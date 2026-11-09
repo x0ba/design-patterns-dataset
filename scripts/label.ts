@@ -9,6 +9,8 @@
 // Rule 5 (codebook frozen per batch): the batch records the version and hash of
 // dist/codebook.json when it starts, and refuses to continue if either changes.
 // Resumable: finished captures and labels are skipped unless --recapture/--relabel.
+// A Claude Code usage limit pauses the whole run. In-flight raters stop, no
+// further site is labeled, and the interrupted raters continue after the reset.
 
 import crypto from 'node:crypto';
 import fs from 'node:fs';
@@ -19,6 +21,7 @@ import { P } from '../src/paths.ts';
 import { captureSite, launchBrowser } from '../src/pipeline/capture.ts';
 import { loadBundle } from '../src/pipeline/label.ts';
 import { runRater } from '../src/pipeline/rater.ts';
+import { usageGate } from '../src/pipeline/usage-limit.ts';
 import type { RaterConfig } from '../src/pipeline/provider.ts';
 import { batchDir, captureDir, labelsDir, readJson, readSiteList, siteDir, writeJson, type SiteSpec, type SiteStatus } from '../src/pipeline/sites.ts';
 import { scoreSite } from '../src/irr/site.ts';
@@ -174,6 +177,9 @@ function setRater(site: SiteSpec & { slug: string }, id: string, state: SiteStat
 async function pool<T>(items: T[], n: number, fn: (t: T) => Promise<void>): Promise<void> {
   const queue = [...items];
   await Promise.all(Array.from({ length: Math.max(1, n) }, async () => {
-    for (let t = queue.shift(); t !== undefined; t = queue.shift()) await fn(t);
+    for (let t = queue.shift(); t !== undefined; t = queue.shift()) {
+      await usageGate.wait();
+      await fn(t);
+    }
   }));
 }

@@ -11,6 +11,7 @@ import { providerFor, type RaterConfig } from './provider.ts';
 import { RaterTools, toolSpecs } from './tools.ts';
 import { writeJson, type SiteSpec } from './sites.ts';
 import type { Label } from './label.ts';
+import { usageGate, UsageLimitError } from './usage-limit.ts';
 
 export interface RaterJob {
   batch: string;
@@ -23,6 +24,19 @@ export interface RaterJob {
 }
 
 export async function runRater(job: RaterJob): Promise<Label> {
+  // Usage limits are account-wide. Wait out a pause before opening a browser
+  // page or a claude process, then run this rater again once usage is back.
+  for (;;) {
+    await usageGate.wait();
+    try {
+      return await runRaterOnce(job);
+    } catch (e) {
+      if (!(e instanceof UsageLimitError)) throw e;
+    }
+  }
+}
+
+async function runRaterOnce(job: RaterJob): Promise<Label> {
   const { rater, codebook } = job;
   const meta: CaptureMeta = JSON.parse(fs.readFileSync(path.join(job.captureDir, 'meta.json'), 'utf8'));
   const styles = JSON.parse(fs.readFileSync(path.join(job.captureDir, 'styles.json'), 'utf8'));

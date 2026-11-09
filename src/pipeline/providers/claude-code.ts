@@ -15,8 +15,11 @@
 //   as the result has been sent.
 // - ANTHROPIC_API_KEY is removed from the CLI's environment so it uses its own
 //   login rather than silently billing an API key exported for other tools.
+// - A usage limit ("You've hit your 5-hour limit · resets …") stops every
+//   claude process in this run. The batch waits for that reset and then retries
+//   the interrupted rater; it does not start labeling another site first.
 
-import { spawn } from 'node:child_process';
+import { spawn, type ChildProcess } from 'node:child_process';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import http from 'node:http';
@@ -25,19 +28,47 @@ import os from 'node:os';
 import path from 'node:path';
 import readline from 'node:readline';
 import type { AgentOutcome, AgentRun, ImagePart, Provider, RaterConfig, ToolResult } from '../provider.ts';
+import { usageGate, usageLimitFromText, UsageLimitError } from '../usage-limit.ts';
 
 const SERVER = 'rater';
 const MAX_NUDGES = 2;
+const active = new Set<ChildProcess>();
+
+function stopChild(child: ChildProcess): void {
+  try { child.stdin?.end(); } catch { /* already closed */ }
+  try { child.kill('SIGTERM'); } catch { /* already exited */ }
+}
+
+/** Pause the batch on a usage-limit notice and stop every other claude still labeling. */
+function stopForUsageLimit(texts: unknown[], run: AgentRun, turn: number, child: ChildProcess | undefined): void {
+  let err: UsageLimitError | undefined;
+  for (const t of texts) {
+    const text = typeof t === 'string' ? t : t && typeof t === 'object' ? JSON.stringify(t) : '';
+    if (!text) continue;
+    err = usageLimitFromText(text);
+    if (err) break;
+  }
+  if (!err) return;
+  run.log({ type: 'error', turn, data: { usageLimit: true, resetsAt: err.resetsAt?.toISOString() ?? null, result: err.message } });
+  usageGate.hold(err);
+  for (const other of active) if (other !== child) stopChild(other);
+  throw err;
+}
 
 export const claudeCodeProvider: Provider = {
   async run(cfg: RaterConfig, run: AgentRun): Promise<AgentOutcome> {
+    const paused = usageGate.pending();
+    if (paused) throw paused;
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), `rater-${cfg.id}-`));
     let turn = 0;
     let finished = false;
     let stopProcess = () => {};
     const mcp = await startMcpServer(run, () => turn, () => { finished = true; stopProcess(); });
 
+    let child: ChildProcess | undefined;
     try {
+      const stillPaused = usageGate.pending();
+      if (stillPaused) throw stillPaused;
       const systemFile = path.join(dir, 'system.md');
       fs.writeFileSync(systemFile, run.system);
       const args = [
@@ -64,16 +95,19 @@ export const claudeCodeProvider: Provider = {
         ENABLE_TOOL_SEARCH: 'false', // load the rater tools up front, never behind a search
       };
       delete env.ANTHROPIC_API_KEY;
-      const child = spawn(cfg.command ?? 'claude', args, { cwd: dir, env, stdio: ['pipe', 'pipe', 'pipe'] });
+      const proc = spawn(cfg.command ?? 'claude', args, { cwd: dir, env, stdio: ['pipe', 'pipe', 'pipe'] });
+      child = proc;
+      active.add(proc);
       let stderr = '';
-      child.stderr.on('data', (d) => { stderr = (stderr + d).slice(-8000); });
+      proc.stderr.on('data', (d) => { stderr = (stderr + d).slice(-8000); });
       const exited = new Promise<number | null>((resolve, reject) => {
-        child.on('error', reject);
-        child.on('exit', (code) => resolve(code));
+        proc.on('error', reject);
+        proc.on('exit', (code) => resolve(code));
       });
-      stopProcess = () => { child.stdin.end(); child.kill('SIGTERM'); };
+      void exited.catch(() => {}); // a usage-limit throw abandons this promise; don't surface an unhandled rejection
+      stopProcess = () => stopChild(proc);
 
-      const send = (content: unknown) => child.stdin.write(JSON.stringify({ type: 'user', message: { role: 'user', content }, parent_tool_use_id: null, session_id: '' }) + '\n');
+      const send = (content: unknown) => proc.stdin.write(JSON.stringify({ type: 'user', message: { role: 'user', content }, parent_tool_use_id: null, session_id: '' }) + '\n');
       send([...(run.first.images ?? []).map(imageBlock), { type: 'text', text: run.first.text }]);
 
       const usageById = new Map<string, Record<string, unknown>>();
@@ -88,52 +122,83 @@ export const claudeCodeProvider: Provider = {
         return { finished, reason: finished ? 'stopped' : r, turns: turn, servedBy: [...servedBy], usage };
       };
 
-      for await (const line of readline.createInterface({ input: child.stdout })) {
-        if (finished || reason) break;
-        let ev: any;
-        try { ev = JSON.parse(line); } catch { continue; }
+      try {
+        for await (const line of readline.createInterface({ input: proc.stdout })) {
+          if (finished || reason) break;
+          let ev: any;
+          try { ev = JSON.parse(line); } catch { continue; }
 
-        if (ev.type === 'system' && ev.subtype === 'init') {
-          const s = (ev.mcp_servers ?? []).find((m: any) => m.name === SERVER);
-          if (s?.status !== 'connected') throw new Error(`claude CLI could not connect to the rater MCP server (status: ${s?.status ?? 'missing'})`);
-        } else if (ev.type === 'stream_event' && ev.parent_tool_use_id == null) {
-          // Exact per-request usage and stop reason (assistant events carry partial counts).
-          const e = ev.event;
-          if (e.type === 'message_start') {
-            if (turn >= run.maxTurns) { reason = 'max_turns'; break; }
-            turn++;
-            currentId = e.message.id;
-            run.log({ type: 'request', turn });
-            usageById.set(currentId, { ...e.message.usage });
-            if (e.message.model) servedBy.add(e.message.model);
-          } else if (e.type === 'message_delta') {
-            if (e.usage) Object.assign(usageById.get(currentId) ?? {}, e.usage);
-            if (e.delta?.stop_reason === 'refusal') reason = 'refusal';
+          if (ev.type === 'system' && ev.subtype === 'init') {
+            const s = (ev.mcp_servers ?? []).find((m: any) => m.name === SERVER);
+            if (s?.status !== 'connected') throw new Error(`claude CLI could not connect to the rater MCP server (status: ${s?.status ?? 'missing'})`);
+          } else if (ev.type === 'stream_event' && ev.parent_tool_use_id == null) {
+            // Exact per-request usage and stop reason (assistant events carry partial counts).
+            const e = ev.event;
+            if (e.type === 'message_start') {
+              if (turn >= run.maxTurns) { reason = 'max_turns'; break; }
+              turn++;
+              currentId = e.message.id;
+              run.log({ type: 'request', turn });
+              usageById.set(currentId, { ...e.message.usage });
+              if (e.message.model) servedBy.add(e.message.model);
+            } else if (e.type === 'message_delta') {
+              if (e.usage) Object.assign(usageById.get(currentId) ?? {}, e.usage);
+              if (e.delta?.stop_reason === 'refusal') reason = 'refusal';
+            }
+          } else if (ev.type === 'assistant' && ev.parent_tool_use_id == null) {
+            const m = ev.message;
+            const blocks = (m.content ?? []).map((b: any) => b.type);
+            const text = (m.content ?? []).filter((b: any) => b.type === 'text').map((b: any) => b.text).join('\n');
+            run.log({ type: 'response', turn, data: { model: m.model, blocks, text: text.slice(0, 2000) } });
+            // The limit notice is a local synthetic turn, not a model reply. Stop before nudging.
+            if (m.model === '<synthetic>') stopForUsageLimit([text], run, turn, child);
+          } else if (ev.type === 'result') {
+            if (ev.stop_reason === 'refusal') { reason = 'refusal'; break; }
+            const resultText = typeof ev.result === 'string' ? ev.result : '';
+            const failed = ev.subtype !== 'success' || ev.is_error;
+            // A successful result is the model's own closing text. Only a short notice is the CLI.
+            if (failed || (resultText.trim().length > 0 && resultText.trim().length <= 500)) {
+              stopForUsageLimit([resultText, ...(Array.isArray(ev.errors) ? ev.errors : [])], run, turn, child);
+            }
+            if (failed) {
+              run.log({ type: 'error', turn, data: { subtype: ev.subtype, errors: ev.errors, result: ev.result } });
+              if (ev.subtype === 'error_max_turns') { reason = 'max_turns'; break; }
+              throw new Error(`claude CLI ended with ${ev.subtype}: ${JSON.stringify(ev.errors ?? ev.result ?? '').slice(0, 500)}`);
+            }
+            // The model ended its turn without submitting.
+            if (nudges++ >= MAX_NUDGES) { reason = 'gave_up'; break; }
+            run.log({ type: 'nudge', turn });
+            send(run.nudge);
           }
-        } else if (ev.type === 'assistant' && ev.parent_tool_use_id == null) {
-          const m = ev.message;
-          const blocks = (m.content ?? []).map((b: any) => b.type);
-          const text = (m.content ?? []).filter((b: any) => b.type === 'text').map((b: any) => b.text).join('\n');
-          run.log({ type: 'response', turn, data: { model: m.model, blocks, text: text.slice(0, 2000) } });
-        } else if (ev.type === 'result') {
-          if (ev.stop_reason === 'refusal') { reason = 'refusal'; break; }
-          if (ev.subtype !== 'success' || ev.is_error) {
-            run.log({ type: 'error', turn, data: { subtype: ev.subtype, errors: ev.errors, result: ev.result } });
-            if (ev.subtype === 'error_max_turns') { reason = 'max_turns'; break; }
-            throw new Error(`claude CLI ended with ${ev.subtype}: ${JSON.stringify(ev.errors ?? ev.result ?? '').slice(0, 500)}`);
-          }
-          // The model ended its turn without submitting.
-          if (nudges++ >= MAX_NUDGES) { reason = 'gave_up'; break; }
-          run.log({ type: 'nudge', turn });
-          send(run.nudge);
         }
+      } catch (e) {
+        // Stopping a sibling closes its stdout. That can surface as a stream error
+        // rather than a clean exit; it is the same pause, not a failed label.
+        if (e instanceof UsageLimitError) throw e;
+        const blocked = usageGate.pending();
+        if (blocked) throw blocked;
+        throw e;
       }
 
       stopProcess();
-      const code = await exited;
-      if (!finished && !reason) throw new Error(`claude CLI exited (code ${code}) before the rater finished.\n${stderr.trim()}`);
+      let code: number | null;
+      try {
+        code = await exited;
+      } catch (e) {
+        const blocked = usageGate.pending();
+        if (blocked) throw blocked;
+        throw e;
+      }
+      if (!finished && !reason) {
+        stopForUsageLimit([stderr], run, turn, child);
+        // A sibling rater already hit the limit and stopped this process.
+        const blocked = usageGate.pending();
+        if (blocked) throw blocked;
+        throw new Error(`claude CLI exited (code ${code}) before the rater finished.\n${stderr.trim()}`);
+      }
       return outcome(reason ?? 'stopped');
     } finally {
+      if (child) active.delete(child);
       stopProcess();
       await mcp.close();
       fs.rmSync(dir, { recursive: true, force: true });
