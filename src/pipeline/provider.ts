@@ -44,12 +44,12 @@ export interface AgentOutcome {
 
 export interface RaterConfig {
   id: string;
-  provider: 'anthropic' | 'openai-compatible' | 'dry-run';
+  provider: 'claude-code' | 'openai-compatible' | 'dry-run';
   model: string;
-  /** anthropic: low | medium | high | xhigh | max */
+  /** claude-code: low | medium | high | xhigh | max */
   effort?: string;
-  /** anthropic: server-side refusal fallback (records the serving model in model.servedBy). */
-  fallbacks?: boolean;
+  /** claude-code: the Claude Code executable. Default: `claude` on PATH. */
+  command?: string;
   /** openai-compatible: base URL and the env var holding the API key. */
   baseURL?: string;
   apiKeyEnv?: string;
@@ -62,7 +62,7 @@ export interface Provider {
 
 export async function providerFor(cfg: RaterConfig): Promise<Provider> {
   switch (cfg.provider) {
-    case 'anthropic': return (await import('./providers/anthropic.ts')).anthropicProvider;
+    case 'claude-code': return (await import('./providers/claude-code.ts')).claudeCodeProvider;
     case 'openai-compatible': return (await import('./providers/openai-compatible.ts')).openAICompatibleProvider;
     case 'dry-run': return (await import('./providers/dry-run.ts')).dryRunProvider;
     default: throw new Error(`unknown provider "${(cfg as RaterConfig).provider}"`);

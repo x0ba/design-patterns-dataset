@@ -238,7 +238,7 @@ and pnpm. Setup:
 nix develop                         # optional: Node + pnpm from flake.nix
 pnpm install
 pnpm exec playwright install chromium
-export ANTHROPIC_API_KEY=...        # only for real labeling runs
+claude auth status                  # real labeling runs use the local Claude Code CLI and its login
 ```
 
 ### Commands
@@ -311,7 +311,8 @@ src/                   library code (codebook, pipeline, irr); scripts/ are thin
    version, model info) are filled in by code, not by the model.
 4. **Agreement.** After all raters finish, the site gets `agreement.json`. Sites
    below `flagBelowAgreement`, sites where a rater failed, and sites where a
-   refusal fallback served a different model are marked **flagged**.
+   turn was served by a model other than the configured one are marked
+   **flagged**.
 
 ### Decisions worth reviewing
 
@@ -338,9 +339,13 @@ src/                   library code (codebook, pipeline, irr); scripts/ are thin
   is counted as "absent", and their confidence for it is missing. `pattern.dims`
   agreement is reported as an extra row; it is the most useful signal for
   finding ambiguous dimensions in the codebook.
-- **Refusal fallbacks are on by default.** On a policy refusal the API re-runs
-  the turn on another Claude model, and `label.model.servedBy` records it. For
-  strict IRR you may prefer `fallbacks: false` in `config/raters.yaml`.
+- **Raters run through the local Claude Code CLI.** The `claude-code` provider
+  (`src/pipeline/providers/claude-code.ts`) runs `claude -p` once per rater
+  and site. It runs in an empty temp dir with built-in tools off, only the rater
+  tools (served over a local MCP server), and the codebook system prompt in
+  place of Claude Code's own. It uses the CLI's login and removes
+  `ANTHROPIC_API_KEY` from its environment. `label.model.servedBy` records the
+  model that served each turn.
 
 ### Open questions — what the code does
 
@@ -366,12 +371,12 @@ src/                   library code (codebook, pipeline, irr); scripts/ are thin
 
 ### Not yet verified
 
-- **No live model run.** There were no API credentials in the build environment,
-  so the Claude rater loop (`src/pipeline/providers/anthropic.ts`) type-checks
-  but has not made a real API call. Everything around it — capture, tools,
-  validation, proposals, orchestration, IRR, consensus and the console — was run
-  end to end with the model-free `dry-run` provider. Before batch-001, run one
-  site with one rater:
+- **One live pilot only.** The Claude Code rater
+  (`src/pipeline/providers/claude-code.ts`) has labeled a single site with a
+  single rater (`news-ycombinator-com`). It has not run a full batch.
+  Everything around it — capture, tools, validation, proposals, orchestration,
+  IRR, consensus and the console — was run end to end with the model-free
+  `dry-run` provider. Before batch-001, run one site with one rater:
   `node scripts/label.ts --batch pilot --sites sites/dry-run.yaml --only linear-app --rater rater-1`.
 - Some sites in `batch-001.yaml` may block headless browsers; they will show up
   as `failed`.
