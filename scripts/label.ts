@@ -83,7 +83,18 @@ let sites = list.sites as (SiteSpec & { slug: string })[];
 if (args.only) sites = sites.filter((s) => args.only!.split(',').includes(s.slug));
 for (const s of list.sites) initStatus(s as SiteSpec & { slug: string });
 
-const browser = await launchBrowser();
+// One shared browser, relaunched if it dies (crash, SIGINT to the process group, ...)
+// so a single browser death can't fail every remaining site.
+let browser = await launchBrowser();
+let relaunching: Promise<void> | null = null;
+async function ensureBrowser(): Promise<void> {
+  if (browser.isConnected()) return;
+  relaunching ??= (async () => {
+    console.error('  browser disconnected, relaunching');
+    browser = await launchBrowser();
+  })().finally(() => { relaunching = null; });
+  await relaunching;
+}
 let done = 0;
 try {
   await pool(sites, Number(args.concurrency), async (site) => {
@@ -95,13 +106,14 @@ try {
     console.log(`[${++done}/${sites.length}] ${site.slug} -> ${readStatus(site.slug)?.state}`);
   });
 } finally {
-  await browser.close();
+  await browser.close().catch(() => {});
 }
 console.log(`\nDone. Next: node scripts/irr.ts --batch ${batch}   ·   console: node console/server.ts`);
 
 // ======================================================================
 
 async function runSite(site: SiteSpec & { slug: string }): Promise<void> {
+  await ensureBrowser();
   const cdir = captureDir(batch, site.slug);
   const metaFile = path.join(cdir, 'meta.json');
   if (args.recapture || !fs.existsSync(metaFile)) {
@@ -130,6 +142,7 @@ async function runSite(site: SiteSpec & { slug: string }): Promise<void> {
     if (!args.relabel && fs.existsSync(out)) return setRater(site, rater.id, 'done');
     setRater(site, rater.id, 'running');
     try {
+      await ensureBrowser();
       await runRater({ batch, site, captureDir: cdir, labelsDir: ldir, rater, codebook, browser });
       setRater(site, rater.id, 'done');
     } catch (e) {
