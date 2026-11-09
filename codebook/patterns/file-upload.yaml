@@ -1,0 +1,393 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "file-upload". Edit between batches only — see README "Rules".
+id: file-upload
+name: File upload
+level: component
+parent: enter-data
+aliases:
+  - dropzone
+  - attachment
+  - file picker
+definition: "Handing files to a system: choosing them, sending them and seeing that they arrived."
+data: media
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - productivity
+  - communication
+  - government
+  - health
+anatomy:
+  - name: Entry point
+    role: Button or drop zone
+  - name: File list
+    role: What has been added
+  - name: Progress
+    role: How the upload is going
+roles: []
+dimensions:
+  - name: Entry
+    family: invocation
+    question: How do files get in?
+    subdimensions:
+      - id: entry
+        name: Entry
+        select: many
+        values:
+          - id: browse-button
+            name: Browse button
+            example: Most forms
+          - id: drag-and-drop-zone
+            name: Drag-and-drop zone
+            example: Google Drive
+          - id: paste
+            name: Paste
+            example: Slack pasted images
+          - id: camera-capture
+            name: Camera capture
+            example: Mobile document scanning
+          - id: cloud-import
+            name: Cloud import
+            example: Google Picker
+          - id: automatic-sync
+            name: Automatic sync
+            description: "Files enter with no per-file action: a folder or camera roll is watched and uploaded
+              on its own (Google Photos backup, Dropbox desktop folder)"
+            example: Google Photos — Backup
+          - id: automatic-from-the-device
+            name: Automatic from the device
+            description: Files are handed over with no act of choosing at all — a background service uploads
+              what the device produces once it is switched on
+            example: Google Photos — Backup
+  - name: Progress
+    family: feedback
+    question: How is the upload shown?
+    subdimensions:
+      - id: progress
+        name: Progress
+        select: one
+        values:
+          - id: none
+            name: None
+            example: Small attachments
+          - id: per-file-progress
+            name: Per-file progress
+            example: Dropbox
+          - id: background-with-notification
+            name: Background with notification
+            example: Google Photos backup
+          - id: resumable
+            name: Resumable
+            example: Large-file services
+          - id: overall-progress
+            name: Overall progress
+            description: One indicator for the whole batch or send rather than one per file (WeTransfer's ring,
+              iMessage's send bar)
+            example: iMessage — Send a photo
+  - name: Multiplicity
+    family: scope
+    question: How many files at once?
+    subdimensions:
+      - id: multiplicity
+        name: Multiplicity
+        select: one
+        values:
+          - id: single-file
+            name: Single file
+            example: Profile photos
+          - id: multiple-files
+            name: Multiple files
+            example: Attachments
+          - id: folders
+            name: Folders
+            example: Google Drive folder upload
+  - name: Preview
+    family: content
+    question: What is shown about each file?
+    subdimensions:
+      - id: preview
+        name: Preview
+        select: one
+        values:
+          - id: filename
+            name: Filename
+            example: Forms
+          - id: thumbnail
+            name: Thumbnail
+            example: Image uploads
+          - id: extracted-contents
+            name: Extracted contents
+            example: Parsed résumé fields
+  - name: Checks
+    family: lifecycle
+    question: When are files checked?
+    subdimensions:
+      - id: checks
+        name: Checks
+        select: one
+        values:
+          - id: after-upload
+            name: After upload
+            example: Server-side validation
+          - id: before-upload
+            name: Before upload
+            description: Type and size
+            example: Client-side checks
+          - id: scanned
+            name: Scanned
+            example: Malware scanning status
+wild:
+  score: 0
+  note: Entry methods are fixed by the product.
+  examples: []
+techniques:
+  - name: Extract on upload
+    dimension: Preview
+    how: Uploaded documents fill related fields, each marked as inferred until confirmed.
+    ai: true
+signature: Extract on upload
+sample: Applications, messaging, cloud storage and health portals.
+unit: One upload control.
+relations:
+  uses:
+    - progress-indicator
+  specializes: []
+  neighbors:
+    - form
+scores:
+  ubiquity: 4
+  potential: 2
+  spec: 4
+evidence: agent-coded
+usage:
+  - Drag-and-drop is invisible to people who do not expect it
+questions:
+  - How should extraction errors be shown on the original document?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7711488565395347
+  agreementFirstPass: 0.8666666666666667
+  kappaFinal: 0.9324697454854126
+  agreementFinal: 0.96
+  pass: true
+  perSub:
+    entry:
+      kappaFirstPass: 0.8320173232135434
+      agreementFirstPass: 0.9
+      kappaFinal: 0.9883705905155707
+      agreementFinal: 0.9916666666666667
+      flag: null
+    progress:
+      kappaFirstPass: 0.5601173020527861
+      agreementFirstPass: 0.65
+      kappaFinal: 0.830028328611898
+      agreementFinal: 0.85
+      flag: null
+    multiplicity:
+      kappaFirstPass: 0.7616683217477656
+      agreementFirstPass: 0.8
+      kappaFinal: 0.9418040737148402
+      agreementFinal: 0.95
+      flag: null
+    preview:
+      kappaFirstPass: 1
+      agreementFirstPass: 1
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    checks:
+      kappaFirstPass: 0.27586206896551724
+      agreementFirstPass: 0.75
+      kappaFinal: 0.6226415094339626
+      agreementFinal: 0.85
+      flag: null
+  distribution:
+    entry:
+      Browse button: 19
+      Drag-and-drop zone: 13
+      Paste: 7
+      Camera capture: 4
+      Cloud import: 3
+      Automatic sync: 0
+      Automatic from the device: 1
+    progress:
+      None: 5
+      Per-file progress: 11
+      Background with notification: 2
+      Resumable: 0
+      Overall progress: 2
+    multiplicity:
+      Single file: 4
+      Multiple files: 12
+      Folders: 4
+    preview:
+      Filename: 10
+      Thumbnail: 9
+      Extracted contents: 1
+    checks:
+      After upload: 1
+      Before upload: 18
+      Scanned: 0
+      n/a: 1
+  exemplars:
+    entry:
+      Browse button:
+        - Google Drive — Upload files or folders
+        - Dropbox — Upload
+        - Slack — Attach to a message
+      Drag-and-drop zone:
+        - Google Drive — Upload files or folders
+        - Dropbox — Upload
+        - Slack — Attach to a message
+      Paste:
+        - Slack — Attach to a message
+        - Gmail — Attach files to a message
+        - GitHub — Attach to an issue comment
+      Camera capture:
+        - WhatsApp — Send a document or photo
+        - iMessage — Send a photo
+        - MyChart — Attach a photo to a message
+      Cloud import:
+        - Gmail — Attach files to a message
+        - ChatGPT — Attach a file to a prompt
+        - Google Forms — File upload question
+      Automatic sync: []
+      Automatic from the device:
+        - Google Photos — Backup
+    progress:
+      None:
+        - Workday — Upload résumé
+        - LinkedIn — Easy Apply résumé
+        - MyChart — Attach a photo to a message
+      Per-file progress:
+        - Google Drive — Upload files or folders
+        - Dropbox — Upload
+        - Slack — Attach to a message
+      Background with notification:
+        - Google Photos — Backup
+        - Instagram — New post
+      Resumable: []
+      Overall progress:
+        - iMessage — Send a photo
+        - WeTransfer — Send files
+    multiplicity:
+      Single file:
+        - Workday — Upload résumé
+        - LinkedIn — Easy Apply résumé
+        - Notion — Image block
+      Multiple files:
+        - Slack — Attach to a message
+        - Gmail — Attach files to a message
+        - WhatsApp — Send a document or photo
+      Folders:
+        - Google Drive — Upload files or folders
+        - Dropbox — Upload
+        - OneDrive — Upload
+    preview:
+      Filename:
+        - Google Drive — Upload files or folders
+        - Dropbox — Upload
+        - Gmail — Attach files to a message
+      Thumbnail:
+        - Slack — Attach to a message
+        - WhatsApp — Send a document or photo
+        - iMessage — Send a photo
+      Extracted contents:
+        - Workday — Upload résumé
+    checks:
+      After upload:
+        - Google Photos — Backup
+      Before upload:
+        - Google Drive — Upload files or folders
+        - Dropbox — Upload
+        - Slack — Attach to a message
+      Scanned: []
+  unobserved:
+    - sub: entry
+      var: Automatic sync
+    - sub: progress
+      var: Resumable
+    - sub: checks
+      var: Scanned
+  unresolved: []
+  proposals:
+    raised: 4
+    adopted:
+      - sub: entry
+        name: Automatic sync
+        raters:
+          - fable
+          - opus
+      - sub: progress
+        name: Overall progress
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: entry
+        name: Automatic from the device
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded:
+      - place: sub:entry
+        sub: entry
+        dim: null
+        name: Automatic background backup
+        gloss: Files already on the device sync up on their own, continuously, without the person choosing
+          individual files each time.
+        raters:
+          - sonnet
+        instances:
+          - 11
+        status: raised
+  raterNotes:
+    fable:
+      - "Checks is nearly always Before upload from the outside: type and size are enforced on
+        selection everywhere; After upload and Scanned are server behaviours a rater cannot see, so
+        the sub-dimension barely discriminates."
+      - checks conflates when a file is vetted (before or after) with whether it is scanned, so
+        cloud drives split three ways; progress lacks an aggregate indicator, which two raters
+        proposed independently; entry lacks the case where nothing is chosen at all.
+    opus:
+      - "checks is the sub-dimension I trust least: what a service does after an upload (virus
+        scanning, transcoding, quota) is invisible, so After upload is really where I could see no
+        client-side refusal. preview is also pick-one where products mix — Gmail and ChatGPT show a
+        name for a document and a thumbnail for an image in the same control."
+      - checks has no value for 'nothing is checked', which split us three ways on iMessage, and it
+        is pick one although a cloud drive checks names and size at selection and scans for malware
+        afterwards; entry has no value for a stock or web library (Notion's Unsplash tab, embed by
+        link) as distinct from importing your own cloud files; progress conflates granularity with
+        location — Instagram's post bar is both aggregate and in the background, and only the
+        background half has a variation.
+    sonnet:
+      - For cloud-storage products (Drive, Dropbox, OneDrive) I coded checks as Scanned rather than
+        After/Before upload, since their most distinctive, well-known check is backend malware
+        scanning rather than a simple client-side gate — this may be under-crediting the size/type
+        checks they also do before accepting a file.
+      - "Two recurring corrections: (1) 'checks' for cloud-storage uploaders (Drive, Dropbox,
+        OneDrive) kept pulling me toward 'Scanned' because these services are known for backend
+        malware scanning — but that scanning is a separate, later feature (often only surfaced at
+        download time), not the upload flow's own before/after check; the interactive check a person
+        actually experiences during upload is a before-upload size/quota/name check in all three
+        cases. (2) I was under-crediting 'entry' pick-any options (Paste, Drag-and-drop, Camera
+        capture) across chat and composer apps where I'd only credited the primary Browse path — a
+        systematic under-listing similar to other archetypes' pick-any sub-dimensions."
+  codedAt: 2026-09-22
+previews:
+  - file: file-upload.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

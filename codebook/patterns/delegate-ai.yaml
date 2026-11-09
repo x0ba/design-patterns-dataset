@@ -1,0 +1,323 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "delegate-ai". Edit between batches only — see README "Rules".
+id: delegate-ai
+name: Delegate to AI
+level: archetype
+aliases:
+  - AI assistance
+  - human–AI handoff
+  - copilot
+definition: Hand a model a goal, then steer, verify and accept its work—keeping intent, progress and
+  provenance visible enough to trust or reject the result.
+data: conversation
+platforms:
+  - web
+  - desktop
+  - mobile
+  - voice
+domains:
+  - ai
+  - software
+  - productivity
+  - design
+  - education
+  - enterprise
+anatomy:
+  - name: Intent
+    role: What the person wants
+  - name: Model work
+    role: What the AI produces
+  - name: Steering
+    role: How the person redirects
+  - name: Verification
+    role: How output is checked
+roles: []
+dimensions:
+  - name: Handoff form
+    family: invocation
+    question: How is intent handed to the model?
+    subdimensions:
+      - id: handoff
+        name: Handoff
+        select: many
+        values:
+          - id: chat-prompt
+            name: Chat prompt
+            example: ChatGPT
+          - id: inline-in-the-editor
+            name: Inline in the editor
+            example: Cursor Tab / Copilot
+          - id: structured-brief
+            name: Structured brief
+            example: Agent task forms
+          - id: voice
+            name: Voice
+            example: Voice mode assistants
+          - id: selection-as-context
+            name: Selection as context
+            example: Explain this code
+  - name: Initiative balance
+    family: initiative
+    question: Who drives the next step?
+    subdimensions:
+      - id: initiative
+        name: Initiative
+        select: one
+        values:
+          - id: person-asks-each-turn
+            name: Person asks each turn
+            example: Classic chat
+          - id: model-proposes-next-actions
+            name: Model proposes next actions
+            example: ChatGPT suggested replies
+          - id: autonomous-multi-step-agent
+            name: Autonomous multi-step agent
+            example: Operator-style agents
+          - id: mixed-person-approves-steps
+            name: "Mixed: person approves steps"
+            example: Cursor agent with confirmations
+  - name: Verification
+    family: feedback
+    question: How does the person know what the model did and whether to trust it?
+    subdimensions:
+      - id: verification
+        name: Verification
+        select: many
+        values:
+          - id: raw-output-only
+            name: Raw output only
+            example: Early chat UIs
+          - id: citations-and-sources
+            name: Citations and sources
+            example: Perplexity
+          - id: diffs-before-apply
+            name: Diffs before apply
+            example: Cursor / Copilot Edits
+          - id: provenance-badges
+            name: Provenance badges
+            example: AI-generated labels
+          - id: tests-or-previews
+            name: Tests or previews
+            example: Run and screenshot loops
+  - name: Acceptance scope
+    family: scope
+    question: What can be accepted, edited or undone?
+    subdimensions:
+      - id: scope
+        name: Scope
+        select: one
+        values:
+          - id: whole-response
+            name: Whole response
+            example: Copy from chat
+          - id: selected-span
+            name: Selected span
+            example: Partial apply
+          - id: file-or-project-patch
+            name: File or project patch
+            example: Multi-file agents
+          - id: variant-among-alternatives
+            name: Variant among alternatives
+            example: Midjourney image grid
+wild:
+  score: 2
+  note: Model, tone and tool permissions are increasingly user-set; verification UI less so.
+  examples:
+    - name: ChatGPT
+      note: Custom instructions and model picker
+    - name: Cursor
+      note: Rules, model choice, apply controls
+    - name: Midjourney
+      note: Parameters and remix
+techniques:
+  - name: Intent as an editable brief
+    dimension: Handoff form
+    how: Promote the prompt into a visible brief (goal, constraints, context, tools) whose parts can be
+      edited between runs.
+    ai: false
+  - name: Never silent apply
+    dimension: Verification
+    how: Default to reviewable diffs, citations or previews before mutating the user’s artifact.
+    ai: false
+signature: Intent as an editable brief
+sample: Chat assistants, coding copilots, image generators and agent products.
+unit: One delegation episode from intent through acceptance.
+relations:
+  uses:
+    - prompt-input
+    - suggestion-chips
+    - ai-provenance
+    - undo
+  specializes: []
+  neighbors:
+    - create
+    - search
+    - collaborate
+scores:
+  ubiquity: 4
+  potential: 5
+  spec: 3
+evidence: agent-coded
+usage:
+  - People paste outputs elsewhere when apply and provenance are weak
+questions:
+  - What minimum provenance makes acceptance responsible rather than ritual?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.8531990486632816
+  agreementFirstPass: 0.9083333333333333
+  kappaFinal: 0.8531990486632816
+  agreementFinal: 0.9083333333333333
+  pass: true
+  perSub:
+    handoff:
+      kappaFirstPass: 0.8834498834498827
+      agreementFirstPass: 0.94
+      kappaFinal: 0.8834498834498827
+      agreementFinal: 0.94
+      flag: null
+    initiative:
+      kappaFirstPass: 0.7775718257645967
+      agreementFirstPass: 0.8
+      kappaFinal: 0.7775718257645967
+      agreementFinal: 0.8
+      flag: null
+    verification:
+      kappaFirstPass: 0.8494259363824578
+      agreementFirstPass: 0.92
+      kappaFinal: 0.8494259363824578
+      agreementFinal: 0.92
+      flag: null
+    scope:
+      kappaFirstPass: 0.7964376590330791
+      agreementFirstPass: 0.8
+      kappaFinal: 0.7964376590330791
+      agreementFinal: 0.8
+      flag: null
+  distribution:
+    handoff:
+      Chat prompt: 11
+      Inline in the editor: 5
+      Structured brief: 1
+      Voice: 3
+      Selection as context: 2
+    initiative:
+      Person asks each turn: 13
+      Model proposes next actions: 2
+      Autonomous multi-step agent: 2
+      "Mixed: person approves steps": 3
+    verification:
+      Raw output only: 12
+      Citations and sources: 2
+      Diffs before apply: 4
+      Provenance badges: 0
+      Tests or previews: 5
+    scope:
+      Whole response: 11
+      Selected span: 3
+      File or project patch: 3
+      Variant among alternatives: 3
+  exemplars:
+    handoff:
+      Chat prompt:
+        - ChatGPT — Asking for a draft email in a chat
+        - Claude — Asking for a small web app, answered as an artifact
+        - Cursor — Agent mode task across files
+      Inline in the editor:
+        - GitHub Copilot — Tab completion while typing code
+        - Cursor — Cmd-K edit on a selected block
+        - Gmail — Smart Compose
+      Structured brief:
+        - Devin — Background coding task
+      Voice:
+        - Siri — Voice request
+        - Amazon Alexa — Voice request
+        - ChatGPT — Advanced Voice Mode
+      Selection as context:
+        - Cursor — Cmd-K edit on a selected block
+        - Adobe Photoshop — Generative Fill
+    initiative:
+      Person asks each turn:
+        - ChatGPT — Asking for a draft email in a chat
+        - Claude — Asking for a small web app, answered as an artifact
+        - Cursor — Cmd-K edit on a selected block
+      Model proposes next actions:
+        - GitHub Copilot — Tab completion while typing code
+        - Gmail — Smart Compose
+      Autonomous multi-step agent:
+        - ChatGPT — Deep research report
+        - Devin — Background coding task
+      "Mixed: person approves steps":
+        - Cursor — Agent mode task across files
+        - Claude Code — A task in the terminal
+        - ChatGPT — Agent mode browsing task
+    verification:
+      Raw output only:
+        - ChatGPT — Asking for a draft email in a chat
+        - GitHub Copilot — Tab completion while typing code
+        - Midjourney — /imagine then upscale
+      Citations and sources:
+        - Perplexity — Research question with cited answer
+        - ChatGPT — Deep research report
+      Diffs before apply:
+        - Cursor — Cmd-K edit on a selected block
+        - Cursor — Agent mode task across files
+        - Claude Code — A task in the terminal
+      Provenance badges: []
+      Tests or previews:
+        - Claude — Asking for a small web app, answered as an artifact
+        - Cursor — Agent mode task across files
+        - Claude Code — A task in the terminal
+    scope:
+      Whole response:
+        - ChatGPT — Asking for a draft email in a chat
+        - Claude — Asking for a small web app, answered as an artifact
+        - Perplexity — Research question with cited answer
+      Selected span:
+        - GitHub Copilot — Tab completion while typing code
+        - Cursor — Cmd-K edit on a selected block
+        - Gmail — Smart Compose
+      File or project patch:
+        - Cursor — Agent mode task across files
+        - Claude Code — A task in the terminal
+        - Devin — Background coding task
+      Variant among alternatives:
+        - Midjourney — /imagine then upscale
+        - Adobe Photoshop — Generative Fill
+        - Canva — Magic Design
+  unobserved:
+    - sub: verification
+      var: Provenance badges
+  unresolved: []
+  proposals:
+    raised: 0
+    adopted: []
+    recorded: []
+  raterNotes:
+    fable:
+      - Verification has no value for a live view of the agent acting (virtual browser, Siri's
+        confirm sheet); coded Tests or previews and noted.
+    opus:
+      - Verification collapses to Raw output only for every consumer case, which says more about the
+        products than the codebook; the harder line is initiative, where Model proposes next actions
+        had to cover both suggested follow-ups and offered refine buttons, and Mixed vs Autonomous
+        turns entirely on whether the product happens to gate one class of action.
+    sonnet:
+      - "Initiative was the hardest pick-one: several products blend a person-driven loop with
+        occasional model-initiated steps (confirmations before risky actions); I coded the dominant
+        mode for that product's default experience."
+  codedAt: 2026-09-22
+previews:
+  - file: delegate-ai.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

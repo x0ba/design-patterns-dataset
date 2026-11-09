@@ -1,0 +1,437 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "text-field". Edit between batches only — see README "Rules".
+id: text-field
+name: Text field
+level: component
+parent: enter-data
+aliases:
+  - input
+  - text box
+  - text area
+definition: A single- or multi-line input for typed text, together with its label, help and validation.
+data: schema
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - government
+  - commerce
+  - communication
+  - enterprise
+anatomy:
+  - name: Label
+    role: What is asked
+  - name: Input
+    role: Where text goes
+  - name: Supporting text
+    role: Hint, counter or error
+roles: []
+dimensions:
+  - name: Supporting content
+    family: content
+    question: What surrounds the input?
+    subdimensions:
+      - id: supporting
+        name: Supporting content
+        select: many
+        values:
+          - id: label
+            name: Label
+            example: All
+          - id: placeholder
+            name: Placeholder
+            example: Search boxes
+          - id: hint-text
+            name: Hint text
+            example: GOV.UK
+          - id: character-counter
+            name: Character counter
+            example: Material text fields
+          - id: prefix-or-suffix
+            name: Prefix or suffix
+            example: Currency and units
+          - id: clear-button
+            name: Clear button
+            example: Search fields
+          - id: format-examples
+            name: Format examples
+            description: A worked example of the expected format (e.g. QQ 12 34 56 C) shown alongside the field
+              — the 'form' entry's Help dimension has this exact variation, but this entry's
+              Supporting-content options don't.
+            example: GOV.UK — National Insurance number field
+          - id: reveal-toggle
+            name: Reveal toggle
+            description: An eye/show icon toggles a sensitive value between masked dots and its plain text,
+              distinct from a label, placeholder, hint, counter, prefix/suffix or clear button.
+            example: TurboTax — Social Security number
+  - name: Validation
+    family: feedback
+    question: How is input checked?
+    subdimensions:
+      - id: validation
+        name: Validation
+        select: one
+        values:
+          - id: none
+            name: None
+            example: Free text
+          - id: on-leaving-the-field
+            name: On leaving the field
+            example: Email fields
+          - id: while-typing
+            name: While typing
+            example: Character limits
+          - id: strength-meter
+            name: Strength meter
+            example: Password strength meter (Tidwell)
+          - id: on-submit
+            name: On submit
+            description: The field is checked only when the form or step is submitted (GOV.UK, Google sign-in
+              Next, Amazon Apply)
+            example: GOV.UK — National Insurance number field
+  - name: Style
+    family: layout
+    question: How is the field drawn?
+    subdimensions:
+      - id: style
+        name: Style
+        select: one
+        values:
+          - id: outlined
+            name: Outlined
+            example: Material outlined
+          - id: filled
+            name: Filled
+            example: Material filled
+          - id: underline-only
+            name: Underline only
+            example: Material 1
+          - id: borderless-inline
+            name: Borderless inline
+            example: Notion
+  - name: Assistance
+    family: initiative
+    question: What does the system add while typing?
+    subdimensions:
+      - id: assistance
+        name: Assistance
+        select: many
+        values:
+          - id: none
+            name: None
+            example: Code fields
+          - id: autofill
+            name: Autofill
+            example: Browser autofill
+          - id: suggestions
+            name: Suggestions
+            example: Autocomplete
+          - id: autocorrect-and-prediction
+            name: Autocorrect and prediction
+            example: iOS keyboard
+          - id: rewrite
+            name: Rewrite
+            example: Writing tools in iOS
+  - name: Input type
+    family: adaptation
+    question: How does the field adapt to what is typed?
+    subdimensions:
+      - id: inputType
+        name: Input type
+        select: one
+        values:
+          - id: plain
+            name: Plain
+            example: Name fields
+          - id: specialized-keyboard
+            name: Specialized keyboard
+            example: Numeric keypad on mobile
+          - id: masked-format
+            name: Masked format
+            example: Card numbers
+          - id: forgiving-format
+            name: Forgiving format
+            description: Any format accepted and normalized
+            example: Forgiving format (Tidwell)
+          - id: obscured-entry
+            name: Obscured entry
+            description: The characters are hidden as they are typed, usually with a reveal toggle — a password
+              or secret field
+            example: Apple Account — Password with rules
+wild:
+  score: 1
+  note: Assistance is configurable at the operating-system level, not per field.
+  examples:
+    - name: iOS
+      note: Autocorrect and predictive text settings
+techniques:
+  - name: Forgiving format
+    dimension: Input type
+    how: Accept any reasonable format and echo the interpretation beneath the field.
+    ai: false
+signature: Forgiving format
+sample: Forms across government, retail and SaaS.
+unit: One field.
+relations:
+  uses: []
+  specializes: []
+  neighbors:
+    - autocomplete
+    - inline-edit
+scores:
+  ubiquity: 5
+  potential: 2
+  spec: 5
+evidence: agent-coded
+usage:
+  - Masked inputs break paste
+questions:
+  - Where does input assistance stop being help and start being authorship?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7948691825297362
+  agreementFirstPass: 0.884375
+  kappaFinal: 0.9360484070792128
+  agreementFinal: 0.965625
+  pass: true
+  perSub:
+    supporting:
+      kappaFirstPass: 0.767521367521368
+      agreementFirstPass: 0.89375
+      kappaFinal: 0.8996838997883961
+      agreementFinal: 0.95
+      flag: null
+    validation:
+      kappaFirstPass: 0.6453900709219857
+      agreementFirstPass: 0.65
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    style:
+      kappaFirstPass: 0.8130841121495327
+      agreementFirstPass: 0.85
+      kappaFinal: 0.8753894080996882
+      agreementFinal: 0.9
+      flag: null
+    assistance:
+      kappaFirstPass: 0.8625204582651382
+      agreementFirstPass: 0.93
+      kappaFinal: 0.9807827813721093
+      agreementFinal: 0.99
+      flag: null
+    inputType:
+      kappaFirstPass: 0.8066595059076261
+      agreementFirstPass: 0.85
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+  distribution:
+    supporting:
+      Label: 11
+      Placeholder: 10
+      Hint text: 3
+      Character counter: 2
+      Prefix or suffix: 5
+      Clear button: 1
+      Format examples: 0
+      Reveal toggle: 1
+    validation:
+      None: 9
+      On leaving the field: 1
+      While typing: 4
+      Strength meter: 1
+      On submit: 5
+    style:
+      Outlined: 13
+      Filled: 2
+      Underline only: 2
+      Borderless inline: 3
+    assistance:
+      None: 6
+      Autofill: 6
+      Suggestions: 5
+      Autocorrect and prediction: 3
+      Rewrite: 2
+    inputType:
+      Plain: 12
+      Specialized keyboard: 3
+      Masked format: 2
+      Forgiving format: 1
+      Obscured entry: 2
+  exemplars:
+    supporting:
+      Label:
+        - GOV.UK — National Insurance number field
+        - Google Sign-in — Email or phone
+        - Stripe Checkout — Card number field
+      Placeholder:
+        - X (Twitter) — Compose a post
+        - Stripe Checkout — Card number field
+        - Amazon — Search box
+      Hint text:
+        - GOV.UK — National Insurance number field
+        - Apple Account — Password with rules
+        - GitHub — Sign up password
+      Character counter:
+        - X (Twitter) — Compose a post
+        - Instagram — Bio in Edit profile
+      Prefix or suffix:
+        - Stripe Checkout — Card number field
+        - Amazon — Search box
+        - Venmo — Amount field
+      Clear button:
+        - iOS Settings — Search field
+      Format examples: []
+      Reveal toggle:
+        - TurboTax — Social Security number
+    validation:
+      None:
+        - Amazon — Search box
+        - iOS Settings — Search field
+        - Slack — Message composer
+      On leaving the field:
+        - Shopify checkout — Phone number field
+      While typing:
+        - X (Twitter) — Compose a post
+        - Stripe Checkout — Card number field
+        - Apple Account — Password with rules
+      Strength meter:
+        - GitHub — Sign up password
+      On submit:
+        - GOV.UK — National Insurance number field
+        - Google Sign-in — Email or phone
+        - Airbnb — Phone number at sign up
+    style:
+      Outlined:
+        - GOV.UK — National Insurance number field
+        - Google Sign-in — Email or phone
+        - Stripe Checkout — Card number field
+      Filled:
+        - iOS Settings — Search field
+        - Windows 11 Settings — Find a setting
+      Underline only:
+        - Instagram — Bio in Edit profile
+        - Google Forms — Short answer
+      Borderless inline:
+        - X (Twitter) — Compose a post
+        - Notion — Page body
+        - Venmo — Amount field
+    assistance:
+      None:
+        - GOV.UK — National Insurance number field
+        - Venmo — Amount field
+        - Google Forms — Short answer
+      Autofill:
+        - Google Sign-in — Email or phone
+        - Stripe Checkout — Card number field
+        - Apple Account — Password with rules
+      Suggestions:
+        - X (Twitter) — Compose a post
+        - Amazon — Search box
+        - Slack — Message composer
+      Autocorrect and prediction:
+        - iOS Settings — Search field
+        - Instagram — Bio in Edit profile
+        - iMessage — Message field
+      Rewrite:
+        - Notion — Page body
+        - iMessage — Message field
+    inputType:
+      Plain:
+        - Google Sign-in — Email or phone
+        - X (Twitter) — Compose a post
+        - Amazon — Search box
+      Specialized keyboard:
+        - Shopify checkout — Phone number field
+        - Venmo — Amount field
+        - Airbnb — Phone number at sign up
+      Masked format:
+        - Stripe Checkout — Card number field
+        - TurboTax — Social Security number
+      Forgiving format:
+        - GOV.UK — National Insurance number field
+      Obscured entry:
+        - Apple Account — Password with rules
+        - GitHub — Sign up password
+  unobserved:
+    - sub: supporting
+      var: Format examples
+  unresolved: []
+  proposals:
+    raised: 4
+    adopted:
+      - sub: validation
+        name: On submit
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: inputType
+        name: Obscured entry
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: supporting
+        name: Format examples
+        raters:
+          - opus
+          - sonnet
+      - sub: supporting
+        name: Reveal toggle
+        raters:
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - validation has no On submit variation although the form entry does; five fields needed it.
+      - validation omits On submit, the commonest timing, which two raters proposed with the same
+        name; Prefix or suffix needs to say whether a decorative glyph counts or only an affix with
+        content or a control; inputType has no value for obscured entry.
+    opus:
+      - The validation list is missing On submit, which the form entry has and which is what most
+        real fields do; that gap alone forced four proposals' worth of codes. supporting treats the
+        label as one of several optional parts, which makes Label almost universal and therefore
+        uninformative, and it cannot record that a field has no label at all except by its absence.
+        style also has no variation for a field drawn as a plain row in a grouped list, which is
+        what most mobile settings fields are.
+      - "The validation list's missing On submit is the single biggest fault in this entry — all
+        three raters hit it, two of us named it identically, and the third recorded that On leaving
+        the field was only the nearest available fit. Two smaller ones confirmed by this round:
+        supporting has no rule for what counts as a Prefix or suffix, so an icon inside a search box
+        is an affix to one rater and nothing to another, while Clear button gets its own name — the
+        sub should either name every affix control (clear, reveal, unit, menu) or none. And style's
+        Outlined/Filled pair is Material's distinction; it cannot describe a white field on dark
+        chrome (Amazon) or a Fluent field with a focus underline (Windows), which is both style
+        disagreements here."
+    sonnet:
+      - This dimension has no 'On submit' validation-timing value, unlike the enter-data/form
+        entries; for fields that visibly error only once you try to advance (GOV.UK, Google sign-in,
+        Shopify phone, Amazon ZIP) I coded On leaving the field as the nearest of the four available
+        options rather than force a mismatched one.
+      - "Two real codebook gaps and one systematic miss: (1) 'validation' has no On-submit value at
+        the field level even though the sibling 'form' archetype does — a real, recurring omission
+        both other raters independently named across five instances. (2) 'inputType' has no way to
+        name password-style character obscuring, which is a genuine adaptation-to-content-type
+        behaviour like the other three values, just for concealment rather than formatting. (3) I
+        was under-crediting 'Label' across plainly labelled fields (passwords, bios, form questions)
+        — a milder version of the pick-any under-listing seen in other archetypes, here on a
+        dimension I'd treated as needing a visually distinctive label rather than any named prompt
+        at all."
+  codedAt: 2026-09-22
+previews:
+  - file: text-field.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

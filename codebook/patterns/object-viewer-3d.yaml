@@ -1,0 +1,591 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "object-viewer-3d". Edit between batches only — see README "Rules".
+id: object-viewer-3d
+name: 3D object viewer
+level: pattern
+parent: explore-space
+aliases:
+  - model viewer
+  - 3D viewer
+  - orbit viewer
+  - product 3D
+definition: A three-dimensional model presented for inspection — orbit, pan, zoom and sometimes
+  explode or cross-section — to understand form, fit or configuration.
+data: object
+platforms:
+  - web
+  - mobile
+  - desktop
+  - xr
+domains:
+  - commerce
+  - design
+  - science
+  - education
+  - entertainment
+  - enterprise
+anatomy:
+  - name: Viewport
+    role: The 3D camera view
+  - name: Model
+    role: Meshes, materials and hierarchy
+  - name: Camera controls
+    role: Orbit, pan, zoom, presets
+  - name: Hotspots or BOM
+    role: Selectable parts and labels
+  - name: Display modes
+    role: Shading, section, explode
+roles:
+  - part
+  - material
+  - dimension
+  - hotspot
+  - camera
+dimensions:
+  - name: What the model shows
+    family: content
+    question: How much of the object’s structure and metadata is exposed?
+    subdimensions:
+      - id: modelContent
+        name: Model content
+        select: many
+        values:
+          - id: single-mesh-beauty-shot
+            name: Single mesh beauty shot
+            example: Shopify 3D product viewers
+          - id: part-hierarchy-bom
+            name: Part hierarchy / BOM
+            description: Selectable assemblies
+            example: Autodesk Viewer
+          - id: measurements-and-pmi
+            name: Measurements and PMI
+            description: Dimensions on the model
+            example: CAD web viewers
+          - id: hotspot-callouts
+            name: Hotspot callouts
+            description: Anchored labels
+            example: Sketchfab annotations
+          - id: configured-variants
+            name: Configured variants
+            description: Materials and options
+            example: Nike By You 3D
+          - id: scientific-overlays
+            name: Scientific overlays
+            description: Scalars on the surface
+            example: Medical / CFD viewers
+      - id: appearanceModes
+        name: Appearance modes
+        select: many
+        values:
+          - id: realistic-materials
+            name: Realistic materials
+            example: Sketchfab
+          - id: wireframe-x-ray
+            name: Wireframe / x-ray
+            example: Many CAD viewers
+          - id: exploded-view
+            name: Exploded view
+            example: Technical illustration modes
+          - id: section-plane
+            name: Section plane
+            example: Autodesk section analysis
+          - id: ar-in-the-room
+            name: AR in the room
+            description: Place model via camera
+            example: Apple AR Quick Look, Shopify AR
+          - id: abstract-representation
+            name: Abstract representation
+            description: Domain-specific renderings that are neither photoreal nor wireframe — molecular
+              ribbons, sticks and surfaces, schematic shading — where the representation is a
+              scientific convention rather than a material
+            example: NCBI iCn3D — Protein structure viewer
+  - name: Camera control
+    family: invocation
+    question: How does the person change viewpoint?
+    subdimensions:
+      - id: cameraControls
+        name: Controls
+        select: many
+        values:
+          - id: orbit-drag
+            name: Orbit drag
+            example: Sketchfab
+          - id: turntable-auto-spin
+            name: Turntable auto-spin
+            example: Product pages
+          - id: zoom-to-cursor-pinch
+            name: Zoom to cursor / pinch
+            example: model-viewer
+          - id: pan
+            name: Pan
+            example: CAD viewers
+          - id: preset-cameras
+            name: Preset cameras
+            description: Front / iso / named views
+            example: Autodesk Viewer
+          - id: walkthrough-first-person
+            name: Walkthrough / first person
+            example: Matterport-style spaces
+          - id: xr-grab-and-scale
+            name: XR grab and scale
+            example: Vision Pro / Quest viewers
+          - id: move-the-device
+            name: Move the device
+            description: In phone AR the viewpoint is the device camera; the person changes view by moving the
+              phone, while gestures move the object
+            example: IKEA — View in your room
+  - name: Part selection and detail
+    family: composition
+    question: How does selecting geometry open information?
+    subdimensions:
+      - id: partSelection
+        name: Selection
+        select: one
+        values:
+          - id: whole-object-only
+            name: Whole-object only
+            description: No part picking
+            example: Simple product spin
+          - id: click-part-for-properties
+            name: Click part for properties
+            example: Autodesk Viewer
+          - id: hotspot-anchors-only
+            name: Hotspot anchors only
+            description: Predefined points
+            example: Sketchfab annotations
+          - id: linked-bom-table
+            name: Linked BOM table
+            description: List and model synchronized
+            example: Engineering viewers
+          - id: configure-then-refresh
+            name: Configure then refresh
+            description: Options rebuild the mesh
+            example: Car configurators
+  - name: Viewer chrome
+    family: layout
+    question: How is the 3D view arranged with controls and metadata?
+    subdimensions:
+      - id: viewerChrome
+        name: Chrome
+        select: one
+        values:
+          - id: full-bleed-with-floating-tools
+            name: Full-bleed with floating tools
+            example: Sketchfab embed
+          - id: side-bom-plus-view
+            name: Side BOM + view
+            example: CAD web apps
+          - id: thumbnail-strip-of-cameras
+            name: Thumbnail strip of cameras
+            example: Some real-estate 3D tours
+          - id: inline-in-a-product-gallery
+            name: Inline in a product gallery
+            description: One slot among photos
+            example: Amazon 3D / AR modules
+          - id: immersive-fullscreen-xr
+            name: Immersive fullscreen / XR
+            example: Quick Look
+  - name: Loading and fidelity
+    family: lifecycle
+    question: How does the model arrive and refine?
+    subdimensions:
+      - id: modelLoading
+        name: Loading
+        select: one
+        values:
+          - id: single-download-then-view
+            name: Single download then view
+            example: Small glTF embeds
+          - id: progressive-lod
+            name: Progressive LOD
+            description: Coarse then detailed
+            example: Google model-viewer / CDN LODs
+          - id: streamed-tiles
+            name: Streamed tiles
+            description: Large environments
+            example: Cesium, Photogrammetry clouds
+          - id: placeholder-then-enhance
+            name: Placeholder then enhance
+            description: Static image until 3D ready
+            example: Commerce sites
+  - name: Guidance
+    family: initiative
+    question: Who directs attention in the scene?
+    subdimensions:
+      - id: sceneGuidance
+        name: Guidance
+        select: one
+        values:
+          - id: free-explore
+            name: Free explore
+            example: Sketchfab
+          - id: guided-tour-of-hotspots
+            name: Guided tour of hotspots
+            description: Auto camera path
+            example: Product story tours
+          - id: assisted-find-a-part
+            name: Assisted find a part
+            description: Search highlights geometry
+            example: CAD search
+          - id: ai-explain-this-view
+            name: AI explain this view
+            description: Caption the current camera
+            example: Research / support demos
+wild:
+  score: 1
+  note: Display mode toggles appear in CAD; consumer product viewers rarely let shoppers change
+    encodings.
+  examples:
+    - name: Autodesk Viewer
+      note: Display modes and settings
+    - name: Sketchfab
+      note: Annotation and VR toggles
+techniques:
+  - name: BOM as Fluid Attributes
+    dimension: What the model shows
+    how: Any part property in the inspector can be surfaced as colour, label or filter on the model —
+      collection Fluid Attributes applied to assemblies.
+    ai: false
+  - name: Named cameras as links
+    dimension: Camera control
+    how: Saved camera + display mode pairs become shareable URLs for support and design review.
+    ai: false
+  - name: Show me the issue
+    dimension: Guidance
+    how: “Highlight the hinge that fails the drop test” moves the camera, sections the mesh and cites
+      the source note.
+    ai: true
+signature: BOM as Fluid Attributes
+sample: Sketchfab, Google model-viewer embeds, Shopify 3D/AR, Autodesk Viewer, Matterport, car and
+  furniture configurators, NCBI / scientific 3D viewers.
+unit: One model in one viewer session (including AR placement if offered).
+relations:
+  uses:
+    - property-inspector
+    - tooltip
+    - progress-indicator
+    - carousel
+  specializes:
+    - explore-space
+  neighbors:
+    - zoomable-canvas
+    - map-explorer
+scores:
+  ubiquity: 3
+  potential: 4
+  spec: 3
+evidence: agent-coded
+usage:
+  - Shoppers orbit for material and scale; engineers section and explode
+  - AR placement answers size questions photos cannot
+questions:
+  - When is 3D worth the load cost over a spiral gallery?
+  - How should part-level accessibility labels work for screen-reader users of spatial viewers?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7500053847278833
+  agreementFirstPass: 0.848
+  kappaFinal: 0.8647145407889893
+  agreementFinal: 0.9145833333333333
+  pass: true
+  perSub:
+    modelContent:
+      kappaFirstPass: 0.9181669394435344
+      agreementFirstPass: 0.9583333333333334
+      kappaFinal: 0.984207755746622
+      agreementFinal: 0.9916666666666667
+      flag: null
+    appearanceModes:
+      kappaFirstPass: 0.7854825141208982
+      agreementFirstPass: 0.8785714285714286
+      kappaFinal: 0.8839167353373216
+      agreementFinal: 0.925
+      flag: null
+    cameraControls:
+      kappaFirstPass: 0.6329365079365077
+      agreementFirstPass: 0.76875
+      kappaFinal: 0.8158238047732337
+      agreementFinal: 0.875
+      flag: null
+    partSelection:
+      kappaFirstPass: 0.9509403107113656
+      agreementFirstPass: 0.95
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    viewerChrome:
+      kappaFirstPass: 0.8634294385432469
+      agreementFirstPass: 0.85
+      kappaFinal: 0.9539877300613495
+      agreementFinal: 0.95
+      flag: null
+    modelLoading:
+      kappaFirstPass: 0.4915254237288136
+      agreementFirstPass: 0.55
+      kappaFinal: 0.6904557179707654
+      agreementFinal: 0.7
+      flag: null
+    sceneGuidance:
+      kappaFirstPass: 0.3733681462141001
+      agreementFirstPass: 0.8
+      kappaFinal: 0.3733681462141001
+      agreementFinal: 0.8
+      flag: unreliable
+  distribution:
+    modelContent:
+      Single mesh beauty shot: 11
+      Part hierarchy / BOM: 4
+      Measurements and PMI: 4
+      Hotspot callouts: 3
+      Configured variants: 3
+      Scientific overlays: 2
+    appearanceModes:
+      Realistic materials: 18
+      Wireframe / x-ray: 7
+      Exploded view: 1
+      Section plane: 2
+      AR in the room: 8
+      Abstract representation: 2
+    cameraControls:
+      Orbit drag: 16
+      Turntable auto-spin: 2
+      Zoom to cursor / pinch: 14
+      Pan: 10
+      Preset cameras: 6
+      Walkthrough / first person: 2
+      XR grab and scale: 3
+      Move the device: 3
+    partSelection:
+      Whole-object only: 10
+      Click part for properties: 3
+      Hotspot anchors only: 3
+      Linked BOM table: 1
+      Configure then refresh: 3
+    viewerChrome:
+      Full-bleed with floating tools: 6
+      Side BOM + view: 7
+      Thumbnail strip of cameras: 0
+      Inline in a product gallery: 2
+      Immersive fullscreen / XR: 5
+    modelLoading:
+      Single download then view: 10
+      Progressive LOD: 3
+      Streamed tiles: 1
+      Placeholder then enhance: 6
+    sceneGuidance:
+      Free explore: 19
+      Guided tour of hotspots: 1
+      Assisted find a part: 0
+      AI explain this view: 0
+  exemplars:
+    modelContent:
+      Single mesh beauty shot:
+        - Sketchfab — Model page viewer
+        - Apple.com — AR Quick Look of a product
+        - Amazon — View in 3D / View in your room
+      Part hierarchy / BOM:
+        - Autodesk Viewer — Uploaded CAD model
+        - Onshape — Part Studio viewer
+        - NCBI iCn3D — Protein structure viewer
+      Measurements and PMI:
+        - Autodesk Viewer — Uploaded CAD model
+        - Onshape — Part Studio viewer
+        - Matterport — Dollhouse and walkthrough
+      Hotspot callouts:
+        - Sketchfab — Model page viewer
+        - Matterport — Dollhouse and walkthrough
+        - Smithsonian Voyager — 3D artifact tour
+      Configured variants:
+        - Tesla — Design Studio configurator
+        - Porsche — Car Configurator
+        - Nike By You — Shoe customizer
+      Scientific overlays:
+        - NCBI iCn3D — Protein structure viewer
+        - RCSB PDB Mol* — 3D structure viewer
+    appearanceModes:
+      Realistic materials:
+        - Sketchfab — Model page viewer
+        - Apple.com — AR Quick Look of a product
+        - Amazon — View in 3D / View in your room
+      Wireframe / x-ray:
+        - Sketchfab — Model page viewer
+        - Autodesk Viewer — Uploaded CAD model
+        - Onshape — Part Studio viewer
+      Exploded view:
+        - Autodesk Viewer — Uploaded CAD model
+      Section plane:
+        - Autodesk Viewer — Uploaded CAD model
+        - Onshape — Part Studio viewer
+      AR in the room:
+        - Apple.com — AR Quick Look of a product
+        - Amazon — View in 3D / View in your room
+        - IKEA — View in your room
+      Abstract representation:
+        - NCBI iCn3D — Protein structure viewer
+        - RCSB PDB Mol* — 3D structure viewer
+    cameraControls:
+      Orbit drag:
+        - Sketchfab — Model page viewer
+        - Apple.com — AR Quick Look of a product
+        - Amazon — View in 3D / View in your room
+      Turntable auto-spin:
+        - Sketchfab — Model page viewer
+        - macOS Quick Look — USDZ preview
+      Zoom to cursor / pinch:
+        - Sketchfab — Model page viewer
+        - Apple.com — AR Quick Look of a product
+        - Amazon — View in 3D / View in your room
+      Pan:
+        - Sketchfab — Model page viewer
+        - Apple.com — AR Quick Look of a product
+        - Autodesk Viewer — Uploaded CAD model
+      Preset cameras:
+        - Autodesk Viewer — Uploaded CAD model
+        - Onshape — Part Studio viewer
+        - Matterport — Dollhouse and walkthrough
+      Walkthrough / first person:
+        - Autodesk Viewer — Uploaded CAD model
+        - Matterport — Dollhouse and walkthrough
+      XR grab and scale:
+        - IKEA — View in your room
+        - visionOS Quick Look — 3D object in the room
+        - Wayfair — View in Room 3D
+      Move the device:
+        - IKEA — View in your room
+        - Google Search — 3D animals in AR
+        - Wayfair — View in Room 3D
+    partSelection:
+      Whole-object only:
+        - Apple.com — AR Quick Look of a product
+        - Amazon — View in 3D / View in your room
+        - IKEA — View in your room
+      Click part for properties:
+        - Autodesk Viewer — Uploaded CAD model
+        - Onshape — Part Studio viewer
+        - NCBI iCn3D — Protein structure viewer
+      Hotspot anchors only:
+        - Sketchfab — Model page viewer
+        - Matterport — Dollhouse and walkthrough
+        - Smithsonian Voyager — 3D artifact tour
+      Linked BOM table:
+        - RCSB PDB Mol* — 3D structure viewer
+      Configure then refresh:
+        - Tesla — Design Studio configurator
+        - Porsche — Car Configurator
+        - Nike By You — Shoe customizer
+    viewerChrome:
+      Full-bleed with floating tools:
+        - Sketchfab — Model page viewer
+        - Matterport — Dollhouse and walkthrough
+        - Windows 3D Viewer — Model viewer
+      Side BOM + view:
+        - Autodesk Viewer — Uploaded CAD model
+        - Onshape — Part Studio viewer
+        - Tesla — Design Studio configurator
+      Thumbnail strip of cameras: []
+      Inline in a product gallery:
+        - Amazon — View in 3D / View in your room
+        - Shopify 3D product viewer — Merchant product page 3D model
+      Immersive fullscreen / XR:
+        - Apple.com — AR Quick Look of a product
+        - IKEA — View in your room
+        - Google Search — 3D animals in AR
+    modelLoading:
+      Single download then view:
+        - Apple.com — AR Quick Look of a product
+        - IKEA — View in your room
+        - NCBI iCn3D — Protein structure viewer
+      Progressive LOD:
+        - Autodesk Viewer — Uploaded CAD model
+        - Onshape — Part Studio viewer
+        - Smithsonian Voyager — 3D artifact tour
+      Streamed tiles:
+        - Matterport — Dollhouse and walkthrough
+      Placeholder then enhance:
+        - Sketchfab — Model page viewer
+        - Amazon — View in 3D / View in your room
+        - Shopify 3D product viewer — Merchant product page 3D model
+    sceneGuidance:
+      Free explore:
+        - Sketchfab — Model page viewer
+        - Apple.com — AR Quick Look of a product
+        - Amazon — View in 3D / View in your room
+      Guided tour of hotspots:
+        - Smithsonian Voyager — 3D artifact tour
+      Assisted find a part: []
+      AI explain this view: []
+  unobserved:
+    - sub: viewerChrome
+      var: Thumbnail strip of cameras
+    - sub: sceneGuidance
+      var: Assisted find a part
+    - sub: sceneGuidance
+      var: AI explain this view
+  unresolved: []
+  proposals:
+    raised: 3
+    adopted:
+      - sub: cameraControls
+        name: Move the device
+        raters:
+          - fable
+          - sonnet
+      - sub: appearanceModes
+        name: Abstract representation
+        raters:
+          - opus
+          - sonnet
+    recorded:
+      - place: sub:appearanceModes
+        sub: appearanceModes
+        dim: null
+        name: Representation styles
+        gloss: Scientific viewers switch among ribbon, stick, ball-and-stick and surface representations
+          rather than materials or wireframe
+        raters:
+          - fable
+        instances:
+          - 12
+          - 13
+        status: raised
+  raterNotes:
+    fable:
+      - modelLoading is largely unobservable from product knowledge; I inferred it from viewer
+        technology (poster images on commerce sites, streaming in CAD and Matterport) and it should
+        be treated as low confidence.
+    opus:
+      - viewerChrome has no value for a configurator's options rail, so Tesla, Porsche and Nike went
+        under Side BOM + view with a note; it is the cell I would expect to split. modelLoading is
+        also largely invisible from product knowledge — I inferred Progressive LOD and Streamed
+        tiles from what the products must do with large assemblies and scans rather than from
+        something the interface says.
+    sonnet:
+      - sceneGuidance was 'Free explore' for nearly every instance except the two tools that
+        explicitly name guided or curated tours (Sketchfab-adjacent Smithsonian Voyager); most
+        product/commerce/CAD viewers don't describe any directed attention mechanism.
+      - "Three real problems. (1) appearanceModes has no term between Realistic materials and
+        Wireframe: molecular ribbons and plain grey CAD shading both get coded as 'realistic' for
+        want of anywhere else — two raters independently proposed a variation for it (opus's
+        Abstract representation, fable's Representation styles), so it is variation-worthy. (2)
+        cameraControls has no term for phone AR, where the device is the camera; two raters proposed
+        one here too, and the same gap shows up in the archetype entry under a third name (Move your
+        body), so the codebook should settle on one. (3) 'Single download then view' and
+        'Placeholder then enhance' overlap badly — nearly every web viewer shows a poster while the
+        asset downloads, which is why this sub split four ways across the commerce instances.
+        sceneGuidance is also pick-one but conflates the default mode with an available capability,
+        which split every CAD and science viewer between Free explore and Assisted find a part."
+  codedAt: 2026-09-22
+previews:
+  - file: object-viewer-3d.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

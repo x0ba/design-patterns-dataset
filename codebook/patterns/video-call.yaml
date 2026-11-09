@@ -1,0 +1,519 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "video-call". Edit between batches only — see README "Rules".
+id: video-call
+name: Video call
+level: pattern
+parent: communicate
+aliases:
+  - video meeting
+  - conference call
+definition: Real-time audio and video among several participants, with shared content and side channels.
+data: stream
+platforms:
+  - desktop
+  - web
+  - mobile
+domains:
+  - communication
+  - enterprise
+  - education
+  - health
+anatomy:
+  - name: Participant tiles
+    role: People
+  - name: Stage
+    role: Shared content
+  - name: Controls
+    role: Mute, camera, share, leave
+  - name: Side panels
+    role: Chat, participants, notes
+roles:
+  - name
+  - video
+  - status
+dimensions:
+  - name: Participant layout
+    family: layout
+    question: How are people and shared content arranged?
+    subdimensions:
+      - id: people
+        name: People
+        select: one
+        values:
+          - id: speaker-view
+            name: Speaker view
+            example: Zoom
+          - id: gallery-grid
+            name: Gallery grid
+            example: Zoom gallery
+          - id: pinned-or-spotlighted
+            name: Pinned or spotlighted
+            example: Google Meet pin
+          - id: shared-scene
+            name: Shared scene
+            example: Teams Together mode
+          - id: floating-mini-window
+            name: Floating mini window
+            example: Picture-in-picture calls
+          - id: spatial-tiles
+            name: Spatial tiles
+            description: Participant tiles float in the user's physical room and can be placed freely, rather
+              than in a grid or speaker layout
+            example: FaceTime — Call on Apple Vision Pro
+          - id: tiles-placed-in-the-room
+            name: Tiles placed in the room
+            description: Each participant is a separate window the wearer positions in their own physical space;
+              there is no shared arrangement and no self view
+            example: FaceTime — Call on Apple Vision Pro
+      - id: withContent
+        name: With shared content
+        select: one
+        values:
+          - id: content-with-filmstrip
+            name: Content with filmstrip
+            example: Google Meet
+          - id: content-beside-speakers
+            name: Content beside speakers
+            example: Zoom side-by-side mode
+          - id: presenter-over-slides
+            name: Presenter over slides
+            example: Teams Standout
+  - name: Sub-spaces
+    family: composition
+    question: Can the call split?
+    subdimensions:
+      - id: subspaces
+        name: Sub-spaces
+        select: one
+        values:
+          - id: one-room
+            name: One room
+            example: Most calls
+          - id: breakout-rooms
+            name: Breakout rooms
+            example: Zoom
+          - id: persistent-spatial-rooms
+            name: Persistent spatial rooms
+            example: Gather
+          - id: persistent-named-rooms
+            name: Persistent named rooms
+            description: A server holds several always-on voice rooms that people move between by name, with no
+              map or proximity
+            example: Discord — Voice channel with video
+  - name: Tile information
+    family: content
+    question: What does a tile say?
+    subdimensions:
+      - id: tile
+        name: Tile
+        select: many
+        values:
+          - id: name
+            name: Name
+            example: All
+          - id: mute-and-hand-raised
+            name: Mute and hand raised
+            example: Zoom
+          - id: speaking-indicator
+            name: Speaking indicator
+            example: Google Meet
+          - id: live-captions
+            name: Live captions
+            example: Google Meet captions
+          - id: reactions
+            name: Reactions
+            example: Zoom reactions
+  - name: Meeting assistance
+    family: initiative
+    question: What does the system capture or do?
+    subdimensions:
+      - id: assistance
+        name: Assistance
+        select: many
+        values:
+          - id: none
+            name: None
+            example: Basic calls
+          - id: transcript
+            name: Transcript
+            example: Teams transcription
+          - id: notes-and-action-items
+            name: Notes and action items
+            example: Google Meet Take notes for me, Zoom AI Companion
+          - id: noise-suppression
+            name: Noise suppression
+            example: Krisp in Discord
+  - name: Attention controls
+    family: scope
+    question: What can each person hide or pin for themselves?
+    subdimensions:
+      - id: attention
+        name: Attention
+        select: many
+        values:
+          - id: hide-self-view
+            name: Hide self view
+            example: Zoom
+          - id: hide-non-video-participants
+            name: Hide non-video participants
+            example: Zoom
+          - id: pin-a-participant
+            name: Pin a participant
+            example: Google Meet
+          - id: mute-everyone
+            name: Mute everyone
+            description: Host control
+            example: Zoom
+  - name: Constraints
+    family: adaptation
+    question: How does it adapt to bandwidth and device?
+    subdimensions:
+      - id: constraints
+        name: Constraints
+        select: one
+        values:
+          - id: automatic-quality
+            name: Automatic quality
+            example: All
+          - id: audio-only
+            name: Audio only
+            example: Mobile calls
+          - id: low-data-mode
+            name: Low-data mode
+            example: WhatsApp low data usage
+          - id: dial-in
+            name: Dial-in
+            example: Zoom phone dial-in
+wild:
+  score: 2
+  note: Layout, pinning and self-view are per-person choices in major tools.
+  examples:
+    - name: Zoom
+      note: Speaker or gallery view, hide self view
+    - name: Google Meet
+      note: Tile count and pinning
+techniques:
+  - name: Stage composer
+    dimension: Participant layout
+    how: Each person composes their own stage from the call’s streams (who, which content, captions,
+      notes) and saves it for recurring meetings.
+    ai: false
+  - name: What did I miss?
+    dimension: Meeting assistance
+    how: Joining late brings a summary with jump points into the recording and transcript.
+    ai: true
+signature: Stage composer
+sample: Meeting, webinar, classroom and telehealth platforms.
+unit: One call interface.
+relations:
+  uses:
+    - drawer
+    - reactions
+    - toast
+  specializes:
+    - communicate
+  neighbors:
+    - co-editing-presence
+    - media-player
+scores:
+  ubiquity: 3
+  potential: 4
+  spec: 3
+evidence: agent-coded
+usage:
+  - Self-view fatigue leads people to hide themselves
+questions:
+  - Could each person’s stage be a spec that the meeting recording also respects?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.4964471096274694
+  agreementFirstPass: 0.6605263157894737
+  kappaFinal: 0.9551701527228236
+  agreementFinal: 0.9705882352941176
+  pass: true
+  perSub:
+    people:
+      kappaFirstPass: 0.4576593720266413
+      agreementFirstPass: 0.55
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    withContent:
+      kappaFirstPass: 0.15779283639883823
+      agreementFirstPass: 0.3
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    subspaces:
+      kappaFirstPass: 0.8153846153846155
+      agreementFirstPass: 0.85
+      kappaFinal: 0.9414634146341462
+      agreementFinal: 0.95
+      flag: null
+    tile:
+      kappaFirstPass: 0.3778935185185183
+      agreementFirstPass: 0.57
+      kappaFinal: 0.9566818280268573
+      agreementFinal: 0.98
+      flag: null
+    assistance:
+      kappaFirstPass: 0.6266666666666675
+      agreementFirstPass: 0.7375
+      kappaFinal: 0.9297783629580867
+      agreementFinal: 0.95
+      flag: null
+    attention:
+      kappaFirstPass: 0.5297085454299726
+      agreementFirstPass: 0.7583333333333333
+      kappaFinal: 0.9609247802018882
+      agreementFinal: 0.975
+      flag: null
+    constraints:
+      kappaFirstPass: 0.42727272727272725
+      agreementFirstPass: 0.5
+      kappaFinal: 0.9502074688796679
+      agreementFinal: 0.95
+      flag: null
+  distribution:
+    people:
+      Speaker view: 6
+      Gallery grid: 13
+      Pinned or spotlighted: 0
+      Shared scene: 0
+      Floating mini window: 0
+      Spatial tiles: 1
+      Tiles placed in the room: 0
+    withContent:
+      Content with filmstrip: 17
+      Content beside speakers: 1
+      Presenter over slides: 0
+      n/a: 2
+    subspaces:
+      One room: 10
+      Breakout rooms: 8
+      Persistent spatial rooms: 1
+      Persistent named rooms: 1
+    tile:
+      Name: 20
+      Mute and hand raised: 18
+      Speaking indicator: 18
+      Live captions: 11
+      Reactions: 14
+    assistance:
+      None: 7
+      Transcript: 9
+      Notes and action items: 6
+      Noise suppression: 9
+    attention:
+      Hide self view: 5
+      Hide non-video participants: 2
+      Pin a participant: 9
+      Mute everyone: 8
+    constraints:
+      Automatic quality: 8
+      Audio only: 2
+      Low-data mode: 2
+      Dial-in: 8
+  exemplars:
+    people:
+      Speaker view:
+        - Zoom — Meeting
+        - WhatsApp — Video call
+        - Zoom — Webinar attendee view
+      Gallery grid:
+        - Google Meet — Meeting
+        - Microsoft Teams — Meeting
+        - FaceTime — Group call
+      Pinned or spotlighted: []
+      Shared scene: []
+      Floating mini window: []
+      Spatial tiles:
+        - FaceTime — Call on Apple Vision Pro
+      Tiles placed in the room: []
+    withContent:
+      Content with filmstrip:
+        - Zoom — Meeting
+        - Google Meet — Meeting
+        - Microsoft Teams — Meeting
+      Content beside speakers:
+        - FaceTime — Call on Apple Vision Pro
+      Presenter over slides: []
+    subspaces:
+      One room:
+        - FaceTime — Group call
+        - WhatsApp — Video call
+        - Slack — Huddle
+      Breakout rooms:
+        - Zoom — Meeting
+        - Google Meet — Meeting
+        - Microsoft Teams — Meeting
+      Persistent spatial rooms:
+        - Gather — Space with a video conversation
+      Persistent named rooms:
+        - Discord — Voice channel with video
+    tile:
+      Name:
+        - Zoom — Meeting
+        - Google Meet — Meeting
+        - Microsoft Teams — Meeting
+      Mute and hand raised:
+        - Zoom — Meeting
+        - Google Meet — Meeting
+        - Microsoft Teams — Meeting
+      Speaking indicator:
+        - Zoom — Meeting
+        - Google Meet — Meeting
+        - Microsoft Teams — Meeting
+      Live captions:
+        - Zoom — Meeting
+        - Google Meet — Meeting
+        - Microsoft Teams — Meeting
+      Reactions:
+        - Zoom — Meeting
+        - Google Meet — Meeting
+        - Microsoft Teams — Meeting
+    assistance:
+      None:
+        - WhatsApp — Video call
+        - Gather — Space with a video conversation
+        - Doxy.me — Telehealth visit
+      Transcript:
+        - Zoom — Meeting
+        - Google Meet — Meeting
+        - Microsoft Teams — Meeting
+      Notes and action items:
+        - Zoom — Meeting
+        - Google Meet — Meeting
+        - Microsoft Teams — Meeting
+      Noise suppression:
+        - Zoom — Meeting
+        - Google Meet — Meeting
+        - Microsoft Teams — Meeting
+    attention:
+      Hide self view:
+        - Zoom — Meeting
+        - Google Meet — Meeting
+        - Microsoft Teams — Meeting
+      Hide non-video participants:
+        - Zoom — Meeting
+        - Google Meet — Meeting
+      Pin a participant:
+        - Zoom — Meeting
+        - Google Meet — Meeting
+        - Microsoft Teams — Meeting
+      Mute everyone:
+        - Zoom — Meeting
+        - Google Meet — Meeting
+        - Microsoft Teams — Meeting
+    constraints:
+      Automatic quality:
+        - Discord — Voice channel with video
+        - Slack — Huddle
+        - Gather — Space with a video conversation
+      Audio only:
+        - FaceTime — Group call
+        - Teladoc — Video visit
+      Low-data mode:
+        - WhatsApp — Video call
+        - Signal — Group call
+      Dial-in:
+        - Zoom — Meeting
+        - Google Meet — Meeting
+        - Microsoft Teams — Meeting
+  unobserved:
+    - sub: people
+      var: Pinned or spotlighted
+    - sub: people
+      var: Shared scene
+    - sub: people
+      var: Floating mini window
+    - sub: people
+      var: Tiles placed in the room
+    - sub: withContent
+      var: Presenter over slides
+  unresolved: []
+  proposals:
+    raised: 4
+    adopted:
+      - sub: subspaces
+        name: Persistent named rooms
+        raters:
+          - fable
+          - opus
+      - sub: people
+        name: Spatial tiles
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: people
+        name: Tiles placed in the room
+        raters:
+          - fable
+          - opus
+    recorded:
+      - place: sub:people
+        sub: people
+        dim: null
+        name: Avatars in a space
+        gloss: People are avatars in a shared virtual space rather than tiles; video exists only for whoever
+          your avatar is standing near
+        raters:
+          - opus
+        instances:
+          - 10
+        status: raised
+  raterNotes:
+    fable:
+      - constraints is pick-one but most products offer automatic quality plus something more
+        specific; I coded the most specific adaptation the product offers (dial-in, low-data,
+        audio-only) and Automatic quality only when nothing more specific exists. attention and tile
+        are partly unobservable from memory for the smaller products (Whereby, Messenger, Huddles)
+        so some lists are conservative.
+      - tile's Live captions exemplar (Meet) is a caption line along the bottom, not on a tile, so
+        raters split on whether captions belong to the tile; say where. constraints is pick one but
+        products hold dial-in, audio-only and low-data at once; it wants pick any or a most-specific
+        rule.
+    opus:
+      - "constraints is pick-one but nearly every product has several fallbacks, so I ranked them
+        Dial-in > Low-data mode > Audio only > Automatic quality and coded the deepest one each
+        product offers as an explicit affordance. tile's Live captions never fired: every product I
+        know draws captions along the bottom of the stage, not on a person's tile — worth checking
+        whether that variation describes anything real."
+      - "Two codebook faults drove most of this entry: Live captions sits under Tile information
+        although captions are a call-level overlay in every product that has them, and constraints
+        is pick one although automatic quality is glossed 'All' and stacks under dial-in, audio-only
+        and low-data — it should be pick any, or automatic quality should be dropped as the
+        baseline."
+    sonnet:
+      - attention is unobservable from general product knowledge for most non-flagship tools (only
+        Zoom and Google Meet are cited by the codebook itself); coded '?' rather than guess for the
+        majority of instances.
+      - "Three codebook problems, and this entry's low kappa comes almost entirely from them. (1)
+        constraints is unusable as pick one because its first value, Automatic quality, is glossed
+        'e.g., All' — it is true of every instance, so a rater who codes it honestly records nothing
+        and a rater who codes the distinctive adaptation records something else; it should be pick
+        any, or Automatic quality should be dropped as a baseline. (2) withContent came out Content
+        with filmstrip for all thirteen disputed cells, because the other two values (Content beside
+        speakers, Presenter over slides) are opt-in modes of a single product rather than layouts a
+        product chooses — the sub barely discriminates as written. (3) tile's Live captions is
+        ambiguous about where the caption renders: most products draw captions at the bottom of the
+        window with a speaker name rather than on the tile, which is why one rater coded it
+        everywhere and another nowhere; I coded it wherever the call ships live captions and the
+        codebook should say which it means. Minor: attention has no explicit 'None' value, so
+        'nothing applies' has to be an empty array."
+  codedAt: 2026-09-22
+previews:
+  - file: video-call.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

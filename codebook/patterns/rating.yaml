@@ -1,0 +1,328 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "rating". Edit between batches only — see README "Rules".
+id: rating
+name: Rating
+level: component
+parent: enter-data
+aliases:
+  - stars
+  - thumbs
+  - review score
+definition: An input for expressing quality or preference on a scale.
+data: schema
+platforms:
+  - web
+  - mobile
+domains:
+  - commerce
+  - entertainment
+  - travel
+  - mobility
+anatomy:
+  - name: Scale
+    role: The choices
+  - name: Context
+    role: Review text or aspects
+  - name: Aggregate
+    role: What others said
+roles: []
+dimensions:
+  - name: Scale
+    family: encoding
+    question: What scale is used?
+    subdimensions:
+      - id: scale
+        name: Scale
+        select: one
+        values:
+          - id: thumbs
+            name: Thumbs
+            example: Netflix
+          - id: two-level-thumbs
+            name: Two-level thumbs
+            description: Adds Love this
+            example: Netflix double thumbs
+          - id: five-stars
+            name: Five stars
+            example: Amazon
+          - id: numeric-1-10
+            name: Numeric 1–10
+            example: IMDb
+          - id: emoji-faces
+            name: Emoji faces
+            example: Airport kiosks
+  - name: Context
+    family: content
+    question: What accompanies the rating?
+    subdimensions:
+      - id: context
+        name: Context
+        select: many
+        values:
+          - id: rating-only
+            name: Rating only
+            example: Netflix
+          - id: written-review
+            name: Written review
+            example: Amazon
+          - id: aspect-ratings
+            name: Aspect ratings
+            example: Airbnb cleanliness, location, value
+          - id: photos
+            name: Photos
+            example: Google Maps reviews
+          - id: quick-tags
+            name: Quick tags
+            description: Predefined chips or checkboxes accompany the score — compliment badges, feedback tags,
+              what-went-wrong lists (Uber, Lyft, ChatGPT, Teams, Zoom)
+            example: Uber — Rate your trip
+          - id: reason-or-compliment-tags
+            name: Reason or compliment tags
+            description: A fixed vocabulary of reasons or compliments offered after the score — usually revealed
+              by a low or high rating — which is neither free prose nor a per-aspect scale
+            example: Uber — Rate your trip
+  - name: Moment
+    family: lifecycle
+    question: When is a rating asked for?
+    subdimensions:
+      - id: moment
+        name: Moment
+        select: one
+        values:
+          - id: on-demand
+            name: On demand
+            example: Netflix
+          - id: after-completion
+            name: After completion
+            example: Uber trip rating
+          - id: periodic-survey
+            name: Periodic survey
+            example: NPS prompts
+  - name: Visibility
+    family: collaboration
+    question: Who sees it?
+    subdimensions:
+      - id: visibility
+        name: Visibility
+        select: one
+        values:
+          - id: private-preference
+            name: Private preference
+            example: Netflix
+          - id: public-review
+            name: Public review
+            example: Google Maps
+          - id: aggregate-only
+            name: Aggregate only
+            example: Driver ratings
+wild:
+  score: 0
+  note: Scales and aspects are chosen by the platform.
+  examples: []
+techniques:
+  - name: Aspects on demand
+    dimension: Context
+    how: People add the aspects they care about; aggregate views can re-rank by those aspects.
+    ai: false
+signature: Aspects on demand
+sample: Marketplaces, streaming, maps and ride-hailing.
+unit: One rating input.
+relations:
+  uses: []
+  specializes: []
+  neighbors:
+    - reactions
+    - slider
+scores:
+  ubiquity: 4
+  potential: 3
+  spec: 5
+evidence: agent-coded
+usage:
+  - Five-star scales collapse toward the top
+questions:
+  - Can aspect ratings be generated from reviews without misrepresenting reviewers?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7688304238275221
+  agreementFirstPass: 0.8555555555555555
+  kappaFinal: 0.985632183908046
+  agreementFinal: 0.9875
+  pass: true
+  perSub:
+    scale:
+      kappaFirstPass: 1
+      agreementFirstPass: 1
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    context:
+      kappaFirstPass: 0.720576820948567
+      agreementFirstPass: 0.8416666666666667
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    moment:
+      kappaFirstPass: 0.8771750255885361
+      agreementFirstPass: 0.9
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    visibility:
+      kappaFirstPass: 0.7188378631677601
+      agreementFirstPass: 0.75
+      kappaFinal: 0.8850574712643676
+      agreementFinal: 0.9
+      flag: null
+  distribution:
+    scale:
+      Thumbs: 4
+      Two-level thumbs: 1
+      Five stars: 13
+      Numeric 1–10: 2
+      Emoji faces: 0
+    context:
+      Rating only: 4
+      Written review: 13
+      Aspect ratings: 6
+      Photos: 5
+      Quick tags: 0
+      Reason or compliment tags: 5
+    moment:
+      On demand: 11
+      After completion: 8
+      Periodic survey: 1
+    visibility:
+      Private preference: 2
+      Public review: 10
+      Aggregate only: 8
+  exemplars:
+    scale:
+      Thumbs:
+        - YouTube — Like / Dislike
+        - Steam — Write a review
+        - ChatGPT — Rate a response
+      Two-level thumbs:
+        - Netflix — Rate a title
+      Five stars:
+        - Amazon — Write a customer review
+        - Uber — Rate your trip
+        - Lyft — Rate your ride
+      Numeric 1–10:
+        - IMDb — Rate this title
+        - Booking.com — Review your stay
+      Emoji faces: []
+    context:
+      Rating only:
+        - Netflix — Rate a title
+        - IMDb — Rate this title
+        - App Store — In-app rating prompt
+      Written review:
+        - Amazon — Write a customer review
+        - Google Maps — Rate and review a place
+        - Yelp — Write a review
+      Aspect ratings:
+        - Google Maps — Rate and review a place
+        - Airbnb — Review your stay
+        - DoorDash — Rate your order
+      Photos:
+        - Amazon — Write a customer review
+        - Google Maps — Rate and review a place
+        - Yelp — Write a review
+      Quick tags: []
+      Reason or compliment tags:
+        - Uber — Rate your trip
+        - Lyft — Rate your ride
+        - ChatGPT — Rate a response
+    moment:
+      On demand:
+        - Netflix — Rate a title
+        - Amazon — Write a customer review
+        - Google Maps — Rate and review a place
+      After completion:
+        - Uber — Rate your trip
+        - Lyft — Rate your ride
+        - Airbnb — Review your stay
+      Periodic survey:
+        - App Store — In-app rating prompt
+    visibility:
+      Private preference:
+        - Netflix — Rate a title
+        - ChatGPT — Rate a response
+      Public review:
+        - Amazon — Write a customer review
+        - Google Maps — Rate and review a place
+        - Yelp — Write a review
+      Aggregate only:
+        - Uber — Rate your trip
+        - Lyft — Rate your ride
+        - IMDb — Rate this title
+  unobserved:
+    - sub: scale
+      var: Emoji faces
+    - sub: context
+      var: Quick tags
+  unresolved: []
+  proposals:
+    raised: 2
+    adopted:
+      - sub: context
+        name: Quick tags
+        raters:
+          - fable
+          - opus
+      - sub: context
+        name: Reason or compliment tags
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - Visibility for feedback that goes to a company (ChatGPT, Teams, Zoom) is neither a private
+        preference nor a public review; I used Aggregate only for telemetry and Private preference
+        when it tunes your own experience.
+      - context lacks the reason-tag case that two raters proposed independently; visibility has no
+        value for feedback sent to the maker and never shown (ChatGPT, Teams, Zoom), so raters split
+        Private preference / Aggregate only.
+    opus:
+      - visibility has no variation for feedback that goes to the maker and is never shown back to
+        anyone (ChatGPT, Teams, Zoom); I coded those Aggregate only, which overstates how public
+        they are. context also cannot hold the circumstance questions TripAdvisor asks (when you
+        went, who with) or system-supplied context like Steam's hours played.
+      - visibility has no value for a rating that goes only to the maker of the product — not
+        published, not shown back, not averaged anywhere a person can see — which split us between
+        Private preference and Aggregate only on ChatGPT, Zoom and Teams; context's Aspect ratings
+        cannot distinguish facets of one thing (Airbnb's cleanliness/location) from separate targets
+        rated in one flow (DoorDash's courier, restaurant and items); moment mixes 'the system asks
+        you now' with 'it is tied to something you completed', which is what made Amazon and
+        TripAdvisor look like after-completion ratings.
+    sonnet:
+      - Moment for algorithmic/system-triggered prompts (App Store review sheet) didn't fit On
+        demand or After completion cleanly since neither the person nor a just-finished task
+        triggers it — I used Periodic survey as the closest of the three, but it's a genuine edge
+        case the dimension doesn't name precisely.
+      - "Two systematic misses: (1) 'context' has no place for post-score compliment/reason chips
+        (Uber, Lyft, ChatGPT, Teams, Zoom) — I'd defaulted to Rating only or stretched Aspect
+        ratings for a fixed-vocabulary tag list that is neither; two peers independently proposed
+        near-identical variations for the same five instances. (2) 'visibility' — I was treating
+        'not shown to a counterpart' as equivalent to Private preference, when the sharper test is
+        whether the score personalizes something for the rater (Private preference) versus pools
+        into a metric a third party (admins, a public average) sees instead (Aggregate only); I had
+        this backwards for IMDb, the App Store prompt, Teams and Zoom."
+  codedAt: 2026-09-22
+previews:
+  - file: rating.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

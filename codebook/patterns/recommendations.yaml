@@ -1,0 +1,441 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "recommendations". Edit between batches only — see README "Rules".
+id: recommendations
+name: Recommendations
+level: pattern
+parent: search
+aliases:
+  - recommended for you
+  - related items
+  - shelves
+definition: Items proposed by the system from a person’s behaviour, context or the current item,
+  rather than from a query.
+data: collection
+platforms:
+  - web
+  - mobile
+domains:
+  - entertainment
+  - commerce
+  - social
+  - news
+anatomy:
+  - name: Shelf
+    role: A themed set of suggestions
+  - name: Item
+    role: One suggestion
+  - name: Rationale
+    role: Why it is here
+  - name: Feedback controls
+    role: How to steer
+roles:
+  - title
+  - thumbnail
+  - reason
+dimensions:
+  - name: Basis
+    family: initiative
+    question: On what grounds is something recommended?
+    subdimensions:
+      - id: basis
+        name: Basis
+        select: many
+        values:
+          - id: similar-to-this-item
+            name: Similar to this item
+            example: Amazon frequently bought together
+          - id: viewing-or-purchase-history
+            name: Viewing or purchase history
+            example: Netflix Because you watched
+          - id: trending
+            name: Trending
+            example: Top 10 rows
+          - id: social
+            name: Social
+            example: Friends listened on Spotify
+          - id: editorial-curation
+            name: Editorial curation
+            example: App Store Today
+          - id: context
+            name: Context
+            description: Time or place
+            example: Morning playlists
+  - name: Rationale
+    family: content
+    question: Does the recommendation say why?
+    subdimensions:
+      - id: rationale
+        name: Rationale shown
+        select: one
+        values:
+          - id: none
+            name: None
+            example: Most shelves
+          - id: short-label
+            name: Short label
+            example: Netflix Because you watched
+          - id: explanation-on-demand
+            name: Explanation on demand
+            example: Facebook Why am I seeing this ad?
+          - id: editable-reason
+            name: Editable reason
+            example: Research prototypes
+  - name: Placement
+    family: layout
+    question: Where do recommendations appear?
+    subdimensions:
+      - id: placement
+        name: Placement
+        select: one
+        values:
+          - id: home-shelves
+            name: Home shelves
+            example: Netflix
+          - id: inside-a-detail-view
+            name: Inside a detail view
+            example: Related products
+          - id: up-next-at-the-end
+            name: Up next at the end
+            example: YouTube autoplay
+          - id: digest
+            name: Digest
+            example: Weekly email
+          - id: dedicated-queue
+            name: Dedicated queue
+            description: A surface whose only content is recommendations, presented one at a time and advanced
+              deliberately (Steam's Discovery Queue, swipe-to-decide apps) — not a shelf inside
+              another screen, not an up-next after content and not a periodic digest
+            example: Steam — Discovery Queue
+  - name: Steering controls
+    family: feedback
+    question: How can a person steer?
+    subdimensions:
+      - id: controls
+        name: Controls
+        select: many
+        values:
+          - id: thumbs
+            name: Thumbs
+            example: Netflix
+          - id: not-interested
+            name: Not interested
+            example: YouTube
+          - id: exclude-from-taste-profile
+            name: Exclude from taste profile
+            example: Spotify
+          - id: interest-settings
+            name: Interest settings
+            example: X Interests
+  - name: Freshness
+    family: lifecycle
+    question: How often do recommendations change?
+    subdimensions:
+      - id: freshness
+        name: Freshness
+        select: one
+        values:
+          - id: per-session
+            name: Per session
+            example: Retail home
+          - id: live-with-actions
+            name: Live with actions
+            example: TikTok
+          - id: periodic
+            name: Periodic
+            example: Spotify Discover Weekly
+  - name: Nesting
+    family: composition
+    question: How are shelves composed?
+    subdimensions:
+      - id: nesting
+        name: Nesting
+        select: one
+        values:
+          - id: single-shelf
+            name: Single shelf
+            example: Related items
+          - id: many-themed-shelves
+            name: Many themed shelves
+            example: Netflix home
+          - id: shelves-inside-detail-views
+            name: Shelves inside detail views
+            description: Recursion
+            example: Product page recommendations
+wild:
+  score: 2
+  note: Thumbs and not-interested controls are common; the basis and weighting are never editable.
+  examples:
+    - name: Spotify
+      note: Exclude a playlist from your taste profile
+    - name: YouTube
+      note: Not interested, Don’t recommend channel
+techniques:
+  - name: Steerable shelves
+    dimension: Basis
+    how: Each shelf exposes its recipe (basis, filters, weights) for editing, forking into a new shelf,
+      and sharing.
+    ai: false
+  - name: Disagree with the reason
+    dimension: Rationale
+    how: A stated reason can be contested (“I watched that for a class”), removing its influence.
+    ai: false
+  - name: More like this, but…
+    dimension: Basis
+    how: Steer a shelf in words; the change appears as recipe edits.
+    ai: true
+signature: Steerable shelves
+sample: Streaming, retail, news and app-store home screens.
+unit: One shelf or recommendation surface.
+relations:
+  uses:
+    - carousel
+    - card
+    - reactions
+    - menu
+  specializes:
+    - search
+  neighbors:
+    - feed
+    - search-results
+scores:
+  ubiquity: 5
+  potential: 5
+  spec: 4
+evidence: agent-coded
+usage:
+  - People keep separate profiles to protect recommendations from shared use
+questions:
+  - How legible can a recipe be before it stops being a recommendation and becomes a query?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7558082967965855
+  agreementFirstPass: 0.86
+  kappaFinal: 0.9198256119862813
+  agreementFinal: 0.95
+  pass: true
+  perSub:
+    basis:
+      kappaFirstPass: 0.7535466500983735
+      agreementFirstPass: 0.8785714285714286
+      kappaFinal: 0.9104440482607067
+      agreementFinal: 0.95
+      flag: null
+    rationale:
+      kappaFirstPass: 0.8850574712643678
+      agreementFirstPass: 0.9
+      kappaFinal: 0.9421407907425263
+      agreementFinal: 0.95
+      flag: null
+    placement:
+      kappaFirstPass: 0.754098360655738
+      agreementFirstPass: 0.9
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    controls:
+      kappaFirstPass: 0.7101199206280739
+      agreementFirstPass: 0.825
+      kappaFinal: 0.883636363636364
+      agreementFinal: 0.925
+      flag: null
+    freshness:
+      kappaFirstPass: 0.7725358045492838
+      agreementFirstPass: 0.8
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    nesting:
+      kappaFirstPass: 0.8101265822784811
+      agreementFirstPass: 0.85
+      kappaFinal: 0.938208032955716
+      agreementFinal: 0.95
+      flag: null
+  distribution:
+    basis:
+      Similar to this item: 3
+      Viewing or purchase history: 16
+      Trending: 3
+      Social: 2
+      Editorial curation: 2
+      Context: 3
+    rationale:
+      None: 10
+      Short label: 8
+      Explanation on demand: 2
+      Editable reason: 0
+    placement:
+      Home shelves: 16
+      Inside a detail view: 1
+      Up next at the end: 1
+      Digest: 1
+      Dedicated queue: 1
+    controls:
+      Thumbs: 6
+      Not interested: 9
+      Exclude from taste profile: 6
+      Interest settings: 4
+    freshness:
+      Per session: 9
+      Live with actions: 6
+      Periodic: 5
+    nesting:
+      Single shelf: 11
+      Many themed shelves: 8
+      Shelves inside detail views: 1
+  exemplars:
+    basis:
+      Similar to this item:
+        - YouTube — Up next after a video
+        - Amazon — Frequently bought together
+        - Goodreads — Recommendations page
+      Viewing or purchase history:
+        - Netflix — Because you watched row
+        - Spotify — Discover Weekly
+        - Spotify — Made For You shelf
+      Trending:
+        - Netflix — Top 10 row
+        - YouTube — Home recommendations
+        - TikTok — For You
+      Social:
+        - Instagram — Suggested for you posts
+        - LinkedIn — People you may know
+      Editorial curation:
+        - Apple App Store — Today tab
+        - Apple News — For You
+      Context:
+        - Google Discover — Discover feed
+        - Facebook — Ad with Why am I seeing this ad
+        - Uber Eats — Picked for you
+    rationale:
+      None:
+        - Spotify — Discover Weekly
+        - Spotify — Made For You shelf
+        - YouTube — Up next after a video
+      Short label:
+        - Netflix — Because you watched row
+        - Netflix — Top 10 row
+        - Amazon — Frequently bought together
+      Explanation on demand:
+        - Instagram — Suggested for you posts
+        - Facebook — Ad with Why am I seeing this ad
+      Editable reason: []
+    placement:
+      Home shelves:
+        - Netflix — Because you watched row
+        - Netflix — Top 10 row
+        - Spotify — Made For You shelf
+      Inside a detail view:
+        - Amazon — Frequently bought together
+      Up next at the end:
+        - YouTube — Up next after a video
+      Digest:
+        - Spotify — Discover Weekly
+      Dedicated queue:
+        - Steam — Discovery Queue
+    controls:
+      Thumbs:
+        - Netflix — Because you watched row
+        - Netflix — Top 10 row
+        - Spotify — Discover Weekly
+      Not interested:
+        - YouTube — Up next after a video
+        - YouTube — Home recommendations
+        - TikTok — For You
+      Exclude from taste profile:
+        - Spotify — Discover Weekly
+        - YouTube — Home recommendations
+        - Amazon — Recommended for you on the home page
+      Interest settings:
+        - TikTok — For You
+        - Apple News — For You
+        - Google Discover — Discover feed
+    freshness:
+      Per session:
+        - Netflix — Because you watched row
+        - Amazon — Frequently bought together
+        - Amazon — Recommended for you on the home page
+      Live with actions:
+        - YouTube — Up next after a video
+        - YouTube — Home recommendations
+        - TikTok — For You
+      Periodic:
+        - Netflix — Top 10 row
+        - Spotify — Discover Weekly
+        - Spotify — Made For You shelf
+    nesting:
+      Single shelf:
+        - Spotify — Discover Weekly
+        - YouTube — Up next after a video
+        - YouTube — Home recommendations
+      Many themed shelves:
+        - Netflix — Because you watched row
+        - Netflix — Top 10 row
+        - Spotify — Made For You shelf
+      Shelves inside detail views:
+        - Amazon — Frequently bought together
+  unobserved:
+    - sub: rationale
+      var: Editable reason
+  unresolved: []
+  proposals:
+    raised: 1
+    adopted:
+      - sub: placement
+        name: Dedicated queue
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - Placement lacks a variation for a full-screen or single-stream feed that is itself the
+        recommendation (TikTok, Discover, Instagram suggested posts); I used Home shelves. Freshness
+        Per session vs Live with actions is a judgement about recompute timing that is not directly
+        observable.
+      - "basis overlaps: Similar to this item and Viewing or purchase history coincide wherever
+        similarity is computed from a history item (Netflix, Amazon, Goodreads), and the raters
+        split on whether to code both. controls' Not interested and Exclude from taste profile have
+        no rule for durable dismissals (Suggest Less, Ignore). placement lacks a value for a feed
+        that is the app's main surface."
+    opus:
+      - "rationale hangs on a distinction the codebook leaves implicit: a shelf header that names
+        the evidence ('Because you watched X', 'Because you added X') versus a generic one
+        ('Recommended for you'). I coded the first as Short label and the second as None, and said
+        so per instance; a rater who treats every themed row title as a label would code far more
+        Short labels than I did. placement is written for shelves and has no good home for a
+        recommendation injected into a feed (Instagram, Facebook ads, TikTok's whole surface) — I
+        used Home shelves and flagged each. controls has no None variation, so an empty array means
+        nothing steers it; that is the case for a quarter of the sample. freshness was the least
+        observable sub: whether a shelf recomputes per visit or on a weekly cycle is invisible
+        unless the product says so, and I leaned on what each product advertises."
+      - "`rationale` needs its gloss to separate a stated cause ('Because you watched X') from a
+        bare personalisation label ('Picked for you'); that one ambiguity split us on several
+        shelves. `basis` also needs to say whether Similar to this item requires an anchor item on
+        screen or merely item-similarity in the model — I now read it as requiring the anchor, and
+        that rule resolved five of these cells."
+    sonnet:
+      - rationale sometimes shows both a short label and a richer on-demand explanation (12, 19);
+        coded to the richer variation present since pick-one forces a single choice and the
+        on-demand explanation is the more complete disclosure.
+      - Two instances (Amazon n7, Apple Store n9) show I sometimes coded the `placement` sub's
+        canonical example correctly but failed to check whether `nesting` names the same scenario
+        under a different sub — the codebook could flag cross-references between subs that share a
+        worked example. Separately, `controls` disagreements were mostly real gaps in what I'd
+        verified about each product (Amazon n8 contradicted my own note) rather than genuine
+        interpretive splits.
+  codedAt: 2026-09-22
+previews:
+  - file: recommendations.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

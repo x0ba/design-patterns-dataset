@@ -1,0 +1,552 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "command-palette". Edit between batches only — see README "Rules".
+id: command-palette
+name: Command palette
+level: pattern
+parent: navigate
+aliases:
+  - command bar
+  - quick open
+  - launcher
+  - Cmd+K menu
+definition: A keyboard-summoned search box that finds and runs commands, jumps to places and
+  objects, and teaches shortcuts along the way.
+data: collection
+platforms:
+  - desktop
+  - web
+domains:
+  - software
+  - productivity
+  - design
+anatomy:
+  - name: Trigger
+    role: The shortcut or button that summons it
+  - name: Query
+    role: The typed text
+  - name: Results
+    role: Ranked commands, places and objects
+  - name: Arguments
+    role: Follow-up inputs a command needs
+roles:
+  - title
+  - shortcut
+  - icon
+  - description
+dimensions:
+  - name: Results
+    family: content
+    question: What can be found, and what does each result show?
+    subdimensions:
+      - id: types
+        name: Result types
+        select: many
+        values:
+          - id: commands
+            name: Commands
+            example: VS Code Command Palette
+          - id: places
+            name: Places
+            example: Linear go-to
+          - id: objects-and-files
+            name: Objects and files
+            example: VS Code Quick Open
+          - id: settings-toggles
+            name: Settings toggles
+            example: Chrome omnibox actions
+          - id: system-and-web-results
+            name: System and web results
+            example: Spotlight, Raycast
+          - id: ai-answers
+            name: AI answers
+            example: Raycast AI
+          - id: people
+            name: People
+            description: Finding and jumping to a specific person, distinct from a command, a place, a file, a
+              settings toggle, a system/web result, or an AI answer.
+            example: Notion — Search and actions
+          - id: code-symbols
+            name: Code symbols
+            description: Classes, symbols and other code-structure results, distinct from commands, places,
+              files, settings, web/system results or AI answers — the same gap found in the
+              autocomplete entry's IntelliSense instance.
+            example: IntelliJ IDEA — Search Everywhere
+      - id: detail
+        name: Result detail
+        select: one
+        values:
+          - id: name-only
+            name: Name only
+            example: Minimal palettes
+          - id: name-and-shortcut
+            name: Name and shortcut
+            example: VS Code keybinding hints
+          - id: name-and-description
+            name: Name and description
+            example: Linear
+          - id: preview-pane
+            name: Preview pane
+            example: Raycast detail view
+  - name: Summoning
+    family: invocation
+    question: How is the palette opened and moded?
+    subdimensions:
+      - id: summon
+        name: Summon by
+        select: many
+        values:
+          - id: in-app-shortcut
+            name: In-app shortcut
+            example: Cmd+K in Linear
+          - id: system-wide-hotkey
+            name: System-wide hotkey
+            example: Spotlight, Raycast, Alfred
+          - id: visible-search-button
+            name: Visible search button
+            example: GitHub command palette button
+          - id: prefix-characters
+            name: Prefix characters
+            description: Typed prefixes switch modes
+            example: VS Code > and @
+  - name: Arguments
+    family: flow
+    question: How does a command collect what it needs?
+    subdimensions:
+      - id: arguments
+        name: Argument collection
+        select: one
+        values:
+          - id: runs-immediately
+            name: Runs immediately
+            example: Toggle sidebar
+          - id: nested-pages
+            name: Nested pages
+            example: Linear Change status submenu
+          - id: inline-argument-fields
+            name: Inline argument fields
+            example: Raycast arguments
+          - id: conversational-follow-up
+            name: Conversational follow-up
+            example: AI command bars
+  - name: Ranking
+    family: initiative
+    question: Who decides which results come first?
+    subdimensions:
+      - id: ranking
+        name: Ranking
+        select: one
+        values:
+          - id: fuzzy-match
+            name: Fuzzy match
+            example: VS Code
+          - id: frequency-and-recency
+            name: Frequency and recency
+            example: VS Code recently used
+          - id: context-of-the-selection
+            name: Context of the selection
+            example: Linear commands for the selected issue
+          - id: predicted-next-action
+            name: Predicted next action
+            example: Research prototypes
+          - id: pinned-by-the-person
+            name: Pinned by the person
+            description: The person fixes chosen commands to the top of the list; the order is authored rather
+              than matched, learned or contextual
+            example: Obsidian — Command palette
+          - id: manually-pinned
+            name: Manually pinned
+            description: The person manually pins specific commands to the top of the list, rather than the
+              system ranking by fuzzy match, frequency/recency, selection context or predicted next
+              action.
+            example: Obsidian — Command palette
+  - name: Command scope
+    family: scope
+    question: How far does it reach?
+    subdimensions:
+      - id: scope
+        name: Scope
+        select: one
+        values:
+          - id: current-app
+            name: Current app
+            example: Figma Quick actions
+          - id: current-selection
+            name: Current selection
+            example: Linear
+          - id: operating-system
+            name: Operating system
+            example: Spotlight
+          - id: connected-apps
+            name: Connected apps
+            example: Raycast extensions
+  - name: Placement
+    family: layout
+    question: Where does it appear?
+    subdimensions:
+      - id: placement
+        name: Placement
+        select: one
+        values:
+          - id: centered-overlay
+            name: Centered overlay
+            example: Linear
+          - id: top-anchored-dropdown
+            name: Top-anchored dropdown
+            example: VS Code
+          - id: full-screen
+            name: Full screen
+            example: Mobile palettes
+          - id: inline-in-the-toolbar
+            name: Inline in the toolbar
+            example: Slack search bar
+          - id: prompt-line-at-the-bottom-edge
+            name: Prompt line at the bottom edge
+            description: The palette is a single line docked to the bottom of the window (a minibuffer or status
+              line) rather than a floating surface
+            example: Emacs — M-x
+wild:
+  score: 2
+  note: Launchers let people add commands and aliases; in-app palettes let people rebind shortcuts
+    from results.
+  examples:
+    - name: Raycast
+      note: Extensions, aliases and hotkeys per command
+    - name: VS Code
+      note: Change a keybinding from the palette
+techniques:
+  - name: Promote from palette
+    dimension: Results
+    how: A command run often from the palette can be promoted to a toolbar button or shortcut in place,
+      so usage shapes the interface.
+    ai: false
+  - name: Macro from history
+    dimension: Arguments
+    how: Chain the last few commands into one named command.
+    ai: false
+  - name: Say it, see it, run it
+    dimension: Arguments
+    how: A sentence resolves to a command with arguments filled, shown as an ordinary palette row before
+      it runs.
+    ai: true
+signature: Promote from palette
+sample: Developer tools, design tools and SaaS products with a keyboard palette, plus OS launchers.
+unit: One palette within one product.
+relations:
+  uses:
+    - autocomplete
+    - modal-dialog
+    - menu
+  specializes:
+    - navigate
+  neighbors:
+    - search-results
+    - menu
+scores:
+  ubiquity: 3
+  potential: 4
+  spec: 5
+evidence: agent-coded
+usage:
+  - Palettes become the primary interface for experts, and shortcuts are learned from the hints
+questions:
+  - Can the palette be the discovery surface for a whole malleable interface’s customizations?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7561651494048921
+  agreementFirstPass: 0.8294117647058824
+  kappaFinal: 0.9658967965163742
+  agreementFinal: 0.9764705882352941
+  pass: true
+  perSub:
+    types:
+      kappaFirstPass: 0.8082386363636365
+      agreementFirstPass: 0.8875
+      kappaFinal: 0.9495798319327733
+      agreementFinal: 0.96875
+      flag: null
+    detail:
+      kappaFirstPass: 0.5855717574827323
+      agreementFirstPass: 0.6
+      kappaFinal: 0.9536679536679535
+      agreementFinal: 0.95
+      flag: null
+    summon:
+      kappaFirstPass: 0.7814041745730552
+      agreementFirstPass: 0.85
+      kappaFinal: 0.9826977146564774
+      agreementFinal: 0.9875
+      flag: null
+    arguments:
+      kappaFirstPass: 0.5155709342560557
+      agreementFirstPass: 0.65
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    ranking:
+      kappaFirstPass: 0.6168958742632614
+      agreementFirstPass: 0.7
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    scope:
+      kappaFirstPass: 0.8702702702702702
+      agreementFirstPass: 0.9
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    placement:
+      kappaFirstPass: 0.6749729144095339
+      agreementFirstPass: 0.75
+      kappaFinal: 0.9391480730223126
+      agreementFinal: 0.95
+      flag: null
+  distribution:
+    types:
+      Commands: 18
+      Places: 6
+      Objects and files: 9
+      Settings toggles: 5
+      System and web results: 6
+      AI answers: 2
+      People: 0
+      Code symbols: 1
+    detail:
+      Name only: 4
+      Name and shortcut: 8
+      Name and description: 5
+      Preview pane: 3
+    summon:
+      In-app shortcut: 15
+      System-wide hotkey: 5
+      Visible search button: 8
+      Prefix characters: 4
+    arguments:
+      Runs immediately: 15
+      Nested pages: 3
+      Inline argument fields: 2
+      Conversational follow-up: 0
+    ranking:
+      Fuzzy match: 10
+      Frequency and recency: 8
+      Context of the selection: 1
+      Predicted next action: 0
+      Pinned by the person: 1
+      Manually pinned: 0
+    scope:
+      Current app: 13
+      Current selection: 2
+      Operating system: 3
+      Connected apps: 2
+    placement:
+      Centered overlay: 12
+      Top-anchored dropdown: 5
+      Full screen: 0
+      Inline in the toolbar: 2
+      Prompt line at the bottom edge: 1
+  exemplars:
+    types:
+      Commands:
+        - VS Code — Command Palette
+        - VS Code — Quick Open
+        - macOS Spotlight — Spotlight search
+      Places:
+        - VS Code — Quick Open
+        - Linear — Command menu
+        - Notion — Search and actions
+      Objects and files:
+        - VS Code — Quick Open
+        - macOS Spotlight — Spotlight search
+        - Raycast — Root search
+      Settings toggles:
+        - macOS Spotlight — Spotlight search
+        - Notion — Search and actions
+        - Sublime Text — Command Palette
+      System and web results:
+        - macOS Spotlight — Spotlight search
+        - Raycast — Root search
+        - Alfred — Alfred bar
+      AI answers:
+        - Raycast — Root search
+        - Notion — Search and actions
+      People: []
+      Code symbols:
+        - IntelliJ IDEA — Search Everywhere
+    detail:
+      Name only:
+        - Slack — Quick switcher
+        - Vercel — Command menu
+        - Emacs — M-x
+      Name and shortcut:
+        - VS Code — Command Palette
+        - Linear — Command menu
+        - Figma — Quick actions
+      Name and description:
+        - VS Code — Quick Open
+        - Alfred — Alfred bar
+        - Notion — Search and actions
+      Preview pane:
+        - macOS Spotlight — Spotlight search
+        - Raycast — Root search
+        - Windows 11 Start — Start menu search
+    summon:
+      In-app shortcut:
+        - VS Code — Command Palette
+        - VS Code — Quick Open
+        - Linear — Command menu
+      System-wide hotkey:
+        - macOS Spotlight — Spotlight search
+        - Raycast — Root search
+        - Alfred — Alfred bar
+      Visible search button:
+        - VS Code — Command Palette
+        - macOS Spotlight — Spotlight search
+        - Notion — Search and actions
+      Prefix characters:
+        - VS Code — Command Palette
+        - VS Code — Quick Open
+        - Alfred — Alfred bar
+    arguments:
+      Runs immediately:
+        - VS Code — Command Palette
+        - VS Code — Quick Open
+        - macOS Spotlight — Spotlight search
+      Nested pages:
+        - Linear — Command menu
+        - Superhuman — Command palette
+        - Emacs — M-x
+      Inline argument fields:
+        - Raycast — Root search
+        - Alfred — Alfred bar
+      Conversational follow-up: []
+    ranking:
+      Fuzzy match:
+        - VS Code — Quick Open
+        - Figma — Quick actions
+        - Sublime Text — Command Palette
+      Frequency and recency:
+        - VS Code — Command Palette
+        - macOS Spotlight — Spotlight search
+        - Raycast — Root search
+      Context of the selection:
+        - Linear — Command menu
+      Predicted next action: []
+      Pinned by the person:
+        - Obsidian — Command palette
+      Manually pinned: []
+    scope:
+      Current app:
+        - VS Code — Command Palette
+        - VS Code — Quick Open
+        - Figma — Quick actions
+      Current selection:
+        - Linear — Command menu
+        - Superhuman — Command palette
+      Operating system:
+        - macOS Spotlight — Spotlight search
+        - PowerToys Run — Launcher
+        - Windows 11 Start — Start menu search
+      Connected apps:
+        - Raycast — Root search
+        - Alfred — Alfred bar
+    placement:
+      Centered overlay:
+        - macOS Spotlight — Spotlight search
+        - Raycast — Root search
+        - Alfred — Alfred bar
+      Top-anchored dropdown:
+        - VS Code — Command Palette
+        - VS Code — Quick Open
+        - Figma — Quick actions
+      Full screen: []
+      Inline in the toolbar:
+        - Slack — Quick switcher
+        - Microsoft Word — Search box (Tell me)
+      Prompt line at the bottom edge:
+        - Emacs — M-x
+  unobserved:
+    - sub: types
+      var: People
+    - sub: arguments
+      var: Conversational follow-up
+    - sub: ranking
+      var: Predicted next action
+    - sub: ranking
+      var: Manually pinned
+    - sub: placement
+      var: Full screen
+  unresolved: []
+  proposals:
+    raised: 5
+    adopted:
+      - sub: types
+        name: People
+        raters:
+          - fable
+          - sonnet
+      - sub: types
+        name: Code symbols
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: ranking
+        name: Pinned by the person
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: placement
+        name: Prompt line at the bottom edge
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: ranking
+        name: Manually pinned
+        raters:
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - Arguments is pick-one but most palettes mix commands that run at once with ones that open a
+        follow-up list; I coded whichever the palette is known for. Emacs' minibuffer is neither a
+        toolbar nor an overlay.
+      - arguments is pick one but every real palette mixes commands that run at once with a few that
+        open a follow-up list, so it wants a which-dominates rule; detail cannot hold a shortcut and
+        a description together (Google Docs); types lacks people and code symbols.
+    opus:
+      - detail is pick-one over palettes that show two things at once — IntelliJ and Notion give
+        both a location and a shortcut — and ranking is genuinely unobservable in several cases,
+        since fuzzy scoring and recency weighting are combined behind one ordered list; I coded
+        whichever the product is known for and said so. types also blurs Places and Objects wherever
+        a page is both.
+      - "Two pick-one subs are doing pick-any work, and they account for most of this packet. detail
+        asks which of four things a row shows when IntelliJ shows a location and a shortcut and
+        Windows shows rows and a panel; arguments asks how a command collects input when every
+        general-purpose palette runs most commands immediately and nests a few. I resolved both by
+        taking the codebook's first-listed value, but both subs want to be pick any (or to ask about
+        the palette's dominant case explicitly). The third fault is types: Places and Objects and
+        files overlap wherever a page, a channel or a person is both a thing and a destination,
+        which is the whole of the Notion and Slack disagreement — and Sonnet's +People and +Code
+        symbols are both symptoms of that list being a list of six examples rather than a
+        partition."
+    sonnet:
+      - Detail was often a judgment call between Name only and Name and description/shortcut when a
+        result shows secondary text I can't confirm is always present (e.g. path context, category
+        grouping) — I leaned toward the richer value only where I have fairly confident recall.
+  codedAt: 2026-09-22
+previews:
+  - file: command-palette.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

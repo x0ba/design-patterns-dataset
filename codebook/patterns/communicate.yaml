@@ -1,0 +1,499 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "communicate". Edit between batches only — see README "Rules".
+id: communicate
+name: Communicate
+level: archetype
+aliases:
+  - messaging
+  - conversation
+definition: Exchange messages with people over time, from a live call to an email answered next week.
+data: conversation
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - communication
+  - social
+  - enterprise
+  - health
+  - education
+anatomy:
+  - name: Conversations
+    role: The set of exchanges
+  - name: Messages
+    role: Units of an exchange
+  - name: Composer
+    role: Where messages are written
+  - name: Participants
+    role: Who is involved
+roles:
+  - sender
+  - timestamp
+  - body
+  - attachment
+dimensions:
+  - name: Conversation structure
+    family: composition
+    question: How are exchanges divided?
+    subdimensions:
+      - id: structure
+        name: Structure
+        select: one
+        values:
+          - id: one-stream-per-contact
+            name: One stream per contact
+            example: SMS
+          - id: channels
+            name: Channels
+            example: Slack
+          - id: threads-inside-channels
+            name: Threads inside channels
+            example: Slack threads
+          - id: topic-per-message
+            name: Topic per message
+            example: Zulip topics
+          - id: email-threads
+            name: Email threads
+            example: Gmail conversations
+          - id: proximity
+            name: Proximity
+            description: "Exchanges are divided by location in a shared space: you talk to whoever is near your
+              avatar, plus room-wide and everyone channels"
+            example: Gather — Virtual office
+          - id: proximity-based-rooms
+            name: Proximity-based rooms
+            description: Exchanges are not persistent named streams but form dynamically among people whose
+              avatars are spatially near each other on a shared map
+            example: Gather — Virtual office
+  - name: Tempo
+    family: lifecycle
+    question: How synchronous is it, and does it last?
+    subdimensions:
+      - id: tempo
+        name: Tempo
+        select: one
+        values:
+          - id: synchronous
+            name: Synchronous
+            example: Calls
+          - id: near-synchronous
+            name: Near-synchronous
+            example: Chat
+          - id: asynchronous
+            name: Asynchronous
+            example: Email
+          - id: ephemeral
+            name: Ephemeral
+            example: Snapchat disappearing messages
+  - name: Arrangement
+    family: layout
+    question: How are conversations and messages arranged?
+    subdimensions:
+      - id: arrangement
+        name: Arrangement
+        select: one
+        values:
+          - id: list-beside-thread
+            name: List beside thread
+            example: Slack, Gmail
+          - id: one-thread-full-screen
+            name: One thread full screen
+            example: WhatsApp on phones
+          - id: multiple-threads-side-by-side
+            name: Multiple threads side by side
+            example: Slack thread panel
+          - id: spatial-rooms
+            name: Spatial rooms
+            example: Gather
+          - id: beside-content
+            name: Beside content
+            description: A single conversation runs in a column alongside the primary content (a live video),
+              with no list of other conversations
+            example: Twitch — Stream chat
+          - id: chat-beside-content
+            name: Chat beside content
+            description: A single persistent chat column runs beside a media stage (a live stream, a visit)
+              rather than beside a navigable list of separate conversations
+            example: Twitch — Stream chat
+  - name: Assistance
+    family: initiative
+    question: What does the system write or summarize?
+    subdimensions:
+      - id: assistance
+        name: Assistance
+        select: many
+        values:
+          - id: none
+            name: None
+            example: Signal
+          - id: smart-replies
+            name: Smart replies
+            example: Gmail
+          - id: unread-summaries
+            name: Unread summaries
+            example: Slack AI recaps
+          - id: drafting
+            name: Drafting
+            example: Gmail Help me write
+          - id: translation
+            name: Translation
+            example: Teams live translation
+  - name: Audience
+    family: collaboration
+    question: How many people is it for?
+    subdimensions:
+      - id: audience
+        name: Audience
+        select: one
+        values:
+          - id: one-to-one
+            name: One-to-one
+            example: DMs
+          - id: small-group
+            name: Small group
+            example: Group chats
+          - id: community
+            name: Community
+            example: Discord servers
+          - id: broadcast
+            name: Broadcast
+            example: WhatsApp channels
+  - name: Signals
+    family: feedback
+    question: What does the system say about delivery and presence?
+    subdimensions:
+      - id: signals
+        name: Signals
+        select: many
+        values:
+          - id: read-receipts
+            name: Read receipts
+            example: WhatsApp ticks
+          - id: typing-indicators
+            name: Typing indicators
+            example: iMessage
+          - id: online-presence
+            name: Online presence
+            example: Slack status dot
+          - id: none
+            name: None
+            example: Email
+wild:
+  score: 2
+  note: Notification rules, mute, read receipts and sidebar organization are often exposed.
+  examples:
+    - name: Slack
+      note: Per-channel notification preferences and sections
+    - name: WhatsApp
+      note: Read receipts toggle
+techniques:
+  - name: Attention recipes
+    dimension: Tempo
+    how: Per conversation, decide what reaches you, when, and in what form (interrupt, badge, digest),
+      as an editable rule.
+    ai: false
+  - name: Thread ↔ channel morph
+    dimension: Conversation structure
+    how: Promote a thread to its own channel, or fold a quiet channel into a thread, without losing
+      history.
+    ai: false
+  - name: Catch me up
+    dimension: Assistance
+    how: A summary of what changed, every line linked to the message it came from.
+    ai: true
+signature: Attention recipes
+sample: Messaging, email, team chat, community and telehealth apps.
+unit: One product’s conversation experience.
+relations:
+  uses:
+    - reactions
+    - badge
+    - text-field
+    - file-upload
+  specializes: []
+  neighbors:
+    - collaborate
+    - monitor
+scores:
+  ubiquity: 5
+  potential: 4
+  spec: 4
+evidence: agent-coded
+usage:
+  - People migrate conversations to the tool whose tempo matches
+questions:
+  - Is attention the real design material of communication tools?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7093764853157474
+  agreementFirstPass: 0.7923076923076923
+  kappaFinal: 0.9747720564058131
+  agreementFinal: 0.9807692307692307
+  pass: true
+  perSub:
+    structure:
+      kappaFirstPass: 0.8790322580645162
+      agreementFirstPass: 0.9
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    tempo:
+      kappaFirstPass: 0.8779247202441506
+      agreementFirstPass: 0.9
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    arrangement:
+      kappaFirstPass: 0.9432892249527408
+      agreementFirstPass: 0.95
+      kappaFinal: 0.9432892249527408
+      agreementFinal: 0.95
+      flag: null
+    assistance:
+      kappaFirstPass: 0.5636590306997042
+      agreementFirstPass: 0.72
+      kappaFinal: 0.9857522796352582
+      agreementFinal: 0.99
+      flag: null
+    audience:
+      kappaFirstPass: 0.37117903930130997
+      agreementFirstPass: 0.45
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    signals:
+      kappaFirstPass: 0.8330434782608694
+      agreementFirstPass: 0.875
+      kappaFinal: 0.9499965275366344
+      agreementFinal: 0.9625
+      flag: null
+  distribution:
+    structure:
+      One stream per contact: 10
+      Channels: 2
+      Threads inside channels: 3
+      Topic per message: 1
+      Email threads: 3
+      Proximity: 1
+      Proximity-based rooms: 0
+    tempo:
+      Synchronous: 4
+      Near-synchronous: 12
+      Asynchronous: 3
+      Ephemeral: 1
+    arrangement:
+      List beside thread: 8
+      One thread full screen: 10
+      Multiple threads side by side: 0
+      Spatial rooms: 1
+      Beside content: 0
+      Chat beside content: 1
+    assistance:
+      None: 8
+      Smart replies: 5
+      Unread summaries: 7
+      Drafting: 6
+      Translation: 11
+    audience:
+      One-to-one: 13
+      Small group: 1
+      Community: 6
+      Broadcast: 0
+    signals:
+      Read receipts: 11
+      Typing indicators: 13
+      Online presence: 13
+      None: 3
+  exemplars:
+    structure:
+      One stream per contact:
+        - WhatsApp — Chats tab and an open chat
+        - iMessage — Messages conversation
+        - Telegram — Chat list and an open chat
+      Channels:
+        - Discord — Server with a text channel open
+        - Twitch — Stream chat
+      Threads inside channels:
+        - Slack — Workspace with a channel open
+        - Microsoft Teams — Chat and Teams channels
+        - Google Chat — Space
+      Topic per message:
+        - Zulip — Stream view
+      Email threads:
+        - Gmail — Inbox and an open conversation
+        - Microsoft Outlook — Mail view
+        - Superhuman — Inbox and open email
+      Proximity:
+        - Gather — Virtual office
+      Proximity-based rooms: []
+    tempo:
+      Synchronous:
+        - Gather — Virtual office
+        - FaceTime — Call
+        - Doxy.me — Provider dashboard and visit
+      Near-synchronous:
+        - WhatsApp — Chats tab and an open chat
+        - iMessage — Messages conversation
+        - Slack — Workspace with a channel open
+      Asynchronous:
+        - Gmail — Inbox and an open conversation
+        - Microsoft Outlook — Mail view
+        - Superhuman — Inbox and open email
+      Ephemeral:
+        - Snapchat — Chat tab
+    arrangement:
+      List beside thread:
+        - Slack — Workspace with a channel open
+        - Discord — Server with a text channel open
+        - Gmail — Inbox and an open conversation
+      One thread full screen:
+        - WhatsApp — Chats tab and an open chat
+        - iMessage — Messages conversation
+        - Telegram — Chat list and an open chat
+      Multiple threads side by side: []
+      Spatial rooms:
+        - Gather — Virtual office
+      Beside content: []
+      Chat beside content:
+        - Twitch — Stream chat
+    assistance:
+      None:
+        - Discord — Server with a text channel open
+        - Signal — Conversation
+        - Snapchat — Chat tab
+      Smart replies:
+        - iMessage — Messages conversation
+        - Gmail — Inbox and an open conversation
+        - Microsoft Outlook — Mail view
+      Unread summaries:
+        - WhatsApp — Chats tab and an open chat
+        - Slack — Workspace with a channel open
+        - Gmail — Inbox and an open conversation
+      Drafting:
+        - WhatsApp — Chats tab and an open chat
+        - iMessage — Messages conversation
+        - Gmail — Inbox and an open conversation
+      Translation:
+        - WhatsApp — Chats tab and an open chat
+        - iMessage — Messages conversation
+        - Slack — Workspace with a channel open
+    audience:
+      One-to-one:
+        - WhatsApp — Chats tab and an open chat
+        - iMessage — Messages conversation
+        - Gmail — Inbox and an open conversation
+      Small group:
+        - Gather — Virtual office
+      Community:
+        - Slack — Workspace with a channel open
+        - Discord — Server with a text channel open
+        - Microsoft Teams — Chat and Teams channels
+      Broadcast: []
+    signals:
+      Read receipts:
+        - WhatsApp — Chats tab and an open chat
+        - iMessage — Messages conversation
+        - Microsoft Teams — Chat and Teams channels
+      Typing indicators:
+        - WhatsApp — Chats tab and an open chat
+        - iMessage — Messages conversation
+        - Slack — Workspace with a channel open
+      Online presence:
+        - WhatsApp — Chats tab and an open chat
+        - Slack — Workspace with a channel open
+        - Discord — Server with a text channel open
+      None:
+        - Gmail — Inbox and an open conversation
+        - FaceTime — Call
+        - Twitch — Stream chat
+  unobserved:
+    - sub: structure
+      var: Proximity-based rooms
+    - sub: arrangement
+      var: Multiple threads side by side
+    - sub: arrangement
+      var: Beside content
+    - sub: audience
+      var: Broadcast
+  unresolved: []
+  proposals:
+    raised: 5
+    adopted:
+      - sub: structure
+        name: Proximity
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: arrangement
+        name: Beside content
+        raters:
+          - fable
+          - sonnet
+      - sub: structure
+        name: Proximity-based rooms
+        raters:
+          - fable
+          - sonnet
+      - sub: arrangement
+        name: Chat beside content
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded:
+      - place: sub:arrangement
+        sub: arrangement
+        dim: null
+        name: Docked beside content
+        gloss: A single conversation column pinned beside non-conversation content (a live video, a page),
+          with no list of other conversations to move between
+        raters:
+          - opus
+        instances:
+          - 19
+        status: raised
+  raterNotes:
+    fable:
+      - "audience is pick-one but nearly every product spans one-to-one, group and broadcast; coded
+        the screen the sample locates. Structure/arrangement exemplars cite Slack and Gmail for two
+        variations each, so I coded the default state (channel + sidebar; thread replaces list but
+        label list stays). Assistance: 'None' used explicitly where the codebook lists it."
+      - audience is pick one but messengers hold One-to-one, Small group and Broadcast at once
+        (Telegram, WeChat, Messenger, Teams); it wants pick any. tempo's Near-synchronous gloss
+        (Chat) names a medium, so live-only chat rooms split raters.
+    opus:
+      - "audience is the weakest code here: every product supports one-to-one, groups and
+        communities, so I took the audience the sampled screen centres and noted the rest.
+        arrangement forced a choice between the resting layout and the panel-open layout for
+        Slack-likes; I coded the resting layout consistently."
+      - "audience is the codebook's weak spot here: every product supports one-to-one, group and
+        community audiences at once, so the sub-dimension wants to be pick any; structure names
+        Slack for both Channels and Threads inside channels, which is why n=3 split three ways."
+    sonnet:
+      - Audience was hard to pin to one value for products whose sample screen names both a 1:1 and
+        a group context (Telegram, Messenger, WeChat) — marked '?' rather than guess; noted in each
+        _note.
+      - Two codebook problems surfaced here. (1) `audience` is pick one but almost every messenger
+        spans one-to-one, small group and broadcast in the same product — Telegram, WeChat and
+        Messenger all forced raters into a dodge or a coin flip; it should be pick any, or its gloss
+        should say 'the default audience of the screen's conversation'. (2) `structure`'s Channels
+        and Threads inside channels are nested rather than exclusive and the codebook cites Slack
+        for both, which is what split n=3; Threads inside channels should be glossed as implying
+        channels, so the more specific code wins.
+  codedAt: 2026-09-22
+previews:
+  - file: communicate.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

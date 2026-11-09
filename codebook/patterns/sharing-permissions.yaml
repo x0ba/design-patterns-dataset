@@ -1,0 +1,478 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "sharing-permissions". Edit between batches only — see README "Rules".
+id: sharing-permissions
+name: Sharing and permissions
+level: pattern
+parent: collaborate
+aliases:
+  - access control
+  - share dialog
+  - ACL UI
+definition: Granting, reviewing and revoking who can view, comment on or edit a shared artifact, and
+  how they receive access.
+data: object
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - productivity
+  - enterprise
+  - education
+  - design
+  - software
+anatomy:
+  - name: Principal
+    role: A person, group or link
+  - name: Role
+    role: What they may do
+  - name: Share surface
+    role: Where access is granted
+  - name: Inheritance
+    role: How parent access flows
+roles:
+  - viewer
+  - commenter
+  - editor
+  - owner
+dimensions:
+  - name: Permission model
+    family: collaboration
+    question: What rights can be granted?
+    subdimensions:
+      - id: roles
+        name: Roles
+        select: many
+        values:
+          - id: view
+            name: View
+            example: Google Drive Viewer
+          - id: comment
+            name: Comment
+            example: Docs Commenter
+          - id: edit
+            name: Edit
+            example: Editor
+          - id: owner-or-admin
+            name: Owner or admin
+            example: Drive Owner
+          - id: custom-fine-grained
+            name: Custom fine-grained
+            example: GitHub repository roles
+          - id: anonymous-link-access
+            name: Anonymous link access
+            example: Anyone with the link
+  - name: Share invocation
+    family: invocation
+    question: How is sharing started?
+    subdimensions:
+      - id: openBy
+        name: Open by
+        select: many
+        values:
+          - id: share-button
+            name: Share button
+            example: Google Docs
+          - id: copy-link
+            name: Copy link
+            example: Figma
+          - id: invite-by-email
+            name: Invite by email
+            example: Drive
+          - id: request-access-flow
+            name: Request access flow
+            example: Drive request
+          - id: from-a-parent-folder-policy
+            name: From a parent folder policy
+            example: Inherited Drive permissions
+  - name: Permission scope
+    family: scope
+    question: What does a grant apply to?
+    subdimensions:
+      - id: scope
+        name: Scope
+        select: one
+        values:
+          - id: whole-file
+            name: Whole file
+            example: Most docs
+          - id: folder-and-children
+            name: Folder and children
+            example: Drive folders
+          - id: one-section-or-page
+            name: One section or page
+            example: Notion locks
+          - id: one-branch-or-environment
+            name: One branch or environment
+            example: GitHub environments
+          - id: time-limited-access
+            name: Time-limited access
+            example: Expiring links
+  - name: Sharing feedback
+    family: feedback
+    question: How does the person know who has access and what changed?
+    subdimensions:
+      - id: feedback
+        name: Feedback
+        select: many
+        values:
+          - id: people-list-with-roles
+            name: People list with roles
+            example: Share dialog
+          - id: link-privacy-summary
+            name: Link privacy summary
+            example: Restricted vs anyone
+          - id: access-warnings
+            name: Access warnings
+            example: External sharing banners
+          - id: audit-of-grants
+            name: Audit of grants
+            example: Enterprise Drive logs
+          - id: notify-on-share
+            name: Notify on share
+            example: Email invites
+  - name: Grant lifecycle
+    family: lifecycle
+    question: How do grants start, change and end?
+    subdimensions:
+      - id: lifecycle
+        name: Lifecycle
+        select: one
+        values:
+          - id: until-revoked
+            name: Until revoked
+            example: Classic ACLs
+          - id: expiring-access
+            name: Expiring access
+            example: Timed links
+          - id: pending-request
+            name: Pending request
+            example: Request access
+          - id: transferred-ownership
+            name: Transferred ownership
+            example: Drive make owner
+          - id: inherited-then-broken
+            name: Inherited then broken
+            example: Stop inheriting
+  - name: Policy initiative
+    family: initiative
+    question: Who decides the default sharing posture?
+    subdimensions:
+      - id: initiative
+        name: Initiative
+        select: one
+        values:
+          - id: person-chooses-each-time
+            name: Person chooses each time
+            example: Ad-hoc share dialogs
+          - id: org-default-policies
+            name: Org default policies
+            example: Workspace admin
+          - id: suggested-recipients
+            name: Suggested recipients
+            example: People you worked with
+          - id: risk-based-prompts
+            name: Risk-based prompts
+            example: Warn before external share
+wild:
+  score: 2
+  note: Link access and role menus are routinely changed; inheritance and expiry less often.
+  examples:
+    - name: Google Drive
+      note: Roles, link sharing, expiry
+    - name: Figma
+      note: Team vs link access
+    - name: GitHub
+      note: Collaborators, teams, branch protection
+techniques:
+  - name: Access as a visible list
+    dimension: Sharing feedback
+    how: Always show principals and roles as an editable collection, including link principals, not only
+      a success toast.
+    ai: false
+  - name: Warn before widening
+    dimension: Policy initiative
+    how: When a change expands audience (especially external), show who newly gains access before
+      confirming.
+    ai: false
+  - name: Suggest least privilege
+    dimension: Permission model
+    how: Recommend the narrowest role that matches the stated intent (“collect feedback” → commenter).
+    ai: true
+signature: Access as a visible list
+sample: Cloud drives, design libraries, code hosts and enterprise content platforms.
+unit: One share configuration for one artifact or container.
+relations:
+  uses:
+    - confirmation
+    - autocomplete
+    - badge
+    - toast
+  specializes:
+    - collaborate
+  neighbors:
+    - version-history
+    - approval-flow
+scores:
+  ubiquity: 5
+  potential: 4
+  spec: 4
+evidence: agent-coded
+usage:
+  - People copy links before setting the role, then fix oversharing later
+questions:
+  - How should inherited permissions be explained without a full directory tree?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.663302051093094
+  agreementFirstPass: 0.7675
+  kappaFinal: 0.944501338668903
+  agreementFinal: 0.96
+  pass: true
+  perSub:
+    roles:
+      kappaFirstPass: 0.7220077220077218
+      agreementFirstPass: 0.7916666666666666
+      kappaFinal: 0.943522324370117
+      agreementFinal: 0.9583333333333334
+      flag: null
+    openBy:
+      kappaFirstPass: 0.6958534689601567
+      agreementFirstPass: 0.7916666666666666
+      kappaFinal: 0.9539111509409806
+      agreementFinal: 0.9666666666666667
+      flag: null
+    scope:
+      kappaFirstPass: 0.8705501618122975
+      agreementFirstPass: 0.9
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    feedback:
+      kappaFirstPass: 0.5098039215686277
+      agreementFirstPass: 0.68
+      kappaFinal: 0.9448808047402507
+      agreementFinal: 0.96
+      flag: null
+    lifecycle:
+      kappaFirstPass: 0.781021897810219
+      agreementFirstPass: 0.85
+      kappaFinal: 0.781021897810219
+      agreementFinal: 0.85
+      flag: null
+    initiative:
+      kappaFirstPass: 0.5582822085889572
+      agreementFirstPass: 0.7
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+  distribution:
+    roles:
+      View: 18
+      Comment: 8
+      Edit: 18
+      Owner or admin: 7
+      Custom fine-grained: 3
+      Anonymous link access: 14
+    openBy:
+      Share button: 17
+      Copy link: 14
+      Invite by email: 14
+      Request access flow: 1
+      From a parent folder policy: 3
+      n/a: 1
+    scope:
+      Whole file: 13
+      Folder and children: 4
+      One section or page: 2
+      One branch or environment: 1
+      Time-limited access: 0
+    feedback:
+      People list with roles: 16
+      Link privacy summary: 15
+      Access warnings: 3
+      Audit of grants: 1
+      Notify on share: 6
+    lifecycle:
+      Until revoked: 14
+      Expiring access: 3
+      Pending request: 1
+      Transferred ownership: 0
+      Inherited then broken: 2
+    initiative:
+      Person chooses each time: 13
+      Org default policies: 5
+      Suggested recipients: 1
+      Risk-based prompts: 1
+  exemplars:
+    roles:
+      View:
+        - Google Docs — Share dialog
+        - Google Drive — Share a folder
+        - Google Drive — Request access page
+      Comment:
+        - Google Docs — Share dialog
+        - Google Drive — Share a folder
+        - Google Drive — Request access page
+      Edit:
+        - Google Docs — Share dialog
+        - Google Drive — Share a folder
+        - Google Drive — Request access page
+      Owner or admin:
+        - Google Docs — Share dialog
+        - Google Drive — Share a folder
+        - Figma — Share a file
+      Custom fine-grained:
+        - GitHub — Repository collaborators and teams
+        - GitHub — Branch protection rules
+        - SharePoint — Site permissions
+      Anonymous link access:
+        - Google Docs — Share dialog
+        - Google Drive — Share a folder
+        - Dropbox — Share a file
+    openBy:
+      Share button:
+        - Google Docs — Share dialog
+        - Google Drive — Share a folder
+        - Dropbox — Share a file
+      Copy link:
+        - Google Docs — Share dialog
+        - Google Drive — Share a folder
+        - Dropbox — Share a file
+      Invite by email:
+        - Google Docs — Share dialog
+        - Google Drive — Share a folder
+        - Dropbox — Share a file
+      Request access flow:
+        - Google Drive — Request access page
+      From a parent folder policy:
+        - Google Drive — Share a folder
+        - SharePoint — Site permissions
+        - Confluence — Page restrictions
+    scope:
+      Whole file:
+        - Google Docs — Share dialog
+        - Google Drive — Request access page
+        - Dropbox — Share a file
+      Folder and children:
+        - Google Drive — Share a folder
+        - SharePoint — Site permissions
+        - iCloud Drive — Share a folder
+      One section or page:
+        - Notion — Share a page
+        - Confluence — Page restrictions
+      One branch or environment:
+        - GitHub — Branch protection rules
+      Time-limited access: []
+    feedback:
+      People list with roles:
+        - Google Docs — Share dialog
+        - Google Drive — Share a folder
+        - Dropbox — Share a file
+      Link privacy summary:
+        - Google Docs — Share dialog
+        - Google Drive — Share a folder
+        - Dropbox — Share a file
+      Access warnings:
+        - Google Drive — Share a folder
+        - GitHub — Branch protection rules
+        - Confluence — Page restrictions
+      Audit of grants:
+        - SharePoint — Site permissions
+      Notify on share:
+        - Google Docs — Share dialog
+        - Google Drive — Share a folder
+        - Google Drive — Request access page
+    lifecycle:
+      Until revoked:
+        - Google Docs — Share dialog
+        - Google Drive — Share a folder
+        - Figma — Share a file
+      Expiring access:
+        - Dropbox — Share a file
+        - OneDrive — Share
+        - Box — Shared link settings
+      Pending request:
+        - Google Drive — Request access page
+      Transferred ownership: []
+      Inherited then broken:
+        - SharePoint — Site permissions
+        - Confluence — Page restrictions
+    initiative:
+      Person chooses each time:
+        - Google Docs — Share dialog
+        - Google Drive — Request access page
+        - Dropbox — Share a file
+      Org default policies:
+        - OneDrive — Share
+        - GitHub — Repository collaborators and teams
+        - GitHub — Branch protection rules
+      Suggested recipients:
+        - Google Photos — Shared album
+      Risk-based prompts:
+        - Google Drive — Share a folder
+  unobserved:
+    - sub: scope
+      var: Time-limited access
+    - sub: lifecycle
+      var: Transferred ownership
+  unresolved: []
+  proposals:
+    raised: 0
+    adopted: []
+    recorded: []
+  raterNotes:
+    fable:
+      - Lifecycle is Until revoked nearly everywhere; expiring links are options rather than the
+        default. Branch protection is a policy, not a share flow, so openBy is n/a.
+      - lifecycle and initiative are pick-one but nearly every product truthfully holds a default
+        (until revoked; person chooses) plus an option (expiry; org default) — both want pick-any.
+        scope's Time-limited access duplicates lifecycle's Expiring access. Sonnet's lists omit
+        Anonymous link access wherever a link exists, which reads roles as a person-role ladder
+        only; the gloss should say whether a link audience is a role.
+    opus:
+      - scope puts Time-limited access beside Whole file and Folder and children, which are answers
+        to a different question; I coded expiry under lifecycle throughout and left that variation
+        unused, which I think is where the codebook is wrong rather than where the products are. The
+        entry also has no way to record a principal that is a group or a room (a Slack channel, a
+        GitHub team) rather than a person or a link, and roles cannot say that commenting comes
+        bundled with viewing rather than as its own grade (Figma).
+      - lifecycle is pick one but several products hold two values at once — a grant that lasts
+        until revoked plus an optional expiry on the link (Dropbox, OneDrive, Box) — so I applied
+        the codebook's own ordering and coded Until revoked; it wants to be pick any. scope still
+        carries Time-limited access, which answers the lifecycle question rather than the scope one,
+        and that mis-parking is what split us on OneDrive. roles has no way to say that a right is
+        bundled rather than granted (Figma's commenting rides with viewing) and no principal type
+        for a group or a room (a Slack channel, a GitHub team), and openBy has no value for a screen
+        where nothing is shared at all (branch protection) short of n/a.
+    sonnet:
+      - None of these 20 instances showed AI-suggested recipients ('people you worked with') as the
+        primary mechanism, so that Initiative variation went unused rather than being force-applied
+        to ordinary invite-by-email flows that may also have it as a secondary autocomplete feature
+        I'm not confident about per-product.
+      - "Two codebook overlaps and one convention question: (1) scope's Time-limited access and
+        lifecycle's Expiring access share the same exemplar (an expiring link) — the same real
+        feature can be legitimately coded under either or, as I initially did, double-coded under
+        both; I settled on scope answering what the grant covers and lifecycle answering how it
+        ends. (2) openBy's From a parent folder policy is ambiguous between an item's access having
+        arrived FROM an ancestor's policy and an item being the SOURCE whose children inherit
+        downstream — two raters credited a folder/page's own share screen with this value on
+        downstream-inheritance evidence, which I don't think the value is describing. (3) roles'
+        Custom fine-grained: whether it stacks additively with the simpler named roles it subsumes
+        (GitHub's ladder ticked as View/Edit/Owner too) or stands alone as the codebook's own GitHub
+        exemplar suggests — I read it as standing alone."
+  codedAt: 2026-09-22
+previews:
+  - file: sharing-permissions.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

@@ -1,0 +1,340 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "tag-input". Edit between batches only — see README "Rules".
+id: tag-input
+name: Tag input
+level: component
+parent: enter-data
+aliases:
+  - token field
+  - chips input
+  - multi-select
+definition: An input that turns typed or chosen values into removable tokens.
+data: collection
+platforms:
+  - web
+  - desktop
+  - mobile
+domains:
+  - communication
+  - productivity
+  - software
+anatomy:
+  - name: Token
+    role: One value
+  - name: Input
+    role: Where the next value is typed
+  - name: Suggestions
+    role: Known values
+roles: []
+dimensions:
+  - name: Token content
+    family: content
+    question: What does a token show?
+    subdimensions:
+      - id: token
+        name: Token content
+        select: many
+        values:
+          - id: text
+            name: Text
+            example: Keywords
+          - id: avatar
+            name: Avatar
+            example: Recipient fields
+          - id: colour
+            name: Colour
+            example: GitHub labels
+          - id: validation-state
+            name: Validation state
+            example: Invalid email tokens
+  - name: Vocabulary
+    family: scope
+    question: Can new values be created?
+    subdimensions:
+      - id: vocabulary
+        name: Vocabulary
+        select: one
+        values:
+          - id: free-creation
+            name: Free creation
+            example: Blog tags
+          - id: existing-values-only
+            name: Existing values only
+            example: Assignee pickers
+          - id: create-with-confirmation
+            name: Create with confirmation
+            example: Linear new label
+  - name: Creating tokens
+    family: invocation
+    question: What turns text into a token?
+    subdimensions:
+      - id: create
+        name: Create by
+        select: many
+        values:
+          - id: enter
+            name: Enter
+            example: Most
+          - id: comma
+            name: Comma
+            example: Email fields
+          - id: pasting-a-list
+            name: Pasting a list
+            example: Bulk recipients
+          - id: choosing-a-suggestion
+            name: Choosing a suggestion
+            example: Label pickers
+          - id: space
+            name: Space
+            description: Pressing the space bar also turns the typed text into a token, alongside or instead of
+              Enter/comma.
+            example: GitHub — Repository topics
+  - name: Overflow
+    family: layout
+    question: What happens with many tokens?
+    subdimensions:
+      - id: overflow
+        name: Overflow
+        select: one
+        values:
+          - id: wrap
+            name: Wrap
+            example: Tag editors
+          - id: scroll-on-one-line
+            name: Scroll on one line
+            example: Compact filters
+          - id: collapse-with-a-count
+            name: Collapse with a count
+            example: Gmail recipients
+          - id: stacked-list
+            name: Stacked list
+            description: Tokens leave the input and become a vertical list of rows beneath it, one per value,
+              each with its own remove control
+            example: Google Calendar — Add guests
+          - id: stacked-list-of-rows
+            name: Stacked list of rows
+            description: Each added value becomes its own full-width row in a vertical list, rather than an
+              inline chip that wraps, scrolls on one line, or collapses into a count.
+            example: Google Calendar — Add guests
+wild:
+  score: 1
+  note: Workspaces let people define the vocabulary, not the control.
+  examples:
+    - name: GitHub
+      note: Create and colour labels
+techniques:
+  - name: Paste to tokens
+    dimension: Creating tokens
+    how: Paste any list and it splits into tokens, with the ones it could not parse flagged.
+    ai: false
+signature: Paste to tokens
+sample: Email clients, issue trackers, CMSs and filters.
+unit: One token field.
+relations:
+  uses:
+    - autocomplete
+  specializes: []
+  neighbors:
+    - choice-control
+scores:
+  ubiquity: 4
+  potential: 2
+  spec: 5
+evidence: agent-coded
+usage:
+  - Tag vocabularies sprawl without merge tools
+questions:
+  - Should tag merging be part of the input itself?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7158355716653855
+  agreementFirstPass: 0.8045454545454546
+  kappaFinal: 0.9725128183375032
+  agreementFinal: 0.9818181818181818
+  pass: true
+  perSub:
+    token:
+      kappaFirstPass: 0.7708578143360756
+      agreementFirstPass: 0.8375
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    vocabulary:
+      kappaFirstPass: 0.8350137488542624
+      agreementFirstPass: 0.85
+      kappaFinal: 0.9466192170818507
+      agreementFinal: 0.95
+      flag: null
+    create:
+      kappaFirstPass: 0.6913580246913584
+      agreementFirstPass: 0.77
+      kappaFinal: 0.973236986484678
+      agreementFinal: 0.98
+      flag: null
+    overflow:
+      kappaFirstPass: 0.49895615866388293
+      agreementFirstPass: 0.8
+      kappaFinal: 0.884836852207294
+      agreementFinal: 0.95
+      flag: null
+  distribution:
+    token:
+      Text: 20
+      Avatar: 7
+      Colour: 4
+      Validation state: 4
+    vocabulary:
+      Free creation: 10
+      Existing values only: 5
+      Create with confirmation: 5
+    create:
+      Enter: 17
+      Comma: 11
+      Pasting a list: 5
+      Choosing a suggestion: 19
+      Space: 1
+    overflow:
+      Wrap: 17
+      Scroll on one line: 0
+      Collapse with a count: 2
+      Stacked list: 1
+      Stacked list of rows: 0
+  exemplars:
+    token:
+      Text:
+        - Gmail — To field in compose
+        - Microsoft Outlook — To field in a new message
+        - iOS Mail — To field
+      Avatar:
+        - Gmail — To field in compose
+        - Microsoft Outlook — To field in a new message
+        - Slack — Add people to a channel
+      Colour:
+        - Linear — Labels on an issue
+        - Notion — Multi-select property
+        - Airtable — Multiple select field
+      Validation state:
+        - Gmail — To field in compose
+        - Microsoft Outlook — To field in a new message
+        - iOS Mail — To field
+    vocabulary:
+      Free creation:
+        - Gmail — To field in compose
+        - Microsoft Outlook — To field in a new message
+        - iOS Mail — To field
+      Existing values only:
+        - Stack Overflow — Tags on Ask Question
+        - Slack — Add people to a channel
+        - Microsoft Teams — To field in a new chat
+      Create with confirmation:
+        - Linear — Labels on an issue
+        - Jira — Labels field
+        - Notion — Multi-select property
+    create:
+      Enter:
+        - Gmail — To field in compose
+        - Microsoft Outlook — To field in a new message
+        - iOS Mail — To field
+      Comma:
+        - Gmail — To field in compose
+        - Microsoft Outlook — To field in a new message
+        - iOS Mail — To field
+      Pasting a list:
+        - Gmail — To field in compose
+        - Microsoft Outlook — To field in a new message
+        - Slack — Add people to a channel
+      Choosing a suggestion:
+        - Gmail — To field in compose
+        - Microsoft Outlook — To field in a new message
+        - iOS Mail — To field
+      Space:
+        - GitHub — Repository topics
+    overflow:
+      Wrap:
+        - Microsoft Outlook — To field in a new message
+        - GitHub — Repository topics
+        - Linear — Labels on an issue
+      Scroll on one line: []
+      Collapse with a count:
+        - Gmail — To field in compose
+        - iOS Mail — To field
+      Stacked list:
+        - Google Calendar — Add guests
+      Stacked list of rows: []
+  unobserved:
+    - sub: overflow
+      var: Scroll on one line
+    - sub: overflow
+      var: Stacked list of rows
+  unresolved: []
+  proposals:
+    raised: 3
+    adopted:
+      - sub: overflow
+        name: Stacked list
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: create
+        name: Space
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: overflow
+        name: Stacked list of rows
+        raters:
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - Semicolon (Outlook) and space (GitHub) were coded as Comma since the variation is really 'a
+        delimiter key'; the name is narrower than the thing.
+      - "token: one rater never codes Text, so the gloss should say whether Text is implied by every
+        chip; overflow lacks the stacked-rows case; vocabulary is unclear on a recipient field where
+        an unknown email is accepted as an invitation."
+    opus:
+      - "vocabulary needed a rule: Free creation where typing and committing simply makes the value,
+        Create with confirmation where a new value is offered as an explicit Create row to choose,
+        Existing values only where a typed string that matches nothing cannot be committed.
+        Recipient fields sit awkwardly in that scheme — an unknown email address is both free
+        creation and an invitation. The create list also has no variation for space as a separator
+        (GitHub topics) and the entry has nowhere to record a cap on the number of tokens, which
+        four of these impose."
+      - "create mixes the keystroke with the source: when a 'Create X' row is highlighted, Enter and
+        Choosing a suggestion are the same action, which is where the three of us split on Linear,
+        Notion and Airtable; token's Text reads as mutually exclusive with Avatar and Colour to one
+        rater although every token in this sample shows text; overflow is pick one but describes two
+        different states of the same field (Gmail and iOS Mail wrap while focused and collapse to a
+        count when they are not), and it had no value for tokens that leave the field and become
+        rows."
+    sonnet:
+      - Vocabulary was the hardest pick-one for enterprise label/tag fields that both suggest
+        existing values and let you create new ones with a confirm step (Linear, Notion, Airtable,
+        Jira, Asana) — I coded Create with confirmation only where a distinct 'Create X' affordance
+        is part of the pattern, and Free creation where a new value seems to land without that extra
+        step, but I can't fully verify the Jira/Asana distinction from memory.
+      - "One systematic miss dominated this archetype: 'token' content is pick-any, but I was coding
+        it as if only one kind of content could be true per chip, picking Avatar or Colour alone
+        whenever either was present and dropping Text even though nearly every chip in the sample
+        also shows the value's name as text. This alone accounted for the bulk of the disagreement
+        here. Separately, 'create' pick-any suffered a milder version of the same under-listing —
+        I'd often credit only the one or two mechanisms my own note happened to describe rather than
+        the fuller set both other raters independently confirmed."
+  codedAt: 2026-09-22
+previews:
+  - file: tag-input.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

@@ -1,0 +1,460 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "app-shell". Edit between batches only — see README "Rules".
+id: app-shell
+name: App shell
+level: pattern
+parent: navigate
+aliases:
+  - application frame
+  - chrome
+  - navigation shell
+  - scaffold
+definition: "The persistent frame around an application’s content: global navigation, identity,
+  search, and the region where content changes."
+data: hierarchy
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - productivity
+  - communication
+  - software
+  - entertainment
+  - enterprise
+anatomy:
+  - name: Global navigation
+    role: Top-level destinations
+  - name: Top bar
+    role: Title, search and account
+  - name: Content region
+    role: Where destinations render
+  - name: Secondary navigation
+    role: Destinations within a destination
+roles:
+  - destination
+  - badge
+  - avatar
+dimensions:
+  - name: Navigation placement
+    family: layout
+    question: Where are primary and secondary navigation?
+    subdimensions:
+      - id: primary
+        name: Primary navigation
+        select: one
+        values:
+          - id: top-navigation-bar
+            name: Top navigation bar
+            example: GitHub
+          - id: sidebar
+            name: Sidebar
+            example: Notion
+          - id: navigation-rail
+            name: Navigation rail
+            example: Material 3 rail on tablets
+          - id: bottom-tab-bar
+            name: Bottom tab bar
+            example: Instagram
+          - id: drawer
+            name: Drawer
+            example: Gmail on Android
+          - id: tab-bar-that-expands-to-sidebar
+            name: Tab bar that expands to sidebar
+            example: iPadOS 18 tab bar
+      - id: secondary
+        name: Secondary navigation
+        select: one
+        values:
+          - id: none
+            name: None
+            example: Instagram
+          - id: second-sidebar-column
+            name: Second sidebar column
+            example: Discord channel list beside the server rail
+          - id: sub-tabs-under-the-header
+            name: Sub-tabs under the header
+            example: GitHub repository tabs
+          - id: contextual-panel
+            name: Contextual panel
+            example: Settings sub-pages
+  - name: Navigation items
+    family: content
+    question: What does navigation contain, and how does it change?
+    subdimensions:
+      - id: items
+        name: Items
+        select: many
+        values:
+          - id: fixed-destinations
+            name: Fixed destinations
+            example: Instagram tabs
+          - id: user-pinned-items
+            name: User-pinned items
+            example: Notion favourites
+          - id: recents
+            name: Recents
+            example: Figma recents
+          - id: live-counts
+            name: Live counts
+            description: Unread or pending badges
+            example: Slack unreads
+          - id: workspace-switcher
+            name: Workspace switcher
+            example: Discord server rail
+  - name: Show and hide
+    family: invocation
+    question: Is the shell always there?
+    subdimensions:
+      - id: visibility
+        name: Visibility
+        select: one
+        values:
+          - id: always-visible
+            name: Always visible
+            example: Slack
+          - id: toggle-button
+            name: Toggle button
+            example: Gmail collapse menu
+          - id: collapse-on-scroll
+            name: Collapse on scroll
+            example: Safari on iOS toolbar
+          - id: reveal-on-hover
+            name: Reveal on hover
+            example: Edge vertical tabs collapsed
+  - name: Responsive shell
+    family: adaptation
+    question: What happens as the screen narrows?
+    subdimensions:
+      - id: narrowing
+        name: Narrowing
+        select: one
+        values:
+          - id: collapse-to-icons
+            name: Collapse to icons
+            example: Gmail icon rail
+          - id: become-bottom-tabs
+            name: Become bottom tabs
+            example: Cross-platform apps
+          - id: become-drawer
+            name: Become drawer
+            example: Material responsive layouts
+          - id: hide-in-immersive-mode
+            name: Hide in immersive mode
+            example: Full-screen reading and video
+  - name: Workspace structure
+    family: composition
+    question: How many applications or workspaces does one shell hold?
+    subdimensions:
+      - id: structure
+        name: Structure
+        select: one
+        values:
+          - id: single-app
+            name: Single app
+            example: Most apps
+          - id: multi-workspace-rail
+            name: Multi-workspace rail
+            example: Discord servers
+          - id: mini-apps-inside-an-app
+            name: Mini-apps inside an app
+            example: WeChat Mini Programs
+          - id: document-tabs
+            name: Document tabs
+            example: Browsers, Figma file tabs
+wild:
+  score: 2
+  note: Collapsing, reordering and hiding navigation items is common in productivity tools; the
+    placement itself is rarely a choice.
+  examples:
+    - name: VS Code
+      note: Reorder and hide activity bar items
+    - name: Slack
+      note: Sidebar sections and collapse
+    - name: Microsoft Edge
+      note: Vertical tabs toggle
+techniques:
+  - name: Shell morphing
+    dimension: Navigation placement
+    how: The same navigation spec renders as a top bar, sidebar, rail or tab bar; a person picks per
+      device and the destinations follow.
+    ai: false
+  - name: Focus mode by task
+    dimension: Show and hide
+    how: Hide the shell for a task and bring it back on intent, remembered per destination.
+    ai: false
+  - name: Arrange for this week
+    dimension: Navigation items
+    how: “Set up my sidebar for the launch” proposes pinned items and sections as a reviewable change.
+    ai: true
+signature: Shell morphing
+sample: Top 50 productivity, communication and media apps on web, desktop and mobile.
+unit: One product’s shell on one platform.
+relations:
+  uses:
+    - tabs
+    - drawer
+    - menu
+    - badge
+    - breadcrumbs
+    - tree-view
+  specializes:
+    - navigate
+  neighbors:
+    - split-pane
+    - command-palette
+scores:
+  ubiquity: 5
+  potential: 3
+  spec: 4
+evidence: agent-coded
+usage:
+  - People collapse chrome during deep work and restore it to switch
+questions:
+  - How much shell structure can be personal before shared help and screenshots stop matching?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.6134788922398755
+  agreementFirstPass: 0.69
+  kappaFinal: 0.8957010716231624
+  agreementFinal: 0.915
+  pass: true
+  perSub:
+    primary:
+      kappaFirstPass: 0.9035369774919614
+      agreementFirstPass: 0.9
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    secondary:
+      kappaFirstPass: 0.6470588235294118
+      agreementFirstPass: 0.75
+      kappaFinal: 0.8260869565217391
+      agreementFinal: 0.85
+      flag: null
+    items:
+      kappaFirstPass: 0.5555555555555559
+      agreementFirstPass: 0.67
+      kappaFinal: 0.8927566021716785
+      agreementFinal: 0.92
+      flag: null
+    visibility:
+      kappaFirstPass: 0.6527777777777778
+      agreementFirstPass: 0.75
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    narrowing:
+      kappaFirstPass: 0.42060085836909883
+      agreementFirstPass: 0.35
+      kappaFinal: 0.9127906976744183
+      agreementFinal: 0.9
+      flag: null
+    structure:
+      kappaFirstPass: 0.7330367074527255
+      agreementFirstPass: 0.8
+      kappaFinal: 0.7543500511770729
+      agreementFinal: 0.8
+      flag: null
+  distribution:
+    primary:
+      Top navigation bar: 3
+      Sidebar: 9
+      Navigation rail: 3
+      Bottom tab bar: 3
+      Drawer: 1
+      Tab bar that expands to sidebar: 1
+    secondary:
+      None: 11
+      Second sidebar column: 4
+      Sub-tabs under the header: 4
+      Contextual panel: 1
+    items:
+      Fixed destinations: 19
+      User-pinned items: 11
+      Recents: 4
+      Live counts: 14
+      Workspace switcher: 7
+    visibility:
+      Always visible: 11
+      Toggle button: 9
+      Collapse on scroll: 0
+      Reveal on hover: 0
+    narrowing:
+      Collapse to icons: 5
+      Become bottom tabs: 4
+      Become drawer: 6
+      Hide in immersive mode: 1
+      n/a: 4
+    structure:
+      Single app: 13
+      Multi-workspace rail: 2
+      Mini-apps inside an app: 3
+      Document tabs: 2
+  exemplars:
+    primary:
+      Top navigation bar:
+        - GitHub — Web site
+        - Google Chrome — Browser window
+        - Jira — Web app
+      Sidebar:
+        - Slack — Desktop app
+        - Notion — Web app
+        - Gmail — Web app
+      Navigation rail:
+        - Discord — Desktop app
+        - Microsoft Teams — Desktop app
+        - Microsoft Outlook — New Outlook for Windows
+      Bottom tab bar:
+        - Instagram — iOS app
+        - Spotify — iOS app
+        - WeChat — Mobile app
+      Drawer:
+        - Gmail — Android app
+      Tab bar that expands to sidebar:
+        - Apple Music — iPadOS 18 app
+    secondary:
+      None:
+        - Notion — Web app
+        - Gmail — Android app
+        - Instagram — iOS app
+      Second sidebar column:
+        - Slack — Desktop app
+        - Discord — Desktop app
+        - Microsoft Teams — Desktop app
+      Sub-tabs under the header:
+        - Gmail — Web app
+        - GitHub — Web site
+        - Linear — Web app
+      Contextual panel:
+        - Jira — Web app
+    items:
+      Fixed destinations:
+        - Slack — Desktop app
+        - Discord — Desktop app
+        - Notion — Web app
+      User-pinned items:
+        - Slack — Desktop app
+        - Notion — Web app
+        - Spotify — Desktop app
+      Recents:
+        - Spotify — Desktop app
+        - Microsoft Teams — Desktop app
+        - Figma — Desktop app
+      Live counts:
+        - Slack — Desktop app
+        - Discord — Desktop app
+        - Notion — Web app
+      Workspace switcher:
+        - Slack — Desktop app
+        - Discord — Desktop app
+        - Notion — Web app
+    visibility:
+      Always visible:
+        - Slack — Desktop app
+        - Discord — Desktop app
+        - GitHub — Web site
+      Toggle button:
+        - Notion — Web app
+        - Gmail — Web app
+        - Gmail — Android app
+      Collapse on scroll: []
+      Reveal on hover: []
+    narrowing:
+      Collapse to icons:
+        - Gmail — Web app
+        - Spotify — Desktop app
+        - YouTube — Web site
+      Become bottom tabs:
+        - Slack — Desktop app
+        - Discord — Desktop app
+        - Microsoft Teams — Desktop app
+      Become drawer:
+        - Notion — Web app
+        - Gmail — Android app
+        - GitHub — Web site
+      Hide in immersive mode:
+        - Google Chrome — Browser window
+    structure:
+      Single app:
+        - Notion — Web app
+        - Gmail — Web app
+        - Gmail — Android app
+      Multi-workspace rail:
+        - Slack — Desktop app
+        - Discord — Desktop app
+      Mini-apps inside an app:
+        - Microsoft Teams — Desktop app
+        - WeChat — Mobile app
+        - Microsoft Outlook — New Outlook for Windows
+      Document tabs:
+        - Figma — Desktop app
+        - Google Chrome — Browser window
+  unobserved:
+    - sub: visibility
+      var: Collapse on scroll
+    - sub: visibility
+      var: Reveal on hover
+  unresolved: []
+  proposals:
+    raised: 1
+    adopted: []
+    recorded:
+      - place: sub:structure
+        sub: structure
+        dim: null
+        name: Sibling apps in one shell
+        gloss: One product's shell carries a second, whole first-party application beside its own sections —
+          Gmail's Mail/Meet bottom bar, the Calendar/Keep/Tasks side strip — which is neither a
+          single app nor the sandboxed third-party mini-program platform 'Mini-apps inside an app'
+          describes
+        raters:
+          - opus
+        instances:
+          - 4
+          - 5
+        status: raised
+  raterNotes:
+    fable:
+      - narrowing is n/a for phone apps (already the narrowest); Jira was coded on its 2025 sidebar
+        navigation rather than the sample's top bar.
+      - primary and secondary do not say whether an icon rail beside a channel column is a sidebar
+        or a rail, which is why Discord and Teams split; Workspace switcher needs to say whether an
+        account or profile switcher counts; narrowing needs an explicit rule for shells sampled on
+        the phone (n/a) versus coding the desktop counterpart.
+    opus:
+      - secondary has no variation for a bottom bar that switches between sibling products in one
+        shell (Gmail's Mail/Meet), and structure cannot describe a shell that hosts other
+        first-party apps in a side panel (Gmail's Calendar/Keep/Tasks strip, Teams' and Outlook's
+        pinnable apps) short of calling them mini-apps, which overstates it. narrowing I read as
+        naming the form the shell takes when narrow, so phone-only instances take the variation that
+        matches their own layout rather than n/a.
+      - narrowing has no 'Unchanged' variation, so a shell that is the same at every width can only
+        be recorded as n/a — that single gap produced a quarter of this entry's disagreement
+        (instances 5, 7, 9, 11, 16), and it also tempts raters to restate `primary` instead. It is
+        pick one but several shells do two things at once (Discord becomes bottom tabs AND keeps a
+        channel drawer); it wants to be pick any. secondary's 'Second sidebar column' presupposes a
+        first sidebar, so a product with a top bar and one sub-destination column (Jira) has nowhere
+        clean to go. structure asks 'how many applications does one shell hold' but offers only
+        'Mini-apps inside an app' for any answer above one, which is why the three of us split three
+        ways on Gmail, Teams and Outlook.
+    sonnet:
+      - "'narrowing' was the hardest sub-dimension to apply honestly for shells I know mainly at one
+        screen size: already-mobile instances got 'n/a' (nothing further to describe), while desktop
+        apps I don't use daily (Figma, New Outlook) got '?' rather than a guessed breakpoint
+        behaviour."
+  codedAt: 2026-09-22
+previews:
+  - file: app-shell.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

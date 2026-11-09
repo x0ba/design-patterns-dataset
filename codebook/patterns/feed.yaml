@@ -1,0 +1,659 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "feed". Edit between batches only — see README "Rules".
+id: feed
+name: Feed
+level: pattern
+parent: browse-collections
+aliases:
+  - stream
+  - timeline
+  - activity stream
+  - news feed
+definition: An unbounded, continuously arriving stream of heterogeneous items, ordered by time or by
+  ranking and consumed by scrolling.
+data: stream
+platforms:
+  - web
+  - mobile
+domains:
+  - social
+  - news
+  - entertainment
+  - software
+  - commerce
+anatomy:
+  - name: Stream
+    role: The scrolling container and its loading edge
+  - name: Post
+    role: "One item: author, body, media, engagement"
+  - name: Injected modules
+    role: Non-post units placed into the stream
+  - name: Ranking
+    role: The invisible policy that decides order
+roles:
+  - author
+  - avatar
+  - timestamp
+  - body
+  - media
+  - engagement
+  - action
+dimensions:
+  - name: Post content
+    family: content
+    question: How much of each post appears, and how uniform are the items?
+    subdimensions:
+      - id: density
+        name: Density
+        select: one
+        values:
+          - id: headline
+            name: Headline
+            description: Title and source only
+            example: Hacker News
+          - id: card-preview
+            name: Card preview
+            description: Truncated body with media
+            example: LinkedIn
+          - id: full-post
+            name: Full post
+            description: Everything inline
+            example: X / Twitter
+          - id: full-screen-single-item
+            name: Full-screen single item
+            description: One post fills the viewport
+            example: TikTok For You
+      - id: heterogeneity
+        name: Heterogeneity
+        select: many
+        values:
+          - id: uniform-posts
+            name: Uniform posts
+            description: One item type
+            example: Hacker News
+          - id: mixed-media-types
+            name: Mixed media types
+            description: Text, image, video, link
+            example: Facebook
+          - id: injected-modules
+            name: Injected modules
+            description: Carousels of suggestions or stories inside the stream
+            example: Instagram suggested posts
+          - id: ads
+            name: Ads
+            description: Sponsored units in the stream
+            example: Most social feeds
+  - name: Ordering and sources
+    family: initiative
+    question: Who decides what appears, and in what order?
+    subdimensions:
+      - id: ordering
+        name: Ordering
+        select: one
+        values:
+          - id: chronological
+            name: Chronological
+            description: Newest first from followed sources
+            example: Mastodon home
+          - id: ranked
+            name: Ranked
+            description: An algorithm orders by predicted interest
+            example: TikTok For You
+          - id: sort-by-user
+            name: Sort by user
+            description: The person picks a sort
+            example: Reddit Best, Hot, New, Top
+          - id: switchable
+            name: Switchable
+            description: Tabs between ranked and chronological
+            example: X For you / Following
+          - id: editorially-curated
+            name: Editorially curated
+            description: People at the publisher choose and order the lead items; the feed is edited rather than
+              ranked by predicted interest or sorted by the reader
+            example: Apple News — Today
+      - id: sources
+        name: Sources
+        select: many
+        values:
+          - id: followed-accounts
+            name: Followed accounts
+            example: Mastodon
+          - id: topics
+            name: Topics
+            example: Reddit communities
+          - id: algorithmic-discovery
+            name: Algorithmic discovery
+            example: Instagram Reels
+          - id: custom-feeds
+            name: Custom feeds
+            description: User- or third-party-defined feed algorithms
+            example: Bluesky custom feeds
+          - id: lists
+            name: Lists
+            description: Hand-curated account sets
+            example: X Lists
+          - id: all-posts
+            name: All posts
+            description: Every submission on the platform, with no follow, topic or algorithmic selection
+            example: Hacker News — Front page
+          - id: global-pool
+            name: Global pool
+            description: Everything submitted to the site, identical for every visitor — no follows, no topic
+              selection and no personalisation (Hacker News, a federated public timeline)
+            example: Hacker News — Front page
+  - name: Arrangement
+    family: layout
+    question: How is the stream laid out?
+    subdimensions:
+      - id: arrangement
+        name: Arrangement
+        select: one
+        values:
+          - id: single-column
+            name: Single column
+            example: X
+          - id: multi-column
+            name: Multi-column
+            description: Several feeds side by side
+            example: TweetDeck / X Pro
+          - id: masonry-grid
+            name: Masonry grid
+            description: Variable-height tiles
+            example: Pinterest
+          - id: vertical-pager
+            name: Vertical pager
+            description: Snap one item per swipe
+            example: TikTok, YouTube Shorts
+  - name: Loading and position
+    family: lifecycle
+    question: How does new content arrive, and does the feed remember where you were?
+    subdimensions:
+      - id: loading
+        name: Loading
+        select: many
+        values:
+          - id: infinite-scroll
+            name: Infinite scroll
+            example: Instagram
+          - id: new-posts-pill
+            name: New-posts pill
+            description: New items wait behind a button
+            example: X “Show new posts”
+          - id: pull-to-refresh
+            name: Pull to refresh
+            example: Mobile social apps
+          - id: paged
+            name: Paged
+            description: An explicit next page
+            example: Hacker News More
+          - id: live-insertion
+            name: Live insertion
+            description: New items push into the stream as they arrive, moving the content under you, instead of
+              waiting behind a pill or a refresh gesture
+            example: Mastodon — Home timeline
+      - id: position
+        name: End and position
+        select: one
+        values:
+          - id: endless
+            name: Endless
+            description: No end state
+            example: TikTok
+          - id: caught-up-marker
+            name: Caught-up marker
+            description: An explicit end of new items
+            example: Instagram “You’re all caught up”
+          - id: resume-position
+            name: Resume position
+            description: Returns to where you left off
+            example: Feed readers that keep an unread position
+  - name: Nesting
+    family: composition
+    question: Do posts contain other posts?
+    subdimensions:
+      - id: nesting
+        name: Nesting
+        select: many
+        values:
+          - id: flat
+            name: Flat
+            example: Pinterest
+          - id: expandable-threads
+            name: Expandable threads
+            description: Replies open under a post
+            example: Reddit comments
+          - id: embedded-reposts
+            name: Embedded reposts
+            description: A post inside a post
+            example: X quote posts
+          - id: carousel-inside-post
+            name: Carousel inside post
+            description: Several media in one post
+            example: Instagram carousel posts
+          - id: clustered-stories
+            name: Clustered stories
+            description: Several posts about one story grouped as a single unit under a lead item
+            example: Google News — For you
+          - id: clustered-coverage
+            name: Clustered coverage
+            description: One unit holds several independent posts about the same subject from different sources
+              — a lead story with related coverage under it — which is neither a reply thread nor a
+              repost of one post inside another
+            example: Apple News — Today
+wild:
+  score: 2
+  note: Source and ordering choices are increasingly exposed; representation and density almost never
+    are.
+  examples:
+    - name: Bluesky
+      note: Pin and switch between custom feeds
+    - name: Reddit
+      note: Sort by Best, Hot, New, Top, Rising
+    - name: TweetDeck / X Pro
+      note: Compose columns from searches and lists
+    - name: Instagram
+      note: Following and Favorites feed options
+techniques:
+  - name: Feed recipes
+    dimension: Ordering and sources
+    how: The ranking policy becomes an editable recipe — sources × filters × weights — that can be read,
+      tuned, saved as a column and shared, just as Meridian made an ODI exchangeable.
+    ai: false
+  - name: Density dial
+    dimension: Post content
+    how: "Semantic zoom over posts: pinch from headline to card to full post, choosing which attributes
+      survive each level."
+    ai: false
+  - name: Mute by attribute
+    dimension: Post content
+    how: Surface hidden attributes (is a repost, has a link, is sponsored) and filter by them, making
+      every attribute a lever.
+    ai: false
+  - name: Because-you-said
+    dimension: Ordering and sources
+    how: “Show me less of this, because it’s rage bait” becomes an explicit, inspectable constraint in
+      the recipe rather than an opaque signal.
+    ai: true
+signature: Feed recipes
+sample: Top 20 apps in Social Networking, News and Entertainment charts on both app stores, plus
+  their web versions.
+unit: One feed surface (home, following, a topic feed) within one app.
+relations:
+  uses:
+    - card
+    - reactions
+    - carousel
+    - pagination
+    - tabs
+  specializes:
+    - browse-collections
+  neighbors:
+    - chat-thread
+    - activity-log
+scores:
+  ubiquity: 5
+  potential: 5
+  spec: 4
+evidence: agent-coded
+usage:
+  - Grazers scroll ambiently while completionists want an end state
+  - Recipes tuned once, then ignored unless the feed drifts
+questions:
+  - How much ranking transparency helps before it overwhelms?
+  - Can a feed recipe transfer across platforms the way a Meridian spec transfers across shops?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7301760696121679
+  agreementFirstPass: 0.8446428571428571
+  kappaFinal: 0.9348126165924848
+  agreementFinal: 0.95625
+  pass: true
+  perSub:
+    density:
+      kappaFirstPass: 0.797809604043808
+      agreementFirstPass: 0.8
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    heterogeneity:
+      kappaFirstPass: 0.699812382739212
+      agreementFirstPass: 0.775
+      kappaFinal: 0.9164578111946539
+      agreementFinal: 0.9375
+      flag: null
+    ordering:
+      kappaFirstPass: 0.8111723052714397
+      agreementFirstPass: 0.8
+      kappaFinal: 0.9536679536679535
+      agreementFinal: 0.95
+      flag: null
+    sources:
+      kappaFirstPass: 0.7808441558441552
+      agreementFirstPass: 0.8714285714285714
+      kappaFinal: 0.9243591539431293
+      agreementFinal: 0.95
+      flag: null
+    arrangement:
+      kappaFirstPass: 1
+      agreementFirstPass: 1
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    loading:
+      kappaFirstPass: 0.749989787164508
+      agreementFirstPass: 0.8583333333333333
+      kappaFinal: 0.9705651491365775
+      agreementFinal: 0.98
+      flag: null
+    position:
+      kappaFirstPass: 0.6311475409836069
+      agreementFirstPass: 0.85
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    nesting:
+      kappaFirstPass: 0.6342433077126944
+      agreementFirstPass: 0.8357142857142857
+      kappaFinal: 0.8834045860862804
+      agreementFinal: 0.93
+      flag: null
+  distribution:
+    density:
+      Headline: 1
+      Card preview: 9
+      Full post: 7
+      Full-screen single item: 3
+    heterogeneity:
+      Uniform posts: 4
+      Mixed media types: 16
+      Injected modules: 11
+      Ads: 12
+    ordering:
+      Chronological: 4
+      Ranked: 7
+      Sort by user: 1
+      Switchable: 7
+      Editorially curated: 1
+    sources:
+      Followed accounts: 14
+      Topics: 8
+      Algorithmic discovery: 15
+      Custom feeds: 1
+      Lists: 1
+      All posts: 0
+      Global pool: 1
+    arrangement:
+      Single column: 15
+      Multi-column: 1
+      Masonry grid: 1
+      Vertical pager: 3
+    loading:
+      Infinite scroll: 19
+      New-posts pill: 3
+      Pull to refresh: 10
+      Paged: 1
+      Live insertion: 1
+    position:
+      Endless: 18
+      Caught-up marker: 1
+      Resume position: 1
+    nesting:
+      Flat: 7
+      Expandable threads: 4
+      Embedded reposts: 9
+      Carousel inside post: 6
+      Clustered stories: 0
+      Clustered coverage: 2
+  exemplars:
+    density:
+      Headline:
+        - Hacker News — Front page
+      Card preview:
+        - Instagram — Home feed
+        - Facebook — News Feed
+        - LinkedIn — Home feed
+      Full post:
+        - X (Twitter) — For you timeline
+        - Mastodon — Home timeline
+        - Bluesky — Discover feed
+      Full-screen single item:
+        - TikTok — For You
+        - YouTube Shorts — Shorts feed
+        - Snapchat — Spotlight
+    heterogeneity:
+      Uniform posts:
+        - YouTube Shorts — Shorts feed
+        - Hacker News — Front page
+        - Snapchat — Spotlight
+      Mixed media types:
+        - X (Twitter) — For you timeline
+        - Instagram — Home feed
+        - TikTok — For You
+      Injected modules:
+        - X (Twitter) — For you timeline
+        - Instagram — Home feed
+        - Facebook — News Feed
+      Ads:
+        - X (Twitter) — For you timeline
+        - Instagram — Home feed
+        - TikTok — For You
+    ordering:
+      Chronological:
+        - Mastodon — Home timeline
+        - Feedly — Today / All
+        - X Pro (TweetDeck) — Deck of several timelines
+      Ranked:
+        - TikTok — For You
+        - Facebook — News Feed
+        - YouTube Shorts — Shorts feed
+      Sort by user:
+        - Reddit — Popular feed
+      Switchable:
+        - X (Twitter) — For you timeline
+        - Instagram — Home feed
+        - LinkedIn — Home feed
+      Editorially curated:
+        - Apple News — Today
+    sources:
+      Followed accounts:
+        - X (Twitter) — For you timeline
+        - Instagram — Home feed
+        - Facebook — News Feed
+      Topics:
+        - Facebook — News Feed
+        - LinkedIn — Home feed
+        - Reddit — Popular feed
+      Algorithmic discovery:
+        - X (Twitter) — For you timeline
+        - Instagram — Home feed
+        - TikTok — For You
+      Custom feeds:
+        - Bluesky — Discover feed
+      Lists:
+        - X Pro (TweetDeck) — Deck of several timelines
+      All posts: []
+      Global pool:
+        - Hacker News — Front page
+    arrangement:
+      Single column:
+        - X (Twitter) — For you timeline
+        - Instagram — Home feed
+        - Facebook — News Feed
+      Multi-column:
+        - X Pro (TweetDeck) — Deck of several timelines
+      Masonry grid:
+        - Pinterest — Home feed
+      Vertical pager:
+        - TikTok — For You
+        - YouTube Shorts — Shorts feed
+        - Snapchat — Spotlight
+    loading:
+      Infinite scroll:
+        - X (Twitter) — For you timeline
+        - Instagram — Home feed
+        - TikTok — For You
+      New-posts pill:
+        - X (Twitter) — For you timeline
+        - Mastodon — Home timeline
+        - Bluesky — Discover feed
+      Pull to refresh:
+        - X (Twitter) — For you timeline
+        - Instagram — Home feed
+        - TikTok — For You
+      Paged:
+        - Hacker News — Front page
+      Live insertion:
+        - X Pro (TweetDeck) — Deck of several timelines
+    position:
+      Endless:
+        - X (Twitter) — For you timeline
+        - TikTok — For You
+        - Facebook — News Feed
+      Caught-up marker:
+        - Instagram — Home feed
+      Resume position:
+        - Feedly — Today / All
+    nesting:
+      Flat:
+        - YouTube Shorts — Shorts feed
+        - Pinterest — Home feed
+        - Hacker News — Front page
+      Expandable threads:
+        - X (Twitter) — For you timeline
+        - Facebook — News Feed
+        - LinkedIn — Home feed
+      Embedded reposts:
+        - X (Twitter) — For you timeline
+        - Facebook — News Feed
+        - LinkedIn — Home feed
+      Carousel inside post:
+        - X (Twitter) — For you timeline
+        - Instagram — Home feed
+        - TikTok — For You
+      Clustered stories: []
+      Clustered coverage:
+        - Apple News — Today
+        - Google News — For you
+  unobserved:
+    - sub: sources
+      var: All posts
+    - sub: nesting
+      var: Clustered stories
+  unresolved: []
+  proposals:
+    raised: 7
+    adopted:
+      - sub: sources
+        name: All posts
+        raters:
+          - fable
+          - opus
+      - sub: nesting
+        name: Clustered stories
+        raters:
+          - fable
+          - opus
+      - sub: sources
+        name: Global pool
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: ordering
+        name: Editorially curated
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: nesting
+        name: Clustered coverage
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: loading
+        name: Live insertion
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded:
+      - place: sub:nesting
+        sub: nesting
+        dim: null
+        name: Story cluster
+        gloss: A lead item appears in the stream with a small set of related items (e.g. related coverage)
+          nested directly beneath it at that same feed position, distinct from a reply thread, a
+          quoted/reposted single item, or a same-post media carousel
+        raters:
+          - sonnet
+        instances:
+          - 14
+        status: raised
+  raterNotes:
+    fable:
+      - Position (end state) is hard to know for bounded editorial feeds (Apple News, Google News
+        coded ?). Switchable vs Ranked depends on whether a hidden dropdown counts as a tab; I
+        counted Instagram's.
+      - Switchable and Sort by user overlap whenever the sort keys are exactly ranked and recent,
+        and the codebook should say whether the option set, the control form or a buried setting
+        decides. Headline versus Card preview is undefined for a headline with a thumbnail and no
+        body. Expandable threads needs to say whether always-visible reply previews count. All three
+        raters proposed the same story-cluster nesting under three names, and two proposed the same
+        global-pool source; both are missing values.
+    opus:
+      - "ordering forced a call on products whose ranked/chronological switch is a menu rather than
+        tabs (Instagram, LinkedIn): I coded Switchable whenever the switch is reachable from the
+        feed's own header, and Sort by user only where there are several sort keys rather than a
+        pair. nesting is about the feed surface, not the item page, so Reddit's feed is Flat even
+        though the codebook cites Reddit comments — I expect disagreement there. heterogeneity's
+        Uniform posts and Mixed media types are exclusive in practice, so the sub is really one
+        pick-one plus two flags. Whether a given product currently carries ads is the least stable
+        thing here."
+      - "Two thirds of this packet is the pick-any problem the brief predicts — one rater's list
+        missing an item the others saw — and it clusters on the sub-dimensions where the feature is
+        intermittent: Injected modules and Ads appear between posts and may not be on screen when
+        you look, and Carousel inside post is a property of some posts and not of the feed.
+        `heterogeneity`, `sources`, `loading` and `nesting` would all score better if the codebook
+        said whether a unit that appears sometimes counts. The codebook faults proper: `ordering`'s
+        Switchable is a special case of Sort by user (LinkedIn's Top/Recent is both by definition),
+        and neither covers an edited feed — Apple News's Top Stories is chosen by people, which
+        Ranked ('an algorithm orders by predicted interest') actively misdescribes. `nesting` has no
+        value for a cluster of several sources' posts under one lead, which all three of us proposed
+        separately. `sources` has no value for an unselected global pool (Hacker News), and its
+        Custom feeds and Lists overlap for a reader like Feedly. `position` has no value for a
+        finite list that never announces its end. And `density` is read two ways — as how much of
+        the body shows (truncation) or as whether the media is whole; the gloss means the former."
+    sonnet:
+      - Several products (Google News, Apple News) blur the line between per-item nesting and
+        page-level sectioning; only Google News's inline related-coverage cluster was coded as
+        nested (+Story cluster), since Apple News's sections are just headers over otherwise
+        standalone cards.
+      - "Three codebook problems stood out most. (1) 'sources' undercounts real products more than
+        once: Hacker News's fully unpersonalized global pool has no matching value (hence Global
+        pool), and Apple/Google News's editorial curation isn't 'Ranked' at all (hence Editorially
+        curated) — the ordering vocabulary conflates 'an algorithm predicts interest' with 'a person
+        edits the order,' which are genuinely different mechanisms. (2) Three raters independently
+        invented nearly identical nesting variations (Clustered stories / Clustered coverage / Story
+        cluster) for the same lead-story-plus-related-coverage pattern seen on both Apple News and
+        Google News — a real, recurring gap in the four nesting values, not a one-off. (3) 'Followed
+        accounts' is used inconsistently for topic/community-based sources that aren't personal
+        follows (Reddit communities, Tumblr tags, Feedly boards, Strava clubs) — some of these are
+        closer to 'Topics' than to a social-follow graph, and the boundary between the two values
+        needs a clearer rule than product-by-product judgment calls."
+  codedAt: 2026-09-22
+previews:
+  - file: feed.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

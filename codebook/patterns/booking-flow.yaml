@@ -1,0 +1,417 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "booking-flow". Edit between batches only — see README "Rules".
+id: booking-flow
+name: Booking flow
+level: pattern
+parent: transact
+aliases:
+  - reservation
+  - appointment booking
+  - ticketing
+definition: Choosing a time, place or seat from what is available, then reserving it.
+data: time
+platforms:
+  - web
+  - mobile
+domains:
+  - travel
+  - health
+  - entertainment
+  - mobility
+anatomy:
+  - name: Availability
+    role: What can be booked
+  - name: Selection
+    role: The chosen slot or seat
+  - name: Hold
+    role: Keeping it while deciding
+  - name: Confirmation
+    role: The reservation
+roles:
+  - time
+  - price
+  - seat
+  - availability
+dimensions:
+  - name: Selection order
+    family: flow
+    question: In what order are choices made?
+    subdimensions:
+      - id: order
+        name: Order
+        select: one
+        values:
+          - id: date-first
+            name: Date first
+            example: Hotel search
+          - id: venue-first-then-time
+            name: Venue first, then time
+            example: OpenTable
+          - id: seat-map-first
+            name: Seat map first
+            example: Ticketmaster
+          - id: flexible-across-dates
+            name: Flexible across dates
+            example: Google Flights date grid
+  - name: Availability
+    family: content
+    question: How is what can be booked shown?
+    subdimensions:
+      - id: presentation
+        name: Presentation
+        select: one
+        values:
+          - id: list-of-slots
+            name: List of slots
+            example: Doctor appointment slots
+          - id: calendar-with-availability
+            name: Calendar with availability
+            example: Calendly
+          - id: price-calendar
+            name: Price calendar
+            example: Southwest low-fare calendar
+          - id: seat-map-with-price-tiers
+            name: Seat map with price tiers
+            example: Ticketmaster
+  - name: Hold
+    family: lifecycle
+    question: Is the choice held while deciding?
+    subdimensions:
+      - id: hold
+        name: Hold
+        select: one
+        values:
+          - id: no-hold
+            name: No hold
+            example: First come, first served
+          - id: timed-hold-with-countdown
+            name: Timed hold with countdown
+            example: Ticketmaster
+          - id: waitlist
+            name: Waitlist
+            example: Resy Notify
+          - id: request-pending-approval
+            name: Request pending approval
+            example: Airbnb Request to Book
+  - name: Price and scarcity
+    family: encoding
+    question: How are price and scarcity signalled?
+    subdimensions:
+      - id: signals
+        name: Signals
+        select: many
+        values:
+          - id: price-per-option
+            name: Price per option
+            example: Airline fares
+          - id: few-left
+            name: Few left
+            example: Hotel booking sites
+          - id: demand-level
+            name: Demand level
+            example: Ride-hailing surge
+          - id: price-change-warning
+            name: Price change warning
+            example: Google Flights price tracking
+  - name: Party and extras
+    family: scope
+    question: What else is booked with it?
+    subdimensions:
+      - id: extras
+        name: Extras
+        select: many
+        values:
+          - id: party-size
+            name: Party size
+            example: Restaurants
+          - id: add-ons
+            name: Add-ons
+            example: Bags and seats
+          - id: several-units
+            name: Several units
+            example: Multi-room hotel bookings
+          - id: group-coordination
+            name: Group coordination
+            example: Group trip planning
+  - name: Confirmation
+    family: feedback
+    question: How is the booking confirmed?
+    subdimensions:
+      - id: confirmation
+        name: Confirmation
+        select: one
+        values:
+          - id: on-screen
+            name: On screen
+            example: Most
+          - id: email-and-calendar-invite
+            name: Email and calendar invite
+            example: Calendly
+          - id: wallet-pass
+            name: Wallet pass
+            example: Apple Wallet boarding passes
+wild:
+  score: 1
+  note: Date flexibility and price alerts are the main levers.
+  examples:
+    - name: Google Flights
+      note: Date grid and price tracking
+    - name: Airbnb
+      note: Flexible dates
+techniques:
+  - name: Availability as attributes
+    dimension: Availability
+    how: Choose which per-slot attribute annotates the grid (price, crowding, travel time), generalizing
+      Southwest’s cheapest-fares calendar.
+    ai: false
+  - name: Find a slot that fits
+    dimension: Selection order
+    how: Cross availability with the person’s calendar and constraints, showing why each candidate fits.
+    ai: true
+signature: Availability as attributes
+sample: Airline, hotel, restaurant, clinic and event ticketing booking flows.
+unit: One booking flow.
+relations:
+  uses:
+    - date-picker
+    - seat-map
+    - calendar
+    - progress-indicator
+    - confirmation
+  specializes:
+    - transact
+  neighbors:
+    - availability-picker
+    - checkout
+scores:
+  ubiquity: 4
+  potential: 4
+  spec: 5
+evidence: agent-coded
+usage:
+  - Flexible travellers compare across dates before choosing any
+questions:
+  - Is an availability grid an overview whose items are time slots?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.6672731591005717
+  agreementFirstPass: 0.7545454545454545
+  kappaFinal: 0.9287062607725468
+  agreementFinal: 0.9454545454545454
+  pass: true
+  perSub:
+    order:
+      kappaFirstPass: 0.8148148148148151
+      agreementFirstPass: 0.8
+      kappaFinal: 0.9537750385208014
+      agreementFinal: 0.95
+      flag: null
+    presentation:
+      kappaFirstPass: 0.9447004608294929
+      agreementFirstPass: 0.95
+      kappaFinal: 0.9434495758718189
+      agreementFinal: 0.95
+      flag: null
+    hold:
+      kappaFirstPass: 0.9318955732122586
+      agreementFirstPass: 0.95
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    signals:
+      kappaFirstPass: 0.6749263006931715
+      agreementFirstPass: 0.7875
+      kappaFinal: 0.9461722488038277
+      agreementFinal: 0.9625
+      flag: null
+    extras:
+      kappaFirstPass: 0.5150862068965519
+      agreementFirstPass: 0.6666666666666666
+      kappaFinal: 0.8656047784967646
+      agreementFinal: 0.9
+      flag: null
+    confirmation:
+      kappaFirstPass: 0.4036300777873812
+      agreementFirstPass: 0.45
+      kappaFinal: 0.93704092339979
+      agreementFinal: 0.95
+      flag: null
+  distribution:
+    order:
+      Date first: 7
+      Venue first, then time: 7
+      Seat map first: 3
+      Flexible across dates: 3
+    presentation:
+      List of slots: 12
+      Calendar with availability: 1
+      Price calendar: 3
+      Seat map with price tiers: 4
+    hold:
+      No hold: 13
+      Timed hold with countdown: 5
+      Waitlist: 1
+      Request pending approval: 1
+    signals:
+      Price per option: 15
+      Few left: 7
+      Demand level: 5
+      Price change warning: 2
+    extras:
+      Party size: 12
+      Add-ons: 6
+      Several units: 8
+      Group coordination: 0
+    confirmation:
+      On screen: 1
+      Email and calendar invite: 13
+      Wallet pass: 5
+      n/a: 1
+  exemplars:
+    order:
+      Date first:
+        - United Airlines — Book a flight
+        - Booking.com — Hotel search and room selection
+        - Airbnb — Listing reservation
+      Venue first, then time:
+        - OpenTable — Restaurant reservation
+        - Resy — Restaurant reservation
+        - AMC Theatres — Showtime and seats
+      Seat map first:
+        - Ticketmaster — Event seat selection
+        - SeatGeek — Event tickets
+        - StubHub — Resale ticket selection
+      Flexible across dates:
+        - Google Flights — Flight search and select
+        - Southwest Airlines — Low fare calendar
+        - Hopper — Flight booking with price prediction
+    presentation:
+      List of slots:
+        - United Airlines — Book a flight
+        - Booking.com — Hotel search and room selection
+        - Marriott Bonvoy — Hotel booking
+      Calendar with availability:
+        - Airbnb — Listing reservation
+      Price calendar:
+        - Google Flights — Flight search and select
+        - Southwest Airlines — Low fare calendar
+        - Hopper — Flight booking with price prediction
+      Seat map with price tiers:
+        - Ticketmaster — Event seat selection
+        - SeatGeek — Event tickets
+        - AMC Theatres — Showtime and seats
+    hold:
+      No hold:
+        - Google Flights — Flight search and select
+        - United Airlines — Book a flight
+        - Southwest Airlines — Low fare calendar
+      Timed hold with countdown:
+        - Ticketmaster — Event seat selection
+        - SeatGeek — Event tickets
+        - AMC Theatres — Showtime and seats
+      Waitlist:
+        - Resy — Restaurant reservation
+      Request pending approval:
+        - Airbnb — Listing reservation
+    signals:
+      Price per option:
+        - Google Flights — Flight search and select
+        - United Airlines — Book a flight
+        - Southwest Airlines — Low fare calendar
+      Few left:
+        - United Airlines — Book a flight
+        - Booking.com — Hotel search and room selection
+        - Marriott Bonvoy — Hotel booking
+      Demand level:
+        - Booking.com — Hotel search and room selection
+        - Airbnb — Listing reservation
+        - OpenTable — Restaurant reservation
+      Price change warning:
+        - Google Flights — Flight search and select
+        - Hopper — Flight booking with price prediction
+    extras:
+      Party size:
+        - Google Flights — Flight search and select
+        - United Airlines — Book a flight
+        - Southwest Airlines — Low fare calendar
+      Add-ons:
+        - United Airlines — Book a flight
+        - Ticketmaster — Event seat selection
+        - Amtrak — Train booking
+      Several units:
+        - Booking.com — Hotel search and room selection
+        - Marriott Bonvoy — Hotel booking
+        - Ticketmaster — Event seat selection
+      Group coordination: []
+    confirmation:
+      On screen:
+        - Epic MyChart — Schedule a visit
+      Email and calendar invite:
+        - United Airlines — Book a flight
+        - Southwest Airlines — Low fare calendar
+        - Booking.com — Hotel search and room selection
+      Wallet pass:
+        - Ticketmaster — Event seat selection
+        - SeatGeek — Event tickets
+        - AMC Theatres — Showtime and seats
+  unobserved:
+    - sub: extras
+      var: Group coordination
+  unresolved: []
+  proposals:
+    raised: 0
+    adopted: []
+    recorded: []
+  raterNotes:
+    fable:
+      - "confirmation: 'Email and calendar invite' was used for every emailed confirmation even
+        where no .ics is attached, since there is no plain 'Email' variation; ticketing coded Wallet
+        pass because the pass is the artifact. Google Flights has no confirmation of its own (n/a)."
+      - Party size and Several units are not distinguishable for ticket quantity. Wallet pass names
+        a boarding pass, which arrives at check-in, not at booking; the gloss should say which
+        moment it codes. Sonnet coded n/a for confirmation on screens before purchase, so the unit
+        of analysis needs to say the flow is coded through to its end.
+    opus:
+      - "confirmation is pick-one but nearly every flow confirms on screen, emails a record and
+        offers a pass; I coded the durable artefact the product pushes you toward (wallet pass for
+        travel and ticketing, email for hotels and restaurants) rather than the on-screen page,
+        which is the choice most likely to split raters. signals and extras are empty for all four
+        clinic/health bookings, which is itself a finding: medical booking flows deliberately carry
+        no price, scarcity or upsell."
+      - confirmation is pick one but every flow here also confirms on screen, so On screen is a
+        floor that competes with the artefact that actually matters — it wants to be pick any, or to
+        be re-glossed as 'the durable artefact'. order has no value for a flow whose date and venue
+        are both fixed by the item (Eventbrite, any single event), which is what sent three raters
+        to three different codes. signals lacks a value rating — SeatGeek's Deal Score is a
+        judgement about price against market, not a demand level, and I coded it Demand level only
+        because nothing else fits. Party size and Several units also overlap wherever a quantity
+        picker both counts the party and adds units.
+    sonnet:
+      - confirmation is n/a for several instances (Google Flights, Southwest, Hopper,
+        Ticketmaster/SeatGeek/StubHub seat maps, AMC) because the sampled screen is search/selection
+        prior to an actual completed booking, which happens on a later screen not described here.
+      - "Two codebook problems recurred here. (1) order has no variation for a booking flow entered
+        at a single already-fixed event/venue+time where the remaining choice is only ticket type
+        and quantity (Eventbrite) — none of the four variations describe that, and n/a is a real gap
+        rather than a rater disagreement. (2) confirmation and the entry's stated 'unit of analysis:
+        one booking flow' pulled against the literal 'screen' sample text more than once: several of
+        my round-1 n/a codes wrongly stopped coding at the pictured pre-purchase screen (Southwest's
+        calendar, Ticketmaster's seat map, Hopper's price-prediction view) instead of coding the
+        whole flow's eventual confirmation from product knowledge, the way fable and opus did — the
+        codebook could say explicitly whether a sampled screen bounds the instance or merely anchors
+        it."
+  codedAt: 2026-09-22
+previews:
+  - file: booking-flow.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

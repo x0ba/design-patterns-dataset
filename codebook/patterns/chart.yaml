@@ -1,0 +1,585 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "chart". Edit between batches only — see README "Rules".
+id: chart
+name: Chart
+level: pattern
+parent: analyze
+aliases:
+  - plot
+  - graph
+  - visualization
+definition: A visual encoding of data values as marks and channels so a person can see
+  distributions, comparisons and trends.
+data: collection
+platforms:
+  - web
+  - desktop
+  - mobile
+domains:
+  - science
+  - finance
+  - news
+  - enterprise
+  - health
+  - education
+anatomy:
+  - name: Marks
+    role: The visual elements
+  - name: Axes and scales
+    role: How values map to space
+  - name: Legend
+    role: How channels are decoded
+  - name: Tooltip
+    role: Detail on demand for a mark
+  - name: Controls
+    role: Encoding and filter affordances
+roles:
+  - mark
+  - axis
+  - legend
+  - annotation
+dimensions:
+  - name: Mark encoding
+    family: encoding
+    question: What marks and channels carry the data?
+    subdimensions:
+      - id: markType
+        name: Mark type
+        select: one
+        values:
+          - id: points
+            name: Points
+            example: Scatterplots
+          - id: bars
+            name: Bars
+            example: Bar charts
+          - id: lines
+            name: Lines
+            example: Line charts
+          - id: areas
+            name: Areas
+            example: Area charts
+          - id: arcs
+            name: Arcs
+            example: Pie and donut
+          - id: cells
+            name: Cells
+            example: Heatmaps
+          - id: glyphs
+            name: Glyphs
+            example: Radar and parallel coordinates
+      - id: channels
+        name: Channels used
+        select: many
+        values:
+          - id: position
+            name: Position
+            example: Cartesian plots
+          - id: length
+            name: Length
+            example: Bars
+          - id: colour-hue-or-value
+            name: Colour hue or value
+            example: Choropleths
+          - id: size
+            name: Size
+            example: Bubble charts
+          - id: shape
+            name: Shape
+            example: Categorical scatters
+          - id: opacity
+            name: Opacity
+            example: Overplotting control
+          - id: animation
+            name: Animation
+            description: A variable — almost always time — is mapped to motion over frames rather than to a
+              static visual channel, with a play control and a scrubber; bar chart races, animated
+              scatter trails
+            example: Flourish — Bar chart race
+  - name: Scale and axes
+    family: layout
+    question: How is the value space laid out?
+    subdimensions:
+      - id: scale
+        name: Scale
+        select: one
+        values:
+          - id: linear
+            name: Linear
+            example: Most charts
+          - id: logarithmic
+            name: Logarithmic
+            example: Finance log scales
+          - id: ordinal-or-band
+            name: Ordinal or band
+            example: Category axes
+          - id: time
+            name: Time
+            example: Time-series axes
+          - id: radial
+            name: Radial
+            example: Polar charts
+      - id: faceting
+        name: Facet or small multiples
+        select: one
+        values:
+          - id: single-plot
+            name: Single plot
+            example: Simple charts
+          - id: small-multiples
+            name: Small multiples
+            example: Tableau trellis
+          - id: layered-series
+            name: Layered series
+            example: Multi-series lines
+          - id: dual-axis
+            name: Dual axis
+            example: Combo charts
+  - name: Mark interrogation
+    family: invocation
+    question: How does a person inspect a mark?
+    subdimensions:
+      - id: inspectBy
+        name: Inspect by
+        select: many
+        values:
+          - id: hover-tooltip
+            name: Hover tooltip
+            example: Observable Plot
+          - id: click-to-select
+            name: Click to select
+            example: Tableau marks
+          - id: brush-a-region
+            name: Brush a region
+            example: D3 brushing
+          - id: cross-filter-linked-views
+            name: Cross-filter linked views
+            example: Power BI cross-highlight
+          - id: click-through-to-source-rows
+            name: Click-through to source rows
+            example: Tableau View Data
+  - name: Encoding authorship
+    family: initiative
+    question: Who chooses the encoding?
+    subdimensions:
+      - id: authorship
+        name: Authorship
+        select: one
+        values:
+          - id: author-specified
+            name: Author-specified
+            example: News graphics
+          - id: builder-ui
+            name: Builder UI
+            example: Tableau shelves
+          - id: recommended-chart-type
+            name: Recommended chart type
+            example: Excel Recommended Charts
+          - id: generated-from-a-question
+            name: Generated from a question
+            example: Tableau Ask Data
+  - name: Annotation and emphasis
+    family: feedback
+    question: How are findings called out on the chart?
+    subdimensions:
+      - id: annotation
+        name: Annotation
+        select: many
+        values:
+          - id: none
+            name: None
+            example: Raw plots
+          - id: reference-lines
+            name: Reference lines
+            example: Tableau analytics pane
+          - id: callout-labels
+            name: Callout labels
+            example: Datawrapper
+          - id: story-points
+            name: Story points
+            example: Tableau Stories
+          - id: automated-insight-captions
+            name: Automated insight captions
+            example: Power BI smart narratives
+  - name: Responsive encoding
+    family: adaptation
+    question: How does the chart change with space and density?
+    subdimensions:
+      - id: adaptation
+        name: Adaptation
+        select: one
+        values:
+          - id: fixed-desktop-chart
+            name: Fixed desktop chart
+            example: Classic BI
+          - id: reflow-for-narrow-screens
+            name: Reflow for narrow screens
+            example: Responsive Observable notebooks
+          - id: aggregate-when-dense
+            name: Aggregate when dense
+            example: Hexbin overplotting
+          - id: switch-mark-type-by-size
+            name: Switch mark type by size
+            example: Mobile chart simplification
+wild:
+  score: 2
+  note: Authors and analysts rebind encodings freely; consumers of published charts usually cannot.
+  examples:
+    - name: Tableau
+      note: Drag fields to shelves; swap mark types
+    - name: Excel
+      note: Change chart type and series
+    - name: Observable
+      note: Edit Plot code live
+techniques:
+  - name: Shelf rebinding
+    dimension: Mark encoding
+    how: Treat fields as objects dragged onto visual roles (x, y, colour, size) so encodings are
+      reversible without rewriting queries.
+    ai: false
+  - name: Ask for a chart of…
+    dimension: Encoding authorship
+    how: A natural-language question proposes an encoding the person can edit on the shelves before
+      accepting.
+    ai: true
+  - name: Explain this mark
+    dimension: Mark interrogation
+    how: Selecting a mark opens its contributing rows and the transform steps that produced it.
+    ai: false
+signature: Shelf rebinding
+sample: BI tools, spreadsheet charts, news graphics libraries and embedded analytics widgets.
+unit: One chart instance bound to one query or table.
+relations:
+  uses:
+    - tooltip
+    - filter-controls
+    - stat-tile
+  specializes:
+    - analyze
+  neighbors:
+    - coordinated-views
+    - pivot-table
+    - dashboard
+scores:
+  ubiquity: 5
+  potential: 4
+  spec: 5
+evidence: agent-coded
+usage:
+  - People change mark type after seeing the first plot far more often than they change the data
+questions:
+  - Which encoding recommendations should be sticky preferences versus one-off suggestions?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7356443165757568
+  agreementFirstPass: 0.8111111111111111
+  kappaFinal: 0.935634218684826
+  agreementFinal: 0.9527777777777777
+  pass: true
+  perSub:
+    markType:
+      kappaFirstPass: 1
+      agreementFirstPass: 1
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    channels:
+      kappaFirstPass: 0.8235294117647054
+      agreementFirstPass: 0.87
+      kappaFinal: 0.9731615673644657
+      agreementFinal: 0.98
+      flag: null
+    scale:
+      kappaFirstPass: 0.7330960854092526
+      agreementFirstPass: 0.75
+      kappaFinal: 0.9414634146341462
+      agreementFinal: 0.95
+      flag: null
+    faceting:
+      kappaFirstPass: 0.7026759167492568
+      agreementFirstPass: 0.75
+      kappaFinal: 0.7560975609756097
+      agreementFinal: 0.8
+      flag: null
+    inspectBy:
+      kappaFirstPass: 0.6783088235294117
+      agreementFirstPass: 0.79
+      kappaFinal: 0.9423603439166145
+      agreementFinal: 0.96
+      flag: null
+    authorship:
+      kappaFirstPass: 0.8642533936651582
+      agreementFirstPass: 0.9
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    annotation:
+      kappaFirstPass: 0.669117647058824
+      agreementFirstPass: 0.7666666666666667
+      kappaFinal: 0.9286752080306433
+      agreementFinal: 0.95
+      flag: null
+    adaptation:
+      kappaFirstPass: 0.4250281848928974
+      agreementFirstPass: 0.6
+      kappaFinal: 0.7802197802197802
+      agreementFinal: 0.85
+      flag: null
+  distribution:
+    markType:
+      Points: 1
+      Bars: 6
+      Lines: 9
+      Areas: 1
+      Arcs: 0
+      Cells: 1
+      Glyphs: 1
+      "?": 1
+    channels:
+      Position: 19
+      Length: 7
+      Colour hue or value: 18
+      Size: 0
+      Shape: 0
+      Opacity: 0
+      Animation: 1
+      "?": 1
+    scale:
+      Linear: 5
+      Logarithmic: 0
+      Ordinal or band: 2
+      Time: 12
+      Radial: 0
+      "?": 1
+    faceting:
+      Single plot: 11
+      Small multiples: 0
+      Layered series: 9
+      Dual axis: 0
+    inspectBy:
+      Hover tooltip: 19
+      Click to select: 7
+      Brush a region: 4
+      Cross-filter linked views: 5
+      Click-through to source rows: 2
+    authorship:
+      Author-specified: 12
+      Builder UI: 8
+      Recommended chart type: 0
+      Generated from a question: 0
+    annotation:
+      None: 9
+      Reference lines: 7
+      Callout labels: 6
+      Story points: 0
+      Automated insight captions: 0
+    adaptation:
+      Fixed desktop chart: 13
+      Reflow for narrow screens: 7
+      Aggregate when dense: 0
+      Switch mark type by size: 0
+  exemplars:
+    markType:
+      Points:
+        - Tableau — Scatter plot
+      Bars:
+        - Microsoft Excel — Column chart
+        - Power BI — Clustered bar visual
+        - Apple Health — Steps chart
+      Lines:
+        - Google Sheets — Line chart
+        - Looker Studio — Time series chart
+        - Google Analytics 4 — Users over time
+      Areas:
+        - Strava — Elevation profile
+      Arcs: []
+      Cells:
+        - GitHub — Contribution graph
+      Glyphs:
+        - TradingView — Candlestick chart
+    channels:
+      Position:
+        - Microsoft Excel — Column chart
+        - Google Sheets — Line chart
+        - Tableau — Scatter plot
+      Length:
+        - Microsoft Excel — Column chart
+        - Power BI — Clustered bar visual
+        - TradingView — Candlestick chart
+      Colour hue or value:
+        - Microsoft Excel — Column chart
+        - Google Sheets — Line chart
+        - Tableau — Scatter plot
+      Size: []
+      Shape: []
+      Opacity: []
+      Animation:
+        - Flourish — Bar chart race
+    scale:
+      Linear:
+        - Google Sheets — Line chart
+        - Tableau — Scatter plot
+        - Strava — Elevation profile
+      Logarithmic: []
+      Ordinal or band:
+        - Microsoft Excel — Column chart
+        - Power BI — Clustered bar visual
+      Time:
+        - Looker Studio — Time series chart
+        - Google Analytics 4 — Users over time
+        - Grafana — Time series panel
+      Radial: []
+    faceting:
+      Single plot:
+        - Microsoft Excel — Column chart
+        - Tableau — Scatter plot
+        - Power BI — Clustered bar visual
+      Small multiples: []
+      Layered series:
+        - Google Sheets — Line chart
+        - Looker Studio — Time series chart
+        - Google Analytics 4 — Users over time
+      Dual axis: []
+    inspectBy:
+      Hover tooltip:
+        - Microsoft Excel — Column chart
+        - Google Sheets — Line chart
+        - Tableau — Scatter plot
+      Click to select:
+        - Microsoft Excel — Column chart
+        - Tableau — Scatter plot
+        - Power BI — Clustered bar visual
+      Brush a region:
+        - Tableau — Scatter plot
+        - Grafana — Time series panel
+        - Datadog — Timeseries widget
+      Cross-filter linked views:
+        - Power BI — Clustered bar visual
+        - Looker Studio — Time series chart
+        - Grafana — Time series panel
+      Click-through to source rows:
+        - Tableau — Scatter plot
+        - Power BI — Clustered bar visual
+    authorship:
+      Author-specified:
+        - Google Analytics 4 — Users over time
+        - Robinhood — Price chart
+        - Apple Stocks — Price chart
+      Builder UI:
+        - Microsoft Excel — Column chart
+        - Google Sheets — Line chart
+        - Tableau — Scatter plot
+      Recommended chart type: []
+      Generated from a question: []
+    annotation:
+      None:
+        - Microsoft Excel — Column chart
+        - Google Sheets — Line chart
+        - Power BI — Clustered bar visual
+      Reference lines:
+        - Tableau — Scatter plot
+        - Grafana — Time series panel
+        - Robinhood — Price chart
+      Callout labels:
+        - Grafana — Time series panel
+        - Datadog — Timeseries widget
+        - TradingView — Candlestick chart
+      Story points: []
+      Automated insight captions: []
+    adaptation:
+      Fixed desktop chart:
+        - Microsoft Excel — Column chart
+        - Google Sheets — Line chart
+        - Tableau — Scatter plot
+      Reflow for narrow screens:
+        - Google Analytics 4 — Users over time
+        - Grafana — Time series panel
+        - The New York Times — Covid cases chart
+      Aggregate when dense: []
+      Switch mark type by size: []
+  unobserved:
+    - sub: markType
+      var: Arcs
+    - sub: channels
+      var: Size
+    - sub: channels
+      var: Shape
+    - sub: channels
+      var: Opacity
+    - sub: scale
+      var: Logarithmic
+    - sub: scale
+      var: Radial
+    - sub: faceting
+      var: Small multiples
+    - sub: faceting
+      var: Dual axis
+    - sub: authorship
+      var: Recommended chart type
+    - sub: authorship
+      var: Generated from a question
+    - sub: annotation
+      var: Story points
+    - sub: annotation
+      var: Automated insight captions
+    - sub: adaptation
+      var: Aggregate when dense
+    - sub: adaptation
+      var: Switch mark type by size
+  unresolved: []
+  proposals:
+    raised: 1
+    adopted:
+      - sub: channels
+        name: Animation
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - Scale is a pick-one that conflates the x and value axes (time-series with log toggles coded
+        Time); Adaptation's Fixed desktop chart also had to cover fixed mobile encodings.
+      - scale is a pick one across two axes, so every bar, line-over-categories and log-toggle chart
+        holds two values; it wants to be pick any or one sub per axis. adaptation's Fixed desktop
+        chart has to hold every phone-native chart, and has no value for a fixed encoding that
+        resizes with its container. annotation needs a rule that value and legend labels are not
+        callouts, and a reference-mark value for a dot at a value. faceting's Small multiples and a
+        band axis of repeated marks get confused when each category is drawn as its own row.
+    opus:
+      - "Scale is pick-one over a chart that has two axes and often a log toggle, so the code
+        records the axis that defines the chart and loses the other. Fixed desktop chart is also
+        doing duty for every chart that simply does not adapt, including five built for phones, and
+        Datawrapper (16) shows the limit of the sample: a generic embed does not fix a mark type, so
+        mark and scale are honestly unknowable."
+      - "Three faults did most of the work here. `scale` and `faceting` each want two codes: a chart
+        has a category axis and a value axis (Sheets, GitHub) and the codebook makes you choose one,
+        and clustered/grouped series have no variation at all since Layered series means overlay.
+        `adaptation`'s first variation is named 'Fixed desktop chart', so every non-adapting phone
+        chart in the sample has to be coded as a desktop one. And `annotation` needs the line the
+        raters kept drawing by hand: a data label or a direct series label is furniture, a reference
+        value or a dated note is an annotation."
+    sonnet:
+      - markType/channels/scale were genuinely unknowable for the generic Datawrapper instance since
+        the sample doesn't name a chart type; coded '?'. Otherwise mark type was usually clear from
+        the product description.
+      - The adaptation sub's 'Fixed desktop chart' is a misleading name for what's really 'doesn't
+        restructure across viewport widths' -- it covers native single-context mobile app charts
+        just as much as classic desktop BI, and I initially conflated 'renders on a phone' with
+        'reflows for narrow screens' across several cells before correcting it.
+  codedAt: 2026-09-22
+previews:
+  - file: chart.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

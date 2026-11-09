@@ -1,0 +1,434 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "drawer". Edit between batches only — see README "Rules".
+id: drawer
+name: Drawer
+level: component
+parent: navigate
+aliases:
+  - side sheet
+  - flyout panel
+  - slide-over
+definition: A panel that slides in from a screen edge, holding navigation, detail, filters or an
+  assistant beside the main content.
+data: object
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - productivity
+  - enterprise
+  - commerce
+  - ai
+anatomy:
+  - name: Panel
+    role: The drawer surface
+  - name: Scrim
+    role: What covers content when modal
+  - name: Handle or trigger
+    role: What opens it
+roles: []
+dimensions:
+  - name: Edge and relationship
+    family: layout
+    question: Which edge, and does it cover, push or sit beside content?
+    subdimensions:
+      - id: edge
+        name: Edge
+        select: one
+        values:
+          - id: left
+            name: Left
+            example: Navigation drawers
+          - id: right
+            name: Right
+            example: Detail panels
+          - id: top
+            name: Top
+            example: Notification shades
+      - id: relationship
+        name: Relationship to content
+        select: one
+        values:
+          - id: overlay-with-scrim
+            name: Overlay with scrim
+            example: Material modal navigation drawer
+          - id: push-content
+            name: Push content
+            example: Standard drawers
+          - id: docked
+            name: Docked
+            example: Material standard side sheet
+          - id: overlay-no-scrim
+            name: Overlay, no scrim
+            description: The panel lies over the content without dimming or disabling it visually (GitHub
+              Projects item panel, Notion side peek, OS panels)
+            example: GitHub Projects — Item side panel
+  - name: Contents
+    family: content
+    question: What is it for?
+    subdimensions:
+      - id: holds
+        name: Holds
+        select: one
+        values:
+          - id: navigation
+            name: Navigation
+            example: Gmail on Android
+          - id: item-detail
+            name: Item detail
+            example: GitHub Projects item panel
+          - id: filters
+            name: Filters
+            example: Mobile retail
+          - id: settings
+            name: Settings
+            example: Admin consoles
+          - id: assistant
+            name: Assistant
+            example: Microsoft Edge Copilot sidebar
+          - id: system-status-and-controls
+            name: System status and controls
+            description: Notifications, quick toggles and widgets belonging to the OS rather than the app
+              (Android shade, iOS Control Center, Windows Widgets, macOS Notification Center)
+            example: Android — Notification shade
+          - id: companion-apps
+            name: Companion apps
+            description: Small versions of other products beside the main one (Gmail's Calendar/Keep/Tasks side
+              panel)
+            example: Gmail — Right side panel
+          - id: notifications-and-system-controls
+            name: Notifications and system controls
+            description: Alerts, quick toggles and glanceable widgets belonging to the system rather than to the
+              application underneath — notification shades, control centres, widget panels
+            example: Android — Notification shade
+          - id: a-companion-app
+            name: A companion app
+            description: The panel runs a different application beside the current one (a calendar or notes app
+              inside a mail client) rather than any part of the host
+            example: Gmail — Right side panel
+  - name: Opening
+    family: invocation
+    question: How does it open?
+    subdimensions:
+      - id: openBy
+        name: Opened by
+        select: many
+        values:
+          - id: menu-button
+            name: Menu button
+            example: Hamburger menus
+          - id: edge-swipe
+            name: Edge swipe
+            example: Android navigation drawers
+          - id: selecting-an-item
+            name: Selecting an item
+            example: Record panels
+          - id: keyboard-shortcut
+            name: Keyboard shortcut
+            example: Developer tools
+  - name: Across sizes
+    family: adaptation
+    question: Does it change with the screen?
+    subdimensions:
+      - id: responsive
+        name: Responsive
+        select: one
+        values:
+          - id: modal-when-small-docked-when-large
+            name: Modal when small, docked when large
+            example: Material adaptive layouts
+          - id: always-modal
+            name: Always modal
+            example: Mobile-first sites
+          - id: always-docked
+            name: Always docked
+            example: Desktop IDE panels
+wild:
+  score: 1
+  note: Some tools let people resize or pin a drawer open.
+  examples:
+    - name: Microsoft Edge
+      note: Pin the sidebar
+techniques:
+  - name: Dock or float
+    dimension: Edge and relationship
+    how: Pin a drawer to become a split pane, float it, or send it to the other edge.
+    ai: false
+signature: Dock or float
+sample: Mobile and web apps with edge panels.
+unit: One drawer.
+relations:
+  uses: []
+  specializes: []
+  neighbors:
+    - modal-dialog
+    - bottom-sheet
+    - split-pane
+scores:
+  ubiquity: 4
+  potential: 3
+  spec: 5
+evidence: agent-coded
+usage:
+  - Hidden navigation drawers reduce discovery of the destinations they hold
+questions:
+  - When a drawer holds detail, is it simply the overview–detail side-by-side layout?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7952201330421864
+  agreementFirstPass: 0.81875
+  kappaFinal: 0.9882040591904937
+  agreementFinal: 0.9875
+  pass: true
+  perSub:
+    edge:
+      kappaFirstPass: 1
+      agreementFirstPass: 1
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    relationship:
+      kappaFirstPass: 0.5893926432848592
+      agreementFirstPass: 0.65
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    holds:
+      kappaFirstPass: 0.7473684210526317
+      agreementFirstPass: 0.7
+      kappaFinal: 0.9569583931133431
+      agreementFinal: 0.95
+      flag: null
+    openBy:
+      kappaFirstPass: 0.8687500000000002
+      agreementFirstPass: 0.9125
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    responsive:
+      kappaFirstPass: 0.5499999999999999
+      agreementFirstPass: 0.55
+      kappaFinal: 0.9486740804106072
+      agreementFinal: 0.95
+      flag: null
+  distribution:
+    edge:
+      Left: 6
+      Right: 12
+      Top: 2
+    relationship:
+      Overlay with scrim: 8
+      Push content: 6
+      Docked: 2
+      Overlay, no scrim: 4
+    holds:
+      Navigation: 6
+      Item detail: 6
+      Filters: 1
+      Settings: 0
+      Assistant: 2
+      System status and controls: 0
+      Companion apps: 1
+      Notifications and system controls: 4
+      A companion app: 0
+    openBy:
+      Menu button: 13
+      Edge swipe: 7
+      Selecting an item: 5
+      Keyboard shortcut: 4
+    responsive:
+      Modal when small, docked when large: 6
+      Always modal: 9
+      Always docked: 5
+  exemplars:
+    edge:
+      Left:
+        - Gmail — Navigation drawer on Android
+        - Amazon — All menu on mobile web
+        - Google Drive — Navigation drawer on Android
+      Right:
+        - Microsoft Edge — Copilot sidebar
+        - GitHub Projects — Item side panel
+        - Nike — Filters on mobile web
+      Top:
+        - Android — Notification shade
+        - iOS — Control Center
+    relationship:
+      Overlay with scrim:
+        - Gmail — Navigation drawer on Android
+        - Android — Notification shade
+        - iOS — Control Center
+      Push content:
+        - Microsoft Edge — Copilot sidebar
+        - Jira — Issue detail from the board
+        - Slack — Thread panel
+      Docked:
+        - VS Code — Secondary side bar
+        - Linear — Issue properties panel
+      Overlay, no scrim:
+        - GitHub Projects — Item side panel
+        - Notion — Side peek
+        - Windows 11 — Widgets panel
+    holds:
+      Navigation:
+        - Gmail — Navigation drawer on Android
+        - Amazon — All menu on mobile web
+        - Google Drive — Navigation drawer on Android
+      Item detail:
+        - GitHub Projects — Item side panel
+        - Jira — Issue detail from the board
+        - Linear — Issue properties panel
+      Filters:
+        - Nike — Filters on mobile web
+      Settings: []
+      Assistant:
+        - Microsoft Edge — Copilot sidebar
+        - VS Code — Secondary side bar
+      System status and controls: []
+      Companion apps:
+        - Gmail — Right side panel
+      Notifications and system controls:
+        - Android — Notification shade
+        - iOS — Control Center
+        - Windows 11 — Widgets panel
+      A companion app: []
+    openBy:
+      Menu button:
+        - Gmail — Navigation drawer on Android
+        - Microsoft Edge — Copilot sidebar
+        - Amazon — All menu on mobile web
+      Edge swipe:
+        - Gmail — Navigation drawer on Android
+        - Android — Notification shade
+        - iOS — Control Center
+      Selecting an item:
+        - GitHub Projects — Item side panel
+        - Jira — Issue detail from the board
+        - Slack — Thread panel
+      Keyboard shortcut:
+        - Microsoft Edge — Copilot sidebar
+        - VS Code — Secondary side bar
+        - Linear — Issue properties panel
+    responsive:
+      Modal when small, docked when large:
+        - Gmail — Navigation drawer on Android
+        - Nike — Filters on mobile web
+        - Google Drive — Navigation drawer on Android
+      Always modal:
+        - Android — Notification shade
+        - iOS — Control Center
+        - GitHub Projects — Item side panel
+      Always docked:
+        - Microsoft Edge — Copilot sidebar
+        - VS Code — Secondary side bar
+        - Linear — Issue properties panel
+  unobserved:
+    - sub: holds
+      var: Settings
+    - sub: holds
+      var: System status and controls
+    - sub: holds
+      var: A companion app
+  unresolved: []
+  proposals:
+    raised: 7
+    adopted:
+      - sub: holds
+        name: System status and controls
+        raters:
+          - fable
+          - opus
+      - sub: relationship
+        name: Overlay, no scrim
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: holds
+        name: Companion apps
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: holds
+        name: Notifications and system controls
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: holds
+        name: A companion app
+        raters:
+          - fable
+          - opus
+    recorded:
+      - place: sub:holds
+        sub: holds
+        dim: null
+        name: Companion content (notifications, widgets or mini-apps)
+        gloss: A feed of system notifications, an embedded companion mini-app (Calendar, Keep, Tasks), or a
+          widget feed (weather, news) — distinct from navigation, item detail, filters, settings or
+          a conversational assistant.
+        raters:
+          - sonnet
+        instances:
+          - 2
+          - 16
+          - 19
+          - 20
+        status: raised
+      - place: sub:holds
+        sub: holds
+        dim: null
+        name: Discussion thread
+        gloss: A conversation thread anchored to a specific message or item, distinct from navigation, item
+          detail, filters, settings or an assistant.
+        raters:
+          - sonnet
+        instances:
+          - 12
+        status: raised
+  raterNotes:
+    fable:
+      - "Push content vs Docked was the hard line: I used Push for panels that temporarily narrow
+        content and Docked for panels that are part of the layout."
+      - relationship has no value for an overlay that does not dim, and the gap between Push content
+        and Docked (temporary versus part of the layout) is not stated, which is why the record
+        panels split three ways; responsive reuses 'modal' for what relationship calls overlay, so a
+        no-scrim overlay has to be coded 'Always modal'.
+    opus:
+      - relationship has no room for an overlay without a scrim, which is what several right-hand
+        detail panels actually are; I coded those Overlay with scrim and said so. The line between
+        Push content and Docked also has to be drawn by hand — I took Docked to mean the panel is
+        part of the layout and Push to mean it arrives and shoves content over. responsive is an
+        inference for the desktop-only panels, which simply have no narrow form.
+      - "relationship had no overlay-without-a-scrim value, which is what most right-hand detail
+        panels actually are — three raters' disagreement on GitHub, Notion and the OS panels is
+        entirely that missing value. responsive then repeats the same axis in different words: its
+        variations name modality (Always modal) rather than adaptation, so a no-scrim overlay that
+        never docks has to be filed as 'modal', and OS panels tempt a rater to n/a. responsive is
+        also ambiguous about what counts as the same drawer at another size (one responsive site, as
+        with Nike, versus a separate mobile skin, as with Wikipedia)."
+    sonnet:
+      - Relationship was a frequent judgment call for record/detail panels that neither dim the
+        background nor visibly resize the main content (GitHub Projects, Jira, Linear, Notion,
+        Asana) — I coded these Docked since nothing pushes or scrims, though I can't rule out a
+        light scrim I'm not recalling precisely. The two OS-level panels (Windows Widgets, macOS
+        Notification Center) got responsive=n/a since they aren't a single app's own responsive
+        layout.
+  codedAt: 2026-09-22
+previews:
+  - file: drawer.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

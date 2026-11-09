@@ -1,0 +1,358 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "tree-view". Edit between batches only — see README "Rules".
+id: tree-view
+name: Tree view
+level: component
+parent: navigate
+aliases:
+  - outline
+  - hierarchy list
+  - folder tree
+definition: A hierarchical list whose nodes expand to reveal their children.
+data: hierarchy
+platforms:
+  - desktop
+  - web
+domains:
+  - software
+  - productivity
+  - enterprise
+  - science
+anatomy:
+  - name: Node
+    role: One item
+  - name: Disclosure
+    role: Expand and collapse
+  - name: Indentation
+    role: Depth
+roles:
+  - label
+  - icon
+  - badge
+dimensions:
+  - name: Node content
+    family: content
+    question: What does a node show?
+    subdimensions:
+      - id: content
+        name: Content
+        select: many
+        values:
+          - id: label
+            name: Label
+            example: All
+          - id: type-icon
+            name: Type icon
+            example: VS Code file icons
+          - id: count-badge
+            name: Count badge
+            example: Mail folder unread counts
+          - id: status-decoration
+            name: Status decoration
+            example: VS Code git decorations
+          - id: hover-actions
+            name: Hover actions
+            example: Notion sidebar page actions
+  - name: Expansion
+    family: invocation
+    question: How do nodes open?
+    subdimensions:
+      - id: expandBy
+        name: Expand by
+        select: many
+        values:
+          - id: disclosure-triangle
+            name: Disclosure triangle
+            example: Finder list view
+          - id: double-click
+            name: Double-click
+            example: Windows Explorer tree
+          - id: arrow-keys
+            name: Arrow keys
+            example: WAI-ARIA tree pattern
+          - id: hover-while-dragging
+            name: Hover while dragging
+            example: Spring-loaded folders
+          - id: expand-all
+            name: Expand all
+            example: Outliners
+  - name: Selection
+    family: scope
+    question: What can be selected?
+    subdimensions:
+      - id: selection
+        name: Selection
+        select: one
+        values:
+          - id: single-node
+            name: Single node
+            example: File trees
+          - id: multiple-nodes
+            name: Multiple nodes
+            example: VS Code explorer
+          - id: tri-state-checkboxes
+            name: Tri-state checkboxes
+            description: Parents reflect partial child selection
+            example: Installer component pickers
+  - name: Hierarchy source
+    family: composition
+    question: What makes one node the parent of another?
+    subdimensions:
+      - id: source
+        name: Source
+        select: one
+        values:
+          - id: containment
+            name: Containment
+            example: Folders
+          - id: grouped-by-attribute
+            name: Grouped by attribute
+            example: Grouped tree tables
+          - id: authored-outline
+            name: Authored outline
+            example: Workflowy
+          - id: multiple-parents
+            name: Multiple parents
+            example: Tags shown as folders
+  - name: Density
+    family: adaptation
+    question: How tight is the tree?
+    subdimensions:
+      - id: density
+        name: Density
+        select: one
+        values:
+          - id: compact
+            name: Compact
+            example: IDEs
+          - id: with-indent-guides
+            name: With indent guides
+            example: VS Code tree indent guides
+          - id: comfortable
+            name: Comfortable
+            example: Mobile outline apps
+wild:
+  score: 1
+  note: IDEs expose indentation and decoration options; hierarchy source is fixed.
+  examples:
+    - name: VS Code
+      note: Tree indent and render indent guides settings
+techniques:
+  - name: Regroup the hierarchy
+    dimension: Hierarchy source
+    how: Switch which attribute makes the parent (folder, tag, owner) while keeping the same nodes.
+    ai: false
+signature: Regroup the hierarchy
+sample: IDEs, mail clients, file managers and outliners.
+unit: One tree.
+relations:
+  uses:
+    - badge
+    - menu
+  specializes: []
+  neighbors:
+    - accordion
+    - breadcrumbs
+    - file-manager
+scores:
+  ubiquity: 4
+  potential: 3
+  spec: 5
+evidence: agent-coded
+usage:
+  - Deep trees are navigated by filtering, not expanding
+questions:
+  - Can a tree regroup without losing a person’s expanded state?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7041372262500626
+  agreementFirstPass: 0.7961538461538461
+  kappaFinal: 0.9637938041812529
+  agreementFinal: 0.9769230769230769
+  pass: true
+  perSub:
+    content:
+      kappaFirstPass: 0.7857142857142857
+      agreementFirstPass: 0.84
+      kappaFinal: 0.9466666666666665
+      agreementFinal: 0.96
+      flag: null
+    expandBy:
+      kappaFirstPass: 0.6388888888888888
+      agreementFirstPass: 0.74
+      kappaFinal: 0.9866571784380005
+      agreementFinal: 0.99
+      flag: null
+    selection:
+      kappaFirstPass: 0.8589894242068156
+      agreementFirstPass: 0.9
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    source:
+      kappaFirstPass: 0.41592920353982293
+      agreementFirstPass: 0.75
+      kappaFinal: 0.8627002288329516
+      agreementFinal: 0.95
+      flag: null
+    density:
+      kappaFirstPass: 0.7558494404883014
+      agreementFirstPass: 0.8
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+  distribution:
+    content:
+      Label: 20
+      Type icon: 15
+      Count badge: 5
+      Status decoration: 4
+      Hover actions: 6
+    expandBy:
+      Disclosure triangle: 20
+      Double-click: 3
+      Arrow keys: 14
+      Hover while dragging: 5
+      Expand all: 7
+    selection:
+      Single node: 12
+      Multiple nodes: 7
+      Tri-state checkboxes: 1
+    source:
+      Containment: 17
+      Grouped by attribute: 1
+      Authored outline: 1
+      Multiple parents: 1
+    density:
+      Compact: 10
+      With indent guides: 1
+      Comfortable: 9
+  exemplars:
+    content:
+      Label:
+        - VS Code — Explorer
+        - macOS Finder — List view
+        - Windows File Explorer — Navigation pane
+      Type icon:
+        - VS Code — Explorer
+        - macOS Finder — List view
+        - Windows File Explorer — Navigation pane
+      Count badge:
+        - Apple Mail — Mailbox list
+        - Microsoft Outlook — Folder pane
+        - Gmail — Labels list
+      Status decoration:
+        - VS Code — Explorer
+        - Xcode — Project navigator
+        - IntelliJ IDEA — Project tool window
+      Hover actions:
+        - Gmail — Labels list
+        - Notion — Page hierarchy in the left column
+        - Slack — Channel sections
+    expandBy:
+      Disclosure triangle:
+        - VS Code — Explorer
+        - macOS Finder — List view
+        - Windows File Explorer — Navigation pane
+      Double-click:
+        - Windows File Explorer — Navigation pane
+        - IntelliJ IDEA — Project tool window
+        - Windows Registry Editor — Key tree
+      Arrow keys:
+        - VS Code — Explorer
+        - macOS Finder — List view
+        - Windows File Explorer — Navigation pane
+      Hover while dragging:
+        - VS Code — Explorer
+        - macOS Finder — List view
+        - Windows File Explorer — Navigation pane
+      Expand all:
+        - macOS Finder — List view
+        - Xcode — Project navigator
+        - IntelliJ IDEA — Project tool window
+    selection:
+      Single node:
+        - Windows File Explorer — Navigation pane
+        - Apple Mail — Mailbox list
+        - Microsoft Outlook — Folder pane
+      Multiple nodes:
+        - VS Code — Explorer
+        - macOS Finder — List view
+        - Xcode — Project navigator
+      Tri-state checkboxes:
+        - Windows Features — Turn Windows features on or off
+    source:
+      Containment:
+        - VS Code — Explorer
+        - macOS Finder — List view
+        - Windows File Explorer — Navigation pane
+      Grouped by attribute:
+        - Slack — Channel sections
+      Authored outline:
+        - Workflowy — Outline
+      Multiple parents:
+        - Gmail — Labels list
+    density:
+      Compact:
+        - macOS Finder — List view
+        - Windows File Explorer — Navigation pane
+        - Xcode — Project navigator
+      With indent guides:
+        - VS Code — Explorer
+      Comfortable:
+        - Apple Mail — Mailbox list
+        - Gmail — Labels list
+        - Notion — Page hierarchy in the left column
+  unobserved: []
+  unresolved: []
+  proposals:
+    raised: 0
+    adopted: []
+    recorded: []
+  raterNotes:
+    fable:
+      - Density is a judgement between Compact and Comfortable for app sidebars; I used Comfortable
+        for roomier sidebars (mail, notes, Notion, Confluence) and Compact for file managers and
+        IDEs.
+      - Arrow keys is a platform fact that raters either know or do not, so it splits every desktop
+        tree; source has no value for groups a person defines (Slack sections) and its Multiple
+        parents gloss reads as being about the items in a node rather than the nodes; Compact vs
+        Comfortable has no measurable line.
+    opus:
+      - "source is the sub-dimension that needed the most judgment: I read Authored outline as a
+        hierarchy that exists only in this view (Slack sections, Workflowy bullets, Xcode groups)
+        and Containment as one the tree is reporting from somewhere else. expandBy is also mostly
+        unobservable in the negative — arrow-key expansion exists in nearly every desktop tree
+        whether or not anyone uses it, so those codes describe capability rather than what a person
+        is likely to do."
+      - "source is the entry's weak point and it split us on five of twenty instances: Containment,
+        Grouped by attribute and Authored outline are not exclusive in products where the person
+        builds the containment themselves (Notion pages, Confluence pages, Slack custom sections),
+        and the sub-dimension asks what makes one node the parent of another without saying whether
+        the answer is the mechanism or the authorship. Slack in particular is attribute-grouped by
+        default and authored where the person makes a section, so this pick one holds two values.
+        expandBy is the opposite problem: arrow-key expansion exists in nearly every desktop tree
+        whether or not anyone uses it, so a rater who codes capability and a rater who codes
+        observed affordances disagree on almost every instance without disagreeing about the product
+        — it produced sixteen of this entry's thirty-nine cells."
+    sonnet:
+      - "Source was the closest call throughout: trees that are literally backed by a filesystem or
+        DOM (Finder, Explorer, Xcode, IntelliJ, GitHub, Obsidian, Figma, registry) got Containment,
+        while trees the person freely drags into an arbitrary parent/child shape without an
+        underlying filesystem (Notion, Confluence, Gmail labels, Workflowy) got Authored outline,
+        even where the codebook's own example (Workflowy) is the only one it names directly."
+  codedAt: 2026-09-22
+previews:
+  - file: tree-view.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

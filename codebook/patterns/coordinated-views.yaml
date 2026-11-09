@@ -1,0 +1,493 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "coordinated-views". Edit between batches only — see README "Rules".
+id: coordinated-views
+name: Coordinated views
+level: pattern
+parent: analyze
+aliases:
+  - multiple coordinated views
+  - brushing and linking
+  - linked views
+definition: Several views of the same or related data that stay synchronized through shared
+  selection, filter or navigation.
+data: collection
+platforms:
+  - web
+  - desktop
+domains:
+  - science
+  - finance
+  - enterprise
+  - health
+  - government
+anatomy:
+  - name: View
+    role: One representation
+  - name: Link channel
+    role: What is shared across views
+  - name: Selection
+    role: The shared focus set
+  - name: Layout frame
+    role: How views are arranged
+roles: []
+dimensions:
+  - name: What is linked
+    family: composition
+    question: What state is shared across views?
+    subdimensions:
+      - id: linkChannel
+        name: Link channel
+        select: many
+        values:
+          - id: selection-highlight
+            name: Selection highlight
+            example: Tableau dashboard actions
+          - id: filter
+            name: Filter
+            example: Cross-filtering dashboards
+          - id: navigation-or-camera
+            name: Navigation or camera
+            example: Linked map and list
+          - id: parameters
+            name: Parameters
+            example: Shared date range
+          - id: derived-aggregates
+            name: Derived aggregates
+            example: Overview totals update with brush
+  - name: View arrangement
+    family: layout
+    question: How are the views placed?
+    subdimensions:
+      - id: arrangement
+        name: Arrangement
+        select: one
+        values:
+          - id: tiled-dashboard
+            name: Tiled dashboard
+            example: Tableau dashboards
+          - id: split-panes
+            name: Split panes
+            example: Observable side-by-side cells
+          - id: tabbed-views
+            name: Tabbed views
+            example: BI report tabs
+          - id: overview-detail-split
+            name: Overview–detail split
+            description: One overview drives a detail view
+            example: Map plus table
+          - id: floating-layers
+            name: Floating layers
+            example: Picture-in-picture charts
+  - name: Coordination trigger
+    family: invocation
+    question: What action propagates across views?
+    subdimensions:
+      - id: trigger
+        name: Trigger
+        select: many
+        values:
+          - id: click-a-mark
+            name: Click a mark
+            example: Tableau filter action
+          - id: brush-a-region
+            name: Brush a region
+            example: Scatterplot brushing
+          - id: hover
+            name: Hover
+            example: Linked highlighting
+          - id: change-a-control
+            name: Change a control
+            example: Shared slicers in Power BI
+          - id: follow-a-story-beat
+            name: Follow a story beat
+            example: Tableau Stories
+          - id: pan-or-zoom
+            name: Pan or zoom
+            description: Moving the camera of one view (panning or zooming a map) re-queries the linked views
+            example: Zillow — Map and list
+          - id: pan-or-zoom-the-view
+            name: Pan or zoom the view
+            description: Moving or zooming one view is itself the coordinating action — the viewport becomes the
+              query and the linked list, count or chart is recomputed for what is now in frame; the
+              standard mechanism of map-plus-list products
+            example: Zillow — Map and list
+  - name: Selection scope
+    family: scope
+    question: What does a coordinating action apply to?
+    subdimensions:
+      - id: scope
+        name: Scope
+        select: one
+        values:
+          - id: one-mark
+            name: One mark
+            example: Click a bar
+          - id: a-brushed-subset
+            name: A brushed subset
+            example: Lasso select
+          - id: a-categorical-group
+            name: A categorical group
+            example: Legend click
+          - id: all-linked-views
+            name: All linked views
+            example: Dashboard-wide filter
+          - id: one-view-only
+            name: One view only
+            description: Local selection
+            example: Isolate mode
+  - name: Coordination feedback
+    family: feedback
+    question: How does a person see what is linked?
+    subdimensions:
+      - id: feedback
+        name: Feedback
+        select: many
+        values:
+          - id: highlight-in-place
+            name: Highlight in place
+            example: Linked brushing
+          - id: grey-out-non-matches
+            name: Grey-out non-matches
+            example: Tableau highlight
+          - id: count-of-selected-rows
+            name: Count of selected rows
+            example: Status bars
+          - id: empty-state-in-a-linked-view
+            name: Empty-state in a linked view
+            example: No matching points
+          - id: action-breadcrumb
+            name: Action breadcrumb
+            example: Applied filter chips
+  - name: View authorship
+    family: initiative
+    question: Who assembles and retunes the set of views?
+    subdimensions:
+      - id: authorship
+        name: Authorship
+        select: one
+        values:
+          - id: fixed-published-dashboard
+            name: Fixed published dashboard
+            example: Embedded BI
+          - id: author-arranges-views
+            name: Author arranges views
+            example: Tableau Desktop
+          - id: person-adds-a-linked-view
+            name: Person adds a linked view
+            example: Exploratory dashboards
+          - id: suggested-companion-views
+            name: Suggested companion views
+            example: Auto-recommended charts beside a selection
+wild:
+  score: 2
+  note: Authors rearrange and rewire actions; viewers mostly filter within a fixed layout.
+  examples:
+    - name: Tableau
+      note: Dashboard actions and layout containers
+    - name: Power BI
+      note: Edit interactions between visuals
+    - name: Observable
+      note: Shared reactive cells across views
+techniques:
+  - name: Wire the brush
+    dimension: What is linked
+    how: Make the link channel (filter, highlight, navigate) a visible, editable binding between views
+      rather than hidden dashboard logic.
+    ai: false
+  - name: Propose a companion view
+    dimension: View authorship
+    how: Given the current selection, suggest a second encoding that answers a complementary question
+      and link it automatically.
+    ai: true
+  - name: Show the shared set
+    dimension: Coordination feedback
+    how: Surface the coordinated selection as a first-class collection a person can name, save and
+      reuse.
+    ai: false
+signature: Wire the brush
+sample: BI dashboards, scientific visual analytics systems and multi-view notebook layouts.
+unit: One coordinated set of views over shared data.
+relations:
+  uses:
+    - chart
+    - split-pane
+    - filter-controls
+    - tabs
+  specializes:
+    - analyze
+  neighbors:
+    - dashboard
+    - focus-context
+    - chart
+scores:
+  ubiquity: 4
+  potential: 5
+  spec: 4
+evidence: agent-coded
+usage:
+  - People brush in one view and read consequences in another more than they rebuild layouts
+questions:
+  - How should conflicts resolve when two views both try to drive the shared filter?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.6727955202780869
+  agreementFirstPass: 0.7735294117647059
+  kappaFinal: 0.9416740411735564
+  agreementFinal: 0.9558823529411765
+  pass: true
+  perSub:
+    linkChannel:
+      kappaFirstPass: 0.6555023923444973
+      agreementFirstPass: 0.76
+      kappaFinal: 0.9591206395348837
+      agreementFinal: 0.97
+      flag: null
+    arrangement:
+      kappaFirstPass: 0.7238204833141545
+      agreementFirstPass: 0.8
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    trigger:
+      kappaFirstPass: 0.6996996996996999
+      agreementFirstPass: 0.79
+      kappaFinal: 0.958660603555188
+      agreementFinal: 0.97
+      flag: null
+    scope:
+      kappaFirstPass: 0.6441281138790037
+      agreementFirstPass: 0.75
+      kappaFinal: 0.7626112759643919
+      agreementFinal: 0.8
+      flag: null
+    feedback:
+      kappaFirstPass: 0.6366823360688398
+      agreementFirstPass: 0.7625
+      kappaFinal: 0.9294947121034075
+      agreementFinal: 0.95
+      flag: null
+    authorship:
+      kappaFirstPass: 0.746835443037975
+      agreementFirstPass: 0.8
+      kappaFinal: 0.9389623601220755
+      agreementFinal: 0.95
+      flag: null
+  distribution:
+    linkChannel:
+      Selection highlight: 11
+      Filter: 15
+      Navigation or camera: 4
+      Parameters: 12
+      Derived aggregates: 1
+    arrangement:
+      Tiled dashboard: 14
+      Split panes: 2
+      Tabbed views: 0
+      Overview–detail split: 4
+      Floating layers: 0
+    trigger:
+      Click a mark: 12
+      Brush a region: 5
+      Hover: 4
+      Change a control: 16
+      Follow a story beat: 0
+      Pan or zoom: 0
+      Pan or zoom the view: 3
+    scope:
+      One mark: 3
+      A brushed subset: 4
+      A categorical group: 2
+      All linked views: 11
+      One view only: 0
+    feedback:
+      Highlight in place: 14
+      Grey-out non-matches: 6
+      Count of selected rows: 3
+      Empty-state in a linked view: 0
+      Action breadcrumb: 7
+    authorship:
+      Fixed published dashboard: 9
+      Author arranges views: 10
+      Person adds a linked view: 1
+      Suggested companion views: 0
+  exemplars:
+    linkChannel:
+      Selection highlight:
+        - Tableau — Superstore dashboard
+        - Power BI — Sales report page
+        - Grafana — Dashboard with variables
+      Filter:
+        - Tableau — Superstore dashboard
+        - Power BI — Sales report page
+        - Looker Studio — Report with date control
+      Navigation or camera:
+        - Zillow — Map and list
+        - Airbnb — Map and list
+        - Google Flights — Explore map
+      Parameters:
+        - Tableau — Superstore dashboard
+        - Power BI — Sales report page
+        - Looker Studio — Report with date control
+      Derived aggregates:
+        - Observable — Linked brushing notebook
+    arrangement:
+      Tiled dashboard:
+        - Tableau — Superstore dashboard
+        - Power BI — Sales report page
+        - Looker Studio — Report with date control
+      Split panes:
+        - Observable — Linked brushing notebook
+        - ParaView — Linked views
+      Tabbed views: []
+      Overview–detail split:
+        - Zillow — Map and list
+        - Airbnb — Map and list
+        - Google Flights — Explore map
+      Floating layers: []
+    trigger:
+      Click a mark:
+        - Tableau — Superstore dashboard
+        - Power BI — Sales report page
+        - Looker Studio — Report with date control
+      Brush a region:
+        - Kibana — Dashboard
+        - Observable — Linked brushing notebook
+        - Vega-Lite Editor — Crossfilter example
+      Hover:
+        - Grafana — Dashboard with variables
+        - Datadog — Dashboard with template variables
+        - Zillow — Map and list
+      Change a control:
+        - Tableau — Superstore dashboard
+        - Power BI — Sales report page
+        - Looker Studio — Report with date control
+      Follow a story beat: []
+      Pan or zoom: []
+      Pan or zoom the view:
+        - Zillow — Map and list
+        - Airbnb — Map and list
+        - Google Flights — Explore map
+    scope:
+      One mark:
+        - Tableau — Superstore dashboard
+        - Power BI — Sales report page
+        - Flightradar24 — Map and sidebar
+      A brushed subset:
+        - Observable — Linked brushing notebook
+        - Vega-Lite Editor — Crossfilter example
+        - Spotfire — Analysis
+      A categorical group:
+        - Google Analytics 4 — Realtime report
+        - Qlik Sense — Sheet
+      All linked views:
+        - Looker Studio — Report with date control
+        - Kibana — Dashboard
+        - Grafana — Dashboard with variables
+      One view only: []
+    feedback:
+      Highlight in place:
+        - Tableau — Superstore dashboard
+        - Power BI — Sales report page
+        - Looker Studio — Report with date control
+      Grey-out non-matches:
+        - Tableau — Superstore dashboard
+        - Power BI — Sales report page
+        - Vega-Lite Editor — Crossfilter example
+      Count of selected rows:
+        - Zillow — Map and list
+        - Airbnb — Map and list
+        - Spotfire — Analysis
+      Empty-state in a linked view: []
+      Action breadcrumb:
+        - Looker Studio — Report with date control
+        - Google Analytics 4 — Realtime report
+        - Kibana — Dashboard
+    authorship:
+      Fixed published dashboard:
+        - Tableau — Superstore dashboard
+        - Power BI — Sales report page
+        - Looker Studio — Report with date control
+      Author arranges views:
+        - Kibana — Dashboard
+        - Grafana — Dashboard with variables
+        - Datadog — Dashboard with template variables
+      Person adds a linked view:
+        - Observable — Linked brushing notebook
+      Suggested companion views: []
+  unobserved:
+    - sub: arrangement
+      var: Tabbed views
+    - sub: arrangement
+      var: Floating layers
+    - sub: trigger
+      var: Follow a story beat
+    - sub: trigger
+      var: Pan or zoom
+    - sub: scope
+      var: One view only
+    - sub: feedback
+      var: Empty-state in a linked view
+    - sub: authorship
+      var: Suggested companion views
+  unresolved: []
+  proposals:
+    raised: 2
+    adopted:
+      - sub: trigger
+        name: Pan or zoom
+        raters:
+          - fable
+          - opus
+      - sub: trigger
+        name: Pan or zoom the view
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - Trigger lacks a camera move, which is how every map-plus-list product coordinates; Scope is
+        a pick-one over products that mix one-mark clicks with dashboard-wide controls, coded the
+        characteristic act.
+      - scope mixes the unit selected (one mark, a group, a brushed subset) with the reach of
+        propagation (all linked views, one view only), so every click-to-filter dashboard holds two
+        values; it wants to be two subs or pick any. trigger lacks a camera move, which every
+        map-plus-list product uses (adopted +Pan or zoom the view). authorship depends on whether
+        the sample names the editor or the viewer of the same product, and the codebook does not say
+        which to code.
+    opus:
+      - "Scope mixes two questions — how big the selection is (one mark, a brush, a category) and
+        how far it propagates (all views, one view) — so an instance where clicking one bar filters
+        every view cannot be coded on both counts; I coded the propagation where the product's point
+        is reach and the granularity where the product's point is marking. Authorship also depends
+        on who is looking rather than on the artifact: the same Kibana or Superset dashboard is
+        fixed for a reader and editable for its author."
+      - "`scope` is the codebook fault behind a third of this packet: it mixes the extent of a
+        selection (one mark, a brushed subset, a categorical group) with how far the action reaches
+        (all linked views, one view only), and both are true of every dashboard — it should be two
+        sub-dimensions, or pick any. Second, `linkChannel` has no way to say that a control narrows
+        a single view rather than linking two, which is what split Flightradar24 and Google Trends."
+    sonnet:
+      - Map-pan interactions (Zillow, Airbnb, Google Flights) don't map cleanly onto any listed
+        trigger — closest is Brush a region, since panning redefines a spatial region of interest.
+      - "Scope conflates two axes that don't always point the same way: what was selected (one mark
+        / a brushed subset / a categorical group) versus how far the coordination reaches (one view
+        only / all linked views) -- Spotfire's free-form lasso needed the first axis named even
+        though it also reaches every view, unlike the click-based dashboards where the reach was the
+        more informative fact."
+  codedAt: 2026-09-22
+previews:
+  - file: coordinated-views.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

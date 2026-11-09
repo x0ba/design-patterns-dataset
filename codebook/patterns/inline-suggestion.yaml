@@ -1,0 +1,462 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "inline-suggestion". Edit between batches only — see README "Rules".
+id: inline-suggestion
+name: Inline suggestion
+level: pattern
+parent: delegate-ai
+aliases:
+  - ghost text
+  - autocomplete AI
+  - copilot inline
+definition: Model-proposed continuation or edit shown inside the artifact at the caret or selection,
+  accepted, cycled or dismissed without leaving the editor.
+data: document
+platforms:
+  - desktop
+  - web
+domains:
+  - software
+  - productivity
+  - design
+  - ai
+anatomy:
+  - name: Ghost text
+    role: The proposed insertion
+  - name: Caret context
+    role: What the model conditioned on
+  - name: Accept control
+    role: Keyboard or click to take it
+  - name: Alternative cycle
+    role: Other proposals
+roles: []
+dimensions:
+  - name: Suggestion content
+    family: content
+    question: What form does the proposal take?
+    subdimensions:
+      - id: content
+        name: Content
+        select: one
+        values:
+          - id: ghost-continuation
+            name: Ghost continuation
+            example: GitHub Copilot
+          - id: multi-line-block
+            name: Multi-line block
+            example: Copilot long suggestions
+          - id: replacement-of-a-selection
+            name: Replacement of a selection
+            example: Cursor inline edit
+          - id: structured-patch-hunk
+            name: Structured patch hunk
+            example: Next-edit suggestions
+          - id: non-code-completion
+            name: Non-code completion
+            example: Smart Compose in Gmail
+  - name: Where it appears
+    family: layout
+    question: How is the suggestion placed relative to the artifact?
+    subdimensions:
+      - id: placement
+        name: Placement
+        select: one
+        values:
+          - id: inline-ghost-at-caret
+            name: Inline ghost at caret
+            example: Copilot
+          - id: beside-the-line
+            name: Beside the line
+            example: Some IDE sidelenses
+          - id: diff-overlay-on-selection
+            name: Diff overlay on selection
+            example: Cursor Cmd-K
+          - id: floating-rewrite-card
+            name: Floating rewrite card
+            example: Notion AI
+          - id: status-bar-only
+            name: Status-bar only
+            example: Low-confidence hints
+  - name: Triggering
+    family: invocation
+    question: What brings a suggestion up?
+    subdimensions:
+      - id: trigger
+        name: Trigger
+        select: many
+        values:
+          - id: as-you-type
+            name: As you type
+            example: Copilot
+          - id: explicit-shortcut
+            name: Explicit shortcut
+            example: Alt-\ / Cursor
+          - id: on-pause
+            name: On pause
+            example: Debounced suggest
+          - id: on-selection-command
+            name: On selection command
+            example: Edit this
+          - id: suppress-in-this-file
+            name: Suppress in this file
+            example: Copilot ignore
+  - name: Acceptance flow
+    family: flow
+    question: How are proposals taken, varied or refused?
+    subdimensions:
+      - id: acceptFlow
+        name: Accept flow
+        select: one
+        values:
+          - id: tab-to-accept-all
+            name: Tab to accept all
+            example: Copilot
+          - id: word-by-word-accept
+            name: Word-by-word accept
+            example: Copilot partial accept
+          - id: cycle-alternatives
+            name: Cycle alternatives
+            example: Copilot Alt-[
+          - id: edit-before-accept
+            name: Edit before accept
+            example: Inline edit buffers
+          - id: dismiss-and-learn-not
+            name: Dismiss and learn-not
+            example: Escape
+          - id: apply-then-revert
+            name: Apply then revert
+            description: The proposal is written into the artifact immediately with no accept gate; refusing it
+              means undoing — the acceptance model of rewrite commands in design and OS-level
+              writing tools
+            example: Apple Writing Tools — Proofread and Rewrite
+  - name: Suggestion initiative
+    family: initiative
+    question: How assertive is the model?
+    subdimensions:
+      - id: initiative
+        name: Initiative
+        select: one
+        values:
+          - id: only-when-asked
+            name: Only when asked
+            example: Manual trigger
+          - id: opportunistic-while-typing
+            name: Opportunistic while typing
+            example: Default Copilot
+          - id: proactive-multi-file-next-edit
+            name: Proactive multi-file next edit
+            example: Cursor next edit
+          - id: off-unless-enabled-per-language
+            name: Off unless enabled per language
+            example: IDE settings
+  - name: Confidence feedback
+    family: feedback
+    question: How is suggestion quality or origin shown?
+    subdimensions:
+      - id: feedback
+        name: Feedback
+        select: many
+        values:
+          - id: visual-ghost-styling
+            name: Visual ghost styling
+            example: Grey ghost text
+          - id: provider-label
+            name: Provider label
+            example: Copilot mark
+          - id: no-cue-until-hover
+            name: No cue until hover
+            example: Minimal UIs
+          - id: why-this-suggestion
+            name: Why this suggestion
+            example: Telemetry-backed explanations
+          - id: blocked-by-policy-banner
+            name: Blocked by policy banner
+            example: Enterprise filters
+wild:
+  score: 2
+  note: Enablement, languages and keybindings are commonly customized; ghost styling rarely.
+  examples:
+    - name: VS Code Copilot
+      note: Enable per-language; keybindings
+    - name: Cursor
+      note: Tab modes and models
+    - name: Gmail
+      note: Smart Compose on/off
+techniques:
+  - name: Partial accept
+    dimension: Acceptance flow
+    how: Allow word- or hunk-level acceptance so people keep control when only part of the ghost is
+      right.
+    ai: false
+  - name: Suggest only under caret policy
+    dimension: Suggestion initiative
+    how: Expose when suggestions fire (always, on pause, on shortcut) as a first-class preference.
+    ai: false
+  - name: Condition on a selection brief
+    dimension: Triggering
+    how: For selection edits, show the short brief the model used and let it be edited before
+      regenerating.
+    ai: true
+signature: Partial accept
+sample: IDEs, writing editors and design tools with caret-level AI.
+unit: One inline proposal episode at a caret or selection.
+relations:
+  uses:
+    - ai-provenance
+    - undo
+    - autocomplete
+  specializes:
+    - delegate-ai
+  neighbors:
+    - autocomplete
+    - generative-variations
+    - ai-chat
+scores:
+  ubiquity: 3
+  potential: 4
+  spec: 3
+evidence: agent-coded
+usage:
+  - Developers tab-accept then immediately edit, treating suggestions as clay
+questions:
+  - How should inline suggestions disclose training-data risk without killing flow?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7689215524780707
+  agreementFirstPass: 0.8833333333333333
+  kappaFinal: 0.9617773890519219
+  agreementFinal: 0.9727272727272728
+  pass: true
+  perSub:
+    content:
+      kappaFirstPass: 0.9564902102973167
+      agreementFirstPass: 0.95
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    placement:
+      kappaFirstPass: 0.9107142857142857
+      agreementFirstPass: 0.95
+      kappaFinal: 0.9404170804369416
+      agreementFinal: 0.95
+      flag: null
+    trigger:
+      kappaFirstPass: 0.8621934213764252
+      agreementFirstPass: 0.9125
+      kappaFinal: 0.9612121212121209
+      agreementFinal: 0.975
+      flag: null
+    acceptFlow:
+      kappaFirstPass: -0.005154639175256991
+      agreementFirstPass: 0.7
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    initiative:
+      kappaFirstPass: 0.9389623601220751
+      agreementFirstPass: 0.95
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    feedback:
+      kappaFirstPass: 0.7443181818181819
+      agreementFirstPass: 0.85
+      kappaFinal: 0.9314285714285714
+      agreementFinal: 0.95
+      flag: null
+  distribution:
+    content:
+      Ghost continuation: 6
+      Multi-line block: 2
+      Replacement of a selection: 6
+      Structured patch hunk: 2
+      Non-code completion: 4
+    placement:
+      Inline ghost at caret: 12
+      Beside the line: 2
+      Diff overlay on selection: 1
+      Floating rewrite card: 5
+      Status-bar only: 0
+    trigger:
+      As you type: 16
+      Explicit shortcut: 4
+      On pause: 0
+      On selection command: 4
+      Suppress in this file: 1
+    acceptFlow:
+      Tab to accept all: 18
+      Word-by-word accept: 0
+      Cycle alternatives: 0
+      Edit before accept: 0
+      Dismiss and learn-not: 0
+      Apply then revert: 2
+    initiative:
+      Only when asked: 4
+      Opportunistic while typing: 12
+      Proactive multi-file next edit: 4
+      Off unless enabled per language: 0
+    feedback:
+      Visual ghost styling: 19
+      Provider label: 4
+      No cue until hover: 0
+      Why this suggestion: 3
+      Blocked by policy banner: 0
+  exemplars:
+    content:
+      Ghost continuation:
+        - GitHub Copilot — Completion in VS Code
+        - JetBrains IntelliJ IDEA — Full line completion
+        - Amazon Q Developer — Inline code suggestions
+      Multi-line block:
+        - Cursor — Tab completion
+        - Xcode — Predictive code completion
+      Replacement of a selection:
+        - Cursor — Cmd-K inline edit
+        - Notion AI — Rewrite on selection
+        - Grammarly — Suggestion card
+      Structured patch hunk:
+        - GitHub Copilot — Next Edit Suggestions
+        - Windsurf — Supercomplete
+      Non-code completion:
+        - Gmail — Smart Compose
+        - Google Docs — Smart Compose
+        - iOS keyboard — Inline predictive text
+    placement:
+      Inline ghost at caret:
+        - GitHub Copilot — Completion in VS Code
+        - Cursor — Tab completion
+        - Gmail — Smart Compose
+      Beside the line:
+        - GitHub Copilot — Next Edit Suggestions
+        - Windsurf — Supercomplete
+      Diff overlay on selection:
+        - Cursor — Cmd-K inline edit
+      Floating rewrite card:
+        - Notion AI — Rewrite on selection
+        - Grammarly — Suggestion card
+        - Microsoft Word — Editor suggestions
+      Status-bar only: []
+    trigger:
+      As you type:
+        - GitHub Copilot — Completion in VS Code
+        - GitHub Copilot — Next Edit Suggestions
+        - Cursor — Tab completion
+      Explicit shortcut:
+        - GitHub Copilot — Completion in VS Code
+        - Cursor — Cmd-K inline edit
+        - Amazon Q Developer — Inline code suggestions
+      On pause: []
+      On selection command:
+        - Cursor — Cmd-K inline edit
+        - Notion AI — Rewrite on selection
+        - Apple Writing Tools — Proofread and Rewrite
+      Suppress in this file:
+        - GitHub Copilot — Completion in VS Code
+    acceptFlow:
+      Tab to accept all:
+        - GitHub Copilot — Completion in VS Code
+        - GitHub Copilot — Next Edit Suggestions
+        - Cursor — Tab completion
+      Word-by-word accept: []
+      Cycle alternatives: []
+      Edit before accept: []
+      Dismiss and learn-not: []
+      Apply then revert:
+        - Apple Writing Tools — Proofread and Rewrite
+        - Figma — Rewrite text layer
+    initiative:
+      Only when asked:
+        - Cursor — Cmd-K inline edit
+        - Notion AI — Rewrite on selection
+        - Apple Writing Tools — Proofread and Rewrite
+      Opportunistic while typing:
+        - GitHub Copilot — Completion in VS Code
+        - Gmail — Smart Compose
+        - Google Docs — Smart Compose
+      Proactive multi-file next edit:
+        - GitHub Copilot — Next Edit Suggestions
+        - Cursor — Tab completion
+        - Windsurf — Supercomplete
+      Off unless enabled per language: []
+    feedback:
+      Visual ghost styling:
+        - GitHub Copilot — Completion in VS Code
+        - GitHub Copilot — Next Edit Suggestions
+        - Cursor — Tab completion
+      Provider label:
+        - GitHub Copilot — Completion in VS Code
+        - Notion AI — Rewrite on selection
+        - Grammarly — Suggestion card
+      No cue until hover: []
+      Why this suggestion:
+        - Grammarly — Suggestion card
+        - Microsoft Word — Editor suggestions
+        - Amazon Q Developer — Inline code suggestions
+      Blocked by policy banner: []
+  unobserved:
+    - sub: placement
+      var: Status-bar only
+    - sub: trigger
+      var: On pause
+    - sub: acceptFlow
+      var: Word-by-word accept
+    - sub: acceptFlow
+      var: Cycle alternatives
+    - sub: acceptFlow
+      var: Edit before accept
+    - sub: acceptFlow
+      var: Dismiss and learn-not
+    - sub: initiative
+      var: Off unless enabled per language
+    - sub: feedback
+      var: No cue until hover
+    - sub: feedback
+      var: Blocked by policy banner
+  unresolved: []
+  proposals:
+    raised: 1
+    adopted:
+      - sub: acceptFlow
+        name: Apply then revert
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - Accept flow is a pick-one but every product offers several (Tab-all plus word-wise or
+        cycling); coded the primary accept and named the others in notes; Tab to accept all also
+        stood in for click-Replace on rewrite cards.
+      - Accept flow has no click-to-replace for card rewrites (Notion, Word Editor, Grammarly) so
+        Tab to accept all is stretched; Placement has no floating diff at the caret; Initiative's
+        Proactive multi-file next edit bundles proactivity with multi-file.
+    opus:
+      - "Accept flow is pick-one over affordances that always co-exist: Tab, partial accept, cycling
+        and Escape ship together in every code completion, so Word-by-word accept and Cycle
+        alternatives never win and the column reads as a constant. Feedback is nearly constant too —
+        Visual ghost styling for everything except the rewrite tools — and there is no variation for
+        the span underline that writing assistants use."
+      - "`acceptFlow` assumes a pending proposal that the person takes, so it has nothing for
+        rewrite commands that apply straight away and rely on undo (Apple Writing Tools, Figma) —
+        both other raters described that behaviour in prose and then coded Tab to accept all anyway.
+        `placement` also needs a value for a floating diff preview near the caret: Copilot NES,
+        Windsurf and Zed's preview are all squeezed into Beside the line or Floating rewrite card,
+        neither of which was written for them."
+    sonnet:
+      - acceptFlow was often genuinely multi-modal (Tab-all plus word-by-word plus cycling on the
+        same product); I coded the primary/headline binding and noted the others.
+  codedAt: 2026-09-22
+previews:
+  - file: inline-suggestion.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

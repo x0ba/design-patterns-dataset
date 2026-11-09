@@ -1,0 +1,318 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "inline-edit". Edit between batches only — see README "Rules".
+id: inline-edit
+name: Inline edit
+level: component
+parent: enter-data
+aliases:
+  - edit in place
+  - click to edit
+definition: Editing a value where it is displayed, without a separate form.
+data: object
+platforms:
+  - web
+  - desktop
+domains:
+  - productivity
+  - enterprise
+  - software
+anatomy:
+  - name: Display
+    role: The value as shown
+  - name: Editor
+    role: The value while editing
+  - name: Commit
+    role: How it saves
+roles: []
+dimensions:
+  - name: Entering edit mode
+    family: invocation
+    question: How does a displayed value become editable?
+    subdimensions:
+      - id: enter
+        name: Enter by
+        select: one
+        values:
+          - id: click
+            name: Click
+            example: Linear issue titles
+          - id: double-click
+            name: Double-click
+            example: Excel cells
+          - id: pencil-on-hover
+            name: Pencil on hover
+            example: Admin consoles
+          - id: always-editable
+            name: Always editable
+            example: Notion, Marble documents
+  - name: Commit
+    family: lifecycle
+    question: When does the edit save?
+    subdimensions:
+      - id: commit
+        name: Commit
+        select: one
+        values:
+          - id: on-leaving-the-field
+            name: On leaving the field
+            example: Airtable
+          - id: enter-saves-escape-cancels
+            name: Enter saves, Escape cancels
+            example: Jira
+          - id: save-and-cancel-buttons
+            name: Save and cancel buttons
+            example: Salesforce
+          - id: every-keystroke
+            name: Every keystroke
+            example: Google Docs
+  - name: Saved state
+    family: feedback
+    question: How does a person know it saved?
+    subdimensions:
+      - id: saved
+        name: Saved state
+        select: one
+        values:
+          - id: nothing
+            name: Nothing
+            example: Many tools
+          - id: saved-indicator
+            name: Saved indicator
+            example: Notion
+          - id: undo-toast
+            name: Undo toast
+            example: Gmail-style undo
+          - id: conflict-warning
+            name: Conflict warning
+            example: Collaborative editors
+  - name: Unit
+    family: scope
+    question: What is edited at once?
+    subdimensions:
+      - id: unit
+        name: Unit
+        select: one
+        values:
+          - id: one-field
+            name: One field
+            example: Titles
+          - id: whole-row
+            name: Whole row
+            example: Row edit mode in grids
+          - id: many-cells
+            name: Many cells
+            example: Paste into a selection
+wild:
+  score: 0
+  note: Which values are editable in place is fixed.
+  examples: []
+techniques:
+  - name: Edit anything displayed
+    dimension: Entering edit mode
+    how: Every displayed value is editable where it sits, and the display is the source, as in Marble
+      documents.
+    ai: false
+signature: Edit anything displayed
+sample: Issue trackers, CRMs, spreadsheets and documents.
+unit: One editable value.
+relations:
+  uses:
+    - text-field
+    - undo
+  specializes: []
+  neighbors:
+    - property-inspector
+    - text-field
+scores:
+  ubiquity: 4
+  potential: 3
+  spec: 4
+evidence: agent-coded
+usage:
+  - Accidental edits happen when display and edit look identical
+questions:
+  - How does an always-editable interface signal what is safe to touch?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.8743172311985014
+  agreementFirstPass: 0.95
+  kappaFinal: 0.9084857961187748
+  agreementFinal: 0.975
+  pass: true
+  perSub:
+    enter:
+      kappaFirstPass: 0.8633257403189065
+      agreementFirstPass: 0.9
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    commit:
+      kappaFirstPass: 1
+      agreementFirstPass: 1
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    saved:
+      kappaFirstPass: 0.9018003273322426
+      agreementFirstPass: 0.95
+      kappaFinal: 0.9018003273322426
+      agreementFinal: 0.95
+      flag: null
+    unit:
+      kappaFirstPass: 0.7321428571428561
+      agreementFirstPass: 0.95
+      kappaFinal: 0.7321428571428561
+      agreementFinal: 0.95
+      flag: null
+  distribution:
+    enter:
+      Click: 8
+      Double-click: 4
+      Pencil on hover: 5
+      Always editable: 1
+    commit:
+      On leaving the field: 5
+      Enter saves, Escape cancels: 7
+      Save and cancel buttons: 6
+      Every keystroke: 2
+    saved:
+      Nothing: 16
+      Saved indicator: 4
+      Undo toast: 0
+      Conflict warning: 0
+    unit:
+      One field: 19
+      Whole row: 1
+      Many cells: 0
+  exemplars:
+    enter:
+      Click:
+        - Linear — Issue title
+        - Jira — Issue summary
+        - Airtable — Grid cell
+      Double-click:
+        - Microsoft Excel — Cell
+        - Google Sheets — Cell
+        - Figma — Layer name
+      Pencil on hover:
+        - Salesforce — Record detail field
+        - HubSpot — Contact property
+        - Trello — Card title on the board
+      Always editable:
+        - Notion — Page title
+    commit:
+      On leaving the field:
+        - Linear — Issue title
+        - Airtable — Grid cell
+        - Google Docs — Document title
+      Enter saves, Escape cancels:
+        - Jira — Issue summary
+        - Microsoft Excel — Cell
+        - Google Sheets — Cell
+      Save and cancel buttons:
+        - Salesforce — Record detail field
+        - HubSpot — Contact property
+        - Trello — Card title on the board
+      Every keystroke:
+        - Notion — Page title
+        - Asana — Task name in a list
+    saved:
+      Nothing:
+        - Linear — Issue title
+        - Jira — Issue summary
+        - Notion — Page title
+      Saved indicator:
+        - Google Sheets — Cell
+        - Salesforce — Record detail field
+        - Google Docs — Document title
+      Undo toast: []
+      Conflict warning: []
+    unit:
+      One field:
+        - Linear — Issue title
+        - Jira — Issue summary
+        - Notion — Page title
+      Whole row:
+        - Salesforce — Record detail field
+      Many cells: []
+  unobserved:
+    - sub: saved
+      var: Undo toast
+    - sub: saved
+      var: Conflict warning
+    - sub: unit
+      var: Many cells
+  unresolved:
+    - sub: enter
+      n: 12
+    - sub: enter
+      n: 13
+  proposals:
+    raised: 3
+    adopted: []
+    recorded:
+      - place: sub:enter
+        sub: enter
+        dim: null
+        name: Rename key
+        gloss: A key on the selected item (Return in Finder, F2 in Explorer) turns its displayed name into a
+          field; there is no click target or pencil
+        raters:
+          - fable
+        instances:
+          - 12
+          - 13
+        status: raised
+      - place: sub:enter
+        sub: enter
+        dim: null
+        name: A key on the selection
+        gloss: The value is selected and a key (Return, F2) turns the display into an editor — no pointer
+          act opens it at all
+        raters:
+          - opus
+        instances:
+          - 12
+          - 13
+        status: raised
+      - place: sub:enter
+        sub: enter
+        dim: null
+        name: Keyboard command
+        gloss: A dedicated keystroke or menu command (Return, F2, a Rename action) switches the value into
+          edit mode, rather than a click, double-click, hover pencil, or it always being editable.
+        raters:
+          - sonnet
+        instances:
+          - 12
+          - 13
+        status: raised
+  raterNotes:
+    fable:
+      - GitHub's always-visible Edit button is not a hover pencil; I folded it in but a colleague
+        may want a variation. Saved state is Nothing almost everywhere, so it barely discriminates.
+    opus:
+      - "commit is the sub-dimension that most often wants two values at once: Jira, Trello and
+        several others accept Enter and offer tick/× buttons, and pick-one hides one of them. saved
+        is nearly always Nothing, which makes it cheap agreement rather than informative; the
+        interesting cases (a success toast in Salesforce, the (edited) tag in Slack) both had to be
+        squeezed into Saved indicator, and no instance in this sample showed a conflict warning."
+    sonnet:
+      - "'Saved' was the hardest to code with confidence for enterprise tools I don't use daily
+        (HubSpot, Trello, Todoist, GitHub) — I coded Nothing by default rather than assume a toast I
+        can't clearly recall, which likely undercounts real saved-state feedback in those products."
+  codedAt: 2026-09-22
+previews:
+  - file: inline-edit.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

@@ -1,0 +1,611 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "inbox". Edit between batches only — see README "Rules".
+id: inbox
+name: Inbox
+level: pattern
+parent: communicate
+aliases:
+  - email client
+  - mailbox
+  - triage queue
+  - shared inbox
+definition: A list of messages or requests awaiting attention, each opened, acted on and cleared.
+data: collection
+platforms:
+  - web
+  - desktop
+  - mobile
+domains:
+  - communication
+  - enterprise
+  - commerce
+anatomy:
+  - name: Message list
+    role: What is waiting
+  - name: Folders or labels
+    role: Organization
+  - name: Reading view
+    role: One message
+  - name: Triage actions
+    role: Archive, snooze, assign
+  - name: Composer
+    role: Replies
+roles:
+  - sender
+  - subject
+  - snippet
+  - date
+  - label
+  - attachment
+dimensions:
+  - name: Organization
+    family: composition
+    question: How are messages sorted into places, and grouped?
+    subdimensions:
+      - id: organization
+        name: Organization
+        select: one
+        values:
+          - id: folders
+            name: Folders
+            example: Outlook
+          - id: labels
+            name: Labels
+            example: Gmail
+          - id: automatic-categories
+            name: Automatic categories
+            example: Gmail Primary, Social, Promotions
+          - id: split-inboxes-by-rule
+            name: Split inboxes by rule
+            example: Superhuman Split Inbox
+      - id: grouping
+        name: Message grouping
+        select: one
+        values:
+          - id: individual-messages
+            name: Individual messages
+            example: Outlook without conversations
+          - id: conversation-threads
+            name: Conversation threads
+            example: Gmail conversation view
+          - id: bundles
+            name: Bundles
+            example: Google Inbox bundles (discontinued)
+  - name: Reading arrangement
+    family: layout
+    question: Where does a message open, and how dense is the list?
+    subdimensions:
+      - id: openIn
+        name: Reading pane
+        select: one
+        values:
+          - id: side-by-side
+            name: Side-by-side
+            example: Gmail reading pane right
+          - id: under-overview
+            name: Under overview
+            example: Gmail reading pane below
+          - id: replace
+            name: Replace
+            example: Gmail with no split
+          - id: new-page
+            name: New page
+            example: Phone mail apps
+      - id: density
+        name: Row density
+        select: one
+        values:
+          - id: compact
+            name: Compact
+            example: Gmail compact
+          - id: default
+            name: Default
+            example: Gmail default
+          - id: comfortable
+            name: Comfortable
+            example: Gmail comfortable
+  - name: Triage model
+    family: flow
+    question: What does clearing a message mean?
+    subdimensions:
+      - id: triage
+        name: Triage
+        select: one
+        values:
+          - id: read-and-file
+            name: Read and file
+            example: Outlook folders
+          - id: archive-to-zero
+            name: Archive to zero
+            example: Superhuman
+          - id: snooze-until-later
+            name: Snooze until later
+            example: Gmail snooze
+          - id: assign-to-a-teammate
+            name: Assign to a teammate
+            example: Front shared inboxes
+          - id: close-or-solve
+            name: Close or solve
+            description: Clearing means setting the ticket's status to solved/closed; assignment is a step along
+              the way, not the clearing act
+            example: Zendesk — Agent ticket views
+          - id: reading-is-triage
+            name: Reading is triage
+            description: "Nothing is archived or filed: an item leaves the attention list simply by being read
+              (HEY's Previously seen, Slack Activity)"
+            example: HEY — Imbox
+          - id: mark-as-read
+            name: Mark as read
+            description: "Clearing means marking read: there is no destination, no archive and no file — the
+              item simply stops being unread"
+            example: HEY — Imbox
+  - name: Row attributes
+    family: content
+    question: What does each row show?
+    subdimensions:
+      - id: rowAttributes
+        name: Attributes
+        select: many
+        values:
+          - id: sender
+            name: Sender
+            example: All
+          - id: subject
+            name: Subject
+            example: All
+          - id: snippet
+            name: Snippet
+            example: Gmail
+          - id: attachment-chips
+            name: Attachment chips
+            example: Gmail attachment previews
+          - id: labels
+            name: Labels
+            example: Gmail
+          - id: generated-summary-or-deadline
+            name: Generated summary or deadline
+            example: CHI '25 Response Deadline attribute
+          - id: assignee
+            name: Assignee
+            description: The row shows who owns the item — an avatar or name for the teammate it is assigned to
+              — which only exists in shared inboxes
+            example: Front — Shared inbox
+          - id: status
+            name: Status
+            description: The row shows a workflow state the item moves through (new, open, pending, solved) and
+              often a priority field, distinct from a user-applied label
+            example: Zendesk — Agent ticket views
+  - name: Prioritization
+    family: initiative
+    question: Who decides what matters first?
+    subdimensions:
+      - id: priority
+        name: Priority
+        select: one
+        values:
+          - id: chronological
+            name: Chronological
+            example: Default inboxes
+          - id: importance-markers
+            name: Importance markers
+            example: Gmail Important
+          - id: focused-and-other
+            name: Focused and Other
+            example: Outlook Focused Inbox
+          - id: priority-sections
+            name: Priority sections
+            example: Gmail Priority Inbox
+  - name: Deferral
+    family: lifecycle
+    question: How can a message come back later?
+    subdimensions:
+      - id: deferral
+        name: Deferral
+        select: many
+        values:
+          - id: none
+            name: None
+            example: Basic clients
+          - id: snooze
+            name: Snooze
+            example: Gmail
+          - id: scheduled-send
+            name: Scheduled send
+            example: Gmail
+          - id: follow-up-nudges
+            name: Follow-up nudges
+            example: Gmail nudges
+wild:
+  score: 3
+  note: Email is one of the few overview–detail interfaces where layout and density are routinely
+    offered.
+  examples:
+    - name: Gmail
+      note: Reading pane position, density, inbox type, category tabs on or off
+    - name: Outlook
+      note: Focused Inbox and conversation view toggles
+techniques:
+  - name: Surfaced deadlines
+    dimension: Row attributes
+    how: Generate an attribute such as Response Deadline from message bodies, surface it into rows and
+      sort by it (CHI '25 §5.1.3), generalized to any extracted field.
+    ai: true
+  - name: Rule from example
+    dimension: Organization
+    how: Select a few messages and file them; the inbox proposes the rule and the split it would create.
+    ai: true
+  - name: Split by query
+    dimension: Organization
+    how: Any saved search becomes its own inbox section, reorderable and collapsible.
+    ai: false
+signature: Surfaced deadlines
+sample: Email clients, shared inboxes, support desks and notification triage tools.
+unit: One inbox view.
+relations:
+  uses:
+    - bulk-actions
+    - filter-controls
+    - split-pane
+    - badge
+    - undo
+    - toast
+    - tag-input
+  specializes:
+    - overview-detail
+    - communicate
+  neighbors:
+    - notification-center
+    - approval-flow
+scores:
+  ubiquity: 5
+  potential: 5
+  spec: 5
+evidence: agent-coded
+usage:
+  - Zero-inbox people and pilers use the same product in opposite ways
+questions:
+  - Should extracted attributes (deadlines, amounts) be treated as first-class email metadata?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.6530625634628594
+  agreementFirstPass: 0.7447368421052631
+  kappaFinal: 0.9485902072561309
+  agreementFinal: 0.9611111111111111
+  pass: true
+  perSub:
+    organization:
+      kappaFirstPass: 0.6519721577726219
+      agreementFirstPass: 0.65
+      kappaFinal: 0.9538816295157573
+      agreementFinal: 0.95
+      flag: null
+    grouping:
+      kappaFirstPass: 0.27552140504939676
+      agreementFirstPass: 0.45
+      kappaFinal: 0.8886827458256026
+      agreementFinal: 0.95
+      flag: null
+    openIn:
+      kappaFirstPass: 0.6262458471760799
+      agreementFirstPass: 0.65
+      kappaFinal: 0.9509403107113653
+      agreementFinal: 0.95
+      flag: null
+    density:
+      kappaFirstPass: 0.3442622950819672
+      agreementFirstPass: 0.7
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    triage:
+      kappaFirstPass: 0.5597945707997066
+      agreementFirstPass: 0.55
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    rowAttributes:
+      kappaFirstPass: 0.7413049726933026
+      agreementFirstPass: 0.8125
+      kappaFinal: 0.9582608695652175
+      agreementFinal: 0.96875
+      flag: null
+    priority:
+      kappaFirstPass: 0.5783132530120483
+      agreementFirstPass: 0.65
+      kappaFinal: 0.8859315589353612
+      agreementFinal: 0.9
+      flag: null
+    deferral:
+      kappaFirstPass: 0.688327879071217
+      agreementFirstPass: 0.8
+      kappaFinal: 0.9322751322751325
+      agreementFinal: 0.95
+      flag: null
+  distribution:
+    organization:
+      Folders: 8
+      Labels: 1
+      Automatic categories: 3
+      Split inboxes by rule: 6
+      n/a: 2
+    grouping:
+      Individual messages: 4
+      Conversation threads: 16
+      Bundles: 0
+    openIn:
+      Side-by-side: 8
+      Under overview: 1
+      Replace: 4
+      New page: 7
+    density:
+      Compact: 3
+      Default: 16
+      Comfortable: 1
+    triage:
+      Read and file: 6
+      Archive to zero: 7
+      Snooze until later: 0
+      Assign to a teammate: 1
+      Close or solve: 4
+      Reading is triage: 2
+      Mark as read: 0
+    rowAttributes:
+      Sender: 20
+      Subject: 17
+      Snippet: 17
+      Attachment chips: 3
+      Labels: 9
+      Generated summary or deadline: 3
+      Assignee: 5
+      Status: 3
+    priority:
+      Chronological: 12
+      Importance markers: 3
+      Focused and Other: 2
+      Priority sections: 3
+    deferral:
+      None: 5
+      Snooze: 14
+      Scheduled send: 11
+      Follow-up nudges: 5
+  exemplars:
+    organization:
+      Folders:
+        - Microsoft Outlook — Inbox
+        - Apple Mail — Inbox
+        - Apple Mail — Inbox on iPhone
+      Labels:
+        - Gmail — Inbox
+      Automatic categories:
+        - GitHub — Notifications inbox
+        - Slack — Activity
+        - Spark — Smart Inbox
+      Split inboxes by rule:
+        - Superhuman — Inbox
+        - HEY — Imbox
+        - Front — Shared inbox
+    grouping:
+      Individual messages:
+        - Microsoft Outlook — Inbox
+        - Slack — Activity
+        - Notion — Inbox
+      Conversation threads:
+        - Gmail — Inbox
+        - Apple Mail — Inbox
+        - Apple Mail — Inbox on iPhone
+      Bundles: []
+    openIn:
+      Side-by-side:
+        - Microsoft Outlook — Inbox
+        - Apple Mail — Inbox
+        - Front — Shared inbox
+      Under overview:
+        - Thunderbird — Inbox
+      Replace:
+        - Gmail — Inbox
+        - Superhuman — Inbox
+        - HEY — Imbox
+      New page:
+        - Apple Mail — Inbox on iPhone
+        - Zendesk — Agent ticket views
+        - GitHub — Notifications inbox
+    density:
+      Compact:
+        - Superhuman — Inbox
+        - Zendesk — Agent ticket views
+        - Thunderbird — Inbox
+      Default:
+        - Gmail — Inbox
+        - Microsoft Outlook — Inbox
+        - Apple Mail — Inbox
+      Comfortable:
+        - HEY — Imbox
+    triage:
+      Read and file:
+        - Microsoft Outlook — Inbox
+        - Apple Mail — Inbox
+        - Apple Mail — Inbox on iPhone
+      Archive to zero:
+        - Gmail — Inbox
+        - Superhuman — Inbox
+        - GitHub — Notifications inbox
+      Snooze until later: []
+      Assign to a teammate:
+        - Front — Shared inbox
+      Close or solve:
+        - Zendesk — Agent ticket views
+        - Intercom — Inbox
+        - Help Scout — Mailbox
+      Reading is triage:
+        - HEY — Imbox
+        - Slack — Activity
+      Mark as read: []
+    rowAttributes:
+      Sender:
+        - Gmail — Inbox
+        - Microsoft Outlook — Inbox
+        - Apple Mail — Inbox
+      Subject:
+        - Gmail — Inbox
+        - Microsoft Outlook — Inbox
+        - Apple Mail — Inbox
+      Snippet:
+        - Gmail — Inbox
+        - Microsoft Outlook — Inbox
+        - Apple Mail — Inbox
+      Attachment chips:
+        - Gmail — Inbox
+        - Yahoo Mail — Inbox
+        - Microsoft Outlook — Inbox on phone
+      Labels:
+        - Gmail — Inbox
+        - Microsoft Outlook — Inbox
+        - Front — Shared inbox
+      Generated summary or deadline:
+        - Apple Mail — Inbox on iPhone
+        - Superhuman — Inbox
+        - Spark — Smart Inbox
+      Assignee:
+        - Front — Shared inbox
+        - Zendesk — Agent ticket views
+        - Intercom — Inbox
+      Status:
+        - Zendesk — Agent ticket views
+        - Help Scout — Mailbox
+        - Freshdesk — Ticket list
+    priority:
+      Chronological:
+        - Apple Mail — Inbox
+        - Superhuman — Inbox
+        - Front — Shared inbox
+      Importance markers:
+        - Gmail — Inbox
+        - Zendesk — Agent ticket views
+        - Freshdesk — Ticket list
+      Focused and Other:
+        - Microsoft Outlook — Inbox
+        - Microsoft Outlook — Inbox on phone
+      Priority sections:
+        - Apple Mail — Inbox on iPhone
+        - HEY — Imbox
+        - Spark — Smart Inbox
+    deferral:
+      None:
+        - Zendesk — Agent ticket views
+        - GitHub — Notifications inbox
+        - Notion — Inbox
+      Snooze:
+        - Gmail — Inbox
+        - Microsoft Outlook — Inbox
+        - Apple Mail — Inbox
+      Scheduled send:
+        - Gmail — Inbox
+        - Microsoft Outlook — Inbox
+        - Apple Mail — Inbox
+      Follow-up nudges:
+        - Gmail — Inbox
+        - Apple Mail — Inbox
+        - Apple Mail — Inbox on iPhone
+  unobserved:
+    - sub: grouping
+      var: Bundles
+    - sub: triage
+      var: Snooze until later
+    - sub: triage
+      var: Mark as read
+  unresolved: []
+  proposals:
+    raised: 6
+    adopted:
+      - sub: triage
+        name: Close or solve
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: triage
+        name: Reading is triage
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: triage
+        name: Mark as read
+        raters:
+          - fable
+          - opus
+      - sub: rowAttributes
+        name: Assignee
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: rowAttributes
+        name: Status
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded:
+      - place: sub:triage
+        sub: triage
+        dim: Triage model
+        name: Sort into stacks
+        gloss: Clearing a message means dragging it into a designated pile (e.g., Set Aside, Reply Later)
+          rather than filing, archiving, snoozing on a timer, or assigning it to someone
+        raters:
+          - sonnet
+        instances:
+          - 6
+        status: raised
+  raterNotes:
+    fable:
+      - "organization is n/a for single-list notification inboxes (Linear, Notion). priority:
+        'Importance markers' used whenever rows carry an importance flag though sort stays
+        chronological (Gmail, Zendesk, Intercom, Freshdesk). Gmail's Labels vs Automatic categories
+        overlap: coded the storage model, not the default view."
+      - organization mixes a storage model (Folders, Labels) with a view model (Automatic
+        categories, Split inboxes), so Gmail and Apple Mail hold two values at once. Replace and New
+        page both mean the list goes away and need a sharper line. density is Gmail-relative with no
+        absolute anchor. Bundles overlaps Automatic categories.
+    opus:
+      - triage is pick-one but mail clients offer archive, file and snooze at once; I coded the
+        product's primary clearing gesture and noted the rest. organization does not fit
+        notification inboxes (Notion has no organising structure at all, coded n/a; GitHub's repo
+        grouping and Slack's filter tabs I read as Automatic categories). rowAttributes had no way
+        to say assignee or status, which is most of what a support row carries.
+      - organization is pick one but Proton, Gmail and Apple Mail all run two systems at once
+        (folders and labels, labels and automatic categories), so it wants to be pick any; and
+        organization's Automatic categories overlaps grouping's Bundles for Spark and GitHub, which
+        is where those two subs split us.
+    sonnet:
+      - Ticketing tools (Zendesk, Freshdesk) carry priority/status fields that only loosely map onto
+        rowAttributes' vocabulary (built for email, not tickets); coded the closest available values
+        rather than proposing a ticket-specific field.
+      - "Four codebook problems. (1) organization is pick one but Gmail is the codebook's own
+        exemplar for both Labels and Automatic categories, and Proton and Apple Mail genuinely have
+        two filing models at once — it should be pick any, or the gloss should say to code the
+        storage model and let categories be a view. (2) organization and grouping overlap: bundling
+        can be read as either, which is what split GitHub and Spark; I resolved it by a rule
+        (organization = how the list is divided into places, grouping = what one row represents) and
+        the codebook should state it. (3) density has no absolute anchor — its three values are
+        Gmail's own settings, so for every product without a density control raters were judging
+        spaciousness by feel, which produced six disagreements. (4) triage is missing two whole
+        models that the sample kept hitting, status-close (helpdesks) and nothing-to-file (HEY,
+        Slack), and rowAttributes, built for email, has no owner or workflow state; both adopted
+        proposals came from that."
+  codedAt: 2026-09-22
+previews:
+  - file: inbox.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

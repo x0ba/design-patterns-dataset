@@ -1,0 +1,406 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "date-picker". Edit between batches only — see README "Rules".
+id: date-picker
+name: Date picker
+level: component
+parent: enter-data
+aliases:
+  - calendar picker
+  - date range picker
+definition: A control for choosing a date, a time or a range of dates.
+data: time
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - travel
+  - health
+  - finance
+  - productivity
+anatomy:
+  - name: Input
+    role: The chosen value
+  - name: Calendar
+    role: Days to choose from
+  - name: Annotations
+    role: What each day carries
+roles: []
+dimensions:
+  - name: Presentation
+    family: layout
+    question: How is time presented for choosing?
+    subdimensions:
+      - id: presentation
+        name: Presentation
+        select: one
+        values:
+          - id: calendar-popover
+            name: Calendar popover
+            example: Most web pickers
+          - id: inline-calendar
+            name: Inline calendar
+            example: Booking sites
+          - id: scroll-wheels
+            name: Scroll wheels
+            example: iOS wheels
+          - id: formatted-text-field
+            name: Formatted text field
+            example: GOV.UK date input
+          - id: natural-language
+            name: Natural language
+            example: Fantastical, Todoist
+          - id: dropdowns-per-part
+            name: Dropdowns per part
+            description: Each part of the date and time is its own select (month, day, year, hour, minute) — no
+              calendar, no free typing (Windows Set the date and time)
+            example: Windows 11 — Set the date and time manually
+          - id: week-strip-with-paging
+            name: Week strip with paging
+            description: A row of individual days, often with time slots shown beneath each, that pages forward
+              or back by arrows — distinct from a month-grid popover, an always-visible inline
+              calendar, scroll wheels, a formatted text field or natural language.
+            example: Zocdoc — Appointment availability
+  - name: Selection
+    family: scope
+    question: What is being chosen?
+    subdimensions:
+      - id: selection
+        name: Selection
+        select: one
+        values:
+          - id: single-date
+            name: Single date
+            example: Birthdays
+          - id: range
+            name: Range
+            example: Airbnb two-month range
+          - id: date-and-time
+            name: Date and time
+            example: Meeting pickers
+          - id: several-dates
+            name: Several dates
+            example: Scheduling polls
+          - id: flexible
+            name: Flexible
+            description: A weekend in October
+            example: Airbnb flexible dates
+          - id: recurring-rule
+            name: Recurring rule
+            description: What is chosen is a repetition — every Friday, the first of each month — rather than a
+              date, a range or a set of dates
+            example: Todoist — Task due date
+  - name: Day annotations
+    family: content
+    question: What does each day say?
+    subdimensions:
+      - id: annotations
+        name: Annotations
+        select: many
+        values:
+          - id: none
+            name: None
+            example: Birthdays
+          - id: unavailable-days-disabled
+            name: Unavailable days disabled
+            example: Booking
+          - id: price-per-day
+            name: Price per day
+            example: Google Flights
+          - id: busy-indicators
+            name: Busy indicators
+            example: Calendar-aware pickers
+          - id: holidays
+            name: Holidays
+            example: Regional calendars
+  - name: Opening
+    family: invocation
+    question: What opens it?
+    subdimensions:
+      - id: openBy
+        name: Opened by
+        select: one
+        values:
+          - id: focusing-the-field
+            name: Focusing the field
+            example: Most pickers
+          - id: calendar-icon
+            name: Calendar icon
+            example: Enterprise forms
+          - id: always-visible
+            name: Always visible
+            example: Hotel booking
+  - name: Locale
+    family: adaptation
+    question: How does it adapt to the person’s conventions?
+    subdimensions:
+      - id: locale
+        name: Locale
+        select: many
+        values:
+          - id: week-start
+            name: Week start
+            example: Monday vs Sunday
+          - id: date-format
+            name: Date format
+            example: Day-month order
+          - id: calendar-system
+            name: Calendar system
+            example: Non-Gregorian calendars
+wild:
+  score: 1
+  note: Week start and format follow system settings.
+  examples:
+    - name: Google Calendar
+      note: Start week on setting
+techniques:
+  - name: Annotate the days
+    dimension: Day annotations
+    how: "Surface any per-day attribute into the picker (price, busyness, weather), as Southwest does
+      with cheapest fares: Fluid Attributes on a calendar."
+    ai: false
+signature: Annotate the days
+sample: Travel, health booking, finance and scheduling products.
+unit: One picker.
+relations:
+  uses:
+    - popover
+  specializes: []
+  neighbors:
+    - calendar
+    - availability-picker
+scores:
+  ubiquity: 5
+  potential: 3
+  spec: 5
+evidence: agent-coded
+usage:
+  - Flexible travellers want prices across days before choosing any
+questions:
+  - When does an annotated picker become an overview?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.6289748242938082
+  agreementFirstPass: 0.7653846153846153
+  kappaFinal: 0.9035932193458369
+  agreementFinal: 0.9375
+  pass: true
+  perSub:
+    presentation:
+      kappaFirstPass: 0.8123534010946054
+      agreementFirstPass: 0.8
+      kappaFinal: 0.9079754601226993
+      agreementFinal: 0.9
+      flag: null
+    selection:
+      kappaFirstPass: 0.7786885245901638
+      agreementFirstPass: 0.8
+      kappaFinal: 0.9520000000000002
+      agreementFinal: 0.95
+      flag: null
+    annotations:
+      kappaFirstPass: 0.7434069850320737
+      agreementFirstPass: 0.8916666666666667
+      kappaFinal: 0.90131037885849
+      agreementFinal: 0.9583333333333334
+      flag: null
+    openBy:
+      kappaFirstPass: 0.6444849589790338
+      agreementFirstPass: 0.7
+      kappaFinal: 0.7752808988764047
+      agreementFinal: 0.8
+      flag: null
+    locale:
+      kappaFirstPass: 0.3701759802408154
+      agreementFirstPass: 0.575
+      kappaFinal: 0.9333333333333336
+      agreementFinal: 0.95
+      flag: null
+  distribution:
+    presentation:
+      Calendar popover: 7
+      Inline calendar: 7
+      Scroll wheels: 1
+      Formatted text field: 1
+      Natural language: 2
+      Dropdowns per part: 1
+      Week strip with paging: 1
+    selection:
+      Single date: 6
+      Range: 5
+      Date and time: 8
+      Several dates: 1
+      Flexible: 0
+      Recurring rule: 0
+    annotations:
+      None: 10
+      Unavailable days disabled: 5
+      Price per day: 2
+      Busy indicators: 1
+      Holidays: 0
+      n/a: 2
+    openBy:
+      Focusing the field: 12
+      Calendar icon: 2
+      Always visible: 4
+      n/a: 2
+    locale:
+      Week start: 13
+      Date format: 16
+      Calendar system: 2
+  exemplars:
+    presentation:
+      Calendar popover:
+        - Google Flights — Departure date
+        - Google Calendar — Event date field
+        - OpenTable — Reservation date
+      Inline calendar:
+        - Airbnb — Check in / Check out on search
+        - Booking.com — Check-in and check-out dates
+        - Hopper — Flight date calendar
+      Scroll wheels:
+        - Uber Reserve — Pick up date and time
+      Formatted text field:
+        - GOV.UK — Date of birth input
+      Natural language:
+        - Fantastical — New event bar
+        - Todoist — Task due date
+      Dropdowns per part:
+        - Windows 11 — Set the date and time manually
+      Week strip with paging:
+        - Zocdoc — Appointment availability
+    selection:
+      Single date:
+        - GOV.UK — Date of birth input
+        - Todoist — Task due date
+        - OpenTable — Reservation date
+      Range:
+        - Airbnb — Check in / Check out on search
+        - Google Flights — Departure date
+        - Booking.com — Check-in and check-out dates
+      Date and time:
+        - iOS Calendar — New Event start and end
+        - Google Calendar — Event date field
+        - Calendly — Booking page
+      Several dates:
+        - Doodle — Create a group poll
+      Flexible: []
+      Recurring rule: []
+    annotations:
+      None:
+        - Booking.com — Check-in and check-out dates
+        - iOS Calendar — New Event start and end
+        - Google Calendar — Event date field
+      Unavailable days disabled:
+        - Airbnb — Check in / Check out on search
+        - Calendly — Booking page
+        - Zocdoc — Appointment availability
+      Price per day:
+        - Google Flights — Departure date
+        - Hopper — Flight date calendar
+      Busy indicators:
+        - Todoist — Task due date
+      Holidays: []
+    openBy:
+      Focusing the field:
+        - Airbnb — Check in / Check out on search
+        - Google Flights — Departure date
+        - Booking.com — Check-in and check-out dates
+      Calendar icon:
+        - Chase — Transfer date
+        - Microsoft Outlook — Meeting start date
+      Always visible:
+        - Calendly — Booking page
+        - Doodle — Create a group poll
+        - Zocdoc — Appointment availability
+    locale:
+      Week start:
+        - Airbnb — Check in / Check out on search
+        - Google Flights — Departure date
+        - Booking.com — Check-in and check-out dates
+      Date format:
+        - Airbnb — Check in / Check out on search
+        - Google Flights — Departure date
+        - Booking.com — Check-in and check-out dates
+      Calendar system:
+        - iOS Calendar — New Event start and end
+        - Windows 11 — Set the date and time manually
+  unobserved:
+    - sub: selection
+      var: Flexible
+    - sub: selection
+      var: Recurring rule
+    - sub: annotations
+      var: Holidays
+  unresolved: []
+  proposals:
+    raised: 3
+    adopted:
+      - sub: presentation
+        name: Dropdowns per part
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: selection
+        name: Recurring rule
+        raters:
+          - opus
+          - sonnet
+      - sub: presentation
+        name: Week strip with paging
+        raters:
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - Locale is unobservable from product knowledge for most web products; I coded it only for OS
+        pickers and products whose settings I know, and ? otherwise.
+      - annotations needs a rule for pickers with no day grid (n/a) versus a grid that marks nothing
+        (None); presentation does not say where a large anchored panel (Airbnb) falls between
+        popover and inline; selection cannot hold a recurring rule.
+    opus:
+      - "The line between Calendar popover and Inline calendar had to be drawn by hand: I took
+        popover to mean a small overlay anchored to a field and dismissed on pick, and inline to
+        mean the calendar is the laid-out content of the sheet, panel or page. Several pickers also
+        span two presentations at once (iOS Calendar: a month grid for the date, wheels for the
+        time), which pick-one cannot hold. locale is close to unobservable — I coded week start and
+        date format for products that ship internationally and left it empty for US-only services,
+        which is an inference, not an observation."
+      - selection has no value for a repetition — Todoist's 'every friday' produces a rule, not a
+        date — and it is pick one although pickers like iOS Calendar and MyChart truthfully hold a
+        date and a time chosen on the same surface; presentation mixes two axes (floating vs in the
+        page flow, opened vs always visible) so Airbnb-style expanding panels can be coded either
+        way; openBy has no honest value for a picker with nothing to open, which split us between
+        n/a and Always visible, and annotations splits the same way between None and n/a when there
+        is no day surface at all.
+    sonnet:
+      - Locale was mostly '?' by direct observation — I coded Week start/Date format wherever the
+        product is a mainstream, internationally deployed consumer app with a standard grid, since
+        that adaptation is real but usually invisible unless your own locale differs from the
+        default; for single-locale government or internal-tool contexts I limited it to just Date
+        format.
+      - "Two recurring corrections: (1) I was conflating 'has a date format at all' with 'adapts to
+        the person's own locale' in the locale sub — several US-only or fixed-order services (GOV.UK
+        DOB, Zocdoc, MyChart, Chase) got credited with Date format when both other raters correctly
+        read them as not adapting to anyone. (2) 'selection' for date+time pickers with visually
+        separate date and time controls (Google Calendar Android, Outlook) is ambiguous between
+        Single date and Date and time depending on whether you're describing the whole task or just
+        the calendar-grid control; I'm now reading it as the control being coded, which argues for
+        Single date whenever the time lives in its own separate widget."
+  codedAt: 2026-09-22
+previews:
+  - file: date-picker.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

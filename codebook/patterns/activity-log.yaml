@@ -1,0 +1,378 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "activity-log". Edit between batches only — see README "Rules".
+id: activity-log
+name: Activity log
+level: pattern
+parent: monitor
+aliases:
+  - audit log
+  - history
+  - changelog
+  - event timeline
+definition: A time-ordered record of what happened to an object or account, and who did it.
+data: time
+platforms:
+  - web
+  - desktop
+domains:
+  - enterprise
+  - software
+  - finance
+  - productivity
+anatomy:
+  - name: Event
+    role: One change
+  - name: Actor
+    role: Who did it
+  - name: Subject
+    role: What it happened to
+  - name: Filters
+    role: Narrowing the record
+roles:
+  - actor
+  - action
+  - subject
+  - timestamp
+  - before
+  - after
+dimensions:
+  - name: Event detail
+    family: content
+    question: How much does each event say?
+    subdimensions:
+      - id: detail
+        name: Detail
+        select: one
+        values:
+          - id: one-line-summary
+            name: One-line summary
+            example: GitHub issue timeline
+          - id: before-and-after-values
+            name: Before and after values
+            example: Jira history tab
+          - id: full-diff
+            name: Full diff
+            example: Wiki page history
+          - id: expandable-groups
+            name: Expandable groups
+            example: Google Docs activity
+  - name: Subject
+    family: scope
+    question: Whose activity is it?
+    subdimensions:
+      - id: subject
+        name: Subject
+        select: one
+        values:
+          - id: one-object
+            name: One object
+            example: Issue history
+          - id: a-workspace
+            name: A workspace
+            example: Admin audit logs
+          - id: the-person-s-own
+            name: The person’s own
+            example: Google My Activity
+          - id: the-whole-system
+            name: The whole system
+            example: AWS CloudTrail
+  - name: Aggregation
+    family: composition
+    question: Are events combined?
+    subdimensions:
+      - id: aggregation
+        name: Aggregation
+        select: one
+        values:
+          - id: every-event
+            name: Every event
+            example: Audit logs
+          - id: consecutive-edits-collapsed
+            name: Consecutive edits collapsed
+            example: Document activity
+          - id: daily-digests
+            name: Daily digests
+            example: Email summaries
+          - id: merged-with-comments
+            name: Merged with comments
+            example: GitHub issue timeline
+  - name: Presentation
+    family: layout
+    question: How is the record drawn?
+    subdimensions:
+      - id: presentation
+        name: Presentation
+        select: one
+        values:
+          - id: vertical-timeline
+            name: Vertical timeline
+            example: GitHub
+          - id: filterable-table
+            name: Filterable table
+            example: Admin audit logs
+          - id: sidebar-in-a-detail-view
+            name: Sidebar in a detail view
+            example: Figma version history panel
+          - id: calendar-heatmap
+            name: Calendar heatmap
+            example: GitHub contribution graph
+  - name: Acting on history
+    family: invocation
+    question: Can the past be restored from the log?
+    subdimensions:
+      - id: actions
+        name: Actions
+        select: one
+        values:
+          - id: read-only
+            name: Read-only
+            example: Audit logs
+          - id: restore-a-version
+            name: Restore a version
+            example: Google Docs version history
+          - id: revert-one-event
+            name: Revert one event
+            example: Git revert
+          - id: replay
+            name: Replay
+            example: Session replays
+          - id: erase-the-record
+            name: Erase the record
+            description: Entries can be deleted from the log — removing the record (and sometimes the content it
+              refers to) rather than restoring, reverting or replaying anything; the characteristic
+              action of personal-data activity logs
+            example: Google My Activity — My Activity
+wild:
+  score: 1
+  note: Filtering by actor or type is common; the representation is fixed.
+  examples:
+    - name: Google My Activity
+      note: Filter by date and product
+techniques:
+  - name: Log as an overview
+    dimension: Event detail
+    how: Events are items with attributes (who, which field, when) that can be surfaced, sorted and
+      filtered like any overview.
+    ai: false
+  - name: What changed since I looked
+    dimension: Aggregation
+    how: A summary of changes since the person’s last visit, every line linked to its events.
+    ai: true
+signature: Log as an overview
+sample: Issue trackers, document tools, admin consoles and personal data dashboards.
+unit: One activity record view.
+relations:
+  uses:
+    - filter-controls
+    - date-picker
+    - accordion
+  specializes:
+    - monitor
+  neighbors:
+    - version-history
+    - notification-center
+    - feed
+scores:
+  ubiquity: 4
+  potential: 3
+  spec: 5
+evidence: agent-coded
+usage:
+  - Logs are read only when something has gone wrong
+questions:
+  - "What is the right overview of history: events, versions or people?"
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7710001535830903
+  agreementFirstPass: 0.8
+  kappaFinal: 0.9305897628043113
+  agreementFinal: 0.94
+  pass: true
+  perSub:
+    detail:
+      kappaFirstPass: 0.7029702970297027
+      agreementFirstPass: 0.75
+      kappaFinal: 0.8105263157894738
+      agreementFinal: 0.85
+      flag: null
+    subject:
+      kappaFirstPass: 1
+      agreementFirstPass: 1
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    aggregation:
+      kappaFirstPass: 0.830028328611898
+      agreementFirstPass: 0.85
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    presentation:
+      kappaFirstPass: 0.6805678793256434
+      agreementFirstPass: 0.7
+      kappaFinal: 0.947043248014122
+      agreementFinal: 0.95
+      flag: null
+    actions:
+      kappaFirstPass: 0.6414342629482074
+      agreementFirstPass: 0.7
+      kappaFinal: 0.8953792502179599
+      agreementFinal: 0.9
+      flag: null
+  distribution:
+    detail:
+      One-line summary: 13
+      Before and after values: 2
+      Full diff: 4
+      Expandable groups: 1
+    subject:
+      One object: 14
+      A workspace: 1
+      The person’s own: 3
+      The whole system: 2
+    aggregation:
+      Every event: 11
+      Consecutive edits collapsed: 4
+      Daily digests: 0
+      Merged with comments: 5
+    presentation:
+      Vertical timeline: 10
+      Filterable table: 6
+      Sidebar in a detail view: 4
+      Calendar heatmap: 0
+    actions:
+      Read-only: 11
+      Restore a version: 5
+      Revert one event: 2
+      Replay: 0
+      Erase the record: 2
+  exemplars:
+    detail:
+      One-line summary:
+        - GitHub — Issue timeline
+        - Google My Activity — My Activity
+        - Notion — Page updates
+      Before and after values:
+        - Jira — Issue History tab
+        - Salesforce — Field history related list
+      Full diff:
+        - Google Docs — Version history
+        - Wikipedia — Page history
+        - Confluence — Page history
+      Expandable groups:
+        - Figma — Version history panel
+    subject:
+      One object:
+        - GitHub — Issue timeline
+        - Jira — Issue History tab
+        - Google Docs — Version history
+      A workspace:
+        - Google Workspace Admin — Audit and investigation log
+      The person’s own:
+        - Google My Activity — My Activity
+        - Dropbox — Events
+        - Facebook — Activity log
+      The whole system:
+        - AWS CloudTrail — Event history
+        - Stripe Dashboard — Events
+    aggregation:
+      Every event:
+        - Jira — Issue History tab
+        - Google My Activity — My Activity
+        - Wikipedia — Page history
+      Consecutive edits collapsed:
+        - Google Docs — Version history
+        - Figma — Version history panel
+        - Notion — Page updates
+      Daily digests: []
+      Merged with comments:
+        - GitHub — Issue timeline
+        - Linear — Issue activity
+        - Trello — Card activity
+    presentation:
+      Vertical timeline:
+        - GitHub — Issue timeline
+        - Jira — Issue History tab
+        - Google My Activity — My Activity
+      Filterable table:
+        - Wikipedia — Page history
+        - AWS CloudTrail — Event history
+        - Google Workspace Admin — Audit and investigation log
+      Sidebar in a detail view:
+        - Google Docs — Version history
+        - Figma — Version history panel
+        - Notion — Page updates
+      Calendar heatmap: []
+    actions:
+      Read-only:
+        - GitHub — Issue timeline
+        - Jira — Issue History tab
+        - Notion — Page updates
+      Restore a version:
+        - Google Docs — Version history
+        - Figma — Version history panel
+        - Dropbox — Events
+      Revert one event:
+        - Wikipedia — Page history
+        - GitHub Desktop — History tab
+      Replay: []
+      Erase the record:
+        - Google My Activity — My Activity
+        - Facebook — Activity log
+  unobserved:
+    - sub: aggregation
+      var: Daily digests
+    - sub: presentation
+      var: Calendar heatmap
+    - sub: actions
+      var: Replay
+  unresolved: []
+  proposals:
+    raised: 1
+    adopted:
+      - sub: actions
+        name: Erase the record
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - Delete-my-record (My Activity, Facebook, Dropbox on non-deletions) is neither read-only nor
+        restore; coded Read-only since the past is not changed.
+      - detail's Expandable groups overlaps aggregation's Consecutive edits collapsed. presentation
+        mixes shape (timeline, table) with placement (sidebar in a detail view). actions has no
+        value for deleting entries, and Replay's gloss means playback when re-delivery is what
+        products offer.
+    opus:
+      - Presentation forces a choice between shape (timeline, table) and location (sidebar), so
+        master-detail logs like GitHub Desktop fit badly; detail is also unstable for logs whose
+        rows are one-liners but whose expansion is a full record or diff (CloudTrail, Stripe,
+        Confluence).
+      - "`actions` is where this entry breaks: personal-data logs let you delete the record and API
+        logs let you re-deliver an event, and neither is Read-only, Restore, Revert or Replay.
+        `aggregation` also forces pick one over logs that both collapse runs and merge comments."
+    sonnet:
+      - Subject was the cleanest sub-dimension to apply; detail sometimes spans two variations
+        (e.g., a table that also shows diffs) and I picked the more central one.
+      - "Aggregation keeps producing entries that are genuinely two things at once
+        (collapsed-by-person AND merged-with-comments for Notion; day-grouped AND edit-collapsed for
+        Dropbox) — it reads like it wants to be pick-any rather than pick-one. Detail also gets
+        confused with aggregation when a pattern nests entries into expandable groups: that's about
+        how entries are bundled, not how much one entry says once you open it."
+  codedAt: 2026-09-22
+previews:
+  - file: activity-log.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

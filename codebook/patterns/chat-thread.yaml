@@ -1,0 +1,472 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "chat-thread". Edit between batches only — see README "Rules".
+id: chat-thread
+name: Chat thread
+level: pattern
+parent: communicate
+aliases:
+  - messaging view
+  - conversation
+  - DM
+definition: A chronological sequence of messages between participants, with a composer at the edge.
+data: conversation
+platforms:
+  - mobile
+  - web
+  - desktop
+domains:
+  - communication
+  - social
+  - enterprise
+  - commerce
+anatomy:
+  - name: Message list
+    role: The history
+  - name: Message
+    role: One turn
+  - name: Composer
+    role: Writing the next turn
+  - name: Header
+    role: Participants and actions
+roles:
+  - sender
+  - avatar
+  - timestamp
+  - body
+  - attachment
+  - reaction
+dimensions:
+  - name: Message layout
+    family: layout
+    question: How are messages drawn?
+    subdimensions:
+      - id: layout
+        name: Layout
+        select: one
+        values:
+          - id: bubbles-by-sender
+            name: Bubbles by sender
+            example: iMessage
+          - id: stream-with-avatars
+            name: Stream with avatars
+            example: Slack
+          - id: compact-lines
+            name: Compact lines
+            example: Discord compact mode
+          - id: cozy
+            name: Cozy
+            example: Discord cozy mode
+  - name: Reply structure
+    family: composition
+    question: How do replies relate to messages?
+    subdimensions:
+      - id: replies
+        name: Replies
+        select: one
+        values:
+          - id: flat
+            name: Flat
+            example: SMS
+          - id: quoted-inline-replies
+            name: Quoted inline replies
+            example: WhatsApp replies
+          - id: side-threads
+            name: Side threads
+            example: Slack threads
+          - id: topic-threads
+            name: Topic threads
+            example: Zulip
+  - name: Message content
+    family: content
+    question: What can a message carry, and what metadata shows?
+    subdimensions:
+      - id: content
+        name: Content
+        select: many
+        values:
+          - id: text
+            name: Text
+            example: All
+          - id: media-and-files
+            name: Media and files
+            example: All
+          - id: link-previews
+            name: Link previews
+            example: iMessage
+          - id: interactive-cards
+            name: Interactive cards
+            example: Slack Block Kit
+          - id: voice-messages
+            name: Voice messages
+            example: WhatsApp
+      - id: metadata
+        name: Metadata
+        select: many
+        values:
+          - id: timestamp
+            name: Timestamp
+            example: All
+          - id: read-receipts
+            name: Read receipts
+            example: WhatsApp
+          - id: edited-marker
+            name: Edited marker
+            example: Slack
+          - id: delivery-status
+            name: Delivery status
+            example: Signal
+  - name: Message lifetime
+    family: lifecycle
+    question: What happens to a message over time?
+    subdimensions:
+      - id: lifetime
+        name: Lifetime
+        select: one
+        values:
+          - id: permanent
+            name: Permanent
+            example: SMS
+          - id: editable-and-deletable
+            name: Editable and deletable
+            example: Slack
+          - id: disappearing
+            name: Disappearing
+            example: Signal disappearing messages
+          - id: scheduled-send
+            name: Scheduled send
+            example: Slack scheduled messages
+  - name: Composer actions
+    family: invocation
+    question: What can be done from the composer?
+    subdimensions:
+      - id: composer
+        name: Composer
+        select: many
+        values:
+          - id: send-on-enter
+            name: Send on Enter
+            example: Desktop chat
+          - id: slash-commands
+            name: Slash commands
+            example: Slack
+          - id: mentions
+            name: Mentions
+            example: "@ in Slack"
+          - id: attachments
+            name: Attachments
+            example: All
+          - id: formatting-toolbar
+            name: Formatting toolbar
+            example: Slack
+  - name: Unread position
+    family: feedback
+    question: Where does a returning reader land?
+    subdimensions:
+      - id: unread
+        name: Unread
+        select: one
+        values:
+          - id: latest-message
+            name: Latest message
+            example: WhatsApp
+          - id: new-messages-divider
+            name: New messages divider
+            example: Slack
+          - id: first-unread
+            name: First unread
+            example: Discord
+wild:
+  score: 2
+  note: Density modes, themes and text size are common options.
+  examples:
+    - name: Discord
+      note: Compact or cozy message display
+    - name: Slack
+      note: Clean or compact message theme
+techniques:
+  - name: Promote to structure
+    dimension: Message content
+    how: Turn any message into a task, a thread, a document or a pinned attribute in the header (a
+      deadline found in chat, surfaced like CHI '25’s Response Deadline).
+    ai: true
+  - name: Density modes
+    dimension: Message layout
+    how: Switch between bubbles, cozy and compact per conversation.
+    ai: false
+signature: Promote to structure
+sample: Consumer messaging, team chat and customer support chat.
+unit: One conversation view.
+relations:
+  uses:
+    - reactions
+    - text-field
+    - file-upload
+    - badge
+    - autocomplete
+  specializes:
+    - communicate
+  neighbors:
+    - comment-thread
+    - ai-chat
+    - feed
+scores:
+  ubiquity: 5
+  potential: 4
+  spec: 4
+evidence: agent-coded
+usage:
+  - Decisions made in chat are lost because chat has no structure to keep them in
+questions:
+  - Where is the overview of a conversation, and what are its attributes?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.8064557903689722
+  agreementFirstPass: 0.8722222222222222
+  kappaFinal: 0.8064557903689722
+  agreementFinal: 0.8722222222222222
+  pass: true
+  perSub:
+    layout:
+      kappaFirstPass: 0.8228346456692914
+      agreementFirstPass: 0.85
+      kappaFinal: 0.8228346456692914
+      agreementFinal: 0.85
+      flag: null
+    replies:
+      kappaFirstPass: 0.7558494404883014
+      agreementFirstPass: 0.8
+      kappaFinal: 0.7558494404883014
+      agreementFinal: 0.8
+      flag: null
+    content:
+      kappaFirstPass: 0.7815148305084738
+      agreementFirstPass: 0.89
+      kappaFinal: 0.7815148305084738
+      agreementFinal: 0.89
+      flag: null
+    metadata:
+      kappaFirstPass: 0.8052953757651748
+      agreementFirstPass: 0.8625
+      kappaFinal: 0.8052953757651748
+      agreementFinal: 0.8625
+      flag: null
+    lifetime:
+      kappaFirstPass: 0.7724399494311
+      agreementFirstPass: 0.85
+      kappaFinal: 0.7724399494311
+      agreementFinal: 0.85
+      flag: null
+    composer:
+      kappaFirstPass: 0.8634563743115924
+      agreementFirstPass: 0.9
+      kappaFinal: 0.8634563743115924
+      agreementFinal: 0.9
+      flag: null
+    unread:
+      kappaFirstPass: 0.7190426638917794
+      agreementFirstPass: 0.8
+      kappaFinal: 0.7190426638917794
+      agreementFinal: 0.8
+      flag: null
+  distribution:
+    layout:
+      Bubbles by sender: 12
+      Stream with avatars: 6
+      Compact lines: 1
+      Cozy: 1
+    replies:
+      Flat: 2
+      Quoted inline replies: 14
+      Side threads: 3
+      Topic threads: 1
+    content:
+      Text: 20
+      Media and files: 19
+      Link previews: 17
+      Interactive cards: 9
+      Voice messages: 12
+    metadata:
+      Timestamp: 19
+      Read receipts: 13
+      Edited marker: 11
+      Delivery status: 7
+    lifetime:
+      Permanent: 4
+      Editable and deletable: 14
+      Disappearing: 2
+      Scheduled send: 0
+    composer:
+      Send on Enter: 11
+      Slash commands: 8
+      Mentions: 15
+      Attachments: 19
+      Formatting toolbar: 6
+    unread:
+      Latest message: 13
+      New messages divider: 4
+      First unread: 2
+  exemplars:
+    layout:
+      Bubbles by sender:
+        - iMessage — Conversation
+        - WhatsApp — Chat
+        - Telegram — Chat
+      Stream with avatars:
+        - Slack — Channel
+        - Microsoft Teams — Chat
+        - Google Chat — Space conversation
+      Compact lines:
+        - Twitch — Stream chat
+      Cozy:
+        - Discord — Text channel
+    replies:
+      Flat:
+        - Intercom Messenger — Support chat widget
+        - Steam — Friends chat
+      Quoted inline replies:
+        - iMessage — Conversation
+        - WhatsApp — Chat
+        - Discord — Text channel
+      Side threads:
+        - Slack — Channel
+        - Google Chat — Space conversation
+        - Mattermost — Channel
+      Topic threads:
+        - Zulip — Stream conversation
+    content:
+      Text:
+        - iMessage — Conversation
+        - WhatsApp — Chat
+        - Slack — Channel
+      Media and files:
+        - iMessage — Conversation
+        - WhatsApp — Chat
+        - Slack — Channel
+      Link previews:
+        - iMessage — Conversation
+        - WhatsApp — Chat
+        - Slack — Channel
+      Interactive cards:
+        - Slack — Channel
+        - Discord — Text channel
+        - Telegram — Chat
+      Voice messages:
+        - iMessage — Conversation
+        - WhatsApp — Chat
+        - Slack — Channel
+    metadata:
+      Timestamp:
+        - iMessage — Conversation
+        - WhatsApp — Chat
+        - Slack — Channel
+      Read receipts:
+        - iMessage — Conversation
+        - WhatsApp — Chat
+        - Telegram — Chat
+      Edited marker:
+        - iMessage — Conversation
+        - WhatsApp — Chat
+        - Slack — Channel
+      Delivery status:
+        - iMessage — Conversation
+        - WhatsApp — Chat
+        - Telegram — Chat
+    lifetime:
+      Permanent:
+        - Intercom Messenger — Support chat widget
+        - Twitch — Stream chat
+        - Google Messages — RCS conversation
+      Editable and deletable:
+        - iMessage — Conversation
+        - WhatsApp — Chat
+        - Slack — Channel
+      Disappearing:
+        - Signal — Conversation
+        - Snapchat — Chat
+      Scheduled send: []
+    composer:
+      Send on Enter:
+        - Slack — Channel
+        - Discord — Text channel
+        - Signal — Conversation
+      Slash commands:
+        - Slack — Channel
+        - Discord — Text channel
+        - Telegram — Chat
+      Mentions:
+        - iMessage — Conversation
+        - WhatsApp — Chat
+        - Slack — Channel
+      Attachments:
+        - iMessage — Conversation
+        - WhatsApp — Chat
+        - Slack — Channel
+      Formatting toolbar:
+        - Slack — Channel
+        - Telegram — Chat
+        - Microsoft Teams — Chat
+    unread:
+      Latest message:
+        - iMessage — Conversation
+        - WhatsApp — Chat
+        - Microsoft Teams — Chat
+      New messages divider:
+        - Slack — Channel
+        - Signal — Conversation
+        - Google Chat — Space conversation
+      First unread:
+        - Discord — Text channel
+        - Zulip — Stream conversation
+  unobserved:
+    - sub: lifetime
+      var: Scheduled send
+  unresolved:
+    - sub: unread
+      n: 5
+  proposals:
+    raised: 1
+    adopted: []
+    recorded:
+      - place: sub:layout
+        sub: layout
+        dim: null
+        name: Labelled stream
+        gloss: One left-aligned stream where each run of messages sits under the sender's coloured name
+          label, with neither bubbles nor avatars
+        raters:
+          - fable
+        instances:
+          - 17
+        status: raised
+  raterNotes:
+    fable:
+      - "unread: the Slack/Discord exemplars both scroll to a divider, so I coded 'New messages
+        divider' when a line is drawn and 'First unread' when the view lands on it without a line
+        (Zulip) or per the Discord exemplar. lifetime is pick-one, so opt-in disappearing (Signal,
+        Instagram) and scheduled send (Telegram, Slack) are noted rather than coded."
+    opus:
+      - "lifetime is pick-one but most products have two answers at once (edit/delete plus scheduled
+        send, or edit/delete plus an optional disappearing timer). I ruled that lifetime describes a
+        sent message's persistence — Disappearing only when the sampled screen's default or
+        signature state is a timer, scheduled send only when nothing can be edited or deleted — and
+        noted it per instance. The New messages divider / First unread split is also thin: I read
+        divider as a marker you land above and First unread as the scroll position."
+    sonnet:
+      - Several messengers (Instagram, WeChat, LINE) support delete/unsend but not true message
+        editing; coded them as 'Editable and deletable' since the codebook bundles both under one
+        variation rather than splitting them.
+  codedAt: 2026-09-22
+previews:
+  - file: chat-thread.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

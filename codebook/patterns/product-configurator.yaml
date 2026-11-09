@@ -1,0 +1,490 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "product-configurator". Edit between batches only — see README "Rules".
+id: product-configurator
+name: Product configurator
+level: pattern
+parent: configure
+aliases:
+  - CPQ configurator
+  - customizer
+  - build and price
+definition: Choosing options that compose a specific product instance — often with live preview,
+  constraints and price — before purchase or build.
+data: object
+platforms:
+  - web
+  - mobile
+  - desktop
+  - xr
+domains:
+  - commerce
+  - mobility
+  - home
+  - design
+  - enterprise
+anatomy:
+  - name: Option groups
+    role: Categories of choices
+  - name: Preview
+    role: Visual or summary of the instance
+  - name: Constraints
+    role: What combinations are allowed
+  - name: Price and summary
+    role: Cost and selected bill of materials
+roles:
+  - option
+  - variant
+  - price
+  - swatch
+  - preview
+dimensions:
+  - name: Option model
+    family: content
+    question: What kinds of choices make up the product?
+    subdimensions:
+      - id: options
+        name: Options
+        select: many
+        values:
+          - id: discrete-variants
+            name: Discrete variants
+            description: Colour, size, trim
+            example: Nike By You colours
+          - id: additive-modules
+            name: Additive modules
+            description: Add or remove parts
+            example: PC part pickers
+          - id: continuous-parameters
+            name: Continuous parameters
+            description: Dimensions or fits
+            example: Made-to-measure
+          - id: materials-and-finishes
+            name: Materials and finishes
+            example: Tesla paint and wheels
+          - id: personalization-marks
+            name: Personalization marks
+            description: Text, monogram, image
+            example: Nike By You text
+  - name: Preview
+    family: feedback
+    question: How is the configured instance shown?
+    subdimensions:
+      - id: preview
+        name: Preview
+        select: one
+        values:
+          - id: static-swatches-only
+            name: Static swatches only
+            example: Simple apparel pickers
+          - id: 2d-composite-image
+            name: 2D composite image
+            example: Many sneaker customizers
+          - id: realtime-3d
+            name: Realtime 3D
+            example: Tesla configurator
+          - id: ar-on-body-or-room
+            name: AR on body or room
+            example: IKEA Place
+          - id: summary-list-without-visual
+            name: Summary list without visual
+            example: Insurance quote builders
+  - name: Constraints and guidance
+    family: flow
+    question: How are illegal or poor combinations handled?
+    subdimensions:
+      - id: constraints
+        name: Constraints
+        select: many
+        values:
+          - id: free-combination
+            name: Free combination
+            example: Some print-on-demand
+          - id: disable-incompatible-options
+            name: Disable incompatible options
+            example: Tesla option dependencies
+          - id: auto-resolve-conflicts
+            name: Auto-resolve conflicts
+            example: CPQ rule engines
+          - id: warn-but-allow
+            name: Warn but allow
+            example: Advanced PC builds
+          - id: guided-recommendations
+            name: Guided recommendations
+            example: Good-better-best bundles
+  - name: Decision order
+    family: composition
+    question: In what order are choices presented?
+    subdimensions:
+      - id: order
+        name: Order
+        select: one
+        values:
+          - id: any-order-panel
+            name: Any-order panel
+            example: Tesla sidebar options
+          - id: stepped-wizard
+            name: Stepped wizard
+            example: Many build-and-price flows
+          - id: progressive-disclosure
+            name: Progressive disclosure
+            description: Advanced options later
+            example: Dell commercial configs
+          - id: start-from-a-base-model
+            name: Start from a base model
+            example: Car trim then options
+          - id: start-from-a-template
+            name: Start from a template
+            example: Nike By You presets
+  - name: Price and commit
+    family: lifecycle
+    question: How do cost and purchase enter the flow?
+    subdimensions:
+      - id: commit
+        name: Commit
+        select: one
+        values:
+          - id: live-price-update
+            name: Live price update
+            example: Tesla total
+          - id: price-after-quote
+            name: Price after quote
+            example: B2B CPQ
+          - id: save-configuration
+            name: Save configuration
+            example: Shareable Tesla link
+          - id: add-to-cart
+            name: Add to cart
+            example: Nike By You
+          - id: order-to-manufacture
+            name: Order to manufacture
+            example: Custom furniture
+  - name: Collaboration on a build
+    family: collaboration
+    question: Can more than one person shape the configuration?
+    subdimensions:
+      - id: collaboration
+        name: Collaboration
+        select: one
+        values:
+          - id: solo
+            name: Solo
+            example: Most DTC customizers
+          - id: shareable-link
+            name: Shareable link
+            example: Tesla design share
+          - id: sales-assisted
+            name: Sales-assisted
+            example: Rep configures with customer
+          - id: team-approval
+            name: Team approval
+            example: Enterprise procurement
+          - id: community-gallery-remix
+            name: Community gallery remix
+            example: Nike By You inspiration
+wild:
+  score: 1
+  note: Preview angle and unit system sometimes exist; the option tree and constraint logic are almost
+    never end-user editable.
+  examples:
+    - name: Tesla
+      note: 3D view, shareable configuration
+    - name: Nike By You
+      note: Colourways and text
+    - name: IKEA
+      note: Planning tools with constraints
+techniques:
+  - name: Constraint explanations
+    dimension: Constraints and guidance
+    how: When an option greys out, show the rule in plain language and the choices that would unlock it.
+    ai: false
+  - name: Configure by goal
+    dimension: Option model
+    how: “Family road trips, max range” proposes a package; every selected option remains editable with
+      sources.
+    ai: true
+  - name: Diff two builds
+    dimension: Preview
+    how: Compare two saved configurations side by side on options, price and preview, like comparing
+      collection items.
+    ai: false
+signature: Constraint explanations
+sample: Tesla, Nike By You, Dell/Apple build-to-order, IKEA planners and CPQ demos.
+unit: One configuration session producing one product instance.
+relations:
+  uses:
+    - choice-control
+    - slider
+    - color-picker
+    - stepper
+    - stat-tile
+  specializes:
+    - configure
+  neighbors:
+    - comparison-table
+    - checkout
+scores:
+  ubiquity: 4
+  potential: 4
+  spec: 4
+evidence: agent-coded
+usage:
+  - People explore visually first, then notice price
+  - Shared links are used to decide with someone else
+questions:
+  - Is the option tree a schema browse-collections problem?
+  - When should AI propose packages versus single options?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7118191618024903
+  agreementFirstPass: 0.7785714285714286
+  kappaFinal: 0.8844777356714998
+  agreementFinal: 0.9035714285714286
+  pass: true
+  perSub:
+    options:
+      kappaFirstPass: 0.7013574660633481
+      agreementFirstPass: 0.78
+      kappaFinal: 0.9464739729693562
+      agreementFinal: 0.96
+      flag: null
+    preview:
+      kappaFirstPass: 0.7795738427626744
+      agreementFirstPass: 0.75
+      kappaFinal: 0.8668639053254438
+      agreementFinal: 0.85
+      flag: null
+    constraints:
+      kappaFirstPass: 0.832298136645962
+      agreementFirstPass: 0.91
+      kappaFinal: 0.9461851231762732
+      agreementFinal: 0.97
+      flag: null
+    order:
+      kappaFirstPass: 0.4379391100702575
+      agreementFirstPass: 0.45
+      kappaFinal: 0.7699386503067488
+      agreementFinal: 0.75
+      flag: null
+    commit:
+      kappaFirstPass: 0.3732193732193732
+      agreementFirstPass: 0.5
+      kappaFinal: 0.39698492462311563
+      agreementFinal: 0.5
+      flag: unreliable
+    collaboration:
+      kappaFirstPass: 0.706457925636008
+      agreementFirstPass: 0.75
+      kappaFinal: 0.8856053384175405
+      agreementFinal: 0.9
+      flag: null
+  distribution:
+    options:
+      Discrete variants: 19
+      Additive modules: 10
+      Continuous parameters: 1
+      Materials and finishes: 10
+      Personalization marks: 7
+    preview:
+      Static swatches only: 2
+      2D composite image: 7
+      Realtime 3D: 5
+      AR on body or room: 2
+      Summary list without visual: 4
+    constraints:
+      Free combination: 9
+      Disable incompatible options: 10
+      Auto-resolve conflicts: 3
+      Warn but allow: 2
+      Guided recommendations: 1
+    order:
+      Any-order panel: 7
+      Stepped wizard: 4
+      Progressive disclosure: 0
+      Start from a base model: 7
+      Start from a template: 2
+    commit:
+      Live price update: 2
+      Price after quote: 1
+      Save configuration: 2
+      Add to cart: 15
+      Order to manufacture: 0
+    collaboration:
+      Solo: 12
+      Shareable link: 5
+      Sales-assisted: 2
+      Team approval: 0
+      Community gallery remix: 1
+  exemplars:
+    options:
+      Discrete variants:
+        - Tesla — Model Y Design Studio
+        - Nike By You — Air Force 1 customizer
+        - Apple — MacBook Pro build-to-order
+      Additive modules:
+        - Tesla — Model Y Design Studio
+        - Apple — MacBook Pro build-to-order
+        - Dell — XPS customize and buy
+      Continuous parameters:
+        - Indochino — Suit customization
+      Materials and finishes:
+        - Tesla — Model Y Design Studio
+        - Nike By You — Air Force 1 customizer
+        - IKEA — PAX wardrobe planner
+      Personalization marks:
+        - Nike By You — Air Force 1 customizer
+        - Converse — Custom Chuck Taylor
+        - Vans — Customs
+    preview:
+      Static swatches only:
+        - Apple — MacBook Pro build-to-order
+        - Apple — iPhone buy flow
+      2D composite image:
+        - Nike By You — Air Force 1 customizer
+        - Converse — Custom Chuck Taylor
+        - Vans — Customs
+      Realtime 3D:
+        - Tesla — Model Y Design Studio
+        - IKEA — PAX wardrobe planner
+        - Porsche — Car Configurator
+      AR on body or room:
+        - IKEA Place — Furniture in your room
+        - Warby Parker — Virtual try-on
+      Summary list without visual:
+        - Dell — XPS customize and buy
+        - PCPartPicker — System Builder
+        - Lenovo — ThinkPad customization
+    constraints:
+      Free combination:
+        - Nike By You — Air Force 1 customizer
+        - IKEA Place — Furniture in your room
+        - Converse — Custom Chuck Taylor
+      Disable incompatible options:
+        - Tesla — Model Y Design Studio
+        - Apple — MacBook Pro build-to-order
+        - Dell — XPS customize and buy
+      Auto-resolve conflicts:
+        - Porsche — Car Configurator
+        - BMW — Build Your Own
+        - Salesforce CPQ — Quote line configurator
+      Warn but allow:
+        - PCPartPicker — System Builder
+        - Salesforce CPQ — Quote line configurator
+      Guided recommendations:
+        - Salesforce CPQ — Quote line configurator
+    order:
+      Any-order panel:
+        - Tesla — Model Y Design Studio
+        - Converse — Custom Chuck Taylor
+        - PCPartPicker — System Builder
+      Stepped wizard:
+        - Porsche — Car Configurator
+        - BMW — Build Your Own
+        - Apple — iPhone buy flow
+      Progressive disclosure: []
+      Start from a base model:
+        - Apple — MacBook Pro build-to-order
+        - Dell — XPS customize and buy
+        - IKEA — PAX wardrobe planner
+      Start from a template:
+        - Nike By You — Air Force 1 customizer
+        - Vistaprint — Business card designer
+    commit:
+      Live price update:
+        - Tesla — Model Y Design Studio
+        - PCPartPicker — System Builder
+      Price after quote:
+        - Salesforce CPQ — Quote line configurator
+      Save configuration:
+        - Porsche — Car Configurator
+        - BMW — Build Your Own
+      Add to cart:
+        - Nike By You — Air Force 1 customizer
+        - Apple — MacBook Pro build-to-order
+        - Dell — XPS customize and buy
+      Order to manufacture: []
+    collaboration:
+      Solo:
+        - Apple — MacBook Pro build-to-order
+        - Dell — XPS customize and buy
+        - IKEA Place — Furniture in your room
+      Shareable link:
+        - Tesla — Model Y Design Studio
+        - IKEA — PAX wardrobe planner
+        - Porsche — Car Configurator
+      Sales-assisted:
+        - BMW — Build Your Own
+        - Salesforce CPQ — Quote line configurator
+      Team approval: []
+      Community gallery remix:
+        - Nike By You — Air Force 1 customizer
+  unobserved:
+    - sub: order
+      var: Progressive disclosure
+    - sub: commit
+      var: Order to manufacture
+    - sub: collaboration
+      var: Team approval
+  unresolved: []
+  proposals:
+    raised: 0
+    adopted: []
+    recorded: []
+  raterNotes:
+    fable:
+      - "Commit as pick-one conflates price feedback with the purchase action; I coded the terminal
+        action where one exists and Live price update only where there is no cart (Tesla kept as the
+        codebook's example). Preview: I code Tesla as 2D composites from product knowledge, against
+        the codebook's example."
+      - "commit conflates live price feedback with the terminal action — nearly every priced
+        configurator holds Live price update plus one of Add to cart or Save configuration, so the
+        sub wants pick any. Discrete variants and Materials and finishes overlap on colour (Nike
+        colours vs Tesla paint). order's Any-order panel and Start from a base model co-occur in
+        every car and laptop configurator. preview's exemplars are misassigned: Tesla shows
+        pre-rendered angles, not a manipulable 3D model."
+    opus:
+      - "The codebook covered this sample without gaps, which is unsurprising since Tesla and Nike
+        By You are both exemplars and archetypes of the form. commit is the sub that fights the
+        sample: nearly every configurator does several of these at once (live price, save, add to
+        cart), and I coded the flow's terminal act, taking Live price update only where the price is
+        the running feedback and the purchase is a later step. preview's 2D composite versus
+        Realtime 3D is the call most likely to split raters, because several customizers have
+        quietly moved from composited flats to rotatable renders (Nike, Xbox). order's Start from a
+        base model and Start from a template are nearly the same act — the difference is whether the
+        starting point is a product SKU or a designed layout — and I used the template only where
+        the starting artefact is itself a design."
+      - "Two sub-dimensions carry most of the disagreement because each asks two questions at once:
+        `order` mixes where a build starts with what sequence is imposed (a Dell page is both a base
+        model and a free panel), and `commit` mixes how price behaves with what act ends the flow
+        (live price and add-to-cart are both true of nearly every commerce configurator) — both
+        should be pick any. The codebook also contradicts itself on Tesla, naming it under Any-order
+        panel while glossing Start-from-a-base-model as 'car trim then options', and its preview
+        scale has no slot for the pre-rendered 360 spin set that most car and sneaker configurators
+        actually ship."
+    sonnet:
+      - commit and collaboration sometimes both plausibly apply (e.g. a save code that is also
+        shareable); coded to the single most distinctively-described action per instance since both
+        subs are pick-one.
+      - "Two patterns of miss on my part, not codebook problems: (1) I under-coded `options` as
+        pick-one-ish by naming only the most salient variant type per product and missing genuine
+        secondary axes (add-on packages, finish choices) that were plainly present once named — a
+        pick-any sub-dimension wants the fuller list. (2) For `order`, I initially treated Dell's
+        and Lenovo's section-revealed flow as generic Progressive disclosure while defaulting other,
+        similarly-structured build flows to Any-order or Start-from-a-base-model somewhat
+        inconsistently; the codebook's own Dell exemplar for Progressive disclosure is worth
+        restating in the gloss so raters apply it to look-alike laptop configurators (Lenovo) rather
+        than defaulting to Start-from-a-base-model."
+  codedAt: 2026-09-22
+previews:
+  - file: product-configurator.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

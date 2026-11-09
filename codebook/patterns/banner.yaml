@@ -1,0 +1,352 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "banner". Edit between batches only — see README "Rules".
+id: banner
+name: Banner
+level: component
+parent: monitor
+aliases:
+  - inline alert
+  - callout
+  - system banner
+  - notice
+definition: A persistent message across a region or page about a condition that needs attention.
+data: object
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - government
+  - finance
+  - software
+  - enterprise
+anatomy:
+  - name: Message
+    role: The condition
+  - name: Severity
+    role: How serious
+  - name: Action
+    role: What to do
+  - name: Dismiss
+    role: Whether it can go away
+roles: []
+dimensions:
+  - name: Scope
+    family: scope
+    question: What does the condition apply to?
+    subdimensions:
+      - id: scope
+        name: Scope
+        select: one
+        values:
+          - id: whole-app
+            name: Whole app
+            example: Service outage banners
+          - id: page
+            name: Page
+            example: Account warnings
+          - id: section
+            name: Section
+            example: GOV.UK error summary
+          - id: field
+            name: Field
+            example: Inline field notices
+  - name: Severity
+    family: feedback
+    question: How serious is it?
+    subdimensions:
+      - id: severity
+        name: Severity
+        select: one
+        values:
+          - id: information
+            name: Information
+            example: Scheduled maintenance
+          - id: success
+            name: Success
+            example: Settings saved
+          - id: warning
+            name: Warning
+            example: Card expiring
+          - id: critical
+            name: Critical
+            example: Payment failed
+  - name: Dismissal
+    family: lifecycle
+    question: Can it go away?
+    subdimensions:
+      - id: dismissal
+        name: Dismissal
+        select: one
+        values:
+          - id: not-until-resolved
+            name: Not until resolved
+            example: Verification required
+          - id: dismissible
+            name: Dismissible
+            example: Announcements
+          - id: returns-later
+            name: Returns later
+            example: Update reminders
+          - id: clears-with-the-condition
+            name: Clears with the condition
+            example: Connectivity banners
+  - name: Action
+    family: content
+    question: Does it offer a way to fix things?
+    subdimensions:
+      - id: action
+        name: Action
+        select: one
+        values:
+          - id: none
+            name: None
+            example: Maintenance notices
+          - id: link-to-fix
+            name: Link to fix
+            example: Update payment method
+          - id: primary-action
+            name: Primary action
+            example: Restart to update
+          - id: several-actions
+            name: Several actions
+            example: Cookie consent
+  - name: Placement
+    family: layout
+    question: Where does it sit?
+    subdimensions:
+      - id: placement
+        name: Placement
+        select: one
+        values:
+          - id: top-of-the-app
+            name: Top of the app
+            example: GitHub site-wide banners
+          - id: top-of-content
+            name: Top of content
+            example: Settings pages
+          - id: beside-the-problem
+            name: Beside the problem
+            example: Inline alerts
+          - id: bottom-bar
+            name: Bottom bar
+            example: Consent bars
+wild:
+  score: 0
+  note: Banners are the organization’s voice and are not customizable.
+  examples: []
+techniques:
+  - name: Snooze by kind
+    dimension: Dismissal
+    how: Snooze a kind of banner (announcements, tips) without silencing critical ones.
+    ai: false
+signature: Snooze by kind
+sample: SaaS, banking and government sites.
+unit: One banner instance.
+relations:
+  uses: []
+  specializes: []
+  neighbors:
+    - toast
+    - empty-state
+scores:
+  ubiquity: 5
+  potential: 2
+  spec: 5
+evidence: agent-coded
+usage:
+  - Banner blindness grows with every dismissible announcement
+questions:
+  - Should banner severity be tied to an organization-wide policy the person can read?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.6608107489359911
+  agreementFirstPass: 0.7
+  kappaFinal: 0.986827661909989
+  agreementFinal: 0.99
+  pass: true
+  perSub:
+    scope:
+      kappaFirstPass: 0.34579439252336464
+      agreementFirstPass: 0.5
+      kappaFinal: 0.9341383095499454
+      agreementFinal: 0.95
+      flag: null
+    severity:
+      kappaFirstPass: 0.7395833333333334
+      agreementFirstPass: 0.75
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    dismissal:
+      kappaFirstPass: 0.7874224977856513
+      agreementFirstPass: 0.8
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    action:
+      kappaFirstPass: 0.6822995461422087
+      agreementFirstPass: 0.65
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    placement:
+      kappaFirstPass: 0.7489539748953973
+      agreementFirstPass: 0.8
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+  distribution:
+    scope:
+      Whole app: 12
+      Page: 7
+      Section: 1
+      Field: 0
+    severity:
+      Information: 9
+      Success: 0
+      Warning: 7
+      Critical: 4
+    dismissal:
+      Not until resolved: 10
+      Dismissible: 1
+      Returns later: 1
+      Clears with the condition: 8
+    action:
+      None: 6
+      Link to fix: 9
+      Primary action: 2
+      Several actions: 3
+    placement:
+      Top of the app: 10
+      Top of content: 9
+      Beside the problem: 1
+      Bottom bar: 0
+  exemplars:
+    scope:
+      Whole app:
+        - GitHub — Site-wide incident notice
+        - GOV.UK — Cookie banner
+        - Gmail — Offline notice
+      Page:
+        - Google Docs — Working offline
+        - PayPal — Confirm your email
+        - Notion — Page in Trash
+      Section:
+        - GOV.UK — Error summary on a form
+      Field: []
+    severity:
+      Information:
+        - GOV.UK — Cookie banner
+        - Stripe Dashboard — Test mode strip
+        - Google Docs — Working offline
+      Success: []
+      Warning:
+        - GitHub — Site-wide incident notice
+        - Gmail — Offline notice
+        - Slack — Connection trouble
+      Critical:
+        - GOV.UK — Error summary on a form
+        - Netflix — Account on hold
+        - Google Ads — Payment problem
+    dismissal:
+      Not until resolved:
+        - GOV.UK — Cookie banner
+        - GOV.UK — Error summary on a form
+        - Netflix — Account on hold
+      Dismissible:
+        - PayPal — Confirm your email
+      Returns later:
+        - Wikipedia — Fundraising banner
+      Clears with the condition:
+        - GitHub — Site-wide incident notice
+        - Gmail — Offline notice
+        - Stripe Dashboard — Test mode strip
+    action:
+      None:
+        - GitHub — Site-wide incident notice
+        - Gmail — Offline notice
+        - Google Docs — Working offline
+      Link to fix:
+        - GOV.UK — Error summary on a form
+        - Slack — Connection trouble
+        - Netflix — Account on hold
+      Primary action:
+        - Stripe Dashboard — Test mode strip
+        - Windows 11 — Restart required
+      Several actions:
+        - GOV.UK — Cookie banner
+        - Notion — Page in Trash
+        - Wikipedia — Fundraising banner
+    placement:
+      Top of the app:
+        - GitHub — Site-wide incident notice
+        - GOV.UK — Cookie banner
+        - Stripe Dashboard — Test mode strip
+      Top of content:
+        - GOV.UK — Error summary on a form
+        - Gmail — Offline notice
+        - PayPal — Confirm your email
+      Beside the problem:
+        - Google Docs — Working offline
+      Bottom bar: []
+  unobserved:
+    - sub: scope
+      var: Field
+    - sub: severity
+      var: Success
+    - sub: placement
+      var: Bottom bar
+  unresolved: []
+  proposals:
+    raised: 0
+    adopted: []
+    recorded: []
+  raterNotes:
+    fable:
+      - Severity coded by consequence and colour together (grey informative → Information, cannot
+        send/save or yellow → Warning, red blocking → Critical); Link to fix had to stand in for
+        links that only inform (status page).
+      - action's Link to fix and Primary action are told apart by navigation in the codebook's
+        examples but raters read them by button styling; action also has no value for a link that
+        only informs. scope's Page example is account warnings, which reads as Whole app when scope
+        is taken to mean what the condition concerns rather than what the banner governs.
+    opus:
+      - Severity had to be read from the condition rather than the styling — offline notices are
+        drawn grey or neutral but genuinely impair the product, so I coded them Warning throughout;
+        Link to fix vs Primary action I split on whether the control navigates to where the fix
+        happens or performs it in place.
+      - Two codebook faults. Scope asks what the condition applies to but its Page gloss ('Account
+        warnings') pulls account-wide conditions onto the page they are shown on, so scope and
+        placement answer the same question twice. And action has no value for a link that informs
+        rather than remedies (GitHub's status page), which pushed two raters to code an information
+        link as Link to fix.
+    sonnet:
+      - Scope between Whole app and Page was sometimes a judgment call for account-wide banners that
+        only render at the top of whichever page loads; I used Whole app when the same condition
+        follows the account across every page.
+      - "Action's biggest problem: 'Primary action' sounds like it should mean any prominent single
+        CTA button, but its codebook example (Restart to update) is specifically an immediate,
+        in-place fix, while 'Link to fix' 's own example (Update payment method) is exactly the kind
+        of button — Update payment, Select a plan, Verify, Confirm — that navigates to a separate
+        flow instead. I coded five different account-gating banners as Primary action in round 1 by
+        pattern-matching 'button' rather than 'does it resolve in place or send you elsewhere', and
+        only Windows 11's actual Restart-now button is the real Primary action case in this sample.
+        Scope also needs a clearer rule for connectivity/offline banners: the strip's visual
+        footprint (over one list, under one bar) undersells that losing the network is a whole-app
+        condition."
+  codedAt: 2026-09-22
+previews:
+  - file: banner.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

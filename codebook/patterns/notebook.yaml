@@ -1,0 +1,522 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "notebook". Edit between batches only — see README "Rules".
+id: notebook
+name: Notebook
+level: pattern
+parent: analyze
+aliases:
+  - computational notebook
+  - data notebook
+  - literate programming notebook
+definition: An interleaved document of prose, code and outputs where analysis is authored as
+  executable cells that produce tables, charts and narrative.
+data: document
+platforms:
+  - web
+  - desktop
+domains:
+  - science
+  - education
+  - software
+  - ai
+  - finance
+anatomy:
+  - name: Cell
+    role: A unit of code or markdown
+  - name: Output
+    role: What a cell produces
+  - name: Kernel or runtime
+    role: Where code runs
+  - name: Outline
+    role: The notebook structure
+  - name: Toolbar
+    role: Run and cell controls
+roles:
+  - markdown
+  - code
+  - output
+  - chart
+  - table
+dimensions:
+  - name: Cell model
+    family: composition
+    question: What are cells and how do they relate?
+    subdimensions:
+      - id: cellTypes
+        name: Cell types
+        select: many
+        values:
+          - id: code-cells
+            name: Code cells
+            example: Jupyter
+          - id: markdown-cells
+            name: Markdown cells
+            example: All notebooks
+          - id: sql-cells
+            name: SQL cells
+            example: Hex, Mode
+          - id: ui-widget-cells
+            name: UI widget cells
+            example: Observable Inputs
+          - id: chart-builder-cells
+            name: Chart-builder cells
+            example: Observable Plot cells
+      - id: deps
+        name: Dependency model
+        select: one
+        values:
+          - id: top-to-bottom-order
+            name: Top-to-bottom order
+            example: Classic Jupyter
+          - id: reactive-graph
+            name: Reactive graph
+            example: Observable
+          - id: explicit-run-selection
+            name: Explicit run selection
+            example: Run this cell only
+          - id: parameterized-notebooks
+            name: Parameterized notebooks
+            example: Papermill, Databricks jobs
+  - name: Execution flow
+    family: flow
+    question: In what order do cells run, and how is progress resumed?
+    subdimensions:
+      - id: execution
+        name: Execution
+        select: one
+        values:
+          - id: run-all-top-down
+            name: Run all top-down
+            example: Jupyter Run All
+          - id: run-selected
+            name: Run selected
+            example: Shift-Enter
+          - id: reactive-recompute
+            name: Reactive recompute
+            example: Observable
+          - id: scheduled-or-pipeline-run
+            name: Scheduled or pipeline run
+            example: Databricks workflows
+          - id: branching-experiments
+            name: Branching experiments
+            example: Deepnote environments
+  - name: Output presentation
+    family: content
+    question: What does a cell show after it runs?
+    subdimensions:
+      - id: output
+        name: Output
+        select: many
+        values:
+          - id: text-and-tables
+            name: Text and tables
+            example: pandas display
+          - id: inline-charts
+            name: Inline charts
+            example: Matplotlib in Jupyter
+          - id: interactive-widgets
+            name: Interactive widgets
+            example: ipywidgets
+          - id: errors-and-stack-traces
+            name: Errors and stack traces
+            example: Kernel errors
+          - id: hidden-or-collapsed-output
+            name: Hidden or collapsed output
+            example: Jupyter collapse
+  - name: Authoring layout
+    family: layout
+    question: How are cells and side surfaces arranged?
+    subdimensions:
+      - id: layout
+        name: Layout
+        select: one
+        values:
+          - id: linear-scroll
+            name: Linear scroll
+            example: JupyterLab
+          - id: side-by-side-editor-and-preview
+            name: Side-by-side editor and preview
+            example: Some markdown notebooks
+          - id: outline-sidebar
+            name: Outline sidebar
+            example: JupyterLab TOC
+          - id: app-or-dashboard-mode
+            name: App or dashboard mode
+            example: Voilà, Observable apps
+          - id: collaborative-multiplayer-canvas
+            name: Collaborative multiplayer canvas
+            example: Hex, Deepnote
+  - name: Runtime feedback
+    family: feedback
+    question: How does the notebook report execution state?
+    subdimensions:
+      - id: feedback
+        name: Feedback
+        select: many
+        values:
+          - id: cell-busy-indicator
+            name: Cell busy indicator
+            example: Jupyter asterisk
+          - id: kernel-status
+            name: Kernel status
+            example: Connected / idle
+          - id: stale-output-badges
+            name: Stale output badges
+            example: Observable
+          - id: progress-for-long-jobs
+            name: Progress for long jobs
+            example: Databricks
+          - id: diff-of-outputs-after-rerun
+            name: Diff of outputs after rerun
+            example: Review notebooks
+  - name: Assistance
+    family: initiative
+    question: What does the environment contribute to the analysis?
+    subdimensions:
+      - id: assistance
+        name: Assistance
+        select: many
+        values:
+          - id: none
+            name: None
+            example: Bare kernels
+          - id: autocomplete-and-docs
+            name: Autocomplete and docs
+            example: JupyterLab
+          - id: generate-a-cell
+            name: Generate a cell
+            example: GitHub Copilot in notebooks
+          - id: explain-this-output
+            name: Explain this output
+            example: Colab Gemini
+          - id: fix-and-rerun
+            name: Fix and rerun
+            example: AI error repair
+wild:
+  score: 3
+  note: Cells, order, runtime and presentation modes are authored continuously by the analyst.
+  examples:
+    - name: JupyterLab
+      note: Rearrange cells, change kernel, collapse outputs
+    - name: Observable
+      note: Fork and edit reactive notebooks
+    - name: Colab
+      note: Runtime type, forms and hiding code
+techniques:
+  - name: Cells as reversible steps
+    dimension: Cell model
+    how: Treat each cell as a named, reorderable step with visible inputs and outputs so analysis
+      history is structural, not only chatty prose.
+    ai: false
+  - name: Generate the next cell
+    dimension: Assistance
+    how: Propose a cell from the current schema and prior outputs, inserted as a draft the person must
+      run and keep.
+    ai: true
+  - name: Mark stale outputs
+    dimension: Runtime feedback
+    how: When upstream cells change, badge downstream outputs as stale until recomputed.
+    ai: false
+signature: Cells as reversible steps
+sample: Scientific and data notebooks, SQL notebooks and literate analytics products.
+unit: One notebook document bound to one runtime.
+relations:
+  uses:
+    - chart
+    - split-pane
+    - tabs
+    - autocomplete
+    - ai-provenance
+  specializes:
+    - analyze
+  neighbors:
+    - code-editor
+    - document-editor
+    - agent-run
+scores:
+  ubiquity: 3
+  potential: 5
+  spec: 3
+evidence: agent-coded
+usage:
+  - Analysts leave dead cells as history rather than using version control
+questions:
+  - When should a notebook become a dashboard, and what authorship affordances survive that shift?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.42576161412250196
+  agreementFirstPass: 0.615909090909091
+  kappaFinal: 0.9288677903706146
+  agreementFinal: 0.9571428571428572
+  pass: true
+  perSub:
+    cellTypes:
+      kappaFirstPass: 0.6883328063598166
+      agreementFirstPass: 0.77
+      kappaFinal: 0.956770257937461
+      agreementFinal: 0.97
+      flag: null
+    deps:
+      kappaFirstPass: 0.916550764951321
+      agreementFirstPass: 0.95
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    execution:
+      kappaFirstPass: 0.7407087294727746
+      agreementFirstPass: 0.75
+      kappaFinal: 0.8373983739837397
+      agreementFinal: 0.85
+      flag: null
+    output:
+      kappaFirstPass: 0.22708870077291218
+      agreementFirstPass: 0.51
+      kappaFinal: 0.8821102269378124
+      agreementFinal: 0.96
+      flag: null
+    layout:
+      kappaFirstPass: 0.896551724137931
+      agreementFirstPass: 0.9
+      kappaFinal: 0.9454545454545457
+      agreementFinal: 0.95
+      flag: null
+    feedback:
+      kappaFirstPass: 0.3273840253706033
+      agreementFirstPass: 0.525
+      kappaFinal: 0.9330357142857145
+      agreementFinal: 0.95
+      flag: null
+    assistance:
+      kappaFirstPass: 0.18526013099739178
+      agreementFirstPass: 0.49
+      kappaFinal: 0.9492063492063492
+      agreementFinal: 0.9625
+      flag: null
+  distribution:
+    cellTypes:
+      Code cells: 20
+      Markdown cells: 20
+      SQL cells: 8
+      UI widget cells: 10
+      Chart-builder cells: 6
+    deps:
+      Top-to-bottom order: 15
+      Reactive graph: 5
+      Explicit run selection: 0
+      Parameterized notebooks: 0
+    execution:
+      Run all top-down: 2
+      Run selected: 10
+      Reactive recompute: 5
+      Scheduled or pipeline run: 3
+      Branching experiments: 0
+    output:
+      Text and tables: 20
+      Inline charts: 20
+      Interactive widgets: 15
+      Errors and stack traces: 20
+      Hidden or collapsed output: 12
+    layout:
+      Linear scroll: 12
+      Side-by-side editor and preview: 2
+      Outline sidebar: 2
+      App or dashboard mode: 1
+      Collaborative multiplayer canvas: 3
+    feedback:
+      Cell busy indicator: 20
+      Kernel status: 16
+      Stale output badges: 4
+      Progress for long jobs: 2
+      Diff of outputs after rerun: 0
+    assistance:
+      None: 0
+      Autocomplete and docs: 20
+      Generate a cell: 9
+      Explain this output: 2
+      Fix and rerun: 5
+  exemplars:
+    cellTypes:
+      Code cells:
+        - Jupyter Notebook — Classic notebook
+        - JupyterLab — Notebook
+        - Google Colab — Notebook
+      Markdown cells:
+        - Jupyter Notebook — Classic notebook
+        - JupyterLab — Notebook
+        - Google Colab — Notebook
+      SQL cells:
+        - Databricks — Notebook
+        - Hex — Project
+        - Deepnote — Notebook
+      UI widget cells:
+        - Google Colab — Notebook
+        - Observable — Notebook
+        - Hex — Project
+      Chart-builder cells:
+        - Observable — Notebook
+        - Hex — Project
+        - Deepnote — Notebook
+    deps:
+      Top-to-bottom order:
+        - Jupyter Notebook — Classic notebook
+        - JupyterLab — Notebook
+        - Google Colab — Notebook
+      Reactive graph:
+        - Observable — Notebook
+        - Hex — Project
+        - Pluto.jl — Notebook
+      Explicit run selection: []
+      Parameterized notebooks: []
+    execution:
+      Run all top-down:
+        - Kaggle — Notebook
+        - Xcode — Playground
+      Run selected:
+        - Jupyter Notebook — Classic notebook
+        - JupyterLab — Notebook
+        - Google Colab — Notebook
+      Reactive recompute:
+        - Observable — Notebook
+        - Hex — Project
+        - Pluto.jl — Notebook
+      Scheduled or pipeline run:
+        - Databricks — Notebook
+        - Deepnote — Notebook
+        - Snowflake — Notebook
+      Branching experiments: []
+    output:
+      Text and tables:
+        - Jupyter Notebook — Classic notebook
+        - JupyterLab — Notebook
+        - Google Colab — Notebook
+      Inline charts:
+        - Jupyter Notebook — Classic notebook
+        - JupyterLab — Notebook
+        - Google Colab — Notebook
+      Interactive widgets:
+        - Jupyter Notebook — Classic notebook
+        - JupyterLab — Notebook
+        - Google Colab — Notebook
+      Errors and stack traces:
+        - Jupyter Notebook — Classic notebook
+        - JupyterLab — Notebook
+        - Google Colab — Notebook
+      Hidden or collapsed output:
+        - Jupyter Notebook — Classic notebook
+        - JupyterLab — Notebook
+        - Google Colab — Notebook
+    layout:
+      Linear scroll:
+        - Jupyter Notebook — Classic notebook
+        - Google Colab — Notebook
+        - Kaggle — Notebook
+      Side-by-side editor and preview:
+        - MATLAB — Live Editor
+        - Xcode — Playground
+      Outline sidebar:
+        - JupyterLab — Notebook
+        - VS Code — ipynb editor
+      App or dashboard mode:
+        - Mode — SQL notebook and report
+      Collaborative multiplayer canvas:
+        - Hex — Project
+        - Deepnote — Notebook
+        - Count — Canvas
+    feedback:
+      Cell busy indicator:
+        - Jupyter Notebook — Classic notebook
+        - JupyterLab — Notebook
+        - Google Colab — Notebook
+      Kernel status:
+        - Jupyter Notebook — Classic notebook
+        - JupyterLab — Notebook
+        - Google Colab — Notebook
+      Stale output badges:
+        - Observable — Notebook
+        - Hex — Project
+        - marimo — Notebook
+      Progress for long jobs:
+        - Databricks — Notebook
+        - Apache Zeppelin — Note
+      Diff of outputs after rerun: []
+    assistance:
+      None: []
+      Autocomplete and docs:
+        - Jupyter Notebook — Classic notebook
+        - JupyterLab — Notebook
+        - Google Colab — Notebook
+      Generate a cell:
+        - Google Colab — Notebook
+        - Databricks — Notebook
+        - Hex — Project
+      Explain this output:
+        - Google Colab — Notebook
+        - Hex — Project
+      Fix and rerun:
+        - Google Colab — Notebook
+        - Databricks — Notebook
+        - Hex — Project
+  unobserved:
+    - sub: deps
+      var: Explicit run selection
+    - sub: deps
+      var: Parameterized notebooks
+    - sub: execution
+      var: Branching experiments
+    - sub: feedback
+      var: Diff of outputs after rerun
+    - sub: assistance
+      var: None
+  unresolved: []
+  proposals:
+    raised: 0
+    adopted: []
+    recorded: []
+  raterNotes:
+    fable:
+      - Execution is a pick-one over products that run selected cells interactively and top-down for
+        versions/jobs; coded the editing flow except where the sample named the batch run (Kaggle).
+      - execution is a pick one over products that run cells singly while editing and top-down or on
+        a schedule as a job; where the sampler names the job I now code it, but the sub wants pick
+        any. deps files Parameterized notebooks, an input model, beside cell-order models. layout
+        cannot hold a notebook that edits linearly and runs as an app, or one with inline chunk
+        output and a rendered preview beside it. assistance's None is read by one rater as no AI,
+        which makes Autocomplete and docs the swing value in every cell.
+    opus:
+      - "Deps and execution restate each other for most instances (reactive graph implies reactive
+        recompute, top-to-bottom implies run selected), so the two only carry separate information
+        for scheduled and parameterized notebooks. Playgrounds and live scripts (20, 12) fit the
+        cell vocabulary badly: their unit is a line or a section, not a cell."
+      - "The packet here is mostly one rater coding only what the sample note mentioned — assistance
+        came back as None for sixteen products that all ship completion — rather than a codebook
+        fault. Where the codebook is at fault: `deps` mixes a dependency model (order, reactive)
+        with an invocation mode (run selection, parameterized), and `layout` makes an authoring
+        layout compete with App or dashboard mode, which most of these products have as well as, not
+        instead of, a linear scroll."
+    sonnet:
+      - Assistance was 'None' for most notebooks — generative help is still the exception rather
+        than the default even in 2026's mainstream data-science tools, aside from Colab/VS Code's
+        completions.
+      - "Most of this entry's disagreement was my own under-coding, not a codebook gap: I marked
+        'assistance' None for nearly every product despite my own notes naming autocomplete, AI
+        generation or error-fix features (Autocomplete and docs is even the codebook's own named
+        JupyterLab example), and I left several pick-any output/feedback lists too short against
+        evidence already in my notes. The one real interpretive question: for tools with both an
+        interactive 'Notebook' screen and a separate scheduled/parameterized-job feature
+        (Databricks, Deepnote, Snowflake), execution/deps/layout should describe what's on the
+        literally-sampled screen, not the tool's most distinguishing capability reached elsewhere."
+  codedAt: 2026-09-22
+previews:
+  - file: notebook.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

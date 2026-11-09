@@ -1,0 +1,557 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "annotation". Edit between batches only — see README "Rules".
+id: annotation
+name: Annotation
+level: pattern
+parent: collaborate
+aliases:
+  - comments
+  - pinned notes
+  - margin notes
+definition: Attaching discussion or marks to a region of a shared artifact so feedback stays
+  anchored to what it is about.
+data: document
+platforms:
+  - web
+  - desktop
+  - mobile
+domains:
+  - productivity
+  - design
+  - education
+  - software
+  - enterprise
+anatomy:
+  - name: Anchor
+    role: The region commented on
+  - name: Thread
+    role: The discussion
+  - name: Marker
+    role: The visible pin or highlight
+  - name: Resolve
+    role: Closing the thread
+roles:
+  - author
+  - reply
+  - reaction
+dimensions:
+  - name: Anchor form
+    family: composition
+    question: What is an annotation attached to?
+    subdimensions:
+      - id: anchor
+        name: Anchor
+        select: one
+        values:
+          - id: text-range
+            name: Text range
+            example: Google Docs comments
+          - id: canvas-point-or-area
+            name: Canvas point or area
+            example: Figma comments
+          - id: timeline-range
+            name: Timeline range
+            example: Frame.io
+          - id: cell-or-row
+            name: Cell or row
+            example: Sheets comments
+          - id: code-line
+            name: Code line
+            example: GitHub PR review
+          - id: whole-page-floating
+            name: Whole page floating
+            example: PDF sticky notes
+          - id: block
+            name: Block
+            description: Attached to a whole block or paragraph rather than a text range or cell (Notion block
+              comments)
+            example: Notion — Block comment
+          - id: content-block
+            name: Content block
+            description: Anchored to one whole structural block of a document (a paragraph, heading, or image),
+              not a free text range, a canvas point, a timeline range, a spreadsheet cell/row, a
+              code line, or the whole page.
+            example: Notion — Block comment
+  - name: Marker presentation
+    family: content
+    question: What does the annotation show in situ?
+    subdimensions:
+      - id: marker
+        name: Marker
+        select: many
+        values:
+          - id: highlight
+            name: Highlight
+            example: Docs
+          - id: avatar-pin
+            name: Avatar pin
+            example: Figma
+          - id: margin-glyph
+            name: Margin glyph
+            example: Word
+          - id: inline-suggestion-mark
+            name: Inline suggestion mark
+            example: Docs Suggesting
+          - id: status-colour
+            name: Status colour
+            example: Resolved vs open
+          - id: timeline-marker
+            name: Timeline marker
+            description: A tick or dot on a media timeline at the annotated time (Frame.io, Loom, Vimeo review)
+            example: Frame.io — Timecoded comment on a video
+          - id: drawn-mark
+            name: Drawn mark
+            description: A freehand shape drawn over the frame or page as the visible mark of the annotation,
+              rather than a highlight, pin or glyph
+            example: Frame.io — Timecoded comment on a video
+  - name: Thread layout
+    family: layout
+    question: Where does the conversation appear?
+    subdimensions:
+      - id: layout
+        name: Layout
+        select: one
+        values:
+          - id: side-margin-panel
+            name: Side margin panel
+            example: Google Docs
+          - id: anchored-popover
+            name: Anchored popover
+            example: Figma
+          - id: bottom-sheet-on-mobile
+            name: Bottom sheet on mobile
+            example: Docs mobile
+          - id: inline-under-the-block
+            name: Inline under the block
+            example: Notion comments
+          - id: review-page-list
+            name: Review page list
+            example: GitHub Files changed
+  - name: Creating an annotation
+    family: invocation
+    question: How is a new annotation started?
+    subdimensions:
+      - id: createBy
+        name: Create by
+        select: many
+        values:
+          - id: select-then-comment
+            name: Select then comment
+            example: Docs
+          - id: pin-tool
+            name: Pin tool
+            example: Figma comment mode
+          - id: mention-while-editing
+            name: "@mention while editing"
+            example: Notion
+          - id: suggestion-mode-edit
+            name: Suggestion mode edit
+            example: Docs Suggesting
+          - id: from-a-review-checklist
+            name: From a review checklist
+            example: PR review
+          - id: comment-at-the-playhead
+            name: Comment at the playhead
+            description: The annotation takes the player's current position as its anchor with no selection or
+              pin act at all — typing into the comment box is the whole gesture
+            example: Frame.io — Timecoded comment on a video
+  - name: Thread lifecycle
+    family: lifecycle
+    question: How do threads open, escalate and close?
+    subdimensions:
+      - id: lifecycle
+        name: Lifecycle
+        select: one
+        values:
+          - id: open-until-resolved
+            name: Open until resolved
+            example: Docs
+          - id: resolved-keeps-history
+            name: Resolved keeps history
+            example: Figma
+          - id: converted-to-task
+            name: Converted to task
+            example: Jira from comment
+          - id: outdated-when-anchor-moves
+            name: Outdated when anchor moves
+            example: GitHub outdated
+          - id: reopened-on-reply
+            name: Reopened on reply
+            example: Many tools
+  - name: Annotation feedback
+    family: feedback
+    question: How do people know annotations need attention?
+    subdimensions:
+      - id: feedback
+        name: Feedback
+        select: many
+        values:
+          - id: unread-badges
+            name: Unread badges
+            example: Docs
+          - id: email-or-chat-notify
+            name: Email or chat notify
+            example: Slack integrations
+          - id: filter-open-only
+            name: Filter open only
+            example: Figma
+          - id: anchor-missing-warning
+            name: Anchor missing warning
+            example: Deleted text
+          - id: ai-thread-summary
+            name: AI thread summary
+            example: PR review summaries
+wild:
+  score: 1
+  note: Filter and notification settings exist; anchor and layout modes are mostly fixed.
+  examples:
+    - name: Figma
+      note: Comment vs spot; filter unread
+    - name: Google Docs
+      note: Notification settings
+    - name: GitHub
+      note: Pending review comments
+techniques:
+  - name: Anchor survives edits
+    dimension: Anchor form
+    how: Keep anchors stable across edits with clear outdated states when the target disappears.
+    ai: false
+  - name: Resolve with a decision
+    dimension: Thread lifecycle
+    how: Resolving captures an accepted outcome (done, wontfix, deferred) visible on the marker.
+    ai: false
+  - name: Cluster related threads
+    dimension: Annotation feedback
+    how: Group overlapping pins or similar feedback into one reviewable set with a summary.
+    ai: true
+signature: Anchor survives edits
+sample: Documents, design files, video review, spreadsheets and code review.
+unit: One anchored thread on one artifact region.
+relations:
+  uses:
+    - reactions
+    - badge
+    - popover
+    - toast
+  specializes:
+    - collaborate
+  neighbors:
+    - comment-thread
+    - co-editing-presence
+    - inline-suggestion
+scores:
+  ubiquity: 5
+  potential: 3
+  spec: 4
+evidence: agent-coded
+usage:
+  - Reviewers pin first and write second so the target is fixed
+questions:
+  - Should suggestion-mode edits count as annotations or as a separate edit channel?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.6704172903585272
+  agreementFirstPass: 0.81
+  kappaFinal: 0.9448557443253222
+  agreementFinal: 0.9675
+  pass: true
+  perSub:
+    anchor:
+      kappaFirstPass: 0.88929889298893
+      agreementFirstPass: 0.9
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    marker:
+      kappaFirstPass: 0.7051901399727476
+      agreementFirstPass: 0.8785714285714286
+      kappaFinal: 0.9298128342245991
+      agreementFinal: 0.9714285714285714
+      flag: null
+    layout:
+      kappaFirstPass: 0.6703296703296706
+      agreementFirstPass: 0.65
+      kappaFinal: 0.9498327759197323
+      agreementFinal: 0.95
+      flag: null
+    createBy:
+      kappaFirstPass: 0.7916666666666666
+      agreementFirstPass: 0.9
+      kappaFinal: 0.9829899829899827
+      agreementFinal: 0.9916666666666667
+      flag: null
+    lifecycle:
+      kappaFirstPass: 0.6100000000000002
+      agreementFirstPass: 0.7
+      kappaFinal: 0.9434495758718192
+      agreementFinal: 0.95
+      flag: null
+    feedback:
+      kappaFirstPass: 0.38809656601067705
+      agreementFirstPass: 0.6
+      kappaFinal: 0.8993006993006997
+      agreementFinal: 0.925
+      flag: null
+  distribution:
+    anchor:
+      Text range: 8
+      Canvas point or area: 4
+      Timeline range: 3
+      Cell or row: 1
+      Code line: 2
+      Whole page floating: 1
+      Block: 0
+      Content block: 1
+    marker:
+      Highlight: 7
+      Avatar pin: 4
+      Margin glyph: 6
+      Inline suggestion mark: 1
+      Status colour: 0
+      Timeline marker: 3
+      Drawn mark: 1
+    layout:
+      Side margin panel: 8
+      Anchored popover: 8
+      Bottom sheet on mobile: 1
+      Inline under the block: 1
+      Review page list: 2
+    createBy:
+      Select then comment: 12
+      Pin tool: 6
+      "@mention while editing": 1
+      Suggestion mode edit: 1
+      From a review checklist: 2
+      Comment at the playhead: 3
+    lifecycle:
+      Open until resolved: 12
+      Resolved keeps history: 3
+      Converted to task: 0
+      Outdated when anchor moves: 1
+      Reopened on reply: 0
+      n/a: 4
+    feedback:
+      Unread badges: 13
+      Email or chat notify: 17
+      Filter open only: 7
+      Anchor missing warning: 1
+      AI thread summary: 0
+  exemplars:
+    anchor:
+      Text range:
+        - Google Docs — Comment on selected text
+        - Google Docs — Suggested edit
+        - Microsoft Word — Comment in the margin
+      Canvas point or area:
+        - Figma — Comment on the canvas
+        - Miro — Comment on a board
+        - Dropbox — Comment on a file preview
+      Timeline range:
+        - Frame.io — Timecoded comment on a video
+        - Loom — Timestamped comment on a recording
+        - Vimeo — Review page notes
+      Cell or row:
+        - Google Sheets — Cell comment
+      Code line:
+        - GitHub — Pull request line comment
+        - GitLab — Merge request diff comment
+      Whole page floating:
+        - Adobe Acrobat — Sticky note on a PDF
+      Block: []
+      Content block:
+        - Notion — Block comment
+    marker:
+      Highlight:
+        - Google Docs — Comment on selected text
+        - Microsoft Word — Comment in the margin
+        - Google Docs — Comments on a phone
+      Avatar pin:
+        - Figma — Comment on the canvas
+        - Miro — Comment on a board
+        - Dropbox — Comment on a file preview
+      Margin glyph:
+        - Google Sheets — Cell comment
+        - Microsoft Word — Comment in the margin
+        - Adobe Acrobat — Sticky note on a PDF
+      Inline suggestion mark:
+        - Google Docs — Suggested edit
+      Status colour: []
+      Timeline marker:
+        - Frame.io — Timecoded comment on a video
+        - Loom — Timestamped comment on a recording
+        - Vimeo — Review page notes
+      Drawn mark:
+        - Frame.io — Timecoded comment on a video
+    layout:
+      Side margin panel:
+        - Google Docs — Comment on selected text
+        - Google Docs — Suggested edit
+        - Frame.io — Timecoded comment on a video
+      Anchored popover:
+        - Figma — Comment on the canvas
+        - Google Sheets — Cell comment
+        - Adobe Acrobat — Sticky note on a PDF
+      Bottom sheet on mobile:
+        - Google Docs — Comments on a phone
+      Inline under the block:
+        - Notion — Block comment
+      Review page list:
+        - GitHub — Pull request line comment
+        - GitLab — Merge request diff comment
+    createBy:
+      Select then comment:
+        - Google Docs — Comment on selected text
+        - GitHub — Pull request line comment
+        - Google Sheets — Cell comment
+      Pin tool:
+        - Figma — Comment on the canvas
+        - Frame.io — Timecoded comment on a video
+        - Adobe Acrobat — Sticky note on a PDF
+      "@mention while editing":
+        - Notion — Block comment
+      Suggestion mode edit:
+        - Google Docs — Suggested edit
+      From a review checklist:
+        - GitHub — Pull request line comment
+        - GitLab — Merge request diff comment
+      Comment at the playhead:
+        - Frame.io — Timecoded comment on a video
+        - Loom — Timestamped comment on a recording
+        - Vimeo — Review page notes
+    lifecycle:
+      Open until resolved:
+        - Google Docs — Comment on selected text
+        - Google Docs — Suggested edit
+        - Frame.io — Timecoded comment on a video
+      Resolved keeps history:
+        - Figma — Comment on the canvas
+        - Microsoft Word — Comment in the margin
+        - Miro — Comment on a board
+      Converted to task: []
+      Outdated when anchor moves:
+        - GitHub — Pull request line comment
+      Reopened on reply: []
+    feedback:
+      Unread badges:
+        - Google Docs — Comment on selected text
+        - Google Docs — Suggested edit
+        - Figma — Comment on the canvas
+      Email or chat notify:
+        - Google Docs — Comment on selected text
+        - Google Docs — Suggested edit
+        - Figma — Comment on the canvas
+      Filter open only:
+        - Figma — Comment on the canvas
+        - Frame.io — Timecoded comment on a video
+        - GitHub — Pull request line comment
+      Anchor missing warning:
+        - Hypothesis — Web page annotation
+      AI thread summary: []
+  unobserved:
+    - sub: anchor
+      var: Block
+    - sub: marker
+      var: Status colour
+    - sub: lifecycle
+      var: Converted to task
+    - sub: lifecycle
+      var: Reopened on reply
+    - sub: feedback
+      var: AI thread summary
+  unresolved: []
+  proposals:
+    raised: 6
+    adopted:
+      - sub: marker
+        name: Timeline marker
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: anchor
+        name: Block
+        raters:
+          - fable
+          - sonnet
+      - sub: marker
+        name: Drawn mark
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: anchor
+        name: Content block
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: createBy
+        name: Comment at the playhead
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded:
+      - place: sub:layout
+        sub: layout
+        dim: null
+        name: Separate collected list
+        gloss: All annotations across the whole document collect into one separate screen or view, rather
+          than appearing in situ beside their own anchor.
+        raters:
+          - sonnet
+        instances:
+          - 18
+        status: raised
+  raterNotes:
+    fable:
+      - lifecycle is n/a where threads never close (Loom, Kindle, Pages, Hypothesis); marker is
+        empty for code review, where the thread itself is the only mark.
+      - "lifecycle: Open until resolved and Resolved keeps history overlap — Docs keeps resolved
+        threads in its history too, so the split has no criterion. feedback: Unread badges and Email
+        or chat notify co-occur almost everywhere once an in-app notifications badge counts, so they
+        do not discriminate. anchor has no block value and createBy has no at-the-playhead value;
+        two raters each proposed them."
+    opus:
+      - "lifecycle assumes every annotation is a thread that someone closes; private or public-web
+        annotation (Kindle, Pages, Hypothesis) has no resolved state at all and came out n/a. anchor
+        also cannot say that a comment belongs to a block rather than a selection (Notion) or that
+        one control offers two anchors at once (Dropbox: whole file, or a pin on an image). The
+        assignment of a comment to a person — Sheets and Docs both do it — has nowhere to go except
+        the Converted to task variation, which overstates it."
+      - "lifecycle assumes every annotation is a social thread someone closes — Kindle, Pages,
+        Hypothesis and Loom have no close state and all came out n/a — and its first two values are
+        not exclusive: Docs, the exemplar for Open until resolved, also keeps resolved threads in a
+        history, which is what split Miro and Canva. layout is pick-one over products that have both
+        an in-situ thread and an aggregate list (Kindle's Notebook, Pages' Comments pane, Acrobat's
+        list), and its Review page list gloss names GitHub Files changed, a screen where the thread
+        is literally inline under the block, so two values name one screen. marker has no value for
+        the commonest code-review case, where the thread in place is the only mark."
+    sonnet:
+      - "Kindle (instance 18) is a genuine edge case for this pattern: its highlights/notes are
+        personal, not a shared discussion thread, so lifecycle was coded n/a rather than forced into
+        a resolve-style value — worth flagging since the sample frame may have intended it as a
+        boundary test of the pattern definition."
+      - "Two codebook gaps confirmed by independent convergence: marker has no value for a
+        video-timeline tick (three instances, two raters proposing the same concept under the same
+        name) and createBy has no value for 'typed at the current playhead position with no
+        selection or pin act', distinct from Pin tool's deliberate placement. Separately, anchor and
+        layout are pick-one but several products genuinely run two modes at once (Dropbox's
+        file-comment vs. image-pin anchor; Kindle's in-situ popover vs. its document-wide Notebook
+        aggregate, which is a different unit of analysis than this pattern's per-thread layout
+        question) — these read as codebook fit issues, not rater error."
+  codedAt: 2026-09-22
+previews:
+  - file: annotation.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

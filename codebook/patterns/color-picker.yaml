@@ -1,0 +1,371 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "color-picker". Edit between batches only — see README "Rules".
+id: color-picker
+name: Colour picker
+level: component
+parent: enter-data
+aliases:
+  - color picker
+  - swatches
+  - eyedropper
+definition: A control for choosing a colour, by sight, by value or by name.
+data: schema
+platforms:
+  - desktop
+  - web
+  - mobile
+domains:
+  - design
+  - productivity
+  - software
+anatomy:
+  - name: Selector
+    role: Area, wheel or swatches
+  - name: Value
+    role: The chosen colour in some model
+  - name: Helpers
+    role: Eyedropper, recents, document colours
+roles: []
+dimensions:
+  - name: Form
+    family: layout
+    question: How is colour space presented?
+    subdimensions:
+      - id: form
+        name: Form
+        select: one
+        values:
+          - id: swatch-palette
+            name: Swatch palette
+            example: Google Docs text colour
+          - id: area-and-hue-strip
+            name: Area and hue strip
+            example: Figma
+          - id: colour-wheel
+            name: Colour wheel
+            example: Procreate colour disc
+          - id: channel-sliders
+            name: Channel sliders
+            example: Photoshop
+          - id: value-field
+            name: Value field
+            example: Hex inputs
+          - id: palette-bars-with-regenerate
+            name: Palette bars with regenerate
+            description: Several colours (a whole palette) are randomized together by a single action, rather
+              than one colour picked at a time via a field, wheel, sliders or swatches.
+            example: Coolors — Palette generator
+  - name: Colour model
+    family: encoding
+    question: In what model is colour expressed?
+    subdimensions:
+      - id: model
+        name: Model
+        select: one
+        values:
+          - id: rgb-or-hex
+            name: RGB or hex
+            example: Most tools
+          - id: hsl-or-hsb
+            name: HSL or HSB
+            example: Figma
+          - id: oklch
+            name: OKLCH
+            description: Perceptually uniform
+            example: Chrome DevTools
+          - id: named-tokens
+            name: Named tokens
+            example: Figma variables
+          - id: cmyk
+            name: CMYK
+            description: Colour expressed as cyan, magenta, yellow, black for print (Illustrator Color panel in
+              a print document, GIMP and macOS Colors CMYK tabs)
+            example: Adobe Illustrator — Color panel
+  - name: Helpers
+    family: content
+    question: What helps a person choose?
+    subdimensions:
+      - id: helpers
+        name: Helpers
+        select: many
+        values:
+          - id: recent-colours
+            name: Recent colours
+            example: Office
+          - id: document-colours
+            name: Document colours
+            example: Figma
+          - id: eyedropper
+            name: Eyedropper
+            example: Figma
+          - id: contrast-check
+            name: Contrast check
+            example: Chrome DevTools contrast ratio
+          - id: harmonies
+            name: Harmonies
+            example: Adobe Color
+  - name: Target
+    family: scope
+    question: What does the colour apply to?
+    subdimensions:
+      - id: target
+        name: Target
+        select: one
+        values:
+          - id: one-object
+            name: One object
+            example: Slides
+          - id: selection-with-mixed-values
+            name: Selection with mixed values
+            example: Figma
+          - id: a-token-used-everywhere
+            name: A token used everywhere
+            example: Design-system variables
+          - id: the-active-tool-or-brush
+            name: The active tool or brush
+            description: The colour is loaded into the tool and applies to whatever is painted next, rather than
+              to an object that already exists or to a token
+            example: Adobe Photoshop — Color Picker dialog
+wild:
+  score: 2
+  note: Saved palettes and chosen models are common in design tools.
+  examples:
+    - name: Figma
+      note: Local styles and variables
+techniques:
+  - name: Token promotion
+    dimension: Target
+    how: A picked colour becomes a named token and every usage follows it.
+    ai: false
+signature: Token promotion
+sample: Design tools, office suites and developer tools.
+unit: One colour picker.
+relations:
+  uses:
+    - popover
+    - slider
+  specializes: []
+  neighbors:
+    - property-inspector
+scores:
+  ubiquity: 3
+  potential: 3
+  spec: 5
+evidence: agent-coded
+usage:
+  - Designers pick by eye, then correct by value
+questions:
+  - Should contrast be checked at the moment of picking, against the actual background?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7100550950821349
+  agreementFirstPass: 0.8277777777777777
+  kappaFinal: 0.9172078109176489
+  agreementFinal: 0.94375
+  pass: true
+  perSub:
+    form:
+      kappaFirstPass: 0.8831775700934579
+      agreementFirstPass: 0.9
+      kappaFinal: 0.9533437013996888
+      agreementFinal: 0.95
+      flag: null
+    model:
+      kappaFirstPass: 0.591373439273553
+      agreementFirstPass: 0.7
+      kappaFinal: 0.8174442190669372
+      agreementFinal: 0.85
+      flag: null
+    helpers:
+      kappaFirstPass: 0.7249248637359275
+      agreementFirstPass: 0.875
+      kappaFinal: 0.9133749133749128
+      agreementFinal: 0.95
+      flag: null
+    target:
+      kappaFirstPass: 0.5663956639566397
+      agreementFirstPass: 0.6
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+  distribution:
+    form:
+      Swatch palette: 7
+      Area and hue strip: 7
+      Colour wheel: 3
+      Channel sliders: 1
+      Value field: 1
+      Palette bars with regenerate: 1
+    model:
+      RGB or hex: 14
+      HSL or HSB: 2
+      OKLCH: 1
+      Named tokens: 1
+      CMYK: 1
+      n/a: 1
+    helpers:
+      Recent colours: 8
+      Document colours: 6
+      Eyedropper: 9
+      Contrast check: 1
+      Harmonies: 3
+    target:
+      One object: 9
+      Selection with mixed values: 3
+      A token used everywhere: 2
+      The active tool or brush: 4
+      n/a: 2
+  exemplars:
+    form:
+      Swatch palette:
+        - Google Docs — Text colour menu
+        - Microsoft PowerPoint — Font Color dropdown
+        - Apple Keynote — Colour well popover
+      Area and hue strip:
+        - Figma — Fill colour picker
+        - Adobe Photoshop — Color Picker dialog
+        - Chrome DevTools — Colour picker in the Styles pane
+      Colour wheel:
+        - Procreate — Colour disc
+        - macOS Colors panel — System colour panel
+        - Adobe Color — Colour wheel
+      Channel sliders:
+        - Adobe Illustrator — Color panel
+      Value field:
+        - Slack — Custom theme colours
+      Palette bars with regenerate:
+        - Coolors — Palette generator
+    model:
+      RGB or hex:
+        - Adobe Photoshop — Color Picker dialog
+        - Google Docs — Text colour menu
+        - Microsoft PowerPoint — Font Color dropdown
+      HSL or HSB:
+        - Figma — Fill colour picker
+        - Procreate — Colour disc
+      OKLCH:
+        - Chrome DevTools — Colour picker in the Styles pane
+      Named tokens:
+        - Notion — Text and background colour menu
+      CMYK:
+        - Adobe Illustrator — Color panel
+    helpers:
+      Recent colours:
+        - Procreate — Colour disc
+        - Google Docs — Text colour menu
+        - Microsoft PowerPoint — Font Color dropdown
+      Document colours:
+        - Figma — Fill colour picker
+        - Microsoft PowerPoint — Font Color dropdown
+        - Apple Keynote — Colour well popover
+      Eyedropper:
+        - Figma — Fill colour picker
+        - Adobe Photoshop — Color Picker dialog
+        - Procreate — Colour disc
+      Contrast check:
+        - Chrome DevTools — Colour picker in the Styles pane
+      Harmonies:
+        - Procreate — Colour disc
+        - Adobe Color — Colour wheel
+        - Coolors — Palette generator
+    target:
+      One object:
+        - Google Docs — Text colour menu
+        - Microsoft PowerPoint — Font Color dropdown
+        - Apple Keynote — Colour well popover
+      Selection with mixed values:
+        - Figma — Fill colour picker
+        - Adobe Illustrator — Color panel
+        - Sketch — Color popover
+      A token used everywhere:
+        - Windows 11 Settings — Accent colour
+        - Slack — Custom theme colours
+      The active tool or brush:
+        - Adobe Photoshop — Color Picker dialog
+        - Procreate — Colour disc
+        - Microsoft Paint — Edit Colors dialog
+  unobserved: []
+  unresolved: []
+  proposals:
+    raised: 4
+    adopted:
+      - sub: model
+        name: CMYK
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: target
+        name: The active tool or brush
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: form
+        name: Palette bars with regenerate
+        raters:
+          - opus
+          - sonnet
+    recorded:
+      - place: sub:helpers
+        sub: helpers
+        dim: null
+        name: Paste a theme string
+        gloss: An entire theme or colour-set can be pasted in as one string to set every colour at once,
+          rather than picked field by field.
+        raters:
+          - sonnet
+        instances:
+          - 17
+        status: raised
+  raterNotes:
+    fable:
+      - Model is pick-one but most pickers show several models at once; I coded the one shown first.
+        Target does not apply to palette generators (Adobe Color, Coolors).
+      - model conflates the selector's colour model with the readout format, so Figma (HSB square,
+        hex box) splits raters; target has no value for paint programs that colour the brush rather
+        than an object; Named tokens is read as design-system variables by two raters and as any
+        theme-bound name by me.
+    opus:
+      - "model is the sub-dimension that does not survive contact: several pickers express a colour
+        in four models at once behind a toggle (Photoshop, the macOS panel, DevTools, GIMP), so
+        pick-one records the default rather than the design, and palettes that never show a value
+        (Reminders) have no model at all. I followed the codebook's exemplars where it names a
+        product (Figma HSB, DevTools OKLCH) even when the default on screen is hex, and said so per
+        instance. target also has no room for a tool colour or for a tool that colours nothing
+        (Adobe Color, Coolors)."
+      - model is pick one but the serious pickers (Photoshop, GIMP, macOS, PowerPoint) show three or
+        four models at once, so the code records the codebook's list order rather than the product;
+        it also has no subtractive space (all three of us proposed CMYK) and its OKLCH variation is
+        really the name of one product's format toggle, which drags DevTools' code. target has no
+        value for a colour that is loaded into a tool (four instances here) and none for a picker
+        whose output is applied to nothing at all, which pushed two of us to n/a. helpers is a list
+        of choosing aids and cannot hold an import affordance like Slack's paste-a-theme line.
+    sonnet:
+      - Multi-tab/multi-model pickers (macOS Colors panel, Photoshop, GIMP, Adobe Color) force a
+        pick-one choice among several simultaneously offered forms or models; I coded the most
+        prominent/first-listed one each time rather than the full set, which likely undercounts real
+        variety.
+      - "Codebook findings: (1) 'target' has no value for paint-style tools that load a colour into
+        a brush/tool for future strokes rather than recolouring an existing object or selection —
+        this recurred identically across four raster tools (Photoshop, Procreate, Paint, GIMP),
+        which the adopted proposal now names. (2) 'helpers' Recent colours doesn't distinguish an
+        auto-tracked recency list from manually-saved custom swatches (MS Paint) — both get forced
+        into the same value. (3) 'helpers' has no room for a bulk paste-a-whole-theme mechanism
+        (Slack); I now think that's rightly out of scope for a per-colour-choice helper list rather
+        than a missing variation."
+  codedAt: 2026-09-22
+previews:
+  - file: color-picker.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

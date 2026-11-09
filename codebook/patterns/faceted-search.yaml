@@ -1,0 +1,474 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "faceted-search". Edit between batches only — see README "Rules".
+id: faceted-search
+name: Faceted search
+level: pattern
+parent: search
+aliases:
+  - faceted navigation
+  - guided navigation
+  - dynamic queries
+definition: Search combined with attribute facets whose values and counts update as the result set narrows.
+data: collection
+platforms:
+  - web
+  - mobile
+domains:
+  - commerce
+  - travel
+  - science
+  - government
+anatomy:
+  - name: Facet
+    role: One attribute with its values
+  - name: Facet surface
+    role: Where facets live
+  - name: Result set
+    role: What the facets leave
+  - name: Active filters
+    role: What is applied
+roles: []
+dimensions:
+  - name: Facet content
+    family: content
+    question: Which facet types are offered, and how are values shown?
+    subdimensions:
+      - id: types
+        name: Facet types
+        select: many
+        values:
+          - id: categorical
+            name: Categorical
+            example: Brand
+          - id: hierarchical-categories
+            name: Hierarchical categories
+            example: Department trees
+          - id: numeric-range
+            name: Numeric range
+            example: Price
+          - id: dates
+            name: Dates
+            example: Publication year
+          - id: rating
+            name: Rating
+            example: Four stars and up
+          - id: geographic-area
+            name: Geographic area
+            example: Map bounds
+      - id: valueDisplay
+        name: Value display
+        select: one
+        values:
+          - id: values-only
+            name: Values only
+            example: Simple facets
+          - id: values-with-counts
+            name: Values with counts
+            example: Amazon
+          - id: distribution-histogram
+            name: Distribution histogram
+            example: Airbnb price histogram
+          - id: zero-count-values-disabled
+            name: Zero-count values disabled
+            example: Library catalogues
+  - name: Facet set
+    family: composition
+    question: Where does the set of facets come from?
+    subdimensions:
+      - id: facetSet
+        name: Facet set
+        select: one
+        values:
+          - id: fixed-per-category
+            name: Fixed per category
+            example: Retail categories
+          - id: dynamic-by-relevance
+            name: Dynamic by relevance
+            example: Algolia dynamic faceting
+          - id: added-by-the-person
+            name: Added by the person
+            description: Any attribute can become a facet
+            example: CHI '25 Fluid Attributes
+          - id: derived-from-the-query
+            name: Derived from the query
+            example: “Red dress under $50” yields facets
+  - name: Update model
+    family: feedback
+    question: When does a facet change take effect?
+    subdimensions:
+      - id: update
+        name: Update
+        select: one
+        values:
+          - id: instant-per-click
+            name: Instant per click
+            example: Amazon
+          - id: apply-button
+            name: Apply button
+            example: Mobile filter sheets
+          - id: count-preview-before-applying
+            name: Count preview before applying
+            example: Airbnb Show N places
+  - name: Placement
+    family: layout
+    question: Where do facets live?
+    subdimensions:
+      - id: placement
+        name: Placement
+        select: one
+        values:
+          - id: left-rail
+            name: Left rail
+            example: Amazon
+          - id: horizontal-bar
+            name: Horizontal bar
+            example: Google Flights
+          - id: sheet-on-mobile
+            name: Sheet on mobile
+            example: Retail apps
+          - id: chips-above-results
+            name: Chips above results
+            example: Google Shopping
+          - id: modal-dialog
+            name: Modal dialog
+            description: Facets live in a centred dialog over the results on desktop web
+            example: Airbnb — Filters dialog
+  - name: Selection logic
+    family: scope
+    question: How do chosen values combine?
+    subdimensions:
+      - id: logic
+        name: Logic
+        select: one
+        values:
+          - id: or-within-and-across
+            name: OR within, AND across
+            example: Most facets
+          - id: one-value-per-facet
+            name: One value per facet
+            example: Category trees
+          - id: exclusions
+            name: Exclusions
+            description: NOT a value
+            example: Advanced library search
+  - name: Visual facets
+    family: encoding
+    question: Are facets drawn, not just listed?
+    subdimensions:
+      - id: visual
+        name: Visual facets
+        select: many
+        values:
+          - id: text-lists
+            name: Text lists
+            example: Most facets
+          - id: histograms
+            name: Histograms
+            example: Price distributions
+          - id: map-as-facet
+            name: Map as facet
+            example: Real-estate search
+          - id: colour-swatches
+            name: Colour swatches
+            example: Fashion colour filters
+wild:
+  score: 1
+  note: Values are chosen by people; which attributes are facets is always decided by the product.
+  examples:
+    - name: Airbnb
+      note: Price histogram facet
+techniques:
+  - name: Promote to facet
+    dimension: Facet set
+    how: "Any attribute in a result’s detail can be promoted to a facet with computed counts: Fluid
+      Attributes, landed in the facet rail."
+    ai: false
+  - name: Facets from my sentence
+    dimension: Facet set
+    how: A typed need creates the facets and values it implies, each removable.
+    ai: true
+signature: Promote to facet
+sample: Retail, travel, real-estate, library and dataset search.
+unit: One faceted results page.
+relations:
+  uses:
+    - filter-controls
+    - slider
+    - choice-control
+    - tag-input
+    - bottom-sheet
+  specializes:
+    - search-results
+  neighbors:
+    - filter-controls
+    - data-table
+scores:
+  ubiquity: 4
+  potential: 4
+  spec: 5
+evidence: agent-coded
+usage:
+  - People discover which criteria exist from the facet list itself
+questions:
+  - Do person-added facets overwhelm the rail, and should they fade with disuse?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.8374790006132724
+  agreementFirstPass: 0.9266666666666666
+  kappaFinal: 0.8374790006132724
+  agreementFinal: 0.9266666666666666
+  pass: true
+  perSub:
+    types:
+      kappaFirstPass: 0.9096357189921871
+      agreementFirstPass: 0.9333333333333333
+      kappaFinal: 0.9096357189921871
+      agreementFinal: 0.9333333333333333
+      flag: null
+    valueDisplay:
+      kappaFirstPass: 0.704433497536946
+      agreementFirstPass: 0.75
+      kappaFinal: 0.704433497536946
+      agreementFinal: 0.75
+      flag: null
+    facetSet:
+      kappaFirstPass: null
+      agreementFirstPass: 1
+      kappaFinal: null
+      agreementFinal: 1
+      flag: constant
+    update:
+      kappaFirstPass: 0.9072642967542501
+      agreementFirstPass: 0.95
+      kappaFinal: 0.9072642967542501
+      agreementFinal: 0.95
+      flag: null
+    placement:
+      kappaFirstPass: 0.8155737704918034
+      agreementFirstPass: 0.85
+      kappaFinal: 0.8155737704918034
+      agreementFinal: 0.85
+      flag: null
+    logic:
+      kappaFirstPass: -0.01694915254237552
+      agreementFirstPass: 0.95
+      kappaFinal: -0.01694915254237552
+      agreementFinal: 0.95
+      flag: unreliable
+    visual:
+      kappaFirstPass: 0.9235120707513343
+      agreementFirstPass: 0.95
+      kappaFinal: 0.9235120707513343
+      agreementFinal: 0.95
+      flag: null
+  distribution:
+    types:
+      Categorical: 20
+      Hierarchical categories: 2
+      Numeric range: 16
+      Dates: 4
+      Rating: 6
+      Geographic area: 3
+    valueDisplay:
+      Values only: 13
+      Values with counts: 6
+      Distribution histogram: 1
+      Zero-count values disabled: 0
+    facetSet:
+      Fixed per category: 20
+      Dynamic by relevance: 0
+      Added by the person: 0
+      Derived from the query: 0
+    update:
+      Instant per click: 16
+      Apply button: 1
+      Count preview before applying: 3
+    placement:
+      Left rail: 13
+      Horizontal bar: 3
+      Sheet on mobile: 2
+      Chips above results: 1
+      Modal dialog: 1
+    logic:
+      OR within, AND across: 20
+      One value per facet: 0
+      Exclusions: 0
+    visual:
+      Text lists: 20
+      Histograms: 1
+      Map as facet: 2
+      Colour swatches: 2
+  exemplars:
+    types:
+      Categorical:
+        - Amazon — Results with left refinements
+        - eBay — Results with refinements
+        - Best Buy — Results with counts
+      Hierarchical categories:
+        - Amazon — Results with left refinements
+        - eBay — Results with refinements
+      Numeric range:
+        - Amazon — Results with left refinements
+        - eBay — Results with refinements
+        - Best Buy — Results with counts
+      Dates:
+        - WorldCat — Catalogue search results
+        - JSTOR — Search results
+        - ACM Digital Library — Search results
+      Rating:
+        - Amazon — Results with left refinements
+        - Best Buy — Results with counts
+        - Booking.com — Filter by sidebar
+      Geographic area:
+        - Zillow — Filter bar with map
+        - Redfin — Filters and map
+        - Realtor.com — Filter sheet
+    valueDisplay:
+      Values only:
+        - Amazon — Results with left refinements
+        - eBay — Results with refinements
+        - Expedia — Hotel results filters
+      Values with counts:
+        - Best Buy — Results with counts
+        - Booking.com — Filter by sidebar
+        - Home Depot — Results with left facets
+      Distribution histogram:
+        - Airbnb — Filters dialog
+      Zero-count values disabled: []
+    facetSet:
+      Fixed per category:
+        - Amazon — Results with left refinements
+        - eBay — Results with refinements
+        - Best Buy — Results with counts
+      Dynamic by relevance: []
+      Added by the person: []
+      Derived from the query: []
+    update:
+      Instant per click:
+        - Amazon — Results with left refinements
+        - eBay — Results with refinements
+        - Best Buy — Results with counts
+      Apply button:
+        - Etsy — Filters sheet
+      Count preview before applying:
+        - Airbnb — Filters dialog
+        - Redfin — Filters and map
+        - Realtor.com — Filter sheet
+    placement:
+      Left rail:
+        - Amazon — Results with left refinements
+        - eBay — Results with refinements
+        - Best Buy — Results with counts
+      Horizontal bar:
+        - Google Flights — Filter chips
+        - Zillow — Filter bar with map
+        - Redfin — Filters and map
+      Sheet on mobile:
+        - Realtor.com — Filter sheet
+        - Etsy — Filters sheet
+      Chips above results:
+        - Target — Results filters
+      Modal dialog:
+        - Airbnb — Filters dialog
+    logic:
+      OR within, AND across:
+        - Amazon — Results with left refinements
+        - eBay — Results with refinements
+        - Best Buy — Results with counts
+      One value per facet: []
+      Exclusions: []
+    visual:
+      Text lists:
+        - Amazon — Results with left refinements
+        - eBay — Results with refinements
+        - Best Buy — Results with counts
+      Histograms:
+        - Airbnb — Filters dialog
+      Map as facet:
+        - Zillow — Filter bar with map
+        - Redfin — Filters and map
+      Colour swatches:
+        - Etsy — Filters sheet
+        - Zappos — Results with swatches
+  unobserved:
+    - sub: valueDisplay
+      var: Zero-count values disabled
+    - sub: facetSet
+      var: Dynamic by relevance
+    - sub: facetSet
+      var: Added by the person
+    - sub: facetSet
+      var: Derived from the query
+    - sub: logic
+      var: One value per facet
+    - sub: logic
+      var: Exclusions
+  unresolved: []
+  proposals:
+    raised: 3
+    adopted:
+      - sub: placement
+        name: Modal dialog
+        raters:
+          - fable
+          - sonnet
+    recorded:
+      - place: sub:placement
+        sub: placement
+        dim: null
+        name: Side drawer
+        gloss: Facets slide in as a panel from the screen edge behind a Filters button
+        raters:
+          - fable
+        instances:
+          - 17
+        status: raised
+      - place: sub:valueDisplay
+        sub: valueDisplay
+        dim: null
+        name: Values with a summary metric
+        gloss: Each facet value is annotated with an aggregate other than a count — the cheapest price, the
+          best rating, the shortest duration for that value — which tells you what choosing it costs
+          rather than how much it leaves
+        raters:
+          - opus
+        instances:
+          - 7
+          - 19
+        status: raised
+  raterNotes:
+    fable:
+      - facetSet is Fixed per category for every instance; the dynamic/added/derived variations did
+        not appear in this sample. Counts beside values are a detail I could not recall for Target.
+    opus:
+      - "logic is a constant in this sample: all twenty are OR within, AND across, because that is
+        what a facet rail means; the interesting variations (exclusions, one-value-per-facet) live
+        in advanced library and database search, which this frame barely reaches. facetSet is nearly
+        constant too — every instance is fixed per category — so the two variations that would
+        distinguish research systems (added by the person, derived from the query) go unused; that
+        is a finding about shipping products rather than a coding difficulty. placement's 'Sheet on
+        mobile' had to cover desktop modal filter dialogs (Airbnb, Realtor) because no other value
+        describes a surface laid over the results; the name should lose the 'on mobile'.
+        valueDisplay needed the one proposal: travel search annotates values with prices, not
+        counts."
+    sonnet:
+      - facetSet and logic are near-uniformly Fixed per category / OR within, AND across across this
+        whole sample — every retail, travel and academic search here uses vendor-defined facets
+        combined the standard way; none exhibited dynamic, person-added or query-derived facet sets,
+        so those variations went unused, not because they were hard to apply but because the sample
+        didn't surface them.
+  codedAt: 2026-09-22
+previews:
+  - file: faceted-search.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

@@ -1,0 +1,529 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "agent-run". Edit between batches only — see README "Rules".
+id: agent-run
+name: Agent run
+level: pattern
+parent: delegate-ai
+aliases:
+  - autonomous agent
+  - tool-using agent
+  - multi-step AI task
+definition: A goal-directed model session that plans and executes multiple steps with tools, while
+  the person monitors, interrupts, approves and reviews the resulting changes.
+data: sequence
+platforms:
+  - web
+  - desktop
+domains:
+  - software
+  - ai
+  - enterprise
+  - productivity
+  - science
+anatomy:
+  - name: Goal
+    role: The assigned objective
+  - name: Plan or trace
+    role: Steps the agent takes
+  - name: Tools
+    role: Actions it may invoke
+  - name: Artifacts
+    role: Files or states it changes
+  - name: Approval gates
+    role: Human checkpoints
+roles:
+  - planner
+  - tool
+  - reviewer
+dimensions:
+  - name: Goal briefing
+    family: content
+    question: What specifies the agent’s job?
+    subdimensions:
+      - id: brief
+        name: Brief
+        select: many
+        values:
+          - id: natural-language-goal
+            name: Natural-language goal
+            example: Cursor agent
+          - id: checklist-of-acceptance-criteria
+            name: Checklist of acceptance criteria
+            example: Task agents
+          - id: repo-or-workspace-context
+            name: Repo or workspace context
+            example: Coding agents
+          - id: tool-allowlist
+            name: Tool allowlist
+            example: Computer-use permissions
+          - id: budget-or-step-limit
+            name: Budget or step limit
+            example: Max turns
+  - name: Step composition
+    family: composition
+    question: How are steps, tools and artifacts structured?
+    subdimensions:
+      - id: structure
+        name: Structure
+        select: one
+        values:
+          - id: linear-trace
+            name: Linear trace
+            example: Chat-style agent logs
+          - id: plan-then-execute
+            name: Plan then execute
+            example: Planner–worker agents
+          - id: dag-of-subagents
+            name: DAG of subagents
+            example: Parallel tool agents
+          - id: single-tool-loop
+            name: Single tool loop
+            example: ReAct-style loops
+          - id: human-in-the-loop-graph
+            name: Human-in-the-loop graph
+            example: Approval nodes
+  - name: Run control
+    family: invocation
+    question: How is a run started, steered and stopped?
+    subdimensions:
+      - id: control
+        name: Control
+        select: many
+        values:
+          - id: start-from-a-prompt
+            name: Start from a prompt
+            example: ChatGPT agent mode
+          - id: continue-redirect-mid-run
+            name: Continue / redirect mid-run
+            example: Cursor
+          - id: pause-for-approval
+            name: Pause for approval
+            example: Destructive tool confirms
+          - id: stop-immediately
+            name: Stop immediately
+            example: Cancel run
+          - id: schedule-or-retry
+            name: Schedule or retry
+            example: Background agents
+  - name: Autonomy lifecycle
+    family: lifecycle
+    question: How long does the agent act without a person?
+    subdimensions:
+      - id: lifecycle
+        name: Lifecycle
+        select: one
+        values:
+          - id: seconds-few-tools
+            name: Seconds, few tools
+            example: Simple assistants
+          - id: minutes-with-live-trace
+            name: Minutes with live trace
+            example: Cursor agent
+          - id: long-running-background-job
+            name: Long-running background job
+            example: Overnight coding agents
+          - id: persistent-memory-across-runs
+            name: Persistent memory across runs
+            example: Project agents
+          - id: expires-without-heartbeat
+            name: Expires without heartbeat
+            example: Timed sessions
+  - name: Progress feedback
+    family: feedback
+    question: How does the person see what the agent is doing?
+    subdimensions:
+      - id: feedback
+        name: Feedback
+        select: many
+        values:
+          - id: streaming-step-log
+            name: Streaming step log
+            example: Cursor
+          - id: file-diffs-as-they-land
+            name: File diffs as they land
+            example: Coding agents
+          - id: screenshots-of-a-computer
+            name: Screenshots of a computer
+            example: Computer-use agents
+          - id: todo-checklist-progress
+            name: Todo checklist progress
+            example: Plan UIs
+          - id: errors-and-retries
+            name: Errors and retries
+            example: Tool failure traces
+          - id: live-preview-of-the-artifact
+            name: Live preview of the artifact
+            description: The thing being built is rendered and running beside the trace — an app preview, a live
+              document — so progress is judged from the artifact rather than from logs or diffs; the
+              defining feedback of app-generation agents
+            example: Replit Agent — Build an app
+          - id: cost-and-usage-meter
+            name: Cost and usage meter
+            description: Tokens, dollars or context used shown as the run proceeds, so the person can judge
+              whether to let it continue; standard in agents where the person pays per call
+            example: Cline — VS Code extension agent
+  - name: Approval initiative
+    family: initiative
+    question: When must a person act during the run?
+    subdimensions:
+      - id: approvals
+        name: Approvals
+        select: one
+        values:
+          - id: fully-autonomous-until-done
+            name: Fully autonomous until done
+            example: Low-risk digests
+          - id: approve-each-tool-call
+            name: Approve each tool call
+            example: Strict modes
+          - id: approve-only-destructive-steps
+            name: Approve only destructive steps
+            example: Common default
+          - id: approve-final-diff-only
+            name: Approve final diff only
+            example: Batch apply
+          - id: policy-based-auto-approve
+            name: Policy-based auto-approve
+            example: Enterprise allowlists
+          - id: approve-at-milestones
+            name: Approve at milestones
+            description: The person approves a plan or a checkpoint (plan, milestone build, final handoff)
+              rather than tool calls or the whole result at once
+            example: Replit Agent — Build an app
+          - id: approve-the-plan
+            name: Approve the plan
+            description: The person acts once, before any tool runs, by reading and editing the proposed plan;
+              after that the run is autonomous — neither a per-tool gate nor a final diff review
+            example: Replit Agent — Build an app
+wild:
+  score: 2
+  note: Tool permissions, models and approval strictness are increasingly configurable.
+  examples:
+    - name: Cursor
+      note: Agent mode, rules, apply controls
+    - name: ChatGPT
+      note: Agent / operator permissions
+    - name: GitHub Copilot coding agent
+      note: Repo access and PR flow
+techniques:
+  - name: Trace as a first-class log
+    dimension: Progress feedback
+    how: Make every tool call, rationale and artifact change a reviewable, filterable event—not only
+      chat prose.
+    ai: false
+  - name: Risk-tiered approvals
+    dimension: Approval initiative
+    how: Map tool classes to approval policies the person can tighten without stopping harmless reads.
+    ai: false
+  - name: Redirect without reset
+    dimension: Run control
+    how: Mid-run natural-language redirects amend the brief and continue with provenance of the change.
+    ai: true
+signature: Trace as a first-class log
+sample: Coding agents, computer-use agents and multi-step enterprise assistants.
+unit: One goal-directed run with its trace and approvals.
+relations:
+  uses:
+    - prompt-input
+    - ai-provenance
+    - progress-indicator
+    - confirmation
+    - undo
+  specializes:
+    - delegate-ai
+  neighbors:
+    - ai-chat
+    - status-tracker
+    - node-editor
+scores:
+  ubiquity: 2
+  potential: 5
+  spec: 3
+evidence: agent-coded
+usage:
+  - People babysit the trace on first runs, then loosen approvals for familiar tasks
+questions:
+  - What is the right unit of approval when an agent edits many files?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.6837593165348916
+  agreementFirstPass: 0.7611111111111111
+  kappaFinal: 0.9560859328504596
+  agreementFinal: 0.9666666666666667
+  pass: true
+  perSub:
+    brief:
+      kappaFirstPass: 0.8432055749128922
+      agreementFirstPass: 0.8833333333333333
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    structure:
+      kappaFirstPass: 0.34426229508196715
+      agreementFirstPass: 0.45
+      kappaFinal: 0.8611111111111109
+      agreementFinal: 0.9
+      flag: null
+    control:
+      kappaFirstPass: 0.638392857142857
+      agreementFirstPass: 0.73
+      kappaFinal: 0.9425837320574162
+      agreementFinal: 0.96
+      flag: null
+    lifecycle:
+      kappaFirstPass: 0.7435897435897433
+      agreementFirstPass: 0.8
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    feedback:
+      kappaFirstPass: 0.7078696343402214
+      agreementFirstPass: 0.8
+      kappaFinal: 0.96031746031746
+      agreementFinal: 0.9714285714285714
+      flag: null
+    approvals:
+      kappaFirstPass: 0.5431472081218276
+      agreementFirstPass: 0.55
+      kappaFinal: 0.9132947976878613
+      agreementFinal: 0.9
+      flag: null
+  distribution:
+    brief:
+      Natural-language goal: 20
+      Checklist of acceptance criteria: 0
+      Repo or workspace context: 10
+      Tool allowlist: 5
+      Budget or step limit: 0
+    structure:
+      Linear trace: 14
+      Plan then execute: 5
+      DAG of subagents: 0
+      Single tool loop: 1
+      Human-in-the-loop graph: 0
+    control:
+      Start from a prompt: 20
+      Continue / redirect mid-run: 14
+      Pause for approval: 12
+      Stop immediately: 17
+      Schedule or retry: 1
+    lifecycle:
+      Seconds, few tools: 3
+      Minutes with live trace: 11
+      Long-running background job: 6
+      Persistent memory across runs: 0
+      Expires without heartbeat: 0
+    feedback:
+      Streaming step log: 20
+      File diffs as they land: 10
+      Screenshots of a computer: 3
+      Todo checklist progress: 6
+      Errors and retries: 13
+      Live preview of the artifact: 2
+      Cost and usage meter: 2
+    approvals:
+      Fully autonomous until done: 5
+      Approve each tool call: 1
+      Approve only destructive steps: 7
+      Approve final diff only: 2
+      Policy-based auto-approve: 2
+      Approve at milestones: 1
+      Approve the plan: 2
+  exemplars:
+    brief:
+      Natural-language goal:
+        - Claude Code — Task run in the terminal
+        - Cursor — Agent in the chat panel
+        - GitHub Copilot — Agent mode in VS Code
+      Checklist of acceptance criteria: []
+      Repo or workspace context:
+        - Claude Code — Task run in the terminal
+        - Cursor — Agent in the chat panel
+        - GitHub Copilot — Agent mode in VS Code
+      Tool allowlist:
+        - Claude Code — Task run in the terminal
+        - Claude in Chrome — Browser agent
+        - Cline — VS Code extension agent
+      Budget or step limit: []
+    structure:
+      Linear trace:
+        - Claude Code — Task run in the terminal
+        - Cursor — Agent in the chat panel
+        - GitHub Copilot — Agent mode in VS Code
+      Plan then execute:
+        - Devin — Session view
+        - Manus — General agent task
+        - Replit Agent — Build an app
+      DAG of subagents: []
+      Single tool loop:
+        - Claude in Chrome — Browser agent
+      Human-in-the-loop graph: []
+    control:
+      Start from a prompt:
+        - Claude Code — Task run in the terminal
+        - Cursor — Agent in the chat panel
+        - GitHub Copilot — Agent mode in VS Code
+      Continue / redirect mid-run:
+        - Claude Code — Task run in the terminal
+        - Cursor — Agent in the chat panel
+        - GitHub Copilot — Agent mode in VS Code
+      Pause for approval:
+        - Claude Code — Task run in the terminal
+        - Cursor — Agent in the chat panel
+        - GitHub Copilot — Agent mode in VS Code
+      Stop immediately:
+        - Claude Code — Task run in the terminal
+        - Cursor — Agent in the chat panel
+        - GitHub Copilot — Agent mode in VS Code
+      Schedule or retry:
+        - Zapier Agents — Agent run
+    lifecycle:
+      Seconds, few tools:
+        - Perplexity — Pro Search steps
+        - Aider — Terminal pair programmer
+        - Salesforce Agentforce — Agent run in Agent Builder
+      Minutes with live trace:
+        - Claude Code — Task run in the terminal
+        - Cursor — Agent in the chat panel
+        - GitHub Copilot — Agent mode in VS Code
+      Long-running background job:
+        - GitHub Copilot — Coding agent assigned an issue
+        - Devin — Session view
+        - OpenAI Codex — Cloud task
+      Persistent memory across runs: []
+      Expires without heartbeat: []
+    feedback:
+      Streaming step log:
+        - Claude Code — Task run in the terminal
+        - Cursor — Agent in the chat panel
+        - GitHub Copilot — Agent mode in VS Code
+      File diffs as they land:
+        - Claude Code — Task run in the terminal
+        - Cursor — Agent in the chat panel
+        - GitHub Copilot — Agent mode in VS Code
+      Screenshots of a computer:
+        - Devin — Session view
+        - ChatGPT — Agent mode browsing
+        - Manus — General agent task
+      Todo checklist progress:
+        - Claude Code — Task run in the terminal
+        - Devin — Session view
+        - Manus — General agent task
+      Errors and retries:
+        - Claude Code — Task run in the terminal
+        - Cursor — Agent in the chat panel
+        - GitHub Copilot — Agent mode in VS Code
+      Live preview of the artifact:
+        - Replit Agent — Build an app
+        - Lovable — App generation
+      Cost and usage meter:
+        - Cline — VS Code extension agent
+        - Aider — Terminal pair programmer
+    approvals:
+      Fully autonomous until done:
+        - Devin — Session view
+        - ChatGPT — Deep research run
+        - Perplexity — Pro Search steps
+      Approve each tool call:
+        - Cline — VS Code extension agent
+      Approve only destructive steps:
+        - Claude Code — Task run in the terminal
+        - Cursor — Agent in the chat panel
+        - GitHub Copilot — Agent mode in VS Code
+      Approve final diff only:
+        - GitHub Copilot — Coding agent assigned an issue
+        - OpenAI Codex — Cloud task
+      Policy-based auto-approve:
+        - Salesforce Agentforce — Agent run in Agent Builder
+        - Zapier Agents — Agent run
+      Approve at milestones:
+        - Replit Agent — Build an app
+      Approve the plan:
+        - Jules — Async coding agent
+        - Google Gemini — Deep Research
+  unobserved:
+    - sub: brief
+      var: Checklist of acceptance criteria
+    - sub: brief
+      var: Budget or step limit
+    - sub: structure
+      var: DAG of subagents
+    - sub: structure
+      var: Human-in-the-loop graph
+    - sub: lifecycle
+      var: Persistent memory across runs
+    - sub: lifecycle
+      var: Expires without heartbeat
+  unresolved: []
+  proposals:
+    raised: 4
+    adopted:
+      - sub: approvals
+        name: Approve at milestones
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: approvals
+        name: Approve the plan
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: feedback
+        name: Live preview of the artifact
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: feedback
+        name: Cost and usage meter
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - Structure conflates presentation (trace) with architecture (loop, DAG); coded what the
+        person sees, so most IDE agents are Linear trace and plan-first products are Plan then
+        execute.
+      - Structure mixes what the person sees (a log) with architecture (a loop, a DAG); Single tool
+        loop only discriminates if read as one tool looped. Approvals is pick one but Cursor,
+        Windsurf and Zapier hold a per-class gate and a review at once, and Policy-based
+        auto-approve overlaps Approve only destructive steps whenever the person writes the policy.
+        Lifecycle bundles duration with unattendedness. Withdrew +Approve at milestones for opus's
+        sharper +Approve the plan.
+    opus:
+      - Approvals and control overlap (Pause for approval restates whichever approval variation
+        applies) and neither can express a milestone check-in where the agent asks whether it is on
+        track (Replit). Structure was coded Plan then execute only where the plan exists as its own
+        artifact, since almost every agent now keeps some todo list; lifecycle conflates duration
+        with attendance, so a Deep Research run that streams a trace for ten minutes but survives
+        you leaving had to be called a background job.
+      - "Two codebook faults drove most of this entry: `structure` mixes presentation with control
+        flow, so Linear trace (a chat-style log) and Single tool loop (one action space) are true of
+        the same agent at once and a pick one forces a coin flip; and `lifecycle` mixes duration
+        with attendance, so a five-minute unattended run has no home between Minutes with live trace
+        and Long-running background job. `approvals` has no variation for a gate that is neither
+        per-tool nor final — hence two proposals, which are distinct: Approve the plan is a single
+        pre-execution gate, Approve at milestones is a recurring checkpoint."
+    sonnet:
+      - "Approvals was hardest: several products gate on milestones or an upfront plan rather than
+        on destructiveness or a final diff, which the five listed variations don't cleanly cover
+        (marked '?' once)."
+  codedAt: 2026-09-22
+previews:
+  - file: agent-run.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

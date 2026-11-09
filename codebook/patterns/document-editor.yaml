@@ -1,0 +1,523 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "document-editor". Edit between batches only — see README "Rules".
+id: document-editor
+name: Document editor
+level: pattern
+parent: create
+aliases:
+  - word processor
+  - rich-text editor
+  - block editor
+definition: Composing a flowing, structured document of text and embedded media.
+data: document
+platforms:
+  - web
+  - desktop
+  - mobile
+domains:
+  - productivity
+  - education
+  - enterprise
+  - news
+  - science
+anatomy:
+  - name: Body
+    role: The document
+  - name: Blocks or paragraphs
+    role: Units of content
+  - name: Formatting tools
+    role: How text changes form
+  - name: Outline
+    role: The document’s structure
+  - name: Margin
+    role: Comments and suggestions
+roles:
+  - heading
+  - paragraph
+  - media
+  - table
+dimensions:
+  - name: Document model
+    family: composition
+    question: What is the document made of?
+    subdimensions:
+      - id: model
+        name: Model
+        select: one
+        values:
+          - id: flowing-rich-text
+            name: Flowing rich text
+            example: Microsoft Word
+          - id: blocks
+            name: Blocks
+            example: Notion
+          - id: markdown-with-live-preview
+            name: Markdown with live preview
+            example: Obsidian live preview
+          - id: structured-source
+            name: Structured source
+            example: LaTeX in Overleaf
+          - id: free-form-containers
+            name: Free-form containers
+            description: The page is a plane and the document is independent containers — text boxes, ink,
+              images — placed at arbitrary positions; nothing reflows, so the document has no single
+              linear order (OneNote, and digital-paper note apps generally)
+            example: Microsoft OneNote — Page
+          - id: free-form-canvas
+            name: Free-form canvas
+            description: The document is a page onto which text and ink containers can be dropped and positioned
+              freely, rather than flowing text, discrete blocks, markdown or structured source
+            example: Microsoft OneNote — Page
+  - name: Formatting access
+    family: invocation
+    question: How is formatting applied?
+    subdimensions:
+      - id: access
+        name: Access
+        select: many
+        values:
+          - id: ribbon-or-toolbar
+            name: Ribbon or toolbar
+            example: Word ribbon
+          - id: floating-selection-toolbar
+            name: Floating selection toolbar
+            example: Medium
+          - id: slash-commands
+            name: Slash commands
+            example: Notion
+          - id: markdown-shortcuts-while-typing
+            name: Markdown shortcuts while typing
+            example: Google Docs automatic Markdown
+          - id: keyboard-shortcuts
+            name: Keyboard shortcuts
+            example: All
+  - name: Page and navigation
+    family: layout
+    question: How is the document laid out and navigated?
+    subdimensions:
+      - id: page
+        name: Page model
+        select: one
+        values:
+          - id: paginated-print-layout
+            name: Paginated print layout
+            example: Word Print Layout
+          - id: pageless
+            name: Pageless
+            example: Google Docs pageless
+          - id: fixed-reading-column
+            name: Fixed reading column
+            example: Notion
+          - id: source-beside-preview
+            name: Source beside preview
+            example: Overleaf
+      - id: navAids
+        name: Navigation aids
+        select: many
+        values:
+          - id: none
+            name: None
+            example: Short notes
+          - id: outline-sidebar
+            name: Outline sidebar
+            example: Google Docs outline
+          - id: minimap
+            name: Minimap
+            example: Code-style editors
+          - id: table-of-contents-block
+            name: Table of contents block
+            example: Notion
+  - name: Change tracking
+    family: feedback
+    question: How are changes made visible?
+    subdimensions:
+      - id: tracking
+        name: Tracking
+        select: one
+        values:
+          - id: none
+            name: None
+            example: Personal notes
+          - id: track-changes
+            name: Track changes
+            example: Word
+          - id: suggestion-mode
+            name: Suggestion mode
+            example: Google Docs Suggesting
+          - id: version-history
+            name: Version history
+            example: Google Docs history
+  - name: Writing assistance
+    family: initiative
+    question: What does the editor contribute to the writing?
+    subdimensions:
+      - id: assistance
+        name: Assistance
+        select: many
+        values:
+          - id: spelling-and-grammar
+            name: Spelling and grammar
+            example: Word Editor
+          - id: rewrite-suggestions
+            name: Rewrite suggestions
+            example: Grammarly
+          - id: continue-writing
+            name: Continue writing
+            example: Notion AI
+          - id: summarize-and-restructure
+            name: Summarize and restructure
+            example: Copilot in Word
+  - name: Reading modes
+    family: adaptation
+    question: How does it adapt to focus and reading?
+    subdimensions:
+      - id: modes
+        name: Modes
+        select: one
+        values:
+          - id: standard
+            name: Standard
+            example: Default
+          - id: focus-mode
+            name: Focus mode
+            description: Dims everything but the sentence
+            example: iA Writer
+          - id: read-mode
+            name: Read mode
+            example: Word Read Mode
+          - id: typography-settings
+            name: Typography settings
+            example: Ulysses
+wild:
+  score: 3
+  note: View modes, ribbons, page models and typography are routinely adjusted.
+  examples:
+    - name: Word
+      note: Customize the ribbon; Read Mode; Focus
+    - name: Google Docs
+      note: Pageless setting and outline
+    - name: iA Writer
+      note: Focus mode
+techniques:
+  - name: Views of one document
+    dimension: Page and navigation
+    how: Outline, pages, pageless, source and reader mode are lenses over one structure that a person
+      switches between mid-task.
+    ai: false
+  - name: Turn into
+    dimension: Document model
+    how: Convert a selection into another structure (list to table, paragraphs to board) in place, as in
+      Notion’s Turn into.
+    ai: false
+  - name: Restructure as…
+    dimension: Writing assistance
+    how: “Restructure as a problem–solution memo” returns a reviewable diff, never a silent rewrite.
+    ai: true
+signature: Views of one document
+sample: Office suites, note apps, publishing and scholarly writing tools.
+unit: One editor for one document type.
+relations:
+  uses:
+    - menu
+    - popover
+    - undo
+    - tree-view
+  specializes:
+    - create
+  neighbors:
+    - reader
+    - code-editor
+    - notebook
+scores:
+  ubiquity: 5
+  potential: 4
+  spec: 3
+evidence: agent-coded
+usage:
+  - Writers outline in one view and draft in another
+questions:
+  - Can a document keep one source while each reader sees their own structure?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.527204860718368
+  agreementFirstPass: 0.690625
+  kappaFinal: 0.8820503568899241
+  agreementFinal: 0.9176470588235294
+  pass: true
+  perSub:
+    model:
+      kappaFirstPass: 0.8983911939034717
+      agreementFirstPass: 0.9
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    access:
+      kappaFirstPass: 0.5835385786574713
+      agreementFirstPass: 0.69
+      kappaFinal: 0.9728985049008537
+      agreementFinal: 0.98
+      flag: null
+    page:
+      kappaFirstPass: 0.6941896024464833
+      agreementFirstPass: 0.75
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    navAids:
+      kappaFirstPass: 0.6000000000000004
+      agreementFirstPass: 0.7333333333333333
+      kappaFinal: 0.9317923455854487
+      agreementFinal: 0.9625
+      flag: null
+    tracking:
+      kappaFirstPass: 0.5714285714285716
+      agreementFirstPass: 0.6
+      kappaFinal: 0.9498327759197323
+      agreementFinal: 0.95
+      flag: null
+    assistance:
+      kappaFirstPass: 0.23895253682487796
+      agreementFirstPass: 0.6125
+      kappaFinal: 0.6721062618595824
+      agreementFinal: 0.775
+      flag: null
+    modes:
+      kappaFirstPass: 0.5977653631284917
+      agreementFirstPass: 0.7
+      kappaFinal: 0.764936336924584
+      agreementFinal: 0.8
+      flag: null
+  distribution:
+    model:
+      Flowing rich text: 10
+      Blocks: 3
+      Markdown with live preview: 5
+      Structured source: 1
+      Free-form containers: 1
+      Free-form canvas: 0
+    access:
+      Ribbon or toolbar: 11
+      Floating selection toolbar: 7
+      Slash commands: 6
+      Markdown shortcuts while typing: 13
+      Keyboard shortcuts: 20
+    page:
+      Paginated print layout: 3
+      Pageless: 4
+      Fixed reading column: 12
+      Source beside preview: 1
+    navAids:
+      None: 6
+      Outline sidebar: 11
+      Minimap: 0
+      Table of contents block: 2
+    tracking:
+      None: 7
+      Track changes: 3
+      Suggestion mode: 1
+      Version history: 9
+    assistance:
+      Spelling and grammar: 14
+      Rewrite suggestions: 8
+      Continue writing: 4
+      Summarize and restructure: 7
+    modes:
+      Standard: 11
+      Focus mode: 4
+      Read mode: 2
+      Typography settings: 3
+  exemplars:
+    model:
+      Flowing rich text:
+        - Google Docs — Document
+        - Microsoft Word — Document
+        - Apple Pages — Document
+      Blocks:
+        - Notion — Page
+        - WordPress — Block editor
+        - Craft — Document
+      Markdown with live preview:
+        - Obsidian — Note
+        - iA Writer — Document
+        - Ulysses — Sheet
+      Structured source:
+        - Overleaf — LaTeX project
+      Free-form containers:
+        - Microsoft OneNote — Page
+      Free-form canvas: []
+    access:
+      Ribbon or toolbar:
+        - Google Docs — Document
+        - Microsoft Word — Document
+        - Apple Pages — Document
+      Floating selection toolbar:
+        - Microsoft Word — Document
+        - Notion — Page
+        - Medium — Story editor
+      Slash commands:
+        - Notion — Page
+        - Obsidian — Note
+        - Evernote — Note
+      Markdown shortcuts while typing:
+        - Google Docs — Document
+        - Notion — Page
+        - Obsidian — Note
+      Keyboard shortcuts:
+        - Google Docs — Document
+        - Microsoft Word — Document
+        - Apple Pages — Document
+    page:
+      Paginated print layout:
+        - Google Docs — Document
+        - Microsoft Word — Document
+        - Apple Pages — Document
+      Pageless:
+        - Apple Notes — Note
+        - Evernote — Note
+        - Scrivener — Manuscript
+      Fixed reading column:
+        - Notion — Page
+        - Obsidian — Note
+        - iA Writer — Document
+      Source beside preview:
+        - Overleaf — LaTeX project
+    navAids:
+      None:
+        - iA Writer — Document
+        - Apple Notes — Note
+        - Evernote — Note
+      Outline sidebar:
+        - Google Docs — Document
+        - Microsoft Word — Document
+        - Apple Pages — Document
+      Minimap: []
+      Table of contents block:
+        - Notion — Page
+        - Confluence — Page editor
+    tracking:
+      None:
+        - Obsidian — Note
+        - iA Writer — Document
+        - Bear — Note
+      Track changes:
+        - Microsoft Word — Document
+        - Apple Pages — Document
+        - Overleaf — LaTeX project
+      Suggestion mode:
+        - Google Docs — Document
+      Version history:
+        - Notion — Page
+        - Ulysses — Sheet
+        - Evernote — Note
+    assistance:
+      Spelling and grammar:
+        - Google Docs — Document
+        - Microsoft Word — Document
+        - Apple Pages — Document
+      Rewrite suggestions:
+        - Google Docs — Document
+        - Microsoft Word — Document
+        - Apple Pages — Document
+      Continue writing:
+        - Google Docs — Document
+        - Microsoft Word — Document
+        - Notion — Page
+      Summarize and restructure:
+        - Microsoft Word — Document
+        - Apple Pages — Document
+        - Notion — Page
+    modes:
+      Standard:
+        - Google Docs — Document
+        - Apple Pages — Document
+        - Notion — Page
+      Focus mode:
+        - iA Writer — Document
+        - WordPress — Block editor
+        - Scrivener — Manuscript
+      Read mode:
+        - Microsoft Word — Document
+        - Obsidian — Note
+      Typography settings:
+        - Ulysses — Sheet
+        - Bear — Note
+        - Craft — Document
+  unobserved:
+    - sub: model
+      var: Free-form canvas
+    - sub: navAids
+      var: Minimap
+  unresolved:
+    - sub: navAids
+      n: 17
+  proposals:
+    raised: 2
+    adopted:
+      - sub: model
+        name: Free-form containers
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: model
+        name: Free-form canvas
+        raters:
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - Writing assistance coded for what the editor itself ships (browser spellcheck and paid AI
+        add-ons excluded), which leaves many empty arrays; OneNote's free-form containers fit no
+        document model.
+      - "assistance needs a rule for bundled AI: Gemini, Copilot, Notion AI, Atlassian Intelligence
+        and Writing Tools are now included in the plans the editor is sold in, so 'what the editor
+        ships' has to count them, and browser spellcheck versus an in-app spellcheck setting needs
+        the same rule. page's Pageless versus Fixed reading column should be glossed by whether
+        there is a fixed measure. access should say whether hardware-keyboard shortcuts count for a
+        mobile instance."
+    opus:
+      - Tracking is pick-one over mechanisms that coexist — Google Docs has suggestion mode and
+        version history, Word has both too — so the code records the stronger one and loses the
+        other. Assistance also cannot distinguish help the editor ships from the operating system's
+        (Apple Intelligence in Pages and Notes) or the browser's spellcheck, which I counted as
+        absent.
+      - "Most of this entry's disagreement was about where writing help comes from, so I re-coded
+        assistance with one rule: count what the editor itself ships, not a paid AI add-on (Copilot,
+        Gemini, Atlassian Intelligence, Craft AI) and not an OS-level service that appears in every
+        text field (Apple's Writing Tools). Two glosses caused the rest: Outline sidebar is named
+        for a desktop sidebar, so a mobile app that opens the same outline as a panel cannot be
+        coded without argument; and Focus mode's gloss says 'dims everything but the sentence',
+        which excludes block-granularity spotlights like WordPress's. Reading modes is also pick one
+        over values that coexist — Obsidian and Typora each truthfully hold two — so I used the
+        earlier-listed value as the tie-break."
+    sonnet:
+      - Tracking defaulted to None for personal note apps with no named versioning/suggestion
+        feature, even where informal undo history exists.
+      - "I systematically missed native, non-AI baseline features across this entry — OS-level
+        spellcheck (assistance), a product's own keyboard shortcuts, and named version-history
+        features (tracking) — because I was looking for the single most distinctive fact about each
+        product rather than checking the full pick-any list. Two separate codebook-adjacent
+        findings: (1) modes' Focus mode gloss ('dims everything but the sentence') describes iA
+        Writer's specific implementation; Scrivener's Composition mode is the same general category
+        of full-screen distraction-free writing without doing sentence-level dimming, and the gloss
+        should generalise. (2) 'Assistance' and 'generation'-style dimensions keep splitting raters
+        on whether a real but paid/opt-in AI feature (Copilot, Notion AI, Atlassian Intelligence,
+        Apple Intelligence) counts if it's reached from inside the editor itself — I've resolved
+        this round by crediting it whenever it's native to the product's own UI, regardless of
+        pricing tier, the same standard I used for code-editor's Copilot-based cells."
+  codedAt: 2026-09-22
+previews:
+  - file: document-editor.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

@@ -1,0 +1,477 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "co-editing-presence". Edit between batches only — see README "Rules".
+id: co-editing-presence
+name: Co-editing presence
+level: pattern
+parent: collaborate
+aliases:
+  - live presence
+  - multiplayer cursors
+  - awareness
+definition: Showing who else is in a shared artifact right now, where they are looking or editing,
+  and how to follow or avoid colliding with them.
+data: document
+platforms:
+  - web
+  - desktop
+domains:
+  - design
+  - productivity
+  - education
+  - software
+  - enterprise
+anatomy:
+  - name: Avatar stack
+    role: Who is here
+  - name: Cursor or selection
+    role: Where each person is
+  - name: Viewport or follow
+    role: Seeing through another’s eyes
+  - name: Awareness label
+    role: Name and colour binding
+roles:
+  - viewer
+  - editor
+  - follower
+dimensions:
+  - name: Presence cues
+    family: content
+    question: What awareness information is shown for each person?
+    subdimensions:
+      - id: cues
+        name: Cues
+        select: many
+        values:
+          - id: avatar-and-colour
+            name: Avatar and colour
+            example: Figma
+          - id: named-cursor
+            name: Named cursor
+            example: Google Docs cursors
+          - id: active-selection-highlight
+            name: Active selection highlight
+            example: Figma selection
+          - id: current-tool-or-mode
+            name: Current tool or mode
+            example: Miro tool indicators
+          - id: idle-or-away-state
+            name: Idle or away state
+            example: Docs idle avatars
+          - id: ephemeral-reactions-or-cursor-chat
+            name: Ephemeral reactions or cursor chat
+            description: Momentary expressive cues anchored at a person's cursor — a typed chat bubble, an emoji
+              stamp, a high-five — beyond a static avatar, a named cursor, a selection highlight, a
+              tool indicator, or an idle state.
+            example: FigJam — Shared whiteboard
+  - name: Where presence sits
+    family: layout
+    question: Where are presence cues placed?
+    subdimensions:
+      - id: placement
+        name: Placement
+        select: many
+        values:
+          - id: in-canvas-cursors
+            name: In-canvas cursors
+            example: Figma
+          - id: top-avatar-stack
+            name: Top avatar stack
+            example: Google Docs
+          - id: sidebar-people-list
+            name: Sidebar people list
+            example: Notion presence
+          - id: minimap-dots
+            name: Minimap dots
+            example: Large canvas locators
+          - id: follow-viewport-frame
+            name: Follow viewport frame
+            example: Figma observation mode
+  - name: Awareness invocation
+    family: invocation
+    question: How does a person engage another’s presence?
+    subdimensions:
+      - id: engageBy
+        name: Engage by
+        select: many
+        values:
+          - id: click-avatar-to-find-them
+            name: Click avatar to find them
+            example: Figma
+          - id: follow-mode
+            name: Follow mode
+            example: Figma follow
+          - id: summon-or-call-in-file
+            name: Summon or call in-file
+            example: "@mentions"
+          - id: watching-badge-only
+            name: Watching badge only
+            example: View-only presence
+          - id: hide-my-cursor
+            name: Hide my cursor
+            example: Privacy toggles
+  - name: Presence scope
+    family: scope
+    question: Whose activity is shown, and over what?
+    subdimensions:
+      - id: scope
+        name: Scope
+        select: one
+        values:
+          - id: this-file
+            name: This file
+            example: Docs
+          - id: this-page-or-frame
+            name: This page or frame
+            example: Figma pages
+          - id: this-selection-only
+            name: This selection only
+            example: Shared plugin sessions
+          - id: organization-wide-activity
+            name: Organization-wide activity
+            example: Enterprise dashboards
+          - id: anonymous-viewers-counted
+            name: Anonymous viewers counted
+            example: Link-view counts
+  - name: Presence lifecycle
+    family: lifecycle
+    question: When do presence cues appear and fade?
+    subdimensions:
+      - id: lifecycle
+        name: Lifecycle
+        select: one
+        values:
+          - id: while-connected
+            name: While connected
+            example: WebSocket presence
+          - id: linger-after-idle
+            name: Linger after idle
+            example: Away after timeout
+          - id: ephemeral-flash-on-edit
+            name: Ephemeral flash on edit
+            example: Momentary highlights
+          - id: persistent-last-seen
+            name: Persistent last-seen
+            example: Async presence stamps
+  - name: Density adaptation
+    family: adaptation
+    question: How does presence behave when many people join?
+    subdimensions:
+      - id: density
+        name: Density
+        select: one
+        values:
+          - id: show-everyone
+            name: Show everyone
+            example: Small teams
+          - id: collapse-to-count
+            name: Collapse to count
+            example: +12 in avatar stack
+          - id: show-editors-only
+            name: Show editors only
+            example: Hide pure viewers
+          - id: cluster-distant-cursors
+            name: Cluster distant cursors
+            example: Crowded canvases
+wild:
+  score: 1
+  note: Follow mode and occasional hide-cursor options exist; cue density is rarely configurable.
+  examples:
+    - name: Figma
+      note: Follow and multiplayer cursor colours
+    - name: Google Docs
+      note: Anonymous animal names when signed out
+    - name: Miro
+      note: Hide collaborator cursors
+techniques:
+  - name: Presence density control
+    dimension: Density adaptation
+    how: Let people choose editors-only, collapse thresholds or hide cursors without leaving the file.
+    ai: false
+  - name: Find who is editing…
+    dimension: Awareness invocation
+    how: A query jumps to people or regions matching a description (“who is in the pricing frame?”).
+    ai: true
+  - name: Follow as a lens
+    dimension: Where presence sits
+    how: Observation mode is a reversible lens over another viewport, not a hard navigation replace.
+    ai: false
+signature: Presence density control
+sample: Multiplayer design tools, documents, whiteboards and IDEs.
+unit: One shared session’s presence layer on one artifact.
+relations:
+  uses:
+    - badge
+    - toast
+  specializes:
+    - collaborate
+  neighbors:
+    - version-history
+    - annotation
+    - video-call
+scores:
+  ubiquity: 4
+  potential: 3
+  spec: 3
+evidence: agent-coded
+usage:
+  - People follow a lead designer during critiques instead of screensharing
+questions:
+  - When does showing idle location become uncomfortable monitoring?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.6642859634054911
+  agreementFirstPass: 0.7921052631578948
+  kappaFinal: 0.9307736505914791
+  agreementFinal: 0.9578947368421052
+  pass: true
+  perSub:
+    cues:
+      kappaFirstPass: 0.7110367892976585
+      agreementFirstPass: 0.8
+      kappaFinal: 0.9542857142857142
+      agreementFinal: 0.9666666666666667
+      flag: null
+    placement:
+      kappaFirstPass: 0.8912008703930364
+      agreementFirstPass: 0.92
+      kappaFinal: 0.9730639730639731
+      agreementFinal: 0.98
+      flag: null
+    engageBy:
+      kappaFirstPass: 0.642386598908338
+      agreementFirstPass: 0.81
+      kappaFinal: 0.9021951749619647
+      agreementFinal: 0.94
+      flag: null
+    scope:
+      kappaFirstPass: 0.2844974446337309
+      agreementFirstPass: 0.65
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    lifecycle:
+      kappaFirstPass: 0.5833333333333336
+      agreementFirstPass: 0.8
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    density:
+      kappaFirstPass: -0.1805555555555557
+      agreementFirstPass: 0.15
+      kappaFinal: 0.5826893353941267
+      agreementFinal: 0.8
+      flag: unreliable
+  distribution:
+    cues:
+      Avatar and colour: 20
+      Named cursor: 15
+      Active selection highlight: 10
+      Current tool or mode: 1
+      Idle or away state: 2
+      Ephemeral reactions or cursor chat: 2
+    placement:
+      In-canvas cursors: 19
+      Top avatar stack: 18
+      Sidebar people list: 2
+      Minimap dots: 1
+      Follow viewport frame: 5
+    engageBy:
+      Click avatar to find them: 11
+      Follow mode: 6
+      Summon or call in-file: 3
+      Watching badge only: 7
+      Hide my cursor: 0
+      "?": 1
+    scope:
+      This file: 17
+      This page or frame: 3
+      This selection only: 0
+      Organization-wide activity: 0
+      Anonymous viewers counted: 0
+    lifecycle:
+      While connected: 16
+      Linger after idle: 4
+      Ephemeral flash on edit: 0
+      Persistent last-seen: 0
+    density:
+      Show everyone: 3
+      Collapse to count: 15
+      Show editors only: 0
+      Cluster distant cursors: 0
+      "?": 1
+  exemplars:
+    cues:
+      Avatar and colour:
+        - Figma — Multiplayer design file
+        - Google Docs — Shared document
+        - Google Sheets — Shared sheet
+      Named cursor:
+        - Figma — Multiplayer design file
+        - Google Docs — Shared document
+        - Notion — Shared page
+      Active selection highlight:
+        - Figma — Multiplayer design file
+        - Google Sheets — Shared sheet
+        - FigJam — Shared whiteboard
+      Current tool or mode:
+        - Miro — Shared board
+      Idle or away state:
+        - Google Docs — Shared document
+        - Notion — Shared page
+      Ephemeral reactions or cursor chat:
+        - FigJam — Shared whiteboard
+        - tldraw — Shared room
+    placement:
+      In-canvas cursors:
+        - Figma — Multiplayer design file
+        - Google Docs — Shared document
+        - Google Sheets — Shared sheet
+      Top avatar stack:
+        - Figma — Multiplayer design file
+        - Google Docs — Shared document
+        - Google Sheets — Shared sheet
+      Sidebar people list:
+        - VS Code Live Share — Shared session
+        - Apple Pages — iCloud collaboration
+      Minimap dots:
+        - Google Slides — Shared deck
+      Follow viewport frame:
+        - Figma — Multiplayer design file
+        - Miro — Shared board
+        - FigJam — Shared whiteboard
+    engageBy:
+      Click avatar to find them:
+        - Figma — Multiplayer design file
+        - Google Docs — Shared document
+        - Google Sheets — Shared sheet
+      Follow mode:
+        - Figma — Multiplayer design file
+        - Miro — Shared board
+        - FigJam — Shared whiteboard
+      Summon or call in-file:
+        - Miro — Shared board
+        - FigJam — Shared whiteboard
+        - VS Code Live Share — Shared session
+      Watching badge only:
+        - Notion — Shared page
+        - Canva — Shared design
+        - Slack Canvas — Canvas with others
+      Hide my cursor: []
+    scope:
+      This file:
+        - Google Docs — Shared document
+        - Google Sheets — Shared sheet
+        - Notion — Shared page
+      This page or frame:
+        - Figma — Multiplayer design file
+        - FigJam — Shared whiteboard
+        - Google Slides — Shared deck
+      This selection only: []
+      Organization-wide activity: []
+      Anonymous viewers counted: []
+    lifecycle:
+      While connected:
+        - Figma — Multiplayer design file
+        - Miro — Shared board
+        - FigJam — Shared whiteboard
+      Linger after idle:
+        - Google Docs — Shared document
+        - Google Sheets — Shared sheet
+        - Notion — Shared page
+      Ephemeral flash on edit: []
+      Persistent last-seen: []
+    density:
+      Show everyone:
+        - VS Code Live Share — Shared session
+        - Apple Pages — iCloud collaboration
+        - Overleaf — Shared project
+      Collapse to count:
+        - Figma — Multiplayer design file
+        - Google Docs — Shared document
+        - Google Sheets — Shared sheet
+      Show editors only: []
+      Cluster distant cursors: []
+  unobserved:
+    - sub: engageBy
+      var: Hide my cursor
+    - sub: scope
+      var: This selection only
+    - sub: scope
+      var: Organization-wide activity
+    - sub: scope
+      var: Anonymous viewers counted
+    - sub: lifecycle
+      var: Ephemeral flash on edit
+    - sub: lifecycle
+      var: Persistent last-seen
+    - sub: density
+      var: Show editors only
+    - sub: density
+      var: Cluster distant cursors
+  unresolved:
+    - sub: density
+      n: 15
+  proposals:
+    raised: 1
+    adopted:
+      - sub: cues
+        name: Ephemeral reactions or cursor chat
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - Density is Collapse to count almost everywhere because every avatar stack overflows to +N;
+        lifecycle beyond While connected is only visible in Google's idle greying.
+      - "density cannot be coded from memory of a normal session — Show everyone vs Collapse to
+        count depends on an overflow threshold nobody sees, so one rater defaulted to each; the
+        codebook should say what to code when the crowded case is unobserved. placement: the Sidebar
+        people list exemplar (Notion) is a top stack, and there is no value for a list behind a
+        button (Pages). scope: file-wide avatars with per-page cursors (Figma, FigJam, Slides) fit
+        neither This file nor This page or frame cleanly."
+    opus:
+      - "density is close to unobservable: how a product behaves with forty people in a file is
+        something almost nobody sees, so those codes are inferences from the avatar stack's design
+        rather than observations. Hide my cursor also went unused — no instance in this sample
+        offers a privacy toggle, which is itself worth reporting. scope is pick-one but a
+        session-based tool (Live Share) has presence that follows people across files, which none of
+        the variations describes."
+      - "density stayed the hardest sub-dimension to apply honestly — nobody watches a file with
+        forty people in it, so most density codes are inferences from how the avatar stack is built,
+        and I moved two to ? rather than keep inferring. scope is pick one but wants pick any: a
+        board with pages (FigJam) is scoped both to the file and to the page, and Live Share's
+        presence follows a person across files, which no variation says. cues has no slot for
+        expressive, momentary cues (cursor chat, stamps), hence the adopted proposal, and
+        placement's Sidebar people list has to absorb popover lists (Pages) that are not sidebars."
+    sonnet:
+      - Density came back Show everyone for almost every instance since none of these sample screens
+        describe a crowded session; Collapse to count only showed up where the note explicitly
+        mentions a count (Docs, Coda), so this dimension is likely undercounted relative to what
+        these products actually do at higher participant counts, which I have no direct evidence of
+        in the sample.
+      - "My own round-1 density codes had a systematic bias: I answered 'Show everyone' as a
+        small-team default across nearly the whole sample instead of checking each product's own
+        overflow behaviour, when most mainstream tools here (Figma, the Workspace and Office
+        families, Canva, Airtable, Slides, Linear, Whiteboard) are well known to collapse a crowded
+        avatar stack to a '+N' count; I've corrected those and held Show everyone only where a rater
+        gave a specific small-scale reason (Replit, tldraw, Pages, Overleaf). Separately, cues is
+        pick-any but I was treating Avatar and colour and Named cursor as if picking one excluded
+        the other, undercounting Avatar and colour across most of the entry even where the sample
+        note names avatars directly."
+  codedAt: 2026-09-22
+previews:
+  - file: co-editing-presence.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

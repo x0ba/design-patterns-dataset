@@ -1,0 +1,435 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "undo". Edit between batches only — see README "Rules".
+id: undo
+name: Undo
+level: component
+parent: transact
+aliases:
+  - undo and redo
+  - history
+  - revert
+definition: Reversing recent actions.
+data: sequence
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - productivity
+  - design
+  - software
+  - communication
+anatomy:
+  - name: History
+    role: Actions that can be reversed
+  - name: Trigger
+    role: How to reverse
+  - name: Label
+    role: What will be reversed
+roles: []
+dimensions:
+  - name: Unit
+    family: scope
+    question: What can be undone?
+    subdimensions:
+      - id: unit
+        name: Unit
+        select: one
+        values:
+          - id: last-action-only
+            name: Last action only
+            example: Simple apps
+          - id: many-levels
+            name: Many levels
+            example: Most editors
+          - id: per-object-history
+            name: Per-object history
+            example: Figma layer history
+          - id: jump-to-a-past-state
+            name: Jump to a past state
+            example: Photoshop History panel
+  - name: Access
+    family: invocation
+    question: How is it triggered?
+    subdimensions:
+      - id: access
+        name: Access
+        select: many
+        values:
+          - id: keyboard-shortcut
+            name: Keyboard shortcut
+            example: Cmd+Z
+          - id: toolbar-button
+            name: Toolbar button
+            example: Google Docs
+          - id: undo-in-a-toast
+            name: Undo in a toast
+            example: Gmail
+          - id: shake
+            name: Shake
+            example: iOS shake to undo
+          - id: history-panel
+            name: History panel
+            example: Photoshop
+          - id: multi-finger-gesture
+            name: Multi-finger gesture
+            description: A touch gesture such as a two-finger tap or three-finger swipe triggers undo, distinct
+              from shaking the device
+            example: Apple Notes — Shake to undo on iPhone
+          - id: context-menu-on-the-item
+            name: Context menu on the item
+            description: Undo is offered in the long-press or right-click menu of the thing just acted on, not
+              globally
+            example: iMessage — Undo Send
+          - id: touch-gesture
+            name: Touch gesture
+            description: A multi-finger tap or swipe on the canvas or page undoes, with no button, shortcut or
+              toast involved (Procreate's two-finger tap, iOS three-finger swipe)
+            example: Apple Notes — Shake to undo on iPhone
+          - id: context-menu-on-the-object
+            name: Context menu on the object
+            description: Undo is reached by long-pressing or right-clicking the affected object itself — the
+              sent message, the moved file — rather than from any global undo control
+            example: iMessage — Undo Send
+  - name: Window
+    family: lifecycle
+    question: How long is undo possible?
+    subdimensions:
+      - id: window
+        name: Window
+        select: one
+        values:
+          - id: session
+            name: Session
+            example: Most editors
+          - id: seconds
+            name: Seconds
+            example: Gmail undo send
+          - id: version-history
+            name: Version history
+            example: Google Docs
+  - name: Multiple people
+    family: collaboration
+    question: Whose actions are undone?
+    subdimensions:
+      - id: multiUser
+        name: Multi-user
+        select: one
+        values:
+          - id: single-user-stack
+            name: Single-user stack
+            example: Desktop apps
+          - id: only-my-own-changes
+            name: Only my own changes
+            example: Google Docs
+          - id: everyone-s
+            name: Everyone’s
+            example: Shared whiteboards without per-user undo
+  - name: Preview
+    family: feedback
+    question: Does it say what will be undone?
+    subdimensions:
+      - id: preview
+        name: Preview
+        select: one
+        values:
+          - id: no
+            name: No
+            example: Web apps
+          - id: named-action
+            name: Named action
+            example: Undo Typing in macOS Edit menu
+          - id: visual-preview
+            name: Visual preview
+            example: History state thumbnails
+wild:
+  score: 1
+  note: Undo windows and history depth are occasionally settings.
+  examples:
+    - name: Gmail
+      note: Undo send cancellation period
+    - name: Photoshop
+      note: History states count
+techniques:
+  - name: Named history
+    dimension: Unit
+    how: The undo stack is visible, named and selectively reversible.
+    ai: false
+signature: Named history
+sample: Editors, email, design and file management.
+unit: One undo system.
+relations:
+  uses:
+    - toast
+  specializes: []
+  neighbors:
+    - confirmation
+    - version-history
+scores:
+  ubiquity: 5
+  potential: 3
+  spec: 4
+evidence: agent-coded
+usage:
+  - People undo to see what an action did, then redo
+questions:
+  - Does a malleable interface need undo for customizations as well as content?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7935918294507506
+  agreementFirstPass: 0.8730769230769231
+  kappaFinal: 0.9774414307467824
+  agreementFinal: 0.9818181818181818
+  pass: true
+  perSub:
+    unit:
+      kappaFirstPass: 0.7855227882037532
+      agreementFirstPass: 0.8
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    access:
+      kappaFirstPass: 0.8379351740696289
+      agreementFirstPass: 0.9277777777777778
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    window:
+      kappaFirstPass: 0.8249027237354086
+      agreementFirstPass: 0.85
+      kappaFinal: 0.8148148148148149
+      agreementFinal: 0.85
+      flag: null
+    multiUser:
+      kappaFirstPass: 0.8222222222222223
+      agreementFirstPass: 0.9
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    preview:
+      kappaFirstPass: 0.3426294820717131
+      agreementFirstPass: 0.45
+      kappaFinal: 0.9370409233997901
+      agreementFinal: 0.95
+      flag: null
+  distribution:
+    unit:
+      Last action only: 6
+      Many levels: 11
+      Per-object history: 0
+      Jump to a past state: 3
+    access:
+      Keyboard shortcut: 12
+      Toolbar button: 6
+      Undo in a toast: 6
+      Shake: 1
+      History panel: 6
+      Multi-finger gesture: 0
+      Context menu on the item: 1
+      Touch gesture: 2
+      Context menu on the object: 0
+    window:
+      Session: 13
+      Seconds: 6
+      Version history: 1
+    multiUser:
+      Single-user stack: 14
+      Only my own changes: 6
+      Everyone’s: 0
+    preview:
+      No: 8
+      Named action: 11
+      Visual preview: 1
+  exemplars:
+    unit:
+      Last action only:
+        - Gmail — Undo send
+        - Microsoft Outlook — Undo send
+        - Asana — Undo after completing a task
+      Many levels:
+        - Google Docs — Undo and version history
+        - Figma — Undo in a shared file
+        - macOS Finder — Undo Move
+      Per-object history: []
+      Jump to a past state:
+        - Adobe Photoshop — History panel
+        - Vim — Undo tree
+        - Blender — Undo History
+    access:
+      Keyboard shortcut:
+        - Google Docs — Undo and version history
+        - Figma — Undo in a shared file
+        - Adobe Photoshop — History panel
+      Toolbar button:
+        - Google Docs — Undo and version history
+        - Apple Notes — Shake to undo on iPhone
+        - Microsoft Word — Undo dropdown
+      Undo in a toast:
+        - Gmail — Undo send
+        - Notion — Undo in a page
+        - Microsoft Outlook — Undo send
+      Shake:
+        - Apple Notes — Shake to undo on iPhone
+      History panel:
+        - Google Docs — Undo and version history
+        - Figma — Undo in a shared file
+        - Adobe Photoshop — History panel
+      Multi-finger gesture: []
+      Context menu on the item:
+        - iMessage — Undo Send
+      Touch gesture:
+        - Apple Notes — Shake to undo on iPhone
+        - Procreate — Two-finger tap undo
+      Context menu on the object: []
+    window:
+      Session:
+        - Figma — Undo in a shared file
+        - Adobe Photoshop — History panel
+        - macOS Finder — Undo Move
+      Seconds:
+        - Gmail — Undo send
+        - Microsoft Outlook — Undo send
+        - Asana — Undo after completing a task
+      Version history:
+        - Google Docs — Undo and version history
+    multiUser:
+      Single-user stack:
+        - Gmail — Undo send
+        - Adobe Photoshop — History panel
+        - macOS Finder — Undo Move
+      Only my own changes:
+        - Google Docs — Undo and version history
+        - Figma — Undo in a shared file
+        - Notion — Undo in a page
+      Everyone’s: []
+    preview:
+      No:
+        - Google Docs — Undo and version history
+        - Figma — Undo in a shared file
+        - Notion — Undo in a page
+      Named action:
+        - Gmail — Undo send
+        - macOS Finder — Undo Move
+        - Apple Notes — Shake to undo on iPhone
+      Visual preview:
+        - Adobe Photoshop — History panel
+  unobserved:
+    - sub: unit
+      var: Per-object history
+    - sub: access
+      var: Multi-finger gesture
+    - sub: access
+      var: Context menu on the object
+    - sub: multiUser
+      var: Everyone’s
+  unresolved: []
+  proposals:
+    raised: 6
+    adopted:
+      - sub: access
+        name: Multi-finger gesture
+        raters:
+          - fable
+          - opus
+      - sub: access
+        name: Context menu on the item
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: access
+        name: Touch gesture
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: access
+        name: Context menu on the object
+        raters:
+          - fable
+          - opus
+    recorded:
+      - place: sub:access
+        sub: access
+        dim: Access
+        name: Multi-finger tap gesture
+        gloss: A tap gesture using two or more fingers on the canvas directly triggers undo (or redo),
+          distinct from a shake, a toolbar button, a keyboard shortcut, or a history panel
+        raters:
+          - sonnet
+        instances:
+          - 18
+        status: raised
+      - place: sub:access
+        sub: access
+        dim: Access
+        name: Long-press context menu
+        gloss: Holding down on the specific item to be undone reveals a context menu with an Undo/recall
+          action, rather than an automatic toast, a persistent toolbar button, a shortcut, or a
+          history panel
+        raters:
+          - sonnet
+        instances:
+          - 20
+        status: raised
+  raterNotes:
+    fable:
+      - "window: coded 'Version history' only where the product's version history is part of the
+        sample's description (Docs, Figma, Canva, VS Code), 'Session' for other editors even when
+        they also keep versions (Word/OneDrive). preview: toasts that name the action ('Task
+        completed - Undo') were read as Named action."
+      - window's Version history exemplar (Docs) is a recovery mechanism apart from the undo stack,
+        so raters cannot tell whether the sub codes the stack or any recovery. preview is pick one
+        but a product's shortcut and its toast differ. Seconds has no room for a two-minute recall.
+    opus:
+      - "window's three values do not fit cleanly: iMessage's two minutes is neither seconds nor
+        version history, and several editors (VS Code, Vim, Canva) have a session stack and a
+        separate long-term recovery store at once, so I coded the undo stack and noted the other.
+        unit's Per-object history never fired — the codebook names Figma for it, but Figma's Cmd+Z
+        is an ordinary per-user linear stack, which is worth checking before round two."
+      - window (and with it unit and preview) assumes one undo mechanism per product, but Docs,
+        Figma, VS Code and Canva each have a session stack and a version history with different
+        answers, so a rater has to decide which mechanism the entry is about before coding anything
+        — that choice, not the products, is what split us. preview does not distinguish naming the
+        action beforehand from reporting it afterwards, which is what Vim exposes. Single-user stack
+        is glossed 'Desktop apps' but reads as 'there is no stack shared with anyone', so
+        collaborative products with a private stack can be coded either way. access has no value for
+        a menu item — Finder's Edit menu, Explorer's context menu, iMessage's long-press menu are
+        all coded as toolbar buttons or as proposals.
+    sonnet:
+      - Several tools (VS Code, Canva) blur session-scoped undo with a separate, longer-lived
+        version-history feature; coded the more persistent/distinguishing value (Version history)
+        where the sample named it explicitly.
+      - "Two codebook problems and one of my own recurring errors. (1) unit's Many levels and Jump
+        to a past state collapse together whenever a tool combines an everyday step-back stack with
+        a separate way to jump straight to a named/timestamped point (Google Docs' version history,
+        Word's undo dropdown) — both genuinely apply at once, and the tie-break (take the
+        first-listed value) mechanically favors Many levels, which is worth a codebook note rather
+        than treating each case as a fresh disagreement. (2) Two pairs of raters proposed
+        near-identical new access variations under different names for the same mechanic (touch
+        gestures: fable's 'Multi-finger gesture' / opus's 'Touch gesture' / my own 'Multi-finger tap
+        gesture'; context-menu recall: fable's 'Context menu on the item' / opus's 'Context menu on
+        the object' / my own 'Long-press context menu') — a real coordination gap where the finding
+        was right three times over but the naming never converged, which cost real signal in the
+        kappa calculation. (3) My own recurring error, not a codebook gap: for window and multiUser
+        I had judged case by case whether a tool's separate version-history feature or
+        shared-editing context was 'central enough' to count, and did so inconsistently across
+        genuinely similar products (Figma vs VS Code vs Canva) — on reconciliation I applied one
+        consistent rule (the undo command's own stack is session-bound; a separate snapshot/history
+        feature doesn't change that; a shared/collaborative editing context makes multiUser Only my
+        own changes) across all three instead of judging each on a vibe."
+  codedAt: 2026-09-22
+previews:
+  - file: undo.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

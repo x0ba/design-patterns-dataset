@@ -1,0 +1,321 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "badge". Edit between batches only — see README "Rules".
+id: badge
+name: Badge
+level: component
+parent: monitor
+aliases:
+  - counter
+  - notification dot
+  - status pill
+definition: A small indicator on another element showing a count or a status.
+data: object
+platforms:
+  - mobile
+  - web
+  - desktop
+domains:
+  - communication
+  - social
+  - software
+  - productivity
+anatomy:
+  - name: Host
+    role: What it is attached to
+  - name: Indicator
+    role: Count, dot or label
+roles: []
+dimensions:
+  - name: Meaning
+    family: content
+    question: What does the badge say?
+    subdimensions:
+      - id: meaning
+        name: Meaning
+        select: one
+        values:
+          - id: count
+            name: Count
+            example: Unread messages
+          - id: dot
+            name: Dot
+            description: Something new
+            example: App icon dots
+          - id: status
+            name: Status
+            example: Online presence
+          - id: label
+            name: Label
+            example: New or Beta
+  - name: Overflow
+    family: encoding
+    question: How are large counts shown?
+    subdimensions:
+      - id: overflow
+        name: Overflow
+        select: one
+        values:
+          - id: exact-count
+            name: Exact count
+            example: Mail folders
+          - id: capped
+            name: Capped
+            description: 99+
+            example: Many apps
+          - id: dot-past-a-threshold
+            name: Dot past a threshold
+            example: Minimal badges
+  - name: What counts
+    family: initiative
+    question: Who decides what increments it?
+    subdimensions:
+      - id: rule
+        name: Counting rule
+        select: one
+        values:
+          - id: everything-unread
+            name: Everything unread
+            example: Default mail badges
+          - id: only-mentions
+            name: Only mentions
+            example: Slack mentions-only badge setting
+          - id: the-person-s-rule
+            name: The person’s rule
+            example: Custom inbox counts
+          - id: pending-actions
+            name: Pending actions
+            description: The badge counts work waiting for the person — updates to install, apps to update,
+              tasks to finish — rather than anything read, unread or addressed to them; the counting
+              rules as written assume a message inbox
+            example: iOS Settings — App icon
+  - name: Aggregation
+    family: scope
+    question: Does it roll up?
+    subdimensions:
+      - id: aggregation
+        name: Aggregation
+        select: one
+        values:
+          - id: per-item
+            name: Per item
+            example: Folder counts
+          - id: rolled-up-to-parent
+            name: Rolled up to parent
+            example: Account totals
+          - id: app-icon-total
+            name: App icon total
+            example: iOS app badges
+          - id: device-total
+            name: Device total
+            description: One indicator for every unread notification on the device, on system chrome rather than
+              on any app's icon or nav entry (watch faces, always-on displays)
+            example: Apple Watch — Watch face
+wild:
+  score: 2
+  note: Turning badges off is common; defining what counts sometimes is.
+  examples:
+    - name: iOS
+      note: Badges on or off per app
+    - name: Slack
+      note: Badge for mentions only
+techniques:
+  - name: Define what counts
+    dimension: What counts
+    how: A badge’s rule is an editable query, so the count means what the person needs it to mean.
+    ai: false
+signature: Define what counts
+sample: Navigation surfaces across communication and productivity apps.
+unit: One badge rule.
+relations:
+  uses: []
+  specializes: []
+  neighbors:
+    - stat-tile
+    - progress-indicator
+scores:
+  ubiquity: 5
+  potential: 3
+  spec: 5
+evidence: agent-coded
+usage:
+  - Unbounded counts are ignored
+questions:
+  - Are badge rules part of the attention budget or separate from it?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.6119621394267045
+  agreementFirstPass: 0.65
+  kappaFinal: 0.8770688582062064
+  agreementFinal: 0.875
+  pass: true
+  perSub:
+    meaning:
+      kappaFirstPass: 0.9192462987886942
+      agreementFirstPass: 0.95
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    overflow:
+      kappaFirstPass: 0.5899772209567198
+      agreementFirstPass: 0.55
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    rule:
+      kappaFirstPass: 0.515086206896552
+      agreementFirstPass: 0.7
+      kappaFinal: 0.9358288770053474
+      agreementFinal: 0.95
+      flag: null
+    aggregation:
+      kappaFirstPass: 0.423538831064852
+      agreementFirstPass: 0.4
+      kappaFinal: 0.5724465558194779
+      agreementFinal: 0.55
+      flag: unreliable
+  distribution:
+    meaning:
+      Count: 15
+      Dot: 4
+      Status: 0
+      Label: 1
+    overflow:
+      Exact count: 8
+      Capped: 4
+      Dot past a threshold: 0
+      "?": 3
+      n/a: 5
+    rule:
+      Everything unread: 13
+      Only mentions: 4
+      The person’s rule: 0
+      Pending actions: 3
+    aggregation:
+      Per item: 4
+      Rolled up to parent: 9
+      App icon total: 6
+      Device total: 0
+      n/a: 1
+  exemplars:
+    meaning:
+      Count:
+        - iOS Mail — App icon
+        - iOS Messages — App icon
+        - iOS Settings — App icon
+      Dot:
+        - GitHub — Inbox bell
+        - Android — Launcher icon
+        - Notion — Sidebar Inbox
+      Status: []
+      Label:
+        - Google Chrome — Toolbar menu button
+    overflow:
+      Exact count:
+        - iOS Mail — App icon
+        - iOS Messages — App icon
+        - iOS Settings — App icon
+      Capped:
+        - Discord — Server icon
+        - LinkedIn — Top navigation
+        - Microsoft Teams — Left rail
+      Dot past a threshold: []
+    rule:
+      Everything unread:
+        - iOS Mail — App icon
+        - iOS Messages — App icon
+        - Gmail — Inbox label
+      Only mentions:
+        - Slack — Sidebar channel
+        - Slack — Dock icon
+        - Discord — Server icon
+      The person’s rule: []
+      Pending actions:
+        - iOS Settings — App icon
+        - macOS App Store — Dock icon
+        - Google Chrome — Toolbar menu button
+    aggregation:
+      Per item:
+        - Slack — Sidebar channel
+        - Gmail — Inbox label
+        - LinkedIn — Top navigation
+      Rolled up to parent:
+        - Discord — Server icon
+        - WhatsApp — Chats tab
+        - Facebook — Notifications bell
+      App icon total:
+        - iOS Mail — App icon
+        - iOS Messages — App icon
+        - iOS Settings — App icon
+      Device total: []
+  unobserved:
+    - sub: meaning
+      var: Status
+    - sub: overflow
+      var: Dot past a threshold
+    - sub: rule
+      var: The person’s rule
+    - sub: aggregation
+      var: Device total
+  unresolved: []
+  proposals:
+    raised: 2
+    adopted:
+      - sub: rule
+        name: Pending actions
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: aggregation
+        name: Device total
+        raters:
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - Overflow is unobservable from memory for most social badges (coded ?); Counting rule has no
+        value for system-condition badges (updates), coded n/a; Aggregation read as Per item unless
+        children carry their own badges that the parent sums.
+      - aggregation cannot say whether a single list's count is Per item (the folder-count example)
+        or Rolled up to parent (the items inside it), which is nearly all of the disagreement here;
+        rule assumes a message inbox and has nothing for badges set by a system condition; overflow
+        is unobservable from memory for most social badges.
+    opus:
+      - Overflow is often unobservable from product knowledge — you only learn the cap by
+        accumulating a hundred unread items — so four cells are ?; I read Per item as a badge on a
+        leaf (channel, label, chat), Rolled up to parent as a badge on a nav entry totalling a
+        surface, and App icon total as the OS-level badge.
+      - "Aggregation is the split: fable reads Per item as 'each nav entry carries its own badge'
+        and I read it as 'the badge sits on the leaf it counts', and the gloss (Folder counts /
+        Account totals) does not say which question is being asked — where the badge sits, or how
+        much it totals. Overflow stays partly uncodeable: you only learn a cap by accumulating a
+        hundred unread items, so ? is a real answer and Capped is often a guess."
+    sonnet:
+      - Several hosts carry two badge types at once (a plain unread dot plus a mention count);
+        pick-one forced me to choose the more informative/numbered variant and note the other. Rule
+        sub-dimension didn't fit system-generated flags (software update pending, browser update
+        overdue).
+      - Overflow's 'Capped' vs '?' split across several consumer apps (Facebook, Instagram, X) is
+        mostly a shared gap in what any of us could actually confirm having seen, not a real reading
+        disagreement — worth flagging that these need a fresh look at the product rather than more
+        reconciliation. Aggregation also needs a clearer line between 'several sibling items each
+        keeping their own badge' (Per item) and 'several child items summed into one shown at a
+        parent' (Rolled up to parent) — LinkedIn/Teams tripped this because each nav icon's own
+        number is itself a sum of underlying events, which reads like a rollup even though the
+        badges are Per item relative to each other.
+  codedAt: 2026-09-22
+previews:
+  - file: badge.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

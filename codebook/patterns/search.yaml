@@ -1,0 +1,453 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "search". Edit between batches only — see README "Rules".
+id: search
+name: Search and discover
+level: archetype
+aliases:
+  - information retrieval
+  - discovery
+definition: Express what you want and get candidates back, or be shown what you might want before you ask.
+data: collection
+platforms:
+  - web
+  - mobile
+  - desktop
+  - voice
+domains:
+  - commerce
+  - news
+  - entertainment
+  - productivity
+  - science
+  - ai
+anatomy:
+  - name: Query
+    role: The expression of intent
+  - name: Candidates
+    role: What comes back
+  - name: Refinement
+    role: How intent changes after seeing results
+roles:
+  - title
+  - snippet
+  - source
+  - thumbnail
+dimensions:
+  - name: Query form
+    family: invocation
+    question: In what form is intent expressed?
+    subdimensions:
+      - id: queryForm
+        name: Query form
+        select: many
+        values:
+          - id: keywords
+            name: Keywords
+            example: Google Search
+          - id: natural-language-question
+            name: Natural-language question
+            example: Perplexity
+          - id: voice
+            name: Voice
+            example: Siri
+          - id: image-or-camera
+            name: Image or camera
+            example: Google Lens
+          - id: query-by-example
+            name: Query by example
+            description: More like this item
+            example: Pinterest visual search
+          - id: structured-query-builder
+            name: Structured query builder
+            example: PubMed advanced search
+  - name: Who initiates
+    family: initiative
+    question: Does the person pull, or does the system push?
+    subdimensions:
+      - id: initiative
+        name: Initiative
+        select: one
+        values:
+          - id: person-pulls
+            name: Person pulls
+            description: Search on demand
+            example: Search boxes
+          - id: system-pushes
+            name: System pushes
+            description: Recommendations before a query
+            example: Netflix home
+          - id: suggestions-while-typing
+            name: Suggestions while typing
+            example: Google autocomplete
+          - id: clarifying-questions
+            name: Clarifying questions
+            description: The system asks back
+            example: ChatGPT deep research
+  - name: Result form
+    family: content
+    question: In what form do candidates come back?
+    subdimensions:
+      - id: resultForm
+        name: Result form
+        select: many
+        values:
+          - id: ranked-links
+            name: Ranked links
+            example: Classic web search
+          - id: direct-answer
+            name: Direct answer
+            example: Featured snippets
+          - id: generated-synthesis-with-citations
+            name: Generated synthesis with citations
+            example: Google AI Overviews, Perplexity
+          - id: entity-cards
+            name: Entity cards
+            example: Knowledge panels
+          - id: grouped-by-type
+            name: Grouped by type
+            example: Spotlight results by kind
+          - id: in-place-highlights
+            name: In-place highlights
+            description: Matches are marked where they already sit (on the page) with a count and next/previous
+              stepping, rather than returned as a list
+            example: Google Chrome — Find in page
+          - id: matches-in-place
+            name: Matches in place
+            description: "There is no result list: the matches are marked in the content itself and navigated
+              one at a time, with a count for orientation (find in page, find in a document or code
+              editor)"
+            example: Google Chrome — Find in page
+  - name: Refinement
+    family: flow
+    question: How does the search move forward after the first results?
+    subdimensions:
+      - id: refinement
+        name: Refinement
+        select: many
+        values:
+          - id: reformulate
+            name: Reformulate
+            example: Editing the query
+          - id: facets
+            name: Facets
+            example: Retail filters
+          - id: follow-up-conversation
+            name: Follow-up conversation
+            example: Perplexity follow-ups
+          - id: related-searches
+            name: Related searches
+            example: Google related searches
+  - name: Index scope
+    family: scope
+    question: What is searched?
+    subdimensions:
+      - id: scope
+        name: Scope
+        select: one
+        values:
+          - id: this-page
+            name: This page
+            example: Find in page
+          - id: this-app
+            name: This app
+            example: Slack search
+          - id: everything-local
+            name: Everything local
+            example: Spotlight
+          - id: the-web
+            name: The web
+            example: Search engines
+          - id: connected-sources
+            name: Connected sources
+            example: Enterprise search across tools
+wild:
+  score: 1
+  note: Scope and a few filters are adjustable; ranking and result form rarely are.
+  examples:
+    - name: Kagi
+      note: Raise, lower or block domains
+    - name: Google
+      note: Date and verbatim tools
+techniques:
+  - name: Query as editable spec
+    dimension: Refinement
+    how: A query becomes a visible structure (terms, filters, sources, sort) whose parts can be edited,
+      saved and shared.
+    ai: false
+  - name: Clarify, then search
+    dimension: Who initiates
+    how: Ambiguous requests produce short clarifying choices whose answers become editable query parts.
+    ai: true
+signature: Query as editable spec
+sample: Search engines, in-app search in the top 50 apps, enterprise and scholarly search.
+unit: "One search experience: query surface, results and refinement."
+relations:
+  uses:
+    - autocomplete
+    - filter-controls
+    - sort-control
+    - suggestion-chips
+  specializes: []
+  neighbors:
+    - browse-collections
+    - navigate
+scores:
+  ubiquity: 5
+  potential: 4
+  spec: 4
+evidence: agent-coded
+usage:
+  - Searchers reformulate more than they filter
+questions:
+  - How should synthesized answers expose the query they actually ran?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.6830880946805108
+  agreementFirstPass: 0.8025
+  kappaFinal: 0.948911465580386
+  agreementFinal: 0.9638888888888889
+  pass: true
+  perSub:
+    queryForm:
+      kappaFirstPass: 0.6841989838809894
+      agreementFirstPass: 0.8
+      kappaFinal: 0.951336555033625
+      agreementFinal: 0.9666666666666667
+      flag: null
+    initiative:
+      kappaFirstPass: 0.6222455403987408
+      agreementFirstPass: 0.7
+      kappaFinal: 0.8740818467995803
+      agreementFinal: 0.9
+      flag: null
+    resultForm:
+      kappaFirstPass: 0.6654719235364398
+      agreementFirstPass: 0.825
+      kappaFinal: 0.95
+      agreementFinal: 0.9666666666666667
+      flag: null
+    refinement:
+      kappaFirstPass: 0.665178571428572
+      agreementFirstPass: 0.75
+      kappaFinal: 0.9495763008614049
+      agreementFinal: 0.9625
+      flag: null
+    scope:
+      kappaFirstPass: 0.9498327759197323
+      agreementFirstPass: 0.95
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+  distribution:
+    queryForm:
+      Keywords: 17
+      Natural-language question: 7
+      Voice: 8
+      Image or camera: 7
+      Query by example: 1
+      Structured query builder: 3
+    initiative:
+      Person pulls: 7
+      System pushes: 0
+      Suggestions while typing: 12
+      Clarifying questions: 1
+    resultForm:
+      Ranked links: 15
+      Direct answer: 7
+      Generated synthesis with citations: 5
+      Entity cards: 7
+      Grouped by type: 5
+      In-place highlights: 0
+      Matches in place: 1
+    refinement:
+      Reformulate: 20
+      Facets: 13
+      Follow-up conversation: 6
+      Related searches: 5
+    scope:
+      This page: 1
+      This app: 8
+      Everything local: 2
+      The web: 8
+      Connected sources: 1
+  exemplars:
+    queryForm:
+      Keywords:
+        - Google Search — Web search
+        - Bing — Web search with Copilot
+        - DuckDuckGo — Web search
+      Natural-language question:
+        - Google Search — Web search
+        - Bing — Web search with Copilot
+        - Perplexity — Ask a question
+      Voice:
+        - Google Search — Web search
+        - Bing — Web search with Copilot
+        - Perplexity — Ask a question
+      Image or camera:
+        - Google Search — Web search
+        - Bing — Web search with Copilot
+        - Perplexity — Ask a question
+      Query by example:
+        - Pinterest — Visual search from a pin
+      Structured query builder:
+        - Gmail — Mail search
+        - PubMed — Advanced search builder
+        - Google Scholar — Scholarly search
+    initiative:
+      Person pulls:
+        - Perplexity — Ask a question
+        - ChatGPT — Search the web
+        - Siri — Voice query
+      System pushes: []
+      Suggestions while typing:
+        - Google Search — Web search
+        - Bing — Web search with Copilot
+        - DuckDuckGo — Web search
+      Clarifying questions:
+        - Amazon Alexa — Voice shopping search
+    resultForm:
+      Ranked links:
+        - Google Search — Web search
+        - Bing — Web search with Copilot
+        - DuckDuckGo — Web search
+      Direct answer:
+        - Google Search — Web search
+        - Bing — Web search with Copilot
+        - DuckDuckGo — Web search
+      Generated synthesis with citations:
+        - Google Search — Web search
+        - Bing — Web search with Copilot
+        - Perplexity — Ask a question
+      Entity cards:
+        - Google Search — Web search
+        - Bing — Web search with Copilot
+        - Siri — Voice query
+      Grouped by type:
+        - macOS Spotlight — System search
+        - Windows Search — Start menu search
+        - Slack — Workspace search
+      In-place highlights: []
+      Matches in place:
+        - Google Chrome — Find in page
+    refinement:
+      Reformulate:
+        - Google Search — Web search
+        - Bing — Web search with Copilot
+        - DuckDuckGo — Web search
+      Facets:
+        - Google Search — Web search
+        - Bing — Web search with Copilot
+        - DuckDuckGo — Web search
+      Follow-up conversation:
+        - Bing — Web search with Copilot
+        - Perplexity — Ask a question
+        - ChatGPT — Search the web
+      Related searches:
+        - Google Search — Web search
+        - Bing — Web search with Copilot
+        - Perplexity — Ask a question
+    scope:
+      This page:
+        - Google Chrome — Find in page
+      This app:
+        - Amazon Alexa — Voice shopping search
+        - Pinterest — Visual search from a pin
+        - Slack — Workspace search
+      Everything local:
+        - macOS Spotlight — System search
+        - Windows Search — Start menu search
+      The web:
+        - Google Search — Web search
+        - Bing — Web search with Copilot
+        - DuckDuckGo — Web search
+      Connected sources:
+        - Glean — Enterprise search
+  unobserved:
+    - sub: initiative
+      var: System pushes
+    - sub: resultForm
+      var: In-place highlights
+  unresolved: []
+  proposals:
+    raised: 3
+    adopted:
+      - sub: resultForm
+        name: In-place highlights
+        raters:
+          - fable
+          - opus
+      - sub: resultForm
+        name: Matches in place
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded:
+      - place: sub:resultForm
+        sub: resultForm
+        dim: null
+        name: Highlighted in place
+        gloss: Matches are highlighted directly within the existing content being searched, with a count,
+          rather than being returned as a separate list of candidate results, e.g. browser Find in
+          page
+        raters:
+          - sonnet
+        instances:
+          - 20
+        status: raised
+  raterNotes:
+    fable:
+      - Initiative as pick-one loses the common pairing of autocomplete with pull; I coded
+        Suggestions while typing wherever autocomplete exists. Instant-results search (Spotify) sits
+        between suggestions and results.
+      - Voice and Natural-language question overlap for every assistant, and Image or camera
+        overlaps Query by example for every visual search. initiative as pick one loses that
+        autocomplete always sits on a pull, and it does not separate query suggestions from instant
+        results. resultForm has no value for a grid of items of one kind (pins, products).
+    opus:
+      - "resultForm is the entry's most useful sub because modern engines stack three or four forms
+        on one page, but it has no value for a grid of homogeneous items (Pinterest's pins, an image
+        wall) — I coded those Ranked links, which is a stretch, and no value for in-place matches,
+        which I proposed. initiative is pick-one but the four values are not alternatives: a page
+        can push recommendations before a query, suggest while typing and be pulled, all at once; I
+        coded the behaviour at the moment of searching, which makes 'System pushes' almost
+        uncodeable in a search sample. scope forces a single index on assistants that answer from
+        the device and the web at once (Siri, Windows Search, Spotlight)."
+      - "Two codebook faults account for most of this entry: `queryForm` mixes modality with form,
+        so Voice and Natural-language question always co-occur and raters split over whether to say
+        both; and `initiative`'s Suggestions-while-typing is glossed with query autocomplete but
+        gets applied to any surface that renders results per keystroke (Spotlight, Windows Search),
+        which is a rendering choice, not who initiated. The find-in-page gap was found by all three
+        raters under three different names."
+    sonnet:
+      - scope is genuinely ambiguous for single-source vertical search tools (PubMed, Scholar,
+        Amazon voice shopping) that are neither the open web nor a general OS/app search; coded as
+        This app by treating the searched database/catalogue itself as the bounded 'app'.
+      - "I under-coded the pick-any subs (queryForm, resultForm, refinement) across most of this
+        entry's most heavily-featured products (Google, Bing, ChatGPT, Perplexity, YouTube, Amazon)
+        — naming only the single most distinctive form and missing the several others plainly
+        present, the same pattern I found in the configure archetype's product-configurator entry.
+        Two smaller codebook findings: (1) `queryForm`'s Keywords vs Natural-language question
+        doesn't say whether typing a question into a plain search box counts as the latter, or
+        whether that value is reserved for products designed around question-form input (Perplexity,
+        Siri) — I resolved it the second way, holding DuckDuckGo and Google Scholar to Keywords
+        alone. (2) `resultForm` has no value for 'a grid of homogeneous items that are not links and
+        not a single known entity' (Pinterest's pin grid, Amazon's product tiles) — Ranked links and
+        Entity cards both get stretched to cover this, and all three raters reached for the nearest
+        existing value rather than proposing new ones."
+  codedAt: 2026-09-22
+previews:
+  - file: search.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

@@ -1,0 +1,367 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "drag-reorder". Edit between batches only — see README "Rules".
+id: drag-reorder
+name: Drag to reorder
+level: component
+parent: browse-collections
+aliases:
+  - drag and drop
+  - sortable list
+definition: Changing an item’s position, container or nesting by dragging it.
+data: sequence
+platforms:
+  - web
+  - desktop
+  - mobile
+domains:
+  - productivity
+  - entertainment
+  - software
+anatomy:
+  - name: Handle
+    role: What is grabbed
+  - name: Ghost
+    role: What travels with the pointer
+  - name: Drop indicator
+    role: Where it will land
+roles: []
+dimensions:
+  - name: Grab
+    family: invocation
+    question: How is an item picked up?
+    subdimensions:
+      - id: grab
+        name: Grab by
+        select: many
+        values:
+          - id: handle
+            name: Handle
+            example: Notion block handles
+          - id: long-press-anywhere
+            name: Long-press anywhere
+            example: iOS list reordering
+          - id: keyboard-lift-and-move
+            name: Keyboard lift and move
+            example: Accessible drag-and-drop pattern
+          - id: move-up-or-down-commands
+            name: Move up or down commands
+            example: Menu fallbacks
+          - id: drag-anywhere
+            name: Drag anywhere
+            description: "Any point on the item is a grab point: a plain pointer press-and-drag with no handle
+              and no hold delay"
+            example: Trello — Moving cards between lists
+  - name: Drop feedback
+    family: feedback
+    question: How does the destination show itself?
+    subdimensions:
+      - id: indication
+        name: Indication
+        select: one
+        values:
+          - id: insertion-line
+            name: Insertion line
+            example: Notion
+          - id: placeholder-gap
+            name: Placeholder gap
+            example: Trello
+          - id: live-reflow
+            name: Live reflow
+            example: iOS home screen
+          - id: ghost-preview
+            name: Ghost preview
+            example: Finder
+  - name: Destinations
+    family: scope
+    question: Where can it go?
+    subdimensions:
+      - id: destinations
+        name: Destinations
+        select: many
+        values:
+          - id: within-the-list
+            name: Within the list
+            example: Playlists
+          - id: across-lists
+            name: Across lists
+            example: Trello
+          - id: into-nesting
+            name: Into nesting
+            example: Outliners
+          - id: onto-a-target-to-act
+            name: Onto a target to act
+            example: Drag to a folder
+  - name: Long journeys
+    family: adaptation
+    question: What happens when the destination is off-screen?
+    subdimensions:
+      - id: edge
+        name: Edge behaviour
+        select: one
+        values:
+          - id: auto-scroll
+            name: Auto-scroll
+            example: Most lists
+          - id: spring-loaded-folders
+            name: Spring-loaded folders
+            example: Finder
+          - id: cut-and-paste-instead
+            name: Cut and paste instead
+            example: Mobile fallbacks
+wild:
+  score: 2
+  note: Manual order is itself a customization and is common in lists that allow it.
+  examples:
+    - name: Spotify
+      note: Reorder a playlist
+    - name: Trello
+      note: Move cards across lists
+techniques:
+  - name: Drag as spec edit
+    dimension: Destinations
+    how: "Dragging maps to a change of the pattern, not only of order: drag an item beside another to
+      turn a list into a grid (Meridian D1-4)."
+    ai: false
+signature: Drag as spec edit
+sample: Lists, boards, editors and home screens.
+unit: One draggable collection.
+relations:
+  uses: []
+  specializes: []
+  neighbors:
+    - bulk-actions
+    - sort-control
+scores:
+  ubiquity: 4
+  potential: 3
+  spec: 3
+evidence: agent-coded
+usage:
+  - Keyboard and switch users are routinely locked out
+questions:
+  - Which drags should be reinterpreted as layout changes, and how does the person know in advance?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.6421229734774421
+  agreementFirstPass: 0.8
+  kappaFinal: 0.9572931218279055
+  agreementFinal: 0.97
+  pass: true
+  perSub:
+    grab:
+      kappaFirstPass: 0.4575045207956587
+      agreementFirstPass: 0.73
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    indication:
+      kappaFirstPass: 0.8929527207850134
+      agreementFirstPass: 0.9
+      kappaFinal: 0.9461883408071751
+      agreementFinal: 0.95
+      flag: null
+    destinations:
+      kappaFirstPass: 0.7814973037327547
+      agreementFirstPass: 0.8375
+      kappaFinal: 0.9333287033821795
+      agreementFinal: 0.95
+      flag: null
+    edge:
+      kappaFirstPass: 0.7568881685575364
+      agreementFirstPass: 0.9
+      kappaFinal: 0.8934280639431613
+      agreementFinal: 0.95
+      flag: null
+  distribution:
+    grab:
+      Handle: 5
+      Long-press anywhere: 3
+      Keyboard lift and move: 0
+      Move up or down commands: 3
+      Drag anywhere: 12
+    indication:
+      Insertion line: 10
+      Placeholder gap: 2
+      Live reflow: 7
+      Ghost preview: 1
+    destinations:
+      Within the list: 19
+      Across lists: 10
+      Into nesting: 7
+      Onto a target to act: 5
+    edge:
+      Auto-scroll: 16
+      Spring-loaded folders: 1
+      Cut and paste instead: 0
+      n/a: 3
+  exemplars:
+    grab:
+      Handle:
+        - Notion — Dragging blocks
+        - YouTube — Reordering a playlist
+        - Todoist — Reordering and indenting tasks
+      Long-press anywhere:
+        - iOS Home Screen — Rearranging app icons
+        - Apple Reminders — Reordering reminders
+        - Android Home Screen — Moving icons and widgets
+      Keyboard lift and move: []
+      Move up or down commands:
+        - Notion — Dragging blocks
+        - Workflowy — Dragging outline items
+        - Jira — Backlog ranking
+      Drag anywhere:
+        - Trello — Moving cards between lists
+        - Spotify — Reordering tracks in a playlist
+        - Google Chrome — Reordering tabs
+    indication:
+      Insertion line:
+        - Notion — Dragging blocks
+        - Spotify — Reordering tracks in a playlist
+        - Figma — Layers panel
+      Placeholder gap:
+        - Trello — Moving cards between lists
+        - Jira — Backlog ranking
+      Live reflow:
+        - iOS Home Screen — Rearranging app icons
+        - Apple Reminders — Reordering reminders
+        - Google Chrome — Reordering tabs
+      Ghost preview:
+        - macOS Finder — Dragging files into folders
+    destinations:
+      Within the list:
+        - iOS Home Screen — Rearranging app icons
+        - Trello — Moving cards between lists
+        - Notion — Dragging blocks
+      Across lists:
+        - iOS Home Screen — Rearranging app icons
+        - Trello — Moving cards between lists
+        - Google Chrome — Reordering tabs
+      Into nesting:
+        - iOS Home Screen — Rearranging app icons
+        - Notion — Dragging blocks
+        - Apple Reminders — Reordering reminders
+      Onto a target to act:
+        - iOS Home Screen — Rearranging app icons
+        - Spotify — Reordering tracks in a playlist
+        - macOS Finder — Dragging files into folders
+    edge:
+      Auto-scroll:
+        - iOS Home Screen — Rearranging app icons
+        - Trello — Moving cards between lists
+        - Notion — Dragging blocks
+      Spring-loaded folders:
+        - macOS Finder — Dragging files into folders
+      Cut and paste instead: []
+  unobserved:
+    - sub: grab
+      var: Keyboard lift and move
+    - sub: edge
+      var: Cut and paste instead
+  unresolved: []
+  proposals:
+    raised: 3
+    adopted:
+      - sub: grab
+        name: Drag anywhere
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded:
+      - place: sub:grab
+        sub: grab
+        dim: null
+        name: Click anywhere
+        gloss: Clicking and dragging from anywhere on the item picks it up directly, with no dedicated
+          handle affordance and no touch long-press required — common across desktop pointer
+          interfaces (Trello cards, browser/editor tabs, Dock icons, slide thumbnails)
+        raters:
+          - sonnet
+        instances:
+          - 2
+          - 4
+          - 6
+          - 7
+          - 8
+          - 9
+          - 10
+          - 15
+          - 16
+          - 17
+          - 18
+          - 19
+        status: raised
+      - place: sub:edge
+        sub: edge
+        dim: null
+        name: Detach on drop off
+        gloss: Dragging the item off the edge of its strip or container entirely detaches it into its own
+          new window, e.g. tearing a browser or editor tab off into a new window
+        raters:
+          - sonnet
+        instances:
+          - 6
+          - 18
+        status: raised
+  raterNotes:
+    fable:
+      - Grab lacks the commonest desktop case, a plain drag from anywhere on the item; twelve of
+        twenty needed +Drag anywhere. Indication (line vs gap vs reflow) is a fine detail of motion
+        that I could not always recall with certainty (YouTube, VS Code).
+      - grab lacks the plain pointer drag, which all three raters proposed. Into nesting and Onto a
+        target to act overlap for dropping into a folder, and the codebook's own examples put
+        folders under the latter. indication is a motion detail that cannot be settled from product
+        memory.
+    opus:
+      - "grab's Long-press anywhere is written as a touch idiom, so twelve desktop instances that
+        simply drag the item had nowhere to go — that is the entry's one real gap. Keyboard lift and
+        move was coded nowhere: accessible drag-and-drop exists in some of these products but is
+        invisible unless you go looking, which makes the variation unobservable rather than absent.
+        indication's Live reflow versus Placeholder gap is a genuinely fine call on a board — I used
+        Placeholder gap only where a single empty slot opens and Live reflow where every neighbour
+        moves. Into nesting is doing double duty for outline indentation and for dropping into a
+        container; edge is n/a for fixed-size strips like the Dock and the taskbar."
+      - "Twelve of the twenty-six cells in this packet are the same missing variation, and all three
+        of us proposed it independently under three names — `grab` has no value for a plain pointer
+        press-and-drag, because Long-press anywhere is written as a touch idiom. Second fault:
+        `destinations` and `edge` overlap, so a behaviour that happens at the edge of a container
+        (tearing a tab off into a new window) can be coded as either, and `edge` assumes every
+        container can be longer than the screen — a fixed strip that shrinks to fit (Chrome tabs,
+        the Dock, the taskbar) has no answer but n/a. Third: Into nesting and Onto a target to act
+        both describe dropping onto another item, separated only by whether the result is
+        containment or an action, which splits the home screens and Finder three ways. The remaining
+        cells are not codebook problems at all: they are memory disputes about what a specific
+        product draws while dragging (YouTube's playlist), which no amount of reconciliation
+        settles."
+    sonnet:
+      - "grab is the sub-dimension the four variations fit worst for desktop pointer UIs: most of
+        this sample's mouse-drag cases (12 of 20) have no dedicated handle and aren't a touch
+        long-press either, hence the large +Click anywhere proposal."
+      - "One dominant pattern, one retraction. (1) 'grab' has no value for the desktop-pointer
+        default — press the item itself and move, no handle, no hold delay — which is how the large
+        majority of desktop drag-reorder surfaces in this sample actually work (Trello, Spotify,
+        Chrome, the Dock, Finder, Keep, Figma, Slides, PowerPoint, Jira, VS Code, the Taskbar); all
+        three raters independently proposed essentially the same missing value, and fable's and
+        opus's names matched exactly ('Drag anywhere'), which I'm adopting over my own
+        near-identical 'Click anywhere.' (2) I initially proposed a new 'edge' value ('Detach on
+        drop off') for tab tear-off into a new window, but on reconsideration this doesn't actually
+        answer the edge sub-dimension's own question (what happens when the destination is
+        off-screen) — it's a different phenomenon, already reasonably captured by 'destinations:
+        Across lists,' and both other raters' specific, corroborated claims that the tab strip
+        itself auto-scrolls when crowded is the real, on-topic answer I'd missed by conflating two
+        separate behaviours."
+  codedAt: 2026-09-22
+previews:
+  - file: drag-reorder.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

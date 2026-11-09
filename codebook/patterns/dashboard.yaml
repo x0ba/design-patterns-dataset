@@ -1,0 +1,586 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "dashboard". Edit between batches only — see README "Rules".
+id: dashboard
+name: Dashboard
+level: pattern
+parent: monitor
+aliases:
+  - KPI board
+  - control panel
+  - overview dashboard
+definition: Several metrics and states on one view, arranged to be scanned at a glance and drilled into.
+data: collection
+platforms:
+  - web
+  - desktop
+  - mobile
+domains:
+  - enterprise
+  - software
+  - finance
+  - health
+  - education
+anatomy:
+  - name: Widgets
+    role: Tiles, charts and tables
+  - name: Grid
+    role: Their arrangement
+  - name: Global controls
+    role: Time range and filters
+  - name: Drill-down
+    role: The detail behind a widget
+roles:
+  - metric
+  - trend
+  - target
+  - label
+dimensions:
+  - name: Widgets and purpose
+    family: content
+    question: What goes on the dashboard, and what is it for?
+    subdimensions:
+      - id: widgets
+        name: Widget types
+        select: many
+        values:
+          - id: kpi-tiles
+            name: KPI tiles
+            example: Stripe dashboard home
+          - id: time-series-charts
+            name: Time-series charts
+            example: Grafana
+          - id: tables
+            name: Tables
+            example: Looker
+          - id: maps
+            name: Maps
+            example: Fleet dashboards
+          - id: status-lists
+            name: Status lists
+            example: Service health
+          - id: narrative-text
+            name: Narrative text
+            example: Magazine-style reports
+          - id: categorical-charts
+            name: Categorical charts
+            description: Bar, column, pie or scatter comparing categories rather than time — the commonest BI
+              widget after the KPI tile, and the list jumps from time-series straight to tables
+            example: Tableau — Superstore sample dashboard
+          - id: control-widgets
+            name: Control widgets
+            description: Widgets that act on the thing being monitored — a switch, slider, scene button or
+              camera with a talk control — rather than only reporting it; smart-home and admin
+              dashboards are built from these
+            example: Home Assistant — Overview
+          - id: categorical-chart
+            name: Categorical chart
+            description: A bar/column chart encoding a categorical dimension rather than a time series (e.g.,
+              sales by category, top pages) — the codebook's Time-series charts doesn't cover
+              non-temporal charts
+            example: Tableau — Superstore sample dashboard
+      - id: purpose
+        name: Purpose
+        select: one
+        note: After Sarikaya et al. 2019, cited by CHI '25.
+        values:
+          - id: strategic-decisions
+            name: Strategic decisions
+            example: Executive dashboards
+          - id: operational-decisions
+            name: Operational decisions
+            example: Operations centres
+          - id: organizational-awareness
+            name: Organizational awareness
+            example: Team metrics screens
+          - id: motivation-and-learning
+            name: Motivation and learning
+            example: Fitness apps’ today view
+  - name: Arrangement
+    family: layout
+    question: How are widgets placed, and how many?
+    subdimensions:
+      - id: arrangement
+        name: Arrangement
+        select: one
+        values:
+          - id: fixed-grid
+            name: Fixed grid
+            example: Grafana panels
+          - id: free-form-canvas
+            name: Free-form canvas
+            example: Tableau floating objects
+          - id: single-scrolling-column
+            name: Single scrolling column
+            example: Mobile dashboards
+          - id: story-layout
+            name: Story layout
+            example: Report-style dashboards
+      - id: density
+        name: Density
+        select: one
+        values:
+          - id: a-few-glanceable-tiles
+            name: A few glanceable tiles
+            example: Apple Health summary
+          - id: dense-wall
+            name: Dense wall
+            example: Network operations screens
+          - id: adaptive
+            name: Adaptive
+            example: Responsive dashboards
+  - name: Linking
+    family: composition
+    question: How do widgets affect each other?
+    subdimensions:
+      - id: linking
+        name: Linking
+        select: one
+        values:
+          - id: independent
+            name: Independent
+            example: Simple dashboards
+          - id: global-filters
+            name: Global filters
+            example: Grafana variables
+          - id: cross-filtering
+            name: Cross-filtering
+            description: Clicking a mark filters the rest
+            example: Power BI cross-filtering
+          - id: drill-through
+            name: Drill-through
+            example: Power BI drillthrough
+  - name: Refresh
+    family: lifecycle
+    question: How current is it?
+    subdimensions:
+      - id: refresh
+        name: Refresh
+        select: one
+        values:
+          - id: static-snapshot
+            name: Static snapshot
+            example: Exported reports
+          - id: periodic-refresh
+            name: Periodic refresh
+            example: Grafana auto-refresh
+          - id: live-stream
+            name: Live stream
+            example: Trading dashboards
+          - id: on-visit
+            name: On visit
+            description: Current data is fetched when the page is opened and then sits still until it is
+              reloaded — neither a frozen exported snapshot nor an auto-refreshing or streaming
+              view; the default for consumer and SaaS web dashboards
+            example: Google Analytics 4 — Reports snapshot
+  - name: Alerting
+    family: feedback
+    question: How does it call attention to change?
+    subdimensions:
+      - id: alerting
+        name: Alerting
+        select: one
+        values:
+          - id: none
+            name: None
+            example: Reports
+          - id: threshold-colours
+            name: Threshold colours
+            example: Conditional tiles
+          - id: alerts-on-panels
+            name: Alerts on panels
+            example: Grafana alerting
+          - id: event-annotations-on-charts
+            name: Event annotations on charts
+            example: Grafana annotations
+  - name: Ownership
+    family: collaboration
+    question: Whose dashboard is it?
+    subdimensions:
+      - id: ownership
+        name: Ownership
+        select: one
+        values:
+          - id: personal
+            name: Personal
+            example: My dashboards
+          - id: shared-read-only
+            name: Shared read-only
+            example: Executive views
+          - id: team-editable
+            name: Team-editable
+            example: Datadog team dashboards
+          - id: forkable-copies
+            name: Forkable copies
+            example: Grafana save as copy
+wild:
+  score: 2
+  note: Analytics and monitoring tools let people edit panels; most product dashboards are fixed.
+  examples:
+    - name: Grafana
+      note: Edit panels, variables and layout
+    - name: Datadog
+      note: Custom dashboards
+techniques:
+  - name: Tile surfacing
+    dimension: Widgets and purpose
+    how: "Pull any metric from a drill-down page up onto the dashboard as a tile: Fluid Attributes from
+      detail to overview."
+    ai: false
+  - name: Dashboard from a question
+    dimension: Widgets and purpose
+    how: “How is onboarding going?” proposes widgets with the queries shown, to keep or discard.
+    ai: true
+  - name: Arrange by glance frequency
+    dimension: Arrangement
+    how: Tiles a person looks at most drift to where the eye lands first, with the move proposed rather
+      than imposed.
+    ai: false
+signature: Tile surfacing
+sample: Analytics, monitoring, finance, fitness and admin products.
+unit: One dashboard.
+relations:
+  uses:
+    - stat-tile
+    - filter-controls
+    - date-picker
+    - badge
+    - drawer
+  specializes:
+    - monitor
+    - overview-detail
+  neighbors:
+    - coordinated-views
+    - status-tracker
+    - chart
+scores:
+  ubiquity: 4
+  potential: 5
+  spec: 5
+evidence: agent-coded
+usage:
+  - Shared dashboards accumulate tiles no one remembers adding
+questions:
+  - Is a dashboard an overview whose items are metrics, with drill-downs as detail views?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.5931512081174289
+  agreementFirstPass: 0.7125
+  kappaFinal: 0.9486000016050908
+  agreementFinal: 0.96
+  pass: true
+  perSub:
+    widgets:
+      kappaFirstPass: 0.6861538461538462
+      agreementFirstPass: 0.8111111111111111
+      kappaFinal: 0.9368942979490644
+      agreementFinal: 0.95625
+      flag: null
+    purpose:
+      kappaFirstPass: 0.3281653746770025
+      agreementFirstPass: 0.4
+      kappaFinal: 0.9447004608294929
+      agreementFinal: 0.95
+      flag: null
+    arrangement:
+      kappaFirstPass: 0.9328107502799554
+      agreementFirstPass: 0.95
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    density:
+      kappaFirstPass: 0.4303797468354432
+      agreementFirstPass: 0.6
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    linking:
+      kappaFirstPass: 0.5188452285485166
+      agreementFirstPass: 0.5
+      kappaFinal: 0.8883720930232558
+      agreementFinal: 0.9
+      flag: null
+    refresh:
+      kappaFirstPass: 0.29233361415332787
+      agreementFirstPass: 0.45
+      kappaFinal: 0.9509403107113653
+      agreementFinal: 0.95
+      flag: null
+    alerting:
+      kappaFirstPass: 0.37500000000000017
+      agreementFirstPass: 0.7
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    ownership:
+      kappaFirstPass: 0.4375000000000002
+      agreementFirstPass: 0.5
+      kappaFinal: 0.9498327759197323
+      agreementFinal: 0.95
+      flag: null
+  distribution:
+    widgets:
+      KPI tiles: 19
+      Time-series charts: 16
+      Tables: 7
+      Maps: 3
+      Status lists: 3
+      Narrative text: 4
+      Categorical charts: 4
+      Control widgets: 1
+      Categorical chart: 0
+    purpose:
+      Strategic decisions: 3
+      Operational decisions: 11
+      Organizational awareness: 0
+      Motivation and learning: 6
+    arrangement:
+      Fixed grid: 12
+      Free-form canvas: 1
+      Single scrolling column: 7
+      Story layout: 0
+    density:
+      A few glanceable tiles: 14
+      Dense wall: 6
+      Adaptive: 0
+    linking:
+      Independent: 11
+      Global filters: 6
+      Cross-filtering: 3
+      Drill-through: 0
+    refresh:
+      Static snapshot: 2
+      Periodic refresh: 9
+      Live stream: 3
+      On visit: 6
+    alerting:
+      None: 16
+      Threshold colours: 4
+      Alerts on panels: 0
+      Event annotations on charts: 0
+    ownership:
+      Personal: 9
+      Shared read-only: 6
+      Team-editable: 3
+      Forkable copies: 2
+  exemplars:
+    widgets:
+      KPI tiles:
+        - Google Analytics 4 — Reports snapshot
+        - Grafana — Node Exporter Full
+        - Datadog — Host overview
+      Time-series charts:
+        - Google Analytics 4 — Reports snapshot
+        - Grafana — Node Exporter Full
+        - Datadog — Host overview
+      Tables:
+        - Google Analytics 4 — Reports snapshot
+        - Monarch Money — Dashboard
+        - Robinhood — Home
+      Maps:
+        - Google Analytics 4 — Reports snapshot
+        - Tableau — Superstore sample dashboard
+        - Power BI — Sales and Marketing sample report
+      Status lists:
+        - Windows 11 Task Manager — Performance tab
+        - Google Search Console — Overview
+        - Home Assistant — Overview
+      Narrative text:
+        - Apple Health — Summary
+        - Shopify admin — Home
+        - Robinhood — Home
+      Categorical charts:
+        - Tableau — Superstore sample dashboard
+        - Power BI — Sales and Marketing sample report
+        - Monarch Money — Dashboard
+      Control widgets:
+        - Home Assistant — Overview
+      Categorical chart: []
+    purpose:
+      Strategic decisions:
+        - Tableau — Superstore sample dashboard
+        - Power BI — Sales and Marketing sample report
+        - Salesforce — Lightning dashboard
+      Operational decisions:
+        - Google Analytics 4 — Reports snapshot
+        - Grafana — Node Exporter Full
+        - Datadog — Host overview
+      Organizational awareness: []
+      Motivation and learning:
+        - Apple Health — Summary
+        - Fitbit — Today
+        - Garmin Connect — My Day
+    arrangement:
+      Fixed grid:
+        - Google Analytics 4 — Reports snapshot
+        - Grafana — Node Exporter Full
+        - Datadog — Host overview
+      Free-form canvas:
+        - Power BI — Sales and Marketing sample report
+      Single scrolling column:
+        - Apple Health — Summary
+        - Fitbit — Today
+        - Garmin Connect — My Day
+      Story layout: []
+    density:
+      A few glanceable tiles:
+        - Google Analytics 4 — Reports snapshot
+        - Stripe — Dashboard home
+        - Apple Health — Summary
+      Dense wall:
+        - Grafana — Node Exporter Full
+        - Datadog — Host overview
+        - Power BI — Sales and Marketing sample report
+      Adaptive: []
+    linking:
+      Independent:
+        - Apple Health — Summary
+        - Fitbit — Today
+        - Garmin Connect — My Day
+      Global filters:
+        - Google Analytics 4 — Reports snapshot
+        - Grafana — Node Exporter Full
+        - Datadog — Host overview
+      Cross-filtering:
+        - Tableau — Superstore sample dashboard
+        - Power BI — Sales and Marketing sample report
+        - Vercel — Project Analytics
+      Drill-through: []
+    refresh:
+      Static snapshot:
+        - Tableau — Superstore sample dashboard
+        - Power BI — Sales and Marketing sample report
+      Periodic refresh:
+        - Google Analytics 4 — Reports snapshot
+        - Grafana — Node Exporter Full
+        - Datadog — Host overview
+      Live stream:
+        - Robinhood — Home
+        - Coinbase — Home
+        - Home Assistant — Overview
+      On visit:
+        - Stripe — Dashboard home
+        - Shopify admin — Home
+        - Monarch Money — Dashboard
+    alerting:
+      None:
+        - Google Analytics 4 — Reports snapshot
+        - Datadog — Host overview
+        - Stripe — Dashboard home
+      Threshold colours:
+        - Grafana — Node Exporter Full
+        - Monarch Money — Dashboard
+        - Salesforce — Lightning dashboard
+      Alerts on panels: []
+      Event annotations on charts: []
+    ownership:
+      Personal:
+        - Stripe — Dashboard home
+        - Apple Health — Summary
+        - Fitbit — Today
+      Shared read-only:
+        - Tableau — Superstore sample dashboard
+        - Power BI — Sales and Marketing sample report
+        - Shopify admin — Home
+      Team-editable:
+        - Google Analytics 4 — Reports snapshot
+        - Salesforce — Lightning dashboard
+        - Home Assistant — Overview
+      Forkable copies:
+        - Grafana — Node Exporter Full
+        - Datadog — Host overview
+  unobserved:
+    - sub: widgets
+      var: Categorical chart
+    - sub: purpose
+      var: Organizational awareness
+    - sub: arrangement
+      var: Story layout
+    - sub: density
+      var: Adaptive
+    - sub: linking
+      var: Drill-through
+    - sub: alerting
+      var: Alerts on panels
+    - sub: alerting
+      var: Event annotations on charts
+  unresolved: []
+  proposals:
+    raised: 4
+    adopted:
+      - sub: widgets
+        name: Categorical charts
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: widgets
+        name: Control widgets
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: refresh
+        name: On visit
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: widgets
+        name: Categorical chart
+        raters:
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - Purpose applied by product family (analytics/BI → Strategic, monitoring/OS → Operational,
+        personal health/finance → Motivation and learning); Density's Adaptive overlaps the other
+        two, used for responsive card grids that reflow.
+      - purpose is read from the viewer, not the screen, and the codebook dropped Sarikaya's
+        Tactical genre, which is where analytics products fall. density's Adaptive is a layout
+        property, not a density, and the scale has no middle between a few tiles and a wall. linking
+        asks how widgets affect each other, but the entry's Drill-down component has no
+        sub-dimension, so tap-for-detail has nowhere to go. refresh's Static snapshot means a frozen
+        export and most web dashboards load on visit. ownership is a role on the folder, not a
+        property of the dashboard.
+    opus:
+      - "Refresh needed a fourth variation (see +On visit): most web dashboards are neither exports
+        nor auto-refreshing. Purpose follows Sarikaya, which has no slot for personal decision
+        support, so finance apps (Monarch, Robinhood, Coinbase) land in Motivation and learning by
+        elimination; density conflates widget count with information density, which misfits
+        single-table tools like Activity Monitor; I read Drill-through as any widget that opens a
+        detail view of its own subject, and reserved Independent for dashboards where widgets
+        neither filter each other nor lead anywhere."
+      - "Purpose is the worst cell here: the codebook keeps Sarikaya's strategic and operational
+        poles but drops the tactical middle, so the analytics home of the person who runs a site
+        (GA4, Vercel, Search Console, YouTube Studio) has nowhere honest to sit and the three of us
+        spread across all four values. Density has the same missing middle — nothing between Apple
+        Health's few tiles and a network operations wall — and Adaptive, read as 'responsive', would
+        swallow every web dashboard. Linking was my error: its question is how widgets affect each
+        other, and I had been coding plain tap-to-detail navigation as Drill-through."
+    sonnet:
+      - Alerting was mostly None for consumer/business dashboards; the two infra dashboards
+        (Grafana, Datadog) coded as Threshold colours since the sampled panels weren't shown
+        actively firing alerts.
+      - "Drill-through vs. ordinary tap-to-detail is under-specified: the gloss's own exemplar
+        (Power BI drillthrough) is a destination page that inherits another visual's filter context,
+        but a tile that just opens its own metric's history page (Health, Fitbit, Garmin, Robinhood,
+        Coinbase, Task Manager) does neither that nor truly 'affect' another widget — I held
+        Independent throughout rather than call plain navigation a form of linking. On visit and
+        Categorical charts (and Control widgets) are real, repeated gaps in Refresh and Widget
+        types, not one-off misreads; adopting opus's proposals for all three."
+  codedAt: 2026-09-22
+previews:
+  - file: dashboard.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

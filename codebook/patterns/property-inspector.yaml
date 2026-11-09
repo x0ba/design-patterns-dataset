@@ -1,0 +1,364 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "property-inspector". Edit between batches only — see README "Rules".
+id: property-inspector
+name: Property inspector
+level: component
+parent: browse-collections
+aliases:
+  - inspector
+  - properties panel
+  - attributes panel
+definition: A panel of key–value properties for the current selection, editable in place.
+data: object
+platforms:
+  - desktop
+  - web
+domains:
+  - design
+  - software
+  - science
+  - productivity
+anatomy:
+  - name: Property rows
+    role: Name and value controls
+  - name: Sections
+    role: Groups of related properties
+  - name: Selection header
+    role: What is being inspected
+roles: []
+dimensions:
+  - name: Property set
+    family: content
+    question: Which properties appear?
+    subdimensions:
+      - id: set
+        name: Property set
+        select: one
+        values:
+          - id: all-properties
+            name: All properties
+            example: Xcode attributes inspector
+          - id: contextual-to-the-selection-type
+            name: Contextual to the selection type
+            example: Figma design panel
+          - id: pinned-favourites
+            name: Pinned favourites
+            example: Custom inspector panels
+          - id: searchable
+            name: Searchable
+            example: Blender properties search
+  - name: Placement
+    family: layout
+    question: Where does the inspector sit?
+    subdimensions:
+      - id: placement
+        name: Placement
+        select: one
+        values:
+          - id: right-sidebar
+            name: Right sidebar
+            example: Figma, Xcode
+          - id: floating-palette
+            name: Floating palette
+            example: Classic Photoshop panels
+          - id: popover-near-the-object
+            name: Popover near the object
+            example: Keynote format popovers on iPad
+          - id: bottom-panel
+            name: Bottom panel
+            example: Game engine inspectors
+          - id: left-sidebar
+            name: Left sidebar
+            description: The inspector panel opens on the left of the canvas
+            example: Canva — Position and Effects panels
+  - name: Multi-selection
+    family: scope
+    question: What happens with several objects selected?
+    subdimensions:
+      - id: multi
+        name: Multi-selection
+        select: one
+        values:
+          - id: single-object-only
+            name: Single object only
+            example: Simple forms
+          - id: common-properties-with-mixed-values
+            name: Common properties with Mixed values
+            example: Figma
+          - id: list-per-object
+            name: List per object
+            example: Spreadsheet-style inspectors
+  - name: Grouping
+    family: composition
+    question: How are properties organized?
+    subdimensions:
+      - id: grouping
+        name: Grouping
+        select: one
+        values:
+          - id: flat
+            name: Flat
+            example: Small inspectors
+          - id: collapsible-sections
+            name: Collapsible sections
+            example: Figma
+          - id: tabs
+            name: Tabs
+            example: Blender properties editor
+  - name: Applying changes
+    family: feedback
+    question: When do edits take effect?
+    subdimensions:
+      - id: apply
+        name: Apply
+        select: one
+        values:
+          - id: live
+            name: Live
+            example: Figma
+          - id: apply-button
+            name: Apply button
+            example: Legacy dialogs
+          - id: scrub-to-preview
+            name: Scrub to preview
+            description: Drag a label to change a number
+            example: Figma number scrubbing
+wild:
+  score: 1
+  note: Inspectors rarely let people choose which properties matter to them.
+  examples:
+    - name: Blender
+      note: Search properties
+techniques:
+  - name: Pin to canvas
+    dimension: Property set
+    how: "Pin a property from the inspector as an on-canvas label on every object: surfacing, run from
+      detail to overview."
+    ai: false
+  - name: Match this
+    dimension: Multi-selection
+    how: “Make these match the brand” proposes property changes across the selection as a reviewable
+      diff.
+    ai: true
+signature: Pin to canvas
+sample: Design tools, IDEs, 3D and game engines, and no-code builders.
+unit: One inspector over one selection type.
+relations:
+  uses:
+    - accordion
+    - slider
+    - color-picker
+    - text-field
+  specializes:
+    - overview-detail
+  neighbors:
+    - settings
+scores:
+  ubiquity: 3
+  potential: 4
+  spec: 5
+evidence: agent-coded
+usage:
+  - Experts memorize positions and are hurt by contextual reshuffling
+questions:
+  - Should contextual inspectors keep a stable spine of properties?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.6034691325599656
+  agreementFirstPass: 0.78
+  kappaFinal: 0.9229744406691583
+  agreementFinal: 0.95
+  pass: true
+  perSub:
+    set:
+      kappaFirstPass: 0.8168870803662259
+      agreementFirstPass: 0.85
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    placement:
+      kappaFirstPass: 0.6586059743954484
+      agreementFirstPass: 0.8
+      kappaFinal: 0.8187311178247735
+      agreementFinal: 0.9
+      flag: null
+    multi:
+      kappaFirstPass: 0.32721712538226294
+      agreementFirstPass: 0.5
+      kappaFinal: 0.8647125140924464
+      agreementFinal: 0.9
+      flag: null
+    grouping:
+      kappaFirstPass: 0.7318768619662364
+      agreementFirstPass: 0.8
+      kappaFinal: 0.9314285714285717
+      agreementFinal: 0.95
+      flag: null
+    apply:
+      kappaFirstPass: 0.4827586206896542
+      agreementFirstPass: 0.95
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+  distribution:
+    set:
+      All properties: 3
+      Contextual to the selection type: 11
+      Pinned favourites: 0
+      Searchable: 6
+    placement:
+      Right sidebar: 15
+      Floating palette: 3
+      Popover near the object: 1
+      Bottom panel: 0
+      Left sidebar: 1
+    multi:
+      Single object only: 8
+      Common properties with Mixed values: 12
+      List per object: 0
+    grouping:
+      Flat: 2
+      Collapsible sections: 13
+      Tabs: 5
+    apply:
+      Live: 19
+      Apply button: 0
+      Scrub to preview: 1
+  exemplars:
+    set:
+      All properties:
+        - Xcode — Attributes inspector for a button
+        - Unity — Inspector for a GameObject
+        - Visual Studio — Properties window
+      Contextual to the selection type:
+        - Figma — Design panel for a selected frame
+        - Webflow — Style panel
+        - Framer — Properties panel
+      Pinned favourites: []
+      Searchable:
+        - Blender — Properties editor for an object
+        - Unreal Engine — Details panel for an actor
+        - Android Studio — Attributes panel in the Layout Editor
+    placement:
+      Right sidebar:
+        - Figma — Design panel for a selected frame
+        - Xcode — Attributes inspector for a button
+        - Blender — Properties editor for an object
+      Floating palette:
+        - Adobe Photoshop — Properties panel
+        - Adobe Illustrator — Properties panel for a path
+        - Bubble — Property editor for an element
+      Popover near the object:
+        - Keynote — Format popover on iPad
+      Bottom panel: []
+      Left sidebar:
+        - Canva — Position and Effects panels
+    multi:
+      Single object only:
+        - Blender — Properties editor for an object
+        - Webflow — Style panel
+        - Adobe Photoshop — Properties panel
+      Common properties with Mixed values:
+        - Figma — Design panel for a selected frame
+        - Xcode — Attributes inspector for a button
+        - Unity — Inspector for a GameObject
+      List per object: []
+    grouping:
+      Flat:
+        - Adobe Illustrator — Properties panel for a path
+        - Chrome DevTools — Styles pane for a selected element
+      Collapsible sections:
+        - Figma — Design panel for a selected frame
+        - Xcode — Attributes inspector for a button
+        - Unity — Inspector for a GameObject
+      Tabs:
+        - Blender — Properties editor for an object
+        - Keynote — Format popover on iPad
+        - Canva — Position and Effects panels
+    apply:
+      Live:
+        - Xcode — Attributes inspector for a button
+        - Blender — Properties editor for an object
+        - Unity — Inspector for a GameObject
+      Apply button: []
+      Scrub to preview:
+        - Figma — Design panel for a selected frame
+  unobserved:
+    - sub: set
+      var: Pinned favourites
+    - sub: placement
+      var: Bottom panel
+    - sub: multi
+      var: List per object
+    - sub: apply
+      var: Apply button
+  unresolved: []
+  proposals:
+    raised: 1
+    adopted:
+      - sub: placement
+        name: Left sidebar
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - Multi-selection behaviour is unobservable from product knowledge for several tools (coded ?
+        on four). Apply is Live for every instance, so it does not discriminate in this sample.
+      - All properties and Contextual to the selection type overlap because every inspector follows
+        the selection's type; the codebook should define All properties as exhaustive. apply wants
+        pick any since Figma is live and scrubbable. The Floating palette example is dated for
+        Adobe's docked panels. multi is unobservable from product memory for several tools.
+    opus:
+      - "This entry is the most uniform in my slice: right sidebar, collapsible sections, live apply
+        is the answer 14 times out of 20, which is itself the finding — the inspector has converged.
+        set conflates two things and I applied a rule to stay consistent: a property search field
+        makes it Searchable, even where All properties would also be true (Unreal, Android Studio,
+        Godot). apply's Live and Scrub to preview are not alternatives — scrubbing is live editing
+        with a drag gesture — so Figma is the only instance where I chose the more specific value,
+        and a rater who reads apply as 'when does the edit commit' would code it Live. Pinned
+        favourites went unused."
+      - "Three codebook faults account for nearly all of this packet. `grouping` offers Flat,
+        Collapsible sections and Tabs but has no value for fixed, non-folding named sections, which
+        is what Xcode, Sketch and Illustrator actually have — so the same panel is coded Flat by a
+        rater reading 'do they collapse?' and Collapsible by one reading 'is it sectioned?'.
+        `placement` mixes where the panel sits with what kind of window it is: Adobe's dockable
+        palettes sit in a right column by default, so Floating palette and Right sidebar are both
+        literally true, and the list has no left side at all (all three of us hit Canva). `multi`
+        was a third of the packet and almost none of it is a reading of the product: multi-selection
+        behaviour is rarely visible in a screen note, so it is coded from knowledge of the tool, and
+        a rater who codes only what the note states will say Single object only every time — the
+        sub-dimension needs an explicit 'not observable on this screen' instruction. Smaller: `set`
+        mixes the contents (All / Contextual) with the access mechanism (Searchable, Pinned), so a
+        searchable inspector always has two true codes, and `apply` has the same problem with Live
+        plus Scrub to preview."
+    sonnet:
+      - placement for IDE/engine inspectors that default to a lower-right dock (Blender) is
+        approximated as Bottom panel per the codebook's own game-engine-inspector gloss, even
+        outside a literal game engine.
+      - "One dominant pattern: I systematically under-coded 'multi' as 'Single object only' across
+        roughly half this archetype's instances (Xcode, Framer, Sketch, Keynote, PowerPoint, Godot)
+        where both other raters specifically named a concrete 'Mixed'/'shared properties' UI element
+        for multi-selection — every one of these tools does support it, and 'Single object only'
+        should probably be my default assumption only when a rater specifically denies
+        multi-selection support, not whenever I simply don't recall seeing it demonstrated. A
+        smaller pattern: 'placement' assumes an inspector opposite the canvas is always a right
+        sidebar, which Canva's left-docked panel (and both other raters' identically-named proposal
+        for it) shows isn't universal."
+  codedAt: 2026-09-22
+previews:
+  - file: property-inspector.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

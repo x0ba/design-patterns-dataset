@@ -1,0 +1,379 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "configure". Edit between batches only — see README "Rules".
+id: configure
+name: Configure and personalize
+level: archetype
+aliases:
+  - personalization
+  - preferences
+  - options
+definition: Change how a system or a product behaves or looks.
+data: schema
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - software
+  - productivity
+  - commerce
+  - home
+  - enterprise
+anatomy:
+  - name: Option space
+    role: What can be changed
+  - name: Controls
+    role: How values are set
+  - name: Preview
+    role: What the change will look like
+  - name: Application
+    role: When and where it takes effect
+roles:
+  - label
+  - value
+  - default
+  - scope
+dimensions:
+  - name: What is configured
+    family: content
+    question: What kind of thing do the options describe?
+    subdimensions:
+      - id: target
+        name: Target
+        select: one
+        values:
+          - id: account-and-app-behaviour
+            name: Account and app behaviour
+            example: Apple Settings
+          - id: a-product-being-bought
+            name: A product being bought
+            example: Tesla configurator
+          - id: a-workspace-or-document
+            name: A workspace or document
+            example: Notion settings
+          - id: a-device-in-the-environment
+            name: A device in the environment
+            example: Philips Hue
+          - id: appearance-of-the-ui
+            name: Appearance of the UI
+            example: Theme pickers
+          - id: a-resource-being-provisioned
+            name: A resource being provisioned
+            description: A cloud or service resource composed and priced before it is created (an instance, a
+              database), neither a bought product nor an existing workspace
+            example: AWS Console — Launch an instance
+  - name: Organization of options
+    family: composition
+    question: How are options grouped and found?
+    subdimensions:
+      - id: organization
+        name: Organization
+        select: one
+        values:
+          - id: flat-list
+            name: Flat list
+            example: Simple preference panes
+          - id: grouped-sections
+            name: Grouped sections
+            example: macOS System Settings
+          - id: hierarchical-panes
+            name: Hierarchical panes
+            example: Apple Settings drill-down
+          - id: searchable-index
+            name: Searchable index
+            example: VS Code settings search
+          - id: wizard-of-decisions
+            name: Wizard of decisions
+            example: Guided setup
+  - name: Preview and apply
+    family: feedback
+    question: When does a change become real, and can it be seen first?
+    subdimensions:
+      - id: application
+        name: Application
+        select: one
+        values:
+          - id: immediate
+            name: Immediate
+            example: iOS toggles
+          - id: explicit-save
+            name: Explicit save
+            example: Many web admin forms
+          - id: live-preview-then-commit
+            name: Live preview then commit
+            example: Tesla 3D configurator
+          - id: deferred-until-restart
+            name: Deferred until restart
+            example: Some developer flags
+          - id: scheduled
+            name: Scheduled
+            example: Focus mode schedules
+  - name: Scope of effect
+    family: scope
+    question: Who and what does a change affect?
+    subdimensions:
+      - id: scope
+        name: Scope
+        select: one
+        values:
+          - id: this-device
+            name: This device
+            example: Local app preferences
+          - id: this-account-everywhere
+            name: This account everywhere
+            example: iCloud settings sync
+          - id: this-document-or-project
+            name: This document or project
+            example: Repo settings
+          - id: shared-with-a-team
+            name: Shared with a team
+            example: Admin policies
+          - id: one-configured-instance
+            name: One configured instance
+            description: A built product or profile
+            example: Saved car configuration
+wild:
+  score: 2
+  note: Search and sync exist in mature settings; most product configurators fix the option tree.
+  examples:
+    - name: VS Code
+      note: Searchable settings and profiles
+    - name: Apple Settings
+      note: Search across panes
+    - name: Figma
+      note: User and team preference layers
+techniques:
+  - name: Option as attribute
+    dimension: What is configured
+    how: Treat every setting as a surfaced attribute of the system object, sortable and filterable like
+      Fluid Attributes.
+    ai: false
+  - name: Describe the preference
+    dimension: Organization of options
+    how: “Make it quieter at night” finds or creates the right toggles and shows what will change before
+      applying.
+    ai: true
+signature: Option as attribute
+sample: OS settings, SaaS admin, commerce configurators and smart-home apps.
+unit: One configuration surface over one target object.
+relations:
+  uses: []
+  specializes: []
+  neighbors:
+    - enter-data
+    - guide
+scores:
+  ubiquity: 5
+  potential: 4
+  spec: 4
+evidence: agent-coded
+usage:
+  - People only open settings when something hurts
+  - Defaults do most of the work
+questions:
+  - Is a product configurator the same grammar as app settings?
+  - How should personal and admin scopes layer?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7854036026766874
+  agreementFirstPass: 0.7875
+  kappaFinal: 0.9568989717260271
+  agreementFinal: 0.9625
+  pass: true
+  perSub:
+    target:
+      kappaFirstPass: 0.9586492074431429
+      agreementFirstPass: 0.95
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    organization:
+      kappaFirstPass: 0.5117540687160943
+      agreementFirstPass: 0.55
+      kappaFinal: 0.8764160659114316
+      agreementFinal: 0.9
+      flag: null
+    application:
+      kappaFirstPass: 0.9007444168734492
+      agreementFirstPass: 0.9
+      kappaFinal: 0.9511798209926768
+      agreementFinal: 0.95
+      flag: null
+    scope:
+      kappaFirstPass: 0.770466717674063
+      agreementFirstPass: 0.75
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+  distribution:
+    target:
+      Account and app behaviour: 5
+      A product being bought: 2
+      A workspace or document: 4
+      A device in the environment: 4
+      Appearance of the UI: 4
+      A resource being provisioned: 1
+    organization:
+      Flat list: 5
+      Grouped sections: 12
+      Hierarchical panes: 2
+      Searchable index: 1
+      Wizard of decisions: 0
+    application:
+      Immediate: 8
+      Explicit save: 7
+      Live preview then commit: 3
+      Deferred until restart: 0
+      Scheduled: 2
+    scope:
+      This device: 9
+      This account everywhere: 3
+      This document or project: 1
+      Shared with a team: 3
+      One configured instance: 4
+  exemplars:
+    target:
+      Account and app behaviour:
+        - iOS Settings — Settings app
+        - VS Code — Settings editor
+        - Google Account — Data & privacy
+      A product being bought:
+        - Tesla — Design Studio
+        - Nike By You — Shoe customizer
+      A workspace or document:
+        - Notion — Workspace settings
+        - GitHub — Repository settings
+        - Slack — Workspace admin settings
+      A device in the environment:
+        - Philips Hue app — Room light settings
+        - Google Home app — Thermostat schedule
+        - Sonos app — Speaker settings and EQ
+      Appearance of the UI:
+        - macOS System Settings — Appearance pane
+        - Windows 11 Settings — Personalization › Themes
+        - Apple Watch app — Watch face editor
+      A resource being provisioned:
+        - AWS Console — Launch an instance
+    organization:
+      Flat list:
+        - Philips Hue app — Room light settings
+        - Google Home app — Thermostat schedule
+        - Apple Watch app — Watch face editor
+      Grouped sections:
+        - macOS System Settings — Appearance pane
+        - Tesla — Design Studio
+        - Notion — Workspace settings
+      Hierarchical panes:
+        - iOS Settings — Settings app
+        - Google Account — Data & privacy
+      Searchable index:
+        - VS Code — Settings editor
+      Wizard of decisions: []
+    application:
+      Immediate:
+        - iOS Settings — Settings app
+        - macOS System Settings — Appearance pane
+        - Philips Hue app — Room light settings
+      Explicit save:
+        - Notion — Workspace settings
+        - GitHub — Repository settings
+        - Slack — Workspace admin settings
+      Live preview then commit:
+        - Tesla — Design Studio
+        - Nike By You — Shoe customizer
+        - Apple Watch app — Watch face editor
+      Deferred until restart: []
+      Scheduled:
+        - Google Home app — Thermostat schedule
+        - iOS Focus — Set up a Focus
+    scope:
+      This device:
+        - iOS Settings — Settings app
+        - macOS System Settings — Appearance pane
+        - Philips Hue app — Room light settings
+      This account everywhere:
+        - Google Account — Data & privacy
+        - iOS Focus — Set up a Focus
+        - Google Chrome — Appearance settings
+      This document or project:
+        - GitHub — Repository settings
+      Shared with a team:
+        - Notion — Workspace settings
+        - Slack — Workspace admin settings
+        - Shopify Admin — Store settings
+      One configured instance:
+        - Tesla — Design Studio
+        - Nike By You — Shoe customizer
+        - Apple Watch app — Watch face editor
+  unobserved:
+    - sub: organization
+      var: Wizard of decisions
+    - sub: application
+      var: Deferred until restart
+  unresolved: []
+  proposals:
+    raised: 1
+    adopted:
+      - sub: target
+        name: A resource being provisioned
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - "Scope for home devices is awkward: the device in the environment is neither 'this device'
+        (the phone) nor an account; I used This device to mean the target device and noted household
+        sharing."
+      - "scope has no value for a device in the environment (Hue, thermostat, Sonos, Ring): This
+        device reads as the client and One configured instance as a built product, so home-device
+        scope splits raters. organization's Grouped sections (macOS System Settings) and
+        Hierarchical panes (Apple Settings) examples are the same sidebar-and-pane design, so
+        sidebar layouts split raters. application wants pick any: Notion mixes Save forms with
+        instant toggles."
+    opus:
+      - organization has no variation for configuration by direct manipulation of a model rather
+        than by a catalogue of options — Google Home's schedule timeline (9) and Ring's drawn motion
+        zones (19) are both edited on a picture of the thing, and I had to force them into Flat list
+        and Grouped sections. scope conflates who a change affects with where it is stored, which
+        makes 'This device' the fallback for OS settings that partly sync; VS Code's user/workspace
+        cascade also has no home here (the settings entry has Override layers for exactly this, but
+        the archetype does not). application is pick-one and several surfaces mix immediate fields
+        with saved ones (Notion), so I coded the dominant behaviour.
+      - "Two codebook faults drove most of this entry: Grouped sections and Hierarchical panes
+        cannot be told apart because the Grouped exemplar (macOS System Settings) is itself a
+        sidebar-and-pane, and Flat list vs Grouped sections flips depending on whether the unit is
+        the pane named in the sample or the whole settings app. `application` should be pick any —
+        Notion and most SaaS admin surfaces genuinely mix instant toggles with saved forms."
+    sonnet:
+      - Smart-home device settings (4, 9, 15, 19) are coded scope One configured instance
+        throughout, on the reasoning that the setting reaches exactly that one physical device/room
+        rather than an account-wide or team-wide surface; target for the AWS EC2 launch flow (16) is
+        coded '?' since none of the five options describes provisioning a cloud resource.
+      - "Two codebook problems surfaced. (1) `organization`'s Grouped sections and Hierarchical
+        panes don't say whether a persistent sidebar that swaps an inline pane (Notion, GitHub,
+        Word) counts as one level (Grouped) or two (Hierarchical) — I resolved it by whether the
+        list itself is ever left behind (push-navigation) versus staying visible beside the swapped
+        pane, but the gloss doesn't say this and the codebook's own macOS System Settings example is
+        structurally identical to the Notion/GitHub cases raters split on. (2) `scope`'s This device
+        / This account everywhere / One configured instance doesn't name smart-home hardware: 'This
+        device' is glossed as the app's own local install, not the physical unit being controlled,
+        and 'One configured instance' is glossed as a saved, portable build (a car configuration)
+        rather than live control of a fixed piece of hardware — both readings are stretches for
+        Hue/Nest/Sonos/Ring."
+  codedAt: 2026-09-22
+previews:
+  - file: configure.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

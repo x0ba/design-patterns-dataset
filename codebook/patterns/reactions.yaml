@@ -1,0 +1,362 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "reactions". Edit between batches only — see README "Rules".
+id: reactions
+name: Reactions
+level: component
+parent: communicate
+aliases:
+  - emoji reactions
+  - likes
+  - tapbacks
+definition: Lightweight responses attached to content without composing a message.
+data: collection
+platforms:
+  - mobile
+  - web
+  - desktop
+domains:
+  - social
+  - communication
+  - enterprise
+anatomy:
+  - name: Vocabulary
+    role: The available reactions
+  - name: Aggregate
+    role: Counts and who
+  - name: Picker
+    role: How to add one
+roles: []
+dimensions:
+  - name: Vocabulary
+    family: encoding
+    question: What reactions exist?
+    subdimensions:
+      - id: vocabulary
+        name: Vocabulary
+        select: one
+        values:
+          - id: single-like
+            name: Single like
+            example: Instagram heart
+          - id: fixed-small-set
+            name: Fixed small set
+            example: LinkedIn reactions
+          - id: any-emoji
+            name: Any emoji
+            example: Slack
+          - id: custom-emoji
+            name: Custom emoji
+            example: Slack custom emoji
+          - id: graded-intensity
+            name: Graded intensity
+            description: One reaction type whose value accumulates with repeated presses, so the reaction
+              carries strength as well as existence (Medium's 1–50 claps)
+            example: Medium — Claps
+  - name: Aggregate
+    family: content
+    question: What is shown about reactions?
+    subdimensions:
+      - id: aggregate
+        name: Aggregate
+        select: one
+        values:
+          - id: total-count
+            name: Total count
+            example: X likes
+          - id: count-per-reaction
+            name: Count per reaction
+            example: Slack
+          - id: who-reacted
+            name: Who reacted
+            example: Slack hover
+          - id: hidden-counts
+            name: Hidden counts
+            example: Instagram hide like counts
+  - name: Adding
+    family: invocation
+    question: How is a reaction added?
+    subdimensions:
+      - id: add
+        name: Add by
+        select: many
+        values:
+          - id: double-tap
+            name: Double-tap
+            example: Instagram
+          - id: long-press-picker
+            name: Long-press picker
+            example: iMessage tapbacks
+          - id: hover-picker
+            name: Hover picker
+            example: Slack
+          - id: typed-shortcut
+            name: Typed shortcut
+            example: "+:emoji: in Slack"
+          - id: single-tap
+            name: Single tap
+            description: One tap or click on a dedicated always-visible reaction button, with no picker to open
+              and no gesture to learn — the heart under a post, the vote arrow
+            example: Instagram — Post like
+          - id: click-to-open-picker
+            name: Click to open picker
+            description: Clicking (not hovering) a button reveals a picker of reaction options to choose from
+            example: GitHub — Comment reactions
+          - id: tap-a-dedicated-button
+            name: Tap a dedicated button
+            description: A single click or tap on a dedicated reaction icon/button applies the platform's one
+              default reaction directly — no gesture on the content itself, no revealed picker, no
+              typed shortcut
+            example: Instagram — Post like
+  - name: Social meaning
+    family: collaboration
+    question: Who sees a reaction?
+    subdimensions:
+      - id: visibility
+        name: Visibility
+        select: one
+        values:
+          - id: public-with-names
+            name: Public with names
+            example: Slack
+          - id: private-to-the-author
+            name: Private to the author
+            example: Private likes on X
+          - id: anonymous-aggregate
+            name: Anonymous aggregate
+            example: Poll-style reactions
+wild:
+  score: 2
+  note: Hiding counts and adding custom emoji are both available in major products.
+  examples:
+    - name: Instagram
+      note: Hide like and view counts
+    - name: Slack
+      note: Add custom emoji
+techniques:
+  - name: Reactions as attributes
+    dimension: Aggregate
+    how: Reactions become sortable and filterable attributes of a collection (show messages marked ✅),
+      exactly as Fluid Attributes made interactive elements sortable.
+    ai: false
+signature: Reactions as attributes
+sample: Social, messaging and team collaboration products.
+unit: One reaction system.
+relations:
+  uses:
+    - popover
+  specializes: []
+  neighbors:
+    - rating
+scores:
+  ubiquity: 5
+  potential: 2
+  spec: 5
+evidence: agent-coded
+usage:
+  - Teams invent private meanings for emoji, such as ✅ for done
+questions:
+  - Should conventional reaction meanings be declared so they can drive views?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.6492092180513019
+  agreementFirstPass: 0.82
+  kappaFinal: 0.9575586535287897
+  agreementFinal: 0.9722222222222222
+  pass: true
+  perSub:
+    vocabulary:
+      kappaFirstPass: 0.7654417513682565
+      agreementFirstPass: 0.75
+      kappaFinal: 0.9057344854673997
+      agreementFinal: 0.9
+      flag: null
+    aggregate:
+      kappaFirstPass: 0.550982226379794
+      agreementFirstPass: 0.65
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    add:
+      kappaFirstPass: 0.6228571428571417
+      agreementFirstPass: 0.8428571428571429
+      kappaFinal: 0.9684155114932442
+      agreementFinal: 0.9833333333333333
+      flag: null
+    visibility:
+      kappaFirstPass: 0.815668202764977
+      agreementFirstPass: 0.9
+      kappaFinal: 0.9018003273322426
+      agreementFinal: 0.95
+      flag: null
+  distribution:
+    vocabulary:
+      Single like: 3
+      Fixed small set: 6
+      Any emoji: 8
+      Custom emoji: 2
+      Graded intensity: 1
+    aggregate:
+      Total count: 10
+      Count per reaction: 9
+      Who reacted: 0
+      Hidden counts: 0
+      n/a: 1
+    add:
+      Double-tap: 4
+      Long-press picker: 6
+      Hover picker: 8
+      Typed shortcut: 2
+      Single tap: 6
+      Click to open picker: 2
+      Tap a dedicated button: 0
+    visibility:
+      Public with names: 16
+      Private to the author: 2
+      Anonymous aggregate: 2
+  exemplars:
+    vocabulary:
+      Single like:
+        - Instagram — Post like
+        - X — Post likes
+        - TikTok — Video like
+      Fixed small set:
+        - Facebook — Post reactions
+        - LinkedIn — Post reactions
+        - YouTube — Video like and dislike
+      Any emoji:
+        - iMessage — Tapbacks
+        - WhatsApp — Message reactions
+        - Telegram — Message reactions
+      Custom emoji:
+        - Slack — Message reactions
+        - Discord — Message reactions
+      Graded intensity:
+        - Medium — Claps
+    aggregate:
+      Total count:
+        - Instagram — Post like
+        - Facebook — Post reactions
+        - LinkedIn — Post reactions
+      Count per reaction:
+        - Slack — Message reactions
+        - iMessage — Tapbacks
+        - Discord — Message reactions
+      Who reacted: []
+      Hidden counts: []
+    add:
+      Double-tap:
+        - iMessage — Tapbacks
+        - Instagram — Post like
+        - Telegram — Message reactions
+      Long-press picker:
+        - iMessage — Tapbacks
+        - Facebook — Post reactions
+        - LinkedIn — Post reactions
+      Hover picker:
+        - Slack — Message reactions
+        - Facebook — Post reactions
+        - LinkedIn — Post reactions
+      Typed shortcut:
+        - Slack — Message reactions
+        - Discord — Message reactions
+      Single tap:
+        - Instagram — Post like
+        - X — Post likes
+        - YouTube — Video like and dislike
+      Click to open picker:
+        - Zoom — Meeting reactions
+        - Gmail — Emoji reactions on email
+      Tap a dedicated button: []
+    visibility:
+      Public with names:
+        - Slack — Message reactions
+        - iMessage — Tapbacks
+        - Instagram — Post like
+      Private to the author:
+        - X — Post likes
+        - TikTok — Video like
+      Anonymous aggregate:
+        - YouTube — Video like and dislike
+        - Reddit — Post and comment votes
+  unobserved:
+    - sub: aggregate
+      var: Who reacted
+    - sub: aggregate
+      var: Hidden counts
+    - sub: add
+      var: Tap a dedicated button
+  unresolved: []
+  proposals:
+    raised: 4
+    adopted:
+      - sub: add
+        name: Single tap
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: add
+        name: Click to open picker
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: vocabulary
+        name: Graded intensity
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: add
+        name: Tap a dedicated button
+        raters:
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - add is pick-any of gestures, so a plain tap/click on an always-visible button (X, YouTube,
+        Reddit, Medium, Zoom, Gmail) codes as an empty array; the codebook may want a 'Tap a button'
+        variation. Slack is the exemplar for both Count per reaction and Who reacted; I coded the
+        always-visible aggregate.
+      - add has no value for the commonest case, a tap on a dedicated button; three raters proposed
+        it under two names. aggregate assumes reactions persist and collect, transient call
+        reactions do not fit. Total count vs Count per reaction needs to say whether glyphs beside
+        one number count as per-reaction.
+    opus:
+      - add had no variation for the commonest case of all — a plain tap on a visible like button —
+        so half the social instances needed +Single tap. aggregate is pick-one but Slack-likes show
+        a count per reaction at rest and the names on hover, which are two different variations of
+        the same system; I coded the resting display and noted the hover. Zoom's transient reactions
+        have no aggregate at all, coded n/a.
+      - aggregate has no value for what messaging apps actually draw — the distinct emoji glyphs
+        with a single total beside them — so WhatsApp and Messenger split all three of us between
+        Total count, Count per reaction and Who reacted.
+    sonnet:
+      - Vocabulary and aggregate were often close calls between two plausible codebook values for
+        the same product (e.g., YouTube's visible like/hidden dislike split, Instagram's optional
+        count-hiding); picked the value the codebook itself cites that product for where one exists.
+      - "Two codebook problems. (1) aggregate is pick one but its values are layers of the same
+        display, not alternatives: WhatsApp and Messenger show a total at rest, per-reaction counts
+        and who reacted on tap. It should be pick any, or the gloss should say to code what the
+        resting surface shows — I coded the resting state. (2) add mixes two questions, what reveals
+        the reaction control (hover, long-press, always visible) and what choosing looks like (one
+        default reaction versus a picker); that is why one affordance drew three different codes and
+        why both the Single tap and Click to open picker proposals were needed. Also worth noting:
+        two raters independently proposed the same missing single-tap variation, so it is
+        variation-worthy."
+  codedAt: 2026-09-22
+previews:
+  - file: reactions.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

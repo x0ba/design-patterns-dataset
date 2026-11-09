@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://design-patterns-dataset/codebook/pattern.schema.json",
+  "title": "Codebook pattern entry",
+  "description": "One entry in codebook/patterns/<id>.yaml (and, with rationale, proposals/<batch>/<id>.yaml).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id", "name", "level", "aliases", "definition", "data", "platforms", "domains", "anatomy", "roles",
+    "dimensions", "wild", "techniques", "signature", "sample", "unit", "relations", "scores", "evidence",
+    "usage", "questions", "previews", "sources", "addedIn"
+  ],
+  "properties": {
+    "id": { "$ref": "#/$defs/kebab" },
+    "name": { "type": "string", "minLength": 1 },
+    "level": { "enum": ["archetype", "pattern", "component"] },
+    "parent": { "$ref": "#/$defs/kebab", "description": "Archetype id. Required unless level is archetype." },
+    "aliases": { "type": "array", "items": { "type": "string" } },
+    "definition": { "type": "string", "minLength": 1 },
+    "data": { "type": "string" },
+    "platforms": { "type": "array", "items": { "type": "string" } },
+    "domains": { "type": "array", "items": { "type": "string" } },
+    "anatomy": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["name", "role"],
+        "properties": { "name": { "type": "string" }, "role": { "type": "string" } }
+      }
+    },
+    "roles": { "type": "array", "items": { "type": "string" } },
+    "dimensions": { "type": "array", "items": { "$ref": "#/$defs/dimension" } },
+    "wild": {
+      "type": "object", "additionalProperties": false, "required": ["score", "note", "examples"],
+      "properties": {
+        "score": { "type": "integer", "minimum": 0, "maximum": 3 },
+        "note": { "type": "string" },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["name", "note"],
+            "properties": { "name": { "type": "string" }, "note": { "type": "string" } }
+          }
+        }
+      }
+    },
+    "techniques": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["name", "dimension", "how", "ai"],
+        "properties": {
+          "name": { "type": "string" }, "dimension": { "type": "string" },
+          "how": { "type": "string" }, "ai": { "type": "boolean" }
+        }
+      }
+    },
+    "signature": { "type": "string" },
+    "sample": { "type": "string" },
+    "unit": { "type": "string" },
+    "relations": {
+      "type": "object", "additionalProperties": false, "required": ["uses", "specializes", "neighbors"],
+      "properties": {
+        "uses": { "type": "array", "items": { "$ref": "#/$defs/kebab" } },
+        "specializes": { "type": "array", "items": { "$ref": "#/$defs/kebab" } },
+        "neighbors": { "type": "array", "items": { "$ref": "#/$defs/kebab" } }
+      }
+    },
+    "scores": {
+      "type": "object", "additionalProperties": false, "required": ["ubiquity", "potential", "spec"],
+      "properties": {
+        "ubiquity": { "type": "integer", "minimum": 0, "maximum": 5 },
+        "potential": { "type": "integer", "minimum": 0, "maximum": 5 },
+        "spec": { "type": "integer", "minimum": 0, "maximum": 5 }
+      }
+    },
+    "evidence": { "type": "string" },
+    "usage": { "type": "array", "items": { "type": "string" } },
+    "questions": { "type": "array", "items": { "type": "string" } },
+    "coding": { "type": "object", "description": "Record of the agent-coded IRR run that produced this entry (kept verbatim)." },
+    "previews": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["file"],
+        "properties": {
+          "file": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*(--[a-z0-9-]+)*\\.svg$" },
+          "dims": {
+            "type": "object",
+            "description": "Sub-dimension id -> value id this preview illustrates.",
+            "additionalProperties": { "type": "string" }
+          }
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false, "minProperties": 1,
+        "properties": {
+          "url": { "type": "string" },
+          "paper": { "type": "string" },
+          "batch": { "type": "string" },
+          "site": { "type": "string" },
+          "note": { "type": "string" }
+        }
+      }
+    },
+    "addedIn": { "$ref": "#/$defs/semver" },
+    "deprecated": { "type": "boolean" },
+    "replacedBy": { "$ref": "#/$defs/kebab" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "level": { "enum": ["pattern", "component"] } } },
+      "then": { "required": ["parent"] }
+    },
+    {
+      "if": { "properties": { "deprecated": { "const": true } }, "required": ["deprecated"] },
+      "then": { "required": ["replacedBy"] }
+    }
+  ],
+  "$defs": {
+    "kebab": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "semver": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "dimension": {
+      "type": "object", "additionalProperties": false, "required": ["name", "family", "question", "subdimensions"],
+      "properties": {
+        "name": { "type": "string" },
+        "family": { "type": "string" },
+        "question": { "type": "string" },
+        "origin": { "type": "string" },
+        "subdimensions": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/subdimension" } }
+      }
+    },
+    "subdimension": {
+      "type": "object", "additionalProperties": false, "required": ["id", "name", "select", "values"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9]*([-_][A-Za-z0-9]+)*$" },
+        "name": { "type": "string" },
+        "select": { "enum": ["one", "many"] },
+        "note": { "type": "string" },
+        "values": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/value" } }
+      }
+    },
+    "value": {
+      "type": "object", "additionalProperties": false, "required": ["id", "name"],
+      "properties": {
+        "id": { "$ref": "#/$defs/kebab" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "example": { "type": "string" },
+        "group": { "type": "string" }
+      }
+    }
+  }
+}

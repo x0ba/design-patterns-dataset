@@ -1,0 +1,668 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "calendar". Edit between batches only — see README "Rules".
+id: calendar
+name: Calendar
+level: pattern
+parent: schedule
+aliases:
+  - calendar view
+  - agenda
+  - date grid
+definition: A time-grid or agenda of events with start and end times, browsed by day, week or month
+  and edited by creating, dragging or inviting.
+data: time
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - productivity
+  - enterprise
+  - education
+  - health
+  - social
+anatomy:
+  - name: Time grid or agenda
+    role: The visible span of time
+  - name: Event block
+    role: One scheduled item’s key attributes
+  - name: Event detail
+    role: The fuller look at one event
+  - name: Calendar list
+    role: Which calendars are shown
+roles:
+  - title
+  - time
+  - location
+  - attendees
+  - calendar-colour
+dimensions:
+  - name: Event content
+    family: content
+    question: What does each event show on the grid versus in detail?
+    subdimensions:
+      - id: gridFields
+        name: Grid fields
+        select: many
+        values:
+          - id: title-only
+            name: Title only
+            example: Dense month cells
+          - id: title-and-time
+            name: Title and time
+            example: Google Calendar week
+          - id: location-or-meet-link
+            name: Location or Meet link
+            example: Google Calendar with location
+          - id: attendee-avatars
+            name: Attendee avatars
+            example: Outlook calendar with faces
+          - id: calendar-colour
+            name: Calendar colour
+            description: Hue stands for source calendar
+            example: Apple Calendar colour dots
+          - id: status-marks
+            name: Status marks
+            description: Busy, free, out of office
+            example: Outlook show-as
+      - id: detailDepth
+        name: Detail depth
+        select: one
+        values:
+          - id: popover-summary
+            name: Popover summary
+            description: A few fields in place
+            example: Google Calendar event popover
+          - id: side-panel
+            name: Side panel
+            description: Editable detail beside the grid
+            example: Outlook event panel
+          - id: full-page-or-modal
+            name: Full page or modal
+            description: Dedicated event editor
+            example: Apple Calendar event window
+          - id: inline-expand
+            name: Inline expand
+            description: Agenda row expands
+            example: Google Calendar Schedule view
+  - name: View structure
+    family: layout
+    question: How is the span of time laid out?
+    subdimensions:
+      - id: primaryView
+        name: Primary view
+        select: one
+        values:
+          - id: day
+            name: Day
+            example: Google Calendar Day
+          - id: week
+            name: Week
+            example: Outlook Work week
+          - id: month
+            name: Month
+            example: Apple Calendar month
+          - id: agenda-schedule-list
+            name: Agenda / schedule list
+            description: Chronological list without a grid
+            example: Google Calendar Schedule
+          - id: multi-day-custom
+            name: Multi-day custom
+            description: N-day strip
+            example: Outlook 3–6 day views
+          - id: year
+            name: Year
+            example: Apple Calendar year
+      - id: multiLayout
+        name: Multi-calendar layout
+        select: one
+        values:
+          - id: overlay-on-one-grid
+            name: Overlay on one grid
+            description: Colours distinguish calendars
+            example: Google Calendar overlays
+          - id: side-by-side-columns
+            name: Side-by-side columns
+            description: One column per person
+            example: Outlook Schedule view
+          - id: stacked-agendas
+            name: Stacked agendas
+            description: Separate lists per calendar
+            example: Some team tools
+  - name: Creating and moving
+    family: invocation
+    question: How are events created, opened and repositioned?
+    subdimensions:
+      - id: createBy
+        name: Create by
+        select: many
+        values:
+          - id: click-empty-slot
+            name: Click empty slot
+            example: Google Calendar
+          - id: drag-a-duration
+            name: Drag a duration
+            example: Outlook drag-to-create
+          - id: compose-button
+            name: Compose button
+            example: New event FAB
+          - id: natural-language
+            name: Natural language
+            description: Type “lunch Friday 1pm”
+            example: Fantastical
+          - id: from-email-or-chat
+            name: From email or chat
+            description: Offer to add a detected time
+            example: Gmail add to Calendar
+      - id: moveResize
+        name: Move and resize
+        select: many
+        values:
+          - id: drag-to-new-time
+            name: Drag to new time
+            example: Google Calendar
+          - id: resize-ends
+            name: Resize ends
+            example: Outlook
+          - id: edit-fields-only
+            name: Edit fields only
+            description: No direct manipulation
+            example: Some mobile agendas
+          - id: propose-new-time
+            name: Propose new time
+            description: Suggest without unilaterally moving
+            example: Google Calendar propose new time
+  - name: Coordination
+    family: collaboration
+    question: How do invites, responses and shared visibility work?
+    subdimensions:
+      - id: inviteFlow
+        name: Invite flow
+        select: one
+        values:
+          - id: send-on-save
+            name: Send on save
+            example: Outlook meeting
+          - id: optional-guests
+            name: Optional guests
+            example: Google Calendar guests
+          - id: rsvp-required
+            name: RSVP required
+            example: Most invite systems
+          - id: hold-for-rooms-first
+            name: Hold for rooms first
+            description: Book resource then people
+            example: Outlook room finder
+      - id: rsvpVisibility
+        name: Response visibility
+        select: many
+        values:
+          - id: yes-no-maybe-list
+            name: Yes / No / Maybe list
+            example: Google Calendar
+          - id: free-busy-only-to-others
+            name: Free/busy only to others
+            example: Exchange free/busy
+          - id: hide-event-details
+            name: Hide event details
+            description: Private or confidential
+            example: Outlook private events
+          - id: see-guest-calendars-while-scheduling
+            name: See guest calendars while scheduling
+            example: Google Find a time
+  - name: Working context
+    family: adaptation
+    question: How does the calendar adapt to working hours, timezone and device?
+    subdimensions:
+      - id: contextAdapt
+        name: Context adaptation
+        select: many
+        values:
+          - id: working-hours-shading
+            name: Working hours shading
+            example: Google Calendar working hours
+          - id: timezone-labels
+            name: Timezone labels
+            example: World clock in Calendar
+          - id: dense-mobile-agenda
+            name: Dense mobile agenda
+            description: List replaces grid
+            example: iOS Calendar list
+          - id: focus-do-not-disturb-mute
+            name: Focus / do-not-disturb mute
+            description: Hide or quiet after hours
+            example: Focus filters affecting Calendar
+  - name: Density and span
+    family: scope
+    question: Which events are in the current view, and how crowded is it?
+    subdimensions:
+      - id: filtering
+        name: Filtering
+        select: many
+        values:
+          - id: toggle-calendars
+            name: Toggle calendars
+            example: Google Calendar left rail
+          - id: search-events
+            name: Search events
+            example: Outlook search
+          - id: hide-declined
+            name: Hide declined
+            example: Google Calendar settings
+          - id: only-mine-only-invited
+            name: Only mine / only invited
+            example: Team calendar filters
+wild:
+  score: 2
+  note: View choice, overlays and working hours are common personal settings; grid field density and
+    invite policy are rarely end-user malleable.
+  examples:
+    - name: Google Calendar
+      note: View switcher, calendar toggles, working location
+    - name: Outlook
+      note: Overlay mode and conditional formatting
+    - name: Apple Calendar
+      note: Delegate and shared calendar toggles
+techniques:
+  - name: Fluid event fields
+    dimension: Event content
+    how: Surface or hide attributes from event detail onto every grid block (travel time, video link,
+      project tag) per person, as Fluid Attributes does for collections.
+    ai: false
+  - name: View morph with selection held
+    dimension: View structure
+    how: Switch day/week/month/agenda while keeping the selected event and scroll anchor, so grain
+      changes without losing place.
+    ai: false
+  - name: Schedule from intent
+    dimension: Creating and moving
+    how: “Find two hours with Ana next week near campus” proposes ranked slots with sources from each
+      calendar and travel estimates.
+    ai: true
+signature: Fluid event fields
+sample: Google Calendar, Outlook, Apple Calendar, Fantastical, Fastmail, and calendar views inside
+  Notion, Linear and university LMS products.
+unit: One calendar surface (one account’s visible calendars in one view mode).
+relations:
+  uses:
+    - date-picker
+    - popover
+    - modal-dialog
+    - filter-controls
+    - view-switcher
+    - badge
+  specializes:
+    - schedule
+  neighbors:
+    - availability-picker
+    - gantt-timeline
+    - task-list
+scores:
+  ubiquity: 5
+  potential: 4
+  spec: 4
+evidence: agent-coded
+usage:
+  - People overlay calendars to negotiate; they hide calendars to focus
+  - Drag-create is preferred on desktop; list-create on mobile
+questions:
+  - Which event attributes deserve to be first-class on the grid without creating clutter?
+  - Can a personal calendar lens (fields + overlays) transfer across Google and Outlook?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.64525185124857
+  agreementFirstPass: 0.7548387096774194
+  kappaFinal: 0.9329560254331377
+  agreementFinal: 0.9516129032258065
+  pass: true
+  perSub:
+    gridFields:
+      kappaFirstPass: 0.6809348739495791
+      agreementFirstPass: 0.775
+      kappaFinal: 0.9774407820528889
+      agreementFinal: 0.9833333333333333
+      flag: null
+    detailDepth:
+      kappaFirstPass: 0.6883116883116884
+      agreementFirstPass: 0.7
+      kappaFinal: 0.945602901178604
+      agreementFinal: 0.95
+      flag: null
+    primaryView:
+      kappaFirstPass: 1
+      agreementFirstPass: 1
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    multiLayout:
+      kappaFirstPass: 0.48863636363636387
+      agreementFirstPass: 0.7
+      kappaFinal: 0.8886827458256026
+      agreementFinal: 0.95
+      flag: null
+    createBy:
+      kappaFirstPass: 0.5621237000547348
+      agreementFirstPass: 0.68
+      kappaFinal: 0.9465145302192901
+      agreementFinal: 0.96
+      flag: null
+    moveResize:
+      kappaFirstPass: 0.694570135746607
+      agreementFirstPass: 0.775
+      kappaFinal: 0.9317988064791132
+      agreementFinal: 0.95
+      flag: null
+    inviteFlow:
+      kappaFirstPass: 0.8411297440423654
+      agreementFirstPass: 0.85
+      kappaFinal: 0.8976109215017063
+      agreementFinal: 0.9
+      flag: null
+    rsvpVisibility:
+      kappaFirstPass: 0.69191270860077
+      agreementFirstPass: 0.8
+      kappaFinal: 0.9299425528933724
+      agreementFinal: 0.95
+      flag: null
+    contextAdapt:
+      kappaFirstPass: 0.5722288236292653
+      agreementFirstPass: 0.7666666666666667
+      kappaFinal: 0.916923076923077
+      agreementFinal: 0.95
+      flag: null
+    filtering:
+      kappaFirstPass: 0.5334928229665077
+      agreementFirstPass: 0.675
+      kappaFinal: 0.8662114138387567
+      agreementFinal: 0.9
+      flag: null
+  distribution:
+    gridFields:
+      Title only: 6
+      Title and time: 14
+      Location or Meet link: 11
+      Attendee avatars: 2
+      Calendar colour: 17
+      Status marks: 2
+    detailDepth:
+      Popover summary: 6
+      Side panel: 4
+      Full page or modal: 10
+      Inline expand: 0
+    primaryView:
+      Day: 1
+      Week: 8
+      Month: 8
+      Agenda / schedule list: 3
+      Multi-day custom: 0
+      Year: 0
+    multiLayout:
+      Overlay on one grid: 16
+      Side-by-side columns: 0
+      Stacked agendas: 0
+      n/a: 4
+    createBy:
+      Click empty slot: 17
+      Drag a duration: 7
+      Compose button: 19
+      Natural language: 2
+      From email or chat: 7
+    moveResize:
+      Drag to new time: 16
+      Resize ends: 11
+      Edit fields only: 4
+      Propose new time: 3
+    inviteFlow:
+      Send on save: 6
+      Optional guests: 8
+      RSVP required: 0
+      Hold for rooms first: 0
+      n/a: 6
+    rsvpVisibility:
+      Yes / No / Maybe list: 14
+      Free/busy only to others: 10
+      Hide event details: 6
+      See guest calendars while scheduling: 4
+      n/a: 6
+    contextAdapt:
+      Working hours shading: 4
+      Timezone labels: 8
+      Dense mobile agenda: 5
+      Focus / do-not-disturb mute: 0
+    filtering:
+      Toggle calendars: 15
+      Search events: 17
+      Hide declined: 3
+      Only mine / only invited: 4
+  exemplars:
+    gridFields:
+      Title only:
+        - Notion — Database calendar view
+        - Moodle — Calendar
+        - Samsung Calendar — Month view
+      Title and time:
+        - Google Calendar — Week view
+        - Google Calendar — Schedule view on phone
+        - Microsoft Outlook — Calendar week
+      Location or Meet link:
+        - Google Calendar — Week view
+        - Google Calendar — Schedule view on phone
+        - Microsoft Outlook — Calendar week
+      Attendee avatars:
+        - Asana — Project calendar view
+        - Trello — Calendar view
+      Calendar colour:
+        - Google Calendar — Week view
+        - Google Calendar — Schedule view on phone
+        - Microsoft Outlook — Calendar week
+      Status marks:
+        - Microsoft Outlook — Calendar week
+        - Microsoft Teams — Calendar tab
+    detailDepth:
+      Popover summary:
+        - Google Calendar — Week view
+        - Apple Calendar — Month view
+        - Fantastical — Calendar window
+      Side panel:
+        - Microsoft Outlook — Calendar week
+        - Fastmail — Calendar
+        - Notion Calendar — Week view
+      Full page or modal:
+        - Google Calendar — Schedule view on phone
+        - Microsoft Outlook — Calendar agenda on phone
+        - Apple Calendar — Day view on iPhone
+      Inline expand: []
+    primaryView:
+      Day:
+        - Apple Calendar — Day view on iPhone
+      Week:
+        - Google Calendar — Week view
+        - Microsoft Outlook — Calendar week
+        - Fantastical — Calendar window
+      Month:
+        - Apple Calendar — Month view
+        - Notion — Database calendar view
+        - Canvas — Calendar
+      Agenda / schedule list:
+        - Google Calendar — Schedule view on phone
+        - Microsoft Outlook — Calendar agenda on phone
+        - Timepage — Timeline view
+      Multi-day custom: []
+      Year: []
+    multiLayout:
+      Overlay on one grid:
+        - Google Calendar — Week view
+        - Google Calendar — Schedule view on phone
+        - Microsoft Outlook — Calendar week
+      Side-by-side columns: []
+      Stacked agendas: []
+    createBy:
+      Click empty slot:
+        - Google Calendar — Week view
+        - Microsoft Outlook — Calendar week
+        - Apple Calendar — Month view
+      Drag a duration:
+        - Google Calendar — Week view
+        - Microsoft Outlook — Calendar week
+        - Fantastical — Calendar window
+      Compose button:
+        - Google Calendar — Week view
+        - Google Calendar — Schedule view on phone
+        - Microsoft Outlook — Calendar week
+      Natural language:
+        - Apple Calendar — Month view
+        - Fantastical — Calendar window
+      From email or chat:
+        - Google Calendar — Week view
+        - Google Calendar — Schedule view on phone
+        - Microsoft Outlook — Calendar week
+    moveResize:
+      Drag to new time:
+        - Google Calendar — Week view
+        - Microsoft Outlook — Calendar week
+        - Apple Calendar — Month view
+      Resize ends:
+        - Google Calendar — Week view
+        - Microsoft Outlook — Calendar week
+        - Apple Calendar — Month view
+      Edit fields only:
+        - Google Calendar — Schedule view on phone
+        - Microsoft Outlook — Calendar agenda on phone
+        - Samsung Calendar — Month view
+      Propose new time:
+        - Google Calendar — Week view
+        - Microsoft Outlook — Calendar week
+        - Apple Calendar — Month view
+    inviteFlow:
+      Send on save:
+        - Microsoft Outlook — Calendar week
+        - Microsoft Outlook — Calendar agenda on phone
+        - Apple Calendar — Month view
+      Optional guests:
+        - Google Calendar — Week view
+        - Google Calendar — Schedule view on phone
+        - Fantastical — Calendar window
+      RSVP required: []
+      Hold for rooms first: []
+    rsvpVisibility:
+      Yes / No / Maybe list:
+        - Google Calendar — Week view
+        - Google Calendar — Schedule view on phone
+        - Microsoft Outlook — Calendar week
+      Free/busy only to others:
+        - Google Calendar — Week view
+        - Google Calendar — Schedule view on phone
+        - Microsoft Outlook — Calendar week
+      Hide event details:
+        - Google Calendar — Week view
+        - Google Calendar — Schedule view on phone
+        - Microsoft Outlook — Calendar week
+      See guest calendars while scheduling:
+        - Google Calendar — Week view
+        - Microsoft Outlook — Calendar week
+        - Notion Calendar — Week view
+    contextAdapt:
+      Working hours shading:
+        - Google Calendar — Week view
+        - Microsoft Outlook — Calendar week
+        - Thunderbird — Calendar tab
+      Timezone labels:
+        - Google Calendar — Week view
+        - Microsoft Outlook — Calendar week
+        - Apple Calendar — Month view
+      Dense mobile agenda:
+        - Google Calendar — Schedule view on phone
+        - Microsoft Outlook — Calendar agenda on phone
+        - Apple Calendar — Day view on iPhone
+      Focus / do-not-disturb mute: []
+    filtering:
+      Toggle calendars:
+        - Google Calendar — Week view
+        - Google Calendar — Schedule view on phone
+        - Microsoft Outlook — Calendar week
+      Search events:
+        - Google Calendar — Week view
+        - Google Calendar — Schedule view on phone
+        - Microsoft Outlook — Calendar week
+      Hide declined:
+        - Google Calendar — Week view
+        - Google Calendar — Schedule view on phone
+        - Apple Calendar — Month view
+      Only mine / only invited:
+        - Notion — Database calendar view
+        - Asana — Project calendar view
+        - Trello — Calendar view
+  unobserved:
+    - sub: detailDepth
+      var: Inline expand
+    - sub: primaryView
+      var: Multi-day custom
+    - sub: primaryView
+      var: Year
+    - sub: multiLayout
+      var: Side-by-side columns
+    - sub: multiLayout
+      var: Stacked agendas
+    - sub: inviteFlow
+      var: RSVP required
+    - sub: inviteFlow
+      var: Hold for rooms first
+    - sub: contextAdapt
+      var: Focus / do-not-disturb mute
+  unresolved: []
+  proposals:
+    raised: 0
+    adopted: []
+    recorded: []
+  raterNotes:
+    fable:
+      - inviteFlow and rsvpVisibility are n/a for database/LMS calendars with no invite concept
+        (Notion, Canvas, Moodle, Asana, Trello, Airtable). detailDepth for Outlook desktop follows
+        the single-click peek rather than the codebook's 'Side panel' exemplar.
+      - inviteFlow's Send on save and Optional guests are not exclusive, every calendar here does
+        both. Edit fields only reads as exclusive with drag, so raters who list both make it
+        pick-any-with-a-contradiction. Search events needs to say whether global search counts.
+    opus:
+      - "The task-database calendars (Notion, Asana, Trello, Airtable, Canvas, Moodle) have no
+        invitations, so inviteFlow and rsvpVisibility are n/a for six of twenty — the pattern as
+        written assumes a real calendar rather than a date view over records. detailDepth's Inline
+        expand never fired: the codebook names Google Schedule view for it, but on the phone that
+        view opens a full screen, so raters may split on that cell."
+      - moveResize's Edit fields only is glossed 'no direct manipulation', so it is mutually
+        exclusive with Drag to new time — coding it as an additional capability (as I did in round
+        1) is a trap the pick-any framing invites. inviteFlow's Optional guests is ambiguous between
+        marking a guest optional and guests being optional at all.
+    sonnet:
+      - inviteFlow and rsvpVisibility genuinely don't apply to non-invite calendar surfaces (Notion
+        database, Canvas, Moodle, Asana, Trello, Airtable calendar views) since there is no
+        guest/RSVP concept on a due-date or course-event card; coded n/a rather than force-fitting a
+        value.
+      - "Five codebook problems: (1) 'gridFields' mixes two mutually exclusive options ('Title only'
+        vs 'Title and time') into a pick-any, so the array can be self-contradictory — they should
+        be one pick-one sub-dimension or one should be dropped; (2) 'moveResize: Edit fields only'
+        is glossed 'no direct manipulation', which makes it exclusive with Drag and Resize, yet it
+        is the natural place to record 'you can also type the dates' — a separate sub-dimension is
+        needed; (3) 'inviteFlow' is not a partition: Google Calendar is simultaneously Send on save,
+        Optional guests and RSVP required, so this pick-one forces an arbitrary choice and was the
+        hardest cell in the entry; (4) 'detailDepth' cross-cuts anchoring (in place vs dedicated)
+        with depth (summary vs editor), so Moodle's centred modal summary fits Popover summary and
+        Full page or modal equally; (5) the Inline expand exemplar names Google Calendar Schedule
+        view, but on phone that surface pushes a full-screen detail — the exemplar needs a platform.
+        Separately, most of my round-1 pick-any codes were too thin: I coded what a screenshot shows
+        rather than what the surface supports, which the glosses ('pick any that apply') plainly ask
+        for."
+  codedAt: 2026-09-22
+previews:
+  - file: calendar.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

@@ -1,0 +1,381 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "ai-provenance". Edit between batches only — see README "Rules".
+id: ai-provenance
+name: AI provenance
+level: component
+parent: delegate-ai
+aliases:
+  - generated label
+  - AI disclosure
+  - source attribution
+definition: Visible markers of what a model produced, from which sources or tools, so a person can
+  judge trust, reuse and responsibility.
+data: object
+platforms:
+  - web
+  - desktop
+  - mobile
+domains:
+  - ai
+  - news
+  - enterprise
+  - education
+  - software
+anatomy:
+  - name: Badge
+    role: That something is AI-involved
+  - name: Source list
+    role: Citations or tools used
+  - name: Detail
+    role: Expanded provenance
+  - name: Action
+    role: Inspect, copy or report
+roles: []
+dimensions:
+  - name: What is disclosed
+    family: content
+    question: What provenance facts are shown?
+    subdimensions:
+      - id: disclosure
+        name: Disclosure
+        select: many
+        values:
+          - id: ai-generated-badge
+            name: AI-generated badge
+            example: Doc AI labels
+          - id: model-identity
+            name: Model identity
+            example: ChatGPT model name
+          - id: citations
+            name: Citations
+            example: Perplexity sources
+          - id: tool-calls-used
+            name: Tool calls used
+            example: Agent traces
+          - id: human-vs-ai-edit-mix
+            name: Human vs AI edit mix
+            example: Suggestion mode authorship
+          - id: training-data-unknown
+            name: Training-data unknown
+            example: Honest empty state
+          - id: verification-highlighting
+            name: Verification highlighting
+            description: Sentence-level colour highlighting showing whether a live search corroborates or
+              contradicts the claim, rather than a citation list or a static badge
+            example: Google Gemini — Double-check response
+  - name: Provenance placement
+    family: layout
+    question: Where do disclosure cues sit?
+    subdimensions:
+      - id: placement
+        name: Placement
+        select: one
+        values:
+          - id: inline-beside-the-span
+            name: Inline beside the span
+            example: Ghost-text labels
+          - id: header-of-a-reply
+            name: Header of a reply
+            example: Chat turns
+          - id: footnote-citations
+            name: Footnote citations
+            example: Perplexity
+          - id: hover-card
+            name: Hover card
+            example: Source previews
+          - id: watermark-on-media
+            name: Watermark on media
+            example: Generated-image marks
+  - name: Inspecting provenance
+    family: invocation
+    question: How does a person open the full trail?
+    subdimensions:
+      - id: openBy
+        name: Open by
+        select: many
+        values:
+          - id: click-citation
+            name: Click citation
+            example: Perplexity
+          - id: expand-tool-trace
+            name: Expand tool trace
+            example: ChatGPT
+          - id: hover-for-snippet
+            name: Hover for snippet
+            example: Search citations
+          - id: open-audit-panel
+            name: Open audit panel
+            example: Enterprise logs
+          - id: copy-provenance-bundle
+            name: Copy provenance bundle
+            example: Share with context
+  - name: Trust feedback
+    family: feedback
+    question: How is uncertainty or risk communicated?
+    subdimensions:
+      - id: trustCues
+        name: Trust cues
+        select: many
+        values:
+          - id: source-count
+            name: Source count
+            example: Perplexity
+          - id: conflict-among-sources
+            name: Conflict among sources
+            example: Disagreement flags
+          - id: unverified-claim-mark
+            name: Unverified claim mark
+            example: No-citation warnings
+          - id: policy-blocked
+            name: Policy blocked
+            example: Safety refusals
+          - id: stale-retrieval-time
+            name: Stale retrieval time
+            example: Indexed-at timestamps
+          - id: blanket-disclaimer
+            name: Blanket disclaimer
+            description: A standing warning attached to every output regardless of content — ChatGPT can make
+              mistakes, AI responses may include mistakes, AI-generated content may be incorrect —
+              rather than a cue about this claim, these sources or this retrieval
+            example: Google Search — AI Overview sources
+wild:
+  score: 1
+  note: Citation density sometimes adjustable; disclosure chrome rarely user-designed.
+  examples:
+    - name: Perplexity
+      note: Source focus modes
+    - name: ChatGPT
+      note: Show more / sources where offered
+    - name: Google Docs
+      note: Help me write disclosure
+techniques:
+  - name: Claim-linked citations
+    dimension: What is disclosed
+    how: Attach sources to spans or claims, not only to the whole reply.
+    ai: false
+  - name: Provenance travels on copy
+    dimension: Inspecting provenance
+    how: Copied AI output optionally carries a compact provenance stub into the destination.
+    ai: false
+  - name: Flag unsupported claims
+    dimension: Trust feedback
+    how: Highlight statements that lack retrieval or tool support before acceptance.
+    ai: true
+signature: Claim-linked citations
+sample: Answer engines, chat replies, generated docs and agent traces.
+unit: One provenance record for one AI-produced span or object.
+relations:
+  uses:
+    - badge
+    - tooltip
+    - popover
+  specializes: []
+  neighbors:
+    - tooltip
+    - badge
+    - confirmation
+scores:
+  ubiquity: 3
+  potential: 5
+  spec: 4
+evidence: agent-coded
+usage:
+  - People click sources only when stakes are high
+questions:
+  - What provenance must survive export into Word, Figma or Git?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7159149514462145
+  agreementFirstPass: 0.8875
+  kappaFinal: 0.9317614251396052
+  agreementFinal: 0.9633333333333334
+  pass: true
+  perSub:
+    disclosure:
+      kappaFirstPass: 0.8565665620797847
+      agreementFirstPass: 0.9333333333333333
+      kappaFinal: 0.9254658385093166
+      agreementFinal: 0.96
+      flag: null
+    placement:
+      kappaFirstPass: 0.7126895450917797
+      agreementFirstPass: 0.7
+      kappaFinal: 0.8570293884034949
+      agreementFinal: 0.85
+      flag: null
+    openBy:
+      kappaFirstPass: 0.7208436724565747
+      agreementFirstPass: 0.88
+      kappaFinal: 0.9341334894613579
+      agreementFinal: 0.97
+      flag: null
+    trustCues:
+      kappaFirstPass: 0.4995829858215179
+      agreementFirstPass: 0.875
+      kappaFinal: 0.9553488372093031
+      agreementFinal: 0.9875
+      flag: null
+  distribution:
+    disclosure:
+      AI-generated badge: 11
+      Model identity: 2
+      Citations: 7
+      Tool calls used: 3
+      Human vs AI edit mix: 0
+      Training-data unknown: 0
+      Verification highlighting: 1
+    placement:
+      Inline beside the span: 10
+      Header of a reply: 3
+      Footnote citations: 4
+      Hover card: 1
+      Watermark on media: 2
+    openBy:
+      Click citation: 9
+      Expand tool trace: 3
+      Hover for snippet: 5
+      Open audit panel: 2
+      Copy provenance bundle: 0
+    trustCues:
+      Source count: 3
+      Conflict among sources: 1
+      Unverified claim mark: 1
+      Policy blocked: 0
+      Stale retrieval time: 0
+      Blanket disclaimer: 3
+  exemplars:
+    disclosure:
+      AI-generated badge:
+        - Google Search — AI Overview sources
+        - Claude — Published artifact badge
+        - Adobe Firefly — Content Credentials
+      Model identity:
+        - ChatGPT — Model label on a reply
+        - Adobe Firefly — Content Credentials
+      Citations:
+        - Perplexity — Sources on an answer
+        - Google Search — AI Overview sources
+        - Microsoft Copilot — Footnote citations
+      Tool calls used:
+        - GitHub Copilot Chat — Used references
+        - Cursor — Tool cards in a reply
+        - Claude Code — Tool use lines
+      Human vs AI edit mix: []
+      Training-data unknown: []
+      Verification highlighting:
+        - Google Gemini — Double-check response
+    placement:
+      Inline beside the span:
+        - ChatGPT — Search sources
+        - Google Gemini — Double-check response
+        - Instagram — AI info label
+      Header of a reply:
+        - Claude — Published artifact badge
+        - GitHub Copilot Chat — Used references
+        - Cursor — Tool cards in a reply
+      Footnote citations:
+        - Perplexity — Sources on an answer
+        - Google Search — AI Overview sources
+        - Microsoft Copilot — Footnote citations
+      Hover card:
+        - ChatGPT — Model label on a reply
+      Watermark on media:
+        - Adobe Firefly — Content Credentials
+        - Meta AI — Image watermark
+    openBy:
+      Click citation:
+        - Perplexity — Sources on an answer
+        - Google Search — AI Overview sources
+        - Microsoft Copilot — Footnote citations
+      Expand tool trace:
+        - GitHub Copilot Chat — Used references
+        - Cursor — Tool cards in a reply
+        - Claude Code — Tool use lines
+      Hover for snippet:
+        - Perplexity — Sources on an answer
+        - Microsoft Copilot — Footnote citations
+        - ChatGPT — Model label on a reply
+      Open audit panel:
+        - ChatGPT — Search sources
+        - Adobe Firefly — Content Credentials
+      Copy provenance bundle: []
+    trustCues:
+      Source count:
+        - Perplexity — Sources on an answer
+        - ChatGPT — Search sources
+        - GitHub Copilot Chat — Used references
+      Conflict among sources:
+        - Google Gemini — Double-check response
+      Unverified claim mark:
+        - Google Gemini — Double-check response
+      Policy blocked: []
+      Stale retrieval time: []
+      Blanket disclaimer:
+        - Google Search — AI Overview sources
+        - ChatGPT — Model label on a reply
+        - Microsoft 365 Copilot — Inserted draft note
+  unobserved:
+    - sub: disclosure
+      var: Human vs AI edit mix
+    - sub: disclosure
+      var: Training-data unknown
+    - sub: openBy
+      var: Copy provenance bundle
+    - sub: trustCues
+      var: Policy blocked
+    - sub: trustCues
+      var: Stale retrieval time
+  unresolved: []
+  proposals:
+    raised: 2
+    adopted:
+      - sub: trustCues
+        name: Blanket disclaimer
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: disclosure
+        name: Verification highlighting
+        raters:
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - Trust cues has no value for the generic may-be-incorrect disclaimer most products carry
+        (coded empty and noted); Placement lacks a slot for labels living in a description or
+        footer.
+      - Placement has no slot for a label in an object's chrome or metadata (Claude artifact,
+        Instagram, TikTok); Trust cues lacked the blanket disclaimer until opus named it; Citations
+        and Tool calls used blur when an assistant lists the files it read.
+    opus:
+      - "Trust cues are empty for most of the sample: outside answer engines, products disclose that
+        AI was involved and stop. Open by fits badly on consumer labels, where tapping a badge opens
+        a plain-language explainer rather than an audit panel or a citation, and placement forces a
+        choice between where the cue sits and what it is attached to (a Made with Claude page mark
+        had to be called a watermark)."
+      - Two glosses did the damage. `placement` has no value for a badge in a published object's
+        chrome, so a Made-with mark and a consumer AI label both got pulled toward Watermark on
+        media, which should mean a mark in the pixels. And `Source count` was read by one rater as
+        'the citations are numbered' and by me as 'a count is displayed'; the gloss should say
+        which. `openBy`'s Hover for snippet also needs to say hover or tap, or every mobile instance
+        is uncodeable.
+    sonnet:
+      - openBy was frequently empty for passive consumer labels (Instagram/TikTok/YouTube) — tapping
+        just explains the label rather than opening a trail, so nothing in the list applied.
+  codedAt: 2026-09-22
+previews:
+  - file: ai-provenance.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

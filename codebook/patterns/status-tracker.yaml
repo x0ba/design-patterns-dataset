@@ -1,0 +1,403 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "status-tracker". Edit between batches only — see README "Rules".
+id: status-tracker
+name: Status tracker
+level: pattern
+parent: monitor
+aliases:
+  - order tracking
+  - delivery status
+  - progress tracker
+definition: Showing where a process, order or journey is in its sequence of stages, and what happens next.
+data: sequence
+platforms:
+  - mobile
+  - web
+domains:
+  - commerce
+  - mobility
+  - government
+  - health
+anatomy:
+  - name: Stages
+    role: The sequence
+  - name: Current stage
+    role: Where it is now
+  - name: Estimate
+    role: When the next stage happens
+  - name: Exceptions
+    role: What went wrong
+roles:
+  - stage
+  - timestamp
+  - eta
+  - location
+dimensions:
+  - name: Stage model
+    family: flow
+    question: How is progress structured?
+    subdimensions:
+      - id: stages
+        name: Stages
+        select: one
+        values:
+          - id: fixed-stages
+            name: Fixed stages
+            description: Ordered, shipped, delivered
+            example: Amazon order tracking
+          - id: stages-with-estimates
+            name: Stages with estimates
+            example: Visa application portals
+          - id: live-location
+            name: Live location
+            example: Uber
+          - id: exception-branches
+            name: Exception branches
+            description: Delayed, returned
+            example: Carrier tracking
+  - name: Stage detail
+    family: content
+    question: What does each stage tell you?
+    subdimensions:
+      - id: detail
+        name: Detail
+        select: many
+        values:
+          - id: stage-names
+            name: Stage names
+            example: All
+          - id: timestamps
+            name: Timestamps
+            example: UPS tracking
+          - id: estimated-time
+            name: Estimated time
+            example: Food delivery
+          - id: responsible-party
+            name: Responsible party
+            example: Government casework
+          - id: map
+            name: Map
+            example: Uber
+  - name: Presentation
+    family: layout
+    question: Where and how is status shown?
+    subdimensions:
+      - id: presentation
+        name: Presentation
+        select: one
+        values:
+          - id: horizontal-progress-bar
+            name: Horizontal progress bar
+            example: Domino’s Tracker
+          - id: vertical-timeline
+            name: Vertical timeline
+            example: Parcel tracking
+          - id: map-with-moving-marker
+            name: Map with moving marker
+            example: Uber
+          - id: lock-screen-live-activity
+            name: Lock-screen live activity
+            example: iOS Live Activities
+          - id: status-statement
+            name: Status statement
+            description: The current state is written out as a sentence or paragraph with no sequence drawn — no
+              bar, timeline or map; the common government casework shape, where the wording carries
+              everything
+            example: USCIS — Case Status Online
+          - id: narrative-status-text
+            name: Narrative status text
+            description: The current stage is conveyed as a plain-language paragraph rather than a bar, timeline
+              or map — typical of government casework portals
+            example: USCIS — Case Status Online
+  - name: Updates
+    family: lifecycle
+    question: How does status reach the person?
+    subdimensions:
+      - id: updates
+        name: Updates
+        select: one
+        values:
+          - id: on-visit
+            name: On visit
+            example: Web tracking pages
+          - id: notification-per-stage
+            name: Notification per stage
+            example: Delivery apps
+          - id: continuous-live
+            name: Continuous live
+            example: Ride-hailing
+  - name: Exceptions
+    family: feedback
+    question: What happens when progress stalls?
+    subdimensions:
+      - id: exceptions
+        name: Exceptions
+        select: one
+        values:
+          - id: silent
+            name: Silent
+            example: Stale tracking pages
+          - id: explaining-banner
+            name: Explaining banner
+            example: Airline delay banners
+          - id: options-offered
+            name: Options offered
+            example: UPS My Choice reschedule
+wild:
+  score: 1
+  note: People can choose notifications for some carriers; nothing else changes.
+  examples:
+    - name: UPS My Choice
+      note: Delivery alerts and rescheduling
+techniques:
+  - name: Pick my milestones
+    dimension: Updates
+    how: "People choose which stage changes notify them, and where: lock screen, email or nothing."
+    ai: false
+  - name: Why is it late?
+    dimension: Exceptions
+    how: An explanation drawn from tracking events, with the options that are really available.
+    ai: true
+signature: Pick my milestones
+sample: Retail, delivery, ride-hailing, travel and government casework.
+unit: One tracked process.
+relations:
+  uses:
+    - stepper
+    - progress-indicator
+    - banner
+    - map-explorer
+  specializes:
+    - monitor
+  neighbors:
+    - stepper
+    - agent-run
+    - dashboard
+scores:
+  ubiquity: 4
+  potential: 3
+  spec: 5
+evidence: agent-coded
+usage:
+  - People check trackers compulsively when estimates are vague
+questions:
+  - How should uncertainty in an estimate be shown?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.6625762491228647
+  agreementFirstPass: 0.7277777777777777
+  kappaFinal: 0.9374076146592055
+  agreementFinal: 0.95
+  pass: true
+  perSub:
+    stages:
+      kappaFirstPass: 0.39855653568564553
+      agreementFirstPass: 0.5
+      kappaFinal: 0.8146718146718148
+      agreementFinal: 0.85
+      flag: null
+    detail:
+      kappaFirstPass: 0.7683502906976742
+      agreementFirstPass: 0.83
+      kappaFinal: 0.9717978848413629
+      agreementFinal: 0.98
+      flag: null
+    presentation:
+      kappaFirstPass: 0.6953125
+      agreementFirstPass: 0.7
+      kappaFinal: 0.9518845228548515
+      agreementFinal: 0.95
+      flag: null
+    updates:
+      kappaFirstPass: 0.7952218430034131
+      agreementFirstPass: 0.8
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    exceptions:
+      kappaFirstPass: 0.23234390992835252
+      agreementFirstPass: 0.4
+      kappaFinal: 0.8111227701993704
+      agreementFinal: 0.85
+      flag: null
+  distribution:
+    stages:
+      Fixed stages: 7
+      Stages with estimates: 4
+      Live location: 3
+      Exception branches: 4
+    detail:
+      Stage names: 20
+      Timestamps: 10
+      Estimated time: 18
+      Responsible party: 5
+      Map: 8
+    presentation:
+      Horizontal progress bar: 8
+      Vertical timeline: 4
+      Map with moving marker: 6
+      Lock-screen live activity: 1
+      Status statement: 0
+      Narrative status text: 0
+    updates:
+      On visit: 7
+      Notification per stage: 6
+      Continuous live: 7
+    exceptions:
+      Silent: 6
+      Explaining banner: 12
+      Options offered: 2
+  exemplars:
+    stages:
+      Fixed stages:
+        - Amazon — Track package
+        - Domino's — Pizza Tracker
+        - USCIS — Case Status Online
+      Stages with estimates:
+        - GOV.UK — Track your passport application
+        - United Airlines — Flight status
+        - Delta — Trip status
+      Live location:
+        - Uber — Ride in progress
+        - FlightAware — Flight page
+        - Lyft — Ride in progress
+      Exception branches:
+        - UPS — Tracking page
+        - FedEx — Track a shipment
+        - USPS — Tracking
+    detail:
+      Stage names:
+        - Amazon — Track package
+        - Domino's — Pizza Tracker
+        - Uber — Ride in progress
+      Timestamps:
+        - Amazon — Track package
+        - UPS — Tracking page
+        - FedEx — Track a shipment
+      Estimated time:
+        - Amazon — Track package
+        - Uber — Ride in progress
+        - DoorDash — Order tracking
+      Responsible party:
+        - Domino's — Pizza Tracker
+        - Uber — Ride in progress
+        - DoorDash — Order tracking
+      Map:
+        - Amazon — Track package
+        - Uber — Ride in progress
+        - DoorDash — Order tracking
+    presentation:
+      Horizontal progress bar:
+        - Amazon — Track package
+        - Domino's — Pizza Tracker
+        - FedEx — Track a shipment
+      Vertical timeline:
+        - UPS — Tracking page
+        - USPS — Tracking
+        - GOV.UK — Track your passport application
+      Map with moving marker:
+        - Uber — Ride in progress
+        - DoorDash — Order tracking
+        - United Airlines — Flight status
+      Lock-screen live activity:
+        - Uber Eats — Live Activity
+      Status statement: []
+      Narrative status text: []
+    updates:
+      On visit:
+        - UPS — Tracking page
+        - FedEx — Track a shipment
+        - USPS — Tracking
+      Notification per stage:
+        - Amazon — Track package
+        - United Airlines — Flight status
+        - Delta — Trip status
+      Continuous live:
+        - Domino's — Pizza Tracker
+        - Uber — Ride in progress
+        - DoorDash — Order tracking
+    exceptions:
+      Silent:
+        - Domino's — Pizza Tracker
+        - USCIS — Case Status Online
+        - Apple — Order status
+      Explaining banner:
+        - Amazon — Track package
+        - Uber — Ride in progress
+        - DoorDash — Order tracking
+      Options offered:
+        - UPS — Tracking page
+        - FedEx — Track a shipment
+  unobserved:
+    - sub: presentation
+      var: Status statement
+    - sub: presentation
+      var: Narrative status text
+  unresolved:
+    - sub: stages
+      n: 4
+    - sub: presentation
+      n: 8
+    - sub: stages
+      n: 16
+  proposals:
+    raised: 2
+    adopted:
+      - sub: presentation
+        name: Status statement
+        raters:
+          - opus
+          - sonnet
+      - sub: presentation
+        name: Narrative status text
+        raters:
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - "Stage model is a pick-one over things that mix: food delivery is fixed stages drawn on a
+        live map, flights are stages with estimates plus a moving aircraft; coded the structure
+        (stages) not the drawing."
+      - stages is a pick one over values that mix structure (fixed stages) with rendering (live
+        location) and with a branch (exceptions), so every food tracker with a map and every carrier
+        splits three ways; it wants to be structure only, with the map under presentation.
+        exceptions cannot separate a status headline that says Delayed from a banner that explains
+        why.
+    opus:
+      - "Stages is the hardest cell: almost every tracker has both a fixed sequence and an estimate,
+        so Fixed stages vs Stages with estimates turns on which the screen leads with, and Exception
+        branches competes with the Exceptions dimension for the same evidence. Exceptions is also
+        largely about a conditional state I am coding from memory of disruption, not from the screen
+        the sample names."
+      - "Stages is the fault: every tracker has a sequence, most have an estimate, and carriers have
+        exception statuses, so three of the four variations are true at once and the code turns on
+        which one the screen leads with. Exception branches also competes with the exceptions
+        sub-dimension for the same evidence — one of them should be dropped or renamed."
+    sonnet:
+      - Government casework trackers (USCIS, GOV.UK) don't fit any of the four presentation
+        variations; proposed +Narrative status text. Exceptions was often Silent by default with no
+        evidence of an explaining path for the everyday case.
+      - "I under-credited Stage names across most live/timestamped trackers (Uber, Lyft, UPS, USPS,
+        United, Delta, FlightAware, DHL, Shop) — a systematic miss on my part, not a codebook
+        problem: I was reading 'has timestamps/a map' as sufficient and forgetting that the
+        timestamped events are also named. Separately, stages' Exception branches is glossed only as
+        'carrier tracking' with no sharper test for when a delay is a structural fork vs. just an
+        exceptions-dimension banner on an otherwise fixed line — FedEx/USPS/DHL only converged once
+        I anchored on 'this is literally the named example' rather than judging the structure
+        independently."
+  codedAt: 2026-09-22
+previews:
+  - file: status-tracker.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

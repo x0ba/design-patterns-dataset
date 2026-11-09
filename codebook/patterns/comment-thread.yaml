@@ -1,0 +1,519 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "comment-thread". Edit between batches only — see README "Rules".
+id: comment-thread
+name: Comment thread
+level: pattern
+parent: communicate
+aliases:
+  - comments
+  - discussion
+  - review comments
+definition: Discussion attached to an artifact or post, where replies nest and threads resolve.
+data: conversation
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - social
+  - news
+  - productivity
+  - software
+  - design
+anatomy:
+  - name: Comment
+    role: One contribution
+  - name: Replies
+    role: Responses to it
+  - name: Anchor
+    role: What the thread is about
+  - name: Resolution
+    role: Whether it is settled
+roles:
+  - author
+  - timestamp
+  - body
+  - votes
+dimensions:
+  - name: Nesting
+    family: composition
+    question: How do replies nest, and what are threads attached to?
+    subdimensions:
+      - id: nesting
+        name: Nesting
+        select: one
+        values:
+          - id: flat
+            name: Flat
+            example: Classic blog comments
+          - id: one-level-of-replies
+            name: One level of replies
+            example: YouTube
+          - id: deep-nesting
+            name: Deep nesting
+            example: Reddit
+          - id: anchored-threads
+            name: Anchored threads
+            description: One thread per location in an artifact
+            example: Google Docs comments
+  - name: Ordering
+    family: initiative
+    question: Who decides which comments come first?
+    subdimensions:
+      - id: ordering
+        name: Ordering
+        select: one
+        values:
+          - id: oldest-first
+            name: Oldest first
+            example: GitHub issues
+          - id: newest-first
+            name: Newest first
+            example: News sites
+          - id: top-by-votes
+            name: Top by votes
+            example: Reddit Best
+          - id: pinned-by-author
+            name: Pinned by author
+            example: YouTube pinned comment
+          - id: anchor-order
+            name: Anchor order
+            description: Threads are listed in the order of their anchors in the artifact (page position,
+              timecode), not by time or votes
+            example: Google Docs — Document comments
+          - id: by-anchor-position
+            name: By anchor position
+            description: Threads are ordered by where their anchors fall in the artifact — down the document,
+              along the timeline, through the pages — not by time or votes
+            example: Google Docs — Document comments
+  - name: Resolution
+    family: lifecycle
+    question: Does a thread end?
+    subdimensions:
+      - id: resolution
+        name: Resolution
+        select: one
+        values:
+          - id: never
+            name: Never
+            example: Social comments
+          - id: resolve-and-hide
+            name: Resolve and hide
+            example: Google Docs
+          - id: accepted-answer
+            name: Accepted answer
+            example: Stack Overflow
+          - id: locked
+            name: Locked
+            example: GitHub locked conversations
+          - id: marked-status
+            name: Marked status
+            description: A thread can be marked completed/accepted/rejected but stays in view rather than being
+              hidden
+            example: Frame.io — Video review comments
+  - name: Placement
+    family: layout
+    question: Where do threads appear?
+    subdimensions:
+      - id: placement
+        name: Placement
+        select: one
+        values:
+          - id: below-the-content
+            name: Below the content
+            example: YouTube
+          - id: margin-beside-the-anchor
+            name: Margin beside the anchor
+            example: Google Docs
+          - id: side-panel
+            name: Side panel
+            example: Figma comments list
+          - id: pins-on-a-canvas
+            name: Pins on a canvas
+            example: Figma comment pins
+          - id: inline-at-the-anchor
+            name: Inline at the anchor
+            description: The thread is spliced into the artifact itself, pushing it apart — a review thread
+              expanding under the diff line it annotates — rather than sitting in a margin or panel
+            example: GitHub — Pull request conversation
+          - id: bottom-sheet
+            name: Bottom sheet
+            description: Comments slide up as a sheet over the lower part of the screen while the content stays
+              playing or visible above
+            example: Instagram — Post comments
+          - id: inline-at-anchor
+            name: Inline at anchor
+            description: The thread renders directly in the content flow at its anchored location (e.g., under a
+              diff line) rather than offset to a margin column, a side panel, or as a pin on a
+              canvas
+            example: GitHub — Pull request conversation
+  - name: Long threads
+    family: content
+    question: How are long threads condensed?
+    subdimensions:
+      - id: condensing
+        name: Condensing
+        select: one
+        values:
+          - id: show-all
+            name: Show all
+            example: GitHub
+          - id: collapse-deep-branches
+            name: Collapse deep branches
+            example: Reddit Continue this thread
+          - id: load-more-replies
+            name: Load more replies
+            example: YouTube
+          - id: hidden-items-summary
+            name: Hidden items summary
+            example: GitHub hidden items
+  - name: Moderation
+    family: collaboration
+    question: How is the discussion kept healthy?
+    subdimensions:
+      - id: moderation
+        name: Moderation
+        select: many
+        values:
+          - id: none
+            name: None
+            example: Private documents
+          - id: voting
+            name: Voting
+            example: Reddit
+          - id: reporting
+            name: Reporting
+            example: YouTube
+          - id: held-for-review
+            name: Held for review
+            example: YouTube held comments
+wild:
+  score: 1
+  note: Sort order is often a choice; structure is not.
+  examples:
+    - name: Reddit
+      note: Sort comments by Best, Top, New, Controversial
+techniques:
+  - name: Thread lenses
+    dimension: Long threads
+    how: Collapse a discussion by participant, by resolved state or by stance, as lenses rather than
+      filters that hide.
+    ai: false
+  - name: Summarize the disagreement
+    dimension: Long threads
+    how: A summary of positions, each linked to the comments that hold it.
+    ai: true
+signature: Thread lenses
+sample: Social, news, code review, document and design collaboration tools.
+unit: One comment thread or thread set on one artifact.
+relations:
+  uses:
+    - reactions
+    - text-field
+    - menu
+  specializes:
+    - communicate
+  neighbors:
+    - chat-thread
+    - annotation
+scores:
+  ubiquity: 5
+  potential: 3
+  spec: 4
+evidence: agent-coded
+usage:
+  - Most readers never go past the top few comments
+questions:
+  - When comments are anchored, is the artifact the overview?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7856048923920033
+  agreementFirstPass: 0.8222222222222222
+  kappaFinal: 0.9840099877189106
+  agreementFinal: 0.9833333333333333
+  pass: true
+  perSub:
+    nesting:
+      kappaFirstPass: 0.8994132439228835
+      agreementFirstPass: 0.9
+      kappaFinal: 0.9497066219614416
+      agreementFinal: 0.95
+      flag: null
+    ordering:
+      kappaFirstPass: 0.4047619047619047
+      agreementFirstPass: 0.55
+      kappaFinal: 0.9500831946755406
+      agreementFinal: 0.95
+      flag: null
+    resolution:
+      kappaFirstPass: 0.8973481608212147
+      agreementFirstPass: 0.9
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    placement:
+      kappaFirstPass: 0.6296296296296299
+      agreementFirstPass: 0.65
+      kappaFinal: 0.9563000728332118
+      agreementFinal: 0.95
+      flag: null
+    condensing:
+      kappaFirstPass: 0.8464163822525598
+      agreementFirstPass: 0.85
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    moderation:
+      kappaFirstPass: 0.8482186775349592
+      agreementFirstPass: 0.8875
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+  distribution:
+    nesting:
+      Flat: 1
+      One level of replies: 8
+      Deep nesting: 3
+      Anchored threads: 8
+    ordering:
+      Oldest first: 3
+      Newest first: 2
+      Top by votes: 10
+      Pinned by author: 0
+      Anchor order: 5
+      By anchor position: 0
+    resolution:
+      Never: 9
+      Resolve and hide: 6
+      Accepted answer: 1
+      Locked: 2
+      Marked status: 2
+    placement:
+      Below the content: 8
+      Margin beside the anchor: 3
+      Side panel: 3
+      Pins on a canvas: 2
+      Inline at the anchor: 2
+      Bottom sheet: 2
+      Inline at anchor: 0
+    condensing:
+      Show all: 7
+      Collapse deep branches: 2
+      Load more replies: 9
+      Hidden items summary: 2
+    moderation:
+      None: 6
+      Voting: 11
+      Reporting: 14
+      Held for review: 6
+  exemplars:
+    nesting:
+      Flat:
+        - GitHub — Issue thread
+      One level of replies:
+        - YouTube — Video comments
+        - Stack Overflow — Question with answers
+        - Instagram — Post comments
+      Deep nesting:
+        - Reddit — Post comments
+        - X — Post replies
+        - Hacker News — Story comments
+      Anchored threads:
+        - Google Docs — Document comments
+        - GitHub — Pull request conversation
+        - Figma — Comments on a design file
+    ordering:
+      Oldest first:
+        - GitHub — Pull request conversation
+        - GitHub — Issue thread
+        - GitLab — Merge request discussion
+      Newest first:
+        - Figma — Comments on a design file
+        - The New York Times — Article comments
+      Top by votes:
+        - YouTube — Video comments
+        - Reddit — Post comments
+        - Stack Overflow — Question with answers
+      Pinned by author: []
+      Anchor order:
+        - Google Docs — Document comments
+        - Notion — Page comments
+        - Microsoft Word — Document comments
+      By anchor position: []
+    resolution:
+      Never:
+        - YouTube — Video comments
+        - Reddit — Post comments
+        - Instagram — Post comments
+      Resolve and hide:
+        - Google Docs — Document comments
+        - GitHub — Pull request conversation
+        - Figma — Comments on a design file
+      Accepted answer:
+        - Stack Overflow — Question with answers
+      Locked:
+        - GitHub — Issue thread
+        - The New York Times — Article comments
+      Marked status:
+        - Frame.io — Video review comments
+        - Adobe Acrobat — PDF comments
+    placement:
+      Below the content:
+        - YouTube — Video comments
+        - Reddit — Post comments
+        - GitHub — Issue thread
+      Margin beside the anchor:
+        - Google Docs — Document comments
+        - Notion — Page comments
+        - Microsoft Word — Document comments
+      Side panel:
+        - The New York Times — Article comments
+        - Frame.io — Video review comments
+        - Medium — Story responses
+      Pins on a canvas:
+        - Figma — Comments on a design file
+        - Adobe Acrobat — PDF comments
+      Inline at the anchor:
+        - GitHub — Pull request conversation
+        - GitLab — Merge request discussion
+      Bottom sheet:
+        - Instagram — Post comments
+        - TikTok — Video comments
+      Inline at anchor: []
+    condensing:
+      Show all:
+        - Google Docs — Document comments
+        - Figma — Comments on a design file
+        - Notion — Page comments
+      Collapse deep branches:
+        - Reddit — Post comments
+        - Hacker News — Story comments
+      Load more replies:
+        - YouTube — Video comments
+        - Stack Overflow — Question with answers
+        - Instagram — Post comments
+      Hidden items summary:
+        - GitHub — Pull request conversation
+        - GitHub — Issue thread
+    moderation:
+      None:
+        - Google Docs — Document comments
+        - Figma — Comments on a design file
+        - Notion — Page comments
+      Voting:
+        - YouTube — Video comments
+        - Reddit — Post comments
+        - Stack Overflow — Question with answers
+      Reporting:
+        - YouTube — Video comments
+        - Reddit — Post comments
+        - GitHub — Pull request conversation
+      Held for review:
+        - YouTube — Video comments
+        - Reddit — Post comments
+        - Instagram — Post comments
+  unobserved:
+    - sub: ordering
+      var: Pinned by author
+    - sub: ordering
+      var: By anchor position
+    - sub: placement
+      var: Inline at anchor
+  unresolved: []
+  proposals:
+    raised: 7
+    adopted:
+      - sub: ordering
+        name: Anchor order
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: resolution
+        name: Marked status
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: ordering
+        name: By anchor position
+        raters:
+          - fable
+          - opus
+      - sub: placement
+        name: Inline at the anchor
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: placement
+        name: Bottom sheet
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: placement
+        name: Inline at anchor
+        raters:
+          - opus
+          - sonnet
+    recorded:
+      - place: sub:placement
+        sub: placement
+        dim: null
+        name: Sheet over the content
+        gloss: Comments open in a bottom sheet that slides up over the post or video rather than below or
+          beside it
+        raters:
+          - fable
+        instances:
+          - 8
+          - 17
+        status: raised
+  raterNotes:
+    fable:
+      - ordering's 'Top by votes' had to stretch to cover engagement/relevance ranking (Instagram,
+        Facebook, X, TikTok, Medium) since no 'ranked by relevance' variation exists. 'Pinned by
+        author' was never coded as the primary ordering because a pin is an exception to whatever
+        sort is default.
+      - Resolve and hide bundles two things, marking a thread settled and removing it from view;
+        review tools mark without hiding. Voting under moderation is read two ways, as a ranking
+        signal (hearts, claps) or as a burying tool; the gloss should say which.
+    opus:
+      - ordering has no variation for algorithmic relevance (Most relevant, Top comments, ranked
+        replies); I coded those Top by votes because a visible like count feeds the rank, but that
+        reads more into it than the label says. Anchored products needed the +By anchor position
+        proposal because none of the four time/vote orderings describe reading down a document.
+      - ordering is pick one but a news or social thread offers newest, top and curated orders side
+        by side on the same screen; it wants to be pick any with a marked default. nesting has
+        nothing between One level of replies and Reddit-deep.
+    sonnet:
+      - "Ordering was often a fit-by-analogy: several products (Facebook, Instagram, TikTok, X)
+        default to an undisclosed relevance/engagement algorithm that most resembles 'Top by votes'
+        without being literal vote counts; two products (Medium, Substack) got '?' where I couldn't
+        recall the exact default confidently."
+      - Three codebook problems. (1) Moderation's Voting has no gloss on whether a one-directional
+        like or clap counts as a vote; that single ambiguity produced six of this entry's nine
+        moderation disagreements, and it should say so explicitly. (2) Resolve and hide bundles two
+        separate things — marking a thread settled and removing it from view — which is why review
+        tools (Frame.io, Acrobat) needed the Marked status proposal. (3) Placement's Pins on a
+        canvas and Side panel are both true of most anchored tools at once (a marker on the
+        artifact, the thread body in a panel); the gloss needs a rule — I coded where the thread
+        body renders — or the sub should be pick any. Nesting also asks two questions at once (how
+        deep replies go, and what the thread is attached to), so Anchored threads competes with a
+        depth answer rather than excluding it.
+  codedAt: 2026-09-22
+previews:
+  - file: comment-thread.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

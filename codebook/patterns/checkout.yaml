@@ -1,0 +1,476 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "checkout". Edit between batches only — see README "Rules".
+id: checkout
+name: Checkout
+level: pattern
+parent: transact
+aliases:
+  - purchase flow
+  - payment flow
+definition: "The flow that turns a cart into a paid order: contact, delivery, payment and review."
+data: schema
+platforms:
+  - web
+  - mobile
+domains:
+  - commerce
+  - travel
+  - entertainment
+anatomy:
+  - name: Contact and delivery
+    role: Who and where
+  - name: Payment
+    role: How to pay
+  - name: Order summary
+    role: What and how much
+  - name: Place order
+    role: The commitment
+roles:
+  - item
+  - price
+  - total
+  - address
+dimensions:
+  - name: Structure
+    family: flow
+    question: How is the flow divided?
+    subdimensions:
+      - id: structure
+        name: Structure
+        select: one
+        values:
+          - id: multi-page-steps
+            name: Multi-page steps
+            example: Classic checkouts
+          - id: one-page
+            name: One page
+            example: Shopify one-page checkout
+          - id: express-wallet
+            name: Express wallet
+            example: Apple Pay, Shop Pay
+          - id: guest-or-account
+            name: Guest or account
+            example: Retail checkouts
+  - name: Order summary
+    family: content
+    question: How visible is what is being bought?
+    subdimensions:
+      - id: summary
+        name: Summary
+        select: one
+        values:
+          - id: only-at-review
+            name: Only at review
+            example: Older checkouts
+          - id: collapsible-on-mobile
+            name: Collapsible on mobile
+            example: Shopify
+          - id: persistent-side-summary
+            name: Persistent side summary
+            example: Desktop checkouts
+          - id: editable-in-place
+            name: Editable in place
+            example: Change quantity in the summary
+  - name: Prefill
+    family: initiative
+    question: What arrives filled in?
+    subdimensions:
+      - id: prefill
+        name: Prefill
+        select: one
+        values:
+          - id: blank
+            name: Blank
+            example: Guest checkout
+          - id: saved-details
+            name: Saved details
+            example: Amazon
+          - id: wallet-autofill
+            name: Wallet autofill
+            example: Apple Pay
+          - id: address-autocomplete
+            name: Address autocomplete
+            example: Google Places autocomplete
+  - name: Cost disclosure
+    family: feedback
+    question: When is the full cost known?
+    subdimensions:
+      - id: disclosure
+        name: Disclosure
+        select: one
+        values:
+          - id: only-at-the-end
+            name: Only at the end
+            example: Fees revealed late
+          - id: running-total-with-estimates
+            name: Running total with estimates
+            example: Shopify
+          - id: everything-up-front
+            name: Everything up front
+            example: Total-price displays
+  - name: Payment options
+    family: layout
+    question: How are ways to pay offered?
+    subdimensions:
+      - id: payment
+        name: Payment
+        select: many
+        values:
+          - id: card-form
+            name: Card form
+            example: Stripe Checkout
+          - id: wallet-buttons
+            name: Wallet buttons
+            example: Apple Pay
+          - id: pay-later
+            name: Pay later
+            example: Klarna
+          - id: saved-methods
+            name: Saved methods
+            example: Amazon
+  - name: Abandonment
+    family: lifecycle
+    question: What happens when a person leaves?
+    subdimensions:
+      - id: abandonment
+        name: Abandonment
+        select: one
+        values:
+          - id: nothing-kept
+            name: Nothing kept
+            example: Guest sessions
+          - id: saved-cart
+            name: Saved cart
+            example: Amazon
+          - id: reminder
+            name: Reminder
+            example: Cart reminder emails
+          - id: synced-across-devices
+            name: Synced across devices
+            example: Signed-in carts
+wild:
+  score: 0
+  note: Checkouts are optimized by the merchant and never customizable.
+  examples: []
+techniques:
+  - name: Express, expandable
+    dimension: Structure
+    how: A one-tap path for returning buyers where every step can be expanded in place to check or
+      change it.
+    ai: false
+signature: Express, expandable
+sample: Top retail, travel and ticketing checkouts.
+unit: One checkout flow.
+relations:
+  uses:
+    - form
+    - stepper
+    - accordion
+    - choice-control
+    - confirmation
+    - autocomplete
+  specializes:
+    - transact
+    - wizard
+  neighbors:
+    - booking-flow
+    - plan-picker
+scores:
+  ubiquity: 5
+  potential: 2
+  spec: 5
+evidence: agent-coded
+usage:
+  - Buyers re-open the summary to check totals before paying
+questions:
+  - Is a checkout the rare pattern where malleability should stay low?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.24282327027736367
+  agreementFirstPass: 0.5166666666666667
+  kappaFinal: 0.8992866379821601
+  agreementFinal: 0.95
+  pass: true
+  perSub:
+    structure:
+      kappaFirstPass: 0.29666366095581603
+      agreementFirstPass: 0.4
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    summary:
+      kappaFirstPass: 0.9332591768631815
+      agreementFirstPass: 0.95
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    prefill:
+      kappaFirstPass: 0.5615866388308973
+      agreementFirstPass: 0.85
+      kappaFinal: 0.8747390396659704
+      agreementFinal: 0.95
+      flag: null
+    disclosure:
+      kappaFirstPass: -0.11244019138755944
+      agreementFirstPass: 0.25
+      kappaFinal: 0.8382749326145548
+      agreementFinal: 0.95
+      flag: null
+    payment:
+      kappaFirstPass: 0.056091394325313224
+      agreementFirstPass: 0.475
+      kappaFinal: 0.9038268883991187
+      agreementFinal: 0.975
+      flag: null
+    abandonment:
+      kappaFirstPass: 0.28197456993268516
+      agreementFirstPass: 0.3
+      kappaFinal: 0.7652582159624414
+      agreementFinal: 0.75
+      flag: null
+  distribution:
+    structure:
+      Multi-page steps: 6
+      One page: 14
+      Express wallet: 0
+      Guest or account: 0
+    summary:
+      Only at review: 0
+      Collapsible on mobile: 8
+      Persistent side summary: 12
+      Editable in place: 0
+    prefill:
+      Blank: 1
+      Saved details: 17
+      Wallet autofill: 2
+      Address autocomplete: 0
+    disclosure:
+      Only at the end: 0
+      Running total with estimates: 18
+      Everything up front: 2
+    payment:
+      Card form: 20
+      Wallet buttons: 19
+      Pay later: 16
+      Saved methods: 18
+    abandonment:
+      Nothing kept: 3
+      Saved cart: 3
+      Reminder: 4
+      Synced across devices: 10
+  exemplars:
+    structure:
+      Multi-page steps:
+        - Apple Store — Online checkout
+        - Best Buy — Checkout
+        - Booking.com — Final details and payment
+      One page:
+        - Amazon — Checkout
+        - Allbirds (Shopify) — Shopify checkout
+        - Walmart — Checkout
+      Express wallet: []
+      Guest or account: []
+    summary:
+      Only at review: []
+      Collapsible on mobile:
+        - Walmart — Checkout
+        - Target — Checkout
+        - Nike — Checkout
+      Persistent side summary:
+        - Amazon — Checkout
+        - Allbirds (Shopify) — Shopify checkout
+        - Apple Store — Online checkout
+      Editable in place: []
+    prefill:
+      Blank:
+        - IKEA — Checkout
+      Saved details:
+        - Amazon — Checkout
+        - Apple Store — Online checkout
+        - Walmart — Checkout
+      Wallet autofill:
+        - Allbirds (Shopify) — Shopify checkout
+        - Stripe Checkout — Hosted payment page
+      Address autocomplete: []
+    disclosure:
+      Only at the end: []
+      Running total with estimates:
+        - Amazon — Checkout
+        - Allbirds (Shopify) — Shopify checkout
+        - Apple Store — Online checkout
+      Everything up front:
+        - Stripe Checkout — Hosted payment page
+        - Ticketmaster — Checkout
+    payment:
+      Card form:
+        - Amazon — Checkout
+        - Allbirds (Shopify) — Shopify checkout
+        - Apple Store — Online checkout
+      Wallet buttons:
+        - Allbirds (Shopify) — Shopify checkout
+        - Apple Store — Online checkout
+        - Walmart — Checkout
+      Pay later:
+        - Amazon — Checkout
+        - Allbirds (Shopify) — Shopify checkout
+        - Apple Store — Online checkout
+      Saved methods:
+        - Amazon — Checkout
+        - Apple Store — Online checkout
+        - Walmart — Checkout
+    abandonment:
+      Nothing kept:
+        - Stripe Checkout — Hosted payment page
+        - Ticketmaster — Checkout
+        - Delta Air Lines — Trip purchase
+      Saved cart:
+        - eBay — Checkout
+        - Zara — Checkout
+        - IKEA — Checkout
+      Reminder:
+        - Allbirds (Shopify) — Shopify checkout
+        - Expedia — Checkout
+        - Booking.com — Final details and payment
+      Synced across devices:
+        - Amazon — Checkout
+        - Apple Store — Online checkout
+        - Walmart — Checkout
+  unobserved:
+    - sub: structure
+      var: Express wallet
+    - sub: structure
+      var: Guest or account
+    - sub: summary
+      var: Only at review
+    - sub: summary
+      var: Editable in place
+    - sub: prefill
+      var: Address autocomplete
+    - sub: disclosure
+      var: Only at the end
+  unresolved: []
+  proposals:
+    raised: 0
+    adopted: []
+    recorded: []
+  raterNotes:
+    fable:
+      - "structure's 'Guest or account' and 'Express wallet' are orthogonal to page shape, so I
+        coded page shape and noted the gate/express buttons. abandonment: 'Synced across devices'
+        whenever the cart lives on an account, 'Saved cart' for cookie carts, 'Reminder' where
+        recovery emails are the product's known behaviour."
+      - structure mixes how pages divide with the guest-or-account entry fork, which nearly every
+        retail checkout has; Guest or account should be its own sub. Everything up front vs Running
+        total needs a rule for totals that move with shipping and tips. abandonment is pick one but
+        signed-in carts are saved, synced and reminded at once.
+      - "Three sub-dimensions cannot be applied consistently as written. abandonment: Saved cart and
+        Synced across devices nest rather than exclude each other (every synced cart is a saved
+        cart; the codebook's Saved cart exemplar is Amazon while Synced's gloss 'signed-in carts'
+        describes Amazon), and Reminder is orthogonal to both, so a signed-in cart with recovery
+        emails holds three values of a pick-one sub; the remaining disagreement there (Zara, and
+        sonnet's Saved cart on the delivery apps) is raters choosing how strong a claim to make, not
+        different readings of the product, and it will not converge until Synced is either folded
+        into Saved cart or the sub becomes pick any. prefill: Address autocomplete is a typing aid,
+        not something that arrives filled in, so it nests inside Blank rather than being an
+        alternative to it; the sub conflates initial state with entry assistance. disclosure:
+        Everything up front versus Running total with estimates has no rule for totals that move
+        with in-flow choices (delivery speed, tip, fulfilment), so the boundary sits wherever each
+        rater draws it and Everything up front collapses to option-free pages. payment: Pay later is
+        glossed by Klarna but its name also covers pay-at-property timing and store-card financing,
+        and Wallet buttons conflates a wallet as a tender in a list with a wallet as an express
+        button; tenders (miles, EBT, gift cards) have no code."
+    opus:
+      - "structure is pick-one but Guest or account is a different axis from Multi-page / One page /
+        Express wallet — almost every checkout here is both (guest choice and a page count), so I
+        coded Guest or account only where the first screen is literally that fork, and raters could
+        easily code Amazon or Etsy the other way. prefill is similarly layered: a signed-in Shopify
+        checkout is wallet autofill, saved details and address autocomplete at once."
+      - "structure mixes two axes and a special case: Multi-page steps and One page answer 'how is
+        the flow divided', while Guest or account is an identity question true of nearly every
+        instance and Express wallet is a path through the flow rather than a division of it — that
+        is most of this entry's disagreement. abandonment is a nesting, not a partition: Nothing
+        kept is inside Saved cart is inside Synced across devices, Reminder is orthogonal to all
+        three, and the codebook names Amazon under Saved cart while glossing Synced as 'signed-in
+        carts'. Pay later covers BNPL, pay-at-property and store-card financing at once, and the
+        payment sub-dimension names payment surfaces so alternative tenders (EBT, miles, points,
+        store credit) cannot be coded at all."
+      - "Three defects account for all 17 cells, and two of them are the kind that cannot be
+        reconciled by re-reading the product. (1) abandonment is a nesting plus an orthogonal, not a
+        partition: Nothing kept ⊂ Saved cart ⊂ Synced across devices are the same claim at
+        increasing strength, so a rater's confidence — not the product — decides the code, while
+        Reminder answers a separate question (outreach, not persistence) and Etsy, Amazon and SHEIN
+        are truthfully both; 6 of the 17 cells are this, and I regard the sub-dimension as
+        unreliable as written rather than mis-applied. It needs splitting into a persistence scale
+        (nothing / this device / the account) and a separate yes-no for reminders, and its own gloss
+        contradicts itself by naming Amazon under Saved cart while glossing Synced as 'signed-in
+        carts'. (2) prefill conflates what arrives filled with what helps you fill: Address
+        autocomplete is not an alternative to Blank, it nests inside it, so n20 has two true codes
+        under pick one — it wants pick any, or Address autocomplete moved to an input-assist
+        sub-dimension. (3) disclosure conflates timing with finality: Everything up front vs Running
+        total with estimates asks both 'is the total there from the start' and 'is it final', and
+        Amazon is yes to the first and no to the second (n1). Two further notes that are naming, not
+        structure: Pay later is named for deferred payment and glossed for BNPL financing, and the
+        two sets differ (n16); and payment names surfaces only, so EBT, miles, points and store
+        credit — on screen at Instacart and Delta — cannot be coded at all. Finally, a process
+        observation: at least 5 of these cells (n4, n5, n15, n9, n16) are raters swapping positions
+        between rounds and citing each other's abandoned codes as support, which inflates the
+        apparent disagreement on structure."
+    sonnet:
+      - "abandonment behavior for on-demand food delivery apps (DoorDash, Uber Eats, Instacart) was
+        marked '?': restaurant/shopper availability is time-sensitive so I'm not confident whether
+        an abandoned cart is saved, reminded, or simply dropped."
+      - "Two codebook problems, one of them large. (1) structure's four values conflate two
+        different axes: three of them (Multi-page steps / One page / Express wallet) describe how
+        many pages the flow spans, while the fourth (Guest or account) describes who must sign in —
+        a question most real checkouts answer independently of their page count (Amazon is both One
+        page and lets you check out as guest-or-account). My round-1 codes defaulted to Guest or
+        account almost everywhere the choice was visible on screen, which is a real miss, but the
+        deeper issue is that this pick-one sub-dimension is answering two different questions with
+        one value; per the reconciliation rule I took the step-shape value since the codebook lists
+        it first and it's what 'How is the flow divided?' is actually asking, but nearly every
+        instance here also truthfully has a guest-or-account choice that the codebook currently has
+        no room to also record. (2) disclosure's Running total with estimates and Everything up
+        front collapsed into each other constantly: almost any checkout that shows a total early but
+        lets one more input (a delivery slot, a coupon, a tip) still adjust it got split three ways,
+        because the codebook doesn't say how much a total needs to move for 'running' to apply
+        versus 'up front' meaning the number is right the first time. Ticketmaster (n14) was the
+        interesting exception — a specific, dated regulatory fact (the FTC's 2025 all-in-pricing
+        rule) changed which value is actually correct now, which is a case worth flagging as a place
+        where a codebook exemplar can go stale rather than being wrong."
+      - "The abandonment sub-dimension cannot be applied consistently as pick-one, and I agree with
+        both other raters' diagnosis: Nothing kept, Saved cart and Synced across devices are not
+        parallel alternatives but three strengths of a single underlying claim (a synced cart is
+        definitionally also a saved cart, which is definitionally not 'nothing kept'), while
+        Reminder names an unrelated axis - an outbound notification - that coexists with any of the
+        other three (Etsy does both, per fable's own n7 note; Amazon is the codebook's own Saved
+        cart exemplar while also matching its Synced gloss, 'signed-in carts', a clash opus named at
+        n1 in round 2). Every abandonment disagreement in this packet (n7, n9, n11, n12, n13, n18)
+        reduces to raters choosing a different confidence level on the same underlying fact, not
+        seeing different products - exactly the failure mode described going into this round. I'm
+        holding my codes at n7/n11/n12/n13 (weaker, more defensible tier), and at n9/n18 I already
+        sit with the majority (also worth noting neither of those was a case of me converging to
+        reach that agreement - n9 and n18 already matched fable and opus respectively going into
+        this round). Two smaller findings from the other recoded cells: (1) structure's 'how many
+        steps' question is ambiguous about whether a modal/sheet used to edit one field counts as a
+        step; I now read the codebook's own One page exemplar (Shopify, which itself has edit
+        sheets) as settling this toward 'no', and moved Walmart/Target/Expedia (n4, n5, n15) to One
+        page on that basis rather than by deferring to the other raters' count. (2) payment's Pay
+        later is glossed only by Klarna-style BNPL financing, but real products use the phrase 'pay
+        later' for plain charge-timing choices too (Booking.com's pay-at-property, n16); I held
+        these apart since the underlying UI mechanism differs even where the marketing word matches,
+        but the gloss doesn't say so explicitly."
+  codedAt: 2026-09-22
+previews:
+  - file: checkout.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

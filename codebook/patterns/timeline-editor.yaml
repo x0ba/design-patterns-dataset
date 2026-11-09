@@ -1,0 +1,483 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "timeline-editor". Edit between batches only — see README "Rules".
+id: timeline-editor
+name: Timeline editor
+level: pattern
+parent: create
+aliases:
+  - non-linear editor
+  - NLE
+  - sequencer
+  - arrangement view
+definition: Composing time-based media by arranging clips on tracks against a time axis.
+data: media
+platforms:
+  - desktop
+  - mobile
+  - web
+domains:
+  - entertainment
+  - design
+  - education
+  - social
+anatomy:
+  - name: Tracks
+    role: Parallel lanes of media
+  - name: Clips
+    role: Pieces of media
+  - name: Playhead
+    role: The current time
+  - name: Viewer
+    role: The rendered result
+  - name: Bin
+    role: Available media
+roles: []
+dimensions:
+  - name: Track model
+    family: layout
+    question: How is time laid out?
+    subdimensions:
+      - id: tracks
+        name: Track model
+        select: one
+        values:
+          - id: fixed-tracks
+            name: Fixed tracks
+            example: Premiere Pro
+          - id: magnetic-storyline
+            name: Magnetic storyline
+            description: Clips close gaps automatically
+            example: Final Cut Pro
+          - id: one-main-track
+            name: One main track
+            example: CapCut
+          - id: storyboard
+            name: Storyboard
+            example: iMovie storyboards
+  - name: Nesting
+    family: composition
+    question: How are clips combined?
+    subdimensions:
+      - id: nesting
+        name: Nesting
+        select: one
+        values:
+          - id: flat
+            name: Flat
+            example: Simple edits
+          - id: nested-sequences
+            name: Nested sequences
+            example: Premiere nested sequences, Final Cut compound clips
+          - id: linked-audio-and-video
+            name: Linked audio and video
+            example: All NLEs
+          - id: groups
+            name: Groups
+            example: DaVinci Resolve
+  - name: Clip representation
+    family: encoding
+    question: How does a clip show its content?
+    subdimensions:
+      - id: representation
+        name: Representation
+        select: many
+        values:
+          - id: name
+            name: Name
+            example: Compact tracks
+          - id: filmstrip-thumbnails
+            name: Filmstrip thumbnails
+            example: Premiere Pro
+          - id: waveforms
+            name: Waveforms
+            example: Audio tracks
+          - id: colour-labels
+            name: Colour labels
+            example: Final Cut roles
+          - id: transcript-text
+            name: Transcript text
+            example: Descript
+          - id: keyframes-on-property-rows
+            name: Keyframes on property rows
+            description: The lane holds parameter values over time — keyframes, envelopes, automation curves —
+              rather than a piece of media, which is how motion and audio tools spend most of their
+              timeline rows
+            example: Adobe After Effects — Composition timeline
+  - name: Edit operations
+    family: scope
+    question: What edits are possible, and on what?
+    subdimensions:
+      - id: operations
+        name: Operations
+        select: many
+        values:
+          - id: blade-cut
+            name: Blade cut
+            example: All
+          - id: ripple
+            name: Ripple
+            description: Later clips move with the edit
+            example: Premiere Pro
+          - id: slip-and-slide
+            name: Slip and slide
+            example: Professional NLEs
+          - id: delete-words
+            name: Delete words
+            description: Edit video by deleting transcript text
+            example: Descript
+  - name: Navigation
+    family: invocation
+    question: How does a person move through time?
+    subdimensions:
+      - id: navigation
+        name: Navigation
+        select: many
+        values:
+          - id: scrub-the-playhead
+            name: Scrub the playhead
+            example: All
+          - id: zoom-the-timeline
+            name: Zoom the timeline
+            example: All
+          - id: j-k-l-shuttle
+            name: J, K, L shuttle
+            example: Professional NLEs
+          - id: markers
+            name: Markers
+            example: Premiere markers
+  - name: Automation
+    family: initiative
+    question: What does the editor do for you?
+    subdimensions:
+      - id: automation
+        name: Automation
+        select: one
+        values:
+          - id: manual
+            name: Manual
+            example: Classic NLEs
+          - id: auto-captions
+            name: Auto-captions
+            example: CapCut
+          - id: remove-filler-words-and-silences
+            name: Remove filler words and silences
+            example: Descript
+          - id: edit-from-a-script
+            name: Edit from a script
+            example: Text-to-edit tools
+          - id: auto-assemble
+            name: Auto-assemble
+            description: The editor builds a first cut from chosen media on its own (iMovie Magic Movie,
+              template auto-fill), which the person then trims
+            example: iMovie — Project
+          - id: auto-assemble-from-media
+            name: Auto-assemble from media
+            description: The tool builds a whole edit from a pile of clips — choosing, ordering, trimming and
+              scoring it — and hands back a timeline to adjust (iMovie Magic Movie, highlight-reel
+              generators)
+            example: iMovie — Project
+wild:
+  score: 3
+  note: Track heights, workspaces and shortcuts are customized routinely by editors.
+  examples:
+    - name: Premiere Pro
+      note: Workspaces and keyboard shortcut editor
+    - name: DaVinci Resolve
+      note: Custom layouts
+techniques:
+  - name: Edit through any representation
+    dimension: Clip representation
+    how: Edit the transcript, the waveform or the thumbnails, and the timeline follows; Descript’s move
+      generalized to any representation.
+    ai: false
+  - name: Track lenses
+    dimension: Clip representation
+    how: Choose per track which representations show, the timeline form of surfacing attributes.
+    ai: false
+  - name: Cut to the best minute
+    dimension: Automation
+    how: A goal produces a proposed edit on a new sequence, never overwriting the original.
+    ai: true
+signature: Edit through any representation
+sample: Desktop NLEs, mobile video editors, DAWs and podcast editors.
+unit: One timeline editor.
+relations:
+  uses:
+    - property-inspector
+    - slider
+    - undo
+    - split-pane
+  specializes:
+    - create
+  neighbors:
+    - gantt-timeline
+    - media-player
+scores:
+  ubiquity: 2
+  potential: 4
+  spec: 3
+evidence: agent-coded
+usage:
+  - Editors switch between text-first and timeline-first as the edit matures
+questions:
+  - Which representations can be edited without losing fidelity?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.4905198653193989
+  agreementFirstPass: 0.6235294117647059
+  kappaFinal: 0.9301644968560411
+  agreementFinal: 0.95
+  pass: true
+  perSub:
+    tracks:
+      kappaFirstPass: 0.9318955732122586
+      agreementFirstPass: 0.95
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    nesting:
+      kappaFirstPass: 0.5059469350411712
+      agreementFirstPass: 0.55
+      kappaFinal: 0.9428026692087701
+      agreementFinal: 0.95
+      flag: null
+    representation:
+      kappaFirstPass: 0.6111420248109711
+      agreementFirstPass: 0.725
+      kappaFinal: 0.9219306669971185
+      agreementFinal: 0.9416666666666667
+      flag: null
+    operations:
+      kappaFirstPass: 0.36800526662277866
+      agreementFirstPass: 0.55
+      kappaFinal: 0.9330357142857145
+      agreementFinal: 0.95
+      flag: null
+    navigation:
+      kappaFirstPass: 0.28208695652173965
+      agreementFirstPass: 0.4625
+      kappaFinal: 0.9015667295545895
+      agreementFinal: 0.9375
+      flag: null
+    automation:
+      kappaFirstPass: 0.6337741607324517
+      agreementFirstPass: 0.7
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+  distribution:
+    tracks:
+      Fixed tracks: 13
+      Magnetic storyline: 1
+      One main track: 5
+      Storyboard: 1
+    nesting:
+      Flat: 11
+      Nested sequences: 5
+      Linked audio and video: 0
+      Groups: 4
+    representation:
+      Name: 13
+      Filmstrip thumbnails: 11
+      Waveforms: 17
+      Colour labels: 9
+      Transcript text: 2
+      Keyframes on property rows: 4
+    operations:
+      Blade cut: 20
+      Ripple: 16
+      Slip and slide: 6
+      Delete words: 2
+    navigation:
+      Scrub the playhead: 20
+      Zoom the timeline: 20
+      J, K, L shuttle: 6
+      Markers: 10
+    automation:
+      Manual: 13
+      Auto-captions: 4
+      Remove filler words and silences: 2
+      Edit from a script: 0
+      Auto-assemble: 1
+      Auto-assemble from media: 0
+  exemplars:
+    tracks:
+      Fixed tracks:
+        - Adobe Premiere Pro — Timeline
+        - DaVinci Resolve — Edit page
+        - Descript — Timeline and script
+      Magnetic storyline:
+        - Final Cut Pro — Magnetic timeline
+      One main track:
+        - iMovie — Project
+        - CapCut — Project
+        - InShot — Project
+      Storyboard:
+        - Canva — Video timeline
+    nesting:
+      Flat:
+        - iMovie — Project
+        - CapCut — Project
+        - InShot — Project
+      Nested sequences:
+        - Adobe Premiere Pro — Timeline
+        - Final Cut Pro — Magnetic timeline
+        - DaVinci Resolve — Edit page
+      Linked audio and video: []
+      Groups:
+        - Ableton Live — Arrangement view
+        - Logic Pro — Tracks area
+        - Pro Tools — Edit window
+    representation:
+      Name:
+        - Adobe Premiere Pro — Timeline
+        - Final Cut Pro — Magnetic timeline
+        - DaVinci Resolve — Edit page
+      Filmstrip thumbnails:
+        - Adobe Premiere Pro — Timeline
+        - Final Cut Pro — Magnetic timeline
+        - DaVinci Resolve — Edit page
+      Waveforms:
+        - Adobe Premiere Pro — Timeline
+        - Final Cut Pro — Magnetic timeline
+        - DaVinci Resolve — Edit page
+      Colour labels:
+        - Adobe Premiere Pro — Timeline
+        - Final Cut Pro — Magnetic timeline
+        - DaVinci Resolve — Edit page
+      Transcript text:
+        - Descript — Timeline and script
+        - Riverside — Editor
+      Keyframes on property rows:
+        - Adobe After Effects — Composition timeline
+        - Ableton Live — Arrangement view
+        - Logic Pro — Tracks area
+    operations:
+      Blade cut:
+        - Adobe Premiere Pro — Timeline
+        - Final Cut Pro — Magnetic timeline
+        - DaVinci Resolve — Edit page
+      Ripple:
+        - Adobe Premiere Pro — Timeline
+        - Final Cut Pro — Magnetic timeline
+        - DaVinci Resolve — Edit page
+      Slip and slide:
+        - Adobe Premiere Pro — Timeline
+        - Final Cut Pro — Magnetic timeline
+        - DaVinci Resolve — Edit page
+      Delete words:
+        - Descript — Timeline and script
+        - Riverside — Editor
+    navigation:
+      Scrub the playhead:
+        - Adobe Premiere Pro — Timeline
+        - Final Cut Pro — Magnetic timeline
+        - DaVinci Resolve — Edit page
+      Zoom the timeline:
+        - Adobe Premiere Pro — Timeline
+        - Final Cut Pro — Magnetic timeline
+        - DaVinci Resolve — Edit page
+      J, K, L shuttle:
+        - Adobe Premiere Pro — Timeline
+        - Final Cut Pro — Magnetic timeline
+        - DaVinci Resolve — Edit page
+      Markers:
+        - Adobe Premiere Pro — Timeline
+        - Final Cut Pro — Magnetic timeline
+        - DaVinci Resolve — Edit page
+    automation:
+      Manual:
+        - Adobe Premiere Pro — Timeline
+        - Final Cut Pro — Magnetic timeline
+        - DaVinci Resolve — Edit page
+      Auto-captions:
+        - CapCut — Project
+        - TikTok — In-app editor
+        - Instagram Reels — Reels editor
+      Remove filler words and silences:
+        - Descript — Timeline and script
+        - Riverside — Editor
+      Edit from a script: []
+      Auto-assemble:
+        - iMovie — Project
+      Auto-assemble from media: []
+  unobserved:
+    - sub: nesting
+      var: Linked audio and video
+    - sub: automation
+      var: Edit from a script
+    - sub: automation
+      var: Auto-assemble from media
+  unresolved: []
+  proposals:
+    raised: 3
+    adopted:
+      - sub: automation
+        name: Auto-assemble
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: representation
+        name: Keyframes on property rows
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: automation
+        name: Auto-assemble from media
+        raters:
+          - fable
+          - opus
+    recorded: []
+  raterNotes:
+    fable:
+      - Automation is a pick-one over pro NLEs that now ship captions and text-based editing; coded
+        Manual for them and the automation only where it is the editor's headline.
+      - automation is pick-one but pro NLEs now ship captions, filler removal and text-based
+        editing, so the gloss must say whether it means the headline automation or the most the
+        editor does; the Manual example (classic NLEs) suggests headline. nesting wants pick any,
+        since Linked audio and video is true of every NLE alongside nesting or groups. The
+        representation list has no value for keyframe and automation rows, which is most of a motion
+        or audio timeline. Phone-editor zoom and marker features are hard to recall reliably.
+    opus:
+      - "The entry assumes clips of media on tracks, so motion-graphics and DAW timelines fit only
+        partly: their rows carry keyframes and automation, which representation cannot name.
+        Operations is also a capability list rather than a mode list, which loses what Pro Tools
+        makes explicit — that ripple and slip are exclusive edit modes there and simultaneous tools
+        elsewhere."
+      - "Automation is pick one over values that are no longer exclusive: every NLE in this sample
+        now ships speech-to-text captioning, so Manual has quietly emptied out and the code depends
+        entirely on whether the sampler named captions on the screen — which is the rule I used,
+        here and in the parent entry. Nesting has the same shape: Linked audio and video is glossed
+        'All NLEs', so coding it truthfully would swamp every other value; I reserved it for cases
+        where two separate objects are actually tied together, which is why the phone editors are
+        Flat. Ripple is also underdetermined — a gapless strip ripples by construction without ever
+        naming the operation, which is most of the split on the mobile editors."
+    sonnet:
+      - Operations was often empty because mobile/simple editors expose trim handles rather than the
+        professional blade/ripple/slip vocabulary the codebook names.
+      - "I systematically under-coded operations and navigation almost everywhere in this entry,
+        missing baseline facts like blade/split, timeline zoom and markers, because I picked the
+        single most distinctive operation per product instead of checking the whole pick-any list
+        against what I actually know. One recurring codebook-adjacent tension: professional NLEs
+        (Premiere, Final Cut, Resolve, Canva) now ship real auto-caption/transcription features, but
+        they live in a separate panel from the base cut-clips-on-a-track timeline; I've held
+        automation at Manual for these to describe the timeline's own default mode, distinct from
+        Reels/TikTok-style tools where auto-captioning is squarely part of the one editing surface
+        being sampled — automation may want a way to say 'this exists, but elsewhere in the app.'"
+  codedAt: 2026-09-22
+previews:
+  - file: timeline-editor.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

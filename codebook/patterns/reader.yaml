@@ -1,0 +1,512 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "reader". Edit between batches only — see README "Rules".
+id: reader
+name: Reader
+level: pattern
+parent: consume-media
+aliases:
+  - ebook reader
+  - reading mode
+  - long-form reader
+definition: Reading long-form text with control over typography, position, annotations and how much
+  of the work is present.
+data: document
+platforms:
+  - mobile
+  - desktop
+  - web
+  - xr
+domains:
+  - entertainment
+  - education
+  - news
+  - productivity
+  - science
+anatomy:
+  - name: Page or flow
+    role: The reading surface
+  - name: Typography
+    role: Type size, face and theme
+  - name: Position
+    role: Progress through the work
+  - name: Annotations
+    role: Highlights, notes and bookmarks
+roles:
+  - title
+  - author
+  - chapter
+  - progress
+  - highlight
+dimensions:
+  - name: Typography and theme
+    family: encoding
+    question: How does the text look?
+    subdimensions:
+      - id: typography
+        name: Typography
+        select: many
+        values:
+          - id: typeface-choice
+            name: Typeface choice
+            example: Kindle fonts
+          - id: size-and-spacing
+            name: Size and spacing
+            example: Apple Books
+          - id: light-dark-sepia
+            name: Light dark sepia
+            example: Kindle themes
+          - id: column-width
+            name: Column width
+            example: Instapaper
+          - id: dyslexia-friendly-face
+            name: Dyslexia-friendly face
+            example: OpenDyslexic in some readers
+  - name: Pagination model
+    family: layout
+    question: How is the text chunked on screen?
+    subdimensions:
+      - id: pagination
+        name: Model
+        select: one
+        values:
+          - id: paginated-pages
+            name: Paginated pages
+            example: Kindle page turns
+          - id: continuous-scroll
+            name: Continuous scroll
+            example: Web articles
+          - id: reflowable-ebook
+            name: Reflowable ebook
+            example: EPUB in Apple Books
+          - id: fixed-layout
+            name: Fixed layout
+            example: Comics and PDFs
+          - id: two-page-spread
+            name: Two-page spread
+            example: iPad landscape books
+  - name: Navigation in the work
+    family: flow
+    question: How does a person move through chapters and locations?
+    subdimensions:
+      - id: navigation
+        name: Navigation
+        select: many
+        values:
+          - id: table-of-contents
+            name: Table of contents
+            example: Kindle Go To
+          - id: scrubber-by-percentage
+            name: Scrubber by percentage
+            example: Apple Books progress
+          - id: search-in-book
+            name: Search in book
+            example: Kindle search
+          - id: page-flip-gestures
+            name: Page flip gestures
+            example: iBooks curl
+          - id: audiobook-sync
+            name: Audiobook sync
+            description: Whispersync position
+            example: Kindle Immersion Reading
+  - name: Annotations
+    family: content
+    question: What can be attached to passages?
+    subdimensions:
+      - id: annotations
+        name: Annotations
+        select: many
+        values:
+          - id: highlights
+            name: Highlights
+            example: Kindle highlights
+          - id: notes
+            name: Notes
+            example: Apple Books notes
+          - id: bookmarks
+            name: Bookmarks
+            example: Most readers
+          - id: shared-popular-highlights
+            name: Shared popular highlights
+            example: Kindle Popular Highlights
+          - id: export-to-notes-app
+            name: Export to notes app
+            example: Readwise
+          - id: inline-reader-comments
+            name: Inline reader comments
+            description: Readers attach public comments to a specific paragraph inside the text, visible to
+              everyone else reading it — a conversation in the margin rather than a private mark or
+              an aggregate of many private marks
+            example: Wattpad — Reading a story
+  - name: Reading assistance
+    family: initiative
+    question: What does the reader contribute beyond the text?
+    subdimensions:
+      - id: assistance
+        name: Assistance
+        select: many
+        values:
+          - id: dictionary-lookup
+            name: Dictionary lookup
+            example: Kindle tap-to-define
+          - id: translate-passage
+            name: Translate passage
+            example: Kindle translation
+          - id: summarize-chapter
+            name: Summarize chapter
+            example: AI reading assistants
+          - id: read-aloud
+            name: Read aloud
+            example: Apple Books Speak Screen
+          - id: focus-line-or-rsvp
+            name: Focus line or RSVP
+            example: Spritz-style modes
+  - name: Progress and goals
+    family: lifecycle
+    question: How is progress through the work tracked?
+    subdimensions:
+      - id: progress
+        name: Progress
+        select: one
+        values:
+          - id: location-only
+            name: Location only
+            example: Early Kindles
+          - id: percent-remaining
+            name: Percent remaining
+            example: Kindle
+          - id: time-left-in-chapter
+            name: Time left in chapter
+            example: Kindle reading time
+          - id: daily-reading-goals
+            name: Daily reading goals
+            example: Kindle reading insights
+          - id: streaks
+            name: Streaks
+            example: Serial fiction apps
+          - id: pages-left-in-chapter
+            name: Pages left in chapter
+            description: Progress is shown as a count of pages remaining in the current chapter rather than time
+              or percent
+            example: Apple Books — Reading a book
+wild:
+  score: 3
+  note: Typography and theme are among the most customized surfaces in consumer software.
+  examples:
+    - name: Kindle
+      note: Fonts, spacing, theme, reading progress
+    - name: Apple Books
+      note: Appearance controls
+    - name: Instapaper
+      note: Text and theme options
+techniques:
+  - name: Reading lens
+    dimension: Typography and theme
+    how: A personal typography-and-theme spec that applies to every article and ebook the way a Meridian
+      overview spec travels across shops.
+    ai: false
+  - name: Highlight then ask
+    dimension: Annotations
+    how: Select a highlight and ask a question; the answer cites nearby passages and stays attached to
+      the highlight.
+    ai: true
+  - name: Pace-aware pagination
+    dimension: Pagination model
+    how: Switch between page-turn and scroll without losing location, matching reading context (commute
+      vs desk).
+    ai: false
+signature: Reading lens
+sample: Kindle, Apple Books, Google Play Books, Instapaper, Pocket and major news reading modes.
+unit: One reading session of one document or ebook.
+relations:
+  uses:
+    - slider
+    - menu
+    - drawer
+    - autocomplete
+  specializes:
+    - consume-media
+  neighbors:
+    - document-editor
+    - media-player
+scores:
+  ubiquity: 4
+  potential: 4
+  spec: 5
+evidence: agent-coded
+usage:
+  - Readers tune type once and keep it for years
+  - Annotations become a personal index of the book
+questions:
+  - Should a reading lens include annotation density and assistance level?
+  - How do shared highlights interact with personal ones?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.5918055159556623
+  agreementFirstPass: 0.7347826086956522
+  kappaFinal: 0.9008736807359432
+  agreementFinal: 0.9282608695652174
+  pass: true
+  perSub:
+    typography:
+      kappaFirstPass: 0.5862068965517232
+      agreementFirstPass: 0.69
+      kappaFinal: 0.9048007615939071
+      agreementFinal: 0.93
+      flag: null
+    pagination:
+      kappaFirstPass: 0.9421407907425263
+      agreementFirstPass: 0.95
+      kappaFinal: 0.9421407907425263
+      agreementFinal: 0.95
+      flag: null
+    navigation:
+      kappaFirstPass: 0.5200000000000005
+      agreementFirstPass: 0.73
+      kappaFinal: 0.955
+      agreementFinal: 0.97
+      flag: null
+    annotations:
+      kappaFirstPass: 0.6146641691196147
+      agreementFirstPass: 0.7666666666666667
+      kappaFinal: 0.8884143821463008
+      agreementFinal: 0.925
+      flag: null
+    assistance:
+      kappaFirstPass: 0.6125222953441171
+      agreementFirstPass: 0.79
+      kappaFinal: 0.873810400126189
+      agreementFinal: 0.92
+      flag: null
+    progress:
+      kappaFirstPass: 0.3877551020408165
+      agreementFirstPass: 0.3
+      kappaFinal: 0.7794117647058826
+      agreementFinal: 0.75
+      flag: null
+  distribution:
+    typography:
+      Typeface choice: 13
+      Size and spacing: 17
+      Light dark sepia: 18
+      Column width: 6
+      Dyslexia-friendly face: 2
+    pagination:
+      Paginated pages: 4
+      Continuous scroll: 12
+      Reflowable ebook: 2
+      Fixed layout: 2
+      Two-page spread: 0
+    navigation:
+      Table of contents: 11
+      Scrubber by percentage: 6
+      Search in book: 10
+      Page flip gestures: 5
+      Audiobook sync: 1
+    annotations:
+      Highlights: 12
+      Notes: 12
+      Bookmarks: 7
+      Shared popular highlights: 2
+      Export to notes app: 5
+      Inline reader comments: 1
+    assistance:
+      Dictionary lookup: 8
+      Translate passage: 4
+      Summarize chapter: 4
+      Read aloud: 13
+      Focus line or RSVP: 2
+    progress:
+      Location only: 4
+      Percent remaining: 5
+      Time left in chapter: 2
+      Daily reading goals: 1
+      Streaks: 0
+      Pages left in chapter: 1
+      n/a: 7
+  exemplars:
+    typography:
+      Typeface choice:
+        - Kindle — Reading a book
+        - Apple Books — Reading a book
+        - Google Play Books — Reading a book
+      Size and spacing:
+        - Kindle — Reading a book
+        - Apple Books — Reading a book
+        - Google Play Books — Reading a book
+      Light dark sepia:
+        - Kindle — Reading a book
+        - Apple Books — Reading a book
+        - Google Play Books — Reading a book
+      Column width:
+        - Kindle — Reading a book
+        - Instapaper — Reading an article
+        - Readwise Reader — Reading a document
+      Dyslexia-friendly face:
+        - Kindle — Reading a book
+        - Libby — Reading a library ebook
+    pagination:
+      Paginated pages:
+        - Kindle — Reading a book
+        - Libby — Reading a library ebook
+        - Kobo — Reading a book
+      Continuous scroll:
+        - Instapaper — Reading an article
+        - Readwise Reader — Reading a document
+        - Safari — Reader View
+      Reflowable ebook:
+        - Apple Books — Reading a book
+        - Google Play Books — Reading a book
+      Fixed layout:
+        - Adobe Acrobat Reader — Reading a PDF
+        - Zotero — PDF reader
+      Two-page spread: []
+    navigation:
+      Table of contents:
+        - Kindle — Reading a book
+        - Apple Books — Reading a book
+        - Google Play Books — Reading a book
+      Scrubber by percentage:
+        - Kindle — Reading a book
+        - Apple Books — Reading a book
+        - Google Play Books — Reading a book
+      Search in book:
+        - Kindle — Reading a book
+        - Apple Books — Reading a book
+        - Google Play Books — Reading a book
+      Page flip gestures:
+        - Kindle — Reading a book
+        - Apple Books — Reading a book
+        - Google Play Books — Reading a book
+      Audiobook sync:
+        - Kindle — Reading a book
+    annotations:
+      Highlights:
+        - Kindle — Reading a book
+        - Apple Books — Reading a book
+        - Google Play Books — Reading a book
+      Notes:
+        - Kindle — Reading a book
+        - Apple Books — Reading a book
+        - Google Play Books — Reading a book
+      Bookmarks:
+        - Kindle — Reading a book
+        - Apple Books — Reading a book
+        - Google Play Books — Reading a book
+      Shared popular highlights:
+        - Kindle — Reading a book
+        - Medium — Reading a story
+      Export to notes app:
+        - Kindle — Reading a book
+        - Instapaper — Reading an article
+        - Readwise Reader — Reading a document
+      Inline reader comments:
+        - Wattpad — Reading a story
+    assistance:
+      Dictionary lookup:
+        - Kindle — Reading a book
+        - Apple Books — Reading a book
+        - Google Play Books — Reading a book
+      Translate passage:
+        - Kindle — Reading a book
+        - Apple Books — Reading a book
+        - Google Play Books — Reading a book
+      Summarize chapter:
+        - Readwise Reader — Reading a document
+        - Safari — Reader View
+        - Adobe Acrobat Reader — Reading a PDF
+      Read aloud:
+        - Apple Books — Reading a book
+        - Google Play Books — Reading a book
+        - Instapaper — Reading an article
+      Focus line or RSVP:
+        - Instapaper — Reading an article
+        - Speechify — Listening to a document
+    progress:
+      Location only:
+        - Adobe Acrobat Reader — Reading a PDF
+        - Zotero — PDF reader
+        - Speechify — Listening to a document
+      Percent remaining:
+        - Instapaper — Reading an article
+        - Readwise Reader — Reading a document
+        - Libby — Reading a library ebook
+      Time left in chapter:
+        - Kindle — Reading a book
+        - Kobo — Reading a book
+      Daily reading goals:
+        - Google Play Books — Reading a book
+      Streaks: []
+      Pages left in chapter:
+        - Apple Books — Reading a book
+  unobserved:
+    - sub: pagination
+      var: Two-page spread
+    - sub: progress
+      var: Streaks
+  unresolved: []
+  proposals:
+    raised: 3
+    adopted:
+      - sub: progress
+        name: Pages left in chapter
+        raters:
+          - fable
+          - sonnet
+      - sub: annotations
+        name: Inline reader comments
+        raters:
+          - opus
+          - sonnet
+    recorded:
+      - place: sub:progress
+        sub: progress
+        dim: Progress and goals
+        name: Estimated total read time
+        gloss: A fixed reading-time estimate is shown up front for the whole piece (e.g., '6 min read'),
+          rather than a dynamically tracked location, percent remaining, time left in the current
+          chapter, a daily goal, or a streak
+        raters:
+          - sonnet
+        instances:
+          - 9
+        status: raised
+  raterNotes:
+    fable:
+      - progress is n/a for reading modes and article apps that track nothing (Safari, Firefox, NYT,
+        Medium, Wikipedia, Substack). Ebook apps mix an in-book indicator with app-level goals; I
+        coded the in-book indicator unless the sample named goals (Play Books).
+    opus:
+      - "progress is n/a for six of twenty: reader modes and news apps show nothing at all about
+        where you are, and Location only overstates it. The web and article readers also make
+        navigation systematically empty — there is no table of contents, scrubber or in-work search
+        in a single article — which is a real finding rather than a coding failure, but it means
+        half this entry's cells are empty arrays."
+    sonnet:
+      - progress defaulted to 'Location only' for most simple article/one-off readers (Safari,
+        Firefox, NYT, Wikipedia, Substack, Matter's peers, Vision Pro Safari, Speechify, Wattpad)
+        since none of the samples described a percent, chapter-time, goal, or streak mechanism for
+        them.
+      - "Two structural problems. `pagination` mixes two axes: Reflowable ebook describes how text
+        is laid out while Paginated pages and Continuous scroll describe how it is chunked, so an
+        EPUB that reflows into page turns is two values at once (this alone split all three raters
+        on Apple Books). `progress` is pick one but products report several at once — Kobo shows
+        both time left in chapter and a percentage, Libby likewise — and it has no value for pages
+        left in a chapter (adopted here as a proposal), for a static 'six minute read' estimate, or
+        for a listening progress bar in a text-to-speech reader; it also lacks a clean way to say a
+        reading surface tracks nothing at all, which is why Safari and Firefox Reader, the NYT,
+        Wikipedia, Substack and Medium all had to be coded n/a."
+  codedAt: 2026-09-22
+previews:
+  - file: reader.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

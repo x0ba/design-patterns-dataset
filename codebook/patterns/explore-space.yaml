@@ -1,0 +1,533 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "explore-space". Edit between batches only — see README "Rules".
+id: explore-space
+name: Explore space
+level: archetype
+aliases:
+  - spatial navigation
+  - spatial browsing
+  - wayfinding in space
+definition: Understand, navigate and select within a spatial world — geographic, diagrammatic,
+  seating or three-dimensional — where position itself carries meaning.
+data: space
+platforms:
+  - web
+  - mobile
+  - desktop
+  - xr
+domains:
+  - travel
+  - mobility
+  - entertainment
+  - design
+  - science
+  - commerce
+  - education
+anatomy:
+  - name: Projection
+    role: How the world is drawn onto the screen
+  - name: Viewport
+    role: The currently visible region
+  - name: Located things
+    role: Objects or places with positions
+  - name: Selection
+    role: What the person has focused or picked
+roles:
+  - position
+  - label
+  - scale
+  - layer
+dimensions:
+  - name: Projection and scale
+    family: encoding
+    question: How is the spatial world projected, and at what scale?
+    subdimensions:
+      - id: projection
+        name: Projection
+        select: one
+        values:
+          - id: cartographic-map
+            name: Cartographic map
+            description: Geographic projection
+            example: Google Maps
+          - id: schematic-diagram
+            name: Schematic diagram
+            description: Topology over metric accuracy
+            example: Transit maps
+          - id: 2d-plan
+            name: 2D plan
+            description: Floor or seat layout
+            example: Ticketmaster venue map
+          - id: infinite-canvas
+            name: Infinite canvas
+            description: Free 2D plane
+            example: Miro
+          - id: 3d-scene
+            name: 3D scene
+            description: Perspective or orthographic view
+            example: Sketchfab viewer
+          - id: xr-situated
+            name: XR situated
+            description: Space aligned to the room
+            example: Apple Immersive maps demos
+      - id: scaleBehaviour
+        name: Scale behaviour
+        select: one
+        values:
+          - id: discrete-zoom-levels
+            name: Discrete zoom levels
+            description: Tile or LOD steps
+            example: Google Maps
+          - id: continuous-zoom
+            name: Continuous zoom
+            description: Pinch any scale
+            example: Figma canvas
+          - id: semantic-zoom
+            name: Semantic zoom
+            description: Representation changes with scale
+            example: Maps switching from cities to streets
+          - id: fixed-scale
+            name: Fixed scale
+            description: No zoom, pan only
+            example: Some seat charts
+  - name: Navigation of the viewport
+    family: invocation
+    question: How does a person move through space?
+    subdimensions:
+      - id: moveBy
+        name: Move by
+        select: many
+        values:
+          - id: pan-and-drag
+            name: Pan and drag
+            example: Google Maps
+          - id: zoom-gestures
+            name: Zoom gestures
+            example: Figma
+          - id: search-to-a-place
+            name: Search to a place
+            description: Jump via query
+            example: Google Maps search
+          - id: orbit-rotate
+            name: Orbit / rotate
+            description: Change viewpoint in 3D
+            example: Google Earth
+          - id: follow-a-route
+            name: Follow a route
+            description: Camera tracks a path
+            example: Turn-by-turn navigation
+          - id: teleport-jump-cuts
+            name: Teleport / jump cuts
+            description: Instant relocate
+            example: VR locomotion teleport
+          - id: locomotion
+            name: Locomotion
+            description: Continuous first-person movement by joystick or keys through a 3D world, distinct from
+              teleporting
+            example: Horizon Worlds — A world in VR
+          - id: move-your-body
+            name: Move your body
+            description: "The viewport moves because the person moves: in AR and room-scale XR the camera is the
+              device, so walking, leaning and turning are the navigation"
+            example: IKEA — View in your room
+  - name: Located content
+    family: content
+    question: What kinds of things appear in space, and how abstracted are they?
+    subdimensions:
+      - id: marksLayers
+        name: Marks and layers
+        select: many
+        values:
+          - id: points-of-interest
+            name: Points of interest
+            example: Google Maps pins
+          - id: paths-and-regions
+            name: Paths and regions
+            example: Strava routes, zoning
+          - id: live-positions
+            name: Live positions
+            description: Moving entities
+            example: Uber driver markers
+          - id: selectable-units
+            name: Selectable units
+            description: Seats, parcels, rooms
+            example: Ticketmaster seats
+          - id: annotations-by-people
+            name: Annotations by people
+            example: Miro sticky notes
+          - id: imagery-photogrammetry
+            name: Imagery / photogrammetry
+            example: Google Earth 3D
+          - id: authored-objects
+            name: Authored objects
+            description: Shapes, frames, drawings and content people create as the substance of the space
+              itself, as opposed to annotations laid over something else
+            example: Figma — Design canvas
+          - id: placed-models
+            name: Placed models
+            description: Virtual objects anchored into the real room at true scale
+            example: IKEA — View in your room
+          - id: continuous-field
+            name: Continuous field
+            description: A scalar or vector field rendered across the whole world — wind particles, temperature
+              shading, rainfall — rather than discrete located things
+            example: Windy — Weather map
+  - name: Selection and detail
+    family: composition
+    question: How does selecting in space open further information?
+    subdimensions:
+      - id: selectionModel
+        name: Selection model
+        select: one
+        values:
+          - id: tap-mark-for-detail
+            name: Tap mark for detail
+            description: Overview–detail in space
+            example: Google Maps place cards
+          - id: multi-select-region
+            name: Multi-select region
+            description: Marquee or lasso
+            example: Figma
+          - id: hover-inspect
+            name: Hover inspect
+            description: Transient readout
+            example: GIS attribute hover
+          - id: enter-immersive-focus
+            name: Enter / immersive focus
+            description: Dive into a sub-space
+            example: Indoor maps entering a building
+wild:
+  score: 2
+  note: Layer toggles and map type (default / satellite) are common; projection choice and selection
+    model almost never are end-user controllable.
+  examples:
+    - name: Google Maps
+      note: Layers, map type, and saved lists
+    - name: Miro
+      note: Frame and zoom-to-fit habits
+    - name: Figma
+      note: Zoom percentage and multiplayer cursors
+techniques:
+  - name: Semantic zoom as content policy
+    dimension: Projection and scale
+    how: Bind which attributes and mark types appear to scale bands, so zooming is not only geometric
+      but a content filter the person can edit.
+    ai: false
+  - name: Space then detail
+    dimension: Selection and detail
+    how: Treat spatial marks as an overview and the attached card or inspector as detail, with the same
+      Fluid Attributes grammar as CHI '25 collections.
+    ai: false
+  - name: Find a place that fits
+    dimension: Located content
+    how: “Quiet cafés open now within a ten-minute walk” filters and ranks marks with inspectable
+      criteria on the map.
+    ai: true
+signature: Semantic zoom as content policy
+sample: Maps, indoor wayfinding, ticketing seat maps, whiteboards, design canvases, Earth viewers
+  and 3D product/model viewers across app stores and the web.
+unit: One spatial viewport over one world (a product may host several worlds).
+relations:
+  uses:
+    - filter-controls
+    - search-results
+    - property-inspector
+    - tooltip
+  specializes: []
+  neighbors:
+    - browse-collections
+    - navigate
+    - create
+scores:
+  ubiquity: 4
+  potential: 5
+  spec: 4
+evidence: agent-coded
+usage:
+  - People zoom out to orient, zoom in to decide
+  - Search often precedes pan when the destination is known by name
+questions:
+  - Is geographic map, canvas and 3D one design space with different projections, or three?
+  - Which spatial customizations should travel with the person across products?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7233027866393965
+  agreementFirstPass: 0.8380952380952381
+  kappaFinal: 0.8878600043123787
+  agreementFinal: 0.9325
+  pass: true
+  perSub:
+    projection:
+      kappaFirstPass: 0.9546142208774583
+      agreementFirstPass: 0.95
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    scaleBehaviour:
+      kappaFirstPass: 0.4871794871794871
+      agreementFirstPass: 0.45
+      kappaFinal: 0.8436142484795829
+      agreementFinal: 0.85
+      flag: null
+    moveBy:
+      kappaFirstPass: 0.7868421052631583
+      agreementFirstPass: 0.8666666666666667
+      kappaFinal: 0.9460421545667452
+      agreementFinal: 0.9625
+      flag: null
+    marksLayers:
+      kappaFirstPass: 0.656363636363637
+      agreementFirstPass: 0.8444444444444444
+      kappaFinal: 0.8342710997442464
+      agreementFinal: 0.9166666666666666
+      flag: null
+    selectionModel:
+      kappaFirstPass: 0.7587131367292225
+      agreementFirstPass: 0.8
+      kappaFinal: 0.8368087035358115
+      agreementFinal: 0.85
+      flag: null
+  distribution:
+    projection:
+      Cartographic map: 8
+      Schematic diagram: 0
+      2D plan: 2
+      Infinite canvas: 4
+      3D scene: 5
+      XR situated: 1
+    scaleBehaviour:
+      Discrete zoom levels: 1
+      Continuous zoom: 8
+      Semantic zoom: 8
+      Fixed scale: 3
+    moveBy:
+      Pan and drag: 18
+      Zoom gestures: 17
+      Search to a place: 6
+      Orbit / rotate: 7
+      Follow a route: 4
+      Teleport / jump cuts: 5
+      Locomotion: 1
+      Move your body: 1
+    marksLayers:
+      Points of interest: 11
+      Paths and regions: 8
+      Live positions: 6
+      Selectable units: 3
+      Annotations by people: 3
+      Imagery / photogrammetry: 3
+      Authored objects: 4
+      Placed models: 1
+      Continuous field: 1
+    selectionModel:
+      Tap mark for detail: 11
+      Multi-select region: 4
+      Hover inspect: 1
+      Enter / immersive focus: 3
+      n/a: 1
+  exemplars:
+    projection:
+      Cartographic map:
+        - Google Maps — Explore map
+        - Apple Maps — Map with Look Around
+        - Uber — Rider map while waiting
+      Schematic diagram: []
+      2D plan:
+        - Ticketmaster — Venue seat map
+        - Delta Air Lines — Seat map
+      Infinite canvas:
+        - Figma — Design canvas
+        - Miro — Board
+        - Apple Freeform — Board
+      3D scene:
+        - Google Earth — 3D globe
+        - Sketchfab — Model viewer
+        - Matterport — 3D home tour
+      XR situated:
+        - IKEA — View in your room
+    scaleBehaviour:
+      Discrete zoom levels:
+        - Windy — Weather map
+      Continuous zoom:
+        - Google Earth — 3D globe
+        - Figma — Design canvas
+        - Miro — Board
+      Semantic zoom:
+        - Google Maps — Explore map
+        - Apple Maps — Map with Look Around
+        - Ticketmaster — Venue seat map
+      Fixed scale:
+        - Horizon Worlds — A world in VR
+        - Delta Air Lines — Seat map
+        - IKEA — View in your room
+    moveBy:
+      Pan and drag:
+        - Google Maps — Explore map
+        - Apple Maps — Map with Look Around
+        - Google Earth — 3D globe
+      Zoom gestures:
+        - Google Maps — Explore map
+        - Apple Maps — Map with Look Around
+        - Google Earth — 3D globe
+      Search to a place:
+        - Google Maps — Explore map
+        - Apple Maps — Map with Look Around
+        - Google Earth — 3D globe
+      Orbit / rotate:
+        - Google Maps — Explore map
+        - Apple Maps — Map with Look Around
+        - Google Earth — 3D globe
+      Follow a route:
+        - Google Maps — Explore map
+        - Apple Maps — Map with Look Around
+        - Uber — Rider map while waiting
+      Teleport / jump cuts:
+        - Apple Maps — Map with Look Around
+        - Figma — Design canvas
+        - Miro — Board
+      Locomotion:
+        - Horizon Worlds — A world in VR
+      Move your body:
+        - IKEA — View in your room
+    marksLayers:
+      Points of interest:
+        - Google Maps — Explore map
+        - Apple Maps — Map with Look Around
+        - Google Earth — 3D globe
+      Paths and regions:
+        - Google Maps — Explore map
+        - Apple Maps — Map with Look Around
+        - Google Earth — 3D globe
+      Live positions:
+        - Google Maps — Explore map
+        - Apple Maps — Map with Look Around
+        - Uber — Rider map while waiting
+      Selectable units:
+        - Ticketmaster — Venue seat map
+        - Delta Air Lines — Seat map
+        - Autodesk Viewer — CAD model viewer
+      Annotations by people:
+        - Figma — Design canvas
+        - Miro — Board
+        - Apple Freeform — Board
+      Imagery / photogrammetry:
+        - Apple Maps — Map with Look Around
+        - Google Earth — 3D globe
+        - Matterport — 3D home tour
+      Authored objects:
+        - Figma — Design canvas
+        - Miro — Board
+        - Apple Freeform — Board
+      Placed models:
+        - IKEA — View in your room
+      Continuous field:
+        - Windy — Weather map
+    selectionModel:
+      Tap mark for detail:
+        - Google Maps — Explore map
+        - Google Earth — 3D globe
+        - Ticketmaster — Venue seat map
+      Multi-select region:
+        - Figma — Design canvas
+        - Miro — Board
+        - Apple Freeform — Board
+      Hover inspect:
+        - Windy — Weather map
+      Enter / immersive focus:
+        - Apple Maps — Map with Look Around
+        - Matterport — 3D home tour
+        - Horizon Worlds — A world in VR
+  unobserved:
+    - sub: projection
+      var: Schematic diagram
+  unresolved: []
+  proposals:
+    raised: 7
+    adopted:
+      - sub: marksLayers
+        name: Authored objects
+        raters:
+          - fable
+          - sonnet
+      - sub: moveBy
+        name: Locomotion
+        raters:
+          - fable
+          - sonnet
+      - sub: marksLayers
+        name: Placed models
+        raters:
+          - fable
+          - sonnet
+      - sub: marksLayers
+        name: Continuous field
+        raters:
+          - opus
+          - sonnet
+      - sub: moveBy
+        name: Move your body
+        raters:
+          - opus
+          - sonnet
+    recorded:
+      - place: sub:moveBy
+        sub: moveBy
+        dim: null
+        name: Move the device
+        gloss: The viewport is the device camera, so the person moves through space by physically moving the
+          phone or headset
+        raters:
+          - fable
+        instances:
+          - 20
+        status: raised
+      - place: sub:marksLayers
+        sub: marksLayers
+        dim: Located content
+        name: Continuous data field
+        gloss: A continuous animated data layer (e.g., wind flow, temperature, precipitation) rendered as a
+          field over the whole visible area, rather than discrete points, paths, live positions,
+          annotations, or photographic imagery
+        raters:
+          - sonnet
+        instances:
+          - 18
+        status: raised
+  raterNotes:
+    fable:
+      - "scaleBehaviour: Google Maps is the exemplar for both Discrete zoom levels and Semantic
+        zoom; I coded every vector basemap Semantic zoom (labels and POIs change with scale) and
+        raster-tile maps Discrete. Canvas tools' shapes and frames fit no marksLayers variation,
+        hence the Authored objects proposal."
+    opus:
+      - "scaleBehaviour needed a rule: every vector basemap both zooms continuously and changes what
+        it draws, so I coded geographic maps Semantic zoom throughout and reserved Continuous zoom
+        for canvases and 3D scenes where the representation never changes. moveBy has no value for
+        physical movement, which is most of what navigation means in AR and XR."
+    sonnet:
+      - Corrected an initial instinct to code standard web/mobile maps as 'Semantic zoom' — the
+        codebook itself cites Google Maps under 'Discrete zoom levels', so all tile-based consumer
+        maps (Google/Apple Maps, Uber, Strava, Zillow, Citymapper, Windy) were coded Discrete zoom
+        levels for consistency.
+      - "scaleBehaviour wants to be pick any: it conflates the mechanic of zooming (discrete tile
+        steps vs continuous pinch) with its effect on representation (semantic), and every modern
+        vector map is continuous AND semantic — the codebook names Google Maps as the exemplar of
+        Discrete zoom levels and, one line later, of Semantic zoom. Two further ambiguities drove
+        most of the rest: 'Live positions' does not say whether the person's own live marker counts
+        (I ruled that it does), and 'Annotations by people' has no counterpart for authored canvas
+        content or for author-placed hotspots on a model, which is what +Authored objects fixes."
+  codedAt: 2026-09-22
+previews:
+  - file: explore-space.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

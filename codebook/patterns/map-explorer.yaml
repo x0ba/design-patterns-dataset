@@ -1,0 +1,564 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "map-explorer". Edit between batches only — see README "Rules".
+id: map-explorer
+name: Map explorer
+level: pattern
+parent: explore-space
+aliases:
+  - interactive map
+  - web map
+  - geo browser
+definition: A pannable, zoomable geographic map with layers of places, routes or data, used to find,
+  compare and open things in the world.
+data: space
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - travel
+  - mobility
+  - commerce
+  - news
+  - government
+  - science
+anatomy:
+  - name: Base map
+    role: Tiles or vector basemap
+  - name: Viewport controls
+    role: Pan, zoom, rotate, tilt
+  - name: Overlays
+    role: Pins, routes, heat, boundaries
+  - name: Place detail
+    role: The card or panel for a selection
+  - name: Search
+    role: Jump to a place or query
+roles:
+  - pin
+  - label
+  - route
+  - layer
+  - user-location
+dimensions:
+  - name: Base and overlays
+    family: content
+    question: What is drawn on the map, and how are overlays chosen?
+    subdimensions:
+      - id: basemap
+        name: Basemap
+        select: one
+        values:
+          - id: streets
+            name: Streets
+            example: Google Maps default
+          - id: satellite-aerial
+            name: Satellite / aerial
+            example: Google Satellite
+          - id: terrain
+            name: Terrain
+            example: Google Terrain
+          - id: transit-schematic-emphasis
+            name: Transit schematic emphasis
+            example: Citymapper map modes
+          - id: minimal-light
+            name: Minimal / light
+            description: Quieter basemap for data
+            example: Mapbox light styles
+      - id: overlays
+        name: Overlay types
+        select: many
+        values:
+          - id: poi-pins
+            name: POI pins
+            example: Google Maps
+          - id: clusters-at-low-zoom
+            name: Clusters at low zoom
+            example: Airbnb map
+          - id: routes-and-polylines
+            name: Routes and polylines
+            example: Google Directions
+          - id: choropleth-heat
+            name: Choropleth / heat
+            example: COVID case maps
+          - id: live-traffic-or-vehicles
+            name: Live traffic or vehicles
+            example: Uber, Google traffic
+          - id: user-generated-marks
+            name: User-generated marks
+            example: Google Maps saved places
+  - name: Viewport controls
+    family: invocation
+    question: How does the person change what region is shown?
+    subdimensions:
+      - id: mapNav
+        name: Navigation
+        select: many
+        values:
+          - id: drag-pan
+            name: Drag pan
+            example: All web maps
+          - id: pinch-scroll-zoom
+            name: Pinch / scroll zoom
+            example: Google Maps
+          - id: rotate-and-tilt
+            name: Rotate and tilt
+            description: 2.5D / 3D globe
+            example: Google Maps 3D
+          - id: recenter-on-me
+            name: Recenter on me
+            example: Blue-dot recenter
+          - id: search-and-fly-to
+            name: Search and fly-to
+            example: Google Maps search
+          - id: bounds-fit-to-results
+            name: Bounds fit to results
+            description: Zoom to fit a result set
+            example: Airbnb search map
+  - name: Map and list coupling
+    family: composition
+    question: How do the map and any list or detail of the same items relate?
+    subdimensions:
+      - id: coupling
+        name: Coupling
+        select: one
+        values:
+          - id: map-only
+            name: Map only
+            example: Casual browsing
+          - id: synchronized-list-plus-map
+            name: Synchronized list + map
+            description: Hover/select links both
+            example: Zillow, Airbnb
+          - id: detail-card-over-map
+            name: Detail card over map
+            description: Bottom sheet or side card
+            example: Google Maps place
+          - id: split-indoor-plus-outdoor
+            name: Split indoor + outdoor
+            description: Building plan after enter
+            example: Mall indoor maps
+          - id: directions-panel-takes-over
+            name: Directions panel takes over
+            description: Route UI replaces browse
+            example: Google Directions
+  - name: Mark encoding
+    family: encoding
+    question: How do attributes become visual marks?
+    subdimensions:
+      - id: markDesign
+        name: Mark design
+        select: many
+        values:
+          - id: category-icon
+            name: Category icon
+            example: Google Maps restaurant pins
+          - id: price-or-value-label
+            name: Price or value label
+            description: Text on mark
+            example: Airbnb price pins
+          - id: colour-of-a-metric
+            name: Colour of a metric
+            example: Zillow estimate heat
+          - id: size-by-magnitude
+            name: Size by magnitude
+            example: Earthquake maps
+          - id: selected-elevation
+            name: Selected elevation
+            description: Chosen mark pops
+            example: Most listing maps
+          - id: availability-shading
+            name: Availability shading
+            description: Grey sold-out regions
+            example: Ticketing city maps
+  - name: Filtering the world
+    family: scope
+    question: How is the set of visible places narrowed?
+    subdimensions:
+      - id: mapNarrowing
+        name: Narrowing
+        select: many
+        values:
+          - id: category-chips
+            name: Category chips
+            example: Google Maps Hotels / Food
+          - id: faceted-filters
+            name: Faceted filters
+            example: Airbnb filters
+          - id: draw-a-search-area
+            name: Draw a search area
+            description: Lasso or “search as I move”
+            example: Airbnb search-as-move
+          - id: time-of-day-live
+            name: Time of day / live
+            description: Open now, ETA
+            example: Google open now
+          - id: saved-lists-only
+            name: Saved lists only
+            example: Google Maps lists
+  - name: Context and device
+    family: adaptation
+    question: How does the map change with mobility, offline and screen size?
+    subdimensions:
+      - id: mapAdapt
+        name: Adaptation
+        select: many
+        values:
+          - id: follow-user-while-navigating
+            name: Follow user while navigating
+            example: Google Navigation
+          - id: offline-packs
+            name: Offline packs
+            example: Google Offline maps
+          - id: compact-mobile-sheet
+            name: Compact mobile sheet
+            description: List collapses under map
+            example: Mobile Google Maps
+          - id: desktop-side-panel
+            name: Desktop side panel
+            example: Desktop Google Maps
+          - id: dark-night-style
+            name: Dark / night style
+            example: Apple Maps night
+wild:
+  score: 2
+  note: Layer and basemap toggles are common; mark encodings and coupling layout are rarely personal.
+  examples:
+    - name: Google Maps
+      note: Layers and map type
+    - name: Airbnb
+      note: Search as I move and price-on-map
+    - name: Strava
+      note: Heatmap and activity filters
+techniques:
+  - name: Fluid map attributes
+    dimension: Mark encoding
+    how: Surface any place attribute onto pins (price, rating, open-now) and let colour/size/label bind
+      to it per person.
+    ai: false
+  - name: Fit to the filtered set
+    dimension: Map and list coupling
+    how: Changing filters always offers zoom-to-fit the remaining marks without stealing the user’s
+      manual viewport unless asked.
+    ai: false
+  - name: Describe the area
+    dimension: Filtering the world
+    how: “Family-friendly spots near the park that are quiet after 8” becomes a filter layer with
+      visible criteria chips.
+    ai: true
+signature: Fluid map attributes
+sample: Google Maps, Apple Maps, Airbnb, Zillow, Uber, Citymapper, Strava, news and election maps,
+  and government GIS viewers.
+unit: One map viewport with its active layers and coupled list/detail, if any.
+relations:
+  uses:
+    - filter-controls
+    - search-results
+    - bottom-sheet
+    - drawer
+    - badge
+    - tooltip
+  specializes:
+    - explore-space
+  neighbors:
+    - overview-detail
+    - seat-map
+    - zoomable-canvas
+scores:
+  ubiquity: 5
+  potential: 5
+  spec: 4
+evidence: agent-coded
+usage:
+  - People alternate search-then-map and map-then-filter
+  - Price-on-pin changes decision speed in lodging and tickets
+questions:
+  - When should the map own selection versus the list?
+  - How much live data can a basemap carry before marks fight the geography?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.6119719218312852
+  agreementFirstPass: 0.75
+  kappaFinal: 0.8928102088235033
+  agreementFinal: 0.9275862068965517
+  pass: true
+  perSub:
+    basemap:
+      kappaFirstPass: 0.8407079646017694
+      agreementFirstPass: 0.85
+      kappaFinal: 0.8941798941798942
+      agreementFinal: 0.9
+      flag: null
+    overlays:
+      kappaFirstPass: 0.659636363636363
+      agreementFirstPass: 0.7833333333333333
+      kappaFinal: 0.8897021276595741
+      agreementFinal: 0.925
+      flag: null
+    mapNav:
+      kappaFirstPass: 0.5867332692128693
+      agreementFirstPass: 0.6916666666666667
+      kappaFinal: 0.9170370370370367
+      agreementFinal: 0.9416666666666667
+      flag: null
+    coupling:
+      kappaFirstPass: 0.7140587768069898
+      agreementFirstPass: 0.7
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    markDesign:
+      kappaFirstPass: 0.6087806998478584
+      agreementFirstPass: 0.76
+      kappaFinal: 0.8663101604278071
+      agreementFinal: 0.91
+      flag: null
+    mapNarrowing:
+      kappaFirstPass: 0.5387867529306258
+      agreementFirstPass: 0.76
+      kappaFinal: 0.851190476190476
+      agreementFinal: 0.91
+      flag: null
+    mapAdapt:
+      kappaFirstPass: 0.5952727861421399
+      agreementFirstPass: 0.75
+      kappaFinal: 0.9138755980861243
+      agreementFinal: 0.94
+      flag: null
+  distribution:
+    basemap:
+      Streets: 9
+      Satellite / aerial: 1
+      Terrain: 1
+      Transit schematic emphasis: 1
+      Minimal / light: 8
+    overlays:
+      POI pins: 16
+      Clusters at low zoom: 2
+      Routes and polylines: 5
+      Choropleth / heat: 5
+      Live traffic or vehicles: 9
+      User-generated marks: 3
+    mapNav:
+      Drag pan: 20
+      Pinch / scroll zoom: 20
+      Rotate and tilt: 5
+      Recenter on me: 9
+      Search and fly-to: 16
+      Bounds fit to results: 4
+    coupling:
+      Map only: 2
+      Synchronized list + map: 8
+      Detail card over map: 8
+      Split indoor + outdoor: 0
+      Directions panel takes over: 2
+    markDesign:
+      Category icon: 12
+      Price or value label: 2
+      Colour of a metric: 7
+      Size by magnitude: 2
+      Selected elevation: 10
+      Availability shading: 0
+    mapNarrowing:
+      Category chips: 4
+      Faceted filters: 8
+      Draw a search area: 5
+      Time of day / live: 8
+      Saved lists only: 2
+    mapAdapt:
+      Follow user while navigating: 5
+      Offline packs: 3
+      Compact mobile sheet: 8
+      Desktop side panel: 9
+      Dark / night style: 11
+  exemplars:
+    basemap:
+      Streets:
+        - Google Maps — Explore map on phone
+        - Google Maps — Search results on the web
+        - Apple Maps — Map with place cards
+      Satellite / aerial:
+        - Google Earth — 3D globe explorer
+      Terrain:
+        - AllTrails — Trail map
+      Transit schematic emphasis:
+        - Citymapper — Map and Go navigation
+      Minimal / light:
+        - Airbnb — Search map
+        - Uber — Ride map
+        - Strava — Global Heatmap
+    overlays:
+      POI pins:
+        - Google Maps — Explore map on phone
+        - Google Maps — Search results on the web
+        - Apple Maps — Map with place cards
+      Clusters at low zoom:
+        - Airbnb — Search map
+        - Zillow — Home search map
+      Routes and polylines:
+        - Citymapper — Map and Go navigation
+        - Waze — Navigation map
+        - AllTrails — Trail map
+      Choropleth / heat:
+        - Zillow — Home search map
+        - Strava — Global Heatmap
+        - The New York Times — Election results map
+      Live traffic or vehicles:
+        - Google Maps — Explore map on phone
+        - Google Maps — Search results on the web
+        - Apple Maps — Map with place cards
+      User-generated marks:
+        - Google Maps — Explore map on phone
+        - Apple Maps — Map with place cards
+        - Waze — Navigation map
+    mapNav:
+      Drag pan:
+        - Google Maps — Explore map on phone
+        - Google Maps — Search results on the web
+        - Apple Maps — Map with place cards
+      Pinch / scroll zoom:
+        - Google Maps — Explore map on phone
+        - Google Maps — Search results on the web
+        - Apple Maps — Map with place cards
+      Rotate and tilt:
+        - Google Maps — Explore map on phone
+        - Google Maps — Search results on the web
+        - Apple Maps — Map with place cards
+      Recenter on me:
+        - Google Maps — Explore map on phone
+        - Apple Maps — Map with place cards
+        - Uber — Ride map
+      Search and fly-to:
+        - Google Maps — Explore map on phone
+        - Google Maps — Search results on the web
+        - Apple Maps — Map with place cards
+      Bounds fit to results:
+        - Google Maps — Search results on the web
+        - Airbnb — Search map
+        - Zillow — Home search map
+    coupling:
+      Map only:
+        - Strava — Global Heatmap
+        - The New York Times — Election results map
+      Synchronized list + map:
+        - Google Maps — Search results on the web
+        - Airbnb — Search map
+        - Zillow — Home search map
+      Detail card over map:
+        - Google Maps — Explore map on phone
+        - Apple Maps — Map with place cards
+        - Uber — Ride map
+      Split indoor + outdoor: []
+      Directions panel takes over:
+        - Citymapper — Map and Go navigation
+        - Waze — Navigation map
+    markDesign:
+      Category icon:
+        - Google Maps — Explore map on phone
+        - Google Maps — Search results on the web
+        - Apple Maps — Map with place cards
+      Price or value label:
+        - Airbnb — Search map
+        - Zillow — Home search map
+      Colour of a metric:
+        - Zillow — Home search map
+        - Strava — Global Heatmap
+        - The New York Times — Election results map
+      Size by magnitude:
+        - Johns Hopkins COVID-19 Dashboard — Global case map
+        - USGS Earthquakes — Latest earthquakes map
+      Selected elevation:
+        - Google Maps — Explore map on phone
+        - Google Maps — Search results on the web
+        - Apple Maps — Map with place cards
+      Availability shading: []
+    mapNarrowing:
+      Category chips:
+        - Google Maps — Explore map on phone
+        - Google Maps — Search results on the web
+        - Apple Maps — Map with place cards
+      Faceted filters:
+        - Google Maps — Search results on the web
+        - Airbnb — Search map
+        - Zillow — Home search map
+      Draw a search area:
+        - Google Maps — Search results on the web
+        - Airbnb — Search map
+        - Zillow — Home search map
+      Time of day / live:
+        - Google Maps — Explore map on phone
+        - Google Maps — Search results on the web
+        - Apple Maps — Map with place cards
+      Saved lists only:
+        - Google Maps — Explore map on phone
+        - Apple Maps — Map with place cards
+    mapAdapt:
+      Follow user while navigating:
+        - Google Maps — Explore map on phone
+        - Apple Maps — Map with place cards
+        - Uber — Ride map
+      Offline packs:
+        - Google Maps — Explore map on phone
+        - Apple Maps — Map with place cards
+        - AllTrails — Trail map
+      Compact mobile sheet:
+        - Google Maps — Explore map on phone
+        - Apple Maps — Map with place cards
+        - Uber — Ride map
+      Desktop side panel:
+        - Google Maps — Search results on the web
+        - Airbnb — Search map
+        - Zillow — Home search map
+      Dark / night style:
+        - Google Maps — Explore map on phone
+        - Google Maps — Search results on the web
+        - Apple Maps — Map with place cards
+  unobserved:
+    - sub: coupling
+      var: Split indoor + outdoor
+    - sub: markDesign
+      var: Availability shading
+  unresolved: []
+  proposals:
+    raised: 0
+    adopted: []
+    recorded: []
+  raterNotes:
+    fable:
+      - basemap 'Minimal / light' was used for every quiet data basemap including dark ones (Strava,
+        JHU); the codebook may want the variation renamed 'Quiet data basemap'. Proportional-circle
+        maps (JHU, USGS) have no overlay variation and were coded as POI pins with Size by
+        magnitude.
+    opus:
+      - "overlays has no clean home for proportional-symbol data maps (USGS quakes, JHU cases): they
+        are neither POI pins nor a choropleth, and I coded them as pins with markDesign carrying
+        size and colour — a likely disagreement. basemap is also awkward for stylised map styles
+        (Snap Map, Uber, Airbnb), which I put under Minimal / light on the grounds that the style
+        exists to get out of the data's way."
+    sonnet:
+      - Several data-visualization maps (Strava, JHU, USGS, Windy, Flightradar24) use a deliberately
+        dark background; coded basemap as Minimal/light anyway since the gloss ('quieter basemap for
+        data') is the defining trait, not the literal light color — flagging this as a naming
+        tension worth a second look, not a missing variation.
+      - "Two glosses did most of the damage here. 'Draw a search area — Lasso or search as I move'
+        bundles two different mechanics, and every rater filed Redo search here / Update results
+        when map moves / Search this area differently (I had them under bounds-fit in mapNav). 'Live
+        traffic or vehicles' has to be stretched to cover people and devices (Find My, Snap Map), so
+        it really means live moving entities. Two exemplars are also wrong about their products:
+        Choropleth / heat cites COVID case maps, but the Johns Hopkins dashboard is a
+        proportional-symbol map, and Choropleth / heat is the only home for an animated continuous
+        field like Windy's wind, which is neither shaded regions nor discrete marks."
+  codedAt: 2026-09-22
+previews:
+  - file: map-explorer.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

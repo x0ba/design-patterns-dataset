@@ -1,0 +1,373 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "collaborate". Edit between batches only — see README "Rules".
+id: collaborate
+name: Collaborate
+level: archetype
+aliases:
+  - multiplayer
+  - co-authoring
+  - shared work
+definition: "Work on shared artifacts with others, at the same time or over time: see who is
+  present, what changed, and what each person may do."
+data: document
+platforms:
+  - web
+  - desktop
+  - mobile
+domains:
+  - productivity
+  - design
+  - software
+  - education
+  - enterprise
+  - communication
+anatomy:
+  - name: Artifact
+    role: The shared thing
+  - name: People
+    role: Who else is here
+  - name: Changes
+    role: What was edited
+  - name: Permissions
+    role: What each person may do
+roles: []
+dimensions:
+  - name: Presence and authorship
+    family: collaboration
+    question: How are other people and their contributions made visible?
+    subdimensions:
+      - id: presence
+        name: Presence
+        select: many
+        values:
+          - id: live-cursors-and-avatars
+            name: Live cursors and avatars
+            example: Figma multiplayer
+          - id: named-authorship-on-edits
+            name: Named authorship on edits
+            example: Google Docs
+          - id: async-activity-only
+            name: Async activity only
+            example: Email attachments
+          - id: follow-a-collaborator
+            name: Follow a collaborator
+            example: Figma observation mode
+  - name: Time mode
+    family: lifecycle
+    question: Do people act together now, or across time?
+    subdimensions:
+      - id: timeMode
+        name: Time mode
+        select: one
+        values:
+          - id: real-time
+            name: Real-time
+            example: Figma, Google Docs
+          - id: async-with-versions
+            name: Async with versions
+            example: GitHub
+          - id: turn-taking-locks
+            name: Turn-taking locks
+            example: Legacy check-out editing
+          - id: mixed-live-and-async
+            name: Mixed live and async
+            example: Notion
+  - name: Access control
+    family: scope
+    question: What may each person see and change?
+    subdimensions:
+      - id: access
+        name: Access
+        select: one
+        values:
+          - id: open-to-anyone-with-the-link
+            name: Open to anyone with the link
+            example: Public Figma links
+          - id: role-based-permissions
+            name: Role-based permissions
+            example: Google Drive roles
+          - id: per-section-permissions
+            name: Per-section permissions
+            example: Notion page locks
+          - id: branch-isolation
+            name: Branch isolation
+            example: Git branches
+          - id: inherited-from-a-container-s-membership
+            name: Inherited from a container's membership
+            description: Access is granted automatically to everyone already in a parent context (a chat
+              channel, a shared folder) rather than assigned per-person, per-role, per-section, or
+              by branch.
+            example: Slack — Canvas in a channel
+  - name: Conflict handling
+    family: feedback
+    question: How are concurrent or conflicting edits surfaced?
+    subdimensions:
+      - id: conflicts
+        name: Conflicts
+        select: one
+        values:
+          - id: operational-transform-crdt-merge
+            name: Operational transform / CRDT merge
+            example: Google Docs, Figma
+          - id: explicit-merge-conflicts
+            name: Explicit merge conflicts
+            example: GitHub pull requests
+          - id: last-write-wins
+            name: Last-write wins
+            example: Simple sync
+          - id: locked-regions
+            name: Locked regions
+            example: Cell locks in Sheets
+          - id: duplicate-on-conflict
+            name: Duplicate on conflict
+            description: Both versions are kept as separate files rather than merged or overwritten (Dropbox
+              conflicted copy, iCloud Drive)
+            example: Dropbox — Shared folder on the desktop
+          - id: conflicted-copy-kept-alongside
+            name: Conflicted copy kept alongside
+            description: Neither edit is merged or discarded — the system keeps both as separate artifacts (a
+              conflicted copy) and leaves the reconciliation to the people
+            example: Dropbox — Shared folder on the desktop
+wild:
+  score: 2
+  note: Sharing links and notification preferences are common; presence density and merge policy
+    rarely are.
+  examples:
+    - name: Google Docs
+      note: Share dialog and notification settings
+    - name: Figma
+      note: Link access and multiplayer follow
+    - name: GitHub
+      note: Branch protection and CODEOWNERS
+techniques:
+  - name: Presence as a first-class layer
+    dimension: Presence and authorship
+    how: Treat cursors, selections and follow-mode as a toggled layer with density controls, not only
+      decorative avatars.
+    ai: false
+  - name: Explain who changed what
+    dimension: Conflict handling
+    how: Summarize concurrent edits by person and region so merge decisions are reviewable.
+    ai: true
+signature: Presence as a first-class layer
+sample: Multiplayer editors, shared drives, design tools and code hosting platforms.
+unit: One shared artifact with its people, changes and permissions.
+relations:
+  uses:
+    - badge
+    - toast
+    - undo
+  specializes: []
+  neighbors:
+    - communicate
+    - create
+    - delegate-ai
+scores:
+  ubiquity: 4
+  potential: 4
+  spec: 3
+evidence: agent-coded
+usage:
+  - Teams leave comments when they cannot see live presence
+questions:
+  - Which presence cues help, and which become surveillance?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7139169440039134
+  agreementFirstPass: 0.8142857142857143
+  kappaFinal: 0.9182900038002297
+  agreementFinal: 0.9428571428571428
+  pass: true
+  perSub:
+    presence:
+      kappaFirstPass: 0.754224270353303
+      agreementFirstPass: 0.825
+      kappaFinal: 0.932541634459982
+      agreementFinal: 0.95
+      flag: null
+    timeMode:
+      kappaFirstPass: 0.9349945828819071
+      agreementFirstPass: 0.95
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    access:
+      kappaFirstPass: 0.5031055900621128
+      agreementFirstPass: 0.8
+      kappaFinal: 0.8861480075901325
+      agreementFinal: 0.95
+      flag: null
+    conflicts:
+      kappaFirstPass: 0.542421353670162
+      agreementFirstPass: 0.65
+      kappaFinal: 0.8117154811715482
+      agreementFinal: 0.85
+      flag: null
+  distribution:
+    presence:
+      Live cursors and avatars: 14
+      Named authorship on edits: 14
+      Async activity only: 4
+      Follow a collaborator: 3
+    timeMode:
+      Real-time: 13
+      Async with versions: 3
+      Turn-taking locks: 1
+      Mixed live and async: 3
+    access:
+      Open to anyone with the link: 0
+      Role-based permissions: 17
+      Per-section permissions: 2
+      Branch isolation: 1
+      Inherited from a container's membership: 0
+    conflicts:
+      Operational transform / CRDT merge: 13
+      Explicit merge conflicts: 1
+      Last-write wins: 2
+      Locked regions: 2
+      Duplicate on conflict: 0
+      Conflicted copy kept alongside: 1
+      n/a: 1
+  exemplars:
+    presence:
+      Live cursors and avatars:
+        - Google Docs — Shared document
+        - Figma — Design file with a team in it
+        - Notion — Shared workspace page
+      Named authorship on edits:
+        - Google Docs — Shared document
+        - GitHub — Repository with pull requests
+        - Google Sheets — Shared sheet
+      Async activity only:
+        - GitHub — Repository with pull requests
+        - Dropbox — Shared folder on the desktop
+        - Google Drive — Shared folder
+      Follow a collaborator:
+        - Figma — Design file with a team in it
+        - Miro — Team board
+        - VS Code Live Share — Shared coding session
+    timeMode:
+      Real-time:
+        - Google Docs — Shared document
+        - Figma — Design file with a team in it
+        - Google Sheets — Shared sheet
+      Async with versions:
+        - GitHub — Repository with pull requests
+        - Dropbox — Shared folder on the desktop
+        - Google Drive — Shared folder
+      Turn-taking locks:
+        - SharePoint — Document library with check-out
+      Mixed live and async:
+        - Notion — Shared workspace page
+        - Apple Notes — Shared note
+        - Confluence — Team page
+    access:
+      Open to anyone with the link: []
+      Role-based permissions:
+        - Google Docs — Shared document
+        - Figma — Design file with a team in it
+        - Google Sheets — Shared sheet
+      Per-section permissions:
+        - Notion — Shared workspace page
+        - Confluence — Team page
+      Branch isolation:
+        - GitHub — Repository with pull requests
+      Inherited from a container's membership: []
+    conflicts:
+      Operational transform / CRDT merge:
+        - Google Docs — Shared document
+        - Figma — Design file with a team in it
+        - Notion — Shared workspace page
+      Explicit merge conflicts:
+        - GitHub — Repository with pull requests
+      Last-write wins:
+        - Airtable — Shared base
+        - Trello — Team board
+      Locked regions:
+        - Microsoft Word — Co-authoring a OneDrive document
+        - SharePoint — Document library with check-out
+      Duplicate on conflict: []
+      Conflicted copy kept alongside:
+        - Dropbox — Shared folder on the desktop
+  unobserved:
+    - sub: access
+      var: Open to anyone with the link
+    - sub: access
+      var: Inherited from a container's membership
+    - sub: conflicts
+      var: Duplicate on conflict
+  unresolved: []
+  proposals:
+    raised: 3
+    adopted:
+      - sub: conflicts
+        name: Duplicate on conflict
+        raters:
+          - fable
+          - opus
+      - sub: conflicts
+        name: Conflicted copy kept alongside
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: access
+        name: Inherited from a container's membership
+        raters:
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - Conflicts for cell-based tools were coded Last-write wins at the cell, since only same-cell
+        edits ever conflict; OT/CRDT was reserved for character- or object-level merging.
+      - "conflicts: the four values mix mechanism, policy and prevention and say nothing about merge
+        granularity — since the OT/CRDT exemplar Figma is itself last-writer-per-property, I now
+        read that value as 'automatic silent merge at the product's edit unit' and reserve
+        Last-write wins for whole-artifact replacement; the Locked regions exemplar 'Cell locks in
+        Sheets' is a permission feature, not conflict handling. presence: 'Async activity only' is
+        named as exclusive inside a pick-any sub. access: Notion/Confluence/GitHub each truthfully
+        hold two values; wants pick-any."
+    opus:
+      - "access is pick-one over products that run two schemes at once: GitHub has both roles and
+        branches, Notion both roles and page-level locks, Sheets both roles and protected ranges. It
+        also has no variation for access that follows from membership of a container — a Slack
+        canvas is readable because you are in the channel, not because anyone shared it. presence
+        conflates being here with having been here, which is why Apple Notes and Trello, both live,
+        came out looking async."
+      - "presence mixes an exclusive negative with a positive: 'Async activity only' says there is
+        no live channel, so it reads as contradicting 'Named authorship on edits' even though every
+        async product in this sample names its authors — that one word drove four of the thirteen
+        presence splits. access stays pick-one over products that run two schemes at once (GitHub
+        roles plus branches, Confluence space groups plus page restrictions) and should be pick any;
+        and the Locked regions exemplar 'Cell locks in Sheets' is a standing permission, not a
+        concurrency strategy, which pulled two raters onto it."
+    sonnet:
+      - Presence was a frequent judgment call between Live cursors and avatars and Named authorship
+        on edits for tools that show real-time updates and avatars but not a literal moving text
+        cursor (Notes, Trello, GitHub) — I reserved Live cursors and avatars for products I'm
+        confident render an actual cursor/selection indicator, and used Named authorship where the
+        cue is really attribution after the fact.
+      - "Two codebook-shaped findings: (1) presence's 'Async activity only' reads as if it excludes
+        the other values, but it routinely co-occurs with Named authorship on edits (GitHub, Apple
+        Notes, SharePoint check-out) since the two describe different axes — temporal mode versus
+        attribution richness — not alternatives; (2) my round-1 '+Inherited from a container's
+        membership' access proposal (Slack Canvas, Google Drive folder) was unnecessary — it's
+        Role-based permissions applied at a container that cascades, which the sharing-permissions
+        archetype's scope dimension (Folder and children) already covers; access in this archetype
+        does not need a fifth value for it."
+  codedAt: 2026-09-22
+previews:
+  - file: collaborate.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

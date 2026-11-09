@@ -1,0 +1,280 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "accordion". Edit between batches only — see README "Rules".
+id: accordion
+name: Accordion
+level: component
+parent: browse-collections
+aliases:
+  - disclosure
+  - collapsible sections
+  - expander
+definition: Stacked sections whose headers expand to reveal their content in place.
+data: hierarchy
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - commerce
+  - government
+  - education
+  - software
+anatomy:
+  - name: Header
+    role: The always-visible label
+  - name: Panel
+    role: The revealed content
+  - name: Indicator
+    role: Chevron or plus
+roles:
+  - title
+  - summary
+dimensions:
+  - name: Expansion policy
+    family: scope
+    question: How many sections can be open?
+    subdimensions:
+      - id: policy
+        name: Open at once
+        select: one
+        values:
+          - id: one-at-a-time
+            name: One at a time
+            description: Opening one closes the others
+            example: ESPN player stats
+          - id: many-at-a-time
+            name: Many at a time
+            description: Sections open independently
+            example: weather.com hourly details
+          - id: all-open-by-default
+            name: All open by default
+            example: Printable FAQs
+  - name: Header content
+    family: content
+    question: What does a closed section say about what is inside?
+    subdimensions:
+      - id: header
+        name: Header content
+        select: many
+        values:
+          - id: title-only
+            name: Title only
+            example: FAQ pages
+          - id: title-plus-summary-value
+            name: Title plus summary value
+            example: Checkout order summary
+          - id: status-indicator
+            name: Status indicator
+            example: Settings sections showing errors
+  - name: Toggle
+    family: invocation
+    question: How is a section opened?
+    subdimensions:
+      - id: toggle
+        name: Toggle by
+        select: many
+        values:
+          - id: header-click
+            name: Header click
+            example: Most accordions
+          - id: indicator-only
+            name: Indicator only
+            example: Tree-like panels
+          - id: expand-all-control
+            name: Expand all control
+            example: Documentation sites
+          - id: keyboard
+            name: Keyboard
+            example: WAI-ARIA accordion pattern
+  - name: Memory
+    family: lifecycle
+    question: Does it remember what was open?
+    subdimensions:
+      - id: memory
+        name: State memory
+        select: one
+        values:
+          - id: resets
+            name: Resets
+            example: Most web pages
+          - id: per-session
+            name: Per session
+            example: Single-page apps
+          - id: persists
+            name: Persists
+            example: IDE side panels
+wild:
+  score: 1
+  note: Expand all is sometimes offered; changing the policy or header summaries is not.
+  examples:
+    - name: Documentation sites
+      note: Expand all / Collapse all
+techniques:
+  - name: Header surfacing
+    dimension: Header content
+    how: Surface a value from inside a section into its closed header, so a collapsed page still answers
+      questions; Fluid Attributes at section scale.
+    ai: false
+  - name: Pin open
+    dimension: Expansion policy
+    how: Pin a section so one-at-a-time policies leave it alone.
+    ai: false
+signature: Header surfacing
+sample: FAQ, checkout, settings and documentation pages across top sites.
+unit: One accordion group.
+relations:
+  uses: []
+  specializes:
+    - overview-detail
+  neighbors:
+    - tabs
+    - tree-view
+scores:
+  ubiquity: 5
+  potential: 3
+  spec: 5
+evidence: agent-coded
+usage:
+  - Scanners open everything; seekers open one
+questions:
+  - When is an accordion an in-place overview–detail interface, and when is it just a page?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.8584860272649149
+  agreementFirstPass: 0.9111111111111111
+  kappaFinal: 0.8584860272649149
+  agreementFinal: 0.9111111111111111
+  pass: true
+  perSub:
+    policy:
+      kappaFirstPass: 0.8630136986301368
+      agreementFirstPass: 0.95
+      kappaFinal: 0.8630136986301368
+      agreementFinal: 0.95
+      flag: null
+    header:
+      kappaFirstPass: 0.9023199023199024
+      agreementFirstPass: 0.9333333333333333
+      kappaFinal: 0.9023199023199024
+      agreementFinal: 0.9333333333333333
+      flag: null
+    toggle:
+      kappaFirstPass: 0.813650128115537
+      agreementFirstPass: 0.875
+      kappaFinal: 0.813650128115537
+      agreementFinal: 0.875
+      flag: null
+    memory:
+      kappaFirstPass: 0.9018003273322426
+      agreementFirstPass: 0.95
+      kappaFinal: 0.9018003273322426
+      agreementFinal: 0.95
+      flag: null
+  distribution:
+    policy:
+      One at a time: 4
+      Many at a time: 15
+      All open by default: 0
+    header:
+      Title only: 14
+      Title plus summary value: 7
+      Status indicator: 0
+    toggle:
+      Header click: 20
+      Indicator only: 1
+      Expand all control: 3
+      Keyboard: 3
+    memory:
+      Resets: 16
+      Per session: 2
+      Persists: 2
+  exemplars:
+    policy:
+      One at a time:
+        - Netflix — Homepage FAQ
+        - Amazon — Checkout
+        - Stripe Checkout — Payment method sections
+      Many at a time:
+        - weather.com — Hourly forecast
+        - Wikipedia — Article sections on the mobile site
+        - Google Support — Help article with steps
+      All open by default: []
+    header:
+      Title only:
+        - Netflix — Homepage FAQ
+        - Stripe Checkout — Payment method sections
+        - Wikipedia — Article sections on the mobile site
+      Title plus summary value:
+        - Amazon — Checkout
+        - Shopify Checkout — Order summary on a phone
+        - weather.com — Hourly forecast
+      Status indicator: []
+    toggle:
+      Header click:
+        - Netflix — Homepage FAQ
+        - Amazon — Checkout
+        - Shopify Checkout — Order summary on a phone
+      Indicator only:
+        - macOS Finder — Get Info window
+      Expand all control:
+        - Google Support — Help article with steps
+        - GOV.UK — Guidance page accordion
+        - Udemy — Course curriculum
+      Keyboard:
+        - GOV.UK — Guidance page accordion
+        - Windows 11 Settings — Advanced network settings
+        - Bootstrap docs — Accordion example
+    memory:
+      Resets:
+        - Netflix — Homepage FAQ
+        - Shopify Checkout — Order summary on a phone
+        - Stripe Checkout — Payment method sections
+      Per session:
+        - Amazon — Checkout
+        - GOV.UK — Guidance page accordion
+      Persists:
+        - macOS Finder — Get Info window
+        - Jira — Issue view details panel
+  unobserved:
+    - sub: policy
+      var: All open by default
+    - sub: header
+      var: Status indicator
+  unresolved:
+    - sub: policy
+      n: 3
+  proposals:
+    raised: 0
+    adopted: []
+    recorded: []
+  raterNotes:
+    fable:
+      - Keyboard toggling is a property of the markup and rarely visible from product use; I coded
+        it only where the component is known to use button headers (design-system or major-vendor
+        pages).
+    opus:
+      - "The codebook fitted this sample without any gaps. Two judgement calls run through it: I
+        coded Keyboard only where the component is known to implement the ARIA accordion pattern
+        (GDS, Bootstrap, WinUI, AppKit) rather than wherever a header happens to be a focusable
+        button, and I read 'All open by default' as a deliberate policy, which nothing in this
+        sample uses. memory is Resets for 15 of 20 — it is worth keeping because the three that
+        remember (Finder, Jira, GOV.UK) are exactly the tools people return to."
+    sonnet:
+      - memory is coded 'Resets' by default absent an explicit persistence cue, since most web
+        accordions do not remember state across a reload; this is a default assumption, not a
+        confirmed recall for every product.
+  codedAt: 2026-09-22
+previews:
+  - file: accordion.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

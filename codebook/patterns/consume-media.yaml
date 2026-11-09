@@ -1,0 +1,374 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "consume-media". Edit between batches only — see README "Rules".
+id: consume-media
+name: Consume media
+level: archetype
+aliases:
+  - playback
+  - media consumption
+  - watching and listening
+definition: Watch, listen or read with control over pace, position and what comes next.
+data: media
+platforms:
+  - web
+  - mobile
+  - desktop
+  - xr
+  - voice
+domains:
+  - entertainment
+  - news
+  - education
+  - social
+  - productivity
+anatomy:
+  - name: Media object
+    role: The thing being consumed
+  - name: Transport
+    role: Play, pause, seek and rate
+  - name: Position
+    role: Where you are in it
+  - name: What next
+    role: Queue, autoplay or related items
+roles:
+  - title
+  - creator
+  - duration
+  - progress
+  - artwork
+dimensions:
+  - name: Media kind
+    family: content
+    question: What form does the media take?
+    subdimensions:
+      - id: kind
+        name: Kind
+        select: many
+        values:
+          - id: video
+            name: Video
+            example: YouTube
+          - id: audio
+            name: Audio
+            example: Spotify
+          - id: long-text
+            name: Long text
+            example: Kindle
+          - id: ephemeral-frames
+            name: Ephemeral frames
+            example: Instagram Stories
+          - id: live-stream
+            name: Live stream
+            example: Twitch
+  - name: Transport and pace
+    family: flow
+    question: How does a person move through the media?
+    subdimensions:
+      - id: transport
+        name: Transport
+        select: many
+        values:
+          - id: play-and-pause
+            name: Play and pause
+            example: Every player
+          - id: seek-scrubber
+            name: Seek scrubber
+            example: YouTube timeline
+          - id: skip-intervals
+            name: Skip intervals
+            description: ±10s / ±15s
+            example: Podcast apps
+          - id: playback-rate
+            name: Playback rate
+            example: YouTube 1.5×
+          - id: continuous-scroll
+            name: Continuous scroll
+            description: Pace is reading speed
+            example: Kindle
+  - name: What comes next
+    family: lifecycle
+    question: What happens when this item ends?
+    subdimensions:
+      - id: continuation
+        name: Continuation
+        select: one
+        values:
+          - id: stop
+            name: Stop
+            example: Standalone clips
+          - id: autoplay-next
+            name: Autoplay next
+            example: Netflix episodes
+          - id: queue
+            name: Queue
+            description: An ordered list of what follows
+            example: Spotify queue
+          - id: related-suggestions
+            name: Related suggestions
+            example: YouTube Up next
+          - id: loop
+            name: Loop
+            example: TikTok sound loops
+  - name: Attention surface
+    family: layout
+    question: How much of the screen does consumption own?
+    subdimensions:
+      - id: surface
+        name: Surface
+        select: one
+        values:
+          - id: full-bleed-stage
+            name: Full-bleed stage
+            example: Netflix player
+          - id: inline-in-a-page
+            name: Inline in a page
+            example: Embedded YouTube
+          - id: mini-player
+            name: Mini player
+            description: Continues while navigating
+            example: Spotify mini player
+          - id: picture-in-picture
+            name: Picture-in-picture
+            example: YouTube PiP
+          - id: background-audio
+            name: Background audio
+            example: Podcasts with screen off
+wild:
+  score: 2
+  note: Speed, captions and quality are often tunable; queue policy and autoplay less so.
+  examples:
+    - name: YouTube
+      note: Playback speed and caption styles
+    - name: Spotify
+      note: Crossfade and gapless settings
+    - name: Netflix
+      note: Autoplay next episode toggle
+techniques:
+  - name: Pace as a dial
+    dimension: Transport and pace
+    how: Expose rate, skip size and scrubber density as one personal pace profile that travels across
+      videos, podcasts and chapters.
+    ai: false
+  - name: Explain the next pick
+    dimension: What comes next
+    how: Show why the next item was chosen and let a person edit the rule (“finish this album before
+      recommendations”).
+    ai: true
+signature: Pace as a dial
+sample: Top streaming, podcast, ebook and short-form video apps on mobile and web.
+unit: One consumption session of one media object or continuous queue.
+relations:
+  uses: []
+  specializes: []
+  neighbors:
+    - browse-collections
+    - create
+scores:
+  ubiquity: 5
+  potential: 4
+  spec: 4
+evidence: agent-coded
+usage:
+  - People binge with autoplay on, then turn it off after overshooting
+questions:
+  - Can one pace profile span video, audio and text?
+  - When should the queue override algorithmic next?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.8907008431012687
+  agreementFirstPass: 0.9166666666666666
+  kappaFinal: 0.8927153211813926
+  agreementFinal: 0.9166666666666666
+  pass: true
+  perSub:
+    kind:
+      kappaFirstPass: 0.9794224569586394
+      agreementFirstPass: 0.99
+      kappaFinal: 0.9794224569586394
+      agreementFinal: 0.99
+      flag: null
+    transport:
+      kappaFirstPass: 0.8121309715512615
+      agreementFirstPass: 0.86
+      kappaFinal: 0.8121309715512615
+      agreementFinal: 0.86
+      flag: null
+    continuation:
+      kappaFirstPass: 0.8519040902679829
+      agreementFirstPass: 0.85
+      kappaFinal: 0.8519040902679829
+      agreementFinal: 0.85
+      flag: null
+    surface:
+      kappaFirstPass: 0.8787388843977365
+      agreementFirstPass: 0.9
+      kappaFinal: 0.9029126213592233
+      agreementFinal: 0.9
+      flag: null
+  distribution:
+    kind:
+      Video: 9
+      Audio: 7
+      Long text: 2
+      Ephemeral frames: 1
+      Live stream: 1
+    transport:
+      Play and pause: 18
+      Seek scrubber: 15
+      Skip intervals: 9
+      Playback rate: 6
+      Continuous scroll: 2
+    continuation:
+      Stop: 4
+      Autoplay next: 5
+      Queue: 4
+      Related suggestions: 3
+      Loop: 3
+    surface:
+      Full-bleed stage: 9
+      Inline in a page: 3
+      Mini player: 3
+      Picture-in-picture: 0
+      Background audio: 4
+  exemplars:
+    kind:
+      Video:
+        - YouTube — Watch page
+        - Netflix — Web player
+        - TikTok — For You feed
+      Audio:
+        - Spotify — Now Playing
+        - Apple Podcasts — Episode player
+        - Audible — Audiobook player
+      Long text:
+        - Kindle — Reading a book
+        - Apple Books — Reading a book
+      Ephemeral frames:
+        - Snapchat — Friend's Story
+      Live stream:
+        - Twitch — Live stream
+    transport:
+      Play and pause:
+        - YouTube — Watch page
+        - Netflix — Web player
+        - Spotify — Now Playing
+      Seek scrubber:
+        - YouTube — Watch page
+        - Netflix — Web player
+        - Spotify — Now Playing
+      Skip intervals:
+        - YouTube — Watch page
+        - Netflix — Web player
+        - Apple Podcasts — Episode player
+      Playback rate:
+        - YouTube — Watch page
+        - Netflix — Web player
+        - Apple Podcasts — Episode player
+      Continuous scroll:
+        - Kindle — Reading a book
+        - Apple Books — Reading a book
+    continuation:
+      Stop:
+        - Kindle — Reading a book
+        - Audible — Audiobook player
+        - Apple Books — Reading a book
+      Autoplay next:
+        - Netflix — Web player
+        - Snapchat — Friend's Story
+        - Disney+ — Player
+      Queue:
+        - Spotify — Now Playing
+        - Apple Podcasts — Episode player
+        - Apple Music — Now Playing on Mac
+      Related suggestions:
+        - YouTube — Watch page
+        - Twitch — Live stream
+        - SoundCloud — Track page
+      Loop:
+        - TikTok — For You feed
+        - Instagram — Reels
+        - YouTube — Shorts
+    surface:
+      Full-bleed stage:
+        - Netflix — Web player
+        - Kindle — Reading a book
+        - TikTok — For You feed
+      Inline in a page:
+        - YouTube — Watch page
+        - Twitch — Live stream
+        - Vimeo — Embedded player
+      Mini player:
+        - Spotify — Now Playing
+        - Apple Music — Now Playing on Mac
+        - SoundCloud — Track page
+      Picture-in-picture: []
+      Background audio:
+        - Apple Podcasts — Episode player
+        - Audible — Audiobook player
+        - Amazon Alexa — Play a podcast by voice
+  unobserved:
+    - sub: surface
+      var: Picture-in-picture
+  unresolved:
+    - sub: continuation
+      n: 13
+    - sub: surface
+      n: 14
+  proposals:
+    raised: 2
+    adopted: []
+    recorded:
+      - place: sub:surface
+        sub: surface
+        dim: null
+        name: Spatial window
+        gloss: In XR the media is a floating, resizable window or an immersive environment in the room
+          rather than a region of a screen
+        raters:
+          - fable
+        instances:
+          - 14
+        status: raised
+      - place: sub:surface
+        sub: surface
+        dim: null
+        name: Screen placed in space
+        gloss: In XR the stage is a window the viewer positions and resizes in their own room, or an
+          environment that replaces the room — attention is claimed by placement rather than by
+          filling a device's screen
+        raters:
+          - opus
+        instances:
+          - 14
+        status: raised
+  raterNotes:
+    fable:
+      - surface is pick-one but every audio app is at once a mini player, background audio and a
+        full Now Playing screen; I coded Background audio for podcast/audiobook apps (codebook
+        exemplar) and Mini player where the sample names the persistent bar.
+    opus:
+      - "surface is pick-one but audio apps are simultaneously a full Now Playing view, a persistent
+        mini bar and screen-off playback; I ruled that the surface is the deepest claim on the
+        session — Background audio for podcasts and audiobooks, Mini player for music apps that keep
+        a bar while you browse — and noted it each time. continuation for an audiobook is also
+        awkward: chapters follow each other inside one object, so I coded Stop for the object's
+        end."
+    sonnet:
+      - Reading apps' page-turn/scroll behavior maps directly onto 'Continuous scroll' since the
+        codebook itself cites Kindle for that transport value (the label is about self-paced
+        reading, not a literal scroll gesture).
+  codedAt: 2026-09-22
+previews:
+  - file: consume-media.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

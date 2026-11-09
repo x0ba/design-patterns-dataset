@@ -1,0 +1,605 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "availability-picker". Edit between batches only — see README "Rules".
+id: availability-picker
+name: Availability picker
+level: pattern
+parent: schedule
+aliases:
+  - slot picker
+  - booking calendar
+  - find-a-time
+  - scheduler
+definition: A surface for choosing a free time from offered or computed availability — for booking
+  someone else, polling a group, or finding mutual free slots.
+data: time
+platforms:
+  - web
+  - mobile
+domains:
+  - productivity
+  - health
+  - education
+  - travel
+  - enterprise
+anatomy:
+  - name: Availability window
+    role: When booking is allowed
+  - name: Slot grid or list
+    role: Candidate times
+  - name: Duration control
+    role: How long the meeting is
+  - name: Confirmation
+    role: The held or booked time
+roles:
+  - slot
+  - duration
+  - timezone
+  - host
+  - buffer
+dimensions:
+  - name: How availability is defined
+    family: content
+    question: What makes a slot free, and what does the booker see?
+    subdimensions:
+      - id: availSource
+        name: Source of free/busy
+        select: one
+        values:
+          - id: host-declared-windows
+            name: Host-declared windows
+            description: Manual weekly hours
+            example: Calendly availability
+          - id: live-calendar-free-busy
+            name: Live calendar free/busy
+            description: Read from connected calendars
+            example: Google Appointment schedules
+          - id: polled-preferences
+            name: Polled preferences
+            description: Respondents mark options
+            example: Doodle
+          - id: resource-inventory
+            name: Resource inventory
+            description: Rooms or clinicians with capacity
+            example: OpenTable, Epic MyChart
+          - id: computed-mutual-free
+            name: Computed mutual free
+            description: Intersection across invitees
+            example: Outlook Scheduling Assistant
+      - id: slotDisclosure
+        name: Slot disclosure
+        select: one
+        values:
+          - id: times-only
+            name: Times only
+            description: No event titles shown
+            example: Calendly public page
+          - id: busy-blocks-visible
+            name: Busy blocks visible
+            description: Opaque busy regions
+            example: Google Find a time
+          - id: named-conflicts-for-owner
+            name: Named conflicts for owner
+            description: Owner sees titles; guest does not
+            example: Typical host vs guest asymmetry
+          - id: price-or-type-per-slot
+            name: Price or type per slot
+            description: Slot carries service attributes
+            example: Mindbody class booking
+  - name: Choosing a slot
+    family: flow
+    question: What is the path from browsing times to a hold?
+    subdimensions:
+      - id: selectionPath
+        name: Selection path
+        select: one
+        values:
+          - id: pick-one-slot
+            name: Pick one slot
+            example: Calendly
+          - id: pick-duration-then-slot
+            name: Pick duration then slot
+            example: YouCanBook.me
+          - id: propose-several-options
+            name: Propose several options
+            description: Host or guest offers candidates
+            example: Doodle
+          - id: assist-then-confirm
+            name: Assist then confirm
+            description: System ranks; person confirms
+            example: Outlook suggested times
+          - id: recurring-series-pick
+            name: Recurring series pick
+            description: Choose a pattern, not one slot
+            example: Calendly recurring
+  - name: Slot presentation
+    family: layout
+    question: How are candidate times arranged?
+    subdimensions:
+      - id: slotLayout
+        name: Arrangement
+        select: one
+        values:
+          - id: calendar-month-then-list
+            name: Calendar month then list
+            description: Pick a day, then times
+            example: Calendly
+          - id: week-strip-of-slots
+            name: Week strip of slots
+            example: Many clinic booking UIs
+          - id: timeline-with-busy-shading
+            name: Timeline with busy shading
+            example: Google Find a time
+          - id: ranked-suggestion-list
+            name: Ranked suggestion list
+            description: Not a grid
+            example: Clockwise, Reclaim
+          - id: map-plus-time
+            name: Map plus time
+            description: Place-constrained booking
+            example: OpenTable
+          - id: options-table
+            name: Options table
+            description: Proposed options as columns and respondents as rows, each cell a yes/if-need-be/no mark
+            example: Doodle — Group poll
+          - id: chips-around-requested-time
+            name: Chips around requested time
+            description: The guest names a target time and sees the nearest available seatings as a short row of
+              chips, not a full day or week of slots
+            example: OpenTable — Reservation search
+          - id: poll-grid-of-options
+            name: Poll grid of options
+            description: A small set of specific date/time options proposed by the organizer are laid out as a
+              table (one column per option) for participants to mark, rather than a real calendar
+              grid, a busy-shaded timeline, a ranked list, or a map
+            example: Doodle — Group poll
+  - name: Constraints and buffers
+    family: scope
+    question: What rules shrink the set of bookable times?
+    subdimensions:
+      - id: constraints
+        name: Constraints
+        select: many
+        values:
+          - id: working-hours
+            name: Working hours
+            example: Calendly schedule
+          - id: minimum-notice
+            name: Minimum notice
+            example: Calendly notice period
+          - id: buffers-before-after
+            name: Buffers before/after
+            example: Calendly buffers
+          - id: duration-presets
+            name: Duration presets
+            example: 15/30/60 meeting types
+          - id: timezone-of-guest
+            name: Timezone of guest
+            description: Show times in guest tz
+            example: Calendly timezone
+          - id: travel-or-location-rules
+            name: Travel or location rules
+            example: Housecall booking tools
+          - id: party-size-or-capacity
+            name: Party size or capacity
+            description: The number of people or seats asked for decides which slots exist at all — a table for
+              six, a class with two spots left — a constraint on the resource rather than on the
+              host's time
+            example: OpenTable — Reservation search
+  - name: Hold and confirm
+    family: lifecycle
+    question: When is the slot reserved, and how long does a hold last?
+    subdimensions:
+      - id: holdBehaviour
+        name: Hold behaviour
+        select: one
+        values:
+          - id: instant-book
+            name: Instant book
+            description: Writes the event immediately
+            example: Calendly
+          - id: timed-hold-then-pay
+            name: Timed hold then pay
+            description: Hold expires if unpaid
+            example: Ticketmaster-style holds
+          - id: request-awaiting-approval
+            name: Request awaiting approval
+            description: Host must accept
+            example: Some clinic request forms
+          - id: poll-closes-later
+            name: Poll closes later
+            description: No hold until a winner is chosen
+            example: Doodle
+  - name: Who drives
+    family: initiative
+    question: Who proposes times — host, guest or system?
+    subdimensions:
+      - id: initiative
+        name: Initiative
+        select: one
+        values:
+          - id: guest-picks-from-host-offer
+            name: Guest picks from host offer
+            example: Calendly
+          - id: host-picks-after-seeing-polls
+            name: Host picks after seeing polls
+            example: Doodle
+          - id: system-suggests-mutual-times
+            name: System suggests mutual times
+            example: Google Find a time
+          - id: ai-negotiates-async
+            name: AI negotiates async
+            description: Bot proposes until agreement
+            example: x.ai-style scheduling assistants
+wild:
+  score: 1
+  note: Hosts configure hours and buffers; guests almost never reshape how slots are shown.
+  examples:
+    - name: Calendly
+      note: Host availability rules and meeting types
+    - name: Google Calendar Appointment schedules
+      note: Booking page settings
+techniques:
+  - name: Constraint as attributes
+    dimension: Constraints and buffers
+    how: Expose notice, buffer, duration and timezone as filterable attributes on the slot set so guests
+      can narrow (“only after 5pm in my timezone”).
+    ai: false
+  - name: Explain why unavailable
+    dimension: How availability is defined
+    how: Grey slots carry a reason code (outside hours, buffer, conflict, capacity) visible on demand
+      without leaking private event titles.
+    ai: false
+  - name: Negotiate in language
+    dimension: Who drives
+    how: “Sometime next week that doesn’t conflict with school pickup” becomes ranked slots with
+      inspectable constraints from both sides.
+    ai: true
+signature: Constraint as attributes
+sample: Calendly, SavvyCal, Doodle, Google Appointment schedules, Outlook Scheduling Assistant,
+  OpenTable, Mindbody and clinic patient portals.
+unit: One booking or find-a-time session between host(s) and guest(s).
+relations:
+  uses:
+    - date-picker
+    - choice-control
+    - stepper
+    - confirmation
+    - modal-dialog
+  specializes:
+    - schedule
+  neighbors:
+    - calendar
+    - booking-flow
+    - plan-picker
+scores:
+  ubiquity: 4
+  potential: 4
+  spec: 5
+evidence: agent-coded
+usage:
+  - Guests abandon when timezone or duration is wrong; hosts over-constrain and starve the slot list
+questions:
+  - How much conflict reason can be shown without leaking privacy?
+  - Should guests be allowed to request outside declared hours as a first-class path?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.6232541138973782
+  agreementFirstPass: 0.7461538461538462
+  kappaFinal: 0.9467205657700469
+  agreementFinal: 0.9538461538461539
+  pass: true
+  perSub:
+    availSource:
+      kappaFirstPass: 0.819684447783621
+      agreementFirstPass: 0.8
+      kappaFinal: 0.9098422238918106
+      agreementFinal: 0.9
+      flag: null
+    slotDisclosure:
+      kappaFirstPass: 0.7055937193326789
+      agreementFirstPass: 0.75
+      kappaFinal: 0.8833819241982507
+      agreementFinal: 0.9
+      flag: null
+    selectionPath:
+      kappaFirstPass: 0.7150997150997149
+      agreementFirstPass: 0.75
+      kappaFinal: 0.7379912663755457
+      agreementFinal: 0.75
+      flag: null
+    slotLayout:
+      kappaFirstPass: 0.6703296703296705
+      agreementFirstPass: 0.7
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    constraints:
+      kappaFirstPass: 0.5171224439517104
+      agreementFirstPass: 0.7
+      kappaFinal: 0.980408163265306
+      agreementFinal: 0.9857142857142858
+      flag: null
+    holdBehaviour:
+      kappaFirstPass: 0.6584440227703985
+      agreementFirstPass: 0.85
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    initiative:
+      kappaFirstPass: 0.913294797687861
+      agreementFirstPass: 0.95
+      kappaFinal: 0.913294797687861
+      agreementFinal: 0.95
+      flag: null
+  distribution:
+    availSource:
+      Host-declared windows: 6
+      Live calendar free/busy: 3
+      Polled preferences: 2
+      Resource inventory: 7
+      Computed mutual free: 2
+    slotDisclosure:
+      Times only: 11
+      Busy blocks visible: 4
+      Named conflicts for owner: 0
+      Price or type per slot: 5
+    selectionPath:
+      Pick one slot: 9
+      Pick duration then slot: 6
+      Propose several options: 2
+      Assist then confirm: 3
+      Recurring series pick: 0
+    slotLayout:
+      Calendar month then list: 7
+      Week strip of slots: 7
+      Timeline with busy shading: 3
+      Ranked suggestion list: 1
+      Map plus time: 0
+      Options table: 1
+      Chips around requested time: 1
+      Poll grid of options: 0
+    constraints:
+      Working hours: 14
+      Minimum notice: 11
+      Buffers before/after: 7
+      Duration presets: 11
+      Timezone of guest: 9
+      Travel or location rules: 3
+      Party size or capacity: 4
+    holdBehaviour:
+      Instant book: 17
+      Timed hold then pay: 0
+      Request awaiting approval: 1
+      Poll closes later: 2
+    initiative:
+      Guest picks from host offer: 15
+      Host picks after seeing polls: 2
+      System suggests mutual times: 3
+      AI negotiates async: 0
+  exemplars:
+    availSource:
+      Host-declared windows:
+        - Calendly — Booking page
+        - SavvyCal — Booking page with calendar overlay
+        - Cal.com — Booking page
+      Live calendar free/busy:
+        - Google Calendar — Appointment schedule booking page
+        - Microsoft Bookings — Customer booking page
+        - Clockwise — Scheduling link
+      Polled preferences:
+        - Doodle — Group poll
+        - When2meet — Availability grid
+      Resource inventory:
+        - OpenTable — Reservation search
+        - Mindbody — Class schedule booking
+        - Epic MyChart — Schedule an appointment
+      Computed mutual free:
+        - Microsoft Outlook — Scheduling Assistant
+        - Google Calendar — Find a time
+    slotDisclosure:
+      Times only:
+        - Calendly — Booking page
+        - Doodle — Group poll
+        - Google Calendar — Appointment schedule booking page
+      Busy blocks visible:
+        - SavvyCal — Booking page with calendar overlay
+        - Microsoft Outlook — Scheduling Assistant
+        - Google Calendar — Find a time
+      Named conflicts for owner: []
+      Price or type per slot:
+        - OpenTable — Reservation search
+        - Mindbody — Class schedule booking
+        - Resy — Restaurant reservation
+    selectionPath:
+      Pick one slot:
+        - Calendly — Booking page
+        - SavvyCal — Booking page with calendar overlay
+        - Google Calendar — Appointment schedule booking page
+      Pick duration then slot:
+        - Epic MyChart — Schedule an appointment
+        - Microsoft Bookings — Customer booking page
+        - Cal.com — Booking page
+      Propose several options:
+        - Doodle — Group poll
+        - When2meet — Availability grid
+      Assist then confirm:
+        - Microsoft Outlook — Scheduling Assistant
+        - Google Calendar — Find a time
+        - Clockwise — Scheduling link
+      Recurring series pick: []
+    slotLayout:
+      Calendar month then list:
+        - Calendly — Booking page
+        - Google Calendar — Appointment schedule booking page
+        - Microsoft Bookings — Customer booking page
+      Week strip of slots:
+        - SavvyCal — Booking page with calendar overlay
+        - Mindbody — Class schedule booking
+        - Epic MyChart — Schedule an appointment
+      Timeline with busy shading:
+        - Microsoft Outlook — Scheduling Assistant
+        - Google Calendar — Find a time
+        - When2meet — Availability grid
+      Ranked suggestion list:
+        - Clockwise — Scheduling link
+      Map plus time: []
+      Options table:
+        - Doodle — Group poll
+      Chips around requested time:
+        - OpenTable — Reservation search
+      Poll grid of options: []
+    constraints:
+      Working hours:
+        - Calendly — Booking page
+        - SavvyCal — Booking page with calendar overlay
+        - Google Calendar — Appointment schedule booking page
+      Minimum notice:
+        - Calendly — Booking page
+        - SavvyCal — Booking page with calendar overlay
+        - Google Calendar — Appointment schedule booking page
+      Buffers before/after:
+        - Calendly — Booking page
+        - SavvyCal — Booking page with calendar overlay
+        - Google Calendar — Appointment schedule booking page
+      Duration presets:
+        - Calendly — Booking page
+        - SavvyCal — Booking page with calendar overlay
+        - Google Calendar — Appointment schedule booking page
+      Timezone of guest:
+        - Calendly — Booking page
+        - SavvyCal — Booking page with calendar overlay
+        - Doodle — Group poll
+      Travel or location rules:
+        - Epic MyChart — Schedule an appointment
+        - Zocdoc — Book with a doctor
+        - Apple — Genius Bar appointment booking
+      Party size or capacity:
+        - OpenTable — Reservation search
+        - Mindbody — Class schedule booking
+        - Resy — Restaurant reservation
+    holdBehaviour:
+      Instant book:
+        - Calendly — Booking page
+        - SavvyCal — Booking page with calendar overlay
+        - Google Calendar — Appointment schedule booking page
+      Timed hold then pay: []
+      Request awaiting approval:
+        - Booksy — Barber or salon booking
+      Poll closes later:
+        - Doodle — Group poll
+        - When2meet — Availability grid
+    initiative:
+      Guest picks from host offer:
+        - Calendly — Booking page
+        - SavvyCal — Booking page with calendar overlay
+        - Google Calendar — Appointment schedule booking page
+      Host picks after seeing polls:
+        - Doodle — Group poll
+        - When2meet — Availability grid
+      System suggests mutual times:
+        - Microsoft Outlook — Scheduling Assistant
+        - Google Calendar — Find a time
+        - Clockwise — Scheduling link
+      AI negotiates async: []
+  unobserved:
+    - sub: slotDisclosure
+      var: Named conflicts for owner
+    - sub: selectionPath
+      var: Recurring series pick
+    - sub: slotLayout
+      var: Map plus time
+    - sub: slotLayout
+      var: Poll grid of options
+    - sub: holdBehaviour
+      var: Timed hold then pay
+    - sub: initiative
+      var: AI negotiates async
+  unresolved: []
+  proposals:
+    raised: 5
+    adopted:
+      - sub: slotLayout
+        name: Options table
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: slotLayout
+        name: Chips around requested time
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: slotLayout
+        name: Poll grid of options
+        raters:
+          - fable
+          - sonnet
+      - sub: constraints
+        name: Party size or capacity
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded:
+      - place: sub:slotLayout
+        sub: slotLayout
+        dim: Slot presentation
+        name: Painted availability grid
+        gloss: Participants directly paint their own free time across a continuous grid of days and
+          half-hours; the aggregate renders as a heat map rather than a list of organizer-proposed
+          options
+        raters:
+          - sonnet
+        instances:
+          - 11
+        status: raised
+  raterNotes:
+    fable:
+      - "holdBehaviour: 'Timed hold then pay' never applied; booking pages that take a card (Acuity,
+        Square, Resy) confirm on submit rather than holding. constraints for restaurant/class
+        booking is thin because party size, capacity and release windows are not variations."
+      - Pick duration then slot should read service or duration, most booking sites fix length
+        through a service choice. Host-declared windows and Resource inventory overlap for a
+        business whose staff declare hours. Busy blocks visible does not say whose busy blocks.
+    opus:
+      - "holdBehaviour's Timed hold then pay never fired: none of these twenty start a countdown on
+        an unpaid reservation (Acuity and Square take payment at booking, which is not the same
+        thing), so that variation may only describe ticketing. availSource blurs for Calendly-likes
+        that both declare windows and subtract connected-calendar busy; I coded the declared windows
+        as the source and noted the subtraction."
+      - constraints is written for host-time rules only, so every inventory booking (tables,
+        classes, seats) has to borrow Working hours or come out empty — the capacity constraint that
+        actually governs those pages has no variation.
+    sonnet:
+      - Group-polling tools (Doodle, When2meet) needed two distinct new slotLayout values since
+        neither matches the four calendar/booking-oriented options; they differ from each other in
+        whether the grid is a fixed set of proposed columns or a freely painted continuum.
+      - "Four codebook problems: (1) 'constraints' was read by me in round 1 as what the page
+        displays rather than what rules shrink the slot set, which is what the gloss asks — the
+        gloss should say 'whether or not the booker can see them'; (2) 'slotDisclosure' is a ladder,
+        not a partition — 'Times only' (no host event titles) is true of almost every instance that
+        also carries a price or busy shading, so it wants to be pick any or the gloss needs 'beyond
+        bare times'; (3) 'selectionPath: Pick duration then slot' is really 'pick a service or visit
+        type, which fixes the duration, then a slot' — every clinic, salon and studio booker in this
+        sample takes that shape and none of them ask for a duration as such; (4) 'holdBehaviour' is
+        per-configuration for MyChart, Booksy and Bookings — some visit types or businesses
+        instant-book while others go to a request — so a pick-one forces a false choice. Also:
+        'availSource' conflates where free/busy comes from (typed windows vs a connected calendar)
+        with what kind of thing is bookable (staff, rooms, seats), which is why Square and Booksy
+        split raters between Host-declared windows and Resource inventory."
+  codedAt: 2026-09-22
+previews:
+  - file: availability-picker.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

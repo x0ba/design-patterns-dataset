@@ -1,0 +1,415 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "enter-data". Edit between batches only — see README "Rules".
+id: enter-data
+name: Enter and edit data
+level: archetype
+aliases:
+  - data entry
+  - input
+definition: Give a system structured information, have it checked, and correct it — from a single
+  field to a multi-page application.
+data: schema
+platforms:
+  - web
+  - mobile
+  - desktop
+  - voice
+domains:
+  - government
+  - finance
+  - health
+  - commerce
+  - enterprise
+anatomy:
+  - name: Fields
+    role: What is asked
+  - name: Structure
+    role: How fields are grouped and ordered
+  - name: Validation
+    role: How answers are checked
+  - name: Commit
+    role: How answers are saved
+roles:
+  - label
+  - hint
+  - error
+dimensions:
+  - name: Field organization
+    family: composition
+    question: How are fields grouped and paced?
+    subdimensions:
+      - id: organization
+        name: Organization
+        select: one
+        values:
+          - id: single-field
+            name: Single field
+            example: Newsletter sign-up
+          - id: one-page
+            name: One page
+            example: Contact forms
+          - id: sections
+            name: Sections
+            example: Account settings
+          - id: multi-step
+            name: Multi-step
+            example: Tax software
+          - id: one-question-at-a-time
+            name: One question at a time
+            example: Typeform
+          - id: grid-entry
+            name: Grid entry
+            example: Spreadsheets
+  - name: Input modality
+    family: adaptation
+    question: How does information get in?
+    subdimensions:
+      - id: modality
+        name: Modality
+        select: many
+        values:
+          - id: typing
+            name: Typing
+            example: Text fields
+          - id: choosing-from-options
+            name: Choosing from options
+            example: Selects
+          - id: direct-manipulation
+            name: Direct manipulation
+            example: Sliders, map pins
+          - id: voice-dictation
+            name: Voice dictation
+            example: iOS dictation
+          - id: camera-scan
+            name: Camera scan
+            example: Apple Pay card scanning
+          - id: import-or-paste
+            name: Import or paste
+            example: CSV import
+  - name: Prefill
+    family: initiative
+    question: How much does the system fill in?
+    subdimensions:
+      - id: prefill
+        name: Prefill
+        select: one
+        values:
+          - id: empty
+            name: Empty
+            example: Most forms
+          - id: defaults
+            name: Defaults
+            example: Country from locale
+          - id: autofill-from-a-profile
+            name: Autofill from a profile
+            example: Browser autofill
+          - id: extracted-from-a-document
+            name: Extracted from a document
+            example: Expensify SmartScan receipts
+  - name: Validation timing
+    family: feedback
+    question: When is input checked?
+    subdimensions:
+      - id: timing
+        name: Timing
+        select: one
+        values:
+          - id: on-submit
+            name: On submit
+            example: GOV.UK error summary
+          - id: on-leaving-a-field
+            name: On leaving a field
+            example: Many web forms
+          - id: while-typing
+            name: While typing
+            example: Password rules
+          - id: asynchronous
+            name: Asynchronous
+            example: Username availability
+          - id: none
+            name: None
+            description: Input is never checked; whatever is typed or picked is accepted as-is (Notion
+              properties, plain note fields)
+            example: Notion — Database page properties
+  - name: Commit model
+    family: lifecycle
+    question: When is input saved?
+    subdimensions:
+      - id: commit
+        name: Commit
+        select: one
+        values:
+          - id: explicit-submit
+            name: Explicit submit
+            example: Web forms
+          - id: autosave
+            name: Autosave
+            example: Google Docs
+          - id: draft-then-publish
+            name: Draft, then publish
+            example: CMS editors
+          - id: undo-window
+            name: Undo window
+            example: Gmail undo send
+wild:
+  score: 1
+  note: Autofill profiles cross products; the structure of what is asked never changes.
+  examples:
+    - name: Chrome
+      note: Saved addresses and payment autofill
+techniques:
+  - name: Fold the optional
+    dimension: Field organization
+    how: People fold away optional fields they never fill and pin the ones they always do, per form and
+      remembered.
+    ai: false
+  - name: Fill from this
+    dimension: Prefill
+    how: Drop or paste a document and fields fill with highlights marking what was inferred, to be
+      confirmed.
+    ai: true
+signature: Fold the optional
+sample: Government services, banking, health intake, checkout and SaaS settings.
+unit: One data-entry task.
+relations:
+  uses:
+    - text-field
+    - choice-control
+    - date-picker
+    - file-upload
+    - autocomplete
+  specializes: []
+  neighbors:
+    - configure
+    - transact
+scores:
+  ubiquity: 5
+  potential: 3
+  spec: 5
+evidence: agent-coded
+usage:
+  - People abandon at unexpected required fields
+questions:
+  - Which parts of a form belong to the organization, which to the person?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7518838976095439
+  agreementFirstPass: 0.81
+  kappaFinal: 0.8726987477269961
+  agreementFinal: 0.91
+  pass: true
+  perSub:
+    organization:
+      kappaFirstPass: 0.7787610619469025
+      agreementFirstPass: 0.75
+      kappaFinal: 0.9122807017543858
+      agreementFinal: 0.9
+      flag: null
+    modality:
+      kappaFirstPass: 0.9170370370370364
+      agreementFirstPass: 0.9416666666666667
+      kappaFinal: 0.9767973961522347
+      agreementFinal: 0.9833333333333333
+      flag: null
+    prefill:
+      kappaFirstPass: 0.7635933806146571
+      agreementFirstPass: 0.75
+      kappaFinal: 0.9525691699604745
+      agreementFinal: 0.95
+      flag: null
+    timing:
+      kappaFirstPass: 0.18410041841004177
+      agreementFirstPass: 0.4
+      kappaFinal: 0.7111913357400725
+      agreementFinal: 0.8
+      flag: null
+    commit:
+      kappaFirstPass: 0.29016189290161926
+      agreementFirstPass: 0.55
+      kappaFinal: 0.29016189290161926
+      agreementFinal: 0.55
+      flag: unreliable
+  distribution:
+    organization:
+      Single field: 1
+      One page: 4
+      Sections: 4
+      Multi-step: 8
+      One question at a time: 2
+      Grid entry: 1
+    modality:
+      Typing: 18
+      Choosing from options: 16
+      Direct manipulation: 2
+      Voice dictation: 2
+      Camera scan: 6
+      Import or paste: 3
+    prefill:
+      Empty: 9
+      Defaults: 4
+      Autofill from a profile: 3
+      Extracted from a document: 4
+    timing:
+      On submit: 14
+      On leaving a field: 3
+      While typing: 0
+      Asynchronous: 1
+      None: 2
+    commit:
+      Explicit submit: 16
+      Autosave: 3
+      Draft, then publish: 0
+      Undo window: 0
+  exemplars:
+    organization:
+      Single field:
+        - Amazon Alexa — Add to shopping list
+      One page:
+        - Amazon — Add a new shipping address at checkout
+        - Google Forms — Respondent view
+        - Notion — Database page properties
+      Sections:
+        - Shopify checkout — One-page checkout
+        - macOS System Settings — Wi-Fi and network details
+        - Common App — College application sections
+      Multi-step:
+        - TurboTax — Federal return interview
+        - GOV.UK — Apply online for a UK passport
+        - HealthCare.gov — Marketplace application
+      One question at a time:
+        - Typeform — Respondent view
+        - Siri — Create a reminder
+      Grid entry:
+        - Microsoft Excel — Entering values in a sheet
+    modality:
+      Typing:
+        - TurboTax — Federal return interview
+        - GOV.UK — Apply online for a UK passport
+        - HealthCare.gov — Marketplace application
+      Choosing from options:
+        - TurboTax — Federal return interview
+        - GOV.UK — Apply online for a UK passport
+        - HealthCare.gov — Marketplace application
+      Direct manipulation:
+        - MyChart — eCheck-In
+        - Microsoft Excel — Entering values in a sheet
+      Voice dictation:
+        - Siri — Create a reminder
+        - Amazon Alexa — Add to shopping list
+      Camera scan:
+        - TurboTax — Federal return interview
+        - Chase Mobile — Deposit a check
+        - Apple Wallet — Add a card
+      Import or paste:
+        - TurboTax — Federal return interview
+        - Microsoft Excel — Entering values in a sheet
+        - Workday — Job application
+    prefill:
+      Empty:
+        - GOV.UK — Apply online for a UK passport
+        - HealthCare.gov — Marketplace application
+        - Typeform — Respondent view
+      Defaults:
+        - Chase Mobile — Deposit a check
+        - macOS System Settings — Wi-Fi and network details
+        - Siri — Create a reminder
+      Autofill from a profile:
+        - Amazon — Add a new shipping address at checkout
+        - Shopify checkout — One-page checkout
+        - MyChart — eCheck-In
+      Extracted from a document:
+        - TurboTax — Federal return interview
+        - Apple Wallet — Add a card
+        - Expensify — SmartScan a receipt
+    timing:
+      On submit:
+        - TurboTax — Federal return interview
+        - GOV.UK — Apply online for a UK passport
+        - HealthCare.gov — Marketplace application
+      On leaving a field:
+        - Shopify checkout — One-page checkout
+        - macOS System Settings — Wi-Fi and network details
+        - Microsoft Excel — Entering values in a sheet
+      While typing: []
+      Asynchronous:
+        - Expensify — SmartScan a receipt
+      None:
+        - Notion — Database page properties
+        - Amazon Alexa — Add to shopping list
+    commit:
+      Explicit submit:
+        - TurboTax — Federal return interview
+        - GOV.UK — Apply online for a UK passport
+        - HealthCare.gov — Marketplace application
+      Autosave:
+        - Notion — Database page properties
+        - macOS System Settings — Wi-Fi and network details
+        - Microsoft Excel — Entering values in a sheet
+      Draft, then publish: []
+      Undo window: []
+  unobserved:
+    - sub: timing
+      var: While typing
+    - sub: commit
+      var: Draft, then publish
+    - sub: commit
+      var: Undo window
+  unresolved:
+    - sub: commit
+      n: 17
+  proposals:
+    raised: 1
+    adopted:
+      - sub: timing
+        name: None
+        raters:
+          - fable
+          - opus
+    recorded: []
+  raterNotes:
+    fable:
+      - Commit for multi-step applications straddles Explicit submit and Draft, then publish; I used
+        Draft, then publish whenever progress persists across sessions before a final submit. Voice
+        instances have no real prefill or validation timing; coded Empty/On submit by analogy.
+      - "commit is the codebook's fault: every save-and-return application (7 cells) is Explicit
+        submit by its final button and Draft, then publish by its persistence, and the gloss does
+        not say which wins; timing has no value for input that is never checked, so raters split n/a
+        / +None / On leaving a field; One question at a time overlaps Multi-step for
+        one-thing-per-page flows."
+    opus:
+      - "commit was the hardest: most of these autosave progress between steps yet only commit the
+        data at a terminal Submit/Pay/File, and I coded the terminal action except where nothing but
+        continuous saving exists (Notion, Excel, System Settings). Voice instances stretch the
+        timing sub-dimension — a spoken readback is confirmation, not validation, so 16 is n/a."
+      - commit's Explicit submit and Draft, then publish overlap for every resumable application —
+        the sibling form entry naming Job applications under Save draft settles it toward the draft
+        reading, but the archetype gloss says publish, which no applicant does; organization
+        conflates pacing with structure, so GOV.UK is truthfully both Multi-step and One question at
+        a time and that sub-dimension wants to be pick any; timing had no way to say nothing is
+        checked until +None.
+    sonnet:
+      - "Voice instances (15, 16) got timing=n/a: field-based validation timing doesn't map cleanly
+        onto turn-based conversational confirmation, which I judged unobservable-by-design rather
+        than a knowledge gap."
+      - "Several pick-one cases held a product that truthfully spans two values (HealthCare.gov and
+        Common App's prefill: Empty for a first pass vs. Autofill from a profile for a renewal/later
+        college) — prefill wants to be pick-any, or the codebook needs a rule for 'first use vs.
+        returning use'. Separately, several organization disagreements (Shopify, macOS, Salesforce)
+        turned on whether headed tabs/section groups on a single page count as Sections or One page
+        — the gloss should say explicitly that a headed sub-grouping is Sections even without full
+        page breaks."
+  codedAt: 2026-09-22
+previews:
+  - file: enter-data.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

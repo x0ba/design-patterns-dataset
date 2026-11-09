@@ -1,0 +1,336 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "carousel". Edit between batches only — see README "Rules".
+id: carousel
+name: Carousel
+level: component
+parent: browse-collections
+aliases:
+  - slider
+  - shelf
+  - horizontal scroller
+definition: A horizontally scrolling strip that shows a subset of items at once and hides the rest off-screen.
+data: collection
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - commerce
+  - entertainment
+  - news
+anatomy:
+  - name: Track
+    role: The items in order
+  - name: Viewport
+    role: What is currently visible
+  - name: Controls
+    role: Arrows, dots, swipe
+roles:
+  - title
+  - thumbnail
+dimensions:
+  - name: Visible items
+    family: layout
+    question: How many items are visible, and how?
+    subdimensions:
+      - id: visible
+        name: Visible items
+        select: one
+        values:
+          - id: one-at-a-time
+            name: One at a time
+            description: A hero slide
+            example: Homepage hero carousels
+          - id: peek-next
+            name: Peek next
+            description: The next item shows at the edge
+            example: App Store
+          - id: multi-item-strip
+            name: Multi-item strip
+            example: Netflix rows
+          - id: hero-with-smaller-neighbours
+            name: Hero with smaller neighbours
+            example: Material 3 hero carousel
+  - name: Advancing
+    family: invocation
+    question: How does it move?
+    subdimensions:
+      - id: advance
+        name: Advance by
+        select: many
+        values:
+          - id: swipe
+            name: Swipe
+            example: Mobile
+          - id: arrow-buttons
+            name: Arrow buttons
+            example: Netflix on web
+          - id: dots
+            name: Dots
+            example: Hero banners
+          - id: autoplay
+            name: Autoplay
+            example: Marketing heroes
+  - name: Timing
+    family: lifecycle
+    question: Does it move on its own?
+    subdimensions:
+      - id: autoplay
+        name: Autoplay
+        select: one
+        values:
+          - id: off
+            name: Off
+            example: Netflix
+          - id: timed-pausing-on-interaction
+            name: Timed, pausing on interaction
+            example: Retail heroes
+          - id: continuous-marquee
+            name: Continuous marquee
+            example: Logo walls
+  - name: Position
+    family: feedback
+    question: Does it say where you are?
+    subdimensions:
+      - id: indicator
+        name: Position indicator
+        select: one
+        values:
+          - id: none
+            name: None
+            example: Netflix rows
+          - id: dots
+            name: Dots
+            example: Hero banners
+          - id: counter
+            name: Counter
+            description: 3 of 10
+            example: Product image galleries
+          - id: progress-bar
+            name: Progress bar
+            example: Stories
+wild:
+  score: 0
+  note: No mainstream product lets people unroll a carousel; content stays hidden off-screen.
+  examples: []
+techniques:
+  - name: Unroll
+    dimension: Visible items
+    how: Turn any carousel into a grid or list in place, so nothing hides off-screen; the escape hatch
+      every carousel should carry.
+    ai: false
+  - name: Pin autoplay off
+    dimension: Timing
+    how: A person-level preference that stops motion in every carousel.
+    ai: false
+signature: Unroll
+sample: Home screens of streaming, retail and news apps.
+unit: One carousel instance.
+relations:
+  uses:
+    - card
+    - pagination
+  specializes: []
+  neighbors:
+    - stories
+    - tabs
+scores:
+  ubiquity: 5
+  potential: 2
+  spec: 5
+evidence: agent-coded
+usage:
+  - Most people see only the first few slides
+questions:
+  - Is Unroll enough to make carousels acceptable where they hide important content?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.8299435641510788
+  agreementFirstPass: 0.9
+  kappaFinal: 0.8355091125759274
+  agreementFinal: 0.8944444444444445
+  pass: true
+  perSub:
+    visible:
+      kappaFirstPass: 0.899749373433584
+      agreementFirstPass: 0.9
+      kappaFinal: 0.899749373433584
+      agreementFinal: 0.9
+      flag: null
+    advance:
+      kappaFirstPass: 0.8081190445111595
+      agreementFirstPass: 0.9
+      kappaFinal: 0.8128299472084458
+      agreementFinal: 0.8916666666666667
+      flag: null
+    autoplay:
+      kappaFirstPass: 0.9147727272727271
+      agreementFirstPass: 0.95
+      kappaFinal: 0.9147727272727271
+      agreementFinal: 0.95
+      flag: null
+    indicator:
+      kappaFirstPass: 0.828080229226361
+      agreementFirstPass: 0.85
+      kappaFinal: 0.828080229226361
+      agreementFinal: 0.85
+      flag: null
+  distribution:
+    visible:
+      One at a time: 9
+      Peek next: 4
+      Multi-item strip: 6
+      Hero with smaller neighbours: 1
+    advance:
+      Swipe: 12
+      Arrow buttons: 11
+      Dots: 4
+      Autoplay: 5
+    autoplay:
+      Off: 15
+      Timed, pausing on interaction: 5
+      Continuous marquee: 0
+    indicator:
+      None: 12
+      Dots: 6
+      Counter: 1
+      Progress bar: 1
+  exemplars:
+    visible:
+      One at a time:
+        - Amazon — Homepage hero banner
+        - Apple TV app — Top hero on Home
+        - Instagram — Multi-photo post
+      Peek next:
+        - Apple App Store — App row on the Apps tab
+        - Google Play — App row on the home tab
+        - Apple Music — New Releases row
+      Multi-item strip:
+        - Netflix — A title row on Home
+        - Instagram — Stories row
+        - Spotify — Made For You shelf
+      Hero with smaller neighbours:
+        - Twitch — Front page featured carousel
+    advance:
+      Swipe:
+        - Apple App Store — App row on the Apps tab
+        - Apple TV app — Top hero on Home
+        - Instagram — Stories row
+      Arrow buttons:
+        - Netflix — A title row on Home
+        - Amazon — Homepage hero banner
+        - Airbnb — Photos inside a listing card
+      Dots:
+        - Apple TV app — Top hero on Home
+        - Disney+ — Home hero banner
+        - Walmart — Homepage hero carousel
+      Autoplay:
+        - Amazon — Homepage hero banner
+        - Disney+ — Home hero banner
+        - Walmart — Homepage hero carousel
+    autoplay:
+      Off:
+        - Netflix — A title row on Home
+        - Apple App Store — App row on the Apps tab
+        - Apple TV app — Top hero on Home
+      Timed, pausing on interaction:
+        - Amazon — Homepage hero banner
+        - Disney+ — Home hero banner
+        - Walmart — Homepage hero carousel
+      Continuous marquee: []
+    indicator:
+      None:
+        - Netflix — A title row on Home
+        - Apple App Store — App row on the Apps tab
+        - Amazon — Homepage hero banner
+      Dots:
+        - Apple TV app — Top hero on Home
+        - Instagram — Multi-photo post
+        - Airbnb — Photos inside a listing card
+      Counter:
+        - Amazon — Product image gallery
+      Progress bar:
+        - Instagram — Story viewer
+  unobserved:
+    - sub: autoplay
+      var: Continuous marquee
+  unresolved: []
+  proposals:
+    raised: 4
+    adopted: []
+    recorded:
+      - place: sub:advance
+        sub: advance
+        dim: null
+        name: Tap the edge
+        gloss: Tapping the right or left side of the item advances or reverses it — the stories convention,
+          where the whole surface is the control and there are no visible buttons
+        raters:
+          - opus
+        instances:
+          - 16
+        status: raised
+      - place: sub:indicator
+        sub: indicator
+        dim: null
+        name: Dots and counter
+        gloss: Both a row of dots and a numeric counter (e.g. 1/5) are shown together for the same carousel,
+          which pick-one can't express as a single existing variation
+        raters:
+          - sonnet
+        instances:
+          - 6
+        status: raised
+      - place: sub:advance
+        sub: advance
+        dim: null
+        name: Tap zones
+        gloss: Tapping the left or right edge of the item advances or rewinds by one, distinct from a
+          continuous swipe gesture, e.g. Instagram/Snapchat Stories
+        raters:
+          - sonnet
+        instances:
+          - 16
+        status: raised
+      - place: sub:advance
+        sub: advance
+        dim: null
+        name: Click a neighbour
+        gloss: Clicking directly on an adjacent, smaller item brings it to the centre/front position, e.g.
+          Twitch's featured carousel
+        raters:
+          - sonnet
+        instances:
+          - 17
+        status: raised
+  raterNotes:
+    fable:
+      - Indicator for on-hover or subtle cues (Netflix dashes, Nike progress line) depends on recall
+        of small details; noted where I am less sure.
+    opus:
+      - "advance and indicator overlap by design: dots are usually both the position indicator and
+        the jump control, so Dots appears in both subs for the same element. autoplay and the
+        Autoplay value of advance are likewise the same fact coded twice. Whether a given hero
+        currently auto-rotates is the least stable thing here — marketing carousels change with the
+        campaign — and Twitch's featured carousel is the one instance whose autoplay I am guessing
+        at. Multi-item strip and Peek next differ only in whether the last visible item is
+        deliberately clipped, which is a fine distinction to hold consistently across raters."
+    sonnet:
+      - Several web hero carousels (3, 14, 19) are coded Timed, pausing on interaction by the usual
+        convention for that pattern rather than confirmed per-product recall of the hover-pause
+        behaviour specifically.
+  codedAt: 2026-09-22
+previews:
+  - file: carousel.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

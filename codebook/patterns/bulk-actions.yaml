@@ -1,0 +1,485 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "bulk-actions". Edit between batches only — see README "Rules".
+id: bulk-actions
+name: Bulk actions
+level: component
+parent: browse-collections
+aliases:
+  - batch operations
+  - multi-select actions
+definition: Selecting many items and applying one action to all of them.
+data: collection
+platforms:
+  - web
+  - desktop
+  - mobile
+domains:
+  - communication
+  - productivity
+  - enterprise
+  - commerce
+anatomy:
+  - name: Selection
+    role: Which items
+  - name: Action surface
+    role: What can be done
+  - name: Consequence
+    role: What will and did happen
+roles: []
+dimensions:
+  - name: Selection model
+    family: scope
+    question: How are many items selected?
+    subdimensions:
+      - id: selection
+        name: Selection
+        select: many
+        values:
+          - id: checkbox-per-row
+            name: Checkbox per row
+            example: Gmail
+          - id: shift-click-range
+            name: Shift-click range
+            example: Finder
+          - id: all-matching-not-just-this-page
+            name: All matching, not just this page
+            example: Gmail “Select all conversations that match this search”
+          - id: marquee
+            name: Marquee
+            example: Desktop icons
+          - id: pick-up-and-gather
+            name: Pick up and gather
+            description: The set is built by holding one item and tapping others to add them to the stack
+              travelling with the finger or pointer; the selection exists only for the duration of
+              the drag
+            example: iOS Home Screen — Drag several apps at once
+          - id: drag-across
+            name: Drag across
+            description: Dragging a finger continuously across several items toggles each one it passes over,
+              without an explicit checkbox tap per item, e.g. Apple Photos multi-select on mobile
+            example: Apple Photos — Select and delete photos
+          - id: pick-up-and-tap-to-add
+            name: Pick up and tap to add
+            description: Grab one item, then tap additional items while still holding to add them to a stack
+              under your finger, e.g. iOS Home Screen app stacking
+            example: iOS Home Screen — Drag several apps at once
+  - name: Action surface
+    family: layout
+    question: Where do bulk actions appear?
+    subdimensions:
+      - id: surface
+        name: Surface
+        select: one
+        values:
+          - id: contextual-toolbar
+            name: Contextual toolbar
+            description: Replaces the header while selected
+            example: Gmail
+          - id: floating-action-bar
+            name: Floating action bar
+            example: Google Photos
+          - id: context-menu
+            name: Context menu
+            example: Finder
+          - id: drop-onto-a-target
+            name: Drop onto a target
+            example: Drag to trash
+          - id: wizard
+            name: Wizard
+            description: A separate multistep flow (choose items, choose operation, confirm) launched from a
+              menu command
+            example: Jira — Bulk change wizard
+          - id: side-panel
+            name: Side panel
+            description: Bulk actions listed in a panel beside the collection while items are selected
+            example: Dropbox — Select files and move or delete
+          - id: wizard-page
+            name: Wizard page
+            description: The bulk operation leaves the collection for a dedicated multi-step page that chooses
+              the items, the operation and its details before committing
+            example: Jira — Bulk change wizard
+          - id: keyboard-shortcut
+            name: Keyboard shortcut
+            description: No action surface appears at all — a key applies the action to everything selected, the
+              norm in professional media tools where speed beats discoverability
+            example: Lightroom Classic — Select photos and flag or rate
+          - id: command-palette
+            name: Command palette
+            description: The action is typed into a searchable command surface (Cmd+K) that applies to the
+              current selection, instead of appearing as a toolbar or a menu at the pointer
+            example: Linear — Multi-select issues and apply
+          - id: keyboard-only
+            name: Keyboard only
+            description: Actions apply to the current selection via keyboard shortcuts directly, with no
+              toolbar, menu or floating bar shown at all, e.g. Lightroom Classic flagging/rating
+              shortcuts
+            example: Lightroom Classic — Select photos and flag or rate
+  - name: Consequence
+    family: feedback
+    question: How is the consequence shown and reversed?
+    subdimensions:
+      - id: consequence
+        name: Consequence
+        select: one
+        values:
+          - id: count-only
+            name: Count only
+            example: 3 selected
+          - id: preview-of-affected-items
+            name: Preview of affected items
+            example: Migration tools
+          - id: undo-afterwards
+            name: Undo afterwards
+            example: Gmail undo
+          - id: confirm-first
+            name: Confirm first
+            example: Permanent delete
+          - id: toast-only
+            name: Toast only
+            description: A transient toast confirms the action; no count beforehand and no undo
+            example: Spotify — Select tracks and add to playlist
+  - name: Execution
+    family: flow
+    question: When does it run?
+    subdimensions:
+      - id: execution
+        name: Execution
+        select: one
+        values:
+          - id: immediate
+            name: Immediate
+            example: Archive
+          - id: background-job-with-progress
+            name: Background job with progress
+            example: Bulk imports
+          - id: scheduled
+            name: Scheduled
+            example: Email campaigns
+wild:
+  score: 1
+  note: The selection model and the actions are fixed by the product.
+  examples: []
+techniques:
+  - name: Query-scoped actions
+    dimension: Selection model
+    how: Act on a saved filter rather than a hand selection, so the action also applies to items that
+      arrive later.
+    ai: false
+  - name: Everything like these
+    dimension: Selection model
+    how: Select three examples and the system proposes the rule that selects the rest, shown as a filter
+      before acting.
+    ai: true
+signature: Query-scoped actions
+sample: Inboxes, admin consoles, photo libraries and file managers.
+unit: One bulk-action flow.
+relations:
+  uses:
+    - toast
+    - undo
+    - confirmation
+  specializes: []
+  neighbors:
+    - drag-reorder
+scores:
+  ubiquity: 4
+  potential: 3
+  spec: 4
+evidence: agent-coded
+usage:
+  - People over-select, then rely on undo
+questions:
+  - How should a rule-based selection preview its future matches?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7669552619429908
+  agreementFirstPass: 0.8545454545454545
+  kappaFinal: 0.8902910446874231
+  agreementFinal: 0.9222222222222223
+  pass: true
+  perSub:
+    selection:
+      kappaFirstPass: 0.8132586367880495
+      agreementFirstPass: 0.90625
+      kappaFinal: 0.9092741935483871
+      agreementFinal: 0.9416666666666667
+      flag: null
+    surface:
+      kappaFirstPass: 0.6122778675282715
+      agreementFirstPass: 0.65
+      kappaFinal: 0.7981497056349874
+      agreementFinal: 0.8
+      flag: null
+    consequence:
+      kappaFirstPass: 0.6781609195402301
+      agreementFirstPass: 0.65
+      kappaFinal: 0.9552238805970148
+      agreementFinal: 0.95
+      flag: null
+    execution:
+      kappaFirstPass: 0.6399999999999999
+      agreementFirstPass: 0.85
+      kappaFinal: 0.8036006546644845
+      agreementFinal: 0.9
+      flag: null
+  distribution:
+    selection:
+      Checkbox per row: 14
+      Shift-click range: 11
+      All matching, not just this page: 6
+      Marquee: 3
+      Pick up and gather: 1
+      Drag across: 2
+      Pick up and tap to add: 0
+    surface:
+      Contextual toolbar: 11
+      Floating action bar: 2
+      Context menu: 2
+      Drop onto a target: 2
+      Wizard: 1
+      Side panel: 1
+      Wizard page: 0
+      Keyboard shortcut: 1
+      Command palette: 0
+      Keyboard only: 0
+    consequence:
+      Count only: 6
+      Preview of affected items: 2
+      Undo afterwards: 6
+      Confirm first: 5
+      Toast only: 1
+    execution:
+      Immediate: 15
+      Background job with progress: 5
+      Scheduled: 0
+  exemplars:
+    selection:
+      Checkbox per row:
+        - Gmail — Select and archive many conversations
+        - Apple Photos — Select and delete photos
+        - Google Photos — Select and add to album
+      Shift-click range:
+        - Gmail — Select and archive many conversations
+        - Google Photos — Select and add to album
+        - macOS Finder — Multi-select and move to Trash
+      All matching, not just this page:
+        - Gmail — Select and archive many conversations
+        - Apple Mail — Edit mode select and mark
+        - Shopify Admin — Orders bulk fulfil
+      Marquee:
+        - macOS Finder — Multi-select and move to Trash
+        - Windows File Explorer — Select files and delete
+        - Google Drive — Select files and move
+      Pick up and gather:
+        - iOS Home Screen — Drag several apps at once
+      Drag across:
+        - Apple Photos — Select and delete photos
+        - Apple Mail — Edit mode select and mark
+      Pick up and tap to add: []
+    surface:
+      Contextual toolbar:
+        - Gmail — Select and archive many conversations
+        - Apple Photos — Select and delete photos
+        - Outlook — Select and move messages
+      Floating action bar:
+        - Google Photos — Select and add to album
+        - Linear — Multi-select issues and apply
+      Context menu:
+        - Windows File Explorer — Select files and delete
+        - Spotify — Select tracks and add to playlist
+      Drop onto a target:
+        - macOS Finder — Multi-select and move to Trash
+        - iOS Home Screen — Drag several apps at once
+      Wizard:
+        - Jira — Bulk change wizard
+      Side panel:
+        - Dropbox — Select files and move or delete
+      Wizard page: []
+      Keyboard shortcut:
+        - Lightroom Classic — Select photos and flag or rate
+      Command palette: []
+      Keyboard only: []
+    consequence:
+      Count only:
+        - Google Photos — Select and add to album
+        - Apple Mail — Edit mode select and mark
+        - Shopify Admin — Orders bulk fulfil
+      Preview of affected items:
+        - Jira — Bulk change wizard
+        - AWS Console — Terminate selected instances
+      Undo afterwards:
+        - Gmail — Select and archive many conversations
+        - macOS Finder — Multi-select and move to Trash
+        - Windows File Explorer — Select files and delete
+      Confirm first:
+        - Apple Photos — Select and delete photos
+        - HubSpot — Contacts bulk edit
+        - Dropbox — Select files and move or delete
+      Toast only:
+        - Spotify — Select tracks and add to playlist
+    execution:
+      Immediate:
+        - Gmail — Select and archive many conversations
+        - Apple Photos — Select and delete photos
+        - Google Photos — Select and add to album
+      Background job with progress:
+        - Windows File Explorer — Select files and delete
+        - Shopify Admin — Orders bulk fulfil
+        - HubSpot — Contacts bulk edit
+      Scheduled: []
+  unobserved:
+    - sub: selection
+      var: Pick up and tap to add
+    - sub: surface
+      var: Wizard page
+    - sub: surface
+      var: Command palette
+    - sub: surface
+      var: Keyboard only
+    - sub: execution
+      var: Scheduled
+  unresolved: []
+  proposals:
+    raised: 12
+    adopted:
+      - sub: surface
+        name: Wizard
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: surface
+        name: Side panel
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: consequence
+        name: Toast only
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: surface
+        name: Wizard page
+        raters:
+          - fable
+          - opus
+      - sub: selection
+        name: Pick up and gather
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: selection
+        name: Drag across
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: surface
+        name: Keyboard shortcut
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: surface
+        name: Command palette
+        raters:
+          - opus
+          - sonnet
+      - sub: selection
+        name: Pick up and tap to add
+        raters:
+          - opus
+          - sonnet
+      - sub: surface
+        name: Keyboard only
+        raters:
+          - opus
+          - sonnet
+    recorded:
+      - place: sub:selection
+        sub: selection
+        dim: null
+        name: Tap to add while dragging
+        gloss: While one item is held, tapping others adds them to the dragged stack
+        raters:
+          - fable
+        instances:
+          - 20
+        status: raised
+      - place: sub:surface
+        sub: surface
+        dim: null
+        name: Dedicated wizard flow
+        gloss: The bulk action runs through a separate multi-step wizard page (choose items, choose
+          operation, confirm), not an inline toolbar, floating bar or menu, e.g. Jira's Bulk Change
+        raters:
+          - sonnet
+        instances:
+          - 12
+        status: raised
+  raterNotes:
+    fable:
+      - Surface as pick-one strains when a product offers both a context menu and a drop target
+        (Finder, Explorer); I coded the one the sample's flow names.
+      - Three variations were proposed by all three raters under different names (the wizard page,
+        the gather-while-dragging selection, the keyboard-only surface), so they are missing values.
+        surface as pick one strains wherever two surfaces coexist (Finder, Dropbox). A phone's
+        swapped bottom toolbar is neither 'replaces the header' nor a floating bar. Preview of
+        affected items and Confirm first overlap. execution depends on set size for Shopify, HubSpot
+        and Mailchimp.
+    opus:
+      - "surface needed three proposals, which says the sub assumes the action lives on the
+        collection screen; a wizard page, a command palette and a bare keyboard shortcut are all
+        common and none is expressible. consequence is pick-one but products stack them — Gmail
+        confirms nothing and offers undo, AWS previews and confirms, Photos confirms with a
+        recoverable trash — so I coded the strongest guard the flow puts in the way. execution is
+        hard to observe: whether a bulk edit runs inline or as a job usually only shows at large N,
+        and I coded the product's behaviour at scale."
+      - "The clearest finding here is not a fault but a fact about proposals: three raters found the
+        same four gaps (a wizard surface, a side-panel surface, a keyboard-only surface, and a touch
+        pick-up-and-gather selection) and named each of them differently, so the packet reports
+        disagreement where there is none. The codebook faults proper: `surface` is pick one but
+        Finder, Dropbox and Linear each show two surfaces at once, and worse, the codebook glosses
+        two different surface variations with the same Finder instance (Context menu 'e.g., Finder'
+        and Drop onto a target 'e.g., Drag to trash'). `consequence` mixes exclusive and
+        non-exclusive values — Count only means 'the count and nothing more', so it cannot be tied
+        against Confirm first or Undo afterwards the way the other variations can, and Spotify shows
+        neither a count nor an undo. `selection`'s variations are named by desktop input
+        (Shift-click range, Marquee), leaving every touch range gesture homeless. And `execution` is
+        not a property of the design at all: the same Shopify or Mailchimp flow is immediate for
+        three items and a background job for thirty thousand, so without a stated selection size
+        raters will keep splitting."
+    sonnet:
+      - Several bulk-action surfaces (a dedicated wizard, a persistent side panel, keyboard-only
+        application) don't fit the four listed surface variations, all of which assume some visible
+        toolbar/menu/bar; consequence for AWS terminate (17) genuinely has both a preview and a
+        confirmation, coded as Confirm first since the action is irreversible.
+      - Two patterns stood out. (1) 'surface' converged on three separate new variations (Wizard,
+        Command palette, Keyboard shortcut) across only 18 instances — this pick-one dimension's
+        four enumerated values (Contextual toolbar, Floating action bar, Context menu, Drop onto a
+        target) all assume the action surface appears ON the collection screen, which misses an
+        entire family of patterns where the action is invoked elsewhere (a separate wizard page, a
+        typed command, or no surface at all). (2) A touch-drag gesture that selects a contiguous run
+        (Apple Photos, Apple Mail) is functionally the same selection outcome as Shift-click range
+        even though the input mechanics differ (finger-drag vs click-shift-click) — I initially
+        proposed a new value for this before recognizing both other raters treat it as the same
+        existing concept, which I now think is the better reading of what the dimension is actually
+        asking.
+  codedAt: 2026-09-22
+previews:
+  - file: bulk-actions.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

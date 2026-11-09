@@ -1,0 +1,534 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "spreadsheet". Edit between batches only — see README "Rules".
+id: spreadsheet
+name: Spreadsheet
+level: pattern
+parent: enter-data
+aliases:
+  - worksheet
+  - grid of cells
+definition: A grid of cells holding values and formulas, where the person defines both the structure
+  and the computation.
+data: schema
+platforms:
+  - desktop
+  - web
+  - mobile
+domains:
+  - finance
+  - enterprise
+  - science
+  - productivity
+  - education
+anatomy:
+  - name: Grid
+    role: Rows and columns
+  - name: Cell
+    role: A value or formula
+  - name: Formula bar
+    role: The source of the selected cell
+  - name: Sheets
+    role: Tabs of grids
+roles: []
+dimensions:
+  - name: Cell content
+    family: content
+    question: What can a cell hold?
+    subdimensions:
+      - id: cells
+        name: Cell content
+        select: many
+        values:
+          - id: values
+            name: Values
+            example: All spreadsheets
+          - id: formulas
+            name: Formulas
+            example: All spreadsheets
+          - id: rich-data-types
+            name: Rich data types
+            example: Excel Stocks and Geography types
+          - id: smart-chips
+            name: Smart chips
+            example: Google Sheets people and file chips
+          - id: checkboxes-and-dropdowns
+            name: Checkboxes and dropdowns
+            example: Google Sheets
+          - id: model-powered-functions
+            name: Model-powered functions
+            example: Google Sheets AI function
+          - id: action-buttons
+            name: Action buttons
+            description: A cell holds a button that runs an action (add a row, call an automation) rather than a
+              value
+            example: Coda — Table inside a doc
+  - name: Structure
+    family: composition
+    question: How much structure is imposed on the grid?
+    subdimensions:
+      - id: structure
+        name: Structure
+        select: one
+        values:
+          - id: free-grid
+            name: Free grid
+            example: Classic spreadsheets
+          - id: tables-inside-the-grid
+            name: Tables inside the grid
+            example: Excel tables
+          - id: linked-sheets
+            name: Linked sheets
+            example: Cross-sheet references
+          - id: typed-records
+            name: Typed records
+            example: Airtable
+          - id: tables-on-a-canvas
+            name: Tables on a canvas
+            description: "There is no underlying grid at all: each table is a separate object placed on a free
+              canvas beside charts and text (Apple Numbers)"
+            example: Apple Numbers — A sheet with tables on a canvas
+          - id: tables-in-a-canvas-or-document
+            name: Tables in a canvas or document
+            description: "There is no endless grid: tables are objects placed on a page, canvas or inside prose,
+              and the document rather than the sheet is the container"
+            example: Apple Numbers — A sheet with tables on a canvas
+  - name: Visual encoding
+    family: encoding
+    question: How are values made visible?
+    subdimensions:
+      - id: encoding
+        name: Encoding
+        select: many
+        values:
+          - id: plain-values
+            name: Plain values
+            example: Default
+          - id: conditional-formatting
+            name: Conditional formatting
+            example: Excel
+          - id: in-cell-bars-and-sparklines
+            name: In-cell bars and sparklines
+            example: Excel data bars, SPARKLINE in Google Sheets
+          - id: floating-charts
+            name: Floating charts
+            example: Charts over the grid
+  - name: Views
+    family: layout
+    question: How can the same grid be looked at?
+    subdimensions:
+      - id: views
+        name: Views
+        select: many
+        values:
+          - id: plain-grid
+            name: Plain grid
+            example: Default
+          - id: frozen-panes
+            name: Frozen panes
+            example: Freeze rows and columns
+          - id: personal-filter-views
+            name: Personal filter views
+            example: Google Sheets filter views
+          - id: grouped-rows
+            name: Grouped rows
+            example: Excel outlines
+          - id: non-grid-views
+            name: Non-grid views
+            description: The same rows can be looked at as a board, calendar, timeline or gallery — every
+              variation of views as written assumes the grid stays a grid
+            example: Airtable — Grid view of a base
+  - name: Concurrency
+    family: collaboration
+    question: How do several people work on it?
+    subdimensions:
+      - id: concurrency
+        name: Concurrency
+        select: one
+        values:
+          - id: single-user-file
+            name: Single-user file
+            example: Classic Excel files
+          - id: real-time-co-editing
+            name: Real-time co-editing
+            example: Google Sheets
+          - id: comments-and-assignments
+            name: Comments and assignments
+            example: Google Sheets comments
+  - name: Assistance
+    family: initiative
+    question: What does the software fill in for you?
+    subdimensions:
+      - id: assistance
+        name: Assistance
+        select: many
+        values:
+          - id: none
+            name: None
+            example: Plain entry
+          - id: autofill-series
+            name: Autofill series
+            example: Fill handle
+          - id: fill-by-example
+            name: Fill by example
+            example: Excel Flash Fill
+          - id: formulas-from-natural-language
+            name: Formulas from natural language
+            example: Copilot in Excel
+          - id: cleanup-suggestions
+            name: Cleanup suggestions
+            description: The software proposes corrections to values already entered — inconsistent spellings,
+              bad types — instead of filling new ones in
+            example: Zoho Sheet — A shared spreadsheet
+wild:
+  score: 3
+  note: "The person defines nearly everything: structure, computation, encoding and views."
+  examples:
+    - name: Excel
+      note: Everything is authored by the user
+    - name: Google Sheets
+      note: Personal filter views over a shared sheet
+techniques:
+  - name: Views without copies
+    dimension: Views
+    how: Personal filter views, sorts and hidden columns over one shared grid, so nobody forks the data
+      to see it their way.
+    ai: false
+  - name: Promote to app
+    dimension: Structure
+    how: Turn a range into a form, a board or a table view without leaving the sheet.
+    ai: false
+  - name: Formula by example
+    dimension: Assistance
+    how: Type the outcome in a few cells and a formula is proposed and explained.
+    ai: true
+signature: Views without copies
+sample: Desktop and web spreadsheets, plus spreadsheet-like databases.
+unit: One sheet in use.
+relations:
+  uses:
+    - inline-edit
+    - tabs
+    - sort-control
+    - filter-controls
+  specializes:
+    - enter-data
+  neighbors:
+    - data-table
+    - pivot-table
+    - notebook
+scores:
+  ubiquity: 4
+  potential: 5
+  spec: 3
+evidence: agent-coded
+usage:
+  - People fall back to spreadsheets to organize information they gathered elsewhere (CHI '25 P6)
+questions:
+  - Why does the most malleable pattern stay the fallback rather than the default?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.583034962874713
+  agreementFirstPass: 0.718
+  kappaFinal: 0.8870325726741226
+  agreementFinal: 0.9217391304347826
+  pass: true
+  perSub:
+    cells:
+      kappaFirstPass: 0.6791666666666656
+      agreementFirstPass: 0.7642857142857142
+      kappaFinal: 0.9808673469387758
+      agreementFinal: 0.9857142857142858
+      flag: null
+    structure:
+      kappaFirstPass: 0.7929249352890424
+      agreementFirstPass: 0.8
+      kappaFinal: 0.9469026548672568
+      agreementFinal: 0.95
+      flag: null
+    encoding:
+      kappaFirstPass: 0.5818511796733221
+      agreementFirstPass: 0.7
+      kappaFinal: 0.716793273840254
+      agreementFinal: 0.8
+      flag: null
+    views:
+      kappaFirstPass: 0.4140434258927693
+      agreementFirstPass: 0.5833333333333334
+      kappaFinal: 0.9282296650717701
+      agreementFinal: 0.95
+      flag: null
+    concurrency:
+      kappaFirstPass: 0.7537619699042408
+      agreementFirstPass: 0.85
+      kappaFinal: 0.9229781771501928
+      agreementFinal: 0.95
+      flag: null
+    assistance:
+      kappaFirstPass: 0.5772258709929963
+      agreementFirstPass: 0.775
+      kappaFinal: 0.8314950980392151
+      agreementFinal: 0.89
+      flag: null
+  distribution:
+    cells:
+      Values: 20
+      Formulas: 20
+      Rich data types: 7
+      Smart chips: 7
+      Checkboxes and dropdowns: 13
+      Model-powered functions: 6
+      Action buttons: 1
+    structure:
+      Free grid: 10
+      Tables inside the grid: 1
+      Linked sheets: 0
+      Typed records: 7
+      Tables on a canvas: 0
+      Tables in a canvas or document: 2
+    encoding:
+      Plain values: 20
+      Conditional formatting: 1
+      In-cell bars and sparklines: 1
+      Floating charts: 3
+    views:
+      Plain grid: 20
+      Frozen panes: 17
+      Personal filter views: 6
+      Grouped rows: 13
+      Non-grid views: 7
+    concurrency:
+      Single-user file: 6
+      Real-time co-editing: 14
+      Comments and assignments: 0
+    assistance:
+      None: 3
+      Autofill series: 15
+      Fill by example: 3
+      Formulas from natural language: 11
+      Cleanup suggestions: 1
+  exemplars:
+    cells:
+      Values:
+        - Microsoft Excel — Monthly budget workbook
+        - Excel for the web — Shared team tracker
+        - Google Sheets — Shared expense tracker
+      Formulas:
+        - Microsoft Excel — Monthly budget workbook
+        - Excel for the web — Shared team tracker
+        - Google Sheets — Shared expense tracker
+      Rich data types:
+        - Airtable — Grid view of a base
+        - Notion — Table view of a database
+        - Coda — Table inside a doc
+      Smart chips:
+        - Google Sheets — Shared expense tracker
+        - Airtable — Grid view of a base
+        - Notion — Table view of a database
+      Checkboxes and dropdowns:
+        - Excel for the web — Shared team tracker
+        - Google Sheets — Shared expense tracker
+        - Google Sheets app — A sheet on a phone
+      Model-powered functions:
+        - Airtable — Grid view of a base
+        - Notion — Table view of a database
+        - Coda — Table inside a doc
+      Action buttons:
+        - Coda — Table inside a doc
+    structure:
+      Free grid:
+        - Microsoft Excel — Monthly budget workbook
+        - Excel for the web — Shared team tracker
+        - Google Sheets — Shared expense tracker
+      Tables inside the grid:
+        - Microsoft Excel for Mac — Portfolio sheet using Stocks data
+      Linked sheets: []
+      Typed records:
+        - Airtable — Grid view of a base
+        - Notion — Table view of a database
+        - Smartsheet — Project sheet
+      Tables on a canvas: []
+      Tables in a canvas or document:
+        - Apple Numbers — A sheet with tables on a canvas
+        - Apple Numbers for iPad — A sheet on iPad
+    encoding:
+      Plain values:
+        - Microsoft Excel — Monthly budget workbook
+        - Excel for the web — Shared team tracker
+        - Google Sheets — Shared expense tracker
+      Conditional formatting:
+        - LibreOffice Calc — A .ods spreadsheet
+      In-cell bars and sparklines:
+        - Google Sheets — Shared expense tracker
+      Floating charts:
+        - Apple Numbers — A sheet with tables on a canvas
+        - Apple Numbers for iPad — A sheet on iPad
+        - WPS Office Spreadsheet — A .xlsx workbook
+    views:
+      Plain grid:
+        - Microsoft Excel — Monthly budget workbook
+        - Excel for the web — Shared team tracker
+        - Google Sheets — Shared expense tracker
+      Frozen panes:
+        - Microsoft Excel — Monthly budget workbook
+        - Excel for the web — Shared team tracker
+        - Google Sheets — Shared expense tracker
+      Personal filter views:
+        - Excel for the web — Shared team tracker
+        - Google Sheets — Shared expense tracker
+        - Airtable — Grid view of a base
+      Grouped rows:
+        - Microsoft Excel — Monthly budget workbook
+        - Google Sheets — Shared expense tracker
+        - Apple Numbers — A sheet with tables on a canvas
+      Non-grid views:
+        - Airtable — Grid view of a base
+        - Notion — Table view of a database
+        - Smartsheet — Project sheet
+    concurrency:
+      Single-user file:
+        - Microsoft Excel — Monthly budget workbook
+        - Apple Numbers — A sheet with tables on a canvas
+        - Apple Numbers for iPad — A sheet on iPad
+      Real-time co-editing:
+        - Excel for the web — Shared team tracker
+        - Google Sheets — Shared expense tracker
+        - Google Sheets app — A sheet on a phone
+      Comments and assignments: []
+    assistance:
+      None:
+        - Notion — Table view of a database
+        - monday.com — Main table of a board
+        - Baserow — Grid view
+      Autofill series:
+        - Microsoft Excel — Monthly budget workbook
+        - Excel for the web — Shared team tracker
+        - Google Sheets — Shared expense tracker
+      Fill by example:
+        - Microsoft Excel — Monthly budget workbook
+        - Google Sheets — Shared expense tracker
+        - Microsoft Excel for Mac — Portfolio sheet using Stocks data
+      Formulas from natural language:
+        - Microsoft Excel — Monthly budget workbook
+        - Excel for the web — Shared team tracker
+        - Google Sheets — Shared expense tracker
+      Cleanup suggestions:
+        - Zoho Sheet — A shared spreadsheet
+  unobserved:
+    - sub: structure
+      var: Linked sheets
+    - sub: structure
+      var: Tables on a canvas
+    - sub: concurrency
+      var: Comments and assignments
+  unresolved: []
+  proposals:
+    raised: 7
+    adopted:
+      - sub: structure
+        name: Tables on a canvas
+        raters:
+          - fable
+          - opus
+      - sub: structure
+        name: Tables in a canvas or document
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: views
+        name: Non-grid views
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: cells
+        name: Action buttons
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: assistance
+        name: Cleanup suggestions
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded:
+      - place: sub:structure
+        sub: structure
+        dim: null
+        name: Tables on a free canvas
+        gloss: Multiple independent tables and charts are placed freely on a canvas rather than living
+          inside one continuous grid — Apple Numbers' model, distinct from Excel's grid-with-tables.
+        raters:
+          - sonnet
+        instances:
+          - 5
+          - 6
+        status: raised
+      - place: sub:views
+        sub: views
+        dim: null
+        name: Timeline or Gantt view
+        gloss: The same rows are plotted against a project timeline instead of a plain grid.
+        raters:
+          - sonnet
+        instances:
+          - 9
+        status: raised
+  raterNotes:
+    fable:
+      - Assistance and cells depend on tier and licence (Copilot, AI fields); I coded what the
+        product offers a paying user in 2026 rather than what one budget file uses, since the file
+        is imaginary. Numbers' canvas is neither a free grid nor tables in one.
+      - "The entry does not say whether a sub is coded by what the sampled sheet shows or by what
+        the product can do: cells, views and assistance ask what a cell or grid can hold or do,
+        encoding asks how values are made visible, and I coded encoding by capability in round 1,
+        which is most of my disagreement; structure conflates the container (canvas or document)
+        with the structure imposed on the grid (typed records), so Coda truthfully holds two
+        values."
+    opus:
+      - cells and encoding I coded from what that sheet shows; structure, views, concurrency and
+        assistance from what the product affords on that surface, since no rater can know whether
+        one particular budget froze its header row. Value-bound colour (a status or select option
+        that is always green) I did not count as Conditional formatting, which I kept for rules a
+        person writes — this is the cell most likely to split the three of us. concurrency is
+        pick-one but real-time co-editing and comments coexist nearly everywhere; I took the
+        stronger.
+      - "Nearly every disagreement here is one unstated rule: whether a cell answers for the sheet
+        on screen or for what the product affords. The glosses actually settle it — cells asks what
+        a cell CAN hold and views how the grid CAN be looked at (affordance), while encoding asks
+        how values ARE made visible (this sheet) — and saying so would remove most of these cells.
+        Two further gaps: encoding does not distinguish rules a person writes from colour that comes
+        bound to a chosen option (every status column), and assistance cannot describe a model that
+        fills cells as a column type rather than as a fill command."
+    sonnet:
+      - Concurrency is pick-one but several tools show both real-time cursors and comment threads at
+        once (Sheets, Smartsheet); I coded the more architecturally defining mode (real-time
+        co-editing) and named the secondary comments layer in the note rather than picking
+        arbitrarily. For screens with no collaborator cues I fell back to product-family defaults
+        (cloud-native tools = real-time co-editing, classic desktop-file tools = single-user file)
+        rather than treating a quiet note as evidence of a solo file.
+      - I was systematically under-listing pick-any sub-dimensions (cells, encoding, views,
+        assistance) in round 1 — defaulting to the minimal set I could personally verify rather than
+        the fuller feature sets these products actually ship, which is most of the disagreement here
+        rather than genuine conflict. Separately, 'structure' doesn't have a place for a table's
+        container (embedded in a document/canvas vs. a dedicated sheet file) — that's a real,
+        recurring fact (Numbers, Coda, Quip) that's orthogonal to how typed the grid itself is, and
+        forcing it into the same pick-one sub-dimension as Free grid/Typed records produces exactly
+        this kind of disagreement.
+  codedAt: 2026-09-22
+previews:
+  - file: spreadsheet.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

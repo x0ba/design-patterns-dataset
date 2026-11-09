@@ -1,0 +1,386 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "card". Edit between batches only — see README "Rules".
+id: card
+name: Card
+level: component
+parent: browse-collections
+aliases:
+  - tile
+  - item card
+definition: A bounded container that summarizes one item; the most common item view inside overviews.
+data: object
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - commerce
+  - social
+  - news
+  - productivity
+anatomy:
+  - name: Media
+    role: Image or video
+  - name: Header
+    role: Title and subtitle
+  - name: Body
+    role: Key attributes
+  - name: Actions
+    role: What can be done to the item
+roles:
+  - title
+  - subtitle
+  - thumbnail
+  - key-attribute
+  - action
+dimensions:
+  - name: Card content
+    family: content
+    question: What goes on the card?
+    subdimensions:
+      - id: media
+        name: Media
+        select: one
+        values:
+          - id: none
+            name: None
+            example: Linear issue cards
+          - id: top-image
+            name: Top image
+            example: Airbnb listings
+          - id: side-thumbnail
+            name: Side thumbnail
+            example: Spotify search results
+          - id: full-bleed-background
+            name: Full-bleed background
+            example: App Store Today cards
+      - id: actions
+        name: Actions
+        select: one
+        values:
+          - id: none
+            name: None
+            description: The card only opens
+            example: News cards
+          - id: one-primary-action
+            name: One primary action
+            example: Add to cart on a product card
+          - id: action-row
+            name: Action row
+            example: Social post actions
+          - id: overflow-menu
+            name: Overflow menu
+            example: Google Drive file cards
+  - name: Form
+    family: layout
+    question: What shape and weight does the card take?
+    subdimensions:
+      - id: shape
+        name: Shape
+        select: one
+        values:
+          - id: vertical
+            name: Vertical
+            example: Product grids
+          - id: horizontal
+            name: Horizontal
+            example: Search result rows
+          - id: compact-tile
+            name: Compact tile
+            example: Home screen widgets
+      - id: style
+        name: Container style
+        select: one
+        values:
+          - id: elevated
+            name: Elevated
+            example: Material 3 elevated card
+          - id: filled
+            name: Filled
+            example: Material 3 filled card
+          - id: outlined
+            name: Outlined
+            example: Material 3 outlined card
+          - id: borderless
+            name: Borderless
+            description: "No container at all: no fill, no border and no shadow — the media and text sit
+              directly on the page background and the card is defined only by its grouping and
+              spacing. The default for most modern consumer overviews, and not expressible with
+              Material's three container styles"
+            example: Airbnb — Listing card in search results
+  - name: Target
+    family: invocation
+    question: Which part of the card opens the item?
+    subdimensions:
+      - id: target
+        name: Tap target
+        select: one
+        values:
+          - id: whole-card
+            name: Whole card
+            example: Airbnb
+          - id: title-only
+            name: Title only
+            example: Search results
+          - id: separate-targets-per-attribute
+            name: Separate targets per attribute
+            description: Thumbnail opens a gallery, title opens the page
+            example: Meridian openFrom
+wild:
+  score: 0
+  note: Cards are almost never customizable directly; people only change them indirectly by switching
+    layouts.
+  examples:
+    - name: Craigslist
+      note: Grid layout adds thumbnails that the list omits
+techniques:
+  - name: Role slots
+    dimension: Card content
+    how: The card declares slots by role (Meridian roles); surfacing an attribute places it by role, so
+      the same card accepts any attribute set.
+    ai: false
+  - name: Card zoom
+    dimension: Form
+    how: Pinch a card to trade media for attributes, or the reverse, and apply it to every card.
+    ai: false
+signature: Role slots
+sample: Component usage inside the top 100 web and app overviews.
+unit: One card design used in one overview.
+relations:
+  uses:
+    - badge
+    - menu
+  specializes: []
+  neighbors:
+    - stat-tile
+scores:
+  ubiquity: 5
+  potential: 3
+  spec: 5
+evidence: agent-coded
+usage:
+  - People rely on image-first cards for taste goods and attribute-first cards for specification
+    goods
+questions:
+  - Is a card a component, or simply a value of the item-view dimension?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.658594589026999
+  agreementFirstPass: 0.77
+  kappaFinal: 0.8767221620552131
+  agreementFinal: 0.93
+  pass: true
+  perSub:
+    media:
+      kappaFirstPass: 0.8756476683937823
+      agreementFirstPass: 0.9
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    actions:
+      kappaFirstPass: 0.9530148786217696
+      agreementFirstPass: 0.95
+      kappaFinal: 0.9530148786217696
+      agreementFinal: 0.95
+      flag: null
+    shape:
+      kappaFirstPass: 0.748427672955975
+      agreementFirstPass: 0.9
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    style:
+      kappaFirstPass: 0.27272727272727265
+      agreementFirstPass: 0.25
+      kappaFinal: 0.8482293423271503
+      agreementFinal: 0.85
+      flag: null
+    target:
+      kappaFirstPass: 0.44315545243619553
+      agreementFirstPass: 0.85
+      kappaFinal: 0.5823665893271462
+      agreementFinal: 0.85
+      flag: unreliable
+  distribution:
+    media:
+      None: 3
+      Top image: 13
+      Side thumbnail: 2
+      Full-bleed background: 2
+    actions:
+      None: 7
+      One primary action: 7
+      Action row: 2
+      Overflow menu: 4
+    shape:
+      Vertical: 17
+      Horizontal: 2
+      Compact tile: 1
+    style:
+      Elevated: 2
+      Filled: 2
+      Outlined: 6
+      Borderless: 10
+    target:
+      Whole card: 17
+      Title only: 2
+      Separate targets per attribute: 1
+  exemplars:
+    media:
+      None:
+        - Linear — Issue card on the board
+        - Trello — Card on a list
+        - GitHub — Pinned repository card on a profile
+      Top image:
+        - Airbnb — Listing card in search results
+        - YouTube — Video card on Home
+        - Google Drive — File card in grid view
+      Side thumbnail:
+        - Spotify — Search result rows
+        - Booking.com — Property card in results
+      Full-bleed background:
+        - Apple App Store — Today card
+        - Netflix — Title card in a row
+    actions:
+      None:
+        - Apple App Store — Today card
+        - Linear — Issue card on the board
+        - Trello — Card on a list
+      One primary action:
+        - Airbnb — Listing card in search results
+        - Amazon — Product tile in search results
+        - Zillow — Listing card
+      Action row:
+        - Netflix — Title card in a row
+        - Apple News — Story card
+      Overflow menu:
+        - YouTube — Video card on Home
+        - Spotify — Search result rows
+        - Google Drive — File card in grid view
+    shape:
+      Vertical:
+        - Airbnb — Listing card in search results
+        - Apple App Store — Today card
+        - YouTube — Video card on Home
+      Horizontal:
+        - Spotify — Search result rows
+        - Booking.com — Property card in results
+      Compact tile:
+        - Netflix — Title card in a row
+    style:
+      Elevated:
+        - Apple App Store — Today card
+        - Trello — Card on a list
+      Filled:
+        - Apple News — Story card
+        - Steam — Game capsule card
+      Outlined:
+        - Linear — Issue card on the board
+        - Google Drive — File card in grid view
+        - Zillow — Listing card
+      Borderless:
+        - Airbnb — Listing card in search results
+        - YouTube — Video card on Home
+        - Spotify — Search result rows
+    target:
+      Whole card:
+        - Airbnb — Listing card in search results
+        - Apple App Store — Today card
+        - YouTube — Video card on Home
+      Title only:
+        - Booking.com — Property card in results
+        - GitHub — Pinned repository card on a profile
+      Separate targets per attribute:
+        - Amazon — Product tile in search results
+  unobserved: []
+  unresolved: []
+  proposals:
+    raised: 2
+    adopted:
+      - sub: style
+        name: Borderless
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded:
+      - place: sub:style
+        sub: style
+        dim: null
+        name: Flat
+        gloss: "No container at all: the card is only its media and text with spacing, no border, fill or
+          shadow"
+        raters:
+          - fable
+        instances:
+          - 1
+          - 3
+          - 4
+          - 10
+          - 11
+          - 12
+          - 13
+          - 14
+          - 15
+        status: raised
+  raterNotes:
+    fable:
+      - Container style has no variation for the borderless card that most consumer grids use; nine
+        of twenty needed +Flat. Style for bordered-vs-shadowed cards (Zillow, Amazon) is a fine
+        visual distinction hard to recall exactly.
+      - style has no value for the borderless card that most consumer grids use, and all three
+        raters proposed one. Outlined versus Borderless is a one-pixel detail hard to recall for
+        Amazon and Zillow. target has no value for a card whose several links all open one place
+        while the card body is inert (Booking), and Separate targets is read differently when a
+        nested link goes elsewhere (YouTube).
+    opus:
+      - "style is the one real gap and it is a big one: half the sample uses no container at all,
+        which Material's elevated/filled/outlined triad cannot say. shape reads as a layout question
+        but its variations mix stacking direction (Vertical, Horizontal) with size (Compact tile); I
+        used Compact tile only for Netflix's bare art tile. actions is pick-one and hover-only
+        actions made it awkward — I counted an action that appears on hover (Pinterest's Save,
+        Netflix's row) because it is on the card, and did not count context menus or edit
+        affordances. target's Separate targets per attribute never applied cleanly: several cards
+        have a nested secondary link (YouTube's channel, Amazon's ratings) without that being a
+        design choice about where the item opens."
+      - "Most of this packet is one codebook fault: `style` borrows Material's
+        elevated/filled/outlined triad, which has no value for the containerless card that half the
+        sample uses (all three of us proposed one, two of us by the same name) and no rule for a
+        card that is both filled and outlined (Linear, Apple News, Zillow) — it should be pick any,
+        or its variations should be ordered as cues to read at rest. Second: `target` has no value
+        for 'the content region but not the container', which is what YouTube, Amazon and Booking
+        actually do, and its Separate targets per attribute gloss conflates several distinct targets
+        with several distinct destinations. Third: `shape` mixes stacking direction with size, so a
+        small vertical card (Google Play) has two defensible codes."
+    sonnet:
+      - "style is the sub-dimension the Material-3-derived vocabulary (Elevated/Filled/Outlined)
+        fits worst: most real browse/shopping/media tiles in this sample are borderless flat tiles
+        rather than any of the three, hence the +Borderless proposal covering well over half the
+        instances."
+      - "One dominant pattern: 'style' has no value for the no-container-at-all look that most
+        modern consumer overview cards actually use (Airbnb, Amazon, Etsy, Pinterest, Netflix, Uber
+        Eats, Facebook Marketplace, Spotify, YouTube, Google Play) — all three raters independently
+        proposed essentially the same missing variation (my and opus's names matched exactly as
+        'Borderless,' fable's 'Flat' names the same thing), which is as strong a convergence signal
+        as this reconciliation produced anywhere; the three existing values
+        (Elevated/Filled/Outlined) assume every card has some kind of visible container, which
+        turned out to be the minority case in this sample. A second, smaller pattern: 'target'
+        undercounts cards where multiple elements link to genuinely different destinations (Amazon:
+        image/title to the product, stars to reviews) versus cards where multiple clickable elements
+        all lead to the same place (Booking.com) — the latter isn't really 'separate targets per
+        attribute' the way the gloss's own example implies, and I initially conflated the two."
+  codedAt: 2026-09-22
+previews:
+  - file: card.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

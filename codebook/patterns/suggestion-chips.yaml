@@ -1,0 +1,321 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "suggestion-chips". Edit between batches only — see README "Rules".
+id: suggestion-chips
+name: Suggestion chips
+level: component
+parent: delegate-ai
+aliases:
+  - follow-up chips
+  - prompt suggestions
+  - starter prompts
+definition: Compact, tappable proposed prompts or next actions that fill or refine the composer when selected.
+data: collection
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - ai
+  - productivity
+  - education
+  - commerce
+anatomy:
+  - name: Chip
+    role: One proposed action
+  - name: Set
+    role: The visible suggestions
+  - name: Composer link
+    role: Where accepting goes
+roles: []
+dimensions:
+  - name: Chip content
+    family: content
+    question: What does a chip propose?
+    subdimensions:
+      - id: content
+        name: Content
+        select: one
+        values:
+          - id: full-starter-prompt
+            name: Full starter prompt
+            example: ChatGPT empty-state
+          - id: follow-up-question
+            name: Follow-up question
+            example: Perplexity related
+          - id: constraint-add-on
+            name: Constraint add-on
+            example: Make it shorter
+          - id: tool-invocation
+            name: Tool invocation
+            example: Search the web
+          - id: example-query
+            name: Example query
+            example: Onboarding
+  - name: Chip placement
+    family: layout
+    question: Where do chips appear?
+    subdimensions:
+      - id: placement
+        name: Placement
+        select: one
+        values:
+          - id: under-the-composer
+            name: Under the composer
+            example: ChatGPT
+          - id: above-the-composer
+            name: Above the composer
+            example: Many mobile chats
+          - id: after-the-last-reply
+            name: After the last reply
+            example: Follow-ups
+          - id: empty-state-gallery
+            name: Empty-state gallery
+            example: New chat starters
+          - id: inline-in-a-sidebar
+            name: Inline in a sidebar
+            example: Copilot tips
+  - name: Chip selection
+    family: invocation
+    question: What happens when a chip is chosen?
+    subdimensions:
+      - id: onSelect
+        name: On select
+        select: one
+        values:
+          - id: send-immediately
+            name: Send immediately
+            example: Many follow-ups
+          - id: fill-composer-for-edit
+            name: Fill composer for edit
+            example: Safer defaults
+          - id: append-to-current-prompt
+            name: Append to current prompt
+            example: Constraint chips
+          - id: open-a-picker-of-variants
+            name: Open a picker of variants
+            example: Nested suggestions
+  - name: Chip lifecycle
+    family: lifecycle
+    question: When do chips refresh or disappear?
+    subdimensions:
+      - id: lifecycle
+        name: Lifecycle
+        select: one
+        values:
+          - id: static-starters
+            name: Static starters
+            example: Hard-coded onboarding
+          - id: refresh-after-each-reply
+            name: Refresh after each reply
+            example: Dynamic follow-ups
+          - id: dismissed-per-session
+            name: Dismissed per session
+            example: Hide suggestions
+          - id: personalized-over-time
+            name: Personalized over time
+            example: Learned starters
+wild:
+  score: 1
+  note: Occasionally hideable; chip generation policy is not user-authored.
+  examples:
+    - name: ChatGPT
+      note: Suggested follow-ups
+    - name: Perplexity
+      note: Related questions
+    - name: Gemini
+      note: Prompt chips
+techniques:
+  - name: Fill, don’t force-send
+    dimension: Chip selection
+    how: Default chips populate the composer so people can edit before committing tokens.
+    ai: false
+  - name: Chips as visible intents
+    dimension: Chip content
+    how: Generate chips that name the move (deepen, challenge, apply) rather than opaque full prompts
+      only.
+    ai: true
+signature: Fill, don’t force-send
+sample: Chat empty states, follow-up rows and onboarding assistants.
+unit: One chip set bound to one composer or reply.
+relations:
+  uses: []
+  specializes: []
+  neighbors:
+    - prompt-input
+    - autocomplete
+    - menu
+scores:
+  ubiquity: 4
+  potential: 3
+  spec: 5
+evidence: agent-coded
+usage:
+  - New users tap chips; experts ignore them once fluent
+questions:
+  - Should chips reflect user goals or model-confident next tokens?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.8458299609813149
+  agreementFirstPass: 0.875
+  kappaFinal: 0.8458299609813149
+  agreementFinal: 0.875
+  pass: true
+  perSub:
+    content:
+      kappaFirstPass: 0.856801909307876
+      agreementFirstPass: 0.85
+      kappaFinal: 0.856801909307876
+      agreementFinal: 0.85
+      flag: null
+    placement:
+      kappaFirstPass: 0.9127906976744184
+      agreementFirstPass: 0.9
+      kappaFinal: 0.9127906976744184
+      agreementFinal: 0.9
+      flag: null
+    onSelect:
+      kappaFirstPass: 0.803600654664484
+      agreementFirstPass: 0.9
+      kappaFinal: 0.803600654664484
+      agreementFinal: 0.9
+      flag: null
+    lifecycle:
+      kappaFirstPass: 0.8101265822784811
+      agreementFirstPass: 0.85
+      kappaFinal: 0.8101265822784811
+      agreementFinal: 0.85
+      flag: null
+  distribution:
+    content:
+      Full starter prompt: 10
+      Follow-up question: 4
+      Constraint add-on: 2
+      Tool invocation: 1
+      Example query: 3
+    placement:
+      Under the composer: 3
+      Above the composer: 4
+      After the last reply: 6
+      Empty-state gallery: 6
+      Inline in a sidebar: 1
+    onSelect:
+      Send immediately: 16
+      Fill composer for edit: 3
+      Append to current prompt: 0
+      Open a picker of variants: 1
+    lifecycle:
+      Static starters: 11
+      Refresh after each reply: 8
+      Dismissed per session: 0
+      Personalized over time: 1
+  exemplars:
+    content:
+      Full starter prompt:
+        - ChatGPT — Empty-state prompts
+        - Google Gemini — Starter prompt cards
+        - Microsoft 365 Copilot — Prompt suggestions in Word
+      Follow-up question:
+        - ChatGPT — Follow-up suggestions
+        - Perplexity — Related questions
+        - Microsoft Copilot — Suggested follow-ups
+      Constraint add-on:
+        - Grammarly — Improve it chips
+        - Apple Writing Tools — Tone chips
+      Tool invocation:
+        - Notion AI — AI action menu
+      Example query:
+        - Claude — Home suggestions
+        - Siri — Suggestions on the Siri screen
+        - Amazon Alexa — Things to try
+    placement:
+      Under the composer:
+        - Claude — Home suggestions
+        - Notion AI — AI action menu
+        - Apple Writing Tools — Tone chips
+      Above the composer:
+        - Gmail — Smart Reply
+        - Google Messages — Smart Reply
+        - LinkedIn — Quick replies
+      After the last reply:
+        - ChatGPT — Follow-up suggestions
+        - Perplexity — Related questions
+        - Microsoft Copilot — Suggested follow-ups
+      Empty-state gallery:
+        - ChatGPT — Empty-state prompts
+        - Google Gemini — Starter prompt cards
+        - GitHub Copilot Chat — Welcome suggestions
+      Inline in a sidebar:
+        - Microsoft 365 Copilot — Prompt suggestions in Word
+    onSelect:
+      Send immediately:
+        - ChatGPT — Empty-state prompts
+        - ChatGPT — Follow-up suggestions
+        - Perplexity — Related questions
+      Fill composer for edit:
+        - Microsoft 365 Copilot — Prompt suggestions in Word
+        - GitHub Copilot Chat — Welcome suggestions
+        - Gmail — Smart Reply
+      Append to current prompt: []
+      Open a picker of variants:
+        - Claude — Home suggestions
+    lifecycle:
+      Static starters:
+        - ChatGPT — Empty-state prompts
+        - Google Gemini — Starter prompt cards
+        - Claude — Home suggestions
+      Refresh after each reply:
+        - ChatGPT — Follow-up suggestions
+        - Perplexity — Related questions
+        - Microsoft Copilot — Suggested follow-ups
+      Dismissed per session: []
+      Personalized over time:
+        - Siri — Suggestions on the Siri screen
+  unobserved:
+    - sub: onSelect
+      var: Append to current prompt
+    - sub: lifecycle
+      var: Dismissed per session
+  unresolved: []
+  proposals:
+    raised: 1
+    adopted: []
+    recorded:
+      - place: sub:placement
+        sub: placement
+        dim: null
+        name: In the rewrite popover
+        gloss: Chips sit inside a floating popover anchored to a selection in the artifact, with no composer
+          in the picture at all; every placement variation assumes a composer or a reply to sit near
+        raters:
+          - opus
+        instances:
+          - 20
+        status: raised
+  raterNotes:
+    fable:
+      - Content has no value for proposed reply texts (Smart Reply, Fin quick replies), coded Full
+        starter prompt; Lifecycle's rotating-but-fixed sets sit between Static and Personalized.
+    opus:
+      - The entry assumes chips propose prompts to a model, so Smart Reply-style chips (Gmail,
+        Messages, LinkedIn, Fin) — which propose a message to another person — only fit under Full
+        starter prompt by stretching it. Lifecycle also cannot separate a fixed pool shown in
+        rotation (Meta AI) from a truly static set, and Dismissed per session went unused.
+    sonnet:
+      - Placement for selection-triggered action menus (Notion, Apple Writing Tools) doesn't map
+        cleanly onto a 'composer' since there isn't one; used Under the composer as the closest
+        available option.
+  codedAt: 2026-09-22
+previews:
+  - file: suggestion-chips.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

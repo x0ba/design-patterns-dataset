@@ -1,0 +1,529 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "media-player". Edit between batches only — see README "Rules".
+id: media-player
+name: Media player
+level: pattern
+parent: consume-media
+aliases:
+  - video player
+  - audio player
+  - playback controls
+definition: A stage and transport for playing video or audio, with position, quality and optional
+  overlays under the person’s control.
+data: media
+platforms:
+  - web
+  - mobile
+  - desktop
+  - xr
+domains:
+  - entertainment
+  - education
+  - news
+  - social
+  - communication
+anatomy:
+  - name: Stage
+    role: Where the media renders
+  - name: Transport bar
+    role: Play, seek, volume
+  - name: Chrome
+    role: Title, creator and actions
+  - name: Overlays
+    role: Captions, chapters, ads
+roles:
+  - title
+  - creator
+  - duration
+  - chapter
+  - caption
+dimensions:
+  - name: Transport controls
+    family: flow
+    question: Which playback controls are available?
+    subdimensions:
+      - id: controls
+        name: Controls
+        select: many
+        values:
+          - id: play-pause
+            name: Play pause
+            example: YouTube
+          - id: scrubber
+            name: Scrubber
+            example: Netflix
+          - id: skip-forward-back
+            name: Skip forward back
+            example: Apple Podcasts ±15s
+          - id: playback-speed
+            name: Playback speed
+            example: YouTube speed menu
+          - id: volume-and-mute
+            name: Volume and mute
+            example: Spotify
+          - id: fullscreen
+            name: Fullscreen
+            example: Vimeo
+  - name: Position and chapters
+    family: content
+    question: How is position shown and segmented?
+    subdimensions:
+      - id: position
+        name: Position encoding
+        select: many
+        values:
+          - id: time-scrubber
+            name: Time scrubber
+            example: YouTube
+          - id: chapter-markers
+            name: Chapter markers
+            example: YouTube chapters
+          - id: heatmap-of-rewatches
+            name: Heatmap of rewatches
+            example: YouTube most-replayed
+          - id: lyrics-synced-to-time
+            name: Lyrics synced to time
+            example: Spotify Lyrics
+          - id: thumbnail-previews-on-hover
+            name: Thumbnail previews on hover
+            example: YouTube scrub previews
+  - name: Presentation mode
+    family: layout
+    question: How is the player framed on screen?
+    subdimensions:
+      - id: mode
+        name: Mode
+        select: one
+        values:
+          - id: inline-embed
+            name: Inline embed
+            example: YouTube on news sites
+          - id: theater-or-immersive
+            name: Theater or immersive
+            example: YouTube Theater
+          - id: fullscreen
+            name: Fullscreen
+            example: Netflix
+          - id: mini-or-pip
+            name: Mini or PiP
+            example: YouTube PiP
+          - id: lock-screen-now-playing
+            name: Lock-screen / Now Playing
+            example: iOS Now Playing
+          - id: standalone-window
+            name: Standalone window
+            description: A desktop player in its own resizable window, neither embedded in a page nor fullscreen
+              by default
+            example: VLC — Desktop player
+  - name: Adaptation
+    family: adaptation
+    question: How does playback adapt to device and network?
+    subdimensions:
+      - id: adaptation
+        name: Adaptation
+        select: many
+        values:
+          - id: adaptive-bitrate
+            name: Adaptive bitrate
+            example: Netflix ABR
+          - id: manual-quality
+            name: Manual quality
+            example: YouTube 1080p
+          - id: offline-download
+            name: Offline download
+            example: Spotify Downloads
+          - id: audio-only-fallback
+            name: Audio-only fallback
+            example: YouTube Music background
+          - id: data-saver-mode
+            name: Data-saver mode
+            example: YouTube data saving
+  - name: Overlays and assistance
+    family: feedback
+    question: What appears on top of the media?
+    subdimensions:
+      - id: overlays
+        name: Overlays
+        select: many
+        values:
+          - id: captions
+            name: Captions
+            example: Netflix subtitles
+          - id: end-cards-and-annotations
+            name: End cards and annotations
+            example: YouTube end screens
+          - id: live-chat-beside-stage
+            name: Live chat beside stage
+            example: Twitch
+          - id: ad-breaks
+            name: Ad breaks
+            example: YouTube ads
+          - id: ambient-lyrics-or-visuals
+            name: Ambient lyrics or visuals
+            example: Apple Music
+          - id: scene-metadata-overlay
+            name: Scene metadata overlay
+            description: Information about what is on screen at this moment — the actors in this scene, the song
+              playing, the product shown — surfaced over or beside the video and updating as it
+              plays
+            example: Prime Video — Web player with X-Ray
+  - name: Session continuity
+    family: lifecycle
+    question: How does playback resume across sessions?
+    subdimensions:
+      - id: resume
+        name: Resume
+        select: one
+        values:
+          - id: always-from-start
+            name: Always from start
+            example: Short clips
+          - id: resume-position
+            name: Resume position
+            example: Netflix Continue Watching
+          - id: synced-across-devices
+            name: Synced across devices
+            example: Spotify Connect position
+          - id: live-edge-only
+            name: Live edge only
+            example: Live sports streams
+wild:
+  score: 2
+  note: Speed, captions and quality menus are common; chapter density and overlay layout rarely are.
+  examples:
+    - name: YouTube
+      note: Speed, quality, caption font
+    - name: Netflix
+      note: Subtitle appearance
+    - name: VLC
+      note: Nearly every transport and codec option
+techniques:
+  - name: Chapter as overview
+    dimension: Position and chapters
+    how: "Treat chapters as an overview–detail of the timeline: surface, hide and reorder chapter
+      attributes the way Meridian surfaces card attributes."
+    ai: false
+  - name: Caption style transfer
+    dimension: Overlays and assistance
+    how: Copy caption size, colour and position from one app and apply it in another.
+    ai: false
+  - name: Skip the boring part
+    dimension: Transport controls
+    how: Ask to jump to the demo, the chorus or the spoiler-free recap; the model proposes timestamps
+      with sources.
+    ai: true
+signature: Chapter as overview
+sample: YouTube, Netflix, Spotify, Twitch, Apple Podcasts and course platforms.
+unit: One player instance bound to one media object.
+relations:
+  uses:
+    - slider
+    - menu
+    - toast
+    - progress-indicator
+  specializes:
+    - consume-media
+  neighbors:
+    - playlist-queue
+    - timeline-editor
+scores:
+  ubiquity: 5
+  potential: 4
+  spec: 4
+evidence: agent-coded
+usage:
+  - People set speed once per context (lectures vs films) and forget it
+questions:
+  - Should chapters be first-class collection items with their own filters?
+  - How much overlay chrome can leave before immersion breaks?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.6335051655592214
+  agreementFirstPass: 0.776
+  kappaFinal: 0.9064748355878982
+  agreementFinal: 0.9375
+  pass: true
+  perSub:
+    controls:
+      kappaFirstPass: 0.5549090909090891
+      agreementFirstPass: 0.7166666666666667
+      kappaFinal: 0.9052465344797327
+      agreementFinal: 0.95
+      flag: null
+    position:
+      kappaFirstPass: 0.8049999999999995
+      agreementFirstPass: 0.87
+      kappaFinal: 0.8978797899241391
+      agreementFinal: 0.93
+      flag: null
+    mode:
+      kappaFirstPass: 0.601181683899557
+      agreementFirstPass: 0.6
+      kappaFinal: 0.953560371517028
+      agreementFinal: 0.95
+      flag: null
+    adaptation:
+      kappaFirstPass: 0.45881955014375136
+      agreementFirstPass: 0.68
+      kappaFinal: 0.8987268518518514
+      agreementFinal: 0.93
+      flag: null
+    overlays:
+      kappaFirstPass: 0.7108323133414924
+      agreementFirstPass: 0.8714285714285714
+      kappaFinal: 0.9402960321738048
+      agreementFinal: 0.9666666666666667
+      flag: null
+    resume:
+      kappaFirstPass: 0.6120689655172415
+      agreementFirstPass: 0.65
+      kappaFinal: 0.745547073791349
+      agreementFinal: 0.75
+      flag: null
+  distribution:
+    controls:
+      Play pause: 20
+      Scrubber: 19
+      Skip forward back: 12
+      Playback speed: 10
+      Volume and mute: 17
+      Fullscreen: 14
+    position:
+      Time scrubber: 19
+      Chapter markers: 6
+      Heatmap of rewatches: 1
+      Lyrics synced to time: 3
+      Thumbnail previews on hover: 4
+    mode:
+      Inline embed: 6
+      Theater or immersive: 2
+      Fullscreen: 8
+      Mini or PiP: 1
+      Lock-screen / Now Playing: 1
+      Standalone window: 2
+    adaptation:
+      Adaptive bitrate: 14
+      Manual quality: 12
+      Offline download: 6
+      Audio-only fallback: 1
+      Data-saver mode: 2
+    overlays:
+      Captions: 13
+      End cards and annotations: 6
+      Live chat beside stage: 1
+      Ad breaks: 5
+      Ambient lyrics or visuals: 3
+      Scene metadata overlay: 1
+    resume:
+      Always from start: 2
+      Resume position: 9
+      Synced across devices: 7
+      Live edge only: 1
+      n/a: 1
+  exemplars:
+    controls:
+      Play pause:
+        - YouTube — Web player
+        - Netflix — Web player
+        - Spotify — Now Playing
+      Scrubber:
+        - YouTube — Web player
+        - Netflix — Web player
+        - Spotify — Now Playing
+      Skip forward back:
+        - YouTube — Web player
+        - Netflix — Web player
+        - Apple Podcasts — Now Playing
+      Playback speed:
+        - YouTube — Web player
+        - Netflix — Web player
+        - Apple Podcasts — Now Playing
+      Volume and mute:
+        - YouTube — Web player
+        - Netflix — Web player
+        - Spotify — Now Playing
+      Fullscreen:
+        - YouTube — Web player
+        - Netflix — Web player
+        - Twitch — Live player
+    position:
+      Time scrubber:
+        - YouTube — Web player
+        - Netflix — Web player
+        - Spotify — Now Playing
+      Chapter markers:
+        - YouTube — Web player
+        - Apple Podcasts — Now Playing
+        - Vimeo — Player
+      Heatmap of rewatches:
+        - YouTube — Web player
+      Lyrics synced to time:
+        - Spotify — Now Playing
+        - Apple Music — Now Playing on Mac
+        - YouTube Music — Player
+      Thumbnail previews on hover:
+        - YouTube — Web player
+        - Netflix — Web player
+        - Prime Video — Web player with X-Ray
+    mode:
+      Inline embed:
+        - YouTube — Web player
+        - Coursera — Lecture video player
+        - Udemy — Course player
+      Theater or immersive:
+        - Twitch — Live player
+        - Apple TV app — Player on Vision Pro
+      Fullscreen:
+        - Netflix — Web player
+        - Spotify — Now Playing
+        - Apple Podcasts — Now Playing
+      Mini or PiP:
+        - Apple Music — Now Playing on Mac
+      Lock-screen / Now Playing:
+        - iOS — Now Playing on the lock screen
+      Standalone window:
+        - VLC — Desktop player
+        - QuickTime Player — Movie window
+    adaptation:
+      Adaptive bitrate:
+        - YouTube — Web player
+        - Netflix — Web player
+        - Spotify — Now Playing
+      Manual quality:
+        - YouTube — Web player
+        - Spotify — Now Playing
+        - Twitch — Live player
+      Offline download:
+        - Spotify — Now Playing
+        - Apple Podcasts — Now Playing
+        - Apple Music — Now Playing on Mac
+      Audio-only fallback:
+        - YouTube Music — Player
+      Data-saver mode:
+        - Spotify — Now Playing
+        - Disney+ — Player
+    overlays:
+      Captions:
+        - YouTube — Web player
+        - Netflix — Web player
+        - Coursera — Lecture video player
+      End cards and annotations:
+        - YouTube — Web player
+        - Netflix — Web player
+        - Vimeo — Player
+      Live chat beside stage:
+        - Twitch — Live player
+      Ad breaks:
+        - YouTube — Web player
+        - Spotify — Now Playing
+        - Twitch — Live player
+      Ambient lyrics or visuals:
+        - Spotify — Now Playing
+        - Apple Music — Now Playing on Mac
+        - YouTube Music — Player
+      Scene metadata overlay:
+        - Prime Video — Web player with X-Ray
+    resume:
+      Always from start:
+        - Vimeo — Player
+        - QuickTime Player — Movie window
+      Resume position:
+        - YouTube — Web player
+        - Netflix — Web player
+        - Coursera — Lecture video player
+      Synced across devices:
+        - Spotify — Now Playing
+        - Apple Podcasts — Now Playing
+        - Apple Music — Now Playing on Mac
+      Live edge only:
+        - Twitch — Live player
+  unobserved: []
+  unresolved: []
+  proposals:
+    raised: 5
+    adopted:
+      - sub: mode
+        name: Standalone window
+        raters:
+          - fable
+          - sonnet
+      - sub: overlays
+        name: Scene metadata overlay
+        raters:
+          - opus
+          - sonnet
+    recorded:
+      - place: sub:overlays
+        sub: overlays
+        dim: null
+        name: Metadata overlay
+        gloss: Cast, music and trivia about the current scene shown over the video on pause or hover (Prime
+          Video X-Ray)
+        raters:
+          - fable
+        instances:
+          - 14
+        status: raised
+      - place: sub:mode
+        sub: mode
+        dim: null
+        name: Resizable app window
+        gloss: The player is an ordinary desktop window the person sizes and moves — neither embedded in a
+          page, nor fullscreen, nor a miniature persistent bar
+        raters:
+          - opus
+        instances:
+          - 9
+          - 10
+        status: raised
+      - place: sub:overlays
+        sub: overlays
+        dim: Overlays and assistance
+        name: Contextual info overlay
+        gloss: A panel of contextual metadata about the currently playing moment (cast, music, trivia) is
+          shown alongside the video, distinct from captions, end cards, live chat, ad breaks, or
+          ambient lyrics/visuals
+        raters:
+          - sonnet
+        instances:
+          - 14
+        status: raised
+  raterNotes:
+    fable:
+      - "resume: 'Synced across devices' was reserved for live position hand-off (Spotify Connect,
+        Whispersync, iCloud podcasts); cross-session resume that also works on another device
+        (Netflix, Plex, YouTube) was coded Resume position because the Netflix exemplar sits there.
+        Transcripts were coded under 'Lyrics synced to time' as the only synced-text variation."
+    opus:
+      - The teaching players (Coursera, Panopto, Khan) all pair the video with a synchronised
+        transcript or slide list that is the real navigation device, and neither position nor
+        overlays has a value for it; I coded Captions and noted the gap each time. mode also
+        conflates framing with device state — YouTube's watch page is an inline embed, a theater
+        mode and a PiP depending on what you press, so I coded the resting state.
+    sonnet:
+      - mode was a poor fit for standalone desktop file players (VLC, QuickTime) since 'a resizable
+        primary window that can go fullscreen' isn't quite inline-embed, theater,
+        fullscreen-as-default, mini/PiP, or lock-screen; marked QuickTime '?' and picked the closest
+        (Fullscreen) for VLC given its movie-watching framing in the sample.
+      - "Three codebook problems surfaced here: `resume` is pick-one but conflates whether playback
+        resumes with where the position is stored, so Resume position and Synced across devices
+        overlap and every syncing product forces an arbitrary choice; `mode`'s 'Lock-screen / Now
+        Playing' reads as both the system lock-screen surface and any app's full-screen Now Playing
+        screen, which split all three raters on Spotify, Apple Podcasts, YouTube Music and Audible;
+        and a time-synced transcript (Apple Podcasts, Coursera, Panopto) has no code at all —
+        'Lyrics synced to time' under `position` wants generalising to time-synced text."
+  codedAt: 2026-09-22
+previews:
+  - file: media-player.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

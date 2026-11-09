@@ -1,0 +1,622 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "form". Edit between batches only — see README "Rules".
+id: form
+name: Form
+level: pattern
+parent: enter-data
+aliases:
+  - input form
+  - questionnaire
+definition: A set of labelled fields that collects structured data and submits it together.
+data: schema
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - government
+  - commerce
+  - finance
+  - health
+  - enterprise
+anatomy:
+  - name: Field
+    role: Label, input, hint and error
+  - name: Section
+    role: A group of fields
+  - name: Actions
+    role: Submit, cancel, save
+  - name: Error summary
+    role: All problems in one place
+roles:
+  - label
+  - hint
+  - error
+  - input
+dimensions:
+  - name: Field layout
+    family: layout
+    question: How are labels and fields arranged?
+    subdimensions:
+      - id: labels
+        name: Label placement
+        select: one
+        values:
+          - id: top-aligned
+            name: Top-aligned
+            example: GOV.UK Design System
+          - id: left-aligned
+            name: Left-aligned
+            example: Desktop preference dialogs
+          - id: floating-label
+            name: Floating label
+            example: Material text fields
+          - id: placeholder-as-label
+            name: Placeholder as label
+            description: Disappears on typing
+            example: Common, and an accessibility problem
+          - id: conversational-prompt
+            name: Conversational prompt
+            description: The question is asked as a chat message; there is no persistent field label, only a
+              bare input for the reply.
+            example: Lemonade — Renters insurance quote
+          - id: prompt-bubble
+            name: Prompt bubble
+            description: The question is a chat message in the conversation above a shared composer; no label is
+              attached to the control itself
+            example: Lemonade — Renters insurance quote
+      - id: columns
+        name: Columns
+        select: one
+        values:
+          - id: single-column
+            name: Single column
+            example: GOV.UK
+          - id: multiple-columns
+            name: Multiple columns
+            example: Enterprise record forms
+          - id: sentence-form
+            name: Sentence form
+            description: Fields inside a sentence
+            example: Fill-in-the-blanks (Tidwell)
+  - name: Grouping
+    family: composition
+    question: How are fields grouped?
+    subdimensions:
+      - id: grouping
+        name: Grouping
+        select: one
+        values:
+          - id: flat
+            name: Flat
+            example: Short forms
+          - id: sections-with-headings
+            name: Sections with headings
+            example: Account settings
+          - id: collapsible-optional-sections
+            name: Collapsible optional sections
+            example: Advanced options
+          - id: split-across-pages
+            name: Split across pages
+            example: Becomes a wizard
+  - name: Validation
+    family: feedback
+    question: When and how are problems shown?
+    subdimensions:
+      - id: timing
+        name: Timing
+        select: one
+        values:
+          - id: on-submit
+            name: On submit
+            example: GOV.UK
+          - id: on-leaving-a-field
+            name: On leaving a field
+            example: Many sign-up forms
+          - id: while-typing
+            name: While typing
+            example: Password rules
+          - id: asynchronous-check
+            name: Asynchronous check
+            example: Username availability
+          - id: none
+            name: None
+            description: Input is never checked; the form accepts whatever is entered (fillable PDFs, contact
+              cards, password-manager items)
+            example: Adobe Acrobat Reader — IRS W-9 fillable PDF
+      - id: errors
+        name: Error presentation
+        select: many
+        values:
+          - id: inline-under-the-field
+            name: Inline under the field
+            example: Most forms
+          - id: summary-linking-to-fields
+            name: Summary linking to fields
+            example: GOV.UK error summary
+          - id: field-highlight
+            name: Field highlight
+            example: Red outlines
+          - id: toast
+            name: Toast
+            example: Some single-page apps
+  - name: Prefill
+    family: initiative
+    question: What arrives already filled?
+    subdimensions:
+      - id: prefill
+        name: Prefill
+        select: one
+        values:
+          - id: blank
+            name: Blank
+            example: Contact forms
+          - id: smart-defaults
+            name: Smart defaults
+            example: Good defaults (Tidwell)
+          - id: browser-autofill
+            name: Browser autofill
+            example: Checkout addresses
+          - id: extracted-from-a-document
+            name: Extracted from a document
+            example: Résumé parsing on job applications
+          - id: from-account-profile
+            name: From account profile
+            description: Fields arrive filled from the product's own stored profile or record (LinkedIn Easy
+              Apply contact info, MyChart chart data, Zocdoc patient details) — neither the browser
+              nor a document
+            example: LinkedIn — Easy Apply
+          - id: autofill-from-a-profile
+            name: Autofill from a profile
+            description: Fields arrive filled from the person's own stored account profile or record in this
+              product, not from the browser — the archetype entry already has this variation and the
+              form entry lacks it
+            example: LinkedIn — Easy Apply
+          - id: looked-up-from-records
+            name: Looked up from records
+            description: Fields arrive filled from a third-party or public-records lookup keyed on what the
+              person has already given (insurance quotes filling in your vehicles and household
+              drivers)
+            example: GEICO — Auto insurance quote
+  - name: Help
+    family: content
+    question: What helps a person answer?
+    subdimensions:
+      - id: help
+        name: Help
+        select: many
+        values:
+          - id: none
+            name: None
+            example: Short forms
+          - id: hint-text
+            name: Hint text
+            example: GOV.UK hints
+          - id: format-examples
+            name: Format examples
+            example: Input hints (Tidwell)
+          - id: tooltip-help
+            name: Tooltip help
+            example: Tax forms
+          - id: why-we-ask
+            name: Why we ask
+            example: Privacy-conscious sign-ups
+  - name: Commit
+    family: lifecycle
+    question: How is the form saved?
+    subdimensions:
+      - id: commit
+        name: Commit
+        select: one
+        values:
+          - id: submit-button
+            name: Submit button
+            example: Most forms
+          - id: autosave-per-field
+            name: Autosave per field
+            example: Notion page properties
+          - id: save-draft
+            name: Save draft
+            example: Job applications
+          - id: review-page-before-submit
+            name: Review page before submit
+            example: GOV.UK check your answers
+          - id: save-the-file
+            name: Save the file
+            description: The filled form is a document the person saves or sends themselves; there is no submit
+              to a system at all
+            example: Adobe Acrobat Reader — IRS W-9 fillable PDF
+wild:
+  score: 1
+  note: Autofill is the only widespread end-user lever.
+  examples:
+    - name: Browsers
+      note: Autofill profiles
+techniques:
+  - name: Optional field folding
+    dimension: Grouping
+    how: Fold away optional fields you never fill, pin the ones you always do, remembered per form.
+    ai: false
+  - name: Paste to fill
+    dimension: Prefill
+    how: Paste a block of text or drop a document; fields fill with inferred values highlighted for
+      confirmation.
+    ai: true
+  - name: Forgiving formats
+    dimension: Validation
+    how: Accept any reasonable format and show the interpretation instead of an error.
+    ai: false
+signature: Optional field folding
+sample: Government services, sign-up and checkout, insurance quotes, health intake.
+unit: One form.
+relations:
+  uses:
+    - text-field
+    - choice-control
+    - date-picker
+    - file-upload
+    - autocomplete
+    - banner
+  specializes:
+    - enter-data
+  neighbors:
+    - wizard
+    - settings
+scores:
+  ubiquity: 5
+  potential: 3
+  spec: 5
+evidence: agent-coded
+usage:
+  - Placeholder-as-label forms fail people who pause mid-entry
+questions:
+  - Can a form be personal without becoming inconsistent with the data the organization needs?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.5000123257584332
+  agreementFirstPass: 0.684375
+  kappaFinal: 0.8822211581553105
+  agreementFinal: 0.9321428571428572
+  pass: true
+  perSub:
+    labels:
+      kappaFirstPass: 0.5192307692307695
+      agreementFirstPass: 0.65
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    columns:
+      kappaFirstPass: 0.1599999999999999
+      agreementFirstPass: 0.65
+      kappaFinal: 0.5636363636363634
+      agreementFinal: 0.9
+      flag: unreliable
+    grouping:
+      kappaFirstPass: 0.6062992125984253
+      agreementFirstPass: 0.65
+      kappaFinal: 0.8468085106382981
+      agreementFinal: 0.85
+      flag: null
+    timing:
+      kappaFirstPass: 0.18644067796610167
+      agreementFirstPass: 0.3
+      kappaFinal: 0.8260869565217392
+      agreementFinal: 0.85
+      flag: null
+    errors:
+      kappaFirstPass: 0.7242647058823529
+      agreementFirstPass: 0.82
+      kappaFinal: 0.9773042491489095
+      agreementFinal: 0.9833333333333333
+      flag: null
+    prefill:
+      kappaFirstPass: 0.46297803091944684
+      agreementFirstPass: 0.5
+      kappaFinal: 0.9549211119459052
+      agreementFinal: 0.95
+      flag: null
+    help:
+      kappaFirstPass: 0.4334795321637427
+      agreementFirstPass: 0.69
+      kappaFinal: 0.896901311644424
+      agreementFinal: 0.94
+      flag: null
+    commit:
+      kappaFirstPass: 0.2765273311897103
+      agreementFirstPass: 0.65
+      kappaFinal: 0.7432239657631955
+      agreementFinal: 0.85
+      flag: null
+  distribution:
+    labels:
+      Top-aligned: 14
+      Left-aligned: 0
+      Floating label: 3
+      Placeholder as label: 2
+      Conversational prompt: 1
+      Prompt bubble: 0
+    columns:
+      Single column: 19
+      Multiple columns: 1
+      Sentence form: 0
+    grouping:
+      Flat: 8
+      Sections with headings: 4
+      Collapsible optional sections: 0
+      Split across pages: 8
+    timing:
+      On submit: 12
+      On leaving a field: 1
+      While typing: 5
+      Asynchronous check: 0
+      None: 2
+    errors:
+      Inline under the field: 17
+      Summary linking to fields: 2
+      Field highlight: 15
+      Toast: 0
+    prefill:
+      Blank: 9
+      Smart defaults: 3
+      Browser autofill: 2
+      Extracted from a document: 2
+      From account profile: 0
+      Autofill from a profile: 3
+      Looked up from records: 1
+    help:
+      None: 11
+      Hint text: 7
+      Format examples: 2
+      Tooltip help: 2
+      Why we ask: 5
+    commit:
+      Submit button: 16
+      Autosave per field: 0
+      Save draft: 0
+      Review page before submit: 3
+      Save the file: 1
+  exemplars:
+    labels:
+      Top-aligned:
+        - GOV.UK — Register to vote
+        - Stripe Checkout — Payment page
+        - Amazon — Add a new address
+      Left-aligned: []
+      Floating label:
+        - Google Account — Create your Google Account
+        - Apple Account — Create your Apple Account
+        - Airbnb — Sign up
+      Placeholder as label:
+        - Uber — Add a payment method
+        - iOS Contacts — New Contact
+      Conversational prompt:
+        - Lemonade — Renters insurance quote
+      Prompt bubble: []
+    columns:
+      Single column:
+        - GOV.UK — Register to vote
+        - Google Account — Create your Google Account
+        - Apple Account — Create your Apple Account
+      Multiple columns:
+        - Adobe Acrobat Reader — IRS W-9 fillable PDF
+      Sentence form: []
+    grouping:
+      Flat:
+        - Apple Account — Create your Apple Account
+        - Amazon — Add a new address
+        - Mailchimp — Embedded newsletter sign-up
+      Sections with headings:
+        - Stripe Checkout — Payment page
+        - "Workday — Application: My Information"
+        - Adobe Acrobat Reader — IRS W-9 fillable PDF
+      Collapsible optional sections: []
+      Split across pages:
+        - GOV.UK — Register to vote
+        - Google Account — Create your Google Account
+        - Lemonade — Renters insurance quote
+    timing:
+      On submit:
+        - GOV.UK — Register to vote
+        - Google Account — Create your Google Account
+        - Amazon — Add a new address
+      On leaving a field:
+        - Apple Account — Create your Apple Account
+      While typing:
+        - Stripe Checkout — Payment page
+        - Airbnb — Sign up
+        - Uber — Add a payment method
+      Asynchronous check: []
+      None:
+        - Adobe Acrobat Reader — IRS W-9 fillable PDF
+        - iOS Contacts — New Contact
+    errors:
+      Inline under the field:
+        - GOV.UK — Register to vote
+        - Google Account — Create your Google Account
+        - Apple Account — Create your Apple Account
+      Summary linking to fields:
+        - GOV.UK — Register to vote
+        - "Workday — Application: My Information"
+      Field highlight:
+        - GOV.UK — Register to vote
+        - Google Account — Create your Google Account
+        - Apple Account — Create your Apple Account
+      Toast: []
+    prefill:
+      Blank:
+        - GOV.UK — Register to vote
+        - Google Account — Create your Google Account
+        - Lemonade — Renters insurance quote
+      Smart defaults:
+        - Apple Account — Create your Apple Account
+        - Airbnb — Sign up
+        - Jira — Create issue
+      Browser autofill:
+        - Stripe Checkout — Payment page
+        - Amazon — Add a new address
+      Extracted from a document:
+        - "Workday — Application: My Information"
+        - Uber — Add a payment method
+      From account profile: []
+      Autofill from a profile:
+        - LinkedIn — Easy Apply
+        - MyChart — Health history questionnaire
+        - Zocdoc — Book appointment patient details
+      Looked up from records:
+        - GEICO — Auto insurance quote
+    help:
+      None:
+        - Lemonade — Renters insurance quote
+        - LinkedIn — Easy Apply
+        - "Workday — Application: My Information"
+      Hint text:
+        - GOV.UK — Register to vote
+        - Google Account — Create your Google Account
+        - Apple Account — Create your Apple Account
+      Format examples:
+        - GOV.UK — Register to vote
+        - Stripe Checkout — Payment page
+      Tooltip help:
+        - Amazon — Add a new address
+        - GEICO — Auto insurance quote
+      Why we ask:
+        - GOV.UK — Register to vote
+        - Google Account — Create your Google Account
+        - Amazon — Add a new address
+    commit:
+      Submit button:
+        - Google Account — Create your Google Account
+        - Apple Account — Create your Apple Account
+        - Stripe Checkout — Payment page
+      Autosave per field: []
+      Save draft: []
+      Review page before submit:
+        - GOV.UK — Register to vote
+        - LinkedIn — Easy Apply
+        - "Workday — Application: My Information"
+      Save the file:
+        - Adobe Acrobat Reader — IRS W-9 fillable PDF
+  unobserved:
+    - sub: labels
+      var: Left-aligned
+    - sub: labels
+      var: Prompt bubble
+    - sub: columns
+      var: Sentence form
+    - sub: grouping
+      var: Collapsible optional sections
+    - sub: timing
+      var: Asynchronous check
+    - sub: errors
+      var: Toast
+    - sub: prefill
+      var: From account profile
+    - sub: commit
+      var: Autosave per field
+    - sub: commit
+      var: Save draft
+  unresolved: []
+  proposals:
+    raised: 8
+    adopted:
+      - sub: prefill
+        name: From account profile
+        raters:
+          - fable
+          - opus
+      - sub: timing
+        name: None
+        raters:
+          - fable
+          - opus
+      - sub: labels
+        name: Conversational prompt
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: prefill
+        name: Autofill from a profile
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: prefill
+        name: Looked up from records
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: commit
+        name: Save the file
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: labels
+        name: Prompt bubble
+        raters:
+          - opus
+          - sonnet
+    recorded:
+      - place: sub:prefill
+        sub: prefill
+        dim: null
+        name: Profile autofill
+        gloss: Fields fill from the person's existing account/profile inside the same product — not the
+          browser, and not extraction from a freshly uploaded document.
+        raters:
+          - sonnet
+        instances:
+          - 9
+        status: raised
+  raterNotes:
+    fable:
+      - Prefill lacks the commonest case, the product's own profile, so I proposed it; timing lacks
+        a no-validation option, which utility forms need. Single-row field pairs (expiry/CVV,
+        first/last) were still coded Single column.
+      - "columns: one rater coded every paired row (first/last, expiry/CVC) as Multiple columns, so
+        the gloss should say a shared row inside a one-column form is still Single column; timing
+        has no None and a live password meter makes While typing true beside On submit for the rest
+        of the form, so it wants pick any or a which-check-wins rule; prefill lacks the product's
+        own profile, which all three raters proposed under different names; commit is ambiguous
+        about whether the unit is one page or the whole application."
+    opus:
+      - "prefill is the weak sub-dimension: Browser autofill is the only external source named, so
+        every product that fills from your own account profile (LinkedIn, MyChart, Zocdoc) or from a
+        records lookup (GEICO) has nowhere to go. grouping also collides with the wizard entry — for
+        long applications I coded the page-splitting I can see, since Split across pages is offered
+        here."
+      - "columns caused a seventh of the disagreement on its own: the codebook does not say whether
+        two fields sharing a row (first/last, expiry/CVC, city/state/ZIP) make a form multi-column,
+        and it should — Multiple columns means a form laid out in columns of fields, not a paired
+        row. timing mixes when (submit/blur/typing) with how (Asynchronous check), so a username
+        check is both; grouping mixes visual grouping with pagination, so any wizard-shaped form is
+        both Sections with headings and Split across pages and that sub-dimension wants to be pick
+        any. errors needs a value for a complaint that arrives as the next conversational turn."
+    sonnet:
+      - Pick-one timing forces a choice between simultaneous checks (e.g. while-typing password
+        rules and async username checks in the same account-creation form); I picked the more
+        architecturally central one and named the other in the note rather than guessing a second
+        sub-dimension.
+      - prefill keeps forcing a pick-one choice where a product truly has both a blank baseline and
+        a profile/records-based fill for returning users or later steps (instances 8, 9, 16, 20) —
+        it wants to be pick-any, or the codebook needs an explicit 'first use vs. returning use'
+        convention. Three raters independently proposed the same 'fills from the product's own
+        profile' idea (instances 9, 14, 15) under three different names before this round; worth
+        promoting to a real variation.
+  codedAt: 2026-09-22
+previews:
+  - file: form.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

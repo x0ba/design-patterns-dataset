@@ -1,0 +1,514 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "settings". Edit between batches only — see README "Rules".
+id: settings
+name: Settings
+level: pattern
+parent: configure
+aliases:
+  - preferences
+  - options
+  - system settings
+definition: A durable catalog of options that change how an app, account or device behaves, usually
+  revisited rarely and in parts.
+data: schema
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - software
+  - productivity
+  - enterprise
+  - home
+  - communication
+anatomy:
+  - name: Panes or pages
+    role: Groups of related options
+  - name: Controls
+    role: Toggles, selects and fields
+  - name: Search
+    role: Finding an option by name
+  - name: Reset
+    role: Return to defaults
+roles:
+  - label
+  - description
+  - value
+  - default
+  - warning
+dimensions:
+  - name: Information architecture
+    family: composition
+    question: How are settings grouped and nested?
+    subdimensions:
+      - id: ia
+        name: IA
+        select: one
+        values:
+          - id: single-long-page
+            name: Single long page
+            example: Simple web prefs
+          - id: sectioned-page
+            name: Sectioned page
+            example: GitHub profile settings
+          - id: drill-down-hierarchy
+            name: Drill-down hierarchy
+            example: Apple Settings
+          - id: tabbed-categories
+            name: Tabbed categories
+            example: Slack preferences
+          - id: command-palette-jump
+            name: Command-palette jump
+            example: VS Code Open Settings
+  - name: Control types
+    family: content
+    question: What kinds of values can be set?
+    subdimensions:
+      - id: controls
+        name: Controls
+        select: many
+        values:
+          - id: boolean-toggles
+            name: Boolean toggles
+            example: iOS switches
+          - id: single-and-multi-select
+            name: Single and multi-select
+            example: Notification categories
+          - id: numeric-and-ranges
+            name: Numeric and ranges
+            example: Text size sliders
+          - id: text-and-credentials
+            name: Text and credentials
+            example: API tokens
+          - id: complex-nested-objects
+            name: Complex nested objects
+            example: VS Code JSON settings
+          - id: permissions-prompts
+            name: Permissions prompts
+            example: macOS Privacy
+  - name: Discovery
+    family: invocation
+    question: How does a person find the right setting?
+    subdimensions:
+      - id: discovery
+        name: Discovery
+        select: many
+        values:
+          - id: browse-hierarchy
+            name: Browse hierarchy
+            example: Apple Settings
+          - id: search-by-label
+            name: Search by label
+            example: macOS System Settings search
+          - id: deep-link-from-feature
+            name: Deep link from feature
+            example: In-context gear icons
+          - id: suggested-settings
+            name: Suggested settings
+            example: Android tips
+          - id: natural-language-find
+            name: Natural-language find
+            example: Assistant “open Wi-Fi settings”
+  - name: Application timing
+    family: lifecycle
+    question: When do changes take effect?
+    subdimensions:
+      - id: timing
+        name: Timing
+        select: one
+        values:
+          - id: instant
+            name: Instant
+            example: Most mobile toggles
+          - id: save-button
+            name: Save button
+            example: Many admin consoles
+          - id: restart-required
+            name: Restart required
+            example: Developer feature flags
+          - id: per-profile-switch
+            name: Per-profile switch
+            example: Chrome profiles
+          - id: scheduled
+            name: Scheduled
+            example: Focus / Do Not Disturb schedules
+  - name: Scope and sync
+    family: scope
+    question: Where does a setting apply?
+    subdimensions:
+      - id: scope
+        name: Scope
+        select: one
+        values:
+          - id: device-local
+            name: Device-local
+            example: On-device only prefs
+          - id: account-synced
+            name: Account-synced
+            example: iCloud settings
+          - id: workspace-or-org
+            name: Workspace or org
+            example: Slack workspace settings
+          - id: override-layers
+            name: Override layers
+            description: User overrides team default
+            example: VS Code settings cascade
+          - id: guest-without-save
+            name: Guest without save
+            example: Incognito-like sessions
+          - id: paired-device
+            name: Paired device
+            description: Settings are configured on one device (e.g. a phone) but take effect on a different,
+              paired device (e.g. a watch), rather than on the configuring device, the account
+              everywhere, or a workspace
+            example: Apple Watch app — Watch settings
+  - name: Safety and reversibility
+    family: feedback
+    question: How are risky changes handled?
+    subdimensions:
+      - id: safety
+        name: Safety
+        select: many
+        values:
+          - id: no-confirm
+            name: No confirm
+            example: Theme toggle
+          - id: confirm-destructive
+            name: Confirm destructive
+            example: Delete account
+          - id: show-side-effects
+            name: Show side effects
+            example: Permission explanations
+          - id: reset-to-default
+            name: Reset to default
+            example: Reset all settings
+          - id: change-history
+            name: Change history
+            example: Google Account activity
+wild:
+  score: 2
+  note: Search is common on desktop OS and IDEs; mobile settings are still mostly browse-only.
+  examples:
+    - name: Apple Settings
+      note: Search and drill-down
+    - name: VS Code
+      note: Settings UI plus JSON
+    - name: Android
+      note: Settings search
+techniques:
+  - name: Settings as a collection
+    dimension: Information architecture
+    how: Every setting is an item in a searchable overview with facets (recently changed, risky, synced)
+      rather than only a fixed tree.
+    ai: false
+  - name: Why is this on?
+    dimension: Discovery
+    how: From any behaviour, jump to the governing settings with a short explanation of the current
+      values.
+    ai: false
+  - name: Set it up for me
+    dimension: Control types
+    how: Describe a desired behaviour; the system proposes a diff of settings with each change
+      inspectable before apply.
+    ai: true
+signature: Settings as a collection
+sample: iOS/macOS Settings, Android Settings, VS Code, Slack, GitHub and major SaaS admin.
+unit: One settings surface for one product or OS.
+relations:
+  uses:
+    - choice-control
+    - text-field
+    - slider
+    - command-palette
+    - tabs
+  specializes:
+    - configure
+  neighbors:
+    - form
+    - wizard
+scores:
+  ubiquity: 5
+  potential: 4
+  spec: 4
+evidence: agent-coded
+usage:
+  - Most people change a handful of settings and never return
+  - Power users live in search and JSON
+questions:
+  - Should every in-product toggle also appear in the settings index?
+  - How do personal and admin layers resolve conflicts visibly?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.722825080760629
+  agreementFirstPass: 0.7921052631578948
+  kappaFinal: 0.9437599922885133
+  agreementFinal: 0.9578947368421052
+  pass: true
+  perSub:
+    ia:
+      kappaFirstPass: 0.818496110630942
+      agreementFirstPass: 0.85
+      kappaFinal: 0.947598253275109
+      agreementFinal: 0.95
+      flag: null
+    controls:
+      kappaFirstPass: 0.7480835904449884
+      agreementFirstPass: 0.8166666666666667
+      kappaFinal: 0.964548319327731
+      agreementFinal: 0.975
+      flag: null
+    discovery:
+      kappaFirstPass: 0.5791855203619906
+      agreementFirstPass: 0.69
+      kappaFinal: 0.9065628476084534
+      agreementFinal: 0.93
+      flag: null
+    timing:
+      kappaFirstPass: 1
+      agreementFirstPass: 1
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    scope:
+      kappaFirstPass: 0.7983193277310926
+      agreementFirstPass: 0.8
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    safety:
+      kappaFirstPass: 0.7464863903220065
+      agreementFirstPass: 0.81
+      kappaFinal: 0.932747489239598
+      agreementFinal: 0.95
+      flag: null
+  distribution:
+    ia:
+      Single long page: 0
+      Sectioned page: 2
+      Drill-down hierarchy: 9
+      Tabbed categories: 8
+      Command-palette jump: 1
+    controls:
+      Boolean toggles: 20
+      Single and multi-select: 20
+      Numeric and ranges: 12
+      Text and credentials: 17
+      Complex nested objects: 1
+      Permissions prompts: 5
+    discovery:
+      Browse hierarchy: 20
+      Search by label: 11
+      Deep link from feature: 13
+      Suggested settings: 4
+      Natural-language find: 4
+    timing:
+      Instant: 16
+      Save button: 4
+      Restart required: 0
+      Per-profile switch: 0
+      Scheduled: 0
+    scope:
+      Device-local: 7
+      Account-synced: 8
+      Workspace or org: 3
+      Override layers: 1
+      Guest without save: 0
+      Paired device: 1
+    safety:
+      No confirm: 20
+      Confirm destructive: 15
+      Show side effects: 11
+      Reset to default: 7
+      Change history: 2
+  exemplars:
+    ia:
+      Single long page: []
+      Sectioned page:
+        - GitHub — Account settings
+        - Google Chrome — Settings
+      Drill-down hierarchy:
+        - iOS — Settings app
+        - macOS — System Settings
+        - Android — Settings
+      Tabbed categories:
+        - Slack — Preferences
+        - Notion — Settings & members
+        - Zoom — Desktop client settings
+      Command-palette jump:
+        - VS Code — Settings editor
+    controls:
+      Boolean toggles:
+        - iOS — Settings app
+        - macOS — System Settings
+        - Android — Settings
+      Single and multi-select:
+        - iOS — Settings app
+        - macOS — System Settings
+        - Android — Settings
+      Numeric and ranges:
+        - iOS — Settings app
+        - macOS — System Settings
+        - Android — Settings
+      Text and credentials:
+        - iOS — Settings app
+        - macOS — System Settings
+        - Android — Settings
+      Complex nested objects:
+        - VS Code — Settings editor
+      Permissions prompts:
+        - iOS — Settings app
+        - macOS — System Settings
+        - Android — Settings
+    discovery:
+      Browse hierarchy:
+        - iOS — Settings app
+        - macOS — System Settings
+        - Android — Settings
+      Search by label:
+        - iOS — Settings app
+        - macOS — System Settings
+        - Android — Settings
+      Deep link from feature:
+        - iOS — Settings app
+        - macOS — System Settings
+        - Android — Settings
+      Suggested settings:
+        - iOS — Settings app
+        - Android — Settings
+        - Windows 11 — Settings
+      Natural-language find:
+        - iOS — Settings app
+        - macOS — System Settings
+        - Android — Settings
+    timing:
+      Instant:
+        - iOS — Settings app
+        - macOS — System Settings
+        - Android — Settings
+      Save button:
+        - GitHub — Account settings
+        - Microsoft 365 admin center — Org settings
+        - Slack — Workspace settings & permissions
+      Restart required: []
+      Per-profile switch: []
+      Scheduled: []
+    scope:
+      Device-local:
+        - iOS — Settings app
+        - macOS — System Settings
+        - Android — Settings
+      Account-synced:
+        - Slack — Preferences
+        - GitHub — Account settings
+        - Google Account — Account settings
+      Workspace or org:
+        - Notion — Settings & members
+        - Microsoft 365 admin center — Org settings
+        - Slack — Workspace settings & permissions
+      Override layers:
+        - VS Code — Settings editor
+      Guest without save: []
+      Paired device:
+        - Apple Watch app — Watch settings
+    safety:
+      No confirm:
+        - iOS — Settings app
+        - macOS — System Settings
+        - Android — Settings
+      Confirm destructive:
+        - iOS — Settings app
+        - macOS — System Settings
+        - Android — Settings
+      Show side effects:
+        - iOS — Settings app
+        - macOS — System Settings
+        - Android — Settings
+      Reset to default:
+        - iOS — Settings app
+        - macOS — System Settings
+        - Android — Settings
+      Change history:
+        - GitHub — Account settings
+        - Google Account — Account settings
+  unobserved:
+    - sub: ia
+      var: Single long page
+    - sub: timing
+      var: Restart required
+    - sub: timing
+      var: Per-profile switch
+    - sub: timing
+      var: Scheduled
+    - sub: scope
+      var: Guest without save
+  unresolved: []
+  proposals:
+    raised: 1
+    adopted:
+      - sub: scope
+        name: Paired device
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - Timing as pick-one hides that OS settings are mostly instant with a few restart-required
+        items; I coded the dominant behaviour. Drill-down vs Tabbed categories is a judgement for
+        sidebar-plus-pane layouts (macOS, Windows coded Drill-down for their nested panes).
+      - "ia's Command-palette jump is a discovery route filed as an information architecture;
+        sidebar-and-pane layouts split Tabbed categories, Sectioned page and Drill-down hierarchy
+        with no rule for depth. safety's No confirm reads two ways: absence of a confirmation dialog
+        (then almost every surface has it) or instant apply (then Save-button surfaces do not).
+        scope lacks a value for a setting that lands on a paired device."
+    opus:
+      - "timing is the sub that most needed a value it does not have: four instances are 'mostly
+        instant, a few requiring a restart or sign-out', and pick-one forces the dominant case, so
+        Restart required will probably never be coded by anyone even though the behaviour is common.
+        ia's Sectioned page and Drill-down hierarchy are hard to separate for web settings with a
+        left menu of pages — I followed the codebook's GitHub exemplar for Sectioned page and
+        drilled elsewhere, which is my likeliest disagreement. discovery is close to unobservable in
+        one respect: whether a product has a settings search is a detail that has changed recently
+        for several of these (Discord, Steam, Instagram all added one), so it is a moving target.
+        safety's No confirm co-occurs with everything, since it describes most rows in every
+        surface; it would be more useful as 'nothing here is guarded'. The sample has no instance of
+        Guest without save or Per-profile switch."
+      - "Most of this entry's disagreement is a pick-any depth difference rather than a conflict: on
+        `controls`, `discovery` and `safety` the three of us named the same things and one rater
+        simply stopped at what the sample note stated. The one real codebook gap is in `safety`:
+        there is no value for 'a Save button commits it, but nothing warns you', so raters split
+        over whether to call that No confirm at all."
+    sonnet:
+      - "ia is coded using a three-way distinction inferred from the codebook's own examples:
+        Sectioned page for single-level web settings reached by separate page navigations (GitHub,
+        Chrome, X); Tabbed categories for a persistent dialog or full-screen overlay whose content
+        swaps in place without navigating away (Slack, Notion, Zoom, Discord, Steam, MS365, Gmail);
+        Drill-down hierarchy reserved for genuinely multi-level navigation (OS settings apps, and
+        mobile apps whose sections push their own sub-screens)."
+      - Three codebook problems recurred. (1) `ia`'s Sectioned page and Drill-down hierarchy don't
+        distinguish a persistent sidebar that swaps an inline pane (GitHub, X/Twitter web settings)
+        from true push-navigation between screens — the same ambiguity as the configure archetype's
+        organization sub, and worth a shared fix. (2) `scope` has no value for a settings surface
+        hosted on one device that configures a different, paired device (Apple Watch via the iPhone
+        app) — Device-local is glossed as on-device prefs, and this is neither that nor
+        account-wide; I hold +Paired device unresolved since no other rater independently proposed
+        it. (3) `safety`'s No confirm is ambiguous for admin surfaces that gate every change behind
+        an explicit Save button but never ask 'are you sure' — that is neither instant/no-confirm
+        nor a destructive confirmation, and both readings (opus's inclusion, fable's/my exclusion)
+        are defensible from the gloss as written.
+  codedAt: 2026-09-22
+previews:
+  - file: settings.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

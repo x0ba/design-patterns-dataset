@@ -1,0 +1,386 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "analyze". Edit between batches only — see README "Rules".
+id: analyze
+name: Analyze and visualize
+level: archetype
+aliases:
+  - visual analytics
+  - data visualization
+  - exploratory analysis
+definition: "Find structure in data through representations of it: encode values as marks, link
+  views, and interrogate what the encoding shows."
+data: collection
+platforms:
+  - web
+  - desktop
+  - mobile
+domains:
+  - science
+  - finance
+  - enterprise
+  - health
+  - education
+  - news
+anatomy:
+  - name: Data
+    role: The values being examined
+  - name: Encoding
+    role: How values become marks
+  - name: Views
+    role: One or more coordinated representations
+  - name: Interrogation
+    role: Selection, filter, brush and query
+roles: []
+dimensions:
+  - name: Encoding choice
+    family: encoding
+    question: How do values become visuals?
+    subdimensions:
+      - id: encoding
+        name: Mark and channel
+        select: many
+        values:
+          - id: position
+            name: Position
+            example: Scatterplots in Tableau
+          - id: length-or-size
+            name: Length or size
+            example: Bar charts
+          - id: colour
+            name: Colour
+            example: Heatmaps
+          - id: shape
+            name: Shape
+            example: Categorical scatters
+          - id: connection
+            name: Connection
+            example: Node–link diagrams
+          - id: text-and-number
+            name: Text and number
+            example: Tables and cards
+  - name: View linkage
+    family: composition
+    question: How do multiple representations of the same data relate?
+    subdimensions:
+      - id: linkage
+        name: Linkage
+        select: one
+        values:
+          - id: single-view
+            name: Single view
+            example: A lone chart
+          - id: coordinated-multiple-views
+            name: Coordinated multiple views
+            description: Brushing and linking
+            example: Tableau dashboards
+          - id: overview-plus-focus-in-one-field
+            name: Overview plus focus in one field
+            description: Context stays visible
+            example: Fisheye and focus+context maps
+          - id: sequential-drill
+            name: Sequential drill
+            description: Replace one view with another
+            example: Pivot drill-down
+  - name: Interrogation
+    family: invocation
+    question: How does a person ask questions of the encoding?
+    subdimensions:
+      - id: interrogation
+        name: Interrogation
+        select: many
+        values:
+          - id: select-and-highlight
+            name: Select and highlight
+            example: Click a mark
+          - id: brush-a-region
+            name: Brush a region
+            example: Scatterplot brushing
+          - id: filter-and-parameter
+            name: Filter and parameter
+            example: Tableau filters
+          - id: natural-language-ask
+            name: Natural-language ask
+            example: Tableau Ask Data
+          - id: compute-a-derived-field
+            name: Compute a derived field
+            example: Calculated fields
+          - id: write-a-query
+            name: Write a query
+            description: The question is posed by writing or editing text — SQL, PromQL, KQL, a pandas
+              expression — and re-running it, rather than by acting on marks or controls; the
+              primary interrogation in notebooks and in every observability explorer
+            example: Jupyter — pandas and matplotlib notebook
+  - name: Analytical initiative
+    family: initiative
+    question: Who drives the next analytical move?
+    subdimensions:
+      - id: initiative
+        name: Initiative
+        select: one
+        values:
+          - id: person-builds-the-view
+            name: Person builds the view
+            example: Tableau Desktop
+          - id: recommended-encodings
+            name: Recommended encodings
+            example: Tableau Show Me
+          - id: automated-insights
+            name: Automated insights
+            example: Power BI smart narratives
+          - id: conversational-analysis
+            name: Conversational analysis
+            example: ChatGPT Advanced Data Analysis
+          - id: fixed-authored-view
+            name: Fixed authored view
+            description: "Neither the person nor the system chooses the encoding during analysis: a designer or
+              journalist fixed it beforehand and the reader only selects, filters within it and
+              reads values — news graphics and every consumer analytics screen"
+            example: The New York Times — Election results map
+wild:
+  score: 2
+  note: Analysts customize encodings, filters and dashboards heavily; end users of published views
+    rarely can.
+  examples:
+    - name: Tableau
+      note: Show Me, calculated fields, dashboard actions
+    - name: Observable
+      note: Editable cells and forks
+    - name: Power BI
+      note: Personalize visuals on published reports
+techniques:
+  - name: Encoding as editable mapping
+    dimension: Encoding choice
+    how: Expose mark type and visual channels as first-class choices a person can rebind without
+      rebuilding the chart.
+    ai: false
+  - name: Suggest the next view
+    dimension: Analytical initiative
+    how: Given the current selection and schema, propose encodings or linked views with a rationale the
+      person can accept or edit.
+    ai: true
+signature: Encoding as editable mapping
+sample: BI tools, scientific notebooks, news graphics and embedded analytics in enterprise apps.
+unit: One analytical surface over one dataset or model.
+relations:
+  uses:
+    - chart
+    - filter-controls
+    - stat-tile
+    - date-picker
+  specializes: []
+  neighbors:
+    - browse-collections
+    - monitor
+    - create
+scores:
+  ubiquity: 4
+  potential: 5
+  spec: 4
+evidence: agent-coded
+usage:
+  - Analysts iterate encodings far more than they change the underlying query
+questions:
+  - When should a system recommend an encoding versus leave the mapping fully manual?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.542820321792591
+  agreementFirstPass: 0.6846153846153846
+  kappaFinal: 0.9250740515094918
+  agreementFinal: 0.95
+  pass: true
+  perSub:
+    encoding:
+      kappaFirstPass: 0.4623655913978495
+      agreementFirstPass: 0.62
+      kappaFinal: 0.8977272727272724
+      agreementFinal: 0.94
+      flag: null
+    linkage:
+      kappaFirstPass: 0.8130841121495327
+      agreementFirstPass: 0.85
+      kappaFinal: 0.9382080329557155
+      agreementFinal: 0.95
+      flag: null
+    interrogation:
+      kappaFirstPass: 0.5771670190274837
+      agreementFirstPass: 0.7083333333333334
+      kappaFinal: 0.9440559440559441
+      agreementFinal: 0.9583333333333334
+      flag: null
+    initiative:
+      kappaFirstPass: 0.4687499999999999
+      agreementFirstPass: 0.7
+      kappaFinal: 0.934782608695652
+      agreementFinal: 0.95
+      flag: null
+  distribution:
+    encoding:
+      Position: 20
+      Length or size: 16
+      Colour: 19
+      Shape: 1
+      Connection: 0
+      Text and number: 18
+    linkage:
+      Single view: 11
+      Coordinated multiple views: 8
+      Overview plus focus in one field: 0
+      Sequential drill: 1
+    interrogation:
+      Select and highlight: 15
+      Brush a region: 7
+      Filter and parameter: 15
+      Natural-language ask: 3
+      Compute a derived field: 12
+      Write a query: 4
+    initiative:
+      Person builds the view: 13
+      Recommended encodings: 1
+      Automated insights: 0
+      Conversational analysis: 1
+      Fixed authored view: 5
+  exemplars:
+    encoding:
+      Position:
+        - Tableau Desktop — Worksheet
+        - Power BI Desktop — Report
+        - Looker Studio — Report
+      Length or size:
+        - Tableau Desktop — Worksheet
+        - Power BI Desktop — Report
+        - Looker Studio — Report
+      Colour:
+        - Tableau Desktop — Worksheet
+        - Power BI Desktop — Report
+        - Looker Studio — Report
+      Shape:
+        - Tableau Desktop — Worksheet
+      Connection: []
+      Text and number:
+        - Tableau Desktop — Worksheet
+        - Power BI Desktop — Report
+        - Looker Studio — Report
+    linkage:
+      Single view:
+        - Tableau Desktop — Worksheet
+        - Google Sheets — Explore panel
+        - Jupyter — pandas and matplotlib notebook
+      Coordinated multiple views:
+        - Power BI Desktop — Report
+        - Looker Studio — Report
+        - Microsoft Excel — PivotTable with chart
+      Overview plus focus in one field: []
+      Sequential drill:
+        - Our World in Data — Chart explorer
+    interrogation:
+      Select and highlight:
+        - Tableau Desktop — Worksheet
+        - Power BI Desktop — Report
+        - Looker Studio — Report
+      Brush a region:
+        - Tableau Desktop — Worksheet
+        - Observable — Notebook
+        - Datadog — Metrics Explorer
+      Filter and parameter:
+        - Tableau Desktop — Worksheet
+        - Power BI Desktop — Report
+        - Looker Studio — Report
+      Natural-language ask:
+        - Power BI Desktop — Report
+        - Google Sheets — Explore panel
+        - ChatGPT — Advanced Data Analysis
+      Compute a derived field:
+        - Tableau Desktop — Worksheet
+        - Power BI Desktop — Report
+        - Looker Studio — Report
+      Write a query:
+        - Jupyter — pandas and matplotlib notebook
+        - Observable — Notebook
+        - Grafana — Explore
+    initiative:
+      Person builds the view:
+        - Tableau Desktop — Worksheet
+        - Power BI Desktop — Report
+        - Looker Studio — Report
+      Recommended encodings:
+        - Google Sheets — Explore panel
+      Automated insights: []
+      Conversational analysis:
+        - ChatGPT — Advanced Data Analysis
+      Fixed authored view:
+        - The New York Times — Election results map
+        - Our World in Data — Chart explorer
+        - Apple Health — Heart Rate detail
+  unobserved:
+    - sub: encoding
+      var: Connection
+    - sub: linkage
+      var: Overview plus focus in one field
+    - sub: initiative
+      var: Automated insights
+  unresolved: []
+  proposals:
+    raised: 2
+    adopted:
+      - sub: interrogation
+        name: Write a query
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: initiative
+        name: Fixed authored view
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - Initiative has no value for fixed editorial/consumer views where the reader only
+        interrogates (coded n/a); Linkage's Sequential drill was used for tabs and click-through
+        pages that replace the view.
+      - "initiative has no value for authored editorial and consumer views (adopted +Fixed authored
+        view) and interrogation has none for typed code or query text (adopted +Write a query).
+        linkage has no value for tabs that swap encodings over one series, so Sequential drill is
+        stretched to cover them, and a news page that both links its views and drills on click needs
+        pick any. encoding's Text and number is read three ways across raters: tables, headline
+        number cards, and hover readouts; the gloss should say the first two and exclude the third.
+        Recommended encodings and Automated insights differ on whether the person chose the fields
+        first, and the gloss does not say so."
+    opus:
+      - "Analytical initiative assumes the person analysing is also the person building, which is
+        false for a quarter of the sample (see +Fixed authored view), and interrogation assumes
+        direct manipulation of marks, which misses query editing (+Write a query). Linkage was the
+        judgement call: I read Coordinated multiple views as requiring a real shared selection or
+        time range, so tabbed alternatives (GA4, Our World in Data) stay Single view."
+      - "Two codebook faults drove most of this packet. Coordinated multiple views is named for any
+        shared state but glossed only as 'Brushing and linking', while Sequential drill is glossed
+        as 'replace one view with another' and named for drilling — so a tabbed explorer and a
+        parameter-linked graphic land wherever a rater weights name over gloss. And Text and number
+        was read by three raters as three different things: I now take it as a persistent table,
+        card or crosstab, never a legend or hover readout of another encoding."
+    sonnet:
+      - Initiative had no honest fit for fixed, non-configurable personal-analytics screens (Apple
+        Health, Strava, Robinhood, the NYT graphic) — the reader interrogates but never builds,
+        recommends, automates or converses; coded '?' rather than force one of the four.
+      - The initiative sub has no honest fit for fixed editorial/consumer analytics screens where
+        the reader never builds, is recommended nothing, gets no automated insight and can't
+        converse -- proposing +Fixed authored view; interrogation likewise has no value for asking a
+        question by writing/editing free code or a query language rather than working a filter or
+        parameter control -- proposing +Write a query.
+  codedAt: 2026-09-22
+previews:
+  - file: analyze.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

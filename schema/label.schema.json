@@ -1,0 +1,193 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://design-patterns-dataset/schema/label.schema.json",
+  "title": "Site label",
+  "description": "One rater's coding of one captured site: dataset/<batch>/sites/<slug>/labels/<rater>.json. Fields marked (harness) are filled by the pipeline, not the model. Codebook cross-checks (pattern ids, dims values) are done in code: src/pipeline/label.ts.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "codebookVersion", "batch", "site", "regions", "patterns", "structure", "aesthetics", "model", "notes"],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "codebookVersion": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$", "description": "(harness) version of dist/codebook.json used." },
+    "batch": { "type": "string", "description": "(harness)" },
+    "site": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["slug", "url", "finalUrl", "status", "title", "capturedAt", "viewport", "screenshot", "userAgent", "domain"],
+      "properties": {
+        "slug": { "type": "string", "description": "(harness)" },
+        "url": { "type": "string", "description": "(harness)" },
+        "finalUrl": { "type": "string", "description": "(harness)" },
+        "status": { "type": ["integer", "null"], "description": "(harness) HTTP status of the main document." },
+        "title": { "type": "string", "description": "(harness)" },
+        "capturedAt": { "type": "string", "format": "date-time", "description": "(harness)" },
+        "viewport": { "$ref": "#/$defs/size", "description": "(harness)" },
+        "screenshot": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["ref", "width", "height"],
+          "description": "(harness) Bounding boxes everywhere in this file are in these pixels.",
+          "properties": {
+            "ref": { "type": "string" },
+            "width": { "type": "integer" },
+            "height": { "type": "integer" },
+            "truncated": { "type": "boolean" }
+          }
+        },
+        "userAgent": { "type": "string", "description": "(harness)" },
+        "domain": { "$ref": "#/$defs/domain" },
+        "domainNote": { "type": "string", "description": "Optional refinement of the domain, e.g. 'personal finance / budgeting'." }
+      }
+    },
+    "regions": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Major page areas, top to bottom (header, hero, templates section, stats strip, footer, ...).",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "role", "label", "bbox", "patterns"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "description": "Unique within this label, e.g. 'header', 'pricing-table'." },
+          "role": { "type": "string", "description": "Short role name, e.g. header, hero, feature-grid, stats-strip, footer, sidebar." },
+          "label": { "type": "string", "description": "One-line description of what is in it." },
+          "bbox": { "$ref": "#/$defs/bbox" },
+          "patterns": { "type": "array", "items": { "type": "string" }, "description": "Codebook ids that appear inside this region. Every id must also be in `patterns` with status present or uncertain." }
+        }
+      }
+    },
+    "patterns": {
+      "type": "array",
+      "description": "One entry per codebook pattern considered: every one that appears, plus any plausible one that was checked and rejected (status absent).",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "status", "confidence", "evidence", "dims"],
+        "properties": {
+          "id": { "type": "string", "description": "Exact codebook id." },
+          "status": { "enum": ["present", "uncertain", "absent"] },
+          "confidence": { "type": "number", "minimum": 0, "maximum": 1, "description": "Confidence in the status." },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "minProperties": 1,
+              "properties": {
+                "bbox": { "$ref": "#/$defs/bbox" },
+                "region": { "type": "string", "description": "Region id this instance sits in." },
+                "quote": { "type": "string", "description": "Verbatim text from the page." },
+                "note": { "type": "string", "description": "What in this box supports the match." }
+              }
+            }
+          },
+          "rationale": { "type": "string", "description": "Required when confidence < 0.6: what could not be verified." },
+          "dims": {
+            "type": "object",
+            "description": "Sub-dimension id -> observed value id (single-select) or value ids (multi-select). Only codebook values; record unlisted variations in `novel`.",
+            "additionalProperties": {
+              "anyOf": [
+                { "type": "string" },
+                { "type": "array", "items": { "type": "string" }, "minItems": 1 }
+              ]
+            }
+          },
+          "novel": {
+            "type": "array",
+            "description": "Observed variations the codebook has no value for. Each should also be filed with propose_codebook_change.",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["subdimension", "description"],
+              "properties": {
+                "subdimension": { "type": "string" },
+                "description": { "type": "string" },
+                "proposedValueId": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "structure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["layout", "regions", "density"],
+      "properties": {
+        "layout": { "type": "string", "description": "e.g. 'single-column marketing landing page with top nav and stacked sections'." },
+        "regions": { "type": "array", "items": { "type": "string" }, "description": "(harness) Ordered region ids, derived from `regions`." },
+        "density": { "enum": ["sparse", "medium", "dense"] }
+      }
+    },
+    "aesthetics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["palette", "colorRoles", "typography", "typeScale", "shape", "elevation", "borders", "imagery", "iconStyle", "whitespace", "backgroundTreatment", "mood"],
+      "properties": {
+        "palette": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/hex" } },
+        "colorRoles": {
+          "type": "object",
+          "required": ["background", "text"],
+          "description": "Role -> hex: background, text, primary, accent, surface, muted, border, ...",
+          "additionalProperties": { "$ref": "#/$defs/hex" }
+        },
+        "typography": { "type": "string", "description": "Typefaces and where each is used." },
+        "typeScale": { "type": "string", "description": "Size/weight contrast and hierarchy." },
+        "shape": { "enum": ["soft", "sharp", "mixed"], "description": "Corner treatment: soft (rounded), sharp (square), mixed." },
+        "elevation": { "enum": ["flat", "subtle-shadows", "elevated"] },
+        "borders": { "enum": ["none", "thin", "heavy"], "description": "none, thin/minimal outlines, or heavy." },
+        "imagery": {
+          "type": "array",
+          "items": { "enum": ["product-screenshots", "illustration", "photography", "abstract-gradients", "3d-renders", "iconography", "data-visualization", "video", "user-generated", "none"] }
+        },
+        "iconStyle": { "enum": ["line", "filled", "duotone", "mixed", "none"] },
+        "whitespace": { "enum": ["tight", "moderate", "generous"] },
+        "backgroundTreatment": { "enum": ["solid", "gradient", "texture", "image"], "description": "solid, soft gradients, subtle texture, or image." },
+        "mood": { "type": "array", "minItems": 1, "items": { "type": "string" }, "description": "Short tags: clean, calm, friendly, airy, playful, technical, luxurious, ..." }
+      }
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rater", "provider", "name", "generatedAt"],
+      "description": "(harness)",
+      "properties": {
+        "rater": { "type": "string" },
+        "provider": { "type": "string" },
+        "name": { "type": "string" },
+        "version": { "type": "string" },
+        "effort": { "type": "string" },
+        "servedBy": { "type": "array", "items": { "type": "string" }, "description": "Models that actually answered (differs from name only if a refusal fallback ran)." },
+        "generatedAt": { "type": "string", "format": "date-time" },
+        "turns": { "type": "integer" },
+        "usage": { "type": "object" }
+      }
+    },
+    "notes": { "type": "string", "description": "Free-form observations not captured by the fields above." }
+  },
+  "$defs": {
+    "hex": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+    "size": {
+      "type": "object", "additionalProperties": false, "required": ["width", "height"],
+      "properties": { "width": { "type": "integer" }, "height": { "type": "integer" } }
+    },
+    "bbox": {
+      "type": "object", "additionalProperties": false, "required": ["x", "y", "width", "height"],
+      "description": "Screenshot pixels, origin top-left of the full-page screenshot.",
+      "properties": {
+        "x": { "type": "number", "minimum": 0 },
+        "y": { "type": "number", "minimum": 0 },
+        "width": { "type": "number", "exclusiveMinimum": 0 },
+        "height": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "domain": {
+      "enum": [
+        "productivity", "developer-tools", "ai-tools", "finance", "commerce", "media-entertainment",
+        "news-publishing", "social-community", "education", "health", "travel-hospitality",
+        "government-civic", "data-visualization", "games", "design-creative", "marketing-landing",
+        "portfolio-agency", "reference-docs", "utilities", "science-research", "nonprofit", "other"
+      ]
+    }
+  }
+}

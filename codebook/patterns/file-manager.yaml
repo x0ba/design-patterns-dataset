@@ -1,0 +1,526 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "file-manager". Edit between batches only — see README "Rules".
+id: file-manager
+name: File manager
+level: pattern
+parent: browse-collections
+aliases:
+  - file browser
+  - Finder
+  - Explorer
+  - drive
+definition: Browse, organize, preview and act on files and folders arranged in a hierarchy of locations.
+data: hierarchy
+platforms:
+  - desktop
+  - web
+  - mobile
+domains:
+  - productivity
+  - enterprise
+  - software
+anatomy:
+  - name: Locations
+    role: Sidebar of places and favourites
+  - name: Path
+    role: Where you are
+  - name: Item area
+    role: Files and folders here
+  - name: Preview
+    role: A look at the selected file
+  - name: Toolbar
+    role: View and file operations
+roles:
+  - name
+  - kind
+  - size
+  - modified
+  - owner
+  - thumbnail
+  - tags
+dimensions:
+  - name: Item view
+    family: layout
+    question: How are files shown, and where does a preview appear?
+    subdimensions:
+      - id: view
+        name: Item view
+        select: one
+        values:
+          - id: icons
+            name: Icons
+            example: Finder icon view
+          - id: list
+            name: List
+            example: Finder list view
+          - id: columns
+            name: Columns
+            description: Miller columns, one per level
+            example: Finder column view
+          - id: gallery
+            name: Gallery
+            description: Large preview with a filmstrip
+            example: Finder gallery view
+          - id: details-table
+            name: Details table
+            example: Windows Explorer details
+      - id: preview
+        name: Preview placement
+        select: one
+        values:
+          - id: none
+            name: None
+            example: Terminal file lists
+          - id: preview-pane
+            name: Preview pane
+            description: Beside the item area
+            example: Windows Explorer preview pane
+          - id: overlay-preview
+            name: Overlay preview
+            description: A transient full preview
+            example: macOS Quick Look
+          - id: viewer-page
+            name: Viewer page
+            description: Opens a viewer over the drive
+            example: Google Drive preview
+  - name: Navigation structure
+    family: composition
+    question: How are locations traversed, and how many are open at once?
+    subdimensions:
+      - id: traversal
+        name: Traversal
+        select: one
+        values:
+          - id: tree-plus-content
+            name: Tree plus content
+            example: Windows Explorer
+          - id: miller-columns
+            name: Miller columns
+            example: Finder column view
+          - id: drill-down-with-breadcrumbs
+            name: Drill-down with breadcrumbs
+            example: Google Drive
+          - id: search-first
+            name: Search first
+            description: Recents and search over folders
+            example: Dropbox home
+      - id: multi
+        name: Multiple locations
+        select: one
+        values:
+          - id: single-window
+            name: Single window
+            example: Mobile file apps
+          - id: tabs
+            name: Tabs
+            example: Finder tabs, Windows 11 Explorer tabs
+          - id: dual-pane
+            name: Dual pane
+            description: Two locations side by side
+            example: Total Commander
+  - name: Metadata
+    family: content
+    question: What does each file show about itself?
+    subdimensions:
+      - id: metadata
+        name: Metadata shown
+        select: many
+        values:
+          - id: name
+            name: Name
+            example: All
+          - id: size-and-kind
+            name: Size and kind
+            example: Finder list view
+          - id: dates
+            name: Dates
+            example: Finder list view
+          - id: tags-and-colours
+            name: Tags and colours
+            example: Finder tags
+          - id: owner-and-sharing
+            name: Owner and sharing
+            example: Google Drive
+          - id: thumbnails
+            name: Thumbnails
+            example: Windows large icons
+          - id: last-change
+            name: Last change
+            description: The last commit or change message shown per file or folder
+            example: GitHub — Repository file tree
+  - name: Grouping
+    family: scope
+    question: Are files grouped, and can a folder be a query?
+    subdimensions:
+      - id: grouping
+        name: Grouping
+        select: one
+        values:
+          - id: none
+            name: None
+            example: Default views
+          - id: by-kind
+            name: By kind
+            example: Finder Use Groups
+          - id: by-date
+            name: By date
+            example: Finder Use Groups
+          - id: saved-searches-as-folders
+            name: Saved searches as folders
+            example: macOS Smart Folders
+  - name: Shared ownership
+    family: collaboration
+    question: How are other people’s files and activity shown?
+    subdimensions:
+      - id: ownership
+        name: Ownership surfaces
+        select: many
+        values:
+          - id: local-only
+            name: Local only
+            example: Finder on a local disk
+          - id: shared-with-me-area
+            name: Shared-with-me area
+            example: Google Drive
+          - id: activity-panel
+            name: Activity panel
+            description: Who changed what
+            example: Google Drive activity
+wild:
+  score: 3
+  note: Desktop file managers have long let people choose views, columns, icon sizes, sorting and
+    grouping per folder.
+  examples:
+    - name: Finder
+      note: View options per folder, including columns shown and groups
+    - name: Windows Explorer
+      note: Layout, details columns and grouping
+    - name: macOS
+      note: Smart Folders as saved queries
+techniques:
+  - name: Per-folder lenses
+    dimension: Item view
+    how: A folder carries its own view spec that can be copied to other folders or promoted to a
+      default.
+    ai: false
+  - name: Surface from Get Info
+    dimension: Metadata
+    how: Surface any property from a file’s info panel as a column or thumbnail badge across the folder.
+    ai: false
+  - name: Organize by description
+    dimension: Grouping
+    how: “Group these by project” proposes generated tags you can accept per file.
+    ai: true
+signature: Per-folder lenses
+sample: Operating-system file managers, cloud drives, and file pickers inside creative and office suites.
+unit: One location view within one file manager.
+relations:
+  uses:
+    - tree-view
+    - breadcrumbs
+    - split-pane
+    - tabs
+    - menu
+    - drag-reorder
+  specializes:
+    - overview-detail
+  neighbors:
+    - data-table
+scores:
+  ubiquity: 4
+  potential: 3
+  spec: 4
+evidence: agent-coded
+usage:
+  - Pilers keep flat folders and search; filers build deep trees
+questions:
+  - Should views follow the folder, the task, or the file type?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7969287509468003
+  agreementFirstPass: 0.8529411764705882
+  kappaFinal: 0.9368454616967176
+  agreementFinal: 0.95625
+  pass: true
+  perSub:
+    view:
+      kappaFirstPass: 0.8994974874371858
+      agreementFirstPass: 0.9
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    preview:
+      kappaFirstPass: 0.3872741555380992
+      agreementFirstPass: 0.35
+      kappaFinal: 0.9518845228548518
+      agreementFinal: 0.95
+      flag: null
+    traversal:
+      kappaFirstPass: 0.6685082872928176
+      agreementFirstPass: 0.75
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    multi:
+      kappaFirstPass: 1
+      agreementFirstPass: 1
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    metadata:
+      kappaFirstPass: 0.8220307561927291
+      agreementFirstPass: 0.86875
+      kappaFinal: 0.914237095859331
+      agreementFinal: 0.9357142857142857
+      flag: null
+    grouping:
+      kappaFirstPass: 0.4230769230769226
+      agreementFirstPass: 0.8
+      kappaFinal: 0.8800000000000003
+      agreementFinal: 0.95
+      flag: null
+    ownership:
+      kappaFirstPass: 0.8982964658021865
+      agreementFirstPass: 0.9375
+      kappaFinal: 0.9394957983193277
+      agreementFinal: 0.9625
+      flag: null
+  distribution:
+    view:
+      Icons: 6
+      List: 9
+      Columns: 1
+      Gallery: 1
+      Details table: 3
+    preview:
+      None: 6
+      Preview pane: 4
+      Overlay preview: 2
+      Viewer page: 8
+    traversal:
+      Tree plus content: 5
+      Miller columns: 1
+      Drill-down with breadcrumbs: 14
+      Search first: 0
+    multi:
+      Single window: 15
+      Tabs: 4
+      Dual pane: 1
+    metadata:
+      Name: 20
+      Size and kind: 12
+      Dates: 18
+      Tags and colours: 5
+      Owner and sharing: 7
+      Thumbnails: 9
+      Last change: 1
+    grouping:
+      None: 17
+      By kind: 3
+      By date: 0
+      Saved searches as folders: 0
+    ownership:
+      Local only: 11
+      Shared-with-me area: 7
+      Activity panel: 5
+  exemplars:
+    view:
+      Icons:
+        - Google Drive — My Drive in grid view
+        - Files app (iOS) — Browse › iCloud Drive
+        - Adobe Bridge — Folder content panel
+      List:
+        - Dropbox — All files
+        - OneDrive — My files
+        - Google Drive app — Files tab
+      Columns:
+        - macOS Finder — Documents in column view
+      Gallery:
+        - macOS Finder — Pictures folder in gallery view
+      Details table:
+        - Windows 11 File Explorer — Downloads in Details view
+        - Microsoft Word — Open › Browse dialog
+        - Total Commander — Main window
+    preview:
+      None:
+        - Microsoft Word — Open › Browse dialog
+        - VS Code — Explorer sidebar
+        - Total Commander — Main window
+      Preview pane:
+        - macOS Finder — Documents in column view
+        - macOS Finder — Pictures folder in gallery view
+        - Windows 11 File Explorer — Downloads in Details view
+      Overlay preview:
+        - Files app (iOS) — Browse › iCloud Drive
+        - macOS Open dialog (Photoshop) — Open file dialog
+      Viewer page:
+        - Google Drive — My Drive in grid view
+        - Dropbox — All files
+        - OneDrive — My files
+    traversal:
+      Tree plus content:
+        - Windows 11 File Explorer — Downloads in Details view
+        - Adobe Bridge — Folder content panel
+        - Microsoft Word — Open › Browse dialog
+      Miller columns:
+        - macOS Finder — Documents in column view
+      Drill-down with breadcrumbs:
+        - macOS Finder — Pictures folder in gallery view
+        - Google Drive — My Drive in grid view
+        - Dropbox — All files
+      Search first: []
+    multi:
+      Single window:
+        - Google Drive — My Drive in grid view
+        - Dropbox — All files
+        - OneDrive — My files
+      Tabs:
+        - macOS Finder — Documents in column view
+        - macOS Finder — Pictures folder in gallery view
+        - Windows 11 File Explorer — Downloads in Details view
+      Dual pane:
+        - Total Commander — Main window
+    metadata:
+      Name:
+        - macOS Finder — Documents in column view
+        - macOS Finder — Pictures folder in gallery view
+        - Windows 11 File Explorer — Downloads in Details view
+      Size and kind:
+        - macOS Finder — Pictures folder in gallery view
+        - Windows 11 File Explorer — Downloads in Details view
+        - OneDrive — My files
+      Dates:
+        - macOS Finder — Pictures folder in gallery view
+        - Windows 11 File Explorer — Downloads in Details view
+        - Google Drive — My Drive in grid view
+      Tags and colours:
+        - macOS Finder — Documents in column view
+        - macOS Finder — Pictures folder in gallery view
+        - Files app (iOS) — Browse › iCloud Drive
+      Owner and sharing:
+        - Google Drive — My Drive in grid view
+        - Dropbox — All files
+        - OneDrive — My files
+      Thumbnails:
+        - macOS Finder — Pictures folder in gallery view
+        - Google Drive — My Drive in grid view
+        - Files app (iOS) — Browse › iCloud Drive
+      Last change:
+        - GitHub — Repository file tree
+    grouping:
+      None:
+        - macOS Finder — Documents in column view
+        - macOS Finder — Pictures folder in gallery view
+        - Windows 11 File Explorer — Downloads in Details view
+      By kind:
+        - Google Drive — My Drive in grid view
+        - Google Drive app — Files tab
+        - Canva — Projects › Folders
+      By date: []
+      Saved searches as folders: []
+    ownership:
+      Local only:
+        - macOS Finder — Documents in column view
+        - macOS Finder — Pictures folder in gallery view
+        - Windows 11 File Explorer — Downloads in Details view
+      Shared-with-me area:
+        - Google Drive — My Drive in grid view
+        - Dropbox — All files
+        - OneDrive — My files
+      Activity panel:
+        - Google Drive — My Drive in grid view
+        - Dropbox — All files
+        - OneDrive — My files
+  unobserved:
+    - sub: traversal
+      var: Search first
+    - sub: grouping
+      var: By date
+    - sub: grouping
+      var: Saved searches as folders
+  unresolved: []
+  proposals:
+    raised: 2
+    adopted:
+      - sub: metadata
+        name: Last change
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded:
+      - place: sub:metadata
+        sub: metadata
+        dim: null
+        name: Change info
+        gloss: Per-item information about the most recent change — e.g. last commit message and author —
+          shown inline instead of a plain modified date
+        raters:
+          - sonnet
+        instances:
+          - 13
+        status: raised
+  raterNotes:
+    fable:
+      - Grouping as pick-one hides that most managers offer By kind and By date as options; I coded
+        the default state and noted the option. Mobile drill-down has no breadcrumbs strictly, coded
+        as the nearest traversal.
+      - metadata does not say whether values shown only in a preview pane for the selected file
+        count; the codebook's own examples are per-row columns, and I coded that way. preview and
+        grouping as pick one need a rule for a toggle that is off by default. A fixed folders-first
+        split and category shortcut locations both get read as By kind by some raters. ownership has
+        no value for a repository or workspace that is shared by construction.
+    opus:
+      - "view's List and Details table cannot be told apart from their glosses: the codebook's List
+        exemplar (Finder list view) has named sortable columns, which is also the definition of
+        Details table. I read List as the platform-neutral row list and reserved Details table for
+        the Windows control and its clones, and flagged it. preview conflates 'a rendering of the
+        file' with 'a metadata sidebar'; Box and Dropbox have both, and I coded the rendering.
+        grouping is off by default nearly everywhere, so it is None for 17 of 20 — the three By kind
+        codes are the folders-above-files band in cloud drives, which a rater could reasonably call
+        ordering instead. File pickers (11, 12) inherit the host file manager's view settings, so
+        their codes describe the common case rather than a fixed design."
+      - "This entry's disagreements are mostly about *what counts as the screen*, and the codebook
+        is the cause twice over. First, several variations are glossed with a product rather than a
+        screen — Search first is 'e.g., Dropbox home' while the sampled Dropbox instance is All
+        files, and Tree plus content is 'e.g., Windows Explorer' while Finder's sidebar is a places
+        list — so a rater coding the product and a rater coding the screen disagree without either
+        misreading anything. Second, `preview` and `metadata` do not say whether an affordance that
+        must be summoned or switched on counts: Quick Look in an open panel, Explorer's optional
+        preview pane, Total Commander's Ctrl+Q, Nautilus's separately-packaged Sushi, and a
+        details-and-activity sheet behind a menu are all real but none is on screen at rest. I now
+        code the resting state for `preview` and count a per-item pane for `ownership` only if this
+        screen can open it; that rule is mine, not the codebook's. Smaller: `metadata` has no value
+        for a change description (all three of us proposed one, two by the same name), and
+        `ownership` is pick any but has a Local only value, so an empty list, ['Local only'] and n/a
+        all get used for 'none of these'."
+    sonnet:
+      - grouping and view are coded for each screen's default/typical configuration rather than
+        every capability the product exposes; metadata, ownership and other pick-any fields draw on
+        full product knowledge, not only the sample note.
+      - "Three patterns stood out. (1) A recurring sidebar-versus-navigation confusion: several
+        products (Finder, the Photoshop/Word open dialogs, GNOME Files) have a sidebar of bookmarked
+        locations that I initially coded as 'Tree plus content,' when the actual traversal mechanism
+        is breadcrumb drill-down; Figma's sidebar, by contrast, genuinely nests Projects under Teams
+        and is a real tree — the codebook doesn't currently distinguish 'sidebar of shortcuts' from
+        'sidebar that is itself a hierarchy.' (2) 'Preview' repeatedly caught tools where opening a
+        file IS the application's primary edit surface (VS Code, Figma, Canva) — none of that is a
+        file-manager-style preview, and I initially over-coded a 'Viewer page' or 'Preview pane' for
+        several of these before recognizing the pattern. (3) Metadata's 'what shows on the row
+        itself' versus 'what shows in a separate detail/preview panel' is an easy conflation (Finder
+        column view, iOS Files icon grid) that the codebook could make explicit."
+  codedAt: 2026-09-22
+previews:
+  - file: file-manager.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

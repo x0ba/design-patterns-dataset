@@ -1,0 +1,456 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "monitor". Edit between batches only — see README "Rules".
+id: monitor
+name: Monitor and get notified
+level: archetype
+aliases:
+  - awareness
+  - alerting
+  - observability
+definition: Keep track of changing state, and be interrupted only when it matters.
+data: stream
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - enterprise
+  - software
+  - finance
+  - health
+  - mobility
+  - home
+anatomy:
+  - name: Signals
+    role: What is watched
+  - name: Surfaces
+    role: Where change shows
+  - name: Thresholds
+    role: When it matters
+  - name: Responses
+    role: What a person can do about it
+roles:
+  - metric
+  - status
+  - timestamp
+dimensions:
+  - name: Signals
+    family: content
+    question: What is being watched?
+    subdimensions:
+      - id: signal
+        name: Signal type
+        select: many
+        values:
+          - id: metrics
+            name: Metrics
+            example: Datadog
+          - id: events
+            name: Events
+            example: GitHub notifications
+          - id: object-status
+            name: Object status
+            example: Order tracking
+          - id: people-s-activity
+            name: People’s activity
+            example: Slack mentions
+          - id: external-conditions
+            name: External conditions
+            example: Weather alerts
+  - name: Surfaces
+    family: layout
+    question: Where does change appear?
+    subdimensions:
+      - id: surface
+        name: Surface
+        select: many
+        values:
+          - id: dashboard
+            name: Dashboard
+            example: Grafana
+          - id: notification-list
+            name: Notification list
+            example: iOS Notification Center
+          - id: badge-on-navigation
+            name: Badge on navigation
+            example: Unread counts
+          - id: ambient-indicator
+            name: Ambient indicator
+            example: iPhone Dynamic Island
+          - id: interruptive-alert
+            name: Interruptive alert
+            example: Critical alerts
+          - id: on-the-object
+            name: On the object
+            description: Change shows inside the watched object's own screen (an order page, a tracking view,
+              the city's weather page) rather than on a separate monitoring surface
+            example: Amazon — Order updates
+          - id: in-app-banner
+            name: In-app banner
+            description: A persistent coloured strip inside the app's own view carrying the condition — not a
+              list, a badge, an ambient chrome indicator or an interruption; the archetype has a
+              banner component but Surfaces has no variation for it
+            example: Apple Weather — Severe weather and precipitation alerts
+  - name: Delivery timing
+    family: lifecycle
+    question: When does a change reach the person?
+    subdimensions:
+      - id: timing
+        name: Timing
+        select: one
+        values:
+          - id: real-time
+            name: Real time
+            example: Push notifications
+          - id: batched-digest
+            name: Batched digest
+            example: iOS Scheduled Summary
+          - id: scheduled
+            name: Scheduled
+            example: Daily reports
+          - id: on-threshold-crossing
+            name: On threshold crossing
+            example: Grafana alert rules
+  - name: What matters
+    family: initiative
+    question: Who decides what is worth attention?
+    subdimensions:
+      - id: definition
+        name: Definition
+        select: one
+        values:
+          - id: system-defaults
+            name: System defaults
+            example: Most apps
+          - id: person-s-rules-and-thresholds
+            name: Person’s rules and thresholds
+            example: Budget alerts in banking apps
+          - id: learned-importance
+            name: Learned importance
+            example: Gmail Important
+          - id: anomaly-detection
+            name: Anomaly detection
+            example: Datadog Watchdog
+  - name: Severity
+    family: feedback
+    question: How is urgency expressed?
+    subdimensions:
+      - id: severity
+        name: Severity
+        select: one
+        values:
+          - id: none
+            name: None
+            example: Social notifications
+          - id: status-colour-with-icon-and-label
+            name: Status colour with icon and label
+            example: Status pages
+          - id: levels
+            name: Levels
+            description: Info, warning, critical
+            example: Monitoring tools
+          - id: escalation-over-time
+            name: Escalation over time
+            example: PagerDuty escalation policies
+  - name: Granularity
+    family: scope
+    question: At what level is state reported?
+    subdimensions:
+      - id: granularity
+        name: Granularity
+        select: one
+        values:
+          - id: per-object
+            name: Per object
+            example: One order
+          - id: per-group
+            name: Per group
+            example: One service
+          - id: summary
+            name: Summary
+            example: Daily digest
+          - id: global-health
+            name: Global health
+            example: Status page
+wild:
+  score: 2
+  note: "Notification settings are common but coarse: per app, rarely per condition."
+  examples:
+    - name: iOS
+      note: Focus modes and Scheduled Summary
+    - name: GitHub
+      note: Custom notification routing
+techniques:
+  - name: Attention budget
+    dimension: Delivery timing
+    how: A person sets how many interruptions a period may hold; the system ranks what spends it and
+      batches the rest.
+    ai: false
+  - name: Tell me when this matters
+    dimension: What matters
+    how: A sentence becomes a visible rule with a threshold that can be edited.
+    ai: true
+signature: Attention budget
+sample: Monitoring, banking, delivery, smart-home and collaboration apps.
+unit: One monitoring experience.
+relations:
+  uses:
+    - badge
+    - toast
+    - banner
+    - stat-tile
+    - progress-indicator
+  specializes: []
+  neighbors:
+    - analyze
+    - communicate
+scores:
+  ubiquity: 5
+  potential: 4
+  spec: 4
+evidence: agent-coded
+usage:
+  - People disable whole channels rather than tune them
+questions:
+  - Can one attention model span every app a person uses?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.6840174864614775
+  agreementFirstPass: 0.815625
+  kappaFinal: 0.9477531426211732
+  agreementFinal: 0.971875
+  pass: true
+  perSub:
+    signal:
+      kappaFirstPass: 0.9147727272727271
+      agreementFirstPass: 0.95
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    surface:
+      kappaFirstPass: 0.5331090013219549
+      agreementFirstPass: 0.7357142857142858
+      kappaFinal: 0.9289159685199283
+      agreementFinal: 0.9571428571428572
+      flag: null
+    timing:
+      kappaFirstPass: 0.9294947121034075
+      agreementFirstPass: 0.95
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    definition:
+      kappaFirstPass: 0.8087141339001062
+      agreementFirstPass: 0.85
+      kappaFinal: 0.9362380446333685
+      agreementFinal: 0.95
+      flag: null
+    severity:
+      kappaFirstPass: 0.6359959555106169
+      agreementFirstPass: 0.7
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    granularity:
+      kappaFirstPass: 0.26444833625218983
+      agreementFirstPass: 0.65
+      kappaFinal: 0.7254004576659036
+      agreementFinal: 0.9
+      flag: null
+  distribution:
+    signal:
+      Metrics: 8
+      Events: 9
+      Object status: 6
+      People’s activity: 3
+      External conditions: 1
+    surface:
+      Dashboard: 9
+      Notification list: 5
+      Badge on navigation: 3
+      Ambient indicator: 1
+      Interruptive alert: 17
+      On the object: 3
+      In-app banner: 1
+    timing:
+      Real time: 12
+      Batched digest: 0
+      Scheduled: 0
+      On threshold crossing: 8
+    definition:
+      System defaults: 7
+      Person’s rules and thresholds: 12
+      Learned importance: 0
+      Anomaly detection: 1
+    severity:
+      None: 12
+      Status colour with icon and label: 4
+      Levels: 3
+      Escalation over time: 1
+    granularity:
+      Per object: 18
+      Per group: 0
+      Summary: 1
+      Global health: 1
+  exemplars:
+    signal:
+      Metrics:
+        - Datadog — Monitors list and a metric monitor's alert
+        - Grafana — Alert rules with a Slack contact point
+        - Chase Mobile — Account alerts
+      Events:
+        - PagerDuty — Incidents list and paging
+        - GitHub — Notifications inbox
+        - Chase Mobile — Account alerts
+      Object status:
+        - Amazon — Order updates
+        - Uber Eats — Order in progress
+        - Google Home — Home cameras and thermostat
+      People’s activity:
+        - GitHub — Notifications inbox
+        - Slack — Activity view and unread channels
+        - Jira — Issue notifications
+      External conditions:
+        - Apple Weather — Severe weather and precipitation alerts
+    surface:
+      Dashboard:
+        - Datadog — Monitors list and a metric monitor's alert
+        - Grafana — Alert rules with a Slack contact point
+        - Monzo — Instant spend notifications and budgets
+      Notification list:
+        - PagerDuty — Incidents list and paging
+        - GitHub — Notifications inbox
+        - Slack — Activity view and unread channels
+      Badge on navigation:
+        - GitHub — Notifications inbox
+        - Slack — Activity view and unread channels
+        - Jira — Issue notifications
+      Ambient indicator:
+        - Uber Eats — Order in progress
+      Interruptive alert:
+        - Datadog — Monitors list and a metric monitor's alert
+        - Grafana — Alert rules with a Slack contact point
+        - PagerDuty — Incidents list and paging
+      On the object:
+        - Amazon — Order updates
+        - Uber Eats — Order in progress
+        - FedEx — Package tracking notifications
+      In-app banner:
+        - Apple Weather — Severe weather and precipitation alerts
+    timing:
+      Real time:
+        - PagerDuty — Incidents list and paging
+        - GitHub — Notifications inbox
+        - Slack — Activity view and unread channels
+      Batched digest: []
+      Scheduled: []
+      On threshold crossing:
+        - Datadog — Monitors list and a metric monitor's alert
+        - Grafana — Alert rules with a Slack contact point
+        - Chase Mobile — Account alerts
+    definition:
+      System defaults:
+        - GitHub — Notifications inbox
+        - Amazon — Order updates
+        - Uber Eats — Order in progress
+      Person’s rules and thresholds:
+        - Datadog — Monitors list and a metric monitor's alert
+        - Grafana — Alert rules with a Slack contact point
+        - PagerDuty — Incidents list and paging
+      Learned importance: []
+      Anomaly detection:
+        - Google Analytics 4 — Insights and custom alerts
+    severity:
+      None:
+        - GitHub — Notifications inbox
+        - Slack — Activity view and unread channels
+        - Chase Mobile — Account alerts
+      Status colour with icon and label:
+        - Grafana — Alert rules with a Slack contact point
+        - Monzo — Instant spend notifications and budgets
+        - AWS CloudWatch — Alarms
+      Levels:
+        - Datadog — Monitors list and a metric monitor's alert
+        - Apple Weather — Severe weather and precipitation alerts
+        - Sentry — Issue alerts
+      Escalation over time:
+        - PagerDuty — Incidents list and paging
+    granularity:
+      Per object:
+        - Datadog — Monitors list and a metric monitor's alert
+        - Grafana — Alert rules with a Slack contact point
+        - PagerDuty — Incidents list and paging
+      Per group: []
+      Summary:
+        - Google Analytics 4 — Insights and custom alerts
+      Global health:
+        - Better Stack — Uptime monitors and status page
+  unobserved:
+    - sub: timing
+      var: Batched digest
+    - sub: timing
+      var: Scheduled
+    - sub: definition
+      var: Learned importance
+    - sub: granularity
+      var: Per group
+  unresolved: []
+  proposals:
+    raised: 2
+    adopted:
+      - sub: surface
+        name: On the object
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: surface
+        name: In-app banner
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - Trackers of one order or shipment show state on the object's own page, which none of the
+        five surfaces names; timing is a pick-one but most products mix real-time events with
+        threshold rules.
+      - surface cannot say whether an ordinary push notification is an Interruptive alert or a
+        Notification list, which is most of the disagreement here; it also has no variation for
+        delivery out to another channel (email, Slack, SMS, SNS), so monitoring tools that page get
+        Interruptive alert by default. granularity cannot tell a monitor's own scope from the
+        objects under it. definition is pick one but banking apps hold a default and a person-set
+        threshold at once.
+    opus:
+      - "Granularity was the hardest: for alerting tools the monitored unit is the rule/series,
+        which reads as Per object, while Per group vs Global health only separates cleanly when a
+        public status page rolls services up. Severity is None for every consumer instance, so the
+        dimension only discriminates among operations tools."
+      - Two codebook problems. Surfaces has no line between a push banner and the list it lands in,
+        so raters split the same product between Interruptive alert and Notification list; the gloss
+        should say that the push is the interruptive surface and Notification list means a list you
+        go back to. And 'definition' and 'severity' are pick one over products that truthfully hold
+        two values (Monzo defaults plus budgets; Better Stack colour plus escalation).
+    sonnet:
+      - Signal and surface read as pick-any in practice for most consumer products (a push channel
+        plus a persistent list/tile); definition is often blended (system default plus
+        person-tunable threshold) and I picked the more distinguishing one per product.
+      - Surface's Interruptive alert (glossed only as 'Critical alerts') and Notification list both
+        plausibly describe an ordinary push before it settles into a list; that reading split
+        fable+me from opus on almost every push-based instance.
+  codedAt: 2026-09-22
+previews:
+  - file: monitor.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

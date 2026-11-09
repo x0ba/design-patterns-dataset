@@ -1,0 +1,535 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "version-history". Edit between batches only — see README "Rules".
+id: version-history
+name: Version history
+level: pattern
+parent: collaborate
+aliases:
+  - revision history
+  - timeline of changes
+  - checkpoints
+definition: A browsable record of past states of an artifact, with authorship, so a person can
+  compare, restore or branch from an earlier version.
+data: sequence
+platforms:
+  - web
+  - desktop
+domains:
+  - productivity
+  - software
+  - design
+  - enterprise
+  - education
+anatomy:
+  - name: Timeline
+    role: Ordered versions
+  - name: Snapshot
+    role: One past state
+  - name: Diff
+    role: What changed
+  - name: Restore
+    role: Bring a past state forward
+  - name: Author stamp
+    role: Who made it
+roles:
+  - version
+  - author
+  - message
+dimensions:
+  - name: What a version captures
+    family: content
+    question: What is stored and shown for each version?
+    subdimensions:
+      - id: capture
+        name: Capture
+        select: many
+        values:
+          - id: full-document-snapshot
+            name: Full document snapshot
+            example: Google Docs history
+          - id: named-checkpoint
+            name: Named checkpoint
+            example: Figma version history
+          - id: commit-with-message
+            name: Commit with message
+            example: GitHub
+          - id: autosave-generations
+            name: Autosave generations
+            example: Office AutoRecover
+          - id: branch-tip
+            name: Branch tip
+            example: Git branches
+          - id: field-change-log
+            name: Field change log
+            description: Each version is one field's old and new value rather than a document state (Airtable
+              record revisions)
+            example: Airtable — Record revision history
+          - id: field-level-change-log
+            name: Field-level change log
+            description: A record of individual field-by-field changes (old value to new value, who and when),
+              rather than a snapshot of the whole document, a named checkpoint, a commit, an
+              autosave generation, or a branch tip.
+            example: Airtable — Record revision history
+  - name: History layout
+    family: layout
+    question: How is the history presented?
+    subdimensions:
+      - id: layout
+        name: Layout
+        select: one
+        values:
+          - id: chronological-list
+            name: Chronological list
+            example: Google Docs
+          - id: graph-of-commits
+            name: Graph of commits
+            example: GitHub network / git log --graph
+          - id: calendar-of-days
+            name: Calendar of days
+            example: Docs grouped by day
+          - id: side-by-side-compare
+            name: Side-by-side compare
+            example: Diff views
+          - id: filmstrip-of-canvases
+            name: Filmstrip of canvases
+            example: Figma version previews
+          - id: receding-stack-in-3d-space
+            name: Receding stack in 3D space
+            description: Past states are shown as a stack of documents/windows receding visually into the
+              distance, navigated by a timeline, rather than a flat chronological list, a calendar
+              grouping, a filmstrip of thumbnails, a commit graph, or a diff view.
+            example: macOS Time Machine — Browse backups
+  - name: Comparing versions
+    family: composition
+    question: How do versions relate when inspected?
+    subdimensions:
+      - id: compare
+        name: Compare
+        select: one
+        values:
+          - id: single-snapshot-preview
+            name: Single snapshot preview
+            example: Docs preview
+          - id: inline-diff
+            name: Inline diff
+            example: Google Docs show changes
+          - id: split-diff
+            name: Split diff
+            example: GitHub Files changed
+          - id: three-way-merge
+            name: Three-way merge
+            example: Git merge
+          - id: blame-or-annotate-view
+            name: Blame or annotate view
+            example: GitHub blame
+  - name: Restore flow
+    family: flow
+    question: How does a person return to or reuse a past state?
+    subdimensions:
+      - id: restore
+        name: Restore
+        select: one
+        values:
+          - id: restore-in-place
+            name: Restore in place
+            example: Docs Restore this version
+          - id: copy-forward-as-new-version
+            name: Copy forward as new version
+            example: Make a copy
+          - id: branch-from-here
+            name: Branch from here
+            example: Git branch / Figma branch
+          - id: cherry-pick-a-change
+            name: Cherry-pick a change
+            example: Partial revert
+          - id: revert-commit
+            name: Revert commit
+            example: GitHub revert
+  - name: Opening history
+    family: invocation
+    question: How is history entered and left?
+    subdimensions:
+      - id: openBy
+        name: Open by
+        select: many
+        values:
+          - id: history-panel
+            name: History panel
+            example: Google Docs
+          - id: commit-list-page
+            name: Commit list page
+            example: GitHub
+          - id: named-version-menu
+            name: Named version menu
+            example: Figma
+          - id: from-a-conflict
+            name: From a conflict
+            example: Merge UI
+          - id: from-an-activity-item
+            name: From an activity item
+            example: Slack file versions
+  - name: History feedback
+    family: feedback
+    question: How does the person know what will happen on restore?
+    subdimensions:
+      - id: feedback
+        name: Feedback
+        select: many
+        values:
+          - id: preview-before-restore
+            name: Preview before restore
+            example: Docs
+          - id: diff-summary-counts
+            name: Diff summary counts
+            example: +/− lines
+          - id: author-and-timestamp
+            name: Author and timestamp
+            example: All
+          - id: warning-that-restore-is-undoable
+            name: Warning that restore is undoable
+            example: Confirm dialogs
+          - id: ai-change-summary
+            name: AI change summary
+            example: GitHub Copilot summaries
+wild:
+  score: 2
+  note: Naming versions and filtering by author are common; diff granularity less so.
+  examples:
+    - name: Google Docs
+      note: Name current version; browse by person
+    - name: Figma
+      note: Name and restore versions
+    - name: GitHub
+      note: Interactive rebase and file history
+techniques:
+  - name: Named checkpoints
+    dimension: What a version captures
+    how: Let people pin meaningful versions with titles so the timeline is a story, not only autosaves.
+    ai: false
+  - name: Summarize this span
+    dimension: History feedback
+    how: Generate a readable summary of changes between two versions, linked to the underlying diff.
+    ai: true
+  - name: Restore as a branch
+    dimension: Restore flow
+    how: Default restore creates a branch or named copy so the current tip is never silently destroyed.
+    ai: false
+signature: Named checkpoints
+sample: Documents, design files, wikis and source control UIs.
+unit: One history timeline for one artifact.
+relations:
+  uses:
+    - split-pane
+    - tabs
+    - undo
+    - confirmation
+  specializes:
+    - collaborate
+  neighbors:
+    - co-editing-presence
+    - approval-flow
+    - activity-log
+scores:
+  ubiquity: 4
+  potential: 4
+  spec: 4
+evidence: agent-coded
+usage:
+  - People name versions before big reviews so restore targets are obvious
+questions:
+  - How fine should diffs be when the artifact is a canvas rather than text?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7438127208635927
+  agreementFirstPass: 0.8425
+  kappaFinal: 0.9658143354042422
+  agreementFinal: 0.9735294117647059
+  pass: true
+  perSub:
+    capture:
+      kappaFirstPass: 0.7854825141208982
+      agreementFirstPass: 0.8785714285714286
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    layout:
+      kappaFirstPass: 0.6250000000000001
+      agreementFirstPass: 0.7
+      kappaFinal: 0.8322460391425909
+      agreementFinal: 0.85
+      flag: null
+    compare:
+      kappaFirstPass: 0.7553017944535078
+      agreementFirstPass: 0.75
+      kappaFinal: 0.9478714161598611
+      agreementFinal: 0.95
+      flag: null
+    restore:
+      kappaFirstPass: 0.75609756097561
+      agreementFirstPass: 0.8
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    openBy:
+      kappaFirstPass: 0.7789833232871209
+      agreementFirstPass: 0.89
+      kappaFinal: 0.9782529902138454
+      agreementFinal: 0.9875
+      flag: null
+    feedback:
+      kappaFirstPass: 0.6693121693121689
+      agreementFirstPass: 0.8
+      kappaFinal: 0.9314285714285712
+      agreementFinal: 0.95
+      flag: null
+  distribution:
+    capture:
+      Full document snapshot: 13
+      Named checkpoint: 4
+      Commit with message: 8
+      Autosave generations: 11
+      Branch tip: 3
+      Field change log: 0
+      Field-level change log: 1
+    layout:
+      Chronological list: 11
+      Graph of commits: 3
+      Calendar of days: 2
+      Side-by-side compare: 0
+      Filmstrip of canvases: 2
+      Receding stack in 3D space: 2
+    compare:
+      Single snapshot preview: 7
+      Inline diff: 9
+      Split diff: 3
+      Three-way merge: 0
+      Blame or annotate view: 0
+      n/a: 1
+    restore:
+      Restore in place: 13
+      Copy forward as new version: 0
+      Branch from here: 0
+      Cherry-pick a change: 0
+      Revert commit: 5
+      n/a: 2
+    openBy:
+      History panel: 12
+      Commit list page: 6
+      Named version menu: 2
+      From a conflict: 0
+      From an activity item: 0
+      n/a: 1
+    feedback:
+      Preview before restore: 10
+      Diff summary counts: 4
+      Author and timestamp: 19
+      Warning that restore is undoable: 1
+      AI change summary: 0
+  exemplars:
+    capture:
+      Full document snapshot:
+        - Google Docs — Version history
+        - Figma — Version history
+        - Wikipedia — Page history
+      Named checkpoint:
+        - Google Docs — Version history
+        - Figma — Version history
+        - Google Sheets — Version history
+      Commit with message:
+        - GitHub — Commits page
+        - GitHub Desktop — History tab
+        - Wikipedia — Page history
+      Autosave generations:
+        - Google Docs — Version history
+        - Figma — Version history
+        - Notion — Page history
+      Branch tip:
+        - Sourcetree — Commit graph
+        - GitLab — Repository graph
+        - Git CLI — git log --graph
+      Field change log: []
+      Field-level change log:
+        - Airtable — Record revision history
+    layout:
+      Chronological list:
+        - GitHub — Commits page
+        - GitHub Desktop — History tab
+        - Wikipedia — Page history
+      Graph of commits:
+        - Sourcetree — Commit graph
+        - GitLab — Repository graph
+        - Git CLI — git log --graph
+      Calendar of days:
+        - Google Docs — Version history
+        - Google Sheets — Version history
+      Side-by-side compare: []
+      Filmstrip of canvases:
+        - Figma — Version history
+        - Canva — Version history
+      Receding stack in 3D space:
+        - macOS Time Machine — Browse backups
+        - Apple Pages — Browse All Versions
+    compare:
+      Single snapshot preview:
+        - Figma — Version history
+        - Notion — Page history
+        - Dropbox — File version history
+      Inline diff:
+        - Google Docs — Version history
+        - GitHub Desktop — History tab
+        - Microsoft Word — Version History
+      Split diff:
+        - GitHub — Commits page
+        - Wikipedia — Page history
+        - VS Code — Timeline view
+      Three-way merge: []
+      Blame or annotate view: []
+    restore:
+      Restore in place:
+        - Google Docs — Version history
+        - Figma — Version history
+        - Notion — Page history
+      Copy forward as new version: []
+      Branch from here: []
+      Cherry-pick a change: []
+      Revert commit:
+        - GitHub — Commits page
+        - GitHub Desktop — History tab
+        - Wikipedia — Page history
+    openBy:
+      History panel:
+        - Google Docs — Version history
+        - Figma — Version history
+        - Notion — Page history
+      Commit list page:
+        - GitHub — Commits page
+        - GitHub Desktop — History tab
+        - Wikipedia — Page history
+      Named version menu:
+        - Figma — Version history
+        - Apple Pages — Browse All Versions
+      From a conflict: []
+      From an activity item: []
+    feedback:
+      Preview before restore:
+        - Google Docs — Version history
+        - Figma — Version history
+        - Notion — Page history
+      Diff summary counts:
+        - GitHub — Commits page
+        - GitHub Desktop — History tab
+        - Wikipedia — Page history
+      Author and timestamp:
+        - Google Docs — Version history
+        - Figma — Version history
+        - GitHub — Commits page
+      Warning that restore is undoable:
+        - Windows — Previous Versions
+      AI change summary: []
+  unobserved:
+    - sub: capture
+      var: Field change log
+    - sub: layout
+      var: Side-by-side compare
+    - sub: compare
+      var: Three-way merge
+    - sub: compare
+      var: Blame or annotate view
+    - sub: restore
+      var: Copy forward as new version
+    - sub: restore
+      var: Branch from here
+    - sub: restore
+      var: Cherry-pick a change
+    - sub: openBy
+      var: From a conflict
+    - sub: openBy
+      var: From an activity item
+    - sub: feedback
+      var: AI change summary
+  unresolved: []
+  proposals:
+    raised: 4
+    adopted:
+      - sub: capture
+        name: Field change log
+        raters:
+          - fable
+          - opus
+      - sub: capture
+        name: Field-level change log
+        raters:
+          - fable
+          - sonnet
+      - sub: layout
+        name: Receding stack in 3D space
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded:
+      - place: sub:capture
+        sub: capture
+        dim: null
+        name: Per-field change events
+        gloss: The timeline records individual changes — this field went from A to B, by whom, when — rather
+          than states of the whole artifact; there is nothing to restore because there is no version
+        raters:
+          - opus
+        instances:
+          - 19
+        status: raised
+  raterNotes:
+    fable:
+      - Time Machine and Pages' versions browser are neither list nor filmstrip exactly; coded
+        Filmstrip. git log is a command with no compare, restore or entry point of its own.
+      - layout's Filmstrip exemplar (Figma) is a list without thumbnails; Canva is the real
+        filmstrip. compare is pick-one but every git UI offers inline and split — the codebook
+        should name a default rule. feedback's Author and timestamp conjoins two things personal
+        histories only half have. Three raters proposed the same field-change-log capture under
+        three names.
+    opus:
+      - "layout and compare pull apart badly: a history that shows commits in a list and a diff in a
+        pane is one layout or two depending on how you read it, and Side-by-side compare sits in
+        layout while the diff variations sit in compare. Branch from here and Cherry-pick a change
+        went unused even though four git instances support both, because pick-one made me take the
+        restore each product leads with. Warning that restore is undoable also never appeared — none
+        of these twenty warns before restoring."
+      - Author and timestamp bundles two signals into one value, so a personal backup that is
+        nothing but dated snapshots (Time Machine, Windows, Pages) cannot be coded truthfully either
+        way — that bundling drove most of the feedback splits. layout cites Google Docs version
+        history under both Chronological list and Calendar of days, so one screen satisfies two
+        values; compare's Split diff cites GitHub, which actually opens a unified diff by default,
+        and that wrong exemplar split all four git clients; and openBy mixes entry routes with
+        destination surfaces and has no value for a typed command.
+    sonnet:
+      - GitLab's repository-graph screen (14) and the raw git log --graph command (18) are both
+        read-only overview views that don't themselves expose compare/restore actions (those live on
+        other screens of the same product) — I coded those honestly as '?' or n/a rather than
+        importing behaviour from a screen not actually sampled.
+      - "Three findings: (1) capture's values aren't mutually exclusive the way I treated them in
+        round 1 — a named checkpoint or an autosave generation is still also a Full document
+        snapshot, and I'd been picking only the more 'interesting' value instead of all that apply,
+        which accounts for most of my changes here. (2) compare's Split diff vs Inline diff split
+        across the git-family instances (GitHub, GitHub Desktop, Sourcetree, GitLab, VS Code) is a
+        real, verifiable platform default in each case, not a matter of taste, but the codebook's
+        'pick one' doesn't flag that several of these tools offer both as a user toggle. (3) All
+        three raters independently proposed near-identical new capture values for Airtable's
+        field-level change log (my Field-level change log, fable's Field change log, opus's
+        Per-field change events) — strong, convergent evidence this is a real gap regardless of
+        which name is adopted."
+  codedAt: 2026-09-22
+previews:
+  - file: version-history.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

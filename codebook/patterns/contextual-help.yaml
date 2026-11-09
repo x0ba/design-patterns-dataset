@@ -1,0 +1,467 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "contextual-help". Edit between batches only — see README "Rules".
+id: contextual-help
+name: Contextual help
+level: pattern
+parent: guide
+aliases:
+  - inline help
+  - help panel
+  - info icons
+  - in-app assistant
+definition: Explanations available where a question arises, without leaving the task.
+data: document
+platforms:
+  - web
+  - desktop
+  - mobile
+domains:
+  - enterprise
+  - software
+  - finance
+  - government
+anatomy:
+  - name: Access point
+    role: Where help is asked for
+  - name: Content
+    role: The explanation
+  - name: Placement
+    role: Where it shows
+roles: []
+dimensions:
+  - name: Access
+    family: invocation
+    question: How is help asked for?
+    subdimensions:
+      - id: access
+        name: Access
+        select: many
+        values:
+          - id: info-icon
+            name: Info icon
+            example: Form field info popovers
+          - id: help-panel-link
+            name: Help panel link
+            example: AWS console Info links
+          - id: shortcut-sheet
+            name: Shortcut sheet
+            example: "? in GitHub"
+          - id: searchable-help-menu
+            name: Searchable help menu
+            example: macOS Help menu
+          - id: assistant-chat
+            name: Assistant chat
+            example: In-product copilots
+          - id: hover
+            name: Hover
+            description: Hover or a modifier-click on the item itself brings help, with no icon, link or menu
+            example: Adobe Photoshop — Rich tool tips
+          - id: the-control-itself
+            name: The control itself
+            description: Help is asked for by pointing at or modifier-clicking the object being explained — a
+              rich tooltip on hover, an Option-click on a symbol — rather than by a separate help
+              affordance placed next to it
+            example: Adobe Photoshop — Rich tool tips
+  - name: Content
+    family: content
+    question: What kind of help is given?
+    subdimensions:
+      - id: content
+        name: Content
+        select: many
+        values:
+          - id: definitions
+            name: Definitions
+            example: Tax terms
+          - id: step-instructions
+            name: Step instructions
+            example: Help panels
+          - id: video
+            name: Video
+            example: Creative apps
+          - id: links-to-documentation
+            name: Links to documentation
+            example: Developer consoles
+          - id: community-answers
+            name: Community answers
+            example: Support forums
+          - id: shortcut-reference
+            name: Shortcut reference
+            description: A list of keyboard shortcuts and their actions
+            example: GitHub — Keyboard shortcuts overlay
+  - name: Placement
+    family: layout
+    question: Where does help appear?
+    subdimensions:
+      - id: placement
+        name: Placement
+        select: one
+        values:
+          - id: popover-at-the-field
+            name: Popover at the field
+            example: Info icons
+          - id: side-panel-beside-the-task
+            name: Side panel beside the task
+            example: AWS help panel
+          - id: overlay
+            name: Overlay
+            example: Shortcut sheets
+          - id: new-tab
+            name: New tab
+            example: Documentation links
+          - id: inline-with-the-field
+            name: Inline with the field
+            description: The help is printed in the layout beside or beneath the control it explains, taking up
+              space and needing no interaction — GOV.UK hint text, form helper text, empty-field
+              descriptions
+            example: GOV.UK — Hint text under fields
+          - id: inline-static-text
+            name: Inline static text
+            description: Help text sits permanently visible beside or under the field itself, needing no
+              popover, panel or overlay to reveal it, e.g. GOV.UK hint text
+            example: GOV.UK — Hint text under fields
+  - name: Proactivity
+    family: initiative
+    question: Does help wait to be asked?
+    subdimensions:
+      - id: proactivity
+        name: Proactivity
+        select: one
+        values:
+          - id: on-request
+            name: On request
+            example: Info icons
+          - id: suggested-when-stuck
+            name: Suggested when stuck
+            example: Error-driven help
+          - id: always-visible-hints
+            name: Always-visible hints
+            example: GOV.UK hint text
+  - name: Relevance
+    family: scope
+    question: How specific is it?
+    subdimensions:
+      - id: relevance
+        name: Relevance
+        select: one
+        values:
+          - id: page
+            name: Page
+            example: Page help links
+          - id: field
+            name: Field
+            example: Field hints
+          - id: the-person-s-current-state
+            name: The person’s current state
+            description: Sees the data and configuration
+            example: Context-aware assistants
+          - id: whole-product
+            name: Whole product
+            description: Help searched or listed for the whole product, not tied to the current page or field
+            example: Microsoft Word — Help pane
+wild:
+  score: 0
+  note: Help is authored by the product.
+  examples: []
+techniques:
+  - name: Menu search that points
+    dimension: Access
+    how: Searching help reveals where the command lives, as macOS Help does for menu items, generalized
+      to any control.
+    ai: false
+  - name: Explain my screen
+    dimension: Relevance
+    how: Help grounded in what the person is looking at, including their own customizations.
+    ai: true
+signature: Menu search that points
+sample: Cloud consoles, tax and finance software, creative and office suites.
+unit: One help system.
+relations:
+  uses:
+    - tooltip
+    - popover
+    - drawer
+    - command-palette
+  specializes:
+    - guide
+  neighbors:
+    - onboarding-tour
+    - ai-chat
+scores:
+  ubiquity: 4
+  potential: 3
+  spec: 3
+evidence: agent-coded
+usage:
+  - People search the web rather than in-product help
+questions:
+  - Can help documentation be generated per person from their interface spec?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7213731571372638
+  agreementFirstPass: 0.815625
+  kappaFinal: 0.9707258626215146
+  agreementFinal: 0.98
+  pass: true
+  perSub:
+    access:
+      kappaFirstPass: 0.8029325513196477
+      agreementFirstPass: 0.8857142857142857
+      kappaFinal: 0.9738181818181817
+      agreementFinal: 0.9833333333333333
+      flag: null
+    content:
+      kappaFirstPass: 0.6309458720612348
+      agreementFirstPass: 0.75
+      kappaFinal: 0.9529964747356051
+      agreementFinal: 0.9666666666666667
+      flag: null
+    placement:
+      kappaFirstPass: 0.8040816326530613
+      agreementFirstPass: 0.8
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    proactivity:
+      kappaFirstPass: 0.7818181818181813
+      agreementFirstPass: 0.95
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    relevance:
+      kappaFirstPass: 0.5498676081200353
+      agreementFirstPass: 0.6
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+  distribution:
+    access:
+      Info icon: 4
+      Help panel link: 12
+      Shortcut sheet: 4
+      Searchable help menu: 9
+      Assistant chat: 5
+      Hover: 2
+      The control itself: 0
+    content:
+      Definitions: 9
+      Step instructions: 13
+      Video: 1
+      Links to documentation: 16
+      Community answers: 3
+      Shortcut reference: 4
+    placement:
+      Popover at the field: 4
+      Side panel beside the task: 8
+      Overlay: 7
+      New tab: 0
+      Inline with the field: 1
+      Inline static text: 0
+    proactivity:
+      On request: 18
+      Suggested when stuck: 0
+      Always-visible hints: 2
+    relevance:
+      Page: 6
+      Field: 7
+      The person’s current state: 1
+      Whole product: 6
+  exemplars:
+    access:
+      Info icon:
+        - AWS Console — Info panel
+        - Google Cloud Console — Learn panel and info icons
+        - Azure Portal — Info icons and Help + support
+      Help panel link:
+        - AWS Console — Info panel
+        - Google Cloud Console — Learn panel and info icons
+        - Azure Portal — Info icons and Help + support
+      Shortcut sheet:
+        - GitHub — Keyboard shortcuts overlay
+        - Gmail — Keyboard shortcut list
+        - Figma — Help menu
+      Searchable help menu:
+        - TurboTax — Learn more links
+        - H&R Block Online — Help sidebar
+        - QuickBooks Online — Help panel
+      Assistant chat:
+        - H&R Block Online — Help sidebar
+        - QuickBooks Online — Help panel
+        - Stripe Dashboard — Inline docs and assistant
+      Hover:
+        - Adobe Photoshop — Rich tool tips
+        - Xcode — Quick Help
+      The control itself: []
+    content:
+      Definitions:
+        - AWS Console — Info panel
+        - Google Cloud Console — Learn panel and info icons
+        - Azure Portal — Info icons and Help + support
+      Step instructions:
+        - AWS Console — Info panel
+        - Google Cloud Console — Learn panel and info icons
+        - Azure Portal — Info icons and Help + support
+      Video:
+        - Adobe Photoshop — Rich tool tips
+      Links to documentation:
+        - AWS Console — Info panel
+        - Google Cloud Console — Learn panel and info icons
+        - Azure Portal — Info icons and Help + support
+      Community answers:
+        - TurboTax — Learn more links
+        - QuickBooks Online — Help panel
+        - Figma — Help menu
+      Shortcut reference:
+        - GitHub — Keyboard shortcuts overlay
+        - Gmail — Keyboard shortcut list
+        - Figma — Help menu
+    placement:
+      Popover at the field:
+        - Azure Portal — Info icons and Help + support
+        - TurboTax — Learn more links
+        - Adobe Photoshop — Rich tool tips
+      Side panel beside the task:
+        - AWS Console — Info panel
+        - Google Cloud Console — Learn panel and info icons
+        - H&R Block Online — Help sidebar
+      Overlay:
+        - Robinhood — Info popovers on the trade screen
+        - Google Docs — Help menu search
+        - macOS — Help menu
+      New tab: []
+      Inline with the field:
+        - GOV.UK — Hint text under fields
+      Inline static text: []
+    proactivity:
+      On request:
+        - AWS Console — Info panel
+        - Google Cloud Console — Learn panel and info icons
+        - Azure Portal — Info icons and Help + support
+      Suggested when stuck: []
+      Always-visible hints:
+        - H&R Block Online — Help sidebar
+        - GOV.UK — Hint text under fields
+    relevance:
+      Page:
+        - Google Cloud Console — Learn panel and info icons
+        - H&R Block Online — Help sidebar
+        - QuickBooks Online — Help panel
+      Field:
+        - AWS Console — Info panel
+        - Azure Portal — Info icons and Help + support
+        - TurboTax — Learn more links
+      The person’s current state:
+        - Stripe Dashboard — Inline docs and assistant
+      Whole product:
+        - Microsoft Word — Help pane
+        - Google Docs — Help menu search
+        - macOS — Help menu
+  unobserved:
+    - sub: access
+      var: The control itself
+    - sub: placement
+      var: New tab
+    - sub: placement
+      var: Inline static text
+    - sub: proactivity
+      var: Suggested when stuck
+  unresolved: []
+  proposals:
+    raised: 7
+    adopted:
+      - sub: access
+        name: Hover
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: content
+        name: Shortcut reference
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: relevance
+        name: Whole product
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: placement
+        name: Inline with the field
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: access
+        name: The control itself
+        raters:
+          - opus
+          - sonnet
+      - sub: placement
+        name: Inline static text
+        raters:
+          - opus
+          - sonnet
+    recorded:
+      - place: sub:placement
+        sub: placement
+        dim: null
+        name: Inline under the field
+        gloss: Help text sits permanently in the form under the field label
+        raters:
+          - fable
+        instances:
+          - 17
+        status: raised
+  raterNotes:
+    fable:
+      - Relevance lacks a product-wide value, which help menus and shortcut sheets need (six of
+        twenty). Content lacks shortcut lists. GOV.UK hint text has no access point at all.
+      - relevance lacks a whole-product value, which every help menu and shortcut sheet needs; the
+        other raters put those under Page, so the sub splits on a gap, not a reading. placement has
+        no phone form of the popover (a bottom sheet) and no inline value. All three raters proposed
+        the inline placement and the hover access under different names.
+    opus:
+      - "proactivity is On request for 18 of 20, which is the honest finding: shipping products
+        almost never volunteer help, and 'Suggested when stuck' — the variation that would matter
+        most — went unused across the whole sample. relevance is nearly binary between Field and
+        Page; 'The person's current state' only fires where an assistant can read the account, and
+        it will be the value that grows as copilots spread. placement's four values cannot tell a
+        popover from a bottom sheet, which is the same component on two form factors. The access and
+        content subs disagree with each other about shortcut sheets, which is what the second
+        proposal fixes."
+      - "Four gaps in this entry were found independently by all three raters, which is the
+        strongest signal in the packet: help summoned by the control itself, a shortcut list as
+        content, permanently inline help text, and help that is scoped to the whole product. The
+        placement gap was proposed under three different names, which is the codebook's problem to
+        settle. `placement` is also written for desktop — a mobile bottom sheet is field-scoped in
+        intent but an overlay in form, and raters split on which to record."
+    sonnet:
+      - content has no variation for a plain keyboard-shortcut list (12, 13), since Shortcut sheet
+        is only named as an access mechanism in this codebook, not as a content type; left empty
+        rather than forced into Step instructions.
+      - "The `relevance` sub is missing a value between Field and Page on the broad end: a global,
+        page-blind help search (macOS Help menu, Word's Help pane, Figma's/Notion's ? menu) returns
+        the same thing no matter where you are, which is not what 'Page' names (a page-scoped
+        result) — fable's +Whole product across six instances names a real, recurring gap, not a
+        one-off. Separately, `access` needs a value for help triggered by interacting with the
+        explained object itself (hover or a modifier-click) rather than a distinct help affordance
+        beside it — opus's +The control itself is the cleaner statement of this than either fable's
+        or my own narrower +Hover, since it also covers modifier-click cases that aren't literally
+        hovering."
+  codedAt: 2026-09-22
+previews:
+  - file: contextual-help.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

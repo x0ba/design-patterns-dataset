@@ -1,0 +1,529 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "search-results". Edit between batches only — see README "Rules".
+id: search-results
+name: Search results
+level: pattern
+parent: search
+aliases:
+  - results page
+  - SERP
+definition: A ranked presentation of items matching a query, with the cues needed to judge relevance
+  and the tools to refine.
+data: collection
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - commerce
+  - news
+  - science
+  - productivity
+  - entertainment
+anatomy:
+  - name: Query bar
+    role: The current query
+  - name: Result
+    role: One candidate
+  - name: Modules
+    role: Blended special results
+  - name: Refinement tools
+    role: Filters, tabs, related searches
+roles:
+  - title
+  - url
+  - snippet
+  - thumbnail
+  - date
+  - source
+dimensions:
+  - name: Result representation
+    family: content
+    question: What does a result show, and how is its snippet made?
+    subdimensions:
+      - id: representation
+        name: Representation
+        select: one
+        values:
+          - id: title-address-and-snippet
+            name: Title, address and snippet
+            example: Google web results
+          - id: rich-result-card
+            name: Rich result card
+            description: Ratings, prices, availability
+            example: Google Shopping results
+          - id: thumbnail-grid
+            name: Thumbnail grid
+            example: Image search
+          - id: answer-box
+            name: Answer box
+            example: Featured snippets
+          - id: summary-with-citations
+            name: Summary with citations
+            example: Google AI Overviews
+      - id: snippet
+        name: Snippet
+        select: one
+        values:
+          - id: static-description
+            name: Static description
+            example: App store results
+          - id: query-biased-with-highlights
+            name: Query-biased with highlights
+            description: Matching terms in bold
+            example: Google snippets
+          - id: generated-per-result
+            name: Generated per result
+            example: Elicit paper summaries
+  - name: Grouping
+    family: composition
+    question: Is it one list or many?
+    subdimensions:
+      - id: grouping
+        name: Grouping
+        select: one
+        values:
+          - id: single-ranked-list
+            name: Single ranked list
+            example: DuckDuckGo
+          - id: verticals-as-tabs
+            name: Verticals as tabs
+            description: All, Images, News
+            example: Google
+          - id: blended-modules
+            name: Blended modules
+            description: Videos, maps and stories in one list
+            example: Google universal search
+          - id: clustered-by-topic
+            name: Clustered by topic
+            example: Research clustering engines
+          - id: grouped-by-type
+            name: Grouped by type
+            description: Results are sectioned by the kind of thing they are (songs, artists, playlists;
+              applications, documents, mail) in one scroll, rather than split into tabs, blended
+              into a single list or clustered by subject. The archetype entry has this value; this
+              entry does not
+            example: Spotify — Search results
+  - name: Ranking control
+    family: initiative
+    question: How much say does the person have in the order?
+    subdimensions:
+      - id: ranking
+        name: Ranking
+        select: one
+        values:
+          - id: opaque-relevance
+            name: Opaque relevance
+            example: Most engines
+          - id: sort-by-the-person
+            name: Sort by the person
+            example: Retail sort by price
+          - id: personalized
+            name: Personalized
+            example: Signed-in search
+          - id: source-weighting
+            name: Source weighting
+            description: Boost or block sources
+            example: Kagi personalized results
+  - name: Relevance cues
+    family: feedback
+    question: What helps a person judge a result before opening it?
+    subdimensions:
+      - id: cues
+        name: Cues
+        select: many
+        values:
+          - id: highlighted-matches
+            name: Highlighted matches
+            example: Google
+          - id: result-count
+            name: Result count
+            example: Retail search
+          - id: freshness-date
+            name: Freshness date
+            example: News results
+          - id: source-identity
+            name: Source identity
+            description: Favicon and site name
+            example: Google result headers
+          - id: why-this-matched
+            name: Why this matched
+            example: Enterprise search explanations
+          - id: rating-and-popularity
+            name: Rating and popularity
+            description: The judging signal is a crowd aggregate carried on the result — star rating and review
+              count, downloads, citations, views — which in app, product and scholarly search
+              decides more clicks than the snippet does
+            example: Google Shopping — Shopping results
+  - name: Result preview
+    family: layout
+    question: Where does a result open?
+    subdimensions:
+      - id: openIn
+        name: Opens in
+        select: one
+        values:
+          - id: new-page
+            name: New page
+            example: Web search
+          - id: side-by-side
+            name: Side-by-side
+            example: Outlook search reading pane
+          - id: in-place
+            name: In-place
+            example: People also ask accordions
+          - id: popover
+            name: Popover
+            example: Hover previews in desktop search
+  - name: Updating
+    family: lifecycle
+    question: When do results change?
+    subdimensions:
+      - id: updating
+        name: Updating
+        select: one
+        values:
+          - id: on-submit
+            name: On submit
+            example: Web search
+          - id: as-you-type
+            name: As you type
+            example: Spotify search
+          - id: saved-search-with-alerts
+            name: Saved search with alerts
+            example: Google Alerts, Zillow saved searches
+wild:
+  score: 1
+  note: Some engines let people weight sources or set a region; result representation is fixed.
+  examples:
+    - name: Kagi
+      note: Personalized domain ranking
+    - name: DuckDuckGo
+      note: Region and safe-search settings
+techniques:
+  - name: Result lens
+    dimension: Result representation
+    how: "Surface attributes from destination pages (author, date, price, reading time) into every
+      result card: Fluid Attributes across sites."
+    ai: true
+  - name: Personal source weighting
+    dimension: Ranking control
+    how: Raise, lower or block a source from its result, visible as an editable list.
+    ai: false
+  - name: Rerank by what I mean
+    dimension: Ranking control
+    how: “Prefer primary sources” reranks with a stated rationale shown on each result.
+    ai: true
+signature: Result lens
+sample: Web engines, retail, scholarly, app-store and in-app search result pages.
+unit: One results page for one query.
+relations:
+  uses:
+    - autocomplete
+    - filter-controls
+    - sort-control
+    - pagination
+    - tabs
+    - ai-provenance
+    - accordion
+  specializes:
+    - overview-detail
+    - search
+  neighbors:
+    - faceted-search
+    - recommendations
+    - ai-chat
+scores:
+  ubiquity: 5
+  potential: 4
+  spec: 4
+evidence: agent-coded
+usage:
+  - "People open several results in tabs to compare: a composition workaround"
+questions:
+  - When results are generated, what is the overview and what is the detail?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.5399303390418937
+  agreementFirstPass: 0.6636363636363637
+  kappaFinal: 0.9273606860205387
+  agreementFinal: 0.9409090909090909
+  pass: true
+  perSub:
+    representation:
+      kappaFirstPass: 0.791485664639444
+      agreementFirstPass: 0.8
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    snippet:
+      kappaFirstPass: 0.5323460639127048
+      agreementFirstPass: 0.5
+      kappaFinal: 0.9504541701073491
+      agreementFinal: 0.95
+      flag: null
+    grouping:
+      kappaFirstPass: 0.6421471172962228
+      agreementFirstPass: 0.75
+      kappaFinal: 0.9416342412451361
+      agreementFinal: 0.95
+      flag: null
+    ranking:
+      kappaFirstPass: 0.26153846153846166
+      agreementFirstPass: 0.4
+      kappaFinal: 0.7824116047144154
+      agreementFinal: 0.8
+      flag: null
+    cues:
+      kappaFirstPass: 0.44218302427257633
+      agreementFirstPass: 0.63
+      kappaFinal: 0.9193945636111235
+      agreementFinal: 0.94
+      flag: null
+    openIn:
+      kappaFirstPass: 0.7139451728247918
+      agreementFirstPass: 0.8
+      kappaFinal: 0.9294947121034075
+      agreementFinal: 0.95
+      flag: null
+    updating:
+      kappaFirstPass: 0.786856127886323
+      agreementFirstPass: 0.9
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+  distribution:
+    representation:
+      Title, address and snippet: 9
+      Rich result card: 7
+      Thumbnail grid: 1
+      Answer box: 0
+      Summary with citations: 3
+    snippet:
+      Static description: 8
+      Query-biased with highlights: 8
+      Generated per result: 2
+      n/a: 2
+    grouping:
+      Single ranked list: 12
+      Verticals as tabs: 1
+      Blended modules: 4
+      Clustered by topic: 1
+      Grouped by type: 2
+    ranking:
+      Opaque relevance: 10
+      Sort by the person: 8
+      Personalized: 1
+      Source weighting: 1
+    cues:
+      Highlighted matches: 7
+      Result count: 7
+      Freshness date: 11
+      Source identity: 14
+      Why this matched: 0
+      Rating and popularity: 8
+    openIn:
+      New page: 13
+      Side-by-side: 6
+      In-place: 1
+      Popover: 0
+    updating:
+      On submit: 17
+      As you type: 2
+      Saved search with alerts: 1
+  exemplars:
+    representation:
+      Title, address and snippet:
+        - Google — Web results for a query
+        - DuckDuckGo — Results page
+        - Kagi — Results page
+      Rich result card:
+        - Google Shopping — Shopping results
+        - Amazon — Product results
+        - Apple App Store — Search results
+      Thumbnail grid:
+        - Google — Images results
+      Answer box: []
+      Summary with citations:
+        - Bing — Results with Copilot answer
+        - Elicit — Results for a research question
+        - Perplexity — Answer with sources
+    snippet:
+      Static description:
+        - Google Shopping — Shopping results
+        - Amazon — Product results
+        - Apple App Store — Search results
+      Query-biased with highlights:
+        - Google — Web results for a query
+        - Bing — Results with Copilot answer
+        - DuckDuckGo — Results page
+      Generated per result:
+        - Semantic Scholar — Results page
+        - Elicit — Results for a research question
+    grouping:
+      Single ranked list:
+        - Google — Images results
+        - DuckDuckGo — Results page
+        - Kagi — Results page
+      Verticals as tabs:
+        - Slack — Search results
+      Blended modules:
+        - Google — Web results for a query
+        - Bing — Results with Copilot answer
+        - Amazon — Product results
+      Clustered by topic:
+        - Carrot2 — Clustered results
+      Grouped by type:
+        - Spotify — Search results
+        - macOS Spotlight — Results list
+    ranking:
+      Opaque relevance:
+        - Google — Web results for a query
+        - Google — Images results
+        - Bing — Results with Copilot answer
+      Sort by the person:
+        - Google Shopping — Shopping results
+        - Amazon — Product results
+        - Google Scholar — Results page
+      Personalized:
+        - Spotify — Search results
+      Source weighting:
+        - Kagi — Results page
+    cues:
+      Highlighted matches:
+        - Google — Web results for a query
+        - Bing — Results with Copilot answer
+        - DuckDuckGo — Results page
+      Result count:
+        - Bing — Results with Copilot answer
+        - Amazon — Product results
+        - Google Scholar — Results page
+      Freshness date:
+        - Google — Web results for a query
+        - Bing — Results with Copilot answer
+        - DuckDuckGo — Results page
+      Source identity:
+        - Google — Web results for a query
+        - Google — Images results
+        - Bing — Results with Copilot answer
+      Why this matched: []
+      Rating and popularity:
+        - Google Shopping — Shopping results
+        - Amazon — Product results
+        - Apple App Store — Search results
+    openIn:
+      New page:
+        - Google — Web results for a query
+        - Bing — Results with Copilot answer
+        - DuckDuckGo — Results page
+      Side-by-side:
+        - Google — Images results
+        - Google Shopping — Shopping results
+        - Elicit — Results for a research question
+      In-place:
+        - Spotify — Search results
+      Popover: []
+    updating:
+      On submit:
+        - Google — Web results for a query
+        - Google — Images results
+        - Bing — Results with Copilot answer
+      As you type:
+        - Spotify — Search results
+        - macOS Spotlight — Results list
+      Saved search with alerts:
+        - Zillow — Saved search results
+  unobserved:
+    - sub: representation
+      var: Answer box
+    - sub: cues
+      var: Why this matched
+    - sub: openIn
+      var: Popover
+  unresolved: []
+  proposals:
+    raised: 3
+    adopted:
+      - sub: grouping
+        name: Grouped by type
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: cues
+        name: Rating and popularity
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded:
+      - place: sub:grouping
+        sub: grouping
+        dim: null
+        name: Grouped by kind
+        gloss: Results sectioned by item type (apps, documents, mail) in one list rather than tabs or
+          blended modules
+        raters:
+          - fable
+        instances:
+          - 16
+        status: raised
+  raterNotes:
+    fable:
+      - "Ranking: Sort by the person coded wherever a sort control exists even if relevance is the
+        default. Snippet is n/a for grids and answer engines whose results carry no text excerpt."
+      - "cues lacks the crowd-aggregate cue (stars, downloads, citations, views) that eight of
+        twenty results pages lead with. grouping lacks the archetype's Grouped by type. ranking
+        wants pick any: signed-in engines are both opaque and personalised, and retail pages are
+        both sortable and opaque by default. snippet's n/a for image grids and answer engines is
+        read differently by each rater."
+    opus:
+      - "cues needed the bigger of the two proposals: in eight of twenty instances the decisive cue
+        is a crowd aggregate (stars, downloads, citations, views) that the codebook has no name for,
+        while 'Why this matched' went entirely unused — no shipping product in this sample explains
+        its matching. grouping's missing 'grouped by type' is a straight inconsistency with the
+        archetype entry, which has exactly that value in resultForm. ranking's Sort by the person
+        fires whenever a sort control exists, which makes it a fact about the toolbar rather than
+        about the ranking; Opaque relevance and Personalized are almost impossible to tell apart
+        from outside, and I coded Personalized only where the product says it personalises.
+        representation is pick-one but a page like Google's or Bing's carries three representations
+        at once, so I coded the headline one and let the rest fall to grouping."
+      - "This entry's low agreement comes from two unstated conventions rather than from the
+        products. First, `snippet` has no rule for a result with no text at all: n/a and Static
+        description were used interchangeably, and I now read Static description as 'text that
+        exists but is not query-built' and n/a as 'no text'. Second, `representation`'s Rich result
+        card is glossed with commerce attributes but gets used for any result denser than a link,
+        which pulled scholarly and media results into it. Two variations are also missing: a
+        grouped-by-kind list (which the archetype already names, so the pattern should inherit it)
+        and a crowd-aggregate cue (ratings, citations, views)."
+    sonnet:
+      - ranking came out Opaque relevance for nearly every instance since none of these sampled
+        screens shows an explicit signed-in personalization cue or a person-chosen sort as the
+        default view; Kagi (5) was the one clear exception, matching its own named feature.
+      - "The clearest, most consistent miss on my part: whenever a screen has an explicit, visible
+        sort control (Shopping, Amazon, Scholar, Semantic Scholar, Outlook, Slack, YouTube, Zillow),
+        both other raters correctly coded `ranking` as Sort by the person while I defaulted to
+        Opaque relevance across eight separate instances — several of my own notes even named the
+        sort control without the code reflecting it. Two codebook gaps worth recording: (1) `cues`
+        has no value for a crowd-aggregate popularity signal (ratings, downloads, citations, views),
+        which both other raters reached for independently and which I now think is real, adopting
+        opus's +Rating and popularity; (2) `grouping` has no value for content sectioned by kind
+        within one scroll (Spotify's Songs/Artists/Albums/Playlists, Spotlight's Top
+        Hit/Applications/Documents/Mail) — the parent archetype has 'Grouped by type' but this
+        entry's own four values (list/tabs/blended/clustered) can't say it, which both other raters
+        flagged independently with near-identical proposals."
+  codedAt: 2026-09-22
+previews:
+  - file: search-results.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

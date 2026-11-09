@@ -1,0 +1,318 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "pagination". Edit between batches only — see README "Rules".
+id: pagination
+name: Pagination
+level: component
+parent: navigate
+aliases:
+  - paging
+  - infinite scroll
+  - load more
+definition: Dividing a long collection into portions and moving between them.
+data: sequence
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - commerce
+  - news
+  - enterprise
+  - social
+anatomy:
+  - name: Portion
+    role: What is loaded now
+  - name: Control
+    role: How to reach more
+  - name: Position
+    role: Where you are in the whole
+roles: []
+dimensions:
+  - name: Mechanism
+    family: flow
+    question: How does a person reach the next portion?
+    subdimensions:
+      - id: mechanism
+        name: Mechanism
+        select: one
+        values:
+          - id: numbered-pages
+            name: Numbered pages
+            example: Stack Overflow question lists
+          - id: next-and-previous
+            name: Next and previous
+            example: Gmail
+          - id: load-more
+            name: Load more
+            example: Hacker News More
+          - id: infinite-scroll
+            name: Infinite scroll
+            example: Instagram
+          - id: continuous-virtual-list
+            name: Continuous virtual list
+            example: Spreadsheets
+  - name: Position
+    family: feedback
+    question: How does a person know where they are?
+    subdimensions:
+      - id: position
+        name: Position
+        select: one
+        values:
+          - id: page-n-of-m
+            name: Page N of M
+            example: Classic pagination
+          - id: item-range
+            name: Item range
+            description: 1–50 of 1,240
+            example: Gmail
+          - id: scroll-position-only
+            name: Scroll position only
+            example: Feeds
+          - id: index-scrubber
+            name: Index scrubber
+            description: Jump by letter or date
+            example: iOS Contacts, Google Photos scrubber
+          - id: count-only
+            name: Count only
+            description: A total number of results with previous/next, but no page number or item range (Stripe
+              Dashboard lists)
+            example: Stripe Dashboard — Payments list
+  - name: Page size
+    family: scope
+    question: How big is a portion?
+    subdimensions:
+      - id: pageSize
+        name: Page size
+        select: one
+        values:
+          - id: fixed
+            name: Fixed
+            example: Search results
+          - id: chosen-by-the-person
+            name: Chosen by the person
+            example: Rows per page in data tables
+          - id: fits-the-viewport
+            name: Fits the viewport
+            example: Responsive grids
+  - name: Position memory
+    family: lifecycle
+    question: Is the position kept?
+    subdimensions:
+      - id: memory
+        name: Memory
+        select: one
+        values:
+          - id: lost-on-back
+            name: Lost on back
+            example: Many infinite feeds
+          - id: restored-on-back
+            name: Restored on back
+            example: Well-built retail sites
+          - id: in-the-url
+            name: In the URL
+            example: Numbered pagination
+wild:
+  score: 1
+  note: Page size is sometimes a choice; the mechanism never is.
+  examples:
+    - name: Gmail
+      note: Maximum page size setting
+techniques:
+  - name: Portion dial
+    dimension: Mechanism
+    how: A person chooses pages, load-more or continuous per collection.
+    ai: false
+  - name: Jump by attribute
+    dimension: Position
+    how: Scrub by any sorted attribute (a date, a price, a letter) instead of a page number.
+    ai: false
+signature: Jump by attribute
+sample: Results, feeds and admin tables across the Semrush categories.
+unit: One paginated collection.
+relations:
+  uses: []
+  specializes: []
+  neighbors:
+    - carousel
+    - feed
+scores:
+  ubiquity: 5
+  potential: 2
+  spec: 5
+evidence: agent-coded
+usage:
+  - Infinite scroll suits grazing; pages suit returning to a place
+questions:
+  - Is the choice of mechanism a property of the task more than of the collection?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7843695145313382
+  agreementFirstPass: 0.8
+  kappaFinal: 0.9616178063469608
+  agreementFinal: 0.9625
+  pass: true
+  perSub:
+    mechanism:
+      kappaFirstPass: 0.9564902102973171
+      agreementFirstPass: 0.95
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    position:
+      kappaFirstPass: 0.9095022624434389
+      agreementFirstPass: 0.9
+      kappaFinal: 0.9554234769687966
+      agreementFinal: 0.95
+      flag: null
+    pageSize:
+      kappaFirstPass: 0.7759103641456585
+      agreementFirstPass: 0.8
+      kappaFinal: 0.9450045829514209
+      agreementFinal: 0.95
+      flag: null
+    memory:
+      kappaFirstPass: 0.49557522123893805
+      agreementFirstPass: 0.55
+      kappaFinal: 0.9460431654676257
+      agreementFinal: 0.95
+      flag: null
+  distribution:
+    mechanism:
+      Numbered pages: 6
+      Next and previous: 4
+      Load more: 1
+      Infinite scroll: 4
+      Continuous virtual list: 5
+    position:
+      Page N of M: 6
+      Item range: 2
+      Scroll position only: 7
+      Index scrubber: 3
+      Count only: 1
+      "?": 1
+    pageSize:
+      Fixed: 11
+      Chosen by the person: 4
+      Fits the viewport: 5
+    memory:
+      Lost on back: 2
+      Restored on back: 7
+      In the URL: 10
+      n/a: 1
+  exemplars:
+    mechanism:
+      Numbered pages:
+        - Google Search — Results
+        - Stack Overflow — Questions list
+        - Amazon — Search results
+      Next and previous:
+        - Gmail — Inbox
+        - Stripe Dashboard — Payments list
+        - Shopify admin — Orders list
+      Load more:
+        - Hacker News — Front page
+      Infinite scroll:
+        - Instagram — Home feed
+        - X (Twitter) — Home timeline
+        - Reddit — Home feed
+      Continuous virtual list:
+        - Microsoft Excel — Large sheet
+        - iOS Contacts — All Contacts
+        - Google Photos — Photos grid
+    position:
+      Page N of M:
+        - Google Search — Results
+        - Stack Overflow — Questions list
+        - Amazon — Search results
+      Item range:
+        - Gmail — Inbox
+        - Google Cloud Console — VM instances table
+      Scroll position only:
+        - Hacker News — Front page
+        - Instagram — Home feed
+        - X (Twitter) — Home timeline
+      Index scrubber:
+        - iOS Contacts — All Contacts
+        - Google Photos — Photos grid
+        - Apple Music — Library Songs
+      Count only:
+        - Stripe Dashboard — Payments list
+    pageSize:
+      Fixed:
+        - Google Search — Results
+        - Hacker News — Front page
+        - Instagram — Home feed
+      Chosen by the person:
+        - Stack Overflow — Questions list
+        - Gmail — Inbox
+        - eBay — Search results
+      Fits the viewport:
+        - Microsoft Excel — Large sheet
+        - iOS Contacts — All Contacts
+        - Google Photos — Photos grid
+    memory:
+      Lost on back:
+        - Reddit — Home feed
+        - Google Cloud Console — VM instances table
+      Restored on back:
+        - Instagram — Home feed
+        - X (Twitter) — Home timeline
+        - iOS Contacts — All Contacts
+      In the URL:
+        - Google Search — Results
+        - Stack Overflow — Questions list
+        - Gmail — Inbox
+  unobserved: []
+  unresolved: []
+  proposals:
+    raised: 1
+    adopted:
+      - sub: position
+        name: Count only
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - memory is unobservable for admin tables without trying them; two ?s. Page N of M was applied
+        even when M is not shown, since the current page number is.
+      - memory does not say In the URL takes precedence when a URL-paged list also restores on back,
+        which split Amazon and eBay; pageSize is unobservable for infinite feeds (the batch is
+        invisible) and the gloss for Fits the viewport reads as any responsive grid; position has no
+        value for cursor-paged tables that show a count but no range.
+    opus:
+      - "pageSize is a system fact rather than something a person can see on any infinite feed —
+        Fixed there means the loader's chunk, which no one experiences; that cell is nearly
+        meaningless for instances 5, 6, 12 and 13. memory is also partly unobservable: whether a
+        feed restores your place varies by session and platform, and I coded the behaviour each
+        product is known for."
+      - "memory conflates a mechanism with an outcome: every URL-paged list is also restored on
+        back, so 'In the URL' and 'Restored on back' are not exclusive and the sub wants to be pick
+        any (I kept the address-based code, which is the checkable one). position has no value for a
+        paged collection that shows nothing at all — fable's Count only covers the halfway case, but
+        bare-chevron admin tables (Shopify) fall through entirely. pageSize stays ambiguous between
+        the chunk the system loads and the rows a viewport shows, and it does not care whether the
+        person chooses it on the list or in settings (Gmail)."
+    sonnet:
+      - For enterprise dashboards I don't use daily (Stripe, Shopify admin, Google Cloud Console), I
+        inferred Item range and Restored-on-back by common convention for well-built admin tables
+        rather than confirmed personal recall — flagged per-instance rather than marked '?', since
+        I'm reasonably (not fully) confident.
+  codedAt: 2026-09-22
+previews:
+  - file: pagination.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

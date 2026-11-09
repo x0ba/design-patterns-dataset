@@ -1,0 +1,357 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "progress-indicator". Edit between batches only — see README "Rules".
+id: progress-indicator
+name: Progress indicator
+level: component
+parent: monitor
+aliases:
+  - spinner
+  - progress bar
+  - skeleton screen
+  - loading state
+definition: Showing that work is happening, and how far along it is.
+data: object
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - software
+  - productivity
+  - commerce
+  - entertainment
+anatomy:
+  - name: Indicator
+    role: Spinner, bar or skeleton
+  - name: Label
+    role: What is happening
+  - name: Control
+    role: Cancel or pause
+roles: []
+dimensions:
+  - name: Determinacy
+    family: feedback
+    question: How much does it say about remaining work?
+    subdimensions:
+      - id: determinacy
+        name: Determinacy
+        select: one
+        values:
+          - id: indeterminate
+            name: Indeterminate
+            example: Spinners
+          - id: percentage
+            name: Percentage
+            example: Download bars
+          - id: steps-completed
+            name: Steps completed
+            description: 3 of 10
+            example: Batch jobs
+          - id: time-remaining
+            name: Time remaining
+            example: macOS file copy
+  - name: Form
+    family: layout
+    question: What does it look like?
+    subdimensions:
+      - id: form
+        name: Form
+        select: one
+        values:
+          - id: spinner
+            name: Spinner
+            example: iOS activity indicator
+          - id: linear-bar
+            name: Linear bar
+            example: Material linear progress
+          - id: circular-determinate
+            name: Circular determinate
+            example: App Store downloads
+          - id: skeleton-placeholders
+            name: Skeleton placeholders
+            example: LinkedIn feed loading
+          - id: inside-a-button
+            name: Inside a button
+            example: Submit buttons
+          - id: text-status
+            name: Text status
+            description: A word or short phrase (Saving…, Posting…) with at most a small icon and no geometric
+              progress indicator
+            example: Google Docs — Saving indicator
+  - name: Delay handling
+    family: lifecycle
+    question: When does it appear?
+    subdimensions:
+      - id: delay
+        name: Delay
+        select: one
+        values:
+          - id: immediately
+            name: Immediately
+            example: Most spinners
+          - id: after-a-short-delay
+            name: After a short delay
+            description: Avoids flashes for quick work
+            example: Well-tuned apps
+          - id: moves-to-background
+            name: Moves to background
+            example: Export jobs that notify on completion
+  - name: Coverage
+    family: scope
+    question: What does it block?
+    subdimensions:
+      - id: coverage
+        name: Coverage
+        select: one
+        values:
+          - id: whole-page
+            name: Whole page
+            example: Page loads
+          - id: a-region
+            name: A region
+            example: Card loading
+          - id: one-control
+            name: One control
+            example: Button spinners
+          - id: background-task-tray
+            name: Background task tray
+            example: Chrome downloads
+  - name: Control
+    family: invocation
+    question: Can the work be stopped?
+    subdimensions:
+      - id: control
+        name: Control
+        select: one
+        values:
+          - id: no-control
+            name: No control
+            example: Page loads
+          - id: cancel
+            name: Cancel
+            example: File copies
+          - id: pause-and-resume
+            name: Pause and resume
+            example: Downloads
+wild:
+  score: 0
+  note: Indicators are never customizable; reduced-motion settings sometimes affect them.
+  examples: []
+techniques:
+  - name: Send to background
+    dimension: Delay handling
+    how: Any long wait can be moved to a background tray that notifies on completion.
+    ai: false
+signature: Send to background
+sample: Loading, upload, export and installation flows.
+unit: One indicator.
+relations:
+  uses: []
+  specializes: []
+  neighbors:
+    - stepper
+    - status-tracker
+scores:
+  ubiquity: 5
+  potential: 2
+  spec: 5
+evidence: agent-coded
+usage:
+  - Indeterminate waits feel longer than determinate ones
+questions:
+  - How should an AI agent’s progress be shown when its steps are not known in advance?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.6998651465041297
+  agreementFirstPass: 0.82
+  kappaFinal: 0.8997556964471246
+  agreementFinal: 0.93
+  pass: true
+  perSub:
+    determinacy:
+      kappaFirstPass: 0.9005799502899752
+      agreementFirstPass: 0.9
+      kappaFinal: 0.9500831946755406
+      agreementFinal: 0.95
+      flag: null
+    form:
+      kappaFirstPass: 0.897172236503856
+      agreementFirstPass: 0.9
+      kappaFinal: 0.948805460750853
+      agreementFinal: 0.95
+      flag: null
+    delay:
+      kappaFirstPass: 0.3063583815028894
+      agreementFirstPass: 0.9
+      kappaFinal: 0.7864768683274017
+      agreementFinal: 0.95
+      flag: null
+    coverage:
+      kappaFirstPass: 0.5022624434389141
+      agreementFirstPass: 0.5
+      kappaFinal: 0.8663697104677062
+      agreementFinal: 0.85
+      flag: null
+    control:
+      kappaFirstPass: 0.8929527207850134
+      agreementFirstPass: 0.9
+      kappaFinal: 0.9470432480141217
+      agreementFinal: 0.95
+      flag: null
+  distribution:
+    determinacy:
+      Indeterminate: 8
+      Percentage: 7
+      Steps completed: 0
+      Time remaining: 5
+    form:
+      Spinner: 3
+      Linear bar: 11
+      Circular determinate: 2
+      Skeleton placeholders: 2
+      Inside a button: 1
+      Text status: 1
+    delay:
+      Immediately: 18
+      After a short delay: 1
+      Moves to background: 1
+    coverage:
+      Whole page: 5
+      A region: 5
+      One control: 3
+      Background task tray: 6
+      n/a: 1
+    control:
+      No control: 10
+      Cancel: 4
+      Pause and resume: 6
+  exemplars:
+    determinacy:
+      Indeterminate:
+        - YouTube — Page navigation bar
+        - LinkedIn — Feed placeholders
+        - Facebook — Feed shimmer
+      Percentage:
+        - iOS App Store — App download ring
+        - Google Chrome — Download bubble
+        - Gmail — Attachment upload
+      Steps completed: []
+      Time remaining:
+        - macOS Finder — Copying files window
+        - Windows File Explorer — Copy dialog
+        - Dropbox — Sync status
+    form:
+      Spinner:
+        - Netflix — Buffering spinner
+        - Notion — Export
+        - Spotify — Album download
+      Linear bar:
+        - macOS Finder — Copying files window
+        - Windows File Explorer — Copy dialog
+        - YouTube — Page navigation bar
+      Circular determinate:
+        - iOS App Store — App download ring
+        - Google Chrome — Download bubble
+      Skeleton placeholders:
+        - LinkedIn — Feed placeholders
+        - Facebook — Feed shimmer
+      Inside a button:
+        - Stripe Checkout — Pay button
+      Text status:
+        - Google Docs — Saving indicator
+    delay:
+      Immediately:
+        - Windows File Explorer — Copy dialog
+        - iOS App Store — App download ring
+        - Google Chrome — Download bubble
+      After a short delay:
+        - macOS Finder — Copying files window
+      Moves to background:
+        - Notion — Export
+    coverage:
+      Whole page:
+        - YouTube — Page navigation bar
+        - Netflix — Buffering spinner
+        - Notion — Export
+      A region:
+        - LinkedIn — Feed placeholders
+        - Facebook — Feed shimmer
+        - Gmail — Attachment upload
+      One control:
+        - iOS App Store — App download ring
+        - Stripe Checkout — Pay button
+        - Spotify — Album download
+      Background task tray:
+        - macOS Finder — Copying files window
+        - Windows File Explorer — Copy dialog
+        - Google Chrome — Download bubble
+    control:
+      No control:
+        - YouTube — Page navigation bar
+        - LinkedIn — Feed placeholders
+        - Facebook — Feed shimmer
+      Cancel:
+        - macOS Finder — Copying files window
+        - Gmail — Attachment upload
+        - Google Drive — Upload panel
+      Pause and resume:
+        - Windows File Explorer — Copy dialog
+        - iOS App Store — App download ring
+        - Google Chrome — Download bubble
+  unobserved:
+    - sub: determinacy
+      var: Steps completed
+  unresolved: []
+  proposals:
+    raised: 1
+    adopted:
+      - sub: form
+        name: Text status
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - Delay handling is unobservable from product knowledge (whether a spinner waits 300 ms cannot
+        be recalled), so every instance is Immediately; Coverage has no value for indicators that
+        block nothing but are not in a tray.
+      - coverage asks what is blocked but has no value for an indicator that blocks nothing and sits
+        outside a tray (a hairline over a feed, a word by a title), so those split three ways;
+        determinacy is pick one over bars that show a percentage and a time estimate together; delay
+        is unobservable from memory.
+    opus:
+      - "Coverage reads as what the indicator blocks, so its fourth variation had to absorb
+        everything non-blocking: real trays (Chrome, Drive), a menu bar item, an app-icon ring and
+        an ambient saving chip all landed in Background task tray. Determinacy also hides a common
+        hybrid — a bar that is really a fake curve (YouTube) versus one tracking bytes — which the
+        codebook cannot separate."
+      - "Coverage is the fault line: its question ('what does it block?') and its variations
+        ('background task tray', 'one control') answer two different questions — what is blocked and
+        where the indicator lives — so every non-blocking indicator that is not literally a tray has
+        nowhere honest to go."
+    sonnet:
+      - Form and determinacy sometimes both apply (a bar that is also inside a small control);
+        picked whichever was the dominant visual described.
+      - "Coverage's line between 'A region' and 'Background task tray' is underspecified for
+        modeless-but-separate-window cases (Finder/Explorer copy windows): the codebook glosses tray
+        with Chrome downloads but doesn't say whether a whole floating window counts as a region or
+        a tray. Also for coverage, a blocking modal dialog (Notion/Canva) needs its blocking
+        behaviour, not its visual footprint, to decide Whole page vs A region — the gloss doesn't
+        say this explicitly."
+  codedAt: 2026-09-22
+previews:
+  - file: progress-indicator.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

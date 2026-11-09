@@ -1,0 +1,422 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "approval-flow". Edit between batches only — see README "Rules".
+id: approval-flow
+name: Approval flow
+level: pattern
+parent: transact
+aliases:
+  - review workflow
+  - sign-off
+  - pull request review
+  - expense approval
+definition: Routing a request to people who approve it, reject it or ask for changes.
+data: sequence
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - enterprise
+  - software
+  - finance
+  - government
+anatomy:
+  - name: Request
+    role: What is being asked
+  - name: Reviewers
+    role: Who decides
+  - name: Decision
+    role: Approve, reject, request changes
+  - name: Trail
+    role: What happened
+roles:
+  - requester
+  - amount
+  - status
+  - reviewer
+dimensions:
+  - name: Routing
+    family: flow
+    question: Who reviews, in what order?
+    subdimensions:
+      - id: routing
+        name: Routing
+        select: one
+        values:
+          - id: single-approver
+            name: Single approver
+            example: Manager approval
+          - id: sequential-chain
+            name: Sequential chain
+            example: Finance chains
+          - id: parallel-reviewers
+            name: Parallel reviewers
+            description: Any or all must approve
+            example: GitHub required reviews
+          - id: conditional-by-rule
+            name: Conditional by rule
+            example: Expense rules by amount
+  - name: Review surface
+    family: content
+    question: What does a reviewer see?
+    subdimensions:
+      - id: surface
+        name: Surface
+        select: many
+        values:
+          - id: request-summary
+            name: Request summary
+            example: Expense reports
+          - id: diff-of-changes
+            name: Diff of changes
+            example: GitHub pull requests
+          - id: evidence-attachments
+            name: Evidence attachments
+            example: Receipts
+          - id: policy-checks
+            name: Policy checks
+            example: GitHub status checks
+  - name: Decision actions
+    family: invocation
+    question: How is a decision made?
+    subdimensions:
+      - id: actions
+        name: Actions
+        select: many
+        values:
+          - id: approve
+            name: Approve
+            example: All
+          - id: reject
+            name: Reject
+            example: All
+          - id: request-changes
+            name: Request changes
+            example: GitHub
+          - id: delegate
+            name: Delegate
+            example: Out-of-office delegation
+          - id: approve-from-a-notification
+            name: Approve from a notification
+            example: Slack approval messages
+  - name: Timing
+    family: lifecycle
+    question: What if nobody decides?
+    subdimensions:
+      - id: timing
+        name: Timing
+        select: one
+        values:
+          - id: no-deadline
+            name: No deadline
+            example: Pull requests
+          - id: reminders
+            name: Reminders
+            example: Expense tools
+          - id: escalation-after-timeout
+            name: Escalation after timeout
+            example: Service desks
+          - id: auto-approve-under-threshold
+            name: Auto-approve under threshold
+            example: Small expenses
+  - name: Visibility
+    family: collaboration
+    question: Who sees the discussion and history?
+    subdimensions:
+      - id: visibility
+        name: Visibility
+        select: one
+        values:
+          - id: status-only
+            name: Status only
+            example: Leave requests
+          - id: full-audit-trail
+            name: Full audit trail
+            example: Finance approvals
+          - id: comments-on-items
+            name: Comments on items
+            example: GitHub review comments
+  - name: Status to requester
+    family: feedback
+    question: What does the requester see while waiting?
+    subdimensions:
+      - id: status
+        name: Status
+        select: one
+        values:
+          - id: final-result-only
+            name: Final result only
+            example: Simple forms
+          - id: stage-by-stage
+            name: Stage by stage
+            example: Procurement portals
+          - id: who-is-holding-it
+            name: Who is holding it
+            example: GitHub reviewers list
+wild:
+  score: 1
+  note: Rules are configured by administrators, not by the people reviewing.
+  examples:
+    - name: GitHub
+      note: Branch protection and required reviewers
+techniques:
+  - name: Decide where you are
+    dimension: Decision actions
+    how: Approve from any surface (email, chat, a notification) with the key attributes surfaced into
+      that surface, Fluid Attributes into the notification.
+    ai: false
+  - name: Summarize risk
+    dimension: Review surface
+    how: A summary of the request’s risks and policy exceptions, each linked to evidence.
+    ai: true
+signature: Decide where you are
+sample: Code review, expense, procurement, HR and content publishing tools.
+unit: One approval workflow.
+relations:
+  uses:
+    - confirmation
+    - comment-thread
+    - badge
+    - stepper
+  specializes:
+    - transact
+  neighbors:
+    - inbox
+    - status-tracker
+scores:
+  ubiquity: 3
+  potential: 3
+  spec: 5
+evidence: agent-coded
+usage:
+  - Reviewers rubber-stamp when the surface lacks evidence
+questions:
+  - What must a reviewer always see, whatever they customize?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7481950969987062
+  agreementFirstPass: 0.7923076923076923
+  kappaFinal: 0.9697198055488467
+  agreementFinal: 0.9730769230769231
+  pass: true
+  perSub:
+    routing:
+      kappaFirstPass: 0.8220904373610082
+      agreementFirstPass: 0.8
+      kappaFinal: 0.9106478034251676
+      agreementFinal: 0.9
+      flag: null
+    surface:
+      kappaFirstPass: 0.8645502645502644
+      agreementFirstPass: 0.9
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    actions:
+      kappaFirstPass: 0.7726867534319845
+      agreementFirstPass: 0.83
+      kappaFinal: 0.9728002175982593
+      agreementFinal: 0.98
+      flag: null
+    timing:
+      kappaFirstPass: 0.6100278551532036
+      agreementFirstPass: 0.65
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    visibility:
+      kappaFirstPass: 0.5785776997366113
+      agreementFirstPass: 0.6
+      kappaFinal: 0.9467613132209407
+      agreementFinal: 0.95
+      flag: null
+    status:
+      kappaFirstPass: 0.3942054433713784
+      agreementFirstPass: 0.5
+      kappaFinal: 0.8849472674976029
+      agreementFinal: 0.9
+      flag: null
+  distribution:
+    routing:
+      Single approver: 6
+      Sequential chain: 4
+      Parallel reviewers: 5
+      Conditional by rule: 5
+    surface:
+      Request summary: 19
+      Diff of changes: 5
+      Evidence attachments: 5
+      Policy checks: 10
+    actions:
+      Approve: 20
+      Reject: 15
+      Request changes: 9
+      Delegate: 6
+      Approve from a notification: 7
+    timing:
+      No deadline: 9
+      Reminders: 8
+      Escalation after timeout: 2
+      Auto-approve under threshold: 1
+    visibility:
+      Status only: 4
+      Full audit trail: 9
+      Comments on items: 7
+    status:
+      Final result only: 3
+      Stage by stage: 7
+      Who is holding it: 10
+  exemplars:
+    routing:
+      Single approver:
+        - Workday — Time off request approval
+        - BambooHR — Time off approval
+        - Jira Service Management — Request approval
+      Sequential chain:
+        - Expensify — Approve a report
+        - SAP Concur — Expense approval
+        - DocuSign — Envelope signing order
+      Parallel reviewers:
+        - GitHub — Pull request review
+        - Gerrit — Change review
+        - Microsoft Teams — Approvals app
+      Conditional by rule:
+        - GitLab — Merge request approvals
+        - Coupa — Purchase requisition approval
+        - ServiceNow — Change request approval
+    surface:
+      Request summary:
+        - GitHub — Pull request review
+        - GitLab — Merge request approvals
+        - Gerrit — Change review
+      Diff of changes:
+        - GitHub — Pull request review
+        - GitLab — Merge request approvals
+        - Gerrit — Change review
+      Evidence attachments:
+        - Expensify — Approve a report
+        - SAP Concur — Expense approval
+        - Microsoft Teams — Approvals app
+      Policy checks:
+        - GitHub — Pull request review
+        - GitLab — Merge request approvals
+        - Gerrit — Change review
+    actions:
+      Approve:
+        - GitHub — Pull request review
+        - GitLab — Merge request approvals
+        - Gerrit — Change review
+      Reject:
+        - Gerrit — Change review
+        - Expensify — Approve a report
+        - Workday — Time off request approval
+      Request changes:
+        - GitHub — Pull request review
+        - GitLab — Merge request approvals
+        - Gerrit — Change review
+      Delegate:
+        - SAP Concur — Expense approval
+        - Workday — Time off request approval
+        - Coupa — Purchase requisition approval
+      Approve from a notification:
+        - Coupa — Purchase requisition approval
+        - ServiceNow — Change request approval
+        - Jira Service Management — Request approval
+    timing:
+      No deadline:
+        - GitHub — Pull request review
+        - GitLab — Merge request approvals
+        - Gerrit — Change review
+      Reminders:
+        - Expensify — Approve a report
+        - SAP Concur — Expense approval
+        - Workday — Time off request approval
+      Escalation after timeout:
+        - ServiceNow — Change request approval
+        - SAP Ariba — Requisition approval
+      Auto-approve under threshold:
+        - Ramp — Expense approval
+    visibility:
+      Status only:
+        - BambooHR — Time off approval
+        - Jira Service Management — Request approval
+        - Microsoft Teams — Approvals app
+      Full audit trail:
+        - Expensify — Approve a report
+        - SAP Concur — Expense approval
+        - Workday — Time off request approval
+      Comments on items:
+        - GitHub — Pull request review
+        - GitLab — Merge request approvals
+        - Gerrit — Change review
+    status:
+      Final result only:
+        - BambooHR — Time off approval
+        - WordPress — Pending review post
+        - Asana — Approval task
+      Stage by stage:
+        - Expensify — Approve a report
+        - SAP Concur — Expense approval
+        - Workday — Time off request approval
+      Who is holding it:
+        - GitHub — Pull request review
+        - GitLab — Merge request approvals
+        - Gerrit — Change review
+  unobserved: []
+  unresolved: []
+  proposals:
+    raised: 0
+    adopted: []
+    recorded: []
+  raterNotes:
+    fable:
+      - "timing was hard to code from product knowledge: whether reminders or escalation are default
+        versus admin-configured is not visible to a requester, so Reminders/Escalation for
+        enterprise tools (Coupa, ServiceNow, Ariba) is moderate confidence."
+      - Request summary reads as either the request's own description (every tool) or a
+        summary-as-primary-surface (expense tools); the gloss should say. Sequential chain and
+        Conditional by rule overlap when rules generate a chain. Who is holding it and Stage by
+        stage overlap whenever a chain shows the current holder.
+    opus:
+      - "actions needed a Hold or Send-back-without-rejecting value for Coupa and Concur — I folded
+        send-back into Request changes and left Hold uncoded. routing's Parallel reviewers and
+        Conditional by rule overlap badly: GitLab, Azure DevOps and ServiceNow all compute a
+        parallel reviewer set from rules, and I split them by whether a human names the reviewers
+        (parallel) or a rule does (conditional), which is a judgement another rater could easily
+        make the other way."
+      - "status is pick one but Expensify, DocuSign, Ariba and Teams all truthfully show both the
+        stage and the person holding it — it wants to be pick any. Parallel reviewers conflates two
+        things, several reviewers at once and a rule that they must approve, which is what made
+        Figma and Azure DevOps split three ways. Delegate and Approve from a notification also sit
+        oddly in 'Decision actions': one is an out-of-band configuration, the other a surface, and
+        neither is a decision."
+    sonnet:
+      - timing (deadline/escalation behavior) was often not directly evident from the sample note
+        and inferred from general knowledge of each product category (finance/procurement tools
+        escalate, lightweight dev/task tools don't); flagged the more confident cases only where the
+        note said so explicitly.
+      - "Two codebook problems recurred here. (1) visibility's Comments on items and Full audit
+        trail are not mutually exclusive in review tools with inline diff/document commenting plus a
+        separate history record (GitLab, Gerrit, Google Docs, DocuSign, Figma) — several of my
+        round-1 codes picked the wrong one of two things that were both present, which the pick-one
+        framing hides; DocuSign and Google Docs genuinely have both, and only their relative
+        prominence separates them. (2) status's three variations (Final result only / Stage by stage
+        / Who is holding it) collapse toward each other whenever routing is Single approver: naming
+        'who is holding it' is trivial when there is exactly one possible holder, which produced
+        repeated three-way splits (BambooHR, Asana, Figma) that a scope note tying status readings
+        to routing structure would resolve."
+  codedAt: 2026-09-22
+previews:
+  - file: approval-flow.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

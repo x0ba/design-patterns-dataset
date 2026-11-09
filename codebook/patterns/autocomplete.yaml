@@ -1,0 +1,477 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "autocomplete". Edit between batches only — see README "Rules".
+id: autocomplete
+name: Autocomplete
+level: component
+parent: enter-data
+aliases:
+  - typeahead
+  - combobox
+  - suggestions
+definition: Suggestions that appear as a person types, completing or replacing the input.
+data: collection
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - commerce
+  - communication
+  - software
+  - travel
+anatomy:
+  - name: Input
+    role: Where typing happens
+  - name: Suggestion list
+    role: What is proposed
+  - name: Highlight
+    role: The current suggestion
+roles:
+  - title
+  - thumbnail
+  - subtitle
+dimensions:
+  - name: Suggestion types
+    family: content
+    question: What is suggested?
+    subdimensions:
+      - id: types
+        name: Types
+        select: many
+        values:
+          - id: query-completions
+            name: Query completions
+            example: Google
+          - id: entities-with-images
+            name: Entities with images
+            example: Spotify search
+          - id: recent-inputs
+            name: Recent inputs
+            example: Recent searches
+          - id: commands
+            name: Commands
+            example: Command palettes
+          - id: people
+            name: People
+            example: Email recipient fields
+          - id: text-continuation
+            name: Text continuation
+            description: The suggestion continues the prose or code being written (next words, a sentence, a
+              code block) rather than completing a query or naming an entity
+            example: Gmail — Smart Compose in the body
+          - id: places-and-addresses
+            name: Places and addresses
+            description: Street addresses, cities, regions or venues from a geocoder or place index — the
+              codebook's own 'address' frame has no type for them
+            example: Google Maps — Search here
+          - id: records-or-entities
+            name: Records or entities
+            description: Objects from a known set — addresses, places, records — listed as plain rows with no
+              artwork; the existing entity variation requires images
+            example: Google Maps — Search here
+          - id: code-symbols
+            name: Code symbols
+            description: Identifiers, methods and keywords from the code's symbol table, each carrying a type
+              icon and documentation.
+            example: VS Code — IntelliSense
+          - id: symbols-in-scope
+            name: Symbols in scope
+            description: Identifiers, methods and properties that are legal at the cursor, offered with their
+              type and documentation
+            example: VS Code — IntelliSense
+  - name: Source
+    family: initiative
+    question: Where do suggestions come from?
+    subdimensions:
+      - id: source
+        name: Source
+        select: one
+        values:
+          - id: prefix-match
+            name: Prefix match
+            example: Country selectors
+          - id: popular-queries
+            name: Popular queries
+            example: Search engines
+          - id: personal-history
+            name: Personal history
+            example: Browser address bars
+          - id: model-prediction
+            name: Model prediction
+            example: Gmail Smart Compose
+  - name: Presentation
+    family: layout
+    question: How are suggestions shown?
+    subdimensions:
+      - id: presentation
+        name: Presentation
+        select: one
+        values:
+          - id: dropdown-list
+            name: Dropdown list
+            example: Most comboboxes
+          - id: ghost-text-inline
+            name: Ghost text inline
+            example: Smart Compose, fish shell
+          - id: grouped-sections
+            name: Grouped sections
+            example: Spotlight
+          - id: full-screen-on-mobile
+            name: Full screen on mobile
+            example: Mobile search
+          - id: suggestion-bar
+            name: Suggestion bar
+            description: A horizontal strip of a few candidates above a keyboard or input, not a list and not
+              inline (iOS QuickType)
+            example: iOS keyboard — QuickType bar
+  - name: Acceptance
+    family: invocation
+    question: How is a suggestion taken?
+    subdimensions:
+      - id: accept
+        name: Accept by
+        select: many
+        values:
+          - id: click
+            name: Click
+            example: All
+          - id: enter
+            name: Enter
+            example: Search boxes
+          - id: tab
+            name: Tab
+            example: Ghost text
+          - id: arrow-keys
+            name: Arrow keys
+            example: WAI-ARIA combobox
+  - name: Freedom
+    family: scope
+    question: Must the value come from the suggestions?
+    subdimensions:
+      - id: freedom
+        name: Freedom
+        select: one
+        values:
+          - id: must-choose
+            name: Must choose
+            example: Strict comboboxes
+          - id: free-text-allowed
+            name: Free text allowed
+            example: Search
+          - id: creates-new-values
+            name: Creates new values
+            example: Tag inputs
+wild:
+  score: 1
+  note: People can clear history or turn predictions off, but not choose sources.
+  examples:
+    - name: Gmail
+      note: Smart Compose on or off
+techniques:
+  - name: Suggestion source control
+    dimension: Source
+    how: Choose and weight what feeds suggestions (history, popular, a model) from the list itself.
+    ai: false
+signature: Suggestion source control
+sample: Search, address, recipient and product-name inputs.
+unit: One autocomplete input.
+relations:
+  uses: []
+  specializes: []
+  neighbors:
+    - text-field
+    - inline-suggestion
+    - command-palette
+scores:
+  ubiquity: 5
+  potential: 3
+  spec: 5
+evidence: agent-coded
+usage:
+  - Suggestions anchor what people end up asking
+questions:
+  - How should suggestions disclose that they are personalized?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.5981966072454865
+  agreementFirstPass: 0.8194444444444444
+  kappaFinal: 0.8910876918728186
+  agreementFinal: 0.94
+  pass: true
+  perSub:
+    types:
+      kappaFirstPass: 0.5156337511346315
+      agreementFirstPass: 0.8272727272727273
+      kappaFinal: 0.8600174978127739
+      agreementFinal: 0.93125
+      flag: null
+    source:
+      kappaFirstPass: 0.8613251155624034
+      agreementFirstPass: 0.85
+      kappaFinal: 0.9536679536679535
+      agreementFinal: 0.95
+      flag: null
+    presentation:
+      kappaFirstPass: 0.884169884169884
+      agreementFirstPass: 0.9
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    accept:
+      kappaFirstPass: 0.6952380952380952
+      agreementFirstPass: 0.775
+      kappaFinal: 0.9294947121034075
+      agreementFinal: 0.95
+      flag: null
+    freedom:
+      kappaFirstPass: 0.5691202872531417
+      agreementFirstPass: 0.8
+      kappaFinal: 0.8145285935085008
+      agreementFinal: 0.9
+      flag: null
+  distribution:
+    types:
+      Query completions: 4
+      Entities with images: 3
+      Recent inputs: 10
+      Commands: 2
+      People: 4
+      Text continuation: 3
+      Places and addresses: 5
+      Records or entities: 0
+      Code symbols: 1
+      Symbols in scope: 0
+    source:
+      Prefix match: 7
+      Popular queries: 4
+      Personal history: 6
+      Model prediction: 3
+    presentation:
+      Dropdown list: 12
+      Ghost text inline: 3
+      Grouped sections: 1
+      Full screen on mobile: 3
+      Suggestion bar: 1
+    accept:
+      Click: 17
+      Enter: 13
+      Tab: 5
+      Arrow keys: 15
+    freedom:
+      Must choose: 3
+      Free text allowed: 15
+      Creates new values: 2
+  exemplars:
+    types:
+      Query completions:
+        - Google Search — Search box on the homepage
+        - Google Chrome — Omnibox
+        - Amazon — Search bar
+      Entities with images:
+        - macOS Spotlight — Spotlight search
+        - Spotify — Search
+        - Wikipedia — Search box
+      Recent inputs:
+        - Google Search — Search box on the homepage
+        - Google Chrome — Omnibox
+        - macOS Spotlight — Spotlight search
+      Commands:
+        - Google Chrome — Omnibox
+        - macOS Spotlight — Spotlight search
+      People:
+        - Gmail — To field in compose
+        - macOS Spotlight — Spotlight search
+        - Slack — @-mention in the message box
+      Text continuation:
+        - Gmail — Smart Compose in the body
+        - GitHub Copilot in VS Code — Inline code suggestion
+        - iOS keyboard — QuickType bar
+      Places and addresses:
+        - Google Maps — Search here
+        - Uber — Where to?
+        - Shopify checkout — Address line with Google Places
+      Records or entities: []
+      Code symbols:
+        - VS Code — IntelliSense
+      Symbols in scope: []
+    source:
+      Prefix match:
+        - macOS Spotlight — Spotlight search
+        - Shopify checkout — Address line with Google Places
+        - Slack — @-mention in the message box
+      Popular queries:
+        - Google Search — Search box on the homepage
+        - Spotify — Search
+        - Amazon — Search bar
+      Personal history:
+        - Google Chrome — Omnibox
+        - Gmail — To field in compose
+        - Google Maps — Search here
+      Model prediction:
+        - Gmail — Smart Compose in the body
+        - GitHub Copilot in VS Code — Inline code suggestion
+        - iOS keyboard — QuickType bar
+    presentation:
+      Dropdown list:
+        - Google Search — Search box on the homepage
+        - Google Chrome — Omnibox
+        - Gmail — To field in compose
+      Ghost text inline:
+        - Gmail — Smart Compose in the body
+        - GitHub Copilot in VS Code — Inline code suggestion
+        - fish shell — Command line
+      Grouped sections:
+        - macOS Spotlight — Spotlight search
+      Full screen on mobile:
+        - Spotify — Search
+        - Google Maps — Search here
+        - Uber — Where to?
+      Suggestion bar:
+        - iOS keyboard — QuickType bar
+    accept:
+      Click:
+        - Google Search — Search box on the homepage
+        - Google Chrome — Omnibox
+        - Gmail — To field in compose
+      Enter:
+        - Google Search — Search box on the homepage
+        - Google Chrome — Omnibox
+        - Gmail — To field in compose
+      Tab:
+        - Gmail — To field in compose
+        - Gmail — Smart Compose in the body
+        - Slack — @-mention in the message box
+      Arrow keys:
+        - Google Search — Search box on the homepage
+        - Google Chrome — Omnibox
+        - Gmail — To field in compose
+    freedom:
+      Must choose:
+        - macOS Spotlight — Spotlight search
+        - Uber — Where to?
+        - Slack — @-mention in the message box
+      Free text allowed:
+        - Google Search — Search box on the homepage
+        - Google Chrome — Omnibox
+        - Gmail — Smart Compose in the body
+      Creates new values:
+        - Gmail — To field in compose
+        - Microsoft Outlook — To field in a new message
+  unobserved:
+    - sub: types
+      var: Records or entities
+    - sub: types
+      var: Symbols in scope
+  unresolved: []
+  proposals:
+    raised: 8
+    adopted:
+      - sub: types
+        name: Text continuation
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: types
+        name: Places and addresses
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: presentation
+        name: Suggestion bar
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: types
+        name: Records or entities
+        raters:
+          - fable
+          - opus
+      - sub: types
+        name: Code symbols
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: types
+        name: Symbols in scope
+        raters:
+          - opus
+          - sonnet
+    recorded:
+      - place: sub:types
+        sub: types
+        dim: null
+        name: Text continuations
+        gloss: The rest of the sentence, line or word the person is writing — a continuation of their own
+          text rather than an item drawn from a set
+        raters:
+          - opus
+        instances:
+          - 4
+          - 12
+          - 13
+        status: raised
+      - place: sub:presentation
+        sub: presentation
+        dim: null
+        name: Suggestion strip above keyboard
+        gloss: Word predictions render as a row of tappable chips above the on-screen keyboard — distinct
+          from a dropdown list, inline ghost text, grouped sections or a full-screen takeover.
+        raters:
+          - sonnet
+        instances:
+          - 13
+        status: raised
+  raterNotes:
+    fable:
+      - "source is the hard one: catalogue and place search is neither prefix-on-a-fixed-list nor
+        popular queries; I used Prefix match for index lookups, Popular queries for
+        popularity-ranked catalogues, Personal history when recents/saved dominate."
+      - types has no value for entities without images, which is why places, addresses and code
+        symbols each drew a proposal; source conflates matching (prefix) with ranking (popularity)
+        so catalogue search splits raters; freedom's Free text allowed and Creates new values
+        overlap for recipient fields where free text becomes a chip.
+    opus:
+      - "types is the sub-dimension that breaks: it was written for pick-a-thing autocompletes and
+        cannot express a continuation of the person's own writing (Smart Compose, Copilot,
+        QuickType) or a code symbol, which is a third of this sample. source is also coarse — nearly
+        every list is a prefix match over a set that is then ranked by popularity or by your
+        history, and pick-one forces a choice between the matching and the ranking."
+      - "types is the sub-dimension that breaks: it has no type for a continuation of the person's
+        own writing, for a code symbol, or for a place/address, and those are half this sample;
+        source is pick one but every list is a prefix match over a set ranked by popularity or
+        history, so it forces a choice between the matching and the ranking and should be pick any;
+        freedom's 'Free text allowed' and 'Creates new values' overlap for chip fields like Gmail
+        and Outlook."
+    sonnet:
+      - The 'types' dimension reads as built for search/communication inputs; generative ghost-text
+        tools (Smart Compose, Copilot, fish, QuickType) and code-editor IntelliSense both needed
+        proposals because none of the five listed categories describe what they suggest.
+      - "Two systematic misses recurred: (1) I was under-crediting 'accept' by Arrow keys wherever a
+        suggestion list exists — treating arrow-to-highlight and Enter/Click-to-commit as two
+        separate acts rather than crediting the arrow key as part of how a suggestion gets accepted,
+        which both other raters counted consistently. (2) 'types' has no variation for geocoded
+        places/addresses (map, travel and checkout autocompletes) — Query completions, Entities with
+        images and Recent inputs all get stretched to cover it; +Places and addresses, proposed
+        independently by a peer across five instances, names the real gap. Separately, 'freedom' for
+        recipient-chip fields (email To fields) is ambiguous between Free text allowed and Creates
+        new values — the codebook's own Creates new values example (tag inputs) is a better
+        mechanistic match than the majority vote landed on."
+  codedAt: 2026-09-22
+previews:
+  - file: autocomplete.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

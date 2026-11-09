@@ -1,0 +1,27 @@
+name: ci
+on:
+  push:
+  pull_request:
+jobs:
+  codebook:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4 # version comes from package.json "packageManager"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Validate codebook (schema + cross-references)
+        run: node scripts/validate-codebook.ts
+      - name: Build dist/
+        run: node scripts/build-codebook.ts
+      - name: Round-trip against the original atlas
+        run: node scripts/verify-roundtrip.ts codebook.html dist/atlas.html
+        # Expected to keep passing until the codebook gains or changes entries;
+        # after the first accepted proposal, delete this step (README Rules §1 is a migration check).
+      - name: Typecheck
+        run: pnpm exec tsc --noEmit -p .
+      - name: Tests
+        run: node --test 'test/**/*.test.ts'

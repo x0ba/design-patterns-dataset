@@ -1,0 +1,480 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "comparison-table". Edit between batches only — see README "Rules".
+id: comparison-table
+name: Comparison table
+level: pattern
+parent: browse-collections
+aliases:
+  - compare view
+  - spec comparison
+  - side-by-side comparison
+definition: A few selected items side by side against shared attributes, so that differences can be
+  read and a choice made.
+data: collection
+platforms:
+  - web
+  - mobile
+domains:
+  - commerce
+  - finance
+  - travel
+  - software
+anatomy:
+  - name: Item columns
+    role: The items being compared
+  - name: Attribute rows
+    role: The criteria
+  - name: Difference cues
+    role: What stands out
+  - name: Add and remove
+    role: Changing the set
+roles:
+  - title
+  - thumbnail
+  - price
+  - spec
+  - rating
+dimensions:
+  - name: Criteria
+    family: content
+    question: Which attributes become rows, and how are values shown?
+    subdimensions:
+      - id: criteria
+        name: Attribute selection
+        select: one
+        values:
+          - id: fixed-spec-rows
+            name: Fixed spec rows
+            description: The vendor chooses
+            example: Apple Compare iPhone models
+          - id: all-attributes
+            name: All attributes
+            description: Everything in the data
+            example: Spec-sheet comparisons
+          - id: user-built-criteria
+            name: User-built criteria
+            description: The person adds rows as they learn
+            example: Mesh (UIST '20)
+      - id: valueForm
+        name: Value form
+        select: many
+        values:
+          - id: raw-values
+            name: Raw values
+            example: Spec sheets
+          - id: normalized-ratings
+            name: Normalized ratings
+            example: Review-site scores
+          - id: bars
+            name: Bars
+            description: Magnitude drawn in the cell
+            example: Benchmark comparisons
+          - id: checkmarks
+            name: Checkmarks
+            description: Presence or absence
+            example: SaaS pricing pages
+  - name: Item set
+    family: composition
+    question: Where do the compared items come from?
+    subdimensions:
+      - id: origin
+        name: Origin of items
+        select: one
+        values:
+          - id: curated-by-the-vendor
+            name: Curated by the vendor
+            example: Apple
+          - id: added-from-the-overview
+            name: Added from the overview
+            description: Compare checkboxes in results
+            example: Retail listing compare boxes
+          - id: suggested-alternatives
+            name: Suggested alternatives
+            description: The system picks rivals
+            example: Amazon compare with similar items
+          - id: picked-on-the-compare-page
+            name: Picked on the compare page
+            description: The person chooses the items from a search box or dropdown on the comparison itself,
+              over a third-party catalogue (not the vendor's own models, not result checkboxes)
+            example: NerdWallet — Compare credit cards beside each other
+          - id: gathered-while-browsing
+            name: Gathered while browsing
+            description: The person collects the items from wherever they were found — separate product pages
+              across sites, clipped as they browse — rather than from one vendor's list, one results
+              page's checkboxes, or a system suggestion
+            example: Mesh (UIST '20) — Comparison table built from browsing
+  - name: Orientation
+    family: layout
+    question: Which way do items and criteria run?
+    subdimensions:
+      - id: orientation
+        name: Orientation
+        select: one
+        values:
+          - id: items-as-columns
+            name: Items as columns
+            example: Apple
+          - id: items-as-rows
+            name: Items as rows
+            example: Flight fare tables
+          - id: cards-with-synchronized-scroll
+            name: Cards with synchronized scroll
+            example: Mobile comparisons
+      - id: sticky
+        name: Sticky parts
+        select: many
+        values:
+          - id: item-headers
+            name: Item headers
+            example: Apple
+          - id: criteria-labels
+            name: Criteria labels
+            example: Wide comparisons
+  - name: Difference emphasis
+    family: feedback
+    question: How are differences made to stand out?
+    subdimensions:
+      - id: emphasis
+        name: Emphasis
+        select: one
+        values:
+          - id: none
+            name: None
+            example: Plain spec tables
+          - id: highlight-differences
+            name: Highlight differences
+            example: Retail compare pages
+          - id: highlight-the-best-value
+            name: Highlight the best value
+            example: Benchmark tables
+          - id: hide-identical-rows
+            name: Hide identical rows
+            example: Differences-only toggles
+  - name: Decision support
+    family: scope
+    question: Does the table help conclude, not only compare?
+    subdimensions:
+      - id: decision
+        name: Decision support
+        select: many
+        values:
+          - id: none
+            name: None
+            example: Most comparisons
+          - id: weighted-scoring
+            name: Weighted scoring
+            description: Criteria carry weights
+            example: Decision-matrix tools
+          - id: notes-per-cell
+            name: Notes per cell
+            example: Mesh
+          - id: pick-a-winner
+            name: Pick a winner
+            example: Shortlists
+wild:
+  score: 1
+  note: Choosing the items is common; choosing the criteria, or weighting them, is rare outside
+    research systems.
+  examples:
+    - name: Amazon
+      note: Compare with similar items
+    - name: Mesh (UIST '20)
+      note: Users build comparison criteria while researching
+techniques:
+  - name: Criteria weaving
+    dimension: Criteria
+    how: Drag an attribute from any item’s detail into the table to add a row; weight rows by dragging
+      them up; collapse identical rows.
+    ai: false
+  - name: Fill the gaps
+    dimension: Criteria
+    how: When an item lacks a row’s value, a model searches its data and fills it with provenance, or
+      answers Not Specified (CHI '25 consistent values).
+    ai: true
+  - name: Ask which is better for…
+    dimension: Decision support
+    how: “Which is better for a small apartment?” adds the criteria the answer depends on, weighted and
+      editable, instead of a bare verdict.
+    ai: true
+signature: Criteria weaving
+sample: Retail compare features, SaaS pricing pages, insurance and finance comparison sites, plus
+  research systems for decision-making.
+unit: One comparison of two or more items.
+relations:
+  uses:
+    - bulk-actions
+    - badge
+    - tooltip
+  specializes:
+    - data-table
+  neighbors:
+    - plan-picker
+scores:
+  ubiquity: 3
+  potential: 5
+  spec: 4
+evidence: agent-coded
+usage:
+  - Criteria emerge during comparison, not before it (Mesh)
+questions:
+  - When should a comparison table conclude, and when should it stay neutral?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.5930090933274
+  agreementFirstPass: 0.7535714285714286
+  kappaFinal: 0.9343555647286047
+  agreementFinal: 0.9535714285714286
+  pass: true
+  perSub:
+    criteria:
+      kappaFirstPass: 0.24528301886792547
+      agreementFirstPass: 0.7
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    valueForm:
+      kappaFirstPass: 0.8151131031584847
+      agreementFirstPass: 0.8625
+      kappaFinal: 0.9159605014356753
+      agreementFinal: 0.9375
+      flag: null
+    origin:
+      kappaFirstPass: 0.6107506950880448
+      agreementFirstPass: 0.7
+      kappaFinal: 0.8899082568807339
+      agreementFinal: 0.9
+      flag: null
+    orientation:
+      kappaFirstPass: 0.7494780793319412
+      agreementFirstPass: 0.9
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    sticky:
+      kappaFirstPass: 0.6544552871540557
+      agreementFirstPass: 0.8
+      kappaFinal: 0.942409214525676
+      agreementFinal: 0.9666666666666667
+      flag: null
+    emphasis:
+      kappaFirstPass: 0.3678665496049164
+      agreementFirstPass: 0.4
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    decision:
+      kappaFirstPass: 0.36831022986488904
+      agreementFirstPass: 0.6666666666666666
+      kappaFinal: 0.9000000000000004
+      agreementFinal: 0.9333333333333333
+      flag: null
+  distribution:
+    criteria:
+      Fixed spec rows: 13
+      All attributes: 6
+      User-built criteria: 1
+    valueForm:
+      Raw values: 20
+      Normalized ratings: 7
+      Bars: 2
+      Checkmarks: 7
+    origin:
+      Curated by the vendor: 12
+      Added from the overview: 4
+      Suggested alternatives: 1
+      Picked on the compare page: 2
+      Gathered while browsing: 1
+    orientation:
+      Items as columns: 17
+      Items as rows: 2
+      Cards with synchronized scroll: 1
+    sticky:
+      Item headers: 14
+      Criteria labels: 0
+      "?": 1
+    emphasis:
+      None: 13
+      Highlight differences: 0
+      Highlight the best value: 2
+      Hide identical rows: 2
+      "?": 3
+    decision:
+      None: 18
+      Weighted scoring: 0
+      Notes per cell: 1
+      Pick a winner: 1
+  exemplars:
+    criteria:
+      Fixed spec rows:
+        - Apple — Compare iPhone models
+        - Apple — Compare Mac models
+        - Amazon — Compare with similar items on a product page
+      All attributes:
+        - Best Buy — Compare tray
+        - Home Depot — Compare products
+        - Samsung — Compare Galaxy phones
+      User-built criteria:
+        - Mesh (UIST '20) — Comparison table built from browsing
+    valueForm:
+      Raw values:
+        - Apple — Compare iPhone models
+        - Apple — Compare Mac models
+        - Amazon — Compare with similar items on a product page
+      Normalized ratings:
+        - Amazon — Compare with similar items on a product page
+        - Best Buy — Compare tray
+        - Home Depot — Compare products
+      Bars:
+        - RTINGS — TV comparison tool
+        - Versus.com — Compare two phones
+      Checkmarks:
+        - Slack — Pricing plan comparison
+        - Notion — Compare plans
+        - GitHub — Pricing feature comparison
+    origin:
+      Curated by the vendor:
+        - Apple — Compare iPhone models
+        - Apple — Compare Mac models
+        - Slack — Pricing plan comparison
+      Added from the overview:
+        - Best Buy — Compare tray
+        - Home Depot — Compare products
+        - NerdWallet — Compare credit cards beside each other
+      Suggested alternatives:
+        - Amazon — Compare with similar items on a product page
+      Picked on the compare page:
+        - RTINGS — TV comparison tool
+        - Versus.com — Compare two phones
+      Gathered while browsing:
+        - Mesh (UIST '20) — Comparison table built from browsing
+    orientation:
+      Items as columns:
+        - Apple — Compare iPhone models
+        - Apple — Compare Mac models
+        - Amazon — Compare with similar items on a product page
+      Items as rows:
+        - Bankrate — Compare mortgage lenders
+        - Policygenius — Life insurance quote comparison
+      Cards with synchronized scroll:
+        - Apple Store app — Compare models in the iPhone buy flow
+    sticky:
+      Item headers:
+        - Apple — Compare iPhone models
+        - Apple — Compare Mac models
+        - Best Buy — Compare tray
+      Criteria labels: []
+    emphasis:
+      None:
+        - Apple — Compare iPhone models
+        - Apple — Compare Mac models
+        - Amazon — Compare with similar items on a product page
+      Highlight differences: []
+      Highlight the best value:
+        - RTINGS — TV comparison tool
+        - Versus.com — Compare two phones
+      Hide identical rows:
+        - Best Buy — Compare tray
+        - Samsung — Compare Galaxy phones
+    decision:
+      None:
+        - Apple — Compare iPhone models
+        - Apple — Compare Mac models
+        - Amazon — Compare with similar items on a product page
+      Weighted scoring: []
+      Notes per cell:
+        - Mesh (UIST '20) — Comparison table built from browsing
+      Pick a winner:
+        - Versus.com — Compare two phones
+  unobserved:
+    - sub: sticky
+      var: Criteria labels
+    - sub: emphasis
+      var: Highlight differences
+    - sub: decision
+      var: Weighted scoring
+  unresolved: []
+  proposals:
+    raised: 3
+    adopted:
+      - sub: origin
+        name: Picked on the compare page
+        raters:
+          - fable
+          - opus
+      - sub: origin
+        name: Gathered while browsing
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded:
+      - place: sub:origin
+        sub: origin
+        dim: null
+        name: Direct selection
+        gloss: The person builds the comparison by choosing items directly in a dedicated compare tool (e.g.
+          entering two model names), not by checking boxes in a browsed results overview
+        raters:
+          - sonnet
+        instances:
+          - 11
+          - 16
+          - 17
+        status: raised
+  raterNotes:
+    fable:
+      - Sticky parts is hard to recall from product knowledge for less-visited pages (coded ? on
+        four). Origin needed a variation for third-party compare tools with on-page pickers.
+      - Fixed spec rows versus All attributes is thin because the vendor chose the data fields too;
+        the useful line is hand-curated rows versus the whole schema. Origin's Added from the
+        overview names a mechanism (checkboxes) where the dimension is about who picks, so pickers
+        on the compare page fall outside it; sonnet's +Direct selection and my +Picked on the
+        compare page are one variation. A recommended-plan badge is not any emphasis value.
+        decision's explicit None makes [] and ['None'] a false disagreement.
+    opus:
+      - "decision is ['None'] for 19 of 20: outside research prototypes, shipping comparisons
+        compare and stop. emphasis was the hardest sub to apply — the differences control is a small
+        toggle I could not recall for several retail sites, and it is ambiguous whether such a
+        toggle hides identical rows or highlights differing ones. sticky is unobservable without the
+        page in front of you for short tables; I coded [] where the table fits on one screen. A
+        vendor's 'Most popular' plan badge is not Pick a winner, which I read as the person
+        concluding."
+      - "The big one: `criteria` reads two ways. 'Fixed spec rows — the vendor chooses' is true of
+        every retail table in a trivial sense (someone defined the schema), so the other two raters
+        coded every spec sheet Fixed and left All attributes with no instances; the useful line is
+        curated shortlist (Apple) versus the whole record rendered (Best Buy, Dell, versus.com), and
+        the gloss should say so. `origin` is really two questions — who assembles the set, and out
+        of what catalogue — which is why two of us independently proposed a variation for 'you pick
+        the items on the comparison tool itself'. `decision`, like `aggregate` elsewhere, is pick
+        any with a None variation, so ['None'] and [] are one code written two ways; and 'Pick a
+        winner' is named as if the person picks, with no room for a site that declares the winner.
+        Finally `emphasis` has no variation for the badged recommended column that every SaaS
+        pricing table ships, which is what pushed sonnet to read those as Highlight the best value."
+    sonnet:
+      - Emphasis is coded '?' rather than guessed where I could not recall a specific product's
+        visual-differentiation behaviour with confidence.
+      - Three codebook problems stood out most. (1) Decision's explicit None versus an empty list
+        caused most of this entry's disagreements (19 of 62 cells) even where all three raters
+        agreed nothing was there — a representation issue, not a coding one. (2) Origin has no value
+        for a dedicated single-purpose compare tool (RTINGS, versus.com, NerdWallet) where items are
+        picked directly rather than checked from a browsed listing; two raters independently
+        invented near-identical variations for it across three instances, which confirms the gap.
+        (3) Emphasis's Highlight the best value doesn't distinguish a vendor's marketing/upsell
+        badge (a SaaS 'Recommended plan') from a genuinely computed value comparison (a benchmark's
+        fastest result or a rate table's lowest APR) — I conflated the two across five pricing-page
+        instances before this round.
+  codedAt: 2026-09-22
+previews:
+  - file: comparison-table.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

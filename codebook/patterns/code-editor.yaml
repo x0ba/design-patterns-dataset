@@ -1,0 +1,510 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "code-editor". Edit between batches only — see README "Rules".
+id: code-editor
+name: Code editor
+level: pattern
+parent: create
+aliases:
+  - IDE
+  - text editor
+  - development environment
+definition: Reading and writing source code with structure-aware tools around the text.
+data: document
+platforms:
+  - desktop
+  - web
+domains:
+  - software
+  - science
+  - ai
+anatomy:
+  - name: Editor
+    role: The source
+  - name: Gutter
+    role: Line information
+  - name: Explorer
+    role: Files and symbols
+  - name: Panels
+    role: Terminal, problems, output
+  - name: Status bar
+    role: State of the workspace
+roles: []
+dimensions:
+  - name: Code representation
+    family: content
+    question: What is shown alongside the text?
+    subdimensions:
+      - id: representation
+        name: Representation
+        select: many
+        values:
+          - id: syntax-colouring
+            name: Syntax colouring
+            example: All
+          - id: inline-diagnostics
+            name: Inline diagnostics
+            example: Squiggles
+          - id: inlay-hints
+            name: Inlay hints
+            example: VS Code inlay hints
+          - id: reference-lenses
+            name: Reference lenses
+            example: VS Code CodeLens
+          - id: folding
+            name: Folding
+            example: All
+          - id: projections
+            name: Projections
+            description: Alternative views that edit the same code
+            example: Lorgnette (UIST '23)
+  - name: Workspace layout
+    family: layout
+    question: How is the workspace arranged?
+    subdimensions:
+      - id: layout
+        name: Layout
+        select: many
+        values:
+          - id: single-editor
+            name: Single editor
+            example: Minimal editors
+          - id: split-editor-groups
+            name: Split editor groups
+            example: VS Code
+          - id: panels
+            name: Panels
+            example: Terminal and problems
+          - id: zen-mode
+            name: Zen mode
+            example: VS Code Zen mode
+          - id: minimap
+            name: Minimap
+            example: VS Code
+  - name: Commands
+    family: invocation
+    question: How are actions invoked?
+    subdimensions:
+      - id: commands
+        name: Commands
+        select: many
+        values:
+          - id: menus
+            name: Menus
+            example: All
+          - id: command-palette
+            name: Command palette
+            example: VS Code
+          - id: keybindings
+            name: Keybindings
+            example: All
+          - id: modal-editing
+            name: Modal editing
+            example: Vim, VS Code Vim extension
+          - id: hover-actions
+            name: Hover actions
+            example: Quick fixes
+  - name: Assistance
+    family: initiative
+    question: How much does the editor write?
+    subdimensions:
+      - id: assistance
+        name: Assistance
+        select: many
+        values:
+          - id: none
+            name: None
+            example: Plain editors
+          - id: completion-lists
+            name: Completion lists
+            example: IntelliSense
+          - id: ghost-text-completion
+            name: Ghost-text completion
+            example: GitHub Copilot
+          - id: chat-panel
+            name: Chat panel
+            example: Copilot Chat
+          - id: agent-edits-across-files
+            name: Agent edits across files
+            example: Cursor agent, Copilot agent mode
+  - name: Change review
+    family: feedback
+    question: How are changes reviewed?
+    subdimensions:
+      - id: review
+        name: Review
+        select: one
+        values:
+          - id: save-only
+            name: Save only
+            example: Plain editors
+          - id: diff-in-the-gutter
+            name: Diff in the gutter
+            example: VS Code git gutter
+          - id: accept-or-reject-hunks
+            name: Accept or reject hunks
+            example: Cursor
+          - id: pull-request-review
+            name: Pull request review
+            example: GitHub
+  - name: Collaboration
+    family: collaboration
+    question: How do people code together?
+    subdimensions:
+      - id: collab
+        name: Collaboration
+        select: one
+        values:
+          - id: solo
+            name: Solo
+            example: Local editors
+          - id: live-shared-session
+            name: Live shared session
+            example: VS Code Live Share
+          - id: review-comments
+            name: Review comments
+            example: GitHub
+  - name: Customization depth
+    family: adaptation
+    question: How far can the editor be changed?
+    subdimensions:
+      - id: depth
+        name: Depth
+        select: one
+        values:
+          - id: themes
+            name: Themes
+            example: Simple editors
+          - id: settings-and-keybindings
+            name: Settings and keybindings
+            example: Sublime Text
+          - id: extensions
+            name: Extensions
+            example: VS Code marketplace
+          - id: programmable-environment
+            name: Programmable environment
+            example: Emacs
+wild:
+  score: 3
+  note: Among the most customized software there is.
+  examples:
+    - name: VS Code
+      note: Settings, keybindings, extensions, layouts
+    - name: Emacs
+      note: Everything is programmable
+techniques:
+  - name: Projections
+    dimension: Code representation
+    how: Show a piece of code as a table, a form or a diagram that edits the same source (Lorgnette,
+      UIST '23, cited by Meridian).
+    ai: false
+  - name: Settings as a shareable spec
+    dimension: Customization depth
+    how: A workspace’s layout, keybindings and extensions export as one file others can apply.
+    ai: false
+  - name: Explain this change
+    dimension: Change review
+    how: Every AI edit arrives as hunks with a rationale per hunk to accept or reject.
+    ai: true
+signature: Projections
+sample: Desktop IDEs, browser-based editors and notebooks’ code cells.
+unit: One editor environment.
+relations:
+  uses:
+    - command-palette
+    - tree-view
+    - split-pane
+    - tabs
+    - autocomplete
+  specializes:
+    - create
+  neighbors:
+    - notebook
+    - document-editor
+scores:
+  ubiquity: 2
+  potential: 4
+  spec: 3
+evidence: agent-coded
+usage:
+  - Developers carry their configuration between machines as dotfiles
+questions:
+  - What is the overview–detail structure of code, and can it be made malleable like an ODI?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.5709651114513183
+  agreementFirstPass: 0.6875
+  kappaFinal: 0.9610886861030674
+  agreementFinal: 0.9717391304347827
+  pass: true
+  perSub:
+    representation:
+      kappaFirstPass: 0.5424107142857143
+      agreementFirstPass: 0.6583333333333333
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    layout:
+      kappaFirstPass: 0.5894909688013138
+      agreementFirstPass: 0.7
+      kappaFinal: 0.9333214793741107
+      agreementFinal: 0.95
+      flag: null
+    commands:
+      kappaFirstPass: 0.5927601809954754
+      agreementFirstPass: 0.7
+      kappaFinal: 0.9849999999999999
+      agreementFinal: 0.99
+      flag: null
+    assistance:
+      kappaFirstPass: 0.5868161094224921
+      agreementFirstPass: 0.71
+      kappaFinal: 0.9831033511686847
+      agreementFinal: 0.9875
+      flag: null
+    review:
+      kappaFirstPass: 0.5165876777251184
+      agreementFirstPass: 0.6
+      kappaFinal: 0.938587512794268
+      agreementFinal: 0.95
+      flag: null
+    collab:
+      kappaFirstPass: 0.3741307371349097
+      agreementFirstPass: 0.65
+      kappaFinal: 0.6424314660309891
+      agreementFinal: 0.75
+      flag: null
+    depth:
+      kappaFirstPass: 0.7126436781609194
+      agreementFirstPass: 0.75
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+  distribution:
+    representation:
+      Syntax colouring: 20
+      Inline diagnostics: 15
+      Inlay hints: 8
+      Reference lenses: 6
+      Folding: 18
+      Projections: 3
+    layout:
+      Single editor: 3
+      Split editor groups: 17
+      Panels: 17
+      Zen mode: 6
+      Minimap: 6
+    commands:
+      Menus: 19
+      Command palette: 17
+      Keybindings: 20
+      Modal editing: 3
+      Hover actions: 8
+    assistance:
+      None: 0
+      Completion lists: 20
+      Ghost-text completion: 11
+      Chat panel: 9
+      Agent edits across files: 5
+    review:
+      Save only: 10
+      Diff in the gutter: 9
+      Accept or reject hunks: 1
+      Pull request review: 0
+    collab:
+      Solo: 13
+      Live shared session: 7
+      Review comments: 0
+    depth:
+      Themes: 0
+      Settings and keybindings: 9
+      Extensions: 9
+      Programmable environment: 2
+  exemplars:
+    representation:
+      Syntax colouring:
+        - VS Code — Workspace
+        - JetBrains IntelliJ IDEA — Project
+        - Xcode — Project
+      Inline diagnostics:
+        - VS Code — Workspace
+        - JetBrains IntelliJ IDEA — Project
+        - Xcode — Project
+      Inlay hints:
+        - VS Code — Workspace
+        - JetBrains IntelliJ IDEA — Project
+        - Cursor — Workspace
+      Reference lenses:
+        - VS Code — Workspace
+        - JetBrains IntelliJ IDEA — Project
+        - Cursor — Workspace
+      Folding:
+        - VS Code — Workspace
+        - JetBrains IntelliJ IDEA — Project
+        - Xcode — Project
+      Projections:
+        - Xcode — Project
+        - Android Studio — Project
+        - Visual Studio — Solution
+    layout:
+      Single editor:
+        - Google Colab — Code cell
+        - Observable — JavaScript cell
+        - Arduino IDE — Sketch
+      Split editor groups:
+        - VS Code — Workspace
+        - JetBrains IntelliJ IDEA — Project
+        - Xcode — Project
+      Panels:
+        - VS Code — Workspace
+        - JetBrains IntelliJ IDEA — Project
+        - Xcode — Project
+      Zen mode:
+        - VS Code — Workspace
+        - JetBrains IntelliJ IDEA — Project
+        - Cursor — Workspace
+      Minimap:
+        - VS Code — Workspace
+        - Xcode — Project
+        - Cursor — Workspace
+    commands:
+      Menus:
+        - VS Code — Workspace
+        - JetBrains IntelliJ IDEA — Project
+        - Xcode — Project
+      Command palette:
+        - VS Code — Workspace
+        - JetBrains IntelliJ IDEA — Project
+        - Cursor — Workspace
+      Keybindings:
+        - VS Code — Workspace
+        - JetBrains IntelliJ IDEA — Project
+        - Xcode — Project
+      Modal editing:
+        - Zed — Workspace
+        - Neovim — Terminal editor
+        - JupyterLab — Code cell
+      Hover actions:
+        - VS Code — Workspace
+        - JetBrains IntelliJ IDEA — Project
+        - Xcode — Project
+    assistance:
+      None: []
+      Completion lists:
+        - VS Code — Workspace
+        - JetBrains IntelliJ IDEA — Project
+        - Xcode — Project
+      Ghost-text completion:
+        - VS Code — Workspace
+        - JetBrains IntelliJ IDEA — Project
+        - Xcode — Project
+      Chat panel:
+        - VS Code — Workspace
+        - JetBrains IntelliJ IDEA — Project
+        - Cursor — Workspace
+      Agent edits across files:
+        - VS Code — Workspace
+        - Cursor — Workspace
+        - Zed — Workspace
+    review:
+      Save only:
+        - Neovim — Terminal editor
+        - Replit — Workspace
+        - CodeSandbox — Sandbox
+      Diff in the gutter:
+        - VS Code — Workspace
+        - JetBrains IntelliJ IDEA — Project
+        - Xcode — Project
+      Accept or reject hunks:
+        - Cursor — Workspace
+      Pull request review: []
+    collab:
+      Solo:
+        - VS Code — Workspace
+        - Xcode — Project
+        - Cursor — Workspace
+      Live shared session:
+        - JetBrains IntelliJ IDEA — Project
+        - Zed — Workspace
+        - Visual Studio — Solution
+      Review comments: []
+    depth:
+      Themes: []
+      Settings and keybindings:
+        - Xcode — Project
+        - Replit — Workspace
+        - CodeSandbox — Sandbox
+      Extensions:
+        - VS Code — Workspace
+        - JetBrains IntelliJ IDEA — Project
+        - Cursor — Workspace
+      Programmable environment:
+        - Neovim — Terminal editor
+        - Emacs — Buffer
+  unobserved:
+    - sub: assistance
+      var: None
+    - sub: review
+      var: Pull request review
+    - sub: collab
+      var: Review comments
+    - sub: depth
+      var: Themes
+  unresolved: []
+  proposals:
+    raised: 0
+    adopted: []
+    recorded: []
+  raterNotes:
+    fable:
+      - Change review's Diff in the gutter is hard to recall for browser editors (three ?); Depth's
+        Extensions vs Settings depends on whether an editor-extension marketplace exists, which is
+        fuzzy for notebooks and cloud IDEs.
+      - collab is pick-one but the codebook's own example (VS Code Live Share) is an add-on, so the
+        sub-dimension must mean capability rather than default mode; it should say so, or become
+        pick any with Solo dropped. review's Diff in the gutter conflates where a diff shows with
+        reviewing a diff at all (Magit); browser editors without gutter marks all fall to Save only.
+        Zen mode and command palette availability in smaller editors (Zed, Arduino IDE 2) are hard
+        to recall reliably.
+    opus:
+      - Assistance and representation were easy; review and depth were not. Review conflates a
+        version-control display with a model-change gate, so an autosaving web editor with a
+        separate git pane (Replit, RStudio) has to read as Save only. Projections finally earned its
+        keep on the IDEs with visual designers (Xcode, Android Studio, Visual Studio), which is
+        worth keeping in the codebook.
+      - "Most of this entry's disagreement was a pick any coded short rather than a conflict, so the
+        packet reads as one rater listing fewer true items. Two glosses caused real trouble: Panels
+        is glossed by function (terminal and problems) but read by chrome, which is what split
+        Neovim and Emacs; and Change review conflates review inside the editor with an external git
+        client, so Magit and RStudio's git pane have to be called Save only while Sublime's gutter
+        marks count. Customization depth also has no way to say that a product retired its extension
+        system, and collab has no way to say 'bundled' versus 'a marketplace install', which is the
+        only thing separating Code With Me from Live Share."
+    sonnet:
+      - Collab defaulted to Solo whenever the sampled screen didn't specifically show a
+        shared/live-editing feature, even for products (Colab, Replit, Zed) where I know real-time
+        collaboration exists as a named capability, which I did credit.
+      - "I under-coded almost every pick-any sub-dimension in this entry on the first pass —
+        representation, layout, commands and assistance are all 'pick any that apply' lists, and I
+        consistently picked only the single most salient item per product instead of checking the
+        whole variation list against what I actually know of each tool; fable and opus's near-total
+        agreement with each other across this entry reflects thoroughness, not a codebook problem.
+        The one real codebook-adjacent finding: review's four values (Save only / Diff in the gutter
+        / Accept or reject hunks / Pull request review) have no value for 'agent changes reviewed in
+        a chat thread with checkpoint rollback' (Replit), which is neither a gutter diff nor a
+        hunk-level accept/reject bar — I coded it Save only for lack of a closer fit, but a future
+        round might want a value for chat-mediated review."
+  codedAt: 2026-09-22
+previews:
+  - file: code-editor.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

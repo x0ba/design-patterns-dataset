@@ -1,0 +1,585 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "gantt-timeline". Edit between batches only — see README "Rules".
+id: gantt-timeline
+name: Gantt timeline
+level: pattern
+parent: schedule
+aliases:
+  - Gantt chart
+  - project timeline
+  - roadmap timeline
+  - bar schedule
+definition: Tasks or phases as bars on a horizontal time axis, often with dependencies, progress and
+  a hierarchical work breakdown beside the bars.
+data: time
+platforms:
+  - web
+  - desktop
+domains:
+  - productivity
+  - enterprise
+  - software
+  - design
+anatomy:
+  - name: Time axis
+    role: Days, weeks or months along the top
+  - name: Task rows
+    role: The work-breakdown list
+  - name: Bars
+    role: Duration and placement of each task
+  - name: Dependencies
+    role: Links between bars
+  - name: Today marker
+    role: The current date on the axis
+roles:
+  - task-name
+  - start
+  - end
+  - progress
+  - assignee
+  - dependency
+dimensions:
+  - name: Bar and row content
+    family: content
+    question: What does each bar and row say about the work?
+    subdimensions:
+      - id: barAttrs
+        name: Bar attributes
+        select: many
+        values:
+          - id: title-on-bar
+            name: Title on bar
+            example: Asana Timeline
+          - id: progress-fill
+            name: Progress fill
+            example: Microsoft Project
+          - id: assignee-colour-or-avatar
+            name: Assignee colour or avatar
+            example: Jira Timeline
+          - id: milestone-diamond
+            name: Milestone diamond
+            example: Roadmunk
+          - id: baseline-vs-actual
+            name: Baseline vs actual
+            description: Planned bar under actual
+            example: MS Project baseline
+          - id: health-or-status-colour
+            name: Health or status colour
+            example: Smartsheet
+      - id: rowHierarchy
+        name: Row hierarchy
+        select: one
+        values:
+          - id: flat-list
+            name: Flat list
+            example: Simple roadmaps
+          - id: collapsible-wbs
+            name: Collapsible WBS
+            description: Parents summarise children
+            example: MS Project
+          - id: swimlanes-by-person-or-team
+            name: Swimlanes by person or team
+            example: Jira Timeline by assignee
+          - id: grouped-by-project
+            name: Grouped by project
+            example: Notion timeline group by
+  - name: Dependencies and constraints
+    family: composition
+    question: How are tasks linked, and what may move freely?
+    subdimensions:
+      - id: linking
+        name: Linking
+        select: many
+        values:
+          - id: no-links
+            name: No links
+            description: Independent bars
+            example: Lightweight roadmaps
+          - id: finish-to-start-arrows
+            name: Finish-to-start arrows
+            example: MS Project
+          - id: multiple-dependency-types
+            name: Multiple dependency types
+            description: FS, SS, FF, SF
+            example: Primavera P6
+          - id: parent-roll-up
+            name: Parent roll-up
+            description: Parent spans children
+            example: Jira Advanced Roadmaps
+          - id: critical-path-highlight
+            name: Critical path highlight
+            example: MS Project critical path
+  - name: Timeline layout
+    family: layout
+    question: How are axis scale and panes arranged?
+    subdimensions:
+      - id: chrome
+        name: Chrome
+        select: one
+        values:
+          - id: list-plus-timeline
+            name: List plus timeline
+            description: Split pane WBS | bars
+            example: MS Project
+          - id: timeline-only
+            name: Timeline only
+            example: Product roadmap slides
+          - id: multi-tier-time-header
+            name: Multi-tier time header
+            description: Year / quarter / month
+            example: Smartsheet
+          - id: compact-mobile-strip
+            name: Compact mobile strip
+            description: Limited desktop parity
+            example: Asana mobile timeline
+      - id: ganttScale
+        name: Scale
+        select: one
+        values:
+          - id: day
+            name: Day
+            example: Short sprints
+          - id: week
+            name: Week
+            example: Asana
+          - id: month-quarter
+            name: Month / quarter
+            example: Product roadmaps
+          - id: zoom-slider
+            name: Zoom slider
+            description: Continuous scale
+            example: Jira Timeline zoom
+  - name: Editing bars
+    family: invocation
+    question: How are start, end and links changed?
+    subdimensions:
+      - id: editGestures
+        name: Edit gestures
+        select: many
+        values:
+          - id: drag-bar-to-move
+            name: Drag bar to move
+            example: Asana Timeline
+          - id: drag-ends-to-resize
+            name: Drag ends to resize
+            example: MS Project
+          - id: draw-dependency
+            name: Draw dependency
+            description: Drag from handle to successor
+            example: Jira
+          - id: edit-in-row-fields
+            name: Edit in row fields
+            description: Type dates in the grid
+            example: Smartsheet
+          - id: bulk-shift
+            name: Bulk shift
+            description: Move many bars together
+            example: Project plans
+  - name: Planning vs tracking
+    family: feedback
+    question: How does the timeline show plan quality and slippage?
+    subdimensions:
+      - id: statusFeedback
+        name: Status feedback
+        select: many
+        values:
+          - id: today-line
+            name: Today line
+            example: Almost all Gantts
+          - id: late-bars-flagged
+            name: Late bars flagged
+            example: Asana overdue
+          - id: baseline-variance
+            name: Baseline variance
+            example: MS Project
+          - id: percent-complete
+            name: Percent complete
+            example: Smartsheet
+          - id: load-or-capacity-hints
+            name: Load or capacity hints
+            description: Overallocation marks
+            example: Resource views in Project
+  - name: Whose plan
+    family: collaboration
+    question: Who can edit, and how are parallel plans reconciled?
+    subdimensions:
+      - id: sharing
+        name: Sharing
+        select: one
+        values:
+          - id: single-editor
+            name: Single editor
+            example: Desktop MSP files
+          - id: co-editing-live
+            name: Co-editing live
+            example: Smartsheet
+          - id: publish-read-only-roadmap
+            name: Publish read-only roadmap
+            example: Productboard / Aha!
+          - id: suggest-dates-for-approval
+            name: Suggest dates for approval
+            example: Agency client reviews
+wild:
+  score: 2
+  note: Zoom, grouping and which fields appear on bars are often configurable in PM tools; dependency
+    semantics rarely are.
+  examples:
+    - name: Jira Timeline
+      note: Zoom and field display
+    - name: Asana Timeline
+      note: Sort, colour and dependency toggles
+    - name: Notion
+      note: Timeline view properties and group by
+techniques:
+  - name: Fluid bar fields
+    dimension: Bar and row content
+    how: Surface any task attribute onto bars (risk, estimate, team) and use it for colour or label;
+      hide the rest per viewer.
+    ai: false
+  - name: Dependency preview
+    dimension: Dependencies and constraints
+    how: While dragging, show which successors will move and by how much before release.
+    ai: false
+  - name: Replan from a goal date
+    dimension: Planning vs tracking
+    how: “Hit launch by June 1” proposes date shifts and flags impossible dependencies with inspectable
+      rationale.
+    ai: true
+signature: Fluid bar fields
+sample: Microsoft Project, Smartsheet, Jira Timeline / Advanced Roadmaps, Asana Timeline, Linear
+  initiatives, Notion timeline, Primavera.
+unit: One timeline view over one project or portfolio.
+relations:
+  uses:
+    - split-pane
+    - drag-reorder
+    - filter-controls
+    - progress-indicator
+    - property-inspector
+  specializes:
+    - schedule
+  neighbors:
+    - kanban-board
+    - calendar
+    - task-list
+    - timeline-editor
+scores:
+  ubiquity: 3
+  potential: 4
+  spec: 4
+evidence: agent-coded
+usage:
+  - Managers live in roll-ups; contributors edit leaf bars
+  - Zoom out for executive narrative, zoom in to schedule
+questions:
+  - When should parent roll-up be authoritative versus derived?
+  - How do Gantt and calendar stay consistent when both edit the same dates?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.5486348295906394
+  agreementFirstPass: 0.672
+  kappaFinal: 0.9304931432492944
+  agreementFinal: 0.952
+  pass: true
+  perSub:
+    barAttrs:
+      kappaFirstPass: 0.5190686726677058
+      agreementFirstPass: 0.65
+      kappaFinal: 0.9107779051395645
+      agreementFinal: 0.9333333333333333
+      flag: null
+    rowHierarchy:
+      kappaFirstPass: 0.6847635726795097
+      agreementFirstPass: 0.7
+      kappaFinal: 0.9440820130475305
+      agreementFinal: 0.95
+      flag: null
+    linking:
+      kappaFirstPass: 0.5980861244019141
+      agreementFirstPass: 0.72
+      kappaFinal: 0.9464285714285713
+      agreementFinal: 0.96
+      flag: null
+    chrome:
+      kappaFirstPass: 0.2539964476021321
+      agreementFirstPass: 0.65
+      kappaFinal: 0.8922800718132852
+      agreementFinal: 0.95
+      flag: null
+    ganttScale:
+      kappaFirstPass: 0.1885038038884192
+      agreementFirstPass: 0.2
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    editGestures:
+      kappaFirstPass: 0.38349446546167903
+      agreementFirstPass: 0.56
+      kappaFinal: 0.9126434104012576
+      agreementFinal: 0.95
+      flag: null
+    statusFeedback:
+      kappaFirstPass: 0.7132583860543443
+      agreementFirstPass: 0.79
+      kappaFinal: 0.9331878312770032
+      agreementFinal: 0.95
+      flag: null
+    sharing:
+      kappaFirstPass: 1
+      agreementFirstPass: 1
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+  distribution:
+    barAttrs:
+      Title on bar: 15
+      Progress fill: 11
+      Assignee colour or avatar: 3
+      Milestone diamond: 12
+      Baseline vs actual: 6
+      Health or status colour: 8
+    rowHierarchy:
+      Flat list: 3
+      Collapsible WBS: 11
+      Swimlanes by person or team: 1
+      Grouped by project: 5
+    linking:
+      No links: 4
+      Finish-to-start arrows: 16
+      Multiple dependency types: 6
+      Parent roll-up: 12
+      Critical path highlight: 8
+    chrome:
+      List plus timeline: 16
+      Timeline only: 3
+      Multi-tier time header: 1
+      Compact mobile strip: 0
+    ganttScale:
+      Day: 0
+      Week: 12
+      Month / quarter: 6
+      Zoom slider: 2
+    editGestures:
+      Drag bar to move: 20
+      Drag ends to resize: 20
+      Draw dependency: 13
+      Edit in row fields: 16
+      Bulk shift: 5
+    statusFeedback:
+      Today line: 20
+      Late bars flagged: 4
+      Baseline variance: 7
+      Percent complete: 11
+      Load or capacity hints: 6
+    sharing:
+      Single editor: 4
+      Co-editing live: 14
+      Publish read-only roadmap: 2
+      Suggest dates for approval: 0
+  exemplars:
+    barAttrs:
+      Title on bar:
+        - Jira — Timeline
+        - Jira — Plans (Advanced Roadmaps)
+        - Asana — Timeline
+      Progress fill:
+        - Microsoft Project — Gantt Chart
+        - Smartsheet — Gantt view
+        - Jira — Timeline
+      Assignee colour or avatar:
+        - Jira — Plans (Advanced Roadmaps)
+        - Asana — Timeline
+        - Trello — Timeline view
+      Milestone diamond:
+        - Microsoft Project — Gantt Chart
+        - Smartsheet — Gantt view
+        - Asana — Timeline
+      Baseline vs actual:
+        - Microsoft Project — Gantt Chart
+        - Smartsheet — Gantt view
+        - Primavera P6 — Activities Gantt
+      Health or status colour:
+        - Smartsheet — Gantt view
+        - Linear — Projects timeline
+        - monday.com — Gantt view
+    rowHierarchy:
+      Flat list:
+        - Asana — Timeline
+        - Linear — Projects timeline
+        - Microsoft Planner — Timeline view
+      Collapsible WBS:
+        - Microsoft Project — Gantt Chart
+        - Smartsheet — Gantt view
+        - Jira — Timeline
+      Swimlanes by person or team:
+        - Productboard — Roadmap timeline
+      Grouped by project:
+        - Notion — Database timeline view
+        - monday.com — Gantt view
+        - Airtable — Gantt view
+    linking:
+      No links:
+        - Linear — Projects timeline
+        - Trello — Timeline view
+        - Productboard — Roadmap timeline
+      Finish-to-start arrows:
+        - Microsoft Project — Gantt Chart
+        - Smartsheet — Gantt view
+        - Jira — Timeline
+      Multiple dependency types:
+        - Microsoft Project — Gantt Chart
+        - Smartsheet — Gantt view
+        - Primavera P6 — Activities Gantt
+      Parent roll-up:
+        - Microsoft Project — Gantt Chart
+        - Smartsheet — Gantt view
+        - Jira — Timeline
+      Critical path highlight:
+        - Microsoft Project — Gantt Chart
+        - Smartsheet — Gantt view
+        - Primavera P6 — Activities Gantt
+    chrome:
+      List plus timeline:
+        - Microsoft Project — Gantt Chart
+        - Jira — Timeline
+        - Jira — Plans (Advanced Roadmaps)
+      Timeline only:
+        - Asana — Timeline
+        - Trello — Timeline view
+        - Productboard — Roadmap timeline
+      Multi-tier time header:
+        - Smartsheet — Gantt view
+      Compact mobile strip: []
+    ganttScale:
+      Day: []
+      Week:
+        - Smartsheet — Gantt view
+        - Asana — Timeline
+        - Primavera P6 — Activities Gantt
+      Month / quarter:
+        - Jira — Plans (Advanced Roadmaps)
+        - Linear — Projects timeline
+        - Notion — Database timeline view
+      Zoom slider:
+        - Microsoft Project — Gantt Chart
+        - Jira — Timeline
+    editGestures:
+      Drag bar to move:
+        - Microsoft Project — Gantt Chart
+        - Smartsheet — Gantt view
+        - Jira — Timeline
+      Drag ends to resize:
+        - Microsoft Project — Gantt Chart
+        - Smartsheet — Gantt view
+        - Jira — Timeline
+      Draw dependency:
+        - Microsoft Project — Gantt Chart
+        - Jira — Timeline
+        - Jira — Plans (Advanced Roadmaps)
+      Edit in row fields:
+        - Microsoft Project — Gantt Chart
+        - Smartsheet — Gantt view
+        - Jira — Plans (Advanced Roadmaps)
+      Bulk shift:
+        - Microsoft Project — Gantt Chart
+        - Jira — Plans (Advanced Roadmaps)
+        - Primavera P6 — Activities Gantt
+    statusFeedback:
+      Today line:
+        - Microsoft Project — Gantt Chart
+        - Smartsheet — Gantt view
+        - Jira — Timeline
+      Late bars flagged:
+        - Asana — Timeline
+        - Wrike — Gantt chart
+        - OmniPlan — Gantt view
+      Baseline variance:
+        - Microsoft Project — Gantt Chart
+        - Smartsheet — Gantt view
+        - Primavera P6 — Activities Gantt
+      Percent complete:
+        - Microsoft Project — Gantt Chart
+        - Smartsheet — Gantt view
+        - Jira — Timeline
+      Load or capacity hints:
+        - Microsoft Project — Gantt Chart
+        - Jira — Plans (Advanced Roadmaps)
+        - Primavera P6 — Activities Gantt
+    sharing:
+      Single editor:
+        - Microsoft Project — Gantt Chart
+        - Primavera P6 — Activities Gantt
+        - GanttProject — Gantt chart
+      Co-editing live:
+        - Smartsheet — Gantt view
+        - Jira — Timeline
+        - Jira — Plans (Advanced Roadmaps)
+      Publish read-only roadmap:
+        - Productboard — Roadmap timeline
+        - Aha! — Gantt chart roadmap
+      Suggest dates for approval: []
+  unobserved:
+    - sub: chrome
+      var: Compact mobile strip
+    - sub: ganttScale
+      var: Day
+    - sub: sharing
+      var: Suggest dates for approval
+  unresolved: []
+  proposals:
+    raised: 0
+    adopted: []
+    recorded: []
+  raterNotes:
+    fable:
+      - "chrome is pick-one but List plus timeline and Multi-tier time header co-occur in nearly
+        every tool; I followed the Smartsheet exemplar once and coded the WBS pane otherwise.
+        ganttScale: coded Zoom slider whenever a zoom control exists, the default preset only when
+        there is none."
+      - ganttScale mixes a control (Zoom slider) with default grains (Day, Week, Month); nearly
+        every product has preset zoom levels, so the gloss should say to code the default grain and
+        reserve Zoom slider for a continuous control. Health or status colour and Critical path
+        highlight overlap when critical bars are red.
+    opus:
+      - "ganttScale forced a single answer out of products whose timescale is a configurable
+        dropdown (Smartsheet, monday, ClickUp, Airtable): I coded the default the product opens at,
+        reserving Zoom slider for continuous controls, so that column is the least reliable here.
+        rowHierarchy's Grouped by project and Swimlanes by person or team are the same mechanism
+        (group-by) pointed at different fields, which made several cells a coin flip decided by the
+        view's default grouping."
+      - "ganttScale is the entry's fault line: Zoom slider is glossed 'continuous', so a
+        Day/Week/Month/Quarter toggle has to be coded as its default scale instead, and one rater
+        coding every zoom control as Zoom slider accounts for most of this entry's disagreement. It
+        needs a 'preset zoom steps' value. barAttrs' Title on bar is the second: in
+        list-plus-timeline schedulers the name is in the table, not on the bar."
+    sonnet:
+      - ganttScale for one product (Notion timeline) got '?' since I couldn't confidently recall
+        whether its zoom is continuous or a set of discrete view steps.
+      - "The biggest codebook problem in this entry is 'ganttScale': Day, Week and Month / quarter
+        name the axis grain while Zoom slider names an interaction, so almost every product is both
+        and raters split on whether to code what the axis shows or how it is changed — it should be
+        two sub-dimensions (current grain; scale control: presets vs continuous). 'chrome' has the
+        same fault: List plus timeline and Timeline only describe pane arrangement, Multi-tier time
+        header describes the header, and Compact mobile strip describes a platform, so Smartsheet
+        and GitHub are two of them at once and the pick-one forces a false choice. Third, 'linking'
+        has an explicit 'No links' variation, which makes an empty array ambiguous — the protocol
+        should say that products with no dependencies take ['No links'], not []. Fourth,
+        'rowHierarchy: Grouped by project' is really 'grouped by any field' and does not cover
+        Asana's grouping by section within one project. Finally, my own round-1 pick-any codes
+        across barAttrs, editGestures and statusFeedback were systematically too thin — I recorded
+        the most salient attribute rather than every one that applies."
+  codedAt: 2026-09-22
+previews:
+  - file: gantt-timeline.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

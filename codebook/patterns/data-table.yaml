@@ -1,0 +1,645 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "data-table". Edit between batches only — see README "Rules".
+id: data-table
+name: Data table
+level: pattern
+parent: browse-collections
+aliases:
+  - data grid
+  - table view
+  - details view
+definition: Items as rows against attributes as columns, built for scanning, comparing, sorting,
+  filtering and acting on many items at once.
+data: collection
+platforms:
+  - web
+  - desktop
+domains:
+  - enterprise
+  - finance
+  - productivity
+  - software
+  - science
+anatomy:
+  - name: Header
+    role: Column names and their controls
+  - name: Row
+    role: One item
+  - name: Cell
+    role: One attribute value
+  - name: Toolbar
+    role: Collection operations
+  - name: Footer
+    role: Aggregates and paging
+roles:
+  - key-attribute
+  - status
+  - owner
+  - date
+  - amount
+  - action
+dimensions:
+  - name: Columns and cells
+    family: content
+    question: Which attributes become columns, and how are values rendered?
+    subdimensions:
+      - id: columnSet
+        name: Column set
+        select: one
+        values:
+          - id: fixed
+            name: Fixed
+            description: The developer decides
+            example: Bank transaction lists
+          - id: show-and-hide
+            name: Show and hide
+            description: The person picks columns
+            example: Airtable hide fields
+          - id: computed-columns
+            name: Computed columns
+            description: Formulas over other columns
+            example: Airtable formula fields
+          - id: generated-columns
+            name: Generated columns
+            description: A model extracts a column per row
+            example: Elicit’s paper table
+      - id: cellRendering
+        name: Cell rendering
+        select: many
+        values:
+          - id: plain-text
+            name: Plain text
+            example: Spreadsheets
+          - id: chips-and-avatars
+            name: Chips and avatars
+            example: Linear list view
+          - id: in-cell-charts
+            name: In-cell charts
+            description: Sparklines and bars
+            example: Excel data bars
+          - id: editable-input
+            name: Editable input
+            example: Airtable
+  - name: Density and structure
+    family: layout
+    question: How tightly are rows packed, what stays put, and how do rows expand?
+    subdimensions:
+      - id: density
+        name: Density
+        select: one
+        values:
+          - id: compact
+            name: Compact
+            example: MUI DataGrid compact
+          - id: standard
+            name: Standard
+            example: MUI DataGrid standard
+          - id: comfortable
+            name: Comfortable
+            example: MUI DataGrid comfortable
+      - id: frozen
+        name: Frozen regions
+        select: many
+        values:
+          - id: sticky-header
+            name: Sticky header
+            example: Most grids
+          - id: frozen-first-column
+            name: Frozen first column
+            example: Google Sheets freeze
+          - id: pinned-columns
+            name: Pinned columns
+            description: Pin left or right
+            example: AG Grid column pinning
+      - id: rowExpansion
+        name: Row expansion
+        select: one
+        values:
+          - id: none
+            name: None
+            example: Simple tables
+          - id: detail-row
+            name: Detail row
+            description: A panel opens under the row
+            example: AG Grid master/detail
+          - id: tree-rows
+            name: Tree rows
+            description: Rows nest under rows
+            example: AG Grid tree data
+          - id: grouped-rows
+            name: Grouped rows
+            description: Group headers with aggregates
+            example: Airtable group by
+  - name: Selection and operations
+    family: scope
+    question: What can be selected, and what do operations apply to?
+    subdimensions:
+      - id: selection
+        name: Selection
+        select: one
+        values:
+          - id: none
+            name: None
+            example: Read-only reports
+          - id: single-row
+            name: Single row
+            example: File pickers
+          - id: multiple-rows
+            name: Multiple rows
+            description: Checkbox column
+            example: Gmail
+          - id: cell-ranges
+            name: Cell ranges
+            description: Spreadsheet-style ranges
+            example: AG Grid range selection
+      - id: opScope
+        name: Operations apply to
+        select: many
+        values:
+          - id: row
+            name: Row
+            example: Row menus
+          - id: selection
+            name: Selection
+            example: Bulk actions
+          - id: column
+            name: Column
+            example: Sort, filter and hide from the header
+          - id: whole-table
+            name: Whole table
+            example: Export
+  - name: Aggregation
+    family: composition
+    question: Are rows combined into groups or summaries?
+    subdimensions:
+      - id: aggregation
+        name: Aggregation
+        select: many
+        values:
+          - id: flat
+            name: Flat
+            example: Simple lists
+          - id: group-by-column
+            name: Group by column
+            example: Airtable
+          - id: pivot
+            name: Pivot
+            description: Rows × columns of aggregates
+            example: Google Sheets pivot tables
+          - id: footer-aggregates
+            name: Footer aggregates
+            description: Sum, average or count under a column
+            example: Airtable summary bar
+  - name: Row detail
+    family: invocation
+    question: How does one row open into its full record?
+    subdimensions:
+      - id: openIn
+        name: Row opens in
+        select: one
+        values:
+          - id: side-by-side
+            name: Side-by-side
+            example: Salesforce split view
+          - id: modal
+            name: Modal
+            example: Airtable expanded record
+          - id: new-page
+            name: New page
+            example: Admin consoles
+          - id: in-place
+            name: In-place
+            example: Expandable rows
+          - id: bottom-panel
+            name: Bottom panel
+            description: The selected row's detail opens in a resizable panel docked below the whole table — the
+              table stays complete above it, unlike a detail row that splits the rows apart or a
+              side panel beside them
+            example: AWS Console — EC2 Instances
+  - name: Narrow screens
+    family: adaptation
+    question: What happens when there is no room for the columns?
+    subdimensions:
+      - id: smallScreen
+        name: Small-screen behaviour
+        select: one
+        values:
+          - id: horizontal-scroll
+            name: Horizontal scroll
+            example: Most responsive tables
+          - id: stack-to-cards
+            name: Stack to cards
+            description: Each row becomes a card
+            example: Mobile banking lists
+          - id: priority-columns
+            name: Priority columns
+            description: Low-priority columns hide
+            example: Responsive table plugins
+          - id: column-chooser
+            name: Column chooser
+            description: The person picks what fits
+            example: Mobile admin apps
+wild:
+  score: 3
+  note: In productivity and admin software, showing, hiding, reordering and resizing columns, sorting,
+    filtering and grouping are routine.
+  examples:
+    - name: Airtable
+      note: Hide fields, group, sort, filter and row height per view
+    - name: Excel / Google Sheets
+      note: Freeze, filter, sort and pivot
+    - name: Jira list view
+      note: Choose columns
+techniques:
+  - name: Column surfacing
+    dimension: Columns and cells
+    how: Pull any attribute from a record’s detail straight into a column, the tabular form of Fluid
+      Attributes; hide columns back into the detail.
+    ai: false
+  - name: Formula by example
+    dimension: Columns and cells
+    how: Type the value you want in two or three cells and the table proposes the computed column.
+    ai: true
+  - name: Table ↔ cards morph
+    dimension: Narrow screens
+    how: The same column set reflows to cards when narrow, with pinned columns becoming the card’s title
+      and subtitle roles.
+    ai: false
+  - name: Ask for a column
+    dimension: Columns and cells
+    how: “Add a column for whether the paper has a user study” extracts a value per row, with provenance
+      and an Unknown value.
+    ai: true
+signature: Column surfacing
+sample: Admin consoles, CRMs, analytics tools, banking and brokerage sites, plus grid libraries’
+  showcase apps.
+unit: One table over one record set.
+relations:
+  uses:
+    - sort-control
+    - filter-controls
+    - bulk-actions
+    - pagination
+    - inline-edit
+    - drawer
+  specializes:
+    - overview-detail
+  neighbors:
+    - spreadsheet
+    - comparison-table
+    - pivot-table
+scores:
+  ubiquity: 5
+  potential: 4
+  spec: 5
+evidence: agent-coded
+usage:
+  - Power users build wide tables and scroll; occasional users want a few columns and a detail panel
+questions:
+  - When does a data table become a spreadsheet, and should people be able to cross that line?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.6360397198557461
+  agreementFirstPass: 0.7595238095238095
+  kappaFinal: 0.8936490761499775
+  agreementFinal: 0.9333333333333333
+  pass: true
+  perSub:
+    columnSet:
+      kappaFirstPass: 0.6226415094339622
+      agreementFirstPass: 0.7
+      kappaFinal: 0.9404170804369416
+      agreementFinal: 0.95
+      flag: null
+    cellRendering:
+      kappaFirstPass: 0.8664347826086957
+      agreementFirstPass: 0.9
+      kappaFinal: 0.9833321758455451
+      agreementFinal: 0.9875
+      flag: null
+    density:
+      kappaFirstPass: 0.6174282678002128
+      agreementFirstPass: 0.7
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    frozen:
+      kappaFirstPass: 0.5958261788403124
+      agreementFirstPass: 0.7166666666666667
+      kappaFinal: 0.8653198653198655
+      agreementFinal: 0.9
+      flag: null
+    rowExpansion:
+      kappaFirstPass: 0.5975232198142416
+      agreementFirstPass: 0.7
+      kappaFinal: 0.8889916743755781
+      agreementFinal: 0.9
+      flag: null
+    selection:
+      kappaFirstPass: 0.735216240070609
+      agreementFirstPass: 0.75
+      kappaFinal: 0.8840579710144926
+      agreementFinal: 0.9
+      flag: null
+    opScope:
+      kappaFirstPass: 0.4529914529914542
+      agreementFirstPass: 0.75
+      kappaFinal: 0.7836538461538445
+      agreementFinal: 0.925
+      flag: null
+    aggregation:
+      kappaFirstPass: 0.6511627906976746
+      agreementFirstPass: 0.7875
+      kappaFinal: 0.9444272923741895
+      agreementFinal: 0.9625
+      flag: null
+    openIn:
+      kappaFirstPass: 0.6792587312900926
+      agreementFirstPass: 0.65
+      kappaFinal: 0.8951048951048952
+      agreementFinal: 0.9
+      flag: null
+    smallScreen:
+      kappaFirstPass: 0.43493150684931525
+      agreementFirstPass: 0.55
+      kappaFinal: 0.7164461247637051
+      agreementFinal: 0.75
+      flag: null
+  distribution:
+    columnSet:
+      Fixed: 3
+      Show and hide: 12
+      Computed columns: 4
+      Generated columns: 1
+    cellRendering:
+      Plain text: 20
+      Chips and avatars: 11
+      In-cell charts: 2
+      Editable input: 7
+    density:
+      Compact: 8
+      Standard: 10
+      Comfortable: 2
+    frozen:
+      Sticky header: 18
+      Frozen first column: 8
+      Pinned columns: 1
+    rowExpansion:
+      None: 11
+      Detail row: 2
+      Tree rows: 1
+      Grouped rows: 6
+    selection:
+      None: 3
+      Single row: 1
+      Multiple rows: 12
+      Cell ranges: 4
+    opScope:
+      Row: 19
+      Selection: 16
+      Column: 18
+      Whole table: 17
+    aggregation:
+      Flat: 9
+      Group by column: 7
+      Pivot: 3
+      Footer aggregates: 8
+    openIn:
+      Side-by-side: 4
+      Modal: 2
+      New page: 5
+      In-place: 2
+      Bottom panel: 1
+      n/a: 5
+    smallScreen:
+      Horizontal scroll: 13
+      Stack to cards: 4
+      Priority columns: 1
+      Column chooser: 0
+      n/a: 2
+  exemplars:
+    columnSet:
+      Fixed:
+        - Google Analytics 4 — Pages and screens report
+        - Chase — Account activity
+        - Fidelity — Positions
+      Show and hide:
+        - Salesforce — Opportunities list view
+        - HubSpot — Contacts table
+        - Linear — Issues list view
+      Computed columns:
+        - Airtable — Grid view of a base
+        - Google Sheets — A worksheet
+        - Microsoft Excel — Worksheet with a formatted table
+      Generated columns:
+        - Elicit — Paper results table
+    cellRendering:
+      Plain text:
+        - Airtable — Grid view of a base
+        - Google Sheets — A worksheet
+        - Microsoft Excel — Worksheet with a formatted table
+      Chips and avatars:
+        - Airtable — Grid view of a base
+        - Google Sheets — A worksheet
+        - HubSpot — Contacts table
+      In-cell charts:
+        - Google Sheets — A worksheet
+        - Microsoft Excel — Worksheet with a formatted table
+      Editable input:
+        - Airtable — Grid view of a base
+        - Google Sheets — A worksheet
+        - Microsoft Excel — Worksheet with a formatted table
+    density:
+      Compact:
+        - Google Sheets — A worksheet
+        - Microsoft Excel — Worksheet with a formatted table
+        - Linear — Issues list view
+      Standard:
+        - Airtable — Grid view of a base
+        - Salesforce — Opportunities list view
+        - HubSpot — Contacts table
+      Comfortable:
+        - AWS Console — EC2 Instances
+        - Elicit — Paper results table
+    frozen:
+      Sticky header:
+        - Airtable — Grid view of a base
+        - Google Sheets — A worksheet
+        - Microsoft Excel — Worksheet with a formatted table
+      Frozen first column:
+        - Airtable — Grid view of a base
+        - Google Sheets — A worksheet
+        - Microsoft Excel — Worksheet with a formatted table
+      Pinned columns:
+        - AG Grid — Olympic winners demo
+    rowExpansion:
+      None:
+        - Google Sheets — A worksheet
+        - Microsoft Excel — Worksheet with a formatted table
+        - Salesforce — Opportunities list view
+      Detail row:
+        - Chase — Account activity
+        - Fidelity — Positions
+      Tree rows:
+        - Google Ads — Campaigns
+      Grouped rows:
+        - Airtable — Grid view of a base
+        - Linear — Issues list view
+        - Jira — Project list view
+    selection:
+      None:
+        - Google Analytics 4 — Pages and screens report
+        - Chase — Account activity
+        - Fidelity — Positions
+      Single row:
+        - Windows Task Manager — Details tab
+      Multiple rows:
+        - Salesforce — Opportunities list view
+        - HubSpot — Contacts table
+        - Linear — Issues list view
+      Cell ranges:
+        - Airtable — Grid view of a base
+        - Google Sheets — A worksheet
+        - Microsoft Excel — Worksheet with a formatted table
+    opScope:
+      Row:
+        - Airtable — Grid view of a base
+        - Google Sheets — A worksheet
+        - Microsoft Excel — Worksheet with a formatted table
+      Selection:
+        - Airtable — Grid view of a base
+        - Google Sheets — A worksheet
+        - Microsoft Excel — Worksheet with a formatted table
+      Column:
+        - Airtable — Grid view of a base
+        - Google Sheets — A worksheet
+        - Microsoft Excel — Worksheet with a formatted table
+      Whole table:
+        - Airtable — Grid view of a base
+        - Google Sheets — A worksheet
+        - Microsoft Excel — Worksheet with a formatted table
+    aggregation:
+      Flat:
+        - Salesforce — Opportunities list view
+        - HubSpot — Contacts table
+        - AWS Console — EC2 Instances
+      Group by column:
+        - Airtable — Grid view of a base
+        - Linear — Issues list view
+        - Jira — Project list view
+      Pivot:
+        - Google Sheets — A worksheet
+        - Microsoft Excel — Worksheet with a formatted table
+        - AG Grid — Olympic winners demo
+      Footer aggregates:
+        - Airtable — Grid view of a base
+        - Google Sheets — A worksheet
+        - Microsoft Excel — Worksheet with a formatted table
+    openIn:
+      Side-by-side:
+        - Salesforce — Opportunities list view
+        - GitHub — Projects table view
+        - Notion — Database table view
+      Modal:
+        - Airtable — Grid view of a base
+        - macOS Activity Monitor — CPU tab
+      New page:
+        - HubSpot — Contacts table
+        - Linear — Issues list view
+        - Stripe Dashboard — Payments
+      In-place:
+        - Chase — Account activity
+        - Fidelity — Positions
+      Bottom panel:
+        - AWS Console — EC2 Instances
+    smallScreen:
+      Horizontal scroll:
+        - Google Sheets — A worksheet
+        - Microsoft Excel — Worksheet with a formatted table
+        - HubSpot — Contacts table
+      Stack to cards:
+        - Airtable — Grid view of a base
+        - Salesforce — Opportunities list view
+        - Shopify Admin — Orders
+      Priority columns:
+        - Linear — Issues list view
+      Column chooser: []
+  unobserved:
+    - sub: smallScreen
+      var: Column chooser
+  unresolved:
+    - sub: openIn
+      n: 7
+  proposals:
+    raised: 1
+    adopted:
+      - sub: openIn
+        name: Bottom panel
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - Small-screen behaviour is largely unobservable from product knowledge for desktop-first
+        admin tools (coded ? on five). columnSet as pick-one forces Computed over Show and hide when
+        both hold; rowExpansion coded as the prominent capability, not only the default state.
+      - aggregation's Flat reads as an exclusive none, so [] and ['Flat'] and Flat-beside-Pivot are
+        false disagreements; the codebook should say whether Flat excludes the rest. columnSet as
+        pick one forces Computed over Show and hide when both hold. density is MUI's scale and
+        products' own density names do not map onto it. frozen and rowExpansion are coded as offered
+        mechanisms by two raters and as defaults by one; the codebook should say which. smallScreen
+        mixes the web table adapting with a separate mobile app. Tree rows and Grouped rows overlap
+        when a parent row is both an item and an aggregate.
+    opus:
+      - "columnSet is two questions in one pick-one: Fixed and Show and hide answer who decides the
+        set, Computed and Generated answer where the values come from. I applied a precedence —
+        Generated > Computed > Show and hide > Fixed — so Airtable, Notion, Sheets and Excel read as
+        Computed columns even though all four also let you hide columns; a rater who read the sub as
+        'who decides' would code those Show and hide, and this is my likeliest disagreement. density
+        is close to unobservable from memory: most web admin grids sit in a middle band and I coded
+        Compact only for spreadsheet-tight rows. frozen is often a user setting rather than a
+        default, and I coded it where the product is known for it. aggregation has a Flat variation
+        inside a pick-any, so I wrote ['Flat'] rather than an empty array."
+      - "Three codebook faults drove most of this packet. (1) columnSet is two questions in one
+        pick-one — Fixed/Show and hide answer who decides the set, Computed/Generated answer where
+        the values come from — so a product with both reads either way; it should be split. (2)
+        aggregation puts Flat inside a pick-any, so 'no aggregation' can be written ['Flat'] or [],
+        and that alone accounts for every aggregation disagreement on the plain admin tables; Flat
+        should be the empty array or the sub should be pick one. (3) frozen and columnSet never say
+        whether to code the default state or the available capability, which is the whole of the
+        Sheets/Excel/Notion split. Two smaller ones: density has no anchor beyond MUI's three names,
+        so raters fall back to Standard as a default; and openIn is pick one where Jira and Airtable
+        truthfully offer a page, a panel and a dialog at once."
+    sonnet:
+      - columnSet distinguishes who controls which fields exist/show; several tools (GitHub
+        Projects, Notion) blur Show-and-hide with letting the person define brand-new custom fields,
+        coded here as Show and hide for lack of a closer fit.
+      - Three codebook problems stood out. (1) Empty list versus explicit 'Flat'/'None' drove a
+        large share of this entry's disagreements even where all three raters agreed on content —
+        the same representation issue as in browse-collections and comparison-table. (2) columnSet
+        is pick-one but Airtable, Google Sheets and Excel all genuinely offer both 'Show and hide'
+        and 'Computed columns' at once (the codebook even cites Airtable as the exemplar for both
+        bullets); I resolved by treating the rarer, more product-defining capability as the
+        diagnostic value, but this should be pick-any or the codebook should state a tie-break. (3)
+        'frozen' sits ambiguously between a capability list (any available control counts, as I read
+        narrowing elsewhere) and a description of current default state (opus's 'freezing is opt-in
+        so I left it out' reading for Notion) — I ended up applying the capability reading for
+        consistency within this entry, but the two readings produce different codes for Excel,
+        Notion and Google Ads and the codebook should say which one 'pick any' means here.
+  codedAt: 2026-09-22
+previews:
+  - file: data-table.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

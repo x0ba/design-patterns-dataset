@@ -1,0 +1,396 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "split-pane". Edit between batches only — see README "Rules".
+id: split-pane
+name: Split pane
+level: component
+parent: browse-collections
+aliases:
+  - split view
+  - resizable panels
+  - editor groups
+definition: Two or more resizable panes sharing one window, each holding its own view.
+data: object
+platforms:
+  - desktop
+  - web
+domains:
+  - software
+  - design
+  - productivity
+  - communication
+anatomy:
+  - name: Pane
+    role: One region
+  - name: Divider
+    role: The resize handle between panes
+roles: []
+dimensions:
+  - name: Arrangement
+    family: layout
+    question: How are panes arranged and sized?
+    subdimensions:
+      - id: orientation
+        name: Orientation
+        select: one
+        values:
+          - id: side-by-side
+            name: Side by side
+            example: Mail apps
+          - id: stacked
+            name: Stacked
+            example: Terminal under an editor
+          - id: grid-of-panes
+            name: Grid of panes
+            example: VS Code editor groups
+          - id: nested-splits
+            name: Nested splits
+            example: tmux
+      - id: sizing
+        name: Sizing
+        select: one
+        values:
+          - id: fixed
+            name: Fixed
+            example: Simple layouts
+          - id: draggable-divider
+            name: Draggable divider
+            example: Most IDEs
+          - id: snap-presets
+            name: Snap presets
+            example: Windows Snap layouts
+          - id: collapsible-pane
+            name: Collapsible pane
+            example: Sidebars
+          - id: keyboard-resize
+            name: Keyboard resize
+            description: Panes are resized via keyboard shortcuts rather than dragging a divider with the
+              pointer, e.g. tmux's prefix+arrow-key resize
+            example: tmux — Nested terminal panes
+  - name: Pane relationship
+    family: composition
+    question: How do the panes relate?
+    subdimensions:
+      - id: relationship
+        name: Relationship
+        select: one
+        values:
+          - id: independent
+            name: Independent
+            example: Two unrelated files
+          - id: linked-selection
+            name: Linked selection
+            description: Selecting in one drives the other
+            example: Mail list and message
+          - id: synchronized-scroll
+            name: Synchronized scroll
+            example: Diff viewers
+          - id: two-views-of-one-document
+            name: Two views of one document
+            example: Word split window
+  - name: Creating splits
+    family: invocation
+    question: How is a split made?
+    subdimensions:
+      - id: create
+        name: Split by
+        select: many
+        values:
+          - id: menu-command
+            name: Menu command
+            example: Split right in VS Code
+          - id: drag-a-tab-to-an-edge
+            name: Drag a tab to an edge
+            example: VS Code
+          - id: keyboard-shortcut
+            name: Keyboard shortcut
+            example: tmux
+  - name: Persistence
+    family: lifecycle
+    question: Does the layout survive?
+    subdimensions:
+      - id: persistence
+        name: Layout persistence
+        select: one
+        values:
+          - id: per-session
+            name: Per session
+            example: Browsers’ split view
+          - id: saved-layouts
+            name: Saved layouts
+            example: Photoshop workspaces
+          - id: per-workspace
+            name: Per workspace
+            example: VS Code workspaces
+          - id: app-wide
+            name: App-wide
+            description: One layout remembered for the whole app or account and restored on every launch, not
+              per session, per workspace, or as named layouts
+            example: Apple Mail — Three-column window
+          - id: remembered-as-a-preference
+            name: Remembered as a preference
+            description: The layout is simply remembered for the application across restarts — no session
+              boundary, no named layout to choose and no project to scope it to. The commonest case
+              in shipping apps, and the codebook's three variations all imply an explicit container
+              for the layout
+            example: Apple Mail — Three-column window
+wild:
+  score: 3
+  note: Professional tools let people split, resize and save layouts as a matter of course.
+  examples:
+    - name: VS Code
+      note: Editor groups, drag to split
+    - name: Photoshop
+      note: Saved workspaces
+techniques:
+  - name: Drag to dock
+    dimension: Creating splits
+    how: Drag any view to an edge to split, and drag it back to merge; the layout is a spec that can be
+      saved and shared.
+    ai: false
+  - name: Layout for this task
+    dimension: Arrangement
+    how: “Set me up to review this PR” opens the diff, tests and the conversation in a proposed split.
+    ai: true
+signature: Drag to dock
+sample: IDEs, creative suites, mail clients and chat apps on desktop.
+unit: One window layout.
+relations:
+  uses: []
+  specializes: []
+  neighbors:
+    - overview-detail
+    - app-shell
+scores:
+  ubiquity: 3
+  potential: 4
+  spec: 4
+evidence: agent-coded
+usage:
+  - Layouts are tuned once and then defended
+questions:
+  - Can layout specs move between tools the way ODI specs move between shops?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.6387116972565806
+  agreementFirstPass: 0.75
+  kappaFinal: 0.9400362580697766
+  agreementFinal: 0.95625
+  pass: true
+  perSub:
+    orientation:
+      kappaFirstPass: 0.7623762376237622
+      agreementFirstPass: 0.8
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    sizing:
+      kappaFirstPass: 0.7404844290657437
+      agreementFirstPass: 0.9
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    relationship:
+      kappaFirstPass: 0.8933333333333333
+      agreementFirstPass: 0.9
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    create:
+      kappaFirstPass: 0.6031746031746038
+      agreementFirstPass: 0.75
+      kappaFinal: 0.8918187964841108
+      agreementFinal: 0.925
+      flag: null
+    persistence:
+      kappaFirstPass: 0.30080116533139106
+      agreementFirstPass: 0.4
+      kappaFinal: 0.9530148786217696
+      agreementFinal: 0.95
+      flag: null
+  distribution:
+    orientation:
+      Side by side: 13
+      Stacked: 1
+      Grid of panes: 3
+      Nested splits: 3
+    sizing:
+      Fixed: 2
+      Draggable divider: 16
+      Snap presets: 1
+      Collapsible pane: 0
+      Keyboard resize: 1
+    relationship:
+      Independent: 8
+      Linked selection: 9
+      Synchronized scroll: 2
+      Two views of one document: 1
+    create:
+      Menu command: 13
+      Drag a tab to an edge: 7
+      Keyboard shortcut: 7
+    persistence:
+      Per session: 5
+      Saved layouts: 2
+      Per workspace: 5
+      App-wide: 8
+      Remembered as a preference: 0
+  exemplars:
+    orientation:
+      Side by side:
+        - Apple Mail — Three-column window
+        - Microsoft Outlook — Folder pane, message list and reading pane
+        - Slack — Sidebar, channel and thread pane
+      Stacked:
+        - Microsoft Word — Split window
+      Grid of panes:
+        - VS Code — Editor groups with a terminal panel
+        - Adobe Photoshop — Docked workspace panels
+        - JupyterLab — Split notebook and console
+      Nested splits:
+        - tmux — Nested terminal panes
+        - iTerm2 — Split panes
+        - Obsidian — Split panes
+    sizing:
+      Fixed:
+        - Discord — Servers, channels, chat, members
+        - GitHub — Split diff view
+      Draggable divider:
+        - VS Code — Editor groups with a terminal panel
+        - Apple Mail — Three-column window
+        - Microsoft Outlook — Folder pane, message list and reading pane
+      Snap presets:
+        - Windows 11 Snap layouts — Two windows snapped beside each other
+      Collapsible pane: []
+      Keyboard resize:
+        - tmux — Nested terminal panes
+    relationship:
+      Independent:
+        - VS Code — Editor groups with a terminal panel
+        - tmux — Nested terminal panes
+        - iTerm2 — Split panes
+      Linked selection:
+        - Apple Mail — Three-column window
+        - Microsoft Outlook — Folder pane, message list and reading pane
+        - Slack — Sidebar, channel and thread pane
+      Synchronized scroll:
+        - GitHub — Split diff view
+        - Beyond Compare — Beside each other file compare
+      Two views of one document:
+        - Microsoft Word — Split window
+    create:
+      Menu command:
+        - VS Code — Editor groups with a terminal panel
+        - Microsoft Outlook — Folder pane, message list and reading pane
+        - Xcode — Editor with an assistant editor
+      Drag a tab to an edge:
+        - VS Code — Editor groups with a terminal panel
+        - Adobe Photoshop — Docked workspace panels
+        - Windows 11 Snap layouts — Two windows snapped beside each other
+      Keyboard shortcut:
+        - VS Code — Editor groups with a terminal panel
+        - Xcode — Editor with an assistant editor
+        - tmux — Nested terminal panes
+    persistence:
+      Per session:
+        - tmux — Nested terminal panes
+        - Microsoft Word — Split window
+        - Windows 11 Snap layouts — Two windows snapped beside each other
+      Saved layouts:
+        - iTerm2 — Split panes
+        - Adobe Photoshop — Docked workspace panels
+      Per workspace:
+        - VS Code — Editor groups with a terminal panel
+        - Xcode — Editor with an assistant editor
+        - IntelliJ IDEA — Editor split right
+      App-wide:
+        - Apple Mail — Three-column window
+        - Microsoft Outlook — Folder pane, message list and reading pane
+        - Slack — Sidebar, channel and thread pane
+      Remembered as a preference: []
+  unobserved:
+    - sub: sizing
+      var: Collapsible pane
+    - sub: persistence
+      var: Remembered as a preference
+  unresolved: []
+  proposals:
+    raised: 3
+    adopted:
+      - sub: persistence
+        name: App-wide
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: persistence
+        name: Remembered as a preference
+        raters:
+          - fable
+          - opus
+      - sub: sizing
+        name: Keyboard resize
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - Persistence lacks the commonest case, a single remembered layout for the app (nine of
+        twenty). Create is n/a for fixed layouts where the user never makes a split.
+      - persistence lacks the commonest case, one layout remembered for the app, which two raters
+        proposed. create needs [] rather than n/a for fixed layouts. sizing wants pick any where a
+        fixed layout also collapses a pane or a snap layout also drags. Grid of panes and Nested
+        splits are undefined for dock systems.
+    opus:
+      - "This entry's unit ('one window layout') stretches over two different things: layouts a
+        person builds (VS Code, tmux, Snap) and fixed multi-region app chromes (Mail, Slack,
+        Discord, Figma). For the latter, create is empty and the interesting sub-dimensions are
+        relationship and sizing. persistence needed the one proposal: eight instances remember the
+        layout forever as an app setting, which is neither per session, a saved layout nor per
+        workspace. sizing is pick-one but collapsible and draggable coexist almost everywhere, so I
+        coded the seam behaviour and treated collapse as secondary. Nothing in the entry can express
+        the responsive reflow that DevTools and many web layouts do when the window narrows."
+      - "Two thirds of this packet is one missing variation in `persistence`: eight of the twenty
+        instances simply remember their layout for the application, which is neither Per session,
+        Saved layouts nor Per workspace — fable and I proposed it independently (I have taken
+        fable's name, +App-wide) and sonnet, having no value for it, coded Per session eight times.
+        The rest divides into three smaller faults. `create` is pick any but has no way to say
+        'nobody creates this split, it is the app's own layout', so six instances are coded as an
+        empty list by two raters and n/a by the third, which scores as disagreement; it also names
+        its variations after editor idioms (a *tab* dragged to an edge), which forces a judgement
+        call for window tiling. `orientation`'s Grid of panes and Nested splits are not exclusive —
+        every dock system that nests arbitrarily also renders as a grid, so Photoshop, JupyterLab
+        and Discord split us. And `sizing` lists only pointer mechanisms, so a keyboard-resized
+        layout (tmux) has no value."
+    sonnet:
+      - create is left empty for several fixed, built-in split layouts (Mail's three columns,
+        Slack's thread pane, Gmail's reading pane) where the split isn't made through a menu
+        command, tab drag or keyboard shortcut the way an IDE split is, but is a toggled built-in
+        feature instead.
+      - "Two patterns stood out. (1) 'persistence' has no value for the single most common case in
+        this sample: a layout simply remembered for the whole app across restarts, with no session
+        boundary, no named-layout picker and no per-project scoping (Apple Mail, Outlook, Slack,
+        Discord, GitHub, Figma, DevTools, Gmail) — I'd been defaulting to 'Per session' for lack of
+        a better fit, but both other raters independently converged on essentially the same missing
+        value, which is as strong a signal as this reconciliation produced anywhere. (2) 'create'
+        needed a genuine n/a (not an empty array) for fixed, built-in multi-pane layouts that no
+        user action constructs (Apple Mail, Slack's thread pane, Discord, Figma, DevTools, Beyond
+        Compare) — these aren't cases where the three create mechanisms were checked and found
+        absent, but cases where the concept of 'making a split' doesn't apply to a layout the app
+        always provides."
+  codedAt: 2026-09-22
+previews:
+  - file: split-pane.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

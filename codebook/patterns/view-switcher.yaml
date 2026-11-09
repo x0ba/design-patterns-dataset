@@ -1,0 +1,373 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "view-switcher". Edit between batches only — see README "Rules".
+id: view-switcher
+name: View switcher
+level: component
+parent: browse-collections
+aliases:
+  - layout toggle
+  - views
+definition: A control that changes how the same collection is represented.
+data: collection
+platforms:
+  - web
+  - desktop
+  - mobile
+domains:
+  - productivity
+  - commerce
+  - enterprise
+anatomy:
+  - name: Views
+    role: The available representations
+  - name: Control
+    role: How one is chosen
+roles: []
+dimensions:
+  - name: Views offered
+    family: content
+    question: Which representations are available?
+    subdimensions:
+      - id: views
+        name: Views
+        select: many
+        values:
+          - id: list
+            name: List
+            example: Notion
+          - id: grid
+            name: Grid
+            example: Google Drive
+          - id: table
+            name: Table
+            example: Airtable
+          - id: board
+            name: Board
+            example: Notion
+          - id: calendar
+            name: Calendar
+            example: Notion
+          - id: timeline
+            name: Timeline
+            example: Notion
+          - id: map
+            name: Map
+            example: Airtable map extension
+          - id: chart
+            name: Chart
+            example: Notion chart view
+          - id: gallery
+            name: Gallery
+            description: Cards with a cover image per item
+            example: Notion — Database view tabs
+          - id: columns
+            name: Columns
+            description: Miller columns, one per level of the hierarchy
+            example: macOS Finder — View toggle in the toolbar
+  - name: Control form
+    family: layout
+    question: How is a view picked?
+    subdimensions:
+      - id: form
+        name: Form
+        select: one
+        values:
+          - id: icon-toggle-group
+            name: Icon toggle group
+            example: Finder
+          - id: tabs-of-saved-views
+            name: Tabs of saved views
+            example: Notion database tabs
+          - id: sidebar-of-views
+            name: Sidebar of views
+            example: Airtable views list
+          - id: dropdown
+            name: Dropdown
+            example: Craigslist
+  - name: Persistence
+    family: lifecycle
+    question: What remembers the choice?
+    subdimensions:
+      - id: persistence
+        name: Persistence
+        select: one
+        values:
+          - id: global-preference
+            name: Global preference
+            example: Google Drive
+          - id: per-collection
+            name: Per collection
+            example: Finder per folder
+          - id: named-views-shared-with-a-team
+            name: Named views shared with a team
+            example: Airtable, Notion
+  - name: View independence
+    family: composition
+    question: Do views share filters and sorts?
+    subdimensions:
+      - id: independence
+        name: Independence
+        select: one
+        values:
+          - id: shared-across-views
+            name: Shared across views
+            example: Google Drive
+          - id: each-view-owns-its-filters
+            name: Each view owns its filters
+            example: Notion
+wild:
+  score: 3
+  note: Where offered, it is the most-used customization; CHI '25 found layout customization on 7.69%
+    of sites.
+  examples:
+    - name: Notion
+      note: Named views per database
+    - name: Airtable
+      note: Grid, calendar, gallery, kanban, timeline, form
+techniques:
+  - name: Attribute-invoked views
+    dimension: Views offered
+    how: Selecting a date offers calendar and timeline; two numbers offer a plot; a location offers a
+      map (CHI '25 Fig. 11).
+    ai: false
+  - name: Views as exchangeable specs
+    dimension: Persistence
+    how: A view is a spec that can be copied into another collection (Meridian D1-2).
+    ai: false
+signature: Attribute-invoked views
+sample: Productivity databases, file managers and shopping results pages.
+unit: One switcher over one collection.
+relations:
+  uses:
+    - tabs
+    - menu
+  specializes: []
+  neighbors:
+    - tabs
+scores:
+  ubiquity: 4
+  potential: 4
+  spec: 5
+evidence: agent-coded
+usage:
+  - People combine two views of one task (P4 grid and list, P6 table and list in CHI '25)
+questions:
+  - When the list of views grows large, is attribute invocation discoverable enough?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.8259461650880311
+  agreementFirstPass: 0.8833333333333333
+  kappaFinal: 0.8259461650880311
+  agreementFinal: 0.8833333333333333
+  pass: true
+  perSub:
+    views:
+      kappaFirstPass: 0.8382417582417592
+      agreementFirstPass: 0.9041666666666667
+      kappaFinal: 0.8382417582417592
+      agreementFinal: 0.9041666666666667
+      flag: null
+    form:
+      kappaFirstPass: 0.9530148786217696
+      agreementFirstPass: 0.95
+      kappaFinal: 0.9530148786217696
+      agreementFinal: 0.95
+      flag: null
+    persistence:
+      kappaFirstPass: 0.7630331753554501
+      agreementFirstPass: 0.75
+      kappaFinal: 0.7630331753554501
+      agreementFinal: 0.75
+      flag: null
+    independence:
+      kappaFirstPass: 0.6142433234421365
+      agreementFirstPass: 0.7
+      kappaFinal: 0.6142433234421365
+      agreementFinal: 0.7
+      flag: null
+  distribution:
+    views:
+      List: 15
+      Grid: 8
+      Table: 7
+      Board: 10
+      Calendar: 8
+      Timeline: 8
+      Map: 4
+      Chart: 2
+      Gallery: 1
+      Columns: 1
+    form:
+      Icon toggle group: 8
+      Tabs of saved views: 5
+      Sidebar of views: 2
+      Dropdown: 5
+    persistence:
+      Global preference: 8
+      Per collection: 7
+      Named views shared with a team: 5
+    independence:
+      Shared across views: 12
+      Each view owns its filters: 7
+  exemplars:
+    views:
+      List:
+        - Notion — Database view tabs
+        - macOS Finder — View toggle in the toolbar
+        - Windows File Explorer — View menu
+      Grid:
+        - Notion — Database view tabs
+        - Airtable — Views list on the left
+        - macOS Finder — View toggle in the toolbar
+      Table:
+        - Notion — Database view tabs
+        - Airtable — Views list on the left
+        - Windows File Explorer — View menu
+      Board:
+        - Notion — Database view tabs
+        - Airtable — Views list on the left
+        - Linear — List and board toggle
+      Calendar:
+        - Notion — Database view tabs
+        - Airtable — Views list on the left
+        - Jira — Project view sidebar
+      Timeline:
+        - Notion — Database view tabs
+        - Airtable — Views list on the left
+        - Jira — Project view sidebar
+      Map:
+        - Craigslist — View selector
+        - Zillow — List and Map toggle
+        - Airbnb — Show map / Show list toggle
+      Chart:
+        - Notion — Database view tabs
+        - monday.com — Board view tabs
+      Gallery:
+        - macOS Finder — View toggle in the toolbar
+      Columns:
+        - macOS Finder — View toggle in the toolbar
+    form:
+      Icon toggle group:
+        - macOS Finder — View toggle in the toolbar
+        - Google Drive — List and grid toggle
+        - Zillow — List and Map toggle
+      Tabs of saved views:
+        - Notion — Database view tabs
+        - Asana — Project view tabs
+        - monday.com — Board view tabs
+      Sidebar of views:
+        - Airtable — Views list on the left
+        - Jira — Project view sidebar
+      Dropdown:
+        - Windows File Explorer — View menu
+        - Craigslist — View selector
+        - Google Calendar — View menu
+    persistence:
+      Global preference:
+        - Google Drive — List and grid toggle
+        - Craigslist — View selector
+        - Zillow — List and Map toggle
+      Per collection:
+        - macOS Finder — View toggle in the toolbar
+        - Windows File Explorer — View menu
+        - Linear — List and board toggle
+      Named views shared with a team:
+        - Notion — Database view tabs
+        - Airtable — Views list on the left
+        - monday.com — Board view tabs
+    independence:
+      Shared across views:
+        - Windows File Explorer — View menu
+        - Google Drive — List and grid toggle
+        - Craigslist — View selector
+      Each view owns its filters:
+        - Notion — Database view tabs
+        - Airtable — Views list on the left
+        - Jira — Project view sidebar
+  unobserved: []
+  unresolved:
+    - sub: independence
+      n: 3
+  proposals:
+    raised: 5
+    adopted:
+      - sub: views
+        name: Gallery
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: views
+        name: Columns
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded:
+      - place: sub:views
+        sub: views
+        dim: null
+        name: Time scales
+        gloss: The same events at different time granularities (day, week, month, year)
+        raters:
+          - fable
+        instances:
+          - 14
+          - 15
+        status: raised
+      - place: sub:persistence
+        sub: persistence
+        dim: null
+        name: Not remembered
+        gloss: The view choice resets on the next visit; nothing stores it
+        raters:
+          - fable
+        instances:
+          - 8
+        status: raised
+      - place: sub:views
+        sub: views
+        dim: null
+        name: Details table
+        gloss: A dense table of columned metadata for each item, distinct from a plain list row, e.g.
+          Windows Explorer's Details view
+        raters:
+          - sonnet
+        instances:
+          - 4
+        status: raised
+  raterNotes:
+    fable:
+      - The views list is missing gallery, Miller columns and calendar time scales. Persistence for
+        consumer toggles (Zillow, Trello) is unobservable without revisiting the product.
+    opus:
+      - "The views list is written for productivity databases and misses two file-manager
+        representations (Miller columns, gallery) and cannot express calendar grain at all —
+        Day/Week/Month/Year all collapse to one Calendar value, which is most of what two instances
+        in this sample actually switch between. form and persistence correlate almost perfectly:
+        icon toggle groups go with a global preference, tabs and sidebars of named views go with
+        team sharing, which suggests the real variable is whether a view is a display setting or a
+        saved object. independence follows the same split. Airbnb (8) shows both views at once on
+        wide screens, so the switcher is a small-screen fallback rather than a switcher, which the
+        entry cannot record."
+    sonnet:
+      - This entry's own eight view types (List/Grid/Table/Board/Calendar/Timeline/Map/Chart) fit
+        productivity-database switchers well but not file-manager view toggles (Finder, Explorer),
+        which need Columns/Gallery/Details-table equivalents borrowed conceptually from the separate
+        file-manager entry; independence is n/a wherever the switcher has no filtering concept at
+        all, rather than forcing a choice between the two given variations.
+  codedAt: 2026-09-22
+previews:
+  - file: view-switcher.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

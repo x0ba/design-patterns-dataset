@@ -1,0 +1,555 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "seat-map". Edit between batches only — see README "Rules".
+id: seat-map
+name: Seat map
+level: pattern
+parent: explore-space
+aliases:
+  - venue map
+  - seating chart
+  - seat picker
+  - auditorium map
+definition: A diagram of a venue’s seats or sections where people browse availability and price,
+  then select one or more seats to book.
+data: space
+platforms:
+  - web
+  - mobile
+domains:
+  - entertainment
+  - travel
+  - mobility
+  - education
+anatomy:
+  - name: Venue diagram
+    role: Sections and seats in plan
+  - name: Availability encoding
+    role: What is free, held or sold
+  - name: Seat selection
+    role: The current picks
+  - name: Legend and filters
+    role: Price tiers and categories
+  - name: Checkout handoff
+    role: Pass selection into purchase
+roles:
+  - section
+  - seat
+  - price-tier
+  - availability
+  - view-preview
+dimensions:
+  - name: Seat content
+    family: content
+    question: What does each seat or section reveal before selection?
+    subdimensions:
+      - id: perSeatInfo
+        name: Per-seat info
+        select: many
+        values:
+          - id: available-vs-taken
+            name: Available vs taken
+            example: Ticketmaster
+          - id: price-tier-colour
+            name: Price tier colour
+            example: SeatGeek
+          - id: seat-identifier
+            name: Seat identifier
+            description: Row and number
+            example: Most ticketing maps
+          - id: view-from-seat-photo
+            name: View-from-seat photo
+            example: Ticketmaster view from seat
+          - id: accessibility-markers
+            name: Accessibility markers
+            example: Accessible seat icons
+          - id: bundle-or-package-badge
+            name: Bundle or package badge
+            example: Season packages
+      - id: sectionSummary
+        name: Section summary
+        select: one
+        values:
+          - id: lowest-price-in-section
+            name: Lowest price in section
+            example: Many NBA team sites
+          - id: availability-count
+            name: Availability count
+            example: StubHub heat sections
+          - id: sold-out-grey
+            name: Sold-out grey
+            example: Ticketmaster
+          - id: no-section-aggregate
+            name: No section aggregate
+            description: Only seat-level
+            example: Small theatre charts
+          - id: value-score-per-section
+            name: Value score per section
+            description: The section is summarised by a computed quality or value rating (SeatGeek's Deal Score)
+              rather than by its lowest price, its remaining count or whether it is sold out
+            example: SeatGeek — Event map
+  - name: Diagram structure
+    family: composition
+    question: How is the venue decomposed, and how does selection nest?
+    subdimensions:
+      - id: seatHierarchy
+        name: Hierarchy
+        select: one
+        values:
+          - id: flat-all-seats
+            name: Flat all seats
+            description: Every seat visible at once
+            example: Small clubs
+          - id: section-then-seats
+            name: Section then seats
+            description: Drill into a section
+            example: Ticketmaster
+          - id: deck-level-tabs
+            name: Deck / level tabs
+            description: Balcony vs orchestra
+            example: Broadway ticketing
+          - id: ship-or-plane-deck-plans
+            name: Ship or plane deck plans
+            description: Cabins or seats by deck
+            example: Cruise and airline seat maps
+          - id: general-admission-regions
+            name: General admission regions
+            description: Areas not seats
+            example: GA festival pits
+  - name: Map interaction
+    family: invocation
+    question: How do people navigate the diagram and pick seats?
+    subdimensions:
+      - id: seatInteract
+        name: Interact by
+        select: many
+        values:
+          - id: pan-and-zoom-the-svg
+            name: Pan and zoom the SVG
+            example: Ticketmaster
+          - id: tap-section-to-zoom-in
+            name: Tap section to zoom in
+            example: SeatGeek
+          - id: click-seats-to-toggle
+            name: Click seats to toggle
+            example: Most maps
+          - id: best-available-button
+            name: Best-available button
+            description: System picks seats
+            example: Ticketmaster best available
+          - id: filter-then-highlight
+            name: Filter then highlight
+            description: Price filter lights seats
+            example: SeatGeek deals
+          - id: pinch-on-mobile
+            name: Pinch on mobile
+            example: Mobile seat maps
+  - name: Availability encoding
+    family: encoding
+    question: How are price and status shown visually?
+    subdimensions:
+      - id: seatEncoding
+        name: Visual encoding
+        select: many
+        values:
+          - id: tier-colours
+            name: Tier colours
+            example: Ticketmaster legend
+          - id: grey-unavailable
+            name: Grey unavailable
+            example: All major sellers
+          - id: heat-of-remaining
+            name: Heat of remaining
+            example: Some StubHub views
+          - id: selected-outline
+            name: Selected outline
+            example: Selected seat glow
+          - id: hold-countdown-styling
+            name: Hold countdown styling
+            description: Seats reserved briefly
+            example: Ticketmaster holds
+  - name: Selection rules
+    family: scope
+    question: What constraints apply to the set of chosen seats?
+    subdimensions:
+      - id: seatConstraints
+        name: Constraints
+        select: many
+        values:
+          - id: max-quantity
+            name: Max quantity
+            example: Four-seat caps
+          - id: must-be-contiguous
+            name: Must be contiguous
+            example: Group seating rules
+          - id: leave-no-single-seats
+            name: Leave no single seats
+            description: Anti-orphan rules
+            example: Many venues
+          - id: accessible-only-filter
+            name: Accessible-only filter
+            example: Wheelchair spaces
+          - id: resale-vs-primary-inventory
+            name: Resale vs primary inventory
+            example: SeatGeek mixed inventory
+  - name: Hold and purchase timing
+    family: lifecycle
+    question: How long are seats kept while the person decides?
+    subdimensions:
+      - id: seatHold
+        name: Hold
+        select: one
+        values:
+          - id: timed-hold-into-checkout
+            name: Timed hold into checkout
+            example: Ticketmaster timer
+          - id: release-on-navigate-away
+            name: Release on navigate away
+            example: Some club sites
+          - id: queue-before-map
+            name: Queue before map
+            description: Waiting room then seats
+            example: Ticketmaster verified fan
+          - id: request-without-hold
+            name: Request without hold
+            description: Lottery or draw
+            example: Some school seat draws
+wild:
+  score: 0
+  note: Seat maps are merchant-controlled; shoppers do not customize encodings or hierarchy.
+  examples: []
+techniques:
+  - name: Surface view and price together
+    dimension: Seat content
+    how: Make view-from-seat, price and accessibility attributes co-visible on hover/focus so comparison
+      does not require opening each seat.
+    ai: false
+  - name: Explain blocked seats
+    dimension: Selection rules
+    how: When a tap is refused, say which rule fired (orphan, max, contiguous) instead of silent
+      failure.
+    ai: false
+  - name: Seats that match us
+    dimension: Map interaction
+    how: “Two together under $80 with aisle and not behind a pillar” highlights a shortlist with
+      inspectable filters.
+    ai: true
+signature: Surface view and price together
+sample: Ticketmaster, SeatGeek, StubHub, airline seat maps (United, Delta), theatre and campus
+  ticketing, cruise cabin plans.
+unit: One venue inventory map for one event or voyage leg.
+relations:
+  uses:
+    - filter-controls
+    - confirmation
+    - progress-indicator
+    - modal-dialog
+    - badge
+  specializes:
+    - explore-space
+  neighbors:
+    - map-explorer
+    - booking-flow
+    - checkout
+scores:
+  ubiquity: 3
+  potential: 4
+  spec: 4
+evidence: agent-coded
+usage:
+  - Fans zoom to a section then compare view photos
+  - Timers create abandoned holds under pressure
+questions:
+  - How should resale and primary seats share one encoding without confusion?
+  - Can accessibility needs be expressed once and reused across venues?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.5486205040900753
+  agreementFirstPass: 0.69375
+  kappaFinal: 0.9280258950915907
+  agreementFinal: 0.9479166666666666
+  pass: true
+  perSub:
+    perSeatInfo:
+      kappaFirstPass: 0.48593073593073566
+      agreementFirstPass: 0.62
+      kappaFinal: 0.8955171899099456
+      agreementFinal: 0.93
+      flag: null
+    sectionSummary:
+      kappaFirstPass: 0.6814671814671817
+      agreementFirstPass: 0.75
+      kappaFinal: 0.886039886039886
+      agreementFinal: 0.9
+      flag: null
+    seatHierarchy:
+      kappaFirstPass: 0.8562300319488818
+      agreementFirstPass: 0.85
+      kappaFinal: 0.9036144578313253
+      agreementFinal: 0.9
+      flag: null
+    seatInteract:
+      kappaFirstPass: 0.5757912997937866
+      agreementFirstPass: 0.7
+      kappaFinal: 0.9219306669971189
+      agreementFinal: 0.9416666666666667
+      flag: null
+    seatEncoding:
+      kappaFirstPass: 0.5598239295718288
+      agreementFirstPass: 0.67
+      kappaFinal: 0.958660603555188
+      agreementFinal: 0.97
+      flag: null
+    seatConstraints:
+      kappaFirstPass: 0.5195695343027361
+      agreementFirstPass: 0.75
+      kappaFinal: 0.9360988338037167
+      agreementFinal: 0.96
+      flag: null
+    seatHold:
+      kappaFirstPass: 0.3478260869565221
+      agreementFirstPass: 0.65
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+  distribution:
+    perSeatInfo:
+      Available vs taken: 20
+      Price tier colour: 16
+      Seat identifier: 20
+      View-from-seat photo: 4
+      Accessibility markers: 4
+      Bundle or package badge: 0
+    sectionSummary:
+      Lowest price in section: 4
+      Availability count: 1
+      Sold-out grey: 2
+      No section aggregate: 12
+      Value score per section: 1
+    seatHierarchy:
+      Flat all seats: 4
+      Section then seats: 8
+      Deck / level tabs: 1
+      Ship or plane deck plans: 7
+      General admission regions: 0
+    seatInteract:
+      Pan and zoom the SVG: 16
+      Tap section to zoom in: 7
+      Click seats to toggle: 17
+      Best-available button: 2
+      Filter then highlight: 5
+      Pinch on mobile: 9
+    seatEncoding:
+      Tier colours: 15
+      Grey unavailable: 20
+      Heat of remaining: 1
+      Selected outline: 20
+      Hold countdown styling: 2
+    seatConstraints:
+      Max quantity: 20
+      Must be contiguous: 0
+      Leave no single seats: 2
+      Accessible-only filter: 1
+      Resale vs primary inventory: 6
+    seatHold:
+      Timed hold into checkout: 13
+      Release on navigate away: 7
+      Queue before map: 0
+      Request without hold: 0
+  exemplars:
+    perSeatInfo:
+      Available vs taken:
+        - Ticketmaster — Event seat map
+        - SeatGeek — Event map
+        - StubHub — Event listings map
+      Price tier colour:
+        - Ticketmaster — Event seat map
+        - SeatGeek — Event map
+        - StubHub — Event listings map
+      Seat identifier:
+        - Ticketmaster — Event seat map
+        - SeatGeek — Event map
+        - StubHub — Event listings map
+      View-from-seat photo:
+        - Ticketmaster — Event seat map
+        - TodayTix — Theatre seat selection
+        - MLB Ballpark — Ticket seat map
+      Accessibility markers:
+        - Ticketmaster — Event seat map
+        - AMC Theatres — Seat picker
+        - Fandango — Reserved seating
+      Bundle or package badge: []
+    sectionSummary:
+      Lowest price in section:
+        - TodayTix — Theatre seat selection
+        - Royal Caribbean — Stateroom selection by deck
+        - Vivid Seats — Event seat map
+      Availability count:
+        - StubHub — Event listings map
+      Sold-out grey:
+        - Ticketmaster — Event seat map
+        - AXS — Seat map
+      No section aggregate:
+        - United Airlines — Seat selection
+        - Delta Air Lines — Seat map
+        - American Airlines — Seat map
+      Value score per section:
+        - SeatGeek — Event map
+    seatHierarchy:
+      Flat all seats:
+        - AMC Theatres — Seat picker
+        - Fandango — Reserved seating
+        - Cinemark — Seat selection
+      Section then seats:
+        - Ticketmaster — Event seat map
+        - SeatGeek — Event map
+        - StubHub — Event listings map
+      Deck / level tabs:
+        - Telecharge — Broadway seat map
+      Ship or plane deck plans:
+        - United Airlines — Seat selection
+        - Delta Air Lines — Seat map
+        - American Airlines — Seat map
+      General admission regions: []
+    seatInteract:
+      Pan and zoom the SVG:
+        - Ticketmaster — Event seat map
+        - SeatGeek — Event map
+        - StubHub — Event listings map
+      Tap section to zoom in:
+        - Ticketmaster — Event seat map
+        - SeatGeek — Event map
+        - StubHub — Event listings map
+      Click seats to toggle:
+        - Ticketmaster — Event seat map
+        - United Airlines — Seat selection
+        - Delta Air Lines — Seat map
+      Best-available button:
+        - Ticketmaster — Event seat map
+        - Telecharge — Broadway seat map
+      Filter then highlight:
+        - Ticketmaster — Event seat map
+        - SeatGeek — Event map
+        - StubHub — Event listings map
+      Pinch on mobile:
+        - SeatGeek — Event map
+        - United Airlines — Seat selection
+        - AMC Theatres — Seat picker
+    seatEncoding:
+      Tier colours:
+        - Ticketmaster — Event seat map
+        - SeatGeek — Event map
+        - United Airlines — Seat selection
+      Grey unavailable:
+        - Ticketmaster — Event seat map
+        - SeatGeek — Event map
+        - StubHub — Event listings map
+      Heat of remaining:
+        - StubHub — Event listings map
+      Selected outline:
+        - Ticketmaster — Event seat map
+        - SeatGeek — Event map
+        - StubHub — Event listings map
+      Hold countdown styling:
+        - Ticketmaster — Event seat map
+        - AXS — Seat map
+    seatConstraints:
+      Max quantity:
+        - Ticketmaster — Event seat map
+        - SeatGeek — Event map
+        - StubHub — Event listings map
+      Must be contiguous: []
+      Leave no single seats:
+        - Ticketmaster — Event seat map
+        - Telecharge — Broadway seat map
+      Accessible-only filter:
+        - Ticketmaster — Event seat map
+      Resale vs primary inventory:
+        - Ticketmaster — Event seat map
+        - SeatGeek — Event map
+        - StubHub — Event listings map
+    seatHold:
+      Timed hold into checkout:
+        - Ticketmaster — Event seat map
+        - SeatGeek — Event map
+        - StubHub — Event listings map
+      Release on navigate away:
+        - United Airlines — Seat selection
+        - Delta Air Lines — Seat map
+        - American Airlines — Seat map
+      Queue before map: []
+      Request without hold: []
+  unobserved:
+    - sub: perSeatInfo
+      var: Bundle or package badge
+    - sub: seatHierarchy
+      var: General admission regions
+    - sub: seatConstraints
+      var: Must be contiguous
+    - sub: seatHold
+      var: Queue before map
+    - sub: seatHold
+      var: Request without hold
+  unresolved: []
+  proposals:
+    raised: 2
+    adopted:
+      - sub: sectionSummary
+        name: Value score per section
+        raters:
+          - opus
+          - sonnet
+    recorded:
+      - place: sub:sectionSummary
+        sub: sectionSummary
+        dim: null
+        name: Deal score shading
+        gloss: Sections are coloured by a computed value rating (price relative to quality) rather than by
+          lowest price, count or sold-out state
+        raters:
+          - fable
+        instances:
+          - 2
+        status: raised
+  raterNotes:
+    fable:
+      - seatHold for airline, rail and cruise maps is 'Release on navigate away' because a seat pick
+        outside a timed checkout is simply dropped; the codebook's exemplar (club sites) reads
+        narrower than that. Resale marketplaces (SeatGeek, StubHub, Vivid) sell listings by section
+        and row, so 'Click seats to toggle' does not apply to them.
+    opus:
+      - "seatConstraints is mostly invisible: anti-orphan and contiguity rules only announce
+        themselves when you break them, so outside Ticketmaster and Broadway houses I coded only
+        what the interface states and left the rest off rather than guessing. Airline and rail maps
+        also stretch seatHold — nothing is held and nothing is released either; the seat is simply
+        assigned when you confirm, which Release on navigate away only half describes."
+    sonnet:
+      - sectionSummary was a frequent judgment call for airline seat maps, which mostly show
+        per-seat prices rather than a single section-level figure; coded No section aggregate in
+        those cases rather than force-fitting one of the other three.
+      - "Four findings. (1) 'Max quantity' is true of all twenty instances — every ticketing flow
+        caps the order — so it discriminates nothing and is really a property of the archetype
+        rather than a variation. (2) seatHold conflates two questions: whether the seats are held
+        with a countdown and whether checkout has a timer. Airline and rail flows have neither (I
+        had wrongly coded them all as timed holds), and 'Queue before map' is a different axis
+        again, since a waiting room precedes the map rather than describing what happens to a pick.
+        (3) sectionSummary is pick one but real maps do two of these at once — Ticketmaster and MLB
+        both grey sold-out sections and print a lowest price — and neither covers a computed value
+        score, which two raters independently proposed. (4) 'Grey unavailable' names a visual rather
+        than a concept: American crosses seats out and Emirates dims them, and both are the same
+        idea; 'Tier colours' and 'Heat of remaining' likewise blur on resale maps, where one colour
+        ramp carries both price and scarcity."
+  codedAt: 2026-09-22
+previews:
+  - file: seat-map.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

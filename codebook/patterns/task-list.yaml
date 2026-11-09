@@ -1,0 +1,579 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "task-list". Edit between batches only — see README "Rules".
+id: task-list
+name: Task list
+level: pattern
+parent: schedule
+aliases:
+  - to-do list
+  - checklist
+  - task manager
+  - action list
+definition: Ordered or grouped actionable items with completion state, often carrying due dates,
+  assignees and priority without requiring a full time grid.
+data: collection
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - productivity
+  - software
+  - education
+  - home
+  - enterprise
+anatomy:
+  - name: List
+    role: The ordered or grouped set of tasks
+  - name: Task row
+    role: Title plus key attributes
+  - name: Completion control
+    role: Check, done or status
+  - name: Detail
+    role: Fuller fields for one task
+roles:
+  - title
+  - due-date
+  - assignee
+  - priority
+  - project
+dimensions:
+  - name: Task representation
+    family: content
+    question: What does each row show, and how rich is the item?
+    subdimensions:
+      - id: rowFields
+        name: Row fields
+        select: many
+        values:
+          - id: title-only
+            name: Title only
+            example: Classic paper-like lists
+          - id: due-date
+            name: Due date
+            example: Apple Reminders
+          - id: assignee
+            name: Assignee
+            example: Asana list
+          - id: priority-or-score
+            name: Priority or score
+            example: Todoist priority flags
+          - id: project-or-tags
+            name: Project or tags
+            example: Todoist labels
+          - id: sub-task-progress
+            name: Sub-task progress
+            example: Things checklist progress
+          - id: estimate
+            name: Estimate
+            example: Linear estimate
+      - id: itemRichness
+        name: Item richness
+        select: one
+        values:
+          - id: checkbox-item
+            name: Checkbox item
+            description: Little more than done + title
+            example: Apple Reminders
+          - id: issue-like-task
+            name: Issue-like task
+            description: Description, comments, fields
+            example: Linear
+          - id: checklist-inside-a-doc
+            name: Checklist inside a doc
+            description: Tasks embedded in prose
+            example: Notion to-do blocks
+          - id: recurring-template
+            name: Recurring template
+            description: Repeats on a rule
+            example: Todoist recurring
+  - name: Ordering and grouping
+    family: composition
+    question: What structure holds the tasks?
+    subdimensions:
+      - id: taskStructure
+        name: Structure
+        select: one
+        values:
+          - id: manual-order
+            name: Manual order
+            description: Drag to prioritize
+            example: Things Today
+          - id: grouped-by-date
+            name: Grouped by date
+            description: Overdue / Today / Upcoming
+            example: Todoist
+          - id: grouped-by-project-or-list
+            name: Grouped by project or list
+            example: Apple Reminders lists
+          - id: grouped-by-assignee-or-status
+            name: Grouped by assignee or status
+            example: Asana
+          - id: hierarchical-outline
+            name: Hierarchical outline
+            description: Indent for sub-tasks
+            example: Workflowy, Dynalist
+          - id: filter-defined-smart-list
+            name: Filter-defined smart list
+            description: Saved query as a list
+            example: Todoist filters
+  - name: Scheduling link
+    family: encoding
+    question: How does the list connect to clock time?
+    subdimensions:
+      - id: timeBinding
+        name: Time binding
+        select: one
+        values:
+          - id: no-dates
+            name: No dates
+            description: Pure ordered work
+            example: Simple checklists
+          - id: due-date-only
+            name: Due date only
+            description: Day without time
+            example: Many to-do apps
+          - id: due-date-and-time
+            name: Due date and time
+            example: Google Tasks with time
+          - id: time-block-on-calendar
+            name: Time block on calendar
+            description: Task appears as a calendar event
+            example: Motion, Reclaim
+          - id: deadline-plus-soft-plan-date
+            name: Deadline plus soft plan date
+            description: Separate plan vs due
+            example: Things deadlines vs when
+  - name: Completing and triaging
+    family: flow
+    question: How do tasks move toward done or deferral?
+    subdimensions:
+      - id: completionPath
+        name: Completion path
+        select: many
+        values:
+          - id: check-off
+            name: Check off
+            example: Reminders
+          - id: status-workflow
+            name: Status workflow
+            description: Todo → In progress → Done
+            example: Linear
+          - id: snooze-defer
+            name: Snooze / defer
+            description: Leave incomplete but hide until later
+            example: Things Tonight / Anytime
+          - id: migrate-to-another-day
+            name: Migrate to another day
+            description: Roll unfinished forward
+            example: Bullet journal digital apps
+          - id: convert-to-event-or-issue
+            name: Convert to event or issue
+            example: Slack save for later → reminders
+  - name: Creation and detail
+    family: invocation
+    question: How are tasks added and opened?
+    subdimensions:
+      - id: createOpen
+        name: Create and open
+        select: many
+        values:
+          - id: inline-add-row
+            name: Inline add row
+            example: Todoist
+          - id: quick-add-shortcut
+            name: Quick-add shortcut
+            example: Todoist q
+          - id: natural-language-parse
+            name: Natural language parse
+            description: “Email Sam tomorrow 5pm”
+            example: Todoist quick add
+          - id: open-detail-pane
+            name: Open detail pane
+            example: Asana task pane
+          - id: open-full-page
+            name: Open full page
+            example: Notion task pages
+          - id: save-from-elsewhere
+            name: Save from elsewhere
+            description: Items enter the list by being captured from another surface — starring an email, saving
+              a message, syncing an issue from another tool — rather than being typed into the list
+              at all
+            example: Google Tasks — Side panel in Gmail
+  - name: Personal vs shared
+    family: collaboration
+    question: Whose list is it, and how is assignment shared?
+    subdimensions:
+      - id: sharingModel
+        name: Sharing model
+        select: one
+        values:
+          - id: private-list
+            name: Private list
+            example: Personal Reminders
+          - id: shared-list
+            name: Shared list
+            description: Several people on one list
+            example: Shared Apple Reminders
+          - id: assigned-from-a-team-backlog
+            name: Assigned from a team backlog
+            example: Asana, Linear
+          - id: delegated-with-visibility
+            name: Delegated with visibility
+            description: Assign and watch
+            example: Microsoft To Do assigned
+wild:
+  score: 3
+  note: List apps routinely let people choose grouping, visible fields and smart filters; that
+    malleability is the product.
+  examples:
+    - name: Todoist
+      note: Filters, labels and grouping
+    - name: Things
+      note: Today / Anytime / Someday structure
+    - name: Linear
+      note: Display options and custom views
+    - name: Notion
+      note: Any database layout over tasks
+techniques:
+  - name: Surface then sort the work
+    dimension: Task representation
+    how: Any field surfaced on the row becomes a sort, group and filter key — the collection finding
+      applied to tasks.
+    ai: false
+  - name: Plan date vs due date
+    dimension: Scheduling link
+    how: Keep deadline and intended work time as separate attributes so lists and calendars can bind
+      differently without fighting.
+    ai: false
+  - name: Break this down
+    dimension: Ordering and grouping
+    how: “Make this shippable by Friday” proposes sub-tasks with estimates and due dates, each editable
+      before accept.
+    ai: true
+signature: Surface then sort the work
+sample: Todoist, Things, Apple Reminders, Microsoft To Do, Google Tasks, Asana list views, Linear,
+  Notion task databases, TickTick.
+unit: One list or smart view over a set of tasks.
+relations:
+  uses:
+    - choice-control
+    - date-picker
+    - filter-controls
+    - drag-reorder
+    - inline-edit
+    - empty-state
+  specializes:
+    - schedule
+  neighbors:
+    - calendar
+    - gantt-timeline
+    - kanban-board
+    - inbox
+scores:
+  ubiquity: 5
+  potential: 5
+  spec: 5
+evidence: agent-coded
+usage:
+  - Daily planners live in Today views; managers live in assigned-to-me filters
+  - People capture quickly and triage later
+questions:
+  - When should completing a task also close calendar time?
+  - How much hierarchy helps before an outline becomes a project plan in disguise?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.6362819999075654
+  agreementFirstPass: 0.7477272727272727
+  kappaFinal: 0.885513975292672
+  agreementFinal: 0.9113636363636364
+  pass: true
+  perSub:
+    rowFields:
+      kappaFirstPass: 0.6567522722207083
+      agreementFirstPass: 0.7642857142857142
+      kappaFinal: 0.9306914354416655
+      agreementFinal: 0.95
+      flag: null
+    itemRichness:
+      kappaFirstPass: 0.8678414096916302
+      agreementFirstPass: 0.9
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    taskStructure:
+      kappaFirstPass: 0.7884344146685471
+      agreementFirstPass: 0.8
+      kappaFinal: 0.8316970546984574
+      agreementFinal: 0.8
+      flag: null
+    timeBinding:
+      kappaFirstPass: 0.5620437956204382
+      agreementFirstPass: 0.5
+      kappaFinal: 0.817905918057663
+      agreementFinal: 0.8
+      flag: null
+    completionPath:
+      kappaFirstPass: 0.6944682675814743
+      agreementFirstPass: 0.81
+      kappaFinal: 0.8687025870453216
+      agreementFinal: 0.91
+      flag: null
+    createOpen:
+      kappaFirstPass: 0.4763636363636353
+      agreementFirstPass: 0.6666666666666666
+      kappaFinal: 0.8288919167273991
+      agreementFinal: 0.875
+      flag: null
+    sharingModel:
+      kappaFirstPass: 0.852095316351684
+      agreementFirstPass: 0.85
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+  distribution:
+    rowFields:
+      Title only: 1
+      Due date: 16
+      Assignee: 7
+      Priority or score: 9
+      Project or tags: 15
+      Sub-task progress: 6
+      Estimate: 4
+    itemRichness:
+      Checkbox item: 12
+      Issue-like task: 6
+      Checklist inside a doc: 2
+      Recurring template: 0
+    taskStructure:
+      Manual order: 6
+      Grouped by date: 5
+      Grouped by project or list: 3
+      Grouped by assignee or status: 3
+      Hierarchical outline: 1
+      Filter-defined smart list: 2
+    timeBinding:
+      No dates: 4
+      Due date only: 4
+      Due date and time: 8
+      Time block on calendar: 2
+      Deadline plus soft plan date: 2
+    completionPath:
+      Check off: 16
+      Status workflow: 7
+      Snooze / defer: 8
+      Migrate to another day: 5
+      Convert to event or issue: 1
+    createOpen:
+      Inline add row: 16
+      Quick-add shortcut: 9
+      Natural language parse: 7
+      Open detail pane: 13
+      Open full page: 6
+      Save from elsewhere: 3
+    sharingModel:
+      Private list: 9
+      Shared list: 4
+      Assigned from a team backlog: 6
+      Delegated with visibility: 1
+  exemplars:
+    rowFields:
+      Title only:
+        - Google Keep — Checklist note
+      Due date:
+        - Todoist — Today
+        - Things 3 — Today
+        - Apple Reminders — A list
+      Assignee:
+        - Asana — Project List view
+        - Linear — My Issues
+        - Notion — Task database
+      Priority or score:
+        - Todoist — Today
+        - Apple Reminders — A list
+        - Microsoft To Do — My Day
+      Project or tags:
+        - Todoist — Today
+        - Things 3 — Today
+        - Apple Reminders — A list
+      Sub-task progress:
+        - Todoist — Today
+        - Things 3 — Today
+        - Microsoft To Do — My Day
+      Estimate:
+        - Linear — My Issues
+        - Jira — Backlog
+        - Motion — Tasks
+    itemRichness:
+      Checkbox item:
+        - Todoist — Today
+        - Things 3 — Today
+        - Apple Reminders — A list
+      Issue-like task:
+        - Asana — Project List view
+        - Linear — My Issues
+        - Notion — Task database
+      Checklist inside a doc:
+        - Trello — Card checklist
+        - Google Keep — Checklist note
+      Recurring template: []
+    taskStructure:
+      Manual order:
+        - Things 3 — Today
+        - Microsoft To Do — My Day
+        - Trello — Card checklist
+      Grouped by date:
+        - Todoist — Today
+        - TickTick — Today
+        - OmniFocus — Forecast
+      Grouped by project or list:
+        - Apple Reminders — A list
+        - Google Tasks — Side panel in Gmail
+        - Basecamp — To-dos
+      Grouped by assignee or status:
+        - Asana — Project List view
+        - Linear — My Issues
+        - Slack — Later
+      Hierarchical outline:
+        - Workflowy — Outline
+      Filter-defined smart list:
+        - Notion — Task database
+        - GitHub — Issues list
+    timeBinding:
+      No dates:
+        - Jira — Backlog
+        - GitHub — Issues list
+        - Workflowy — Outline
+      Due date only:
+        - Microsoft To Do — My Day
+        - Linear — My Issues
+        - Notion — Task database
+      Due date and time:
+        - Todoist — Today
+        - Apple Reminders — A list
+        - Google Tasks — Side panel in Gmail
+      Time block on calendar:
+        - Motion — Tasks
+        - Sunsama — Daily planner
+      Deadline plus soft plan date:
+        - Things 3 — Today
+        - OmniFocus — Forecast
+    completionPath:
+      Check off:
+        - Todoist — Today
+        - Things 3 — Today
+        - Apple Reminders — A list
+      Status workflow:
+        - Asana — Project List view
+        - Linear — My Issues
+        - Notion — Task database
+      Snooze / defer:
+        - Todoist — Today
+        - Things 3 — Today
+        - TickTick — Today
+      Migrate to another day:
+        - Todoist — Today
+        - Microsoft To Do — My Day
+        - TickTick — Today
+      Convert to event or issue:
+        - Trello — Card checklist
+    createOpen:
+      Inline add row:
+        - Todoist — Today
+        - Things 3 — Today
+        - Apple Reminders — A list
+      Quick-add shortcut:
+        - Todoist — Today
+        - Things 3 — Today
+        - Asana — Project List view
+      Natural language parse:
+        - Todoist — Today
+        - Things 3 — Today
+        - Apple Reminders — A list
+      Open detail pane:
+        - Todoist — Today
+        - Apple Reminders — A list
+        - Microsoft To Do — My Day
+      Open full page:
+        - Asana — Project List view
+        - Linear — My Issues
+        - Notion — Task database
+      Save from elsewhere:
+        - Google Tasks — Side panel in Gmail
+        - Slack — Later
+        - Sunsama — Daily planner
+    sharingModel:
+      Private list:
+        - Todoist — Today
+        - Things 3 — Today
+        - Google Tasks — Side panel in Gmail
+      Shared list:
+        - Apple Reminders — A list
+        - Trello — Card checklist
+        - Any.do — My Day
+      Assigned from a team backlog:
+        - Asana — Project List view
+        - Linear — My Issues
+        - Notion — Task database
+      Delegated with visibility:
+        - Microsoft To Do — My Day
+  unobserved:
+    - sub: itemRichness
+      var: Recurring template
+  unresolved: []
+  proposals:
+    raised: 1
+    adopted:
+      - sub: createOpen
+        name: Save from elsewhere
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - "itemRichness: coded personal to-do apps as Checkbox item even where descriptions and
+        comments exist (Todoist), and work-management tools as Issue-like; the boundary is by
+        product genre. 'Recurring template' was never picked because it describes a task's rule, not
+        the item's richness."
+      - Title only in rowFields is exclusive with every other value and should be dropped or glossed
+        as such. timeBinding is pick one but daily planners hold a plan date, a due date and a
+        calendar block at once. Migrate vs Snooze needs a line on postponing overdue items.
+    opus:
+      - "itemRichness is the hardest column: most consumer to-do apps sit between Checkbox item and
+        Issue-like task (Todoist and OmniFocus have notes, sub-tasks and comments but still read as
+        checkboxes), so I reserved Issue-like for items with a status workflow and a comment thread
+        and noted it each time. taskStructure also double-fires — Todoist Today is both grouped by
+        date and a saved filter — and I coded the grouping you see rather than the mechanism behind
+        it."
+    sonnet:
+      - Sunsama and Slack Later both populate their lists by importing/saving from elsewhere rather
+        than through any listed createOpen action; coded an empty array rather than force-fitting
+        one.
+      - "Codebook problems in this entry: (1) 'rowFields' puts 'Title only' in a pick-any alongside
+        six field names, so any row with a due date makes it self-contradictory — it should be the
+        empty array, or a separate pick-one; (2) 'completionPath: Snooze / defer' and 'Migrate to
+        another day' overlap almost completely — pushing a task to tomorrow is both, and raters
+        split on which name to use for the same gesture; (3) 'timeBinding' is pick-one but Sunsama
+        is genuinely both Time block on calendar and Deadline plus soft plan date, and Things is
+        both Due date only and Deadline plus soft plan date; (4) 'taskStructure' has no value for
+        'grouped by section within one list', which is Asana's default and Notion's board default;
+        (5) opus's +Save from elsewhere is a real gap — Slack's Later, Google Tasks in Gmail and
+        Sunsama are all populated by capture from another surface rather than by any of the five
+        creation gestures, and I have adopted it for all three."
+  codedAt: 2026-09-22
+previews:
+  - file: task-list.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

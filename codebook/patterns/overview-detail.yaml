@@ -1,0 +1,424 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "overview-detail". Edit between batches only — see README "Rules".
+id: overview-detail
+name: Overview–detail
+level: pattern
+parent: browse-collections
+aliases:
+  - master–detail
+  - director–detail
+  - list–detail
+  - ODI
+definition: An overview of many items, each shown through a few key attributes, paired with a detail
+  view that shows many or all attributes of a selected item.
+data: collection
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - commerce
+  - travel
+  - communication
+  - news
+  - productivity
+  - entertainment
+anatomy:
+  - name: Overview
+    role: Organizes the collection with a structure (list, grid, map…) and its affordances
+  - name: Item view
+    role: Represents one item inside the overview through key attributes
+  - name: Detail view
+    role: Shows all attributes of one item, opened from the overview
+roles:
+  - title
+  - subtitle
+  - thumbnail
+  - tag
+  - spec
+  - key-attribute
+  - action
+  - link
+  - review-summary
+dimensions:
+  - name: Content
+    family: content
+    question: Is information shown in the overview, the detail view or both, and how are overview
+      attributes abstracted from detail attributes?
+    origin: coded
+    subdimensions:
+      - id: attributePlacement
+        name: Attribute is shown…
+        select: many
+        values:
+          - id: in-overview-only
+            name: In overview only
+            description: An attribute that exists only as an overview representation
+            example: Zillow map pins show a unit count when several units are available
+          - id: in-detail-view-only
+            name: In detail view only
+            description: Present only once the item is opened
+            example: Indeed hides qualifications and benefits from the job list
+          - id: in-both-views
+            name: In both views
+            description: Repeated in overview and detail, interactive elements included
+            example: eBay’s Add to Watchlist in both; job title and salary on Indeed
+      - id: abstraction
+        name: Overview abstractions
+        select: many
+        values:
+          - id: graphic
+            name: Graphic
+            description: Encoded into a visual mark
+            example: Ticketmaster shades sections by seats available
+            group: Visual
+          - id: style
+            name: Style
+            description: Encoded into the item’s styling
+            example: Emphasis on unread items
+            group: Visual
+          - id: summary
+            name: Summary
+            description: A generated précis of the detail
+            example: ChatGPT conversation titles
+            group: Semantic
+          - id: category
+            name: Category
+            description: A label standing for the detail
+            example: Content-type badges
+            group: Semantic
+          - id: sum-or-average
+            name: Sum or average
+            description: Aggregated from detail values
+            example: Average rating shown on a card
+            group: Computational
+          - id: minimum-or-maximum
+            name: Minimum or maximum
+            description: An extreme of detail values
+            example: Southwest’s calendar of cheapest fares per day
+            group: Computational
+          - id: ranking-or-order
+            name: Ranking or order
+            description: Position encodes a computed rank
+            example: Best-seller rank
+            group: Computational
+      - id: truncation
+        name: Long text in the overview
+        select: one
+        note: Observed in CHI '25 §3.2.1; not a Figure 3 dimension.
+        values:
+          - id: ellipsis
+            name: Ellipsis
+            description: Cut short with …
+            example: Gmail message snippets
+          - id: fade-out-gradient
+            name: Fade-out gradient
+            description: Faded towards the cut
+            example: Quora answer previews
+          - id: full-text
+            name: Full text
+            description: Nothing cut
+            example: Short-form feeds
+  - name: Composition
+    family: composition
+    question: How are multiple overviews and detail views connected?
+    origin: coded
+    subdimensions:
+      - id: relationship
+        name: Relationships
+        select: one
+        values:
+          - id: one-to-one
+            name: One-to-one
+            description: One overview opens one kind of detail view
+            example: Most search results
+          - id: many-overviews-to-one-detail-view
+            name: Many overviews to one detail view
+            description: Several overviews of the same items or scopes
+            example: Zillow grid plus map; Southwest 5-day table plus 30-day calendar
+          - id: one-overview-to-many-detail-views
+            name: One overview to many detail views
+            description: Different detail views opened from one overview
+            example: AT&T phone grid opens a quick view, a full page and an offers pop-up (UIST '25 D2-1)
+      - id: recursion
+        name: Recursion
+        select: many
+        values:
+          - id: none
+            name: None
+            description: Views do not nest
+            example: Simple listings
+          - id: overview-inside-detail-view
+            name: Overview inside detail view
+            description: A detail view contains another overview
+            example: New York Times related articles; Merriam-Webster synonyms that open more words
+          - id: detail-views-in-between
+            name: Detail views in between
+            description: An intermediate detail view opens a fuller one
+            example: Discord profile tooltip, then full-screen profile
+      - id: linking
+        name: Linking across overviews
+        select: one
+        note: Observed in CHI '25 §3.2.2; not a Figure 3 dimension.
+        values:
+          - id: independent
+            name: Independent
+            description: Overviews do not react to each other
+            example: Separate tabs of results
+          - id: synchronized-navigation
+            name: Synchronized navigation
+            description: Selecting in one overview navigates the other
+            example: List and map overviews that follow each other
+  - name: Layout
+    family: layout
+    question: How are overviews and detail views arranged, how are items organized, and how many details
+      are open?
+    origin: coded
+    subdimensions:
+      - id: openIn
+        name: Overview–detail arrangement
+        select: one
+        values:
+          - id: side-by-side
+            name: Side-by-side
+            description: Both views visible together
+            example: Gmail with the reading pane on
+          - id: new-page
+            name: New page
+            description: Detail replaces the page
+            example: Amazon product pages
+          - id: replace
+            name: Replace
+            description: Detail swaps into the overview’s place
+            example: Mobile drill-down lists
+          - id: in-place
+            name: In-place
+            description: Detail expands inside the overview
+            example: ESPN player stats dropdown
+          - id: pop-up
+            name: Pop-up
+            description: A modal overlay
+            example: Quick-view dialogs in retail
+          - id: popover
+            name: Popover
+            description: Anchored to the item
+            example: Calendar event popovers
+          - id: tooltip
+            name: Tooltip
+            description: On hover or click, small and transient
+            example: Discord member profile card
+          - id: picture-in-picture
+            name: Picture-in-picture
+            description: Detail floats over the overview
+            example: Minimized video player over a feed
+          - id: side-menu
+            name: Side menu
+            description: Overview as a menu beside the detail
+            example: Documentation sites
+          - id: table-of-contents
+            name: Table of contents
+            description: Overview as a contents list
+            example: Long-form articles
+          - id: under-overview
+            name: Under overview
+            description: Detail stacked below
+            example: Search result expanders
+          - id: above-overview
+            name: Above overview
+            description: Detail stacked above
+            example: Media galleries with a main stage
+      - id: overviewType
+        name: Overview layout
+        select: many
+        values:
+          - id: list
+            name: List
+            example: Gmail
+          - id: grid
+            name: Grid
+            example: Etsy
+          - id: table
+            name: Table
+            example: Southwest 5-day fares
+          - id: map
+            name: Map
+            example: Airbnb, Ticketmaster seat map
+          - id: hierarchy
+            name: Hierarchy
+            example: Nested menus
+          - id: timeline
+            name: Timeline
+            example: Live-blog timelines
+          - id: plot
+            name: Plot
+            example: MLB batted-ball chart
+          - id: canvas
+            name: Canvas
+            example: Spatial boards
+      - id: detailMultiplicity
+        name: Detail views open
+        select: one
+        values:
+          - id: one-at-a-time
+            name: One at a time
+            description: Opening one closes another
+            example: ESPN stats dropdowns
+          - id: many-at-a-time
+            name: Many at a time
+            description: Several detail views stay open
+            example: weather.com hourly dropdowns
+  - name: Invocation
+    family: invocation
+    question: What opens a detail view, from which part of the item, and how does a person get back?
+    origin: spec
+    subdimensions:
+      - id: openBy
+        name: Opened by
+        select: many
+        note: Click, Hover and Back annotations in CHI '25 Fig. 3; Meridian openBy.
+        values:
+          - id: click
+            name: Click
+            example: Most overviews
+          - id: hover
+            name: Hover
+            example: Tooltip profiles; requested by participant P6
+          - id: back-button
+            name: Back button
+            description: Returns from a replacing or floating detail
+            example: Picture-in-picture players
+          - id: custom-event
+            name: Custom event
+            description: Any hook the developer defines
+            example: Meridian openBy event hooks
+      - id: openFrom
+        name: Opened from
+        select: one
+        note: Meridian openFrom.
+        values:
+          - id: whole-item
+            name: Whole item
+            description: The entire item view is the target
+            example: Product cards
+          - id: specific-attribute
+            name: Specific attribute
+            description: Only one attribute opens it
+            example: Thumbnail opens a gallery (UIST '25 Fig. 3)
+          - id: several-attributes-several-details
+            name: Several attributes, several details
+            description: Each attribute opens its own detail
+            example: AT&T quick view vs offers
+  - name: Scope of attributes
+    family: scope
+    question: Do attributes describe one item, or the whole collection?
+    origin: study
+    subdimensions:
+      - id: attributeScope
+        name: Attribute scope
+        select: many
+        note: Unmet need from the CHI '25 study (P6, P10, P12).
+        values:
+          - id: per-item
+            name: Per item
+            description: Each item carries its own values
+            example: Every current ODI
+          - id: per-collection
+            name: Per collection
+            description: Aggregates across items in the overview
+            example: Total price of bookmarked hotels (P6); best price across surfaced attributes (P10)
+wild:
+  score: 1
+  note: "Measured, not estimated: 13 of 156 websites (8.33%) offered any customization; content 2.56%,
+    composition 0%, layout 7.69%. At most eight layout variations on one site (CHI '25 §3.3)."
+  examples:
+    - name: Craigslist
+      note: Five overview layouts and three overview–detail layouts; grid shows thumbnails, list does not
+    - name: eBay
+      note: Toggle six attributes in results
+    - name: Gmail
+      note: Reading pane on the right, below, or off
+techniques:
+  - name: Fluid Attributes
+    dimension: Content
+    how: In Attributes Mode, select attributes in the detail view and Surface them into every item of
+      the overview, or Hide them; drag attributes between views directly (CHI '25 §4.1.1).
+    ai: false
+  - name: Sort and filter by any attribute
+    dimension: Content
+    how: "Any surfaced attribute becomes sortable and filterable, including interactive ones: sort by
+      the wishlist boolean to pin items (CHI '25 §4.1.2)."
+    ai: false
+  - name: AI-assisted Fluid Attributes
+    dimension: Content
+    how: Ask “how popular are these items?” to surface Watchers and Items Sold; generate new attributes
+      such as Total Cost with inspectable sources; reformat inconsistent titles; fill missing values
+      or answer Not Specified (CHI '25 §4.1.3).
+    ai: true
+  - name: Tabbed multiple overviews
+    dimension: Composition
+    how: Add, rename and remove overviews as tabs, used to split a task into sub-collections (CHI '25
+      §4.2).
+    ai: false
+  - name: Layout menus and attribute-invoked overviews
+    dimension: Layout
+    how: Dropdowns for overview and overview–detail layout; selecting Price and Feedback Score offers a
+      scatter plot, and a generated colour attribute offers a colour space (CHI '25 Fig. 11).
+    ai: false
+  - name: Semantic zoom
+    dimension: Content
+    how: Pinch or scroll appends and removes attributes from shownAttributes, with the person choosing
+      which attributes survive each zoom level (UIST '25 D1-3).
+    ai: false
+  - name: Direct manipulation to spec moves
+    dimension: Layout
+    how: Drag an item beside another to make a grid, flatten it to make a table, shrink it to a node to
+      make a canvas; option-drag attributes to spawn a view (UIST '25 D1-4).
+    ai: false
+  - name: Spec exchange
+    dimension: Invocation
+    how: Copy a specification from one site and apply it to another; an extension carries a personal
+      lens across menus and shops (UIST '25 D1-2).
+    ai: false
+signature: Fluid Attributes
+sample: Similarweb top 50 US sites; Semrush top 5 in each of 33 categories; 20 random WordPress
+  showcase sites; 20 random Awwwards 2024 Sites of the Year (156 sites, 303 instances).
+unit: One overview→detail relationship; a page with two overviews linked to one detail view counts twice.
+relations:
+  uses:
+    - card
+    - modal-dialog
+    - popover
+    - tooltip
+    - split-pane
+    - tabs
+    - view-switcher
+    - filter-controls
+    - sort-control
+  specializes:
+    - browse-collections
+  neighbors:
+    - focus-context
+    - accordion
+scores:
+  ubiquity: 5
+  potential: 5
+  spec: 5
+evidence: coded
+usage:
+  - Hoarders never hide attributes; minimalists hide deliberately and keep the space clean (CHI '25
+    §7.2)
+  - Some configure at the start, others throughout the task (CHI '25 Fig. 21)
+  - Surface-then-sort and surface-then-filter sequences
+  - Multiple overviews used to structure sub-tasks, such as work vs home monitors
+questions:
+  - How should collection-level attributes be surfaced and computed?
+  - Should people choose how detail views are invoked, such as hover and a less maximized view?
+  - Which defaults suit which user groups, so fewer customizations are needed?
+  - What does surfacing a detail attribute cost when every detail view is its own REST call?
+previews:
+  - file: overview-detail.svg
+sources:
+  - paper: chi25
+  - paper: uist25
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

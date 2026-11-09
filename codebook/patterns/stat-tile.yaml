@@ -1,0 +1,318 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "stat-tile". Edit between batches only — see README "Rules".
+id: stat-tile
+name: Stat tile
+level: component
+parent: monitor
+aliases:
+  - KPI card
+  - metric card
+  - scorecard
+definition: "A compact tile showing one key number with its context: label, change and trend."
+data: object
+platforms:
+  - web
+  - mobile
+domains:
+  - enterprise
+  - finance
+  - health
+  - software
+anatomy:
+  - name: Value
+    role: The number
+  - name: Label
+    role: What it measures
+  - name: Context
+    role: Change, target, trend
+roles:
+  - metric
+  - label
+  - delta
+  - trend
+dimensions:
+  - name: Context
+    family: content
+    question: What gives the number meaning?
+    subdimensions:
+      - id: context
+        name: Context
+        select: many
+        values:
+          - id: label
+            name: Label
+            example: All
+          - id: change-vs-previous-period
+            name: Change vs previous period
+            example: Stripe
+          - id: target
+            name: Target
+            example: Sales quotas
+          - id: sparkline
+            name: Sparkline
+            example: Google Analytics
+          - id: benchmark
+            name: Benchmark
+            example: Industry comparison
+  - name: Change encoding
+    family: encoding
+    question: How is change drawn?
+    subdimensions:
+      - id: encoding
+        name: Encoding
+        select: one
+        values:
+          - id: number-only
+            name: Number only
+            example: Plain KPI
+          - id: signed-change-with-arrow
+            name: Signed change with arrow
+            example: Stripe
+          - id: sparkline
+            name: Sparkline
+            example: Google Analytics
+          - id: bullet-chart-against-target
+            name: Bullet chart against target
+            example: Executive dashboards
+  - name: Time window
+    family: scope
+    question: Over what period?
+    subdimensions:
+      - id: window
+        name: Window
+        select: one
+        values:
+          - id: fixed
+            name: Fixed
+            example: Today
+          - id: follows-the-dashboard-filter
+            name: Follows the dashboard filter
+            example: Grafana stat panels
+          - id: chosen-per-tile
+            name: Chosen per tile
+            example: Custom widgets
+  - name: Drill-down
+    family: invocation
+    question: What is behind the number?
+    subdimensions:
+      - id: drill
+        name: Drill-down
+        select: one
+        values:
+          - id: none
+            name: None
+            example: Static tiles
+          - id: open-a-detail-chart
+            name: Open a detail chart
+            example: Analytics dashboards
+          - id: breakdown-on-hover
+            name: Breakdown on hover
+            example: Tooltip breakdowns
+wild:
+  score: 1
+  note: Tiles can be chosen in editable dashboards, rarely configured.
+  examples:
+    - name: Grafana
+      note: Stat panel options
+techniques:
+  - name: Metric from any chart
+    dimension: Context
+    how: Select a series or value in a chart and pin it as a tile that stays linked to its source.
+    ai: false
+signature: Metric from any chart
+sample: Dashboards across analytics, finance and health products.
+unit: One tile.
+relations:
+  uses:
+    - badge
+  specializes: []
+  neighbors:
+    - card
+    - chart
+scores:
+  ubiquity: 4
+  potential: 3
+  spec: 5
+evidence: agent-coded
+usage:
+  - Colour-only change indicators fail colour-blind readers
+questions:
+  - Is a stat tile the smallest overview–detail interface?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.8501165617636209
+  agreementFirstPass: 0.89375
+  kappaFinal: 0.8501165617636209
+  agreementFinal: 0.89375
+  pass: true
+  perSub:
+    context:
+      kappaFirstPass: 0.9312683284457476
+      agreementFirstPass: 0.95
+      kappaFinal: 0.9312683284457476
+      agreementFinal: 0.95
+      flag: null
+    encoding:
+      kappaFirstPass: 0.7580645161290321
+      agreementFirstPass: 0.8
+      kappaFinal: 0.7580645161290321
+      agreementFinal: 0.8
+      flag: null
+    window:
+      kappaFirstPass: 0.8734177215189872
+      agreementFirstPass: 0.9
+      kappaFinal: 0.8734177215189872
+      agreementFinal: 0.9
+      flag: null
+    drill:
+      kappaFirstPass: 0.51310861423221
+      agreementFirstPass: 0.7
+      kappaFinal: 0.51310861423221
+      agreementFinal: 0.7
+      flag: unreliable
+  distribution:
+    context:
+      Label: 20
+      Change vs previous period: 9
+      Target: 2
+      Sparkline: 9
+      Benchmark: 1
+    encoding:
+      Number only: 3
+      Signed change with arrow: 10
+      Sparkline: 3
+      Bullet chart against target: 2
+    window:
+      Fixed: 8
+      Follows the dashboard filter: 11
+      Chosen per tile: 1
+    drill:
+      None: 5
+      Open a detail chart: 14
+      Breakdown on hover: 0
+  exemplars:
+    context:
+      Label:
+        - Stripe — Gross volume tile
+        - Google Analytics 4 — Users card
+        - Shopify admin — Total sales tile
+      Change vs previous period:
+        - Stripe — Gross volume tile
+        - Google Analytics 4 — Users card
+        - Shopify admin — Total sales tile
+      Target:
+        - Fitbit — Steps tile
+        - Salesforce — Quarterly performance
+      Sparkline:
+        - Stripe — Gross volume tile
+        - Google Analytics 4 — Users card
+        - Shopify admin — Total sales tile
+      Benchmark:
+        - YouTube Studio — Views card
+    encoding:
+      Number only:
+        - Google Search Console — Total clicks tile
+        - Datadog — Query Value widget
+        - Power BI — Card visual
+      Signed change with arrow:
+        - Stripe — Gross volume tile
+        - Google Analytics 4 — Users card
+        - Shopify admin — Total sales tile
+      Sparkline:
+        - Apple Health — Steps card
+        - Grafana — Stat panel
+        - Strava — This week distance
+      Bullet chart against target:
+        - Fitbit — Steps tile
+        - Salesforce — Quarterly performance
+    window:
+      Fixed:
+        - Apple Health — Steps card
+        - Fitbit — Steps tile
+        - Coinbase — Portfolio balance
+      Follows the dashboard filter:
+        - Stripe — Gross volume tile
+        - Google Analytics 4 — Users card
+        - Shopify admin — Total sales tile
+      Chosen per tile:
+        - Robinhood — Portfolio value
+    drill:
+      None:
+        - Robinhood — Portfolio value
+        - Grafana — Stat panel
+        - Datadog — Query Value widget
+      Open a detail chart:
+        - Stripe — Gross volume tile
+        - Google Analytics 4 — Users card
+        - Shopify admin — Total sales tile
+      Breakdown on hover: []
+  unobserved:
+    - sub: drill
+      var: Breakdown on hover
+  unresolved:
+    - sub: drill
+      n: 8
+    - sub: encoding
+      n: 14
+    - sub: encoding
+      n: 15
+  proposals:
+    raised: 2
+    adopted: []
+    recorded:
+      - place: sub:encoding
+        sub: encoding
+        dim: null
+        name: Radial gauge
+        gloss: The value is drawn as a ring or arc — progress toward a goal, or a 0–100 score in a coloured
+          band — which is how nearly every health and fitness tile encodes its number; neither a
+          sparkline nor a bullet chart
+        raters:
+          - opus
+        instances:
+          - 5
+          - 14
+          - 15
+        status: raised
+      - place: sub:drill
+        sub: drill
+        dim: null
+        name: Plots on the shared chart
+        gloss: "Nothing sits behind the number: selecting the tile makes the dashboard's main chart plot
+          that series, so the tile is a selector for a chart already on screen"
+        raters:
+          - opus
+        instances:
+          - 8
+          - 10
+          - 17
+        status: raised
+  raterNotes:
+    fable:
+      - Tiles that switch the series of an adjacent chart (Search Console, Vercel, Plausible,
+        YouTube Studio) are neither a detail chart nor a hover breakdown; coded Open a detail chart.
+    opus:
+      - Context and encoding overlap by design (Sparkline is a value in both), so a tile with a
+        trend line is coded twice for the same fact. Neither dimension can express threshold or
+        conditional colour, which is the whole point of a Grafana stat panel or a Datadog query
+        value; and Fixed vs Chosen per tile is only distinguishable when the tile carries its own
+        range control.
+    sonnet:
+      - When both a signed-change number and a sparkline were present I coded encoding as the number
+        (the more central, always-on signal) and listed Sparkline under context as well; the
+        codebook's pick-one forces this choice.
+  codedAt: 2026-09-22
+previews:
+  - file: stat-tile.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

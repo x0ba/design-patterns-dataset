@@ -1,0 +1,388 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "prompt-input". Edit between batches only — see README "Rules".
+id: prompt-input
+name: Prompt input
+level: component
+parent: delegate-ai
+aliases:
+  - composer
+  - prompt box
+  - AI text field
+definition: The control where a person enters or edits the instruction, context and attachments sent
+  to a model.
+data: conversation
+platforms:
+  - web
+  - desktop
+  - mobile
+  - voice
+domains:
+  - ai
+  - software
+  - productivity
+  - design
+anatomy:
+  - name: Text area
+    role: The instruction
+  - name: Attachments
+    role: Files, images, selections
+  - name: Submit
+    role: Send or run
+  - name: Modifiers
+    role: Model, tools, parameters
+roles: []
+dimensions:
+  - name: Input content
+    family: content
+    question: What can the composer hold?
+    subdimensions:
+      - id: content
+        name: Content
+        select: many
+        values:
+          - id: plain-prompt
+            name: Plain prompt
+            example: ChatGPT box
+          - id: mentions-of-files-or-symbols
+            name: Mentions of files or symbols
+            example: Cursor @
+          - id: attached-images-or-docs
+            name: Attached images or docs
+            example: ChatGPT uploads
+          - id: hidden-system-preamble
+            name: Hidden system preamble
+            example: Custom GPTs
+          - id: parameter-flags
+            name: Parameter flags
+            example: Midjourney suffix
+  - name: Composer layout
+    family: layout
+    question: Where does the prompt UI sit?
+    subdimensions:
+      - id: layout
+        name: Layout
+        select: one
+        values:
+          - id: bottom-sticky-composer
+            name: Bottom sticky composer
+            example: ChatGPT
+          - id: inline-caret-popover
+            name: Inline caret popover
+            example: Cursor Cmd-K
+          - id: modal-brief
+            name: Modal brief
+            example: Agent task dialogs
+          - id: sidebar-composer
+            name: Sidebar composer
+            example: IDE chat panels
+          - id: voice-first-with-transcript
+            name: Voice-first with transcript
+            example: Voice modes
+          - id: centred-hero-box
+            name: Centred hero box
+            description: A large prompt box in the middle of an empty page that becomes the bottom composer once
+              a thread starts
+            example: Perplexity — Ask anything box
+          - id: terminal-prompt-line
+            name: Terminal prompt line
+            description: A readline-style input at the bottom of a terminal transcript, with slash commands and
+              mentions typed in place
+            example: Claude Code — Prompt line
+  - name: Submitting
+    family: invocation
+    question: How is the prompt sent?
+    subdimensions:
+      - id: submitBy
+        name: Submit by
+        select: many
+        values:
+          - id: enter-key
+            name: Enter key
+            example: Chat UIs
+          - id: click-send
+            name: Click send
+            example: All
+          - id: push-to-talk
+            name: Push to talk
+            example: Voice
+          - id: queue-while-running
+            name: Queue while running
+            example: Follow-ups mid-stream
+          - id: schedule-send
+            name: Schedule send
+            example: Batch agents
+          - id: open-mic
+            name: Open mic
+            description: Nothing is pressed or held to send — the microphone stays open and voice activity
+              detection ends the turn, which is what separates modern voice modes from push-to-talk
+            example: ChatGPT — Voice mode screen
+  - name: Composer assistance
+    family: initiative
+    question: What help shapes the prompt before send?
+    subdimensions:
+      - id: assistance
+        name: Assistance
+        select: many
+        values:
+          - id: none
+            name: None
+            example: Bare text boxes
+          - id: placeholder-examples
+            name: Placeholder examples
+            example: Chat onboarding
+          - id: rewrite-my-prompt
+            name: Rewrite my prompt
+            example: Prompt improvers
+          - id: suggestion-chips
+            name: Suggestion chips
+            example: Starter prompts
+          - id: template-slots
+            name: Template slots
+            example: Fill-in briefs
+wild:
+  score: 2
+  note: Model pickers and attachment toggles are common; composer chrome less so.
+  examples:
+    - name: ChatGPT
+      note: Model menu, attachments, voice
+    - name: Cursor
+      note: "@ context pickers"
+    - name: Midjourney
+      note: Parameter suffixes
+techniques:
+  - name: Prompt as structured brief
+    dimension: Input content
+    how: Offer optional fields for goal, constraints and context instead of only one blob of text.
+    ai: false
+  - name: Improve prompt in place
+    dimension: Composer assistance
+    how: Rewrite the composer contents as an editable draft the person must approve before sending.
+    ai: true
+signature: Prompt as structured brief
+sample: Chat composers, inline AI edit bars and agent brief forms.
+unit: One composer instance bound to one model session.
+relations:
+  uses: []
+  specializes: []
+  neighbors:
+    - text-field
+    - suggestion-chips
+    - file-upload
+scores:
+  ubiquity: 4
+  potential: 4
+  spec: 4
+evidence: agent-coded
+usage:
+  - People keep a scratch note of prompts that worked
+questions:
+  - Which brief fields actually change outcomes enough to show by default?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.6845986181852517
+  agreementFirstPass: 0.7966666666666666
+  kappaFinal: 0.9651282182338597
+  agreementFinal: 0.9766666666666667
+  pass: true
+  perSub:
+    content:
+      kappaFirstPass: 0.7811709784088697
+      agreementFirstPass: 0.85
+      kappaFinal: 0.9582153303310273
+      agreementFinal: 0.97
+      flag: null
+    layout:
+      kappaFirstPass: 0.872249822569198
+      agreementFirstPass: 0.85
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    submitBy:
+      kappaFirstPass: 0.728629579375848
+      agreementFirstPass: 0.82
+      kappaFinal: 0.9716056977899766
+      agreementFinal: 0.98
+      flag: null
+    assistance:
+      kappaFirstPass: 0.46193166532149693
+      agreementFirstPass: 0.6875
+      kappaFinal: 0.9569545332257192
+      agreementFinal: 0.975
+      flag: null
+  distribution:
+    content:
+      Plain prompt: 20
+      Mentions of files or symbols: 4
+      Attached images or docs: 9
+      Hidden system preamble: 4
+      Parameter flags: 3
+    layout:
+      Bottom sticky composer: 6
+      Inline caret popover: 5
+      Modal brief: 2
+      Sidebar composer: 3
+      Voice-first with transcript: 2
+      Centred hero box: 1
+      Terminal prompt line: 1
+    submitBy:
+      Enter key: 16
+      Click send: 14
+      Push to talk: 3
+      Queue while running: 2
+      Schedule send: 0
+      Open mic: 2
+    assistance:
+      None: 6
+      Placeholder examples: 2
+      Rewrite my prompt: 0
+      Suggestion chips: 10
+      Template slots: 3
+  exemplars:
+    content:
+      Plain prompt:
+        - ChatGPT — Composer
+        - Claude — Composer
+        - Google Gemini — Composer
+      Mentions of files or symbols:
+        - Cursor — Chat composer
+        - Cursor — Cmd-K bar
+        - Claude Code — Prompt line
+      Attached images or docs:
+        - ChatGPT — Composer
+        - Claude — Composer
+        - Google Gemini — Composer
+      Hidden system preamble:
+        - ChatGPT — Composer
+        - Claude — Composer
+        - Claude Code — Prompt line
+      Parameter flags:
+        - Midjourney — /imagine in Discord
+        - Suno — Create form
+        - Meta AI — Composer in WhatsApp
+    layout:
+      Bottom sticky composer:
+        - ChatGPT — Composer
+        - Claude — Composer
+        - Google Gemini — Composer
+      Inline caret popover:
+        - Cursor — Cmd-K bar
+        - Notion AI — Ask AI bar
+        - Google Docs — Help me write
+      Modal brief:
+        - Devin — New task form
+        - OpenAI Codex — Task composer
+      Sidebar composer:
+        - Cursor — Chat composer
+        - GitHub Copilot Chat — Composer
+        - Suno — Create form
+      Voice-first with transcript:
+        - ChatGPT — Voice mode screen
+        - Siri — Siri input
+      Centred hero box:
+        - Perplexity — Ask anything box
+      Terminal prompt line:
+        - Claude Code — Prompt line
+    submitBy:
+      Enter key:
+        - ChatGPT — Composer
+        - Claude — Composer
+        - Google Gemini — Composer
+      Click send:
+        - ChatGPT — Composer
+        - Claude — Composer
+        - Google Gemini — Composer
+      Push to talk:
+        - ChatGPT — Composer
+        - Google Gemini — Composer
+        - Perplexity — Ask anything box
+      Queue while running:
+        - Cursor — Chat composer
+        - Claude Code — Prompt line
+      Schedule send: []
+      Open mic:
+        - ChatGPT — Voice mode screen
+        - Siri — Siri input
+    assistance:
+      None:
+        - Cursor — Chat composer
+        - Cursor — Cmd-K bar
+        - Claude Code — Prompt line
+      Placeholder examples:
+        - Google Docs — Help me write
+        - Suno — Create form
+      Rewrite my prompt: []
+      Suggestion chips:
+        - ChatGPT — Composer
+        - Claude — Composer
+        - Google Gemini — Composer
+      Template slots:
+        - Midjourney — /imagine in Discord
+        - Devin — New task form
+        - Suno — Create form
+  unobserved:
+    - sub: submitBy
+      var: Schedule send
+    - sub: assistance
+      var: Rewrite my prompt
+  unresolved: []
+  proposals:
+    raised: 3
+    adopted:
+      - sub: layout
+        name: Centred hero box
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: layout
+        name: Terminal prompt line
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: submitBy
+        name: Open mic
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - Layout has no slot for the empty-state hero box or a terminal prompt; Submit by's Push to
+        talk was used for any speak-to-send voice input.
+      - Submit by's Push to talk cannot name open-mic voice, opus's +Open mic fixes it; Layout lacks
+        the empty-page hero box and the terminal line, each now proposed by two raters; Hidden
+        system preamble is read three ways — I count custom instructions, styles, playbooks and
+        CLAUDE.md, the others mostly a custom GPT's.
+    opus:
+      - "Assistance needed a rule to be usable: I coded Suggestion chips where clickable examples
+        sit with the composer and None where the placeholder is merely a prompt to type, since
+        Placeholder examples otherwise swallows every chat box. Content also cannot express
+        structured brief fields (Devin's repository picker, Suno's style field) — those had to be
+        recorded as Template slots under assistance instead."
+      - "`assistance` has no line between Placeholder examples and Suggestion chips: both are
+        example prompts, and the only real difference — whether clicking one fills the box — is not
+        in either gloss. `content` needs a value for structured parameter fields (Suno's style and
+        title, Devin's machine settings): Parameter flags is glossed as a typed suffix, so raters
+        either stretch it or drop the parameters entirely. Hidden system preamble also needs to say
+        whether it means a preamble bound to this composer or anything the product injects, which is
+        most of the disagreement in the first four cells."
+    sonnet:
+      - Assistance was 'None' for most bare composers; suggestion chips and template-slot forms were
+        the clearest positive cases.
+  codedAt: 2026-09-22
+previews:
+  - file: prompt-input.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

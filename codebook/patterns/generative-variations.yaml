@@ -1,0 +1,455 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "generative-variations". Edit between batches only — see README "Rules".
+id: generative-variations
+name: Generative variations
+level: pattern
+parent: delegate-ai
+aliases:
+  - option grid
+  - image variations
+  - design alternatives
+definition: A model produces multiple candidate outputs for one brief so a person can compare, pick,
+  remix or regenerate along chosen dimensions.
+data: collection
+platforms:
+  - web
+  - desktop
+  - mobile
+domains:
+  - design
+  - entertainment
+  - ai
+  - productivity
+  - commerce
+anatomy:
+  - name: Brief
+    role: The shared prompt or constraints
+  - name: Candidate
+    role: One generated option
+  - name: Grid or strip
+    role: How candidates are compared
+  - name: Controls
+    role: Vary, remix, upscale, apply
+roles: []
+dimensions:
+  - name: Candidate representation
+    family: content
+    question: What does each variation show?
+    subdimensions:
+      - id: representation
+        name: Representation
+        select: one
+        values:
+          - id: image-thumbnail
+            name: Image thumbnail
+            example: Midjourney grid
+          - id: text-alternative
+            name: Text alternative
+            example: ChatGPT regenerate options
+          - id: layout-or-frame
+            name: Layout or frame
+            example: Canva Magic Design
+          - id: code-or-config-snippet
+            name: Code or config snippet
+            example: Alternative implementations
+          - id: audio-or-video-take
+            name: Audio or video take
+            example: Generative media tools
+  - name: Set composition
+    family: composition
+    question: How do candidates relate to the brief and each other?
+    subdimensions:
+      - id: setForm
+        name: Set form
+        select: one
+        values:
+          - id: flat-grid-of-n
+            name: Flat grid of N
+            example: Midjourney 2×2
+          - id: ranked-list
+            name: Ranked list
+            example: Copy alternatives
+          - id: dimension-axes
+            name: Dimension axes
+            description: Vary one factor per axis
+            example: Luminate-style spaces
+          - id: parent-with-remix-children
+            name: Parent with remix children
+            example: Midjourney variations
+          - id: single-slot-replace
+            name: Single slot replace
+            example: Regenerate in place
+  - name: Comparison layout
+    family: layout
+    question: How are variations arranged for choice?
+    subdimensions:
+      - id: layout
+        name: Layout
+        select: one
+        values:
+          - id: uniform-grid
+            name: Uniform grid
+            example: Midjourney
+          - id: carousel
+            name: Carousel
+            example: Mobile generators
+          - id: side-by-side-pair
+            name: Side-by-side pair
+            example: A/B rewrite
+          - id: scatter-by-attributes
+            name: Scatter by attributes
+            example: Design-space plots
+          - id: stacked-with-expand
+            name: Stacked with expand
+            example: Text variants
+  - name: Generation controls
+    family: invocation
+    question: How does the person request or steer the set?
+    subdimensions:
+      - id: controls
+        name: Controls
+        select: many
+        values:
+          - id: prompt-and-parameters
+            name: Prompt and parameters
+            example: Midjourney --stylize
+          - id: vary-strong-subtle
+            name: Vary strong / subtle
+            example: Midjourney V buttons
+          - id: lock-some-attributes
+            name: Lock some attributes
+            example: Seed and character refs
+          - id: pick-winners-to-breed
+            name: Pick winners to breed
+            example: Remix selected
+          - id: natural-language-restyle
+            name: Natural-language restyle
+            example: Describe what to change
+  - name: Selection flow
+    family: flow
+    question: How does choosing proceed after candidates appear?
+    subdimensions:
+      - id: selection
+        name: Selection
+        select: one
+        values:
+          - id: pick-one-to-upscale
+            name: Pick one to upscale
+            example: Midjourney U
+          - id: multi-select-to-keep
+            name: Multi-select to keep
+            example: Boards of favorites
+          - id: blend-selected
+            name: Blend selected
+            example: Image blend
+          - id: apply-to-canvas
+            name: Apply to canvas
+            example: Figma AI insert
+          - id: reject-all-and-rerun
+            name: Reject all and rerun
+            example: Regenerate
+  - name: Provenance feedback
+    family: feedback
+    question: How are origin and parameters shown on candidates?
+    subdimensions:
+      - id: feedback
+        name: Feedback
+        select: many
+        values:
+          - id: job-id-and-seed
+            name: Job id and seed
+            example: Midjourney
+          - id: parameter-chips
+            name: Parameter chips
+            example: Generator settings
+          - id: parent-linkage
+            name: Parent linkage
+            example: Variation-of markers
+          - id: safety-or-filter-flags
+            name: Safety or filter flags
+            example: Blocked grids
+          - id: none-shown
+            name: None shown
+            example: Opaque consumer apps
+wild:
+  score: 2
+  note: Parameters, seeds and remix strength are commonly tweaked; grid size less often.
+  examples:
+    - name: Midjourney
+      note: Parameters, remix, vary region
+    - name: Canva
+      note: Magic Studio regenerate
+    - name: ChatGPT
+      note: Regenerate / try again
+techniques:
+  - name: Vary along named dimensions
+    dimension: Set composition
+    how: Expose axes (style, layout, tone) so the grid is a small design space, not an opaque shuffle.
+    ai: false
+  - name: Breed from winners
+    dimension: Generation controls
+    how: Selecting candidates feeds a next generation with locked and free attributes made visible.
+    ai: true
+  - name: Keep the brief beside the grid
+    dimension: Comparison layout
+    how: Show the editable brief and parameters while comparing so regeneration does not lose intent.
+    ai: false
+signature: Vary along named dimensions
+sample: Image generators, marketing copy tools, design assistants and alternative-UI generators.
+unit: One generation set from one brief.
+relations:
+  uses:
+    - prompt-input
+    - ai-provenance
+    - card
+    - slider
+  specializes:
+    - delegate-ai
+  neighbors:
+    - inline-suggestion
+    - canvas-editor
+    - ai-chat
+scores:
+  ubiquity: 3
+  potential: 5
+  spec: 4
+evidence: agent-coded
+usage:
+  - People upscale then still ask for variations of the winner
+questions:
+  - Which axes should be user-named versus inferred from the brief?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7347816851324521
+  agreementFirstPass: 0.8192307692307692
+  kappaFinal: 0.9518734030805746
+  agreementFinal: 0.9653846153846154
+  pass: true
+  perSub:
+    representation:
+      kappaFirstPass: 0.9493243243243245
+      agreementFirstPass: 0.95
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    setForm:
+      kappaFirstPass: 0.782608695652174
+      agreementFirstPass: 0.85
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    layout:
+      kappaFirstPass: 0.8418674698795182
+      agreementFirstPass: 0.85
+      kappaFinal: 0.9543031226199544
+      agreementFinal: 0.95
+      flag: null
+    controls:
+      kappaFirstPass: 0.7366246643255524
+      agreementFirstPass: 0.83
+      kappaFinal: 0.9570999570999571
+      agreementFinal: 0.97
+      flag: null
+    selection:
+      kappaFirstPass: 0.6666666666666667
+      agreementFirstPass: 0.7
+      kappaFinal: 0.94263862332696
+      agreementFinal: 0.95
+      flag: null
+    feedback:
+      kappaFirstPass: 0.6571428571428578
+      agreementFirstPass: 0.7875
+      kappaFinal: 0.9229781771501928
+      agreementFinal: 0.95
+      flag: null
+  distribution:
+    representation:
+      Image thumbnail: 10
+      Text alternative: 5
+      Layout or frame: 2
+      Code or config snippet: 0
+      Audio or video take: 3
+    setForm:
+      Flat grid of N: 15
+      Ranked list: 2
+      Dimension axes: 1
+      Parent with remix children: 0
+      Single slot replace: 2
+    layout:
+      Uniform grid: 9
+      Carousel: 3
+      Side-by-side pair: 1
+      Scatter by attributes: 1
+      Stacked with expand: 4
+      n/a: 2
+    controls:
+      Prompt and parameters: 19
+      Vary strong / subtle: 1
+      Lock some attributes: 7
+      Pick winners to breed: 5
+      Natural-language restyle: 6
+    selection:
+      Pick one to upscale: 12
+      Multi-select to keep: 2
+      Blend selected: 0
+      Apply to canvas: 5
+      Reject all and rerun: 0
+      "?": 1
+    feedback:
+      Job id and seed: 4
+      Parameter chips: 8
+      Parent linkage: 2
+      Safety or filter flags: 0
+      None shown: 12
+  exemplars:
+    representation:
+      Image thumbnail:
+        - Midjourney — Imagine grid
+        - Bing Image Creator — Image results
+        - Adobe Firefly — Text to Image
+      Text alternative:
+        - Jasper — Template outputs
+        - Copy.ai — Outputs list
+        - Gmail — Help me write drafts
+      Layout or frame:
+        - Canva — Magic Design suggestions
+        - v0 — UI generation
+      Code or config snippet: []
+      Audio or video take:
+        - Suno — Song versions
+        - ElevenLabs — Voice Design previews
+        - Sora — Video variations
+    setForm:
+      Flat grid of N:
+        - Midjourney — Imagine grid
+        - Bing Image Creator — Image results
+        - Adobe Firefly — Text to Image
+      Ranked list:
+        - Jasper — Template outputs
+        - Copy.ai — Outputs list
+      Dimension axes:
+        - Luminate — Dimension-based exploration
+      Parent with remix children: []
+      Single slot replace:
+        - Gmail — Help me write drafts
+        - v0 — UI generation
+    layout:
+      Uniform grid:
+        - Midjourney — Imagine grid
+        - Bing Image Creator — Image results
+        - Adobe Firefly — Text to Image
+      Carousel:
+        - Canva — Magic Design suggestions
+        - Apple Image Playground — Generated images
+        - Google Photos — Magic Editor options
+      Side-by-side pair:
+        - ChatGPT — Compare two responses
+      Scatter by attributes:
+        - Luminate — Dimension-based exploration
+      Stacked with expand:
+        - Jasper — Template outputs
+        - Copy.ai — Outputs list
+        - Suno — Song versions
+    controls:
+      Prompt and parameters:
+        - Midjourney — Imagine grid
+        - Bing Image Creator — Image results
+        - Adobe Firefly — Text to Image
+      Vary strong / subtle:
+        - Midjourney — Imagine grid
+      Lock some attributes:
+        - Midjourney — Imagine grid
+        - Adobe Firefly — Text to Image
+        - Stable Diffusion WebUI — Batch output
+      Pick winners to breed:
+        - Adobe Firefly — Text to Image
+        - Copy.ai — Outputs list
+        - Ideogram — Results
+      Natural-language restyle:
+        - Midjourney — Imagine grid
+        - Gmail — Help me write drafts
+        - v0 — UI generation
+    selection:
+      Pick one to upscale:
+        - Midjourney — Imagine grid
+        - Bing Image Creator — Image results
+        - Adobe Firefly — Text to Image
+      Multi-select to keep:
+        - Jasper — Template outputs
+        - Copy.ai — Outputs list
+      Blend selected: []
+      Apply to canvas:
+        - Adobe Photoshop — Generative Fill variations
+        - Canva — Magic Design suggestions
+        - Gmail — Help me write drafts
+      Reject all and rerun: []
+    feedback:
+      Job id and seed:
+        - Midjourney — Imagine grid
+        - Stable Diffusion WebUI — Batch output
+        - Leonardo.ai — Generation results
+      Parameter chips:
+        - Midjourney — Imagine grid
+        - Adobe Firefly — Text to Image
+        - Stable Diffusion WebUI — Batch output
+      Parent linkage:
+        - Midjourney — Imagine grid
+        - Suno — Song versions
+      Safety or filter flags: []
+      None shown:
+        - Bing Image Creator — Image results
+        - Adobe Photoshop — Generative Fill variations
+        - Canva — Magic Design suggestions
+  unobserved:
+    - sub: representation
+      var: Code or config snippet
+    - sub: setForm
+      var: Parent with remix children
+    - sub: selection
+      var: Blend selected
+    - sub: selection
+      var: Reject all and rerun
+    - sub: feedback
+      var: Safety or filter flags
+  unresolved: []
+  proposals:
+    raised: 0
+    adopted: []
+    recorded: []
+  raterNotes:
+    fable:
+      - Selection's Pick one to upscale was read as pick one to take further (download, extend,
+        remix, save) since only Midjourney upscales; single-slot flows (Gmail drafts, v0) have no
+        comparison layout, coded n/a.
+      - Selection's Pick one to upscale is read by all three as pick one to take further and should
+        say so; single-slot products (Gmail, v0) have no set to lay out, so layout and selection
+        strain there.
+    opus:
+      - Layout is n/a whenever the set is one slot (Gmail, v0), which the codebook should perhaps
+        say outright; Pick one to upscale had to absorb every take-one-further move — download,
+        extend, remix, save — since upscaling as such only exists in a few image tools, and setForm
+        vs layout overlap heavily (a flat grid of N is almost always a uniform grid).
+      - "The recurring fault here is that three subs describe the same fact from different angles:
+        Single slot replace (setForm), Stacked with expand (layout) and Apply to canvas (selection)
+        all get used for a one-candidate tool, so raters differ on which sub carries the
+        observation. `layout` also needs to say whether it describes one generation set or the feed
+        of past sets — that alone split Leonardo and Sora."
+    sonnet:
+      - Selection was frequently 'pick the one to carry forward,' which I mapped to Pick one to
+        upscale even outside literal image upscaling (extend/remix/save/finalize) since it's the
+        closest existing variation for that mechanism.
+  codedAt: 2026-09-22
+previews:
+  - file: generative-variations.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

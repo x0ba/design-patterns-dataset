@@ -1,0 +1,495 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "canvas-editor". Edit between batches only — see README "Rules".
+id: canvas-editor
+name: Canvas editor
+level: pattern
+parent: create
+aliases:
+  - design tool
+  - whiteboard
+  - vector editor
+definition: Arranging visual objects freely on a two-dimensional canvas, frames or artboards.
+data: space
+platforms:
+  - desktop
+  - web
+  - mobile
+domains:
+  - design
+  - education
+  - enterprise
+  - software
+anatomy:
+  - name: Canvas
+    role: The space
+  - name: Objects
+    role: Shapes, text, images, frames
+  - name: Layers panel
+    role: The object hierarchy
+  - name: Toolbar
+    role: Creation tools
+  - name: Inspector
+    role: Properties of the selection
+roles: []
+dimensions:
+  - name: Canvas model
+    family: layout
+    question: What kind of space is it?
+    subdimensions:
+      - id: canvas
+        name: Canvas
+        select: one
+        values:
+          - id: infinite-canvas
+            name: Infinite canvas
+            example: Miro
+          - id: frames-on-a-canvas
+            name: Frames on a canvas
+            example: Figma frames
+          - id: fixed-page-size
+            name: Fixed page size
+            example: Canva
+          - id: slides
+            name: Slides
+            example: Keynote
+  - name: Object hierarchy
+    family: composition
+    question: How are objects nested and reused?
+    subdimensions:
+      - id: hierarchy
+        name: Hierarchy
+        select: one
+        values:
+          - id: flat-objects
+            name: Flat objects
+            example: Whiteboards
+          - id: layers-and-groups
+            name: Layers and groups
+            example: Illustrator
+          - id: auto-layout-containers
+            name: Auto-layout containers
+            example: Figma auto layout
+          - id: components-with-overrides
+            name: Components with overrides
+            example: Figma instances
+  - name: Selection
+    family: scope
+    question: How are objects selected?
+    subdimensions:
+      - id: selection
+        name: Selection
+        select: many
+        values:
+          - id: click
+            name: Click
+            example: All
+          - id: marquee
+            name: Marquee
+            example: All
+          - id: select-matching
+            name: Select matching
+            example: Figma Select matching layers
+          - id: deep-select-into-groups
+            name: Deep select into groups
+            example: Cmd-click in Figma
+  - name: Tools
+    family: invocation
+    question: How are tools reached?
+    subdimensions:
+      - id: tools
+        name: Tools
+        select: many
+        values:
+          - id: persistent-toolbar
+            name: Persistent toolbar
+            example: Figma
+          - id: contextual-toolbar
+            name: Contextual toolbar
+            example: Miro
+          - id: quick-actions-search
+            name: Quick actions search
+            example: Figma Quick actions
+          - id: pen-and-touch
+            name: Pen and touch
+            example: Apple Freeform
+  - name: Generation
+    family: initiative
+    question: What does the tool make for you?
+    subdimensions:
+      - id: generation
+        name: Generation
+        select: one
+        values:
+          - id: manual
+            name: Manual
+            example: Illustrator
+          - id: templates
+            name: Templates
+            example: Canva
+          - id: layouts-from-a-prompt
+            name: Layouts from a prompt
+            example: Canva Magic Design
+          - id: tidying-assistance
+            name: Tidying assistance
+            example: Figma AI layer renaming
+  - name: Multiplayer
+    family: collaboration
+    question: How is working together shown?
+    subdimensions:
+      - id: multiplayer
+        name: Multiplayer
+        select: many
+        values:
+          - id: solo
+            name: Solo
+            example: Illustrator
+          - id: live-cursors
+            name: Live cursors
+            example: Figma
+          - id: comments-pinned-to-the-canvas
+            name: Comments pinned to the canvas
+            example: Figma comments
+          - id: branches
+            name: Branches
+            example: Figma branching
+          - id: follow-a-collaborator
+            name: Follow a collaborator
+            example: Figma observation mode
+  - name: Responsiveness
+    family: adaptation
+    question: How do designs respond to size?
+    subdimensions:
+      - id: responsiveness
+        name: Responsiveness
+        select: one
+        values:
+          - id: absolute-positions
+            name: Absolute positions
+            example: Whiteboards
+          - id: constraints
+            name: Constraints
+            example: Figma constraints
+          - id: auto-layout
+            name: Auto-layout
+            example: Figma auto layout
+          - id: breakpoint-variants
+            name: Breakpoint variants
+            example: Framer breakpoints
+wild:
+  score: 3
+  note: Designers customize panels, plugins, shortcuts and libraries routinely.
+  examples:
+    - name: Figma
+      note: Plugins, libraries, UI3 panel layout
+    - name: Illustrator
+      note: Custom workspaces
+techniques:
+  - name: Attributes as objects
+    dimension: Object hierarchy
+    how: Fills, strokes and effects become objects that can be dragged onto shapes, linked and edited in
+      one place (Object-Oriented Drawing, CHI '16).
+    ai: false
+  - name: Select by attribute
+    dimension: Selection
+    how: Gather everything sharing a value into a live collection and operate on it (Collection Objects,
+      CHI '17).
+    ai: false
+  - name: Variations side by side
+    dimension: Generation
+    how: Generate alternatives of a selected frame along chosen dimensions, spread as a grid like
+      Meridian’s Design Space view.
+    ai: true
+signature: Attributes as objects
+sample: Design, whiteboard, presentation and diagramming tools.
+unit: One canvas editor.
+relations:
+  uses:
+    - property-inspector
+    - tree-view
+    - color-picker
+    - menu
+    - undo
+  specializes:
+    - create
+  neighbors:
+    - zoomable-canvas
+    - node-editor
+scores:
+  ubiquity: 3
+  potential: 5
+  spec: 3
+evidence: agent-coded
+usage:
+  - Designers duplicate frames to explore instead of using version history
+questions:
+  - Can generated variations stay linked to the source so edits propagate?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7453002387296411
+  agreementFirstPass: 0.8277777777777777
+  kappaFinal: 0.9803925608293996
+  agreementFinal: 0.9852941176470589
+  pass: true
+  perSub:
+    canvas:
+      kappaFirstPass: 1
+      agreementFirstPass: 1
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    hierarchy:
+      kappaFirstPass: 0.6312554872695347
+      agreementFirstPass: 0.65
+      kappaFinal: 0.9478714161598611
+      agreementFinal: 0.95
+      flag: null
+    selection:
+      kappaFirstPass: 0.8465473145780055
+      agreementFirstPass: 0.8875
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    tools:
+      kappaFirstPass: 0.8076362576508309
+      agreementFirstPass: 0.8625
+      kappaFinal: 0.9829919920629299
+      agreementFinal: 0.9875
+      flag: null
+    generation:
+      kappaFirstPass: 0.5463137996219283
+      agreementFirstPass: 0.65
+      kappaFinal: 0.8578199052132702
+      agreementFinal: 0.9
+      flag: null
+    multiplayer:
+      kappaFirstPass: 0.6400575907854743
+      agreementFirstPass: 0.7916666666666666
+      kappaFinal: 0.9858028488949886
+      agreementFinal: 0.99
+      flag: null
+    responsiveness:
+      kappaFirstPass: 0.7807551766138856
+      agreementFirstPass: 0.85
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+  distribution:
+    canvas:
+      Infinite canvas: 7
+      Frames on a canvas: 7
+      Fixed page size: 3
+      Slides: 3
+    hierarchy:
+      Flat objects: 10
+      Layers and groups: 5
+      Auto-layout containers: 1
+      Components with overrides: 4
+    selection:
+      Click: 20
+      Marquee: 20
+      Select matching: 2
+      Deep select into groups: 7
+    tools:
+      Persistent toolbar: 20
+      Contextual toolbar: 8
+      Quick actions search: 2
+      Pen and touch: 4
+    generation:
+      Manual: 8
+      Templates: 10
+      Layouts from a prompt: 0
+      Tidying assistance: 1
+    multiplayer:
+      Solo: 3
+      Live cursors: 17
+      Comments pinned to the canvas: 13
+      Branches: 1
+      Follow a collaborator: 4
+    responsiveness:
+      Absolute positions: 14
+      Constraints: 3
+      Auto-layout: 2
+      Breakpoint variants: 1
+  exemplars:
+    canvas:
+      Infinite canvas:
+        - FigJam — Whiteboard
+        - Miro — Board
+        - Apple Freeform — Board
+      Frames on a canvas:
+        - Figma — Design canvas
+        - Adobe Illustrator — Artboards
+        - Sketch — Artboards
+      Fixed page size:
+        - Canva — Design page
+        - Lucidchart — Diagram
+        - diagrams.net — Diagram
+      Slides:
+        - Apple Keynote — Slide canvas
+        - Microsoft PowerPoint — Slide canvas
+        - Google Slides — Slide canvas
+    hierarchy:
+      Flat objects:
+        - FigJam — Whiteboard
+        - Miro — Board
+        - Apple Freeform — Board
+      Layers and groups:
+        - Canva — Design page
+        - Adobe Illustrator — Artboards
+        - Lucidchart — Diagram
+      Auto-layout containers:
+        - Framer — Site canvas
+      Components with overrides:
+        - Figma — Design canvas
+        - Sketch — Artboards
+        - Adobe XD — Artboards
+    selection:
+      Click:
+        - Figma — Design canvas
+        - FigJam — Whiteboard
+        - Miro — Board
+      Marquee:
+        - Figma — Design canvas
+        - FigJam — Whiteboard
+        - Miro — Board
+      Select matching:
+        - Figma — Design canvas
+        - Adobe Illustrator — Artboards
+      Deep select into groups:
+        - Figma — Design canvas
+        - Adobe Illustrator — Artboards
+        - Sketch — Artboards
+    tools:
+      Persistent toolbar:
+        - Figma — Design canvas
+        - FigJam — Whiteboard
+        - Miro — Board
+      Contextual toolbar:
+        - FigJam — Whiteboard
+        - Miro — Board
+        - Canva — Design page
+      Quick actions search:
+        - Figma — Design canvas
+        - FigJam — Whiteboard
+      Pen and touch:
+        - Apple Freeform — Board
+        - tldraw — Canvas
+        - Excalidraw — Canvas
+    generation:
+      Manual:
+        - Apple Freeform — Board
+        - Adobe Illustrator — Artboards
+        - Sketch — Artboards
+      Templates:
+        - FigJam — Whiteboard
+        - Miro — Board
+        - Canva — Design page
+      Layouts from a prompt: []
+      Tidying assistance:
+        - Figma — Design canvas
+    multiplayer:
+      Solo:
+        - Adobe Illustrator — Artboards
+        - diagrams.net — Diagram
+        - Affinity Designer — Document
+      Live cursors:
+        - Figma — Design canvas
+        - FigJam — Whiteboard
+        - Miro — Board
+      Comments pinned to the canvas:
+        - Figma — Design canvas
+        - FigJam — Whiteboard
+        - Miro — Board
+      Branches:
+        - Figma — Design canvas
+      Follow a collaborator:
+        - Figma — Design canvas
+        - FigJam — Whiteboard
+        - Miro — Board
+    responsiveness:
+      Absolute positions:
+        - FigJam — Whiteboard
+        - Miro — Board
+        - Apple Freeform — Board
+      Constraints:
+        - Sketch — Artboards
+        - Adobe XD — Artboards
+        - Affinity Designer — Document
+      Auto-layout:
+        - Figma — Design canvas
+        - Penpot — Design file
+      Breakpoint variants:
+        - Framer — Site canvas
+  unobserved:
+    - sub: generation
+      var: Layouts from a prompt
+  unresolved:
+    - sub: generation
+      n: 7
+  proposals:
+    raised: 1
+    adopted: []
+    recorded:
+      - place: sub:generation
+        sub: generation
+        dim: null
+        name: Variations to choose from
+        gloss: The tool proposes several ready-made layout options built from what you already placed, for
+          you to pick one — not a template gallery, not a typed prompt, and more than a small
+          tidy-up (e.g., PowerPoint Designer)
+        raters:
+          - sonnet
+        instances:
+          - 7
+        status: raised
+  raterNotes:
+    fable:
+      - Hierarchy for slide tools (grouping and z-order without a layers panel) falls between Flat
+        objects and Layers and groups, coded Flat; Multiplayer includes Solo as a value inside a
+        pick-any, used alone.
+      - generation is pick-one but most tools hold Templates and a prompt feature; the create
+        entry's gloss asks how much (ordinal, highest wins) while this one asks what kind, so I
+        coded the codebook-named value where the product is named and the front door otherwise, and
+        the two entries should say which they mean. hierarchy conflates nesting (auto-layout) and
+        reuse (components), and slide tools with groups but no layers panel sit between Flat objects
+        and Layers and groups. Live cursors should cover live selections (Sketch).
+    opus:
+      - "Hierarchy and responsiveness are pick-one over things that coexist: Figma has constraints
+        and auto layout, Sketch has constraints and Smart Layout, so the code records which one the
+        file is actually built with. Generation also forced a choice between a template library and
+        a prompt in tools that ship both (Miro, FigJam, Canva); I followed the codebook's own
+        examples where it named one."
+      - generation is pick one over rungs that coexist, and this entry's list is also missing the
+        parent entry's Variations to choose from, which is the only honest code for PowerPoint's
+        Designer; I re-coded these with the tie-break of taking the first truthfully-held value,
+        which collapses most modern tools onto Templates — the sub-dimension wants to be pick any.
+        hierarchy has the same problem for Framer (stacks and components are both true) and its
+        Layers and groups compounds a persistent layer stack with plain grouping, which is what
+        split the three slide editors. multiplayer lists Solo inside a pick any alongside values it
+        excludes, so an unshared document and a shared one cannot be told apart cleanly.
+    sonnet:
+      - Multiplayer/collaboration is often a capability the sampled screen doesn't show directly; I
+        coded from general product knowledge of each tool's collaboration model rather than only the
+        note.
+      - Hierarchy and generation are pick-one but Framer truthfully holds two values at once on both
+        (Auto-layout containers and Components with overrides; Templates and Layouts from a prompt)
+        — I took the codebook's first-listed value each time. Generation's list is shorter than the
+        parent create archetype's and has no equivalent to create's own 'Variations to choose from',
+        which is what PowerPoint Designer actually does; +Variations to choose from proposes closing
+        that gap rather than stretching Templates, Layouts from a prompt or Tidying assistance to
+        fit.
+  codedAt: 2026-09-22
+previews:
+  - file: canvas-editor.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

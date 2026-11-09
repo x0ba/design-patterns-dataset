@@ -1,0 +1,446 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "filter-controls". Edit between batches only — see README "Rules".
+id: filter-controls
+name: Filter controls
+level: component
+parent: browse-collections
+aliases:
+  - facets
+  - filter bar
+  - refinements
+definition: Controls that narrow a collection to items whose attributes match chosen values.
+data: collection
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - commerce
+  - travel
+  - productivity
+  - enterprise
+anatomy:
+  - name: Filter
+    role: One attribute and its chosen values
+  - name: Filter surface
+    role: Where filters live
+  - name: Result count
+    role: What the filters leave
+roles: []
+dimensions:
+  - name: Placement
+    family: layout
+    question: Where do filters live?
+    subdimensions:
+      - id: placement
+        name: Placement
+        select: one
+        values:
+          - id: sidebar-facets
+            name: Sidebar facets
+            example: Amazon results
+          - id: filter-bar-with-chips
+            name: Filter bar with chips
+            example: Google Shopping
+          - id: modal-or-sheet
+            name: Modal or sheet
+            example: Airbnb Filters
+          - id: column-header-filters
+            name: Column header filters
+            example: Excel AutoFilter
+          - id: toolbar-popover
+            name: Toolbar popover
+            description: Filter conditions live in a popover opened from a toolbar button, with no chips,
+              sidebar, sheet or header controls
+            example: Airtable — View filter
+  - name: Filter types
+    family: content
+    question: What kinds of filter are offered?
+    subdimensions:
+      - id: types
+        name: Types
+        select: many
+        values:
+          - id: checkbox-values
+            name: Checkbox values
+            example: Brand facets
+          - id: range
+            name: Range
+            example: Price sliders
+          - id: toggle-chips
+            name: Toggle chips
+            example: Free cancellation
+          - id: text-match
+            name: Text match
+            example: Contains…
+          - id: date-range
+            name: Date range
+            example: Travel sites
+          - id: map-area
+            name: Map area
+            description: Filter to what is in view
+            example: Airbnb search as I move the map
+  - name: Result preview
+    family: feedback
+    question: Does a person see the effect before committing?
+    subdimensions:
+      - id: preview
+        name: Preview
+        select: one
+        values:
+          - id: none
+            name: None
+            example: Apply-then-see forms
+          - id: counts-per-value
+            name: Counts per value
+            example: Facet counts
+          - id: live-results
+            name: Live results
+            example: Instant filtering
+          - id: count-on-the-apply-button
+            name: Count on the apply button
+            example: Airbnb “Show N places”
+  - name: Filter origin
+    family: initiative
+    question: Who decides what can be filtered?
+    subdimensions:
+      - id: origin
+        name: Origin
+        select: one
+        values:
+          - id: developer-defined
+            name: Developer-defined
+            example: Most sites
+          - id: any-attribute
+            name: Any attribute
+            description: Filter by anything surfaced
+            example: CHI '25 Fluid Attributes
+          - id: natural-language
+            name: Natural language
+            description: A sentence becomes filters
+            example: CHI '25 “only couches with a linen texture”
+  - name: Combination
+    family: scope
+    question: How do filters combine and persist?
+    subdimensions:
+      - id: logic
+        name: Logic
+        select: one
+        values:
+          - id: and-across-or-within
+            name: AND across, OR within
+            example: Facets
+          - id: boolean-builder
+            name: Boolean builder
+            example: Notion advanced filters
+          - id: exclusions
+            name: Exclusions
+            example: Negated filters in Gmail search
+      - id: persistence
+        name: Persistence
+        select: one
+        values:
+          - id: per-query
+            name: Per query
+            example: Retail search
+          - id: saved-filters
+            name: Saved filters
+            example: Jira saved filters
+          - id: in-the-url
+            name: In the URL
+            example: Most e-commerce
+wild:
+  score: 1
+  note: People choose values, not which attributes are filterable; saved filters appear in work tools.
+  examples:
+    - name: Jira
+      note: Saved and shared filters
+    - name: Notion
+      note: Advanced filter groups
+techniques:
+  - name: Filter from any attribute
+    dimension: Filter origin
+    how: Select any surfaced value and choose Filter; the filter appears as an editable chip (CHI '25
+      surface-then-filter).
+    ai: false
+  - name: Sentence to chips
+    dimension: Filter origin
+    how: A typed request becomes ordinary chips that can be inspected and removed, never a hidden query.
+    ai: true
+signature: Filter from any attribute
+sample: Results pages across the Semrush categories plus productivity databases.
+unit: One filter surface over one collection.
+relations:
+  uses:
+    - choice-control
+    - slider
+    - date-picker
+    - tag-input
+    - bottom-sheet
+  specializes: []
+  neighbors:
+    - faceted-search
+    - sort-control
+scores:
+  ubiquity: 5
+  potential: 4
+  spec: 5
+evidence: agent-coded
+usage:
+  - Surface-then-filter (CHI '25)
+questions:
+  - How do natural-language filters show what they could not express?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7347017717386672
+  agreementFirstPass: 0.8045454545454546
+  kappaFinal: 0.9738547218677274
+  agreementFinal: 0.9818181818181818
+  pass: true
+  perSub:
+    placement:
+      kappaFirstPass: 0.8643761301989151
+      agreementFirstPass: 0.9
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    types:
+      kappaFirstPass: 0.8096067695370825
+      agreementFirstPass: 0.8583333333333333
+      kappaFinal: 0.9665178571428568
+      agreementFinal: 0.975
+      flag: null
+    preview:
+      kappaFirstPass: 0.5768688293370943
+      agreementFirstPass: 0.75
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    origin:
+      kappaFirstPass: 0.8886827458256034
+      agreementFirstPass: 0.95
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    logic:
+      kappaFirstPass: 0.6335877862595423
+      agreementFirstPass: 0.8
+      kappaFinal: 0.913294797687861
+      agreementFinal: 0.95
+      flag: null
+    persistence:
+      kappaFirstPass: 0.26056338028169007
+      agreementFirstPass: 0.3
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+  distribution:
+    placement:
+      Sidebar facets: 5
+      Filter bar with chips: 11
+      Modal or sheet: 2
+      Column header filters: 1
+      Toolbar popover: 1
+    types:
+      Checkbox values: 20
+      Range: 13
+      Toggle chips: 10
+      Text match: 6
+      Date range: 6
+      Map area: 2
+    preview:
+      None: 1
+      Counts per value: 2
+      Live results: 15
+      Count on the apply button: 2
+    origin:
+      Developer-defined: 16
+      Any attribute: 4
+      Natural language: 0
+    logic:
+      AND across, OR within: 15
+      Boolean builder: 3
+      Exclusions: 2
+    persistence:
+      Per query: 2
+      Saved filters: 4
+      In the URL: 14
+  exemplars:
+    placement:
+      Sidebar facets:
+        - Amazon — Search results filters
+        - Booking.com — Filter by sidebar
+        - eBay — Left column refinements
+      Filter bar with chips:
+        - Google Shopping — Filter bar
+        - Notion — Database filter
+        - Zillow — Search filter bar
+      Modal or sheet:
+        - Airbnb — Filters dialog
+        - Etsy — Filters panel
+      Column header filters:
+        - Microsoft Excel — AutoFilter on a header
+      Toolbar popover:
+        - Airtable — View filter
+    types:
+      Checkbox values:
+        - Amazon — Search results filters
+        - Airbnb — Filters dialog
+        - Google Shopping — Filter bar
+      Range:
+        - Amazon — Search results filters
+        - Airbnb — Filters dialog
+        - Google Shopping — Filter bar
+      Toggle chips:
+        - Airbnb — Filters dialog
+        - Google Shopping — Filter bar
+        - Zillow — Search filter bar
+      Text match:
+        - Microsoft Excel — AutoFilter on a header
+        - Notion — Database filter
+        - Airtable — View filter
+      Date range:
+        - Microsoft Excel — AutoFilter on a header
+        - Notion — Database filter
+        - Airtable — View filter
+      Map area:
+        - Zillow — Search filter bar
+        - Google Maps — Restaurant result filters
+    preview:
+      None:
+        - Microsoft Excel — AutoFilter on a header
+      Counts per value:
+        - Booking.com — Filter by sidebar
+        - eBay — Left column refinements
+      Live results:
+        - Amazon — Search results filters
+        - Google Shopping — Filter bar
+        - Notion — Database filter
+      Count on the apply button:
+        - Airbnb — Filters dialog
+        - LinkedIn — Jobs search filters
+    origin:
+      Developer-defined:
+        - Amazon — Search results filters
+        - Airbnb — Filters dialog
+        - Google Shopping — Filter bar
+      Any attribute:
+        - Microsoft Excel — AutoFilter on a header
+        - Notion — Database filter
+        - Airtable — View filter
+      Natural language: []
+    logic:
+      AND across, OR within:
+        - Amazon — Search results filters
+        - Airbnb — Filters dialog
+        - Google Shopping — Filter bar
+      Boolean builder:
+        - Notion — Database filter
+        - Airtable — View filter
+        - Jira — Issue search basic filters
+      Exclusions:
+        - Gmail — Search chips
+        - GitHub — Issues filters
+    persistence:
+      Per query:
+        - Yelp — Filter chips over results
+        - Google Maps — Restaurant result filters
+      Saved filters:
+        - Microsoft Excel — AutoFilter on a header
+        - Notion — Database filter
+        - Airtable — View filter
+      In the URL:
+        - Amazon — Search results filters
+        - Airbnb — Filters dialog
+        - Google Shopping — Filter bar
+  unobserved:
+    - sub: origin
+      var: Natural language
+  unresolved: []
+  proposals:
+    raised: 2
+    adopted:
+      - sub: placement
+        name: Toolbar popover
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded:
+      - place: sub:logic
+        sub: logic
+        dim: null
+        name: Flat AND/OR chain
+        gloss: A single ordered list of conditions joined throughout by one chosen AND or OR operator, more
+          flexible than per-attribute facets (AND across, OR within) but without the nested groups
+          of a full boolean builder, e.g. Airtable's classic view filter
+        raters:
+          - sonnet
+        instances:
+          - 6
+        status: raised
+  raterNotes:
+    fable:
+      - Logic as pick-one loses information where a product ANDs by default but also supports
+        negation or a boolean mode (Gmail, GitHub, Jira); I coded the surface's primary behaviour
+        and noted the rest.
+      - Per query and In the URL overlap on every retail site. logic as pick one loses the
+        AND-by-default surface whose query language also negates (Gmail, GitHub) or has a boolean
+        mode (Jira). Preset brackets for price and date are read as Range or Date range by some
+        raters and as values by others. Counts per value and Live results co-occur on facet rails.
+    opus:
+      - "logic is effectively a constant: sixteen of twenty are AND across, OR within, because that
+        is what a facet rail means, and the other four are database query builders. The sub would
+        say more if it separated 'can values be excluded' from 'how do filters combine'. origin's
+        Any attribute only fires for products where the data is the user's own (spreadsheets,
+        databases, JQL); Natural language went unused in this sample, which is the honest finding —
+        no shipping filter rail in the frame takes a sentence. preview and placement interact
+        strongly: a rail filters live, a sheet commits with a count, and the one thing that breaks
+        the pattern is LinkedIn committing from a dropdown. I coded the desktop behaviour where a
+        product's mobile width adds an Apply button."
+      - "Fourteen of these forty-one cells are one codebook fault: `persistence` mixes durability
+        with mechanism, and glosses two of its three variations with the same instances — Per query
+        is 'e.g., Retail search' and In the URL is 'e.g., Most e-commerce', which are the same
+        twelve sites. I code In the URL whenever the state is in the address and can be reloaded or
+        shared, keeping Per query for the phone instances (Yelp, Google Maps) where there is no
+        address to put it in; that partition is coherent but the codebook does not state it. Second
+        fault: `types` mixes the widget with the predicate, so a preset relative date choice
+        (LinkedIn's Date posted), a tier of price checkboxes (Nike) and a slider (Airbnb) are all
+        arguably Range or Date range — and because `placement` names a chip bar, a chip that merely
+        opens a panel gets coded as a Toggle chip type (I made that error on Google Flights). Third:
+        `preview` is pick one but Booking.com genuinely shows counts per value *and* reloads live,
+        and its None gloss ('Apply-then-see forms') reads as 'no feedback at all', which tempts a
+        rater into coding None for a live-filtering page. Smaller: `logic`'s Exclusions is not on
+        the same axis as the other two — negation can be added to either AND-across-OR-within facets
+        or a boolean builder."
+    sonnet:
+      - preview mixes a live/default surface with a separate apply-gated panel in several products
+        (Zillow, Yelp, LinkedIn); coded for the dominant/primary surface with the exception noted
+        per instance, since preview is pick-one.
+      - "One dominant pattern: I systematically under-coded 'persistence' as the generic 'Per query'
+        across roughly a dozen instances (Amazon, Airbnb, Google Shopping, Zillow, Booking.com,
+        eBay, Google Flights, Etsy, LinkedIn, Indeed, Nike, Kayak) where both other raters
+        specifically identified a URL parameter or fragment encoding the filter state — 'In the URL'
+        should probably be treated as the default assumption for any web results page unless there's
+        specific evidence otherwise, since it's cheap to implement and extremely common; 'Per query'
+        should be reserved for cases with actual evidence the state resets and isn't shareable. A
+        second, smaller pattern: 'preview' has three closely related values (Counts per value, Live
+        results, Count on the apply button) that can all plausibly describe the same screen
+        depending on which mechanism you emphasize (Booking.com and LinkedIn both genuinely have two
+        of these at once) — the codebook could use a rule for which one wins when several apply, the
+        way it does for arrangement's Zillow list-plus-map case elsewhere in this study."
+  codedAt: 2026-09-22
+previews:
+  - file: filter-controls.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

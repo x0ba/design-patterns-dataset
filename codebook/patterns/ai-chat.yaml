@@ -1,0 +1,535 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "ai-chat". Edit between batches only — see README "Rules".
+id: ai-chat
+name: AI chat
+level: pattern
+parent: delegate-ai
+aliases:
+  - chatbot
+  - conversational AI
+  - assistant thread
+definition: A turn-taking conversation with a model where prompts and replies accumulate, and the
+  person steers by following up, editing context or starting anew.
+data: conversation
+platforms:
+  - web
+  - desktop
+  - mobile
+  - voice
+domains:
+  - ai
+  - productivity
+  - education
+  - software
+  - enterprise
+  - health
+anatomy:
+  - name: Thread
+    role: The turn history
+  - name: Composer
+    role: Where the next prompt is written
+  - name: Reply
+    role: A model turn
+  - name: Context sources
+    role: Files, tools or retrieval attached
+  - name: Controls
+    role: Regenerate, stop, branch
+roles:
+  - user
+  - assistant
+  - system
+  - tool
+dimensions:
+  - name: Turn content
+    family: content
+    question: What can a turn contain?
+    subdimensions:
+      - id: turnContent
+        name: Turn content
+        select: many
+        values:
+          - id: plain-text
+            name: Plain text
+            example: Classic ChatGPT
+          - id: markdown-with-code
+            name: Markdown with code
+            example: ChatGPT / Claude
+          - id: citations
+            name: Citations
+            example: Perplexity
+          - id: tool-call-traces
+            name: Tool call traces
+            example: ChatGPT tools
+          - id: generated-media
+            name: Generated media
+            example: ChatGPT images
+          - id: structured-cards
+            name: Structured cards
+            example: Shopping or flight modules
+          - id: spoken-reply
+            name: Spoken reply
+            description: The turn is synthesised speech, with no text rendered on the surface where it happens
+              (a transcript may appear later or in a companion app); the only turn content a
+              screenless assistant has
+            example: ChatGPT — Advanced Voice Mode
+  - name: Thread composition
+    family: composition
+    question: How do turns and side contexts relate?
+    subdimensions:
+      - id: composition
+        name: Composition
+        select: one
+        values:
+          - id: linear-thread
+            name: Linear thread
+            example: ChatGPT
+          - id: branching-conversation-tree
+            name: Branching conversation tree
+            example: Claude Projects branching / some UIs
+          - id: thread-plus-artifacts-panel
+            name: Thread plus artifacts panel
+            example: Claude Artifacts, ChatGPT canvas
+          - id: multi-agent-transcript
+            name: Multi-agent transcript
+            example: Swarm-style traces
+          - id: ephemeral-single-turn
+            name: Ephemeral single-turn
+            example: Search-box assistants
+  - name: Composer invocation
+    family: invocation
+    question: How is the next message started?
+    subdimensions:
+      - id: invokeBy
+        name: Invoke by
+        select: many
+        values:
+          - id: text-field-submit
+            name: Text field submit
+            example: ChatGPT
+          - id: voice-input
+            name: Voice input
+            example: Advanced Voice Mode
+          - id: attach-file-or-image
+            name: Attach file or image
+            example: ChatGPT uploads
+          - id: slash-or-mention-tools
+            name: Slash or mention tools
+            example: Custom GPTs actions
+          - id: suggestion-chip
+            name: Suggestion chip
+            example: Follow-up chips
+  - name: Conversation flow
+    family: flow
+    question: How does the dialogue progress and recover?
+    subdimensions:
+      - id: flow
+        name: Flow
+        select: one
+        values:
+          - id: strict-turn-taking
+            name: Strict turn-taking
+            example: Classic chat
+          - id: stop-and-regenerate
+            name: Stop and regenerate
+            example: ChatGPT
+          - id: edit-prior-prompt-and-fork
+            name: Edit prior prompt and fork
+            example: ChatGPT edit
+          - id: continue-in-background
+            name: Continue in background
+            example: Long research tasks
+          - id: hand-off-to-an-agent-run
+            name: Hand off to an agent run
+            example: Deep research / operator
+          - id: barge-in
+            name: Barge-in
+            description: Speaking over the model stops its reply and takes the turn, without a stop button or
+              regenerate
+            example: ChatGPT — Advanced Voice Mode
+          - id: barge-in-duplex
+            name: Barge-in duplex
+            description: "Either party may speak over the other: the person interrupts a reply mid-sentence and
+              the model yields and re-plans, so turns overlap instead of alternating"
+            example: ChatGPT — Advanced Voice Mode
+          - id: hand-off-to-a-person
+            name: Hand off to a person
+            description: The conversation is escalated out of the model to a human who continues in the same
+              thread — the central recovery path in support chat, and the mirror image of handing
+              off to an agent run
+            example: Intercom Fin — Support chat widget
+  - name: Reply feedback
+    family: feedback
+    question: How is generation and quality communicated?
+    subdimensions:
+      - id: feedback
+        name: Feedback
+        select: many
+        values:
+          - id: streaming-tokens
+            name: Streaming tokens
+            example: ChatGPT
+          - id: stop-button
+            name: Stop button
+            example: All major chats
+          - id: citations-inline
+            name: Citations inline
+            example: Perplexity
+          - id: confidence-or-hedging-cues
+            name: Confidence or hedging cues
+            example: Some enterprise bots
+          - id: thumbs-and-free-text-feedback
+            name: Thumbs and free-text feedback
+            example: ChatGPT
+  - name: Context scope
+    family: scope
+    question: What does the model condition on?
+    subdimensions:
+      - id: scope
+        name: Scope
+        select: one
+        values:
+          - id: this-thread-only
+            name: This thread only
+            example: Default chats
+          - id: project-knowledge
+            name: Project knowledge
+            example: Claude Projects
+          - id: connected-apps
+            name: Connected apps
+            example: ChatGPT connectors
+          - id: live-page-or-selection
+            name: Live page or selection
+            example: Sidebar copilots
+          - id: organization-memory
+            name: Organization memory
+            example: Enterprise assistants
+wild:
+  score: 2
+  note: Custom instructions, model choice and memory toggles are common; thread layout less so.
+  examples:
+    - name: ChatGPT
+      note: Custom instructions, memory, model picker
+    - name: Claude
+      note: Projects and artifacts
+    - name: Perplexity
+      note: Focus modes and source controls
+techniques:
+  - name: Fork from an edited turn
+    dimension: Conversation flow
+    how: Editing a past prompt creates a branch rather than silently rewriting history.
+    ai: false
+  - name: Show what was grounded
+    dimension: Reply feedback
+    how: Attach retrieval, tool and file provenance to each claim that depends on them.
+    ai: false
+  - name: Suggest the next ask
+    dimension: Composer invocation
+    how: Offer follow-up chips that deepen, challenge or operationalize the last reply.
+    ai: true
+signature: Fork from an edited turn
+sample: Consumer and enterprise chat assistants, sidebar copilots and voice assistants.
+unit: One chat thread with its composer and context bindings.
+relations:
+  uses:
+    - prompt-input
+    - suggestion-chips
+    - ai-provenance
+    - file-upload
+  specializes:
+    - delegate-ai
+  neighbors:
+    - chat-thread
+    - search-results
+    - agent-run
+scores:
+  ubiquity: 4
+  potential: 4
+  spec: 3
+evidence: agent-coded
+usage:
+  - People start new chats when context pollution is cheaper than steering
+questions:
+  - When should a chat graduate into an artifact or an agent run?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.5551849029664371
+  agreementFirstPass: 0.68
+  kappaFinal: 0.9137185785978409
+  agreementFinal: 0.935
+  pass: true
+  perSub:
+    turnContent:
+      kappaFirstPass: 0.5655172413793095
+      agreementFirstPass: 0.7214285714285714
+      kappaFinal: 0.8593166810221071
+      agreementFinal: 0.9
+      flag: null
+    composition:
+      kappaFirstPass: 0.9339207048458151
+      agreementFirstPass: 0.95
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    invokeBy:
+      kappaFirstPass: 0.6076839826839824
+      agreementFirstPass: 0.71
+      kappaFinal: 0.9597837258143793
+      agreementFinal: 0.97
+      flag: null
+    flow:
+      kappaFirstPass: 0.37117903930131024
+      agreementFirstPass: 0.45
+      kappaFinal: 0.8606811145510834
+      agreementFinal: 0.85
+      flag: null
+    feedback:
+      kappaFirstPass: 0.42552893372565576
+      agreementFirstPass: 0.59
+      kappaFinal: 0.9199110122358173
+      agreementFinal: 0.94
+      flag: null
+    scope:
+      kappaFirstPass: 0.6739130434782609
+      agreementFirstPass: 0.65
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+  distribution:
+    turnContent:
+      Plain text: 19
+      Markdown with code: 10
+      Citations: 11
+      Tool call traces: 5
+      Generated media: 8
+      Structured cards: 2
+      Spoken reply: 3
+    composition:
+      Linear thread: 14
+      Branching conversation tree: 1
+      Thread plus artifacts panel: 2
+      Multi-agent transcript: 1
+      Ephemeral single-turn: 2
+    invokeBy:
+      Text field submit: 18
+      Voice input: 9
+      Attach file or image: 12
+      Slash or mention tools: 7
+      Suggestion chip: 8
+    flow:
+      Strict turn-taking: 7
+      Stop and regenerate: 7
+      Edit prior prompt and fork: 3
+      Continue in background: 0
+      Hand off to an agent run: 1
+      Barge-in: 1
+      Barge-in duplex: 0
+      Hand off to a person: 1
+    feedback:
+      Streaming tokens: 16
+      Stop button: 13
+      Citations inline: 8
+      Confidence or hedging cues: 1
+      Thumbs and free-text feedback: 15
+    scope:
+      This thread only: 8
+      Project knowledge: 2
+      Connected apps: 4
+      Live page or selection: 4
+      Organization memory: 2
+  exemplars:
+    turnContent:
+      Plain text:
+        - ChatGPT — Chat thread
+        - Claude — Chat thread with artifacts
+        - Google Gemini — Chat thread
+      Markdown with code:
+        - ChatGPT — Chat thread
+        - Claude — Chat thread with artifacts
+        - Google Gemini — Chat thread
+      Citations:
+        - ChatGPT — Chat thread
+        - Claude — Chat thread with artifacts
+        - Google Gemini — Chat thread
+      Tool call traces:
+        - ChatGPT — Chat thread
+        - Claude — Chat thread with artifacts
+        - Google Gemini — Chat thread
+      Generated media:
+        - ChatGPT — Chat thread
+        - Google Gemini — Chat thread
+        - Microsoft Copilot — Copilot in Edge sidebar
+      Structured cards:
+        - Perplexity — Thread
+        - Siri — Conversation
+      Spoken reply:
+        - ChatGPT — Advanced Voice Mode
+        - Siri — Conversation
+        - Amazon Alexa — Voice conversation
+    composition:
+      Linear thread:
+        - ChatGPT — Chat thread
+        - Google Gemini — Chat thread
+        - Microsoft Copilot — Copilot in Edge sidebar
+      Branching conversation tree:
+        - Character.ai — Character chat
+      Thread plus artifacts panel:
+        - Claude — Chat thread with artifacts
+        - Mistral Le Chat — Chat
+      Multi-agent transcript:
+        - Poe — Multi-bot chat
+      Ephemeral single-turn:
+        - Siri — Conversation
+        - Amazon Alexa — Voice conversation
+    invokeBy:
+      Text field submit:
+        - ChatGPT — Chat thread
+        - Claude — Chat thread with artifacts
+        - Google Gemini — Chat thread
+      Voice input:
+        - ChatGPT — Chat thread
+        - Google Gemini — Chat thread
+        - Microsoft Copilot — Copilot in Edge sidebar
+      Attach file or image:
+        - ChatGPT — Chat thread
+        - Claude — Chat thread with artifacts
+        - Google Gemini — Chat thread
+      Slash or mention tools:
+        - ChatGPT — Chat thread
+        - Google Gemini — Chat thread
+        - GitHub Copilot Chat — Chat panel in VS Code
+      Suggestion chip:
+        - ChatGPT — Chat thread
+        - Microsoft Copilot — Copilot in Edge sidebar
+        - Perplexity — Thread
+    flow:
+      Strict turn-taking:
+        - Siri — Conversation
+        - Notion AI — Q&A chat
+        - Meta AI — Chat in WhatsApp
+      Stop and regenerate:
+        - Microsoft Copilot — Copilot in Edge sidebar
+        - Perplexity — Thread
+        - GitHub Copilot Chat — Chat panel in VS Code
+      Edit prior prompt and fork:
+        - ChatGPT — Chat thread
+        - Claude — Chat thread with artifacts
+        - Cursor — Chat panel
+      Continue in background: []
+      Hand off to an agent run:
+        - Google Gemini — Chat thread
+      Barge-in:
+        - ChatGPT — Advanced Voice Mode
+      Barge-in duplex: []
+      Hand off to a person:
+        - Intercom Fin — Support chat widget
+    feedback:
+      Streaming tokens:
+        - ChatGPT — Chat thread
+        - Claude — Chat thread with artifacts
+        - Google Gemini — Chat thread
+      Stop button:
+        - ChatGPT — Chat thread
+        - Claude — Chat thread with artifacts
+        - Google Gemini — Chat thread
+      Citations inline:
+        - ChatGPT — Chat thread
+        - Claude — Chat thread with artifacts
+        - Microsoft Copilot — Copilot in Edge sidebar
+      Confidence or hedging cues:
+        - Google Gemini — Chat thread
+      Thumbs and free-text feedback:
+        - ChatGPT — Chat thread
+        - Claude — Chat thread with artifacts
+        - Google Gemini — Chat thread
+    scope:
+      This thread only:
+        - ChatGPT — Chat thread
+        - Perplexity — Thread
+        - ChatGPT — Advanced Voice Mode
+      Project knowledge:
+        - Claude — Chat thread with artifacts
+        - Cursor — Chat panel
+      Connected apps:
+        - Google Gemini — Chat thread
+        - Siri — Conversation
+        - Grok — Chat
+      Live page or selection:
+        - Microsoft Copilot — Copilot in Edge sidebar
+        - GitHub Copilot Chat — Chat panel in VS Code
+        - Google Gemini — Gemini side panel in Gmail
+      Organization memory:
+        - Notion AI — Q&A chat
+        - Intercom Fin — Support chat widget
+  unobserved:
+    - sub: flow
+      var: Continue in background
+    - sub: flow
+      var: Barge-in duplex
+  unresolved: []
+  proposals:
+    raised: 4
+    adopted:
+      - sub: flow
+        name: Barge-in
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: turnContent
+        name: Spoken reply
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: flow
+        name: Barge-in duplex
+        raters:
+          - fable
+          - opus
+      - sub: flow
+        name: Hand off to a person
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - Scope has no value for personal cross-chat memory (ChatGPT Memory) and IDE chats sit between
+        Live page and Project knowledge; coded Project knowledge when @/# reach the workspace.
+      - "Plain text and Markdown with code overlap: I read Plain text as the no-markup case, opus
+        and sonnet read it literally, and that is most of the turnContent disagreement. Flow is pick
+        one but every large chat holds stop-and-regenerate, edit-and-fork and a handoff mode at
+        once. Withdrew +Barge-in for opus's +Barge-in duplex."
+    opus:
+      - Flow is a pick-one over affordances that co-exist (stop, regenerate, edit-and-fork, mode
+        handoff), so I coded the strongest recovery each product offers; voice assistants fit this
+        entry badly — turn content, feedback and flow all assume a rendered thread, which is why
+        feedback is empty for three instances rather than falsely populated.
+      - "Most of this entry's disagreement is two codebook faults. `turnContent` lists Plain text
+        beside Markdown with code without saying whether they are exclusive, so one rater read them
+        as rendering levels and coded only the richest while I read pick-any literally — the split
+        runs through fourteen cells and the fix is one sentence in the gloss. `flow` is an ordered
+        scale, not a set of alternatives: strict turn-taking, stop, regenerate and edit-and-fork
+        accumulate in the same product, so a pick one makes the code mean whichever level the rater
+        thought most characteristic; it wants to be pick any. `Citations` in turnContent and
+        `Citations inline` in feedback are also the same observation coded twice."
+    sonnet:
+      - Scope was often ambiguous between 'This thread only' and a broader connected/live scope when
+        a product offers both a default mode and an optional connector; I coded the capability the
+        sample screen specifically calls out.
+  codedAt: 2026-09-22
+previews:
+  - file: ai-chat.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

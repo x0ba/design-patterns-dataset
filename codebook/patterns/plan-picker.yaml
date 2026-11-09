@@ -1,0 +1,385 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "plan-picker". Edit between batches only — see README "Rules".
+id: plan-picker
+name: Plan picker
+level: pattern
+parent: transact
+aliases:
+  - pricing table
+  - tier selection
+  - plan comparison
+definition: Presenting tiers of a product or subscription to choose among.
+data: collection
+platforms:
+  - web
+  - mobile
+domains:
+  - software
+  - entertainment
+  - finance
+  - mobility
+anatomy:
+  - name: Tiers
+    role: The plans
+  - name: Features
+    role: What each includes
+  - name: Price
+    role: What each costs
+  - name: Call to action
+    role: Choosing one
+roles:
+  - tier
+  - price
+  - feature
+dimensions:
+  - name: Presentation
+    family: layout
+    question: How are tiers arranged?
+    subdimensions:
+      - id: presentation
+        name: Presentation
+        select: one
+        values:
+          - id: tier-cards-side-by-side
+            name: Tier cards side by side
+            example: SaaS pricing pages
+          - id: comparison-table
+            name: Comparison table
+            example: Streaming plan tables
+          - id: usage-slider
+            name: Usage slider
+            example: Usage-based pricing calculators
+          - id: recommendation-quiz
+            name: Recommendation quiz
+            example: Mobile carrier plan finders
+          - id: stacked-list
+            name: Stacked list
+            description: Tiers as a vertical list of rows with a radio or tap target, one line each, with no
+              side-by-side columns or feature table (mobile upgrade sheets)
+            example: YouTube — YouTube Premium offer
+  - name: Feature disclosure
+    family: content
+    question: How are features compared?
+    subdimensions:
+      - id: disclosure
+        name: Disclosure
+        select: one
+        values:
+          - id: highlights-per-tier
+            name: Highlights per tier
+            example: Pricing cards
+          - id: full-matrix-below
+            name: Full matrix below
+            example: SaaS feature tables
+          - id: only-differences
+            name: Only differences
+            description: Everything in Pro, plus…
+            example: Tiered SaaS
+  - name: Recommendation
+    family: initiative
+    question: Does the page steer?
+    subdimensions:
+      - id: recommendation
+        name: Recommendation
+        select: one
+        values:
+          - id: none
+            name: None
+            example: Neutral tables
+          - id: most-popular-highlight
+            name: Most popular highlight
+            example: SaaS pricing
+          - id: personalized
+            name: Personalized
+            example: Upgrade prompts based on usage
+          - id: preselected
+            name: Preselected
+            example: Annual plan preselected
+  - name: Price framing
+    family: encoding
+    question: How is price expressed?
+    subdimensions:
+      - id: framing
+        name: Framing
+        select: many
+        values:
+          - id: monthly-or-annual-toggle
+            name: Monthly or annual toggle
+            example: SaaS pricing
+          - id: per-seat
+            name: Per seat
+            example: Team plans
+          - id: usage-estimate
+            name: Usage estimate
+            example: Cloud pricing
+          - id: local-currency
+            name: Local currency
+            example: Regional pricing
+  - name: Commitment
+    family: lifecycle
+    question: What does choosing commit to?
+    subdimensions:
+      - id: commitment
+        name: Commitment
+        select: one
+        values:
+          - id: upgrade-now
+            name: Upgrade now
+            example: In-app upgrades
+          - id: free-trial
+            name: Free trial
+            example: SaaS trials
+          - id: change-any-time
+            name: Change any time
+            example: Monthly plans
+          - id: contract
+            name: Contract
+            example: Enterprise plans
+wild:
+  score: 0
+  note: Pricing pages are fixed marketing surfaces.
+  examples: []
+techniques:
+  - name: Price for my usage
+    dimension: Price framing
+    how: Enter your actual usage and every tier recomputes a real price and fit.
+    ai: false
+  - name: Which plan fits me?
+    dimension: Recommendation
+    how: An answer built from the person’s usage, showing the features it relied on.
+    ai: true
+signature: Price for my usage
+sample: SaaS, streaming, mobile carrier and cloud pricing pages.
+unit: One pricing surface.
+relations:
+  uses:
+    - card
+    - choice-control
+    - slider
+    - badge
+  specializes:
+    - transact
+  neighbors:
+    - comparison-table
+    - product-configurator
+scores:
+  ubiquity: 3
+  potential: 4
+  spec: 5
+evidence: agent-coded
+usage:
+  - Buyers skip marketing highlights and scroll to the matrix
+questions:
+  - Is a plan picker a comparison table the seller controls?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.49634996450427493
+  agreementFirstPass: 0.6125
+  kappaFinal: 0.918176979382048
+  agreementFinal: 0.925
+  pass: true
+  perSub:
+    presentation:
+      kappaFirstPass: 0.3023255813953487
+      agreementFirstPass: 0.5
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    disclosure:
+      kappaFirstPass: 0.8230088495575217
+      agreementFirstPass: 0.85
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    recommendation:
+      kappaFirstPass: 0.2192192192192194
+      agreementFirstPass: 0.35
+      kappaFinal: 0.7150997150997151
+      agreementFinal: 0.75
+      flag: null
+    framing:
+      kappaFirstPass: 0.5713966813006921
+      agreementFirstPass: 0.7
+      kappaFinal: 0.9658994032395564
+      agreementFinal: 0.975
+      flag: null
+    commitment:
+      kappaFirstPass: 0.34065934065934067
+      agreementFirstPass: 0.4
+      kappaFinal: 0.7667185069984447
+      agreementFinal: 0.75
+      flag: null
+  distribution:
+    presentation:
+      Tier cards side by side: 14
+      Comparison table: 2
+      Usage slider: 1
+      Recommendation quiz: 0
+      Stacked list: 3
+    disclosure:
+      Highlights per tier: 7
+      Full matrix below: 11
+      Only differences: 1
+      n/a: 1
+    recommendation:
+      None: 10
+      Most popular highlight: 8
+      Personalized: 0
+      Preselected: 2
+    framing:
+      Monthly or annual toggle: 10
+      Per seat: 9
+      Usage estimate: 2
+      Local currency: 13
+    commitment:
+      Upgrade now: 3
+      Free trial: 7
+      Change any time: 8
+      Contract: 1
+      n/a: 1
+  exemplars:
+    presentation:
+      Tier cards side by side:
+        - Spotify — Premium plans
+        - Disney+ — Plan selection
+        - Slack — Pricing
+      Comparison table:
+        - Netflix — Choose your plan
+        - Duolingo — Super Duolingo offer
+      Usage slider:
+        - AWS — Pricing calculator
+      Recommendation quiz: []
+      Stacked list:
+        - YouTube — YouTube Premium offer
+        - iCloud+ — Upgrade storage
+        - Google One — Plans
+    disclosure:
+      Highlights per tier:
+        - Spotify — Premium plans
+        - Disney+ — Plan selection
+        - YouTube — YouTube Premium offer
+      Full matrix below:
+        - Netflix — Choose your plan
+        - Slack — Pricing
+        - Notion — Pricing
+      Only differences:
+        - Duolingo — Super Duolingo offer
+    recommendation:
+      None:
+        - Spotify — Premium plans
+        - Disney+ — Plan selection
+        - Figma — Pricing
+      Most popular highlight:
+        - Netflix — Choose your plan
+        - Slack — Pricing
+        - Notion — Pricing
+      Personalized: []
+      Preselected:
+        - YouTube — YouTube Premium offer
+        - Duolingo — Super Duolingo offer
+    framing:
+      Monthly or annual toggle:
+        - Disney+ — Plan selection
+        - Slack — Pricing
+        - Notion — Pricing
+      Per seat:
+        - Slack — Pricing
+        - Notion — Pricing
+        - Figma — Pricing
+      Usage estimate:
+        - AWS — Pricing calculator
+        - Vercel — Pricing
+      Local currency:
+        - Netflix — Choose your plan
+        - Spotify — Premium plans
+        - Disney+ — Plan selection
+    commitment:
+      Upgrade now:
+        - iCloud+ — Upgrade storage
+        - Google One — Plans
+        - ChatGPT — Upgrade your plan
+      Free trial:
+        - Spotify — Premium plans
+        - YouTube — YouTube Premium offer
+        - Slack — Pricing
+      Change any time:
+        - Netflix — Choose your plan
+        - Disney+ — Plan selection
+        - Notion — Pricing
+      Contract:
+        - Adobe Creative Cloud — Plans and pricing
+  unobserved:
+    - sub: presentation
+      var: Recommendation quiz
+    - sub: recommendation
+      var: Personalized
+  unresolved: []
+  proposals:
+    raised: 1
+    adopted:
+      - sub: presentation
+        name: Stacked list
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - recommendation ('Most popular' badges) is the least stable thing on a pricing page and
+        several codes are moderate confidence (Notion, Dropbox, Verizon). commitment is n/a for a
+        calculator that sells nothing.
+      - "presentation's Comparison table and disclosure's Full matrix below describe the same table
+        from two sides, so raters split on which sub it belongs to. commitment's Upgrade now and
+        Change any time are both true of every monthly SaaS plan. Local currency needs a gloss:
+        localized regional pricing, or any price in the visitor's currency."
+    opus:
+      - "presentation and disclosure collapse into each other whenever the tiers are drawn as a
+        comparison table (Netflix, Duolingo): the table is both the arrangement and the feature
+        comparison, so Full matrix below is technically wrong — the matrix is not below anything.
+        framing has no value for an add-on priced separately from the tier (Notion AI, Verizon
+        perks, Copilot), which came up repeatedly."
+      - "presentation and disclosure overlap: cards with a matrix beneath can be coded as either
+        Tier cards side by side or Comparison table, and only reading disclosure's Full matrix below
+        settles it — the two sub-dimensions need a sentence saying which one owns the table. Most
+        popular highlight has no threshold, so an explicit badge and mere visual prominence get the
+        same code. commitment mixes the CTA (Upgrade now, Free trial) with the term (Change any
+        time, Contract), so almost every monthly SaaS plan truthfully holds two values. Local
+        currency reads as either 'the price is regional' or 'the page offers a currency control',
+        which split every consumer instance three ways."
+    sonnet:
+      - recommendation was 'None' for most enterprise SaaS pricing pages sampled, since the specific
+        screen notes didn't call out a most-popular badge even though many such pages do have one in
+        reality — coded strictly from what the sample and my recall together support rather than
+        assuming every pricing page highlights a tier.
+      - "Two codebook problems. (1) commitment's Upgrade now and Change any time collapse together
+        for almost any SaaS plan that charges immediately with no trial but is also cancelable month
+        to month (Notion, Figma, Zoom, GitHub, iCloud+, Google One) — nearly every instance without
+        a trial gate truthfully holds both, and the tie-break (take the first-listed value that
+        applies) mechanically favors Upgrade now every time, which may not be what the sub-dimension
+        is meant to capture; it would help to scope Upgrade now specifically to app-store-style
+        in-app-purchase mechanics rather than any immediate-charge web purchase. (2) presentation's
+        Tier cards side by side has no room for a vertical single-column mobile list (YouTube,
+        iCloud+, Google One) that is neither side-by-side cards nor a shared-row table — fable's
+        proposed +Stacked list fills a real gap, and I adopted it. Separately (not a codebook
+        problem, my own round-1 error): I had repeatedly coded presentation as Comparison table for
+        any page that also showed a feature matrix somewhere on it, when the primary visual unit was
+        actually highlighted cards with a matrix underneath (Slack, Figma, Zoom, GitHub, ChatGPT,
+        Adobe) — Comparison table should be reserved for pages where tiers are literally columns of
+        one shared table from the start (Netflix), which is a narrower case than I was applying it
+        to."
+  codedAt: 2026-09-22
+previews:
+  - file: plan-picker.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

@@ -1,0 +1,353 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "sort-control". Edit between batches only — see README "Rules".
+id: sort-control
+name: Sort control
+level: component
+parent: browse-collections
+aliases:
+  - sort by
+  - ordering
+definition: A control that reorders a collection by one or more keys.
+data: collection
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - commerce
+  - productivity
+  - social
+  - enterprise
+anatomy:
+  - name: Key
+    role: What to sort by
+  - name: Direction
+    role: Ascending or descending
+  - name: Indicator
+    role: What the current order is
+roles: []
+dimensions:
+  - name: Sort keys
+    family: content
+    question: What can the collection be sorted by?
+    subdimensions:
+      - id: keys
+        name: Keys
+        select: one
+        values:
+          - id: fixed-list
+            name: Fixed list
+            example: Relevance, price, newest
+          - id: any-column
+            name: Any column
+            example: Data tables
+          - id: multi-key
+            name: Multi-key
+            example: Excel custom sort
+          - id: any-surfaced-attribute
+            name: Any surfaced attribute
+            example: CHI '25 probes
+  - name: Control form
+    family: layout
+    question: What does the control look like?
+    subdimensions:
+      - id: form
+        name: Form
+        select: one
+        values:
+          - id: dropdown
+            name: Dropdown
+            example: Amazon Sort by
+          - id: column-header-click
+            name: Column header click
+            example: Data tables
+          - id: segmented-tabs
+            name: Segmented tabs
+            example: Reddit Hot / New / Top
+          - id: manual-drag
+            name: Manual drag
+            example: Playlists
+  - name: Default order
+    family: initiative
+    question: Who decides the default?
+    subdimensions:
+      - id: default
+        name: Default
+        select: one
+        values:
+          - id: relevance
+            name: Relevance
+            example: Search
+          - id: recency
+            name: Recency
+            example: Inboxes
+          - id: manual
+            name: Manual
+            example: To-do lists
+          - id: personalized
+            name: Personalized
+            example: Streaming rows
+          - id: alphabetical
+            name: Alphabetical
+            description: Sorted by name A–Z by default
+            example: Google Drive — Column header sort
+  - name: Indicator
+    family: feedback
+    question: How is the current order shown?
+    subdimensions:
+      - id: indicator
+        name: Indicator
+        select: one
+        values:
+          - id: header-arrow
+            name: Header arrow
+            example: Data tables
+          - id: label
+            name: Label
+            description: Sorted by price
+            example: Retail
+          - id: none
+            name: None
+            example: Feeds
+wild:
+  score: 1
+  note: Choosing among fixed keys is common; adding keys is not.
+  examples:
+    - name: Excel
+      note: Multi-level custom sort
+techniques:
+  - name: Attribute sort
+    dimension: Sort keys
+    how: "Any surfaced attribute is a sort key, interactive ones included: sort by the wishlist boolean
+      to pin items (CHI '25)."
+    ai: false
+  - name: Sort by what I mean
+    dimension: Sort keys
+    how: “Sort by best value” generates a computed key whose formula is shown and editable.
+    ai: true
+signature: Attribute sort
+sample: Results pages and lists across the Semrush categories.
+unit: One sort control over one collection.
+relations:
+  uses:
+    - menu
+  specializes: []
+  neighbors:
+    - filter-controls
+scores:
+  ubiquity: 5
+  potential: 3
+  spec: 5
+evidence: agent-coded
+usage:
+  - Surface-then-sort (CHI '25)
+questions:
+  - Should generated sort keys disclose uncertainty per item?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.8018976624136183
+  agreementFirstPass: 0.825
+  kappaFinal: 0.8018976624136183
+  agreementFinal: 0.825
+  pass: true
+  perSub:
+    keys:
+      kappaFirstPass: 1
+      agreementFirstPass: 1
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    form:
+      kappaFirstPass: 0.7652173913043477
+      agreementFirstPass: 0.8
+      kappaFinal: 0.7652173913043477
+      agreementFinal: 0.8
+      flag: null
+    default:
+      kappaFirstPass: 0.7138664710198094
+      agreementFirstPass: 0.7
+      kappaFinal: 0.7138664710198094
+      agreementFinal: 0.7
+      flag: null
+    indicator:
+      kappaFirstPass: 0.7285067873303166
+      agreementFirstPass: 0.8
+      kappaFinal: 0.7285067873303166
+      agreementFinal: 0.8
+      flag: null
+  distribution:
+    keys:
+      Fixed list: 13
+      Any column: 4
+      Multi-key: 3
+      Any surfaced attribute: 0
+    form:
+      Dropdown: 11
+      Column header click: 4
+      Segmented tabs: 4
+      Manual drag: 0
+    default:
+      Relevance: 9
+      Recency: 2
+      Manual: 5
+      Personalized: 2
+      Alphabetical: 1
+    indicator:
+      Header arrow: 5
+      Label: 13
+      None: 2
+  exemplars:
+    keys:
+      Fixed list:
+        - Amazon — Sort by on search results
+        - Reddit — Feed sort tabs
+        - Zillow — Sort menu
+      Any column:
+        - Google Drive — Column header sort
+        - macOS Finder — List view column headers
+        - Spotify — Playlist column sort
+      Multi-key:
+        - Microsoft Excel — Custom Sort dialog
+        - Airtable — Sort in a view
+        - Notion — Database sort
+      Any surfaced attribute: []
+    form:
+      Dropdown:
+        - Amazon — Sort by on search results
+        - Airtable — Sort in a view
+        - Notion — Database sort
+      Column header click:
+        - Google Drive — Column header sort
+        - macOS Finder — List view column headers
+        - Spotify — Playlist column sort
+      Segmented tabs:
+        - Reddit — Feed sort tabs
+        - Google Flights — Best / Price tabs
+        - Hacker News — Top / New / Best links
+      Manual drag: []
+    default:
+      Relevance:
+        - Amazon — Sort by on search results
+        - Booking.com — Sort by menu
+        - Google Flights — Best / Price tabs
+      Recency:
+        - GitHub — Issues Sort menu
+        - Jira — List view column sort
+      Manual:
+        - Microsoft Excel — Custom Sort dialog
+        - Airtable — Sort in a view
+        - Notion — Database sort
+      Personalized:
+        - Reddit — Feed sort tabs
+        - Zillow — Sort menu
+      Alphabetical:
+        - macOS Finder — List view column headers
+    indicator:
+      Header arrow:
+        - Google Drive — Column header sort
+        - macOS Finder — List view column headers
+        - Microsoft Excel — Custom Sort dialog
+      Label:
+        - Amazon — Sort by on search results
+        - Reddit — Feed sort tabs
+        - Airtable — Sort in a view
+      None:
+        - Hacker News — Top / New / Best links
+        - Apple Reminders — List sort menu
+  unobserved:
+    - sub: keys
+      var: Any surfaced attribute
+    - sub: form
+      var: Manual drag
+  unresolved:
+    - sub: default
+      n: 3
+    - sub: form
+      n: 5
+  proposals:
+    raised: 5
+    adopted:
+      - sub: default
+        name: Alphabetical
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded:
+      - place: sub:form
+        sub: form
+        dim: null
+        name: Rule builder
+        gloss: A popover or dialog where sort rules are added as rows (field, direction) that stack for
+          tie-breaks
+        raters:
+          - fable
+        instances:
+          - 5
+          - 6
+          - 7
+        status: raised
+      - place: sub:form
+        sub: form
+        dim: null
+        name: Dialog builder
+        gloss: A separate dialog for building a multi-level sort by adding rows (field plus direction) one
+          at a time, then applying, e.g. Excel's Sort dialog
+        raters:
+          - sonnet
+        instances:
+          - 5
+        status: raised
+      - place: sub:default
+        sub: default
+        dim: null
+        name: Global ranking
+        gloss: An algorithmic ranking applied identically for every visitor, not personalized to the
+          individual and not a text-relevance match score, e.g. Hacker News' front page
+        raters:
+          - sonnet
+        instances:
+          - 16
+        status: raised
+      - place: sub:form
+        sub: form
+        dim: null
+        name: Text links
+        gloss: Each sort option is its own plain hyperlink rather than a dropdown, a connected segmented-tab
+          group, or a column header, e.g. Google Scholar's Sort by relevance/date
+        raters:
+          - sonnet
+        instances:
+          - 20
+        status: raised
+  raterNotes:
+    fable:
+      - Default order lacks an alphabetical/name variation that file managers use; Form lacks the
+        multi-rule popover of databases and spreadsheets.
+    opus:
+      - "keys is really two questions — how many keys and where they come from — and Multi-key wins
+        over Any column whenever a product stacks rules, which is how I kept Airtable and Notion
+        apart from Drive and Finder. form has no variation for a modal sort dialog (Excel) or for a
+        sort buried inside a filters panel (YouTube); I coded both Dropdown and said so. default was
+        the hardest: vendor rankings called Featured, Best Match, Our top picks and Recommended are
+        all Relevance in the codebook's terms, so the sub mostly measures whether a product ranks,
+        dates or leaves the order alone, and it has no name for plain alphabetical order."
+    sonnet:
+      - default is coded from general recall of each product's known default (e.g. Personalized for
+        algorithmic 'top picks'-style options); several of these (13, 16, 18) are lower-confidence
+        recollections rather than certain knowledge.
+  codedAt: 2026-09-22
+previews:
+  - file: sort-control.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

@@ -1,0 +1,472 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "node-editor". Edit between batches only — see README "Rules".
+id: node-editor
+name: Node editor
+level: pattern
+parent: create
+aliases:
+  - node graph
+  - visual programming
+  - flow editor
+definition: Building logic or data flow by connecting nodes through typed ports.
+data: network
+platforms:
+  - desktop
+  - web
+domains:
+  - design
+  - software
+  - entertainment
+  - enterprise
+  - ai
+anatomy:
+  - name: Node
+    role: One operation
+  - name: Port
+    role: A typed input or output
+  - name: Edge
+    role: A connection
+  - name: Library
+    role: Available nodes
+  - name: Inspector
+    role: Node parameters
+roles: []
+dimensions:
+  - name: Graph semantics
+    family: composition
+    question: What does a connection mean, and how are graphs packaged?
+    subdimensions:
+      - id: semantics
+        name: Semantics
+        select: one
+        values:
+          - id: dataflow
+            name: Dataflow
+            example: Blender shader nodes
+          - id: control-flow
+            name: Control flow
+            example: Unreal Blueprints
+          - id: workflow-automation
+            name: Workflow automation
+            example: n8n
+          - id: state-machine
+            name: State machine
+            example: Rive state machines
+          - id: model-pipeline
+            name: Model pipeline
+            example: ComfyUI
+      - id: encapsulation
+        name: Encapsulation
+        select: one
+        values:
+          - id: flat-graph
+            name: Flat graph
+            example: Small workflows
+          - id: frames
+            name: Frames
+            example: Blender frames
+          - id: subgraphs-as-nodes
+            name: Subgraphs as nodes
+            example: Blender node groups
+          - id: reusable-functions
+            name: Reusable functions
+            example: Blueprint functions
+  - name: Node content
+    family: content
+    question: What does a node show?
+    subdimensions:
+      - id: content
+        name: Content
+        select: many
+        values:
+          - id: title-and-ports
+            name: Title and ports
+            example: All
+          - id: inline-parameter-controls
+            name: Inline parameter controls
+            example: ComfyUI
+          - id: live-preview
+            name: Live preview
+            example: ComfyUI image previews
+          - id: values-on-edges
+            name: Values on edges
+            description: Data shown while running
+            example: Debug overlays
+          - id: step-summary
+            name: Step summary
+            description: The node is a titled card with an app icon and a one-line description of what it is
+              configured to do, and has no visible ports — the shape of linear automation builders,
+              where connections are implied by order and configuration lives in a side panel
+            example: Zapier — Zap editor
+  - name: Arrangement
+    family: layout
+    question: How are nodes placed and edges drawn?
+    subdimensions:
+      - id: arrangement
+        name: Arrangement
+        select: one
+        values:
+          - id: free-placement
+            name: Free placement
+            example: Blender
+          - id: snap-to-grid
+            name: Snap to grid
+            example: Many editors
+          - id: auto-arranged
+            name: Auto-arranged
+            example: Graph auto-layout
+          - id: linear-steps
+            name: Linear steps
+            example: Zapier
+      - id: edges
+        name: Edge routing
+        select: one
+        values:
+          - id: curves
+            name: Curves
+            example: Blender
+          - id: orthogonal
+            name: Orthogonal
+            example: Diagram tools
+          - id: straight
+            name: Straight
+            example: Simple graphs
+  - name: Adding nodes
+    family: invocation
+    question: How are nodes added?
+    subdimensions:
+      - id: add
+        name: Add by
+        select: many
+        values:
+          - id: library-sidebar
+            name: Library sidebar
+            example: n8n
+          - id: search-at-the-cursor
+            name: Search at the cursor
+            example: Blender Shift+A
+          - id: drag-from-a-port
+            name: Drag from a port
+            description: Only compatible nodes offered
+            example: Unreal Blueprints
+          - id: generate-a-subgraph
+            name: Generate a subgraph
+            example: AI workflow builders
+  - name: Execution feedback
+    family: feedback
+    question: How does the graph report what it did?
+    subdimensions:
+      - id: feedback
+        name: Feedback
+        select: many
+        values:
+          - id: none
+            name: None
+            example: Static diagrams
+          - id: per-node-status
+            name: Per-node status
+            example: n8n execution view
+          - id: values-on-hover
+            name: Values on hover
+            example: Debuggers
+          - id: error-highlighting
+            name: Error highlighting
+            example: ComfyUI
+wild:
+  score: 2
+  note: The graph is authored by the person; the editor itself is less customizable.
+  examples:
+    - name: Blender
+      note: Node groups exposing inputs
+    - name: ComfyUI
+      note: Custom node packs
+techniques:
+  - name: Collapse to controls
+    dimension: Graph semantics
+    how: Select a subgraph and publish its exposed parameters as a simple panel, so others use the graph
+      without reading it.
+    ai: false
+  - name: Build the graph that…
+    dimension: Adding nodes
+    how: A described goal becomes a grouped subgraph that can be opened, inspected and edited.
+    ai: true
+signature: Collapse to controls
+sample: 3D and VFX tools, game engines, automation platforms and model-pipeline tools.
+unit: One node editor.
+relations:
+  uses:
+    - property-inspector
+    - menu
+    - autocomplete
+    - undo
+  specializes:
+    - create
+  neighbors:
+    - canvas-editor
+    - agent-run
+scores:
+  ubiquity: 2
+  potential: 4
+  spec: 4
+evidence: agent-coded
+usage:
+  - Large graphs become unreadable without encapsulation
+questions:
+  - Is a collapsed graph panel a generated UI, and could it be malleable in turn?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.61008585859392
+  agreementFirstPass: 0.734375
+  kappaFinal: 0.9314498957153667
+  agreementFinal: 0.95625
+  pass: true
+  perSub:
+    semantics:
+      kappaFirstPass: 1
+      agreementFirstPass: 1
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    encapsulation:
+      kappaFirstPass: 0.682819383259912
+      agreementFirstPass: 0.7
+      kappaFinal: 0.9440820130475305
+      agreementFinal: 0.95
+      flag: null
+    content:
+      kappaFirstPass: 0.7738579828132065
+      agreementFirstPass: 0.85
+      kappaFinal: 0.9852825745682887
+      agreementFinal: 0.99
+      flag: null
+    arrangement:
+      kappaFirstPass: 0.534883720930233
+      agreementFirstPass: 0.8
+      kappaFinal: 0.7196261682242991
+      agreementFinal: 0.9
+      flag: null
+    edges:
+      kappaFirstPass: 0.5693779904306219
+      agreementFirstPass: 0.7
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    add:
+      kappaFirstPass: 0.3739908085952054
+      agreementFirstPass: 0.5333333333333333
+      kappaFinal: 0.9085714285714285
+      agreementFinal: 0.9333333333333333
+      flag: null
+    feedback:
+      kappaFirstPass: 0.495757575757576
+      agreementFirstPass: 0.675
+      kappaFinal: 0.8968407479045776
+      agreementFinal: 0.925
+      flag: null
+  distribution:
+    semantics:
+      Dataflow: 11
+      Control flow: 2
+      Workflow automation: 5
+      State machine: 1
+      Model pipeline: 1
+    encapsulation:
+      Flat graph: 5
+      Frames: 3
+      Subgraphs as nodes: 11
+      Reusable functions: 1
+    content:
+      Title and ports: 18
+      Inline parameter controls: 9
+      Live preview: 4
+      Values on edges: 2
+      Step summary: 2
+    arrangement:
+      Free placement: 18
+      Snap to grid: 0
+      Auto-arranged: 0
+      Linear steps: 2
+    edges:
+      Curves: 12
+      Orthogonal: 0
+      Straight: 8
+    add:
+      Library sidebar: 11
+      Search at the cursor: 15
+      Drag from a port: 9
+      Generate a subgraph: 0
+    feedback:
+      None: 1
+      Per-node status: 9
+      Values on hover: 5
+      Error highlighting: 18
+  exemplars:
+    semantics:
+      Dataflow:
+        - Blender — Shader Editor
+        - Blender — Geometry Nodes
+        - Unity — Shader Graph
+      Control flow:
+        - Unreal Engine — Blueprint graph
+        - Unity — Visual Scripting
+      Workflow automation:
+        - n8n — Workflow
+        - Zapier — Zap editor
+        - Make — Scenario
+      State machine:
+        - Rive — State Machine
+      Model pipeline:
+        - ComfyUI — Workflow
+    encapsulation:
+      Flat graph:
+        - n8n — Workflow
+        - Zapier — Zap editor
+        - Make — Scenario
+      Frames:
+        - Nuke — Node Graph
+        - Substance 3D Designer — Graph
+        - ComfyUI — Workflow
+      Subgraphs as nodes:
+        - Blender — Shader Editor
+        - Blender — Geometry Nodes
+        - Unity — Shader Graph
+      Reusable functions:
+        - Unreal Engine — Blueprint graph
+    content:
+      Title and ports:
+        - Blender — Shader Editor
+        - Blender — Geometry Nodes
+        - Unreal Engine — Blueprint graph
+      Inline parameter controls:
+        - Blender — Shader Editor
+        - Blender — Geometry Nodes
+        - Unreal Engine — Blueprint graph
+      Live preview:
+        - Unity — Shader Graph
+        - Substance 3D Designer — Graph
+        - TouchDesigner — Network
+      Values on edges:
+        - Unreal Engine — Blueprint graph
+        - Unity — Visual Scripting
+      Step summary:
+        - Zapier — Zap editor
+        - Microsoft Power Automate — Flow designer
+    arrangement:
+      Free placement:
+        - Blender — Shader Editor
+        - Blender — Geometry Nodes
+        - Unreal Engine — Blueprint graph
+      Snap to grid: []
+      Auto-arranged: []
+      Linear steps:
+        - Zapier — Zap editor
+        - Microsoft Power Automate — Flow designer
+    edges:
+      Curves:
+        - Blender — Shader Editor
+        - Blender — Geometry Nodes
+        - Unreal Engine — Blueprint graph
+      Orthogonal: []
+      Straight:
+        - Houdini — Network editor
+        - Nuke — Node Graph
+        - DaVinci Resolve — Fusion page
+    add:
+      Library sidebar:
+        - Unreal Engine — Blueprint graph
+        - DaVinci Resolve — Fusion page
+        - Substance 3D Designer — Graph
+      Search at the cursor:
+        - Blender — Shader Editor
+        - Blender — Geometry Nodes
+        - Unreal Engine — Blueprint graph
+      Drag from a port:
+        - Blender — Shader Editor
+        - Blender — Geometry Nodes
+        - Unreal Engine — Blueprint graph
+      Generate a subgraph: []
+    feedback:
+      None:
+        - Blender — Shader Editor
+      Per-node status:
+        - Unity — Visual Scripting
+        - Houdini — Network editor
+        - ComfyUI — Workflow
+      Values on hover:
+        - Blender — Geometry Nodes
+        - Unreal Engine — Blueprint graph
+        - TouchDesigner — Network
+      Error highlighting:
+        - Blender — Geometry Nodes
+        - Unreal Engine — Blueprint graph
+        - Unity — Shader Graph
+  unobserved:
+    - sub: arrangement
+      var: Snap to grid
+    - sub: arrangement
+      var: Auto-arranged
+    - sub: edges
+      var: Orthogonal
+    - sub: add
+      var: Generate a subgraph
+  unresolved: []
+  proposals:
+    raised: 1
+    adopted:
+      - sub: content
+        name: Step summary
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - Encapsulation is a pick-one but most editors have both frames and subgraphs; coded the
+        reusable form (subgraph) unless the sample named only backdrops/groups.
+      - encapsulation is pick-one but most editors have both frames and subgraphs (Substance,
+        ComfyUI since 2025); feedback's None competes with an empty array; Inline parameter controls
+        needs a rule for control objects that are their own nodes (Max, Pure Data, Grasshopper);
+        Drag from a port should say it means adding a node, not drawing an edge; edge style is hard
+        to recall reliably for tools with a straight-versus-curved preference.
+    opus:
+      - "Semantics forced one label onto tools that are two things at once: Node-RED and Make are
+        message dataflow in mechanism and automation in purpose, and ComfyUI is dataflow that
+        happens to carry models. Encapsulation also makes frames and subgraphs exclusive when most
+        professional graphs have both (Nuke backdrops plus groups, Substance frames plus graph
+        instances), so the code records whichever the sample's screen leads with."
+      - "Edge routing is the weakest sub-dimension here: it asks about a rendering detail that
+        raters recall differently, and I changed two cells on the strength of two other
+        recollections rather than my own. Arrangement's Free placement and Snap to grid are not
+        exclusive — nearly every one of these editors snaps to a grid by default while letting you
+        put nodes anywhere — so the pick one forces a false choice. Encapsulation has no member for
+        a control-flow container that nests steps without being a frame or a subgraph (Power
+        Automate's Scope, Condition and Apply-to-each), and Node content has no member for the
+        portless automation step card, which is what my Step summary proposal is for."
+    sonnet:
+      - Add-by and feedback were often not visible in the one-line sample note; left empty rather
+        than guessed where the product doesn't have a well-known, distinguishing behaviour I could
+        recall confidently.
+      - "Content's Live preview needs its gloss tightened: it should mean an automatic thumbnail
+        rendered on the node itself (ComfyUI, ShaderGraph), not a single shared viewer panel that
+        can be pointed at any node (Nuke, Fusion) — I conflated the two for three instances in round
+        1. Encapsulation's four values don't cleanly cover a workflow tool whose only structure is
+        condition/loop containers holding a linear list of steps (Zapier, Power Automate): it's not
+        a subgraph-as-node, not a reusable function, and Frames undersells that the containers are
+        structural rather than a loose visual annotation — I resolved it to Flat graph by
+        elimination, but this is a real gap worth a closer look."
+  codedAt: 2026-09-22
+previews:
+  - file: node-editor.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

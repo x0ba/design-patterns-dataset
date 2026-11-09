@@ -1,0 +1,548 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "stories". Edit between batches only — see README "Rules".
+id: stories
+name: Stories
+level: pattern
+parent: consume-media
+aliases:
+  - status stories
+  - ephemeral stories
+  - story rings
+definition: Full-bleed, timed, ephemeral frames advanced by tap or wait, usually from people you
+  follow and gone within a day.
+data: sequence
+platforms:
+  - mobile
+  - web
+domains:
+  - social
+  - entertainment
+  - commerce
+  - news
+anatomy:
+  - name: Tray
+    role: Circles of available story authors
+  - name: Frame
+    role: One full-screen card
+  - name: Progress segments
+    role: Per-frame timers
+  - name: Reply and react
+    role: Lightweight responses
+roles:
+  - author
+  - frame
+  - sticker
+  - cta
+  - timestamp
+dimensions:
+  - name: Frame content
+    family: content
+    question: What can a frame hold?
+    subdimensions:
+      - id: content
+        name: Content
+        select: many
+        values:
+          - id: photo-or-video
+            name: Photo or video
+            example: Instagram Stories
+          - id: text-stickers-and-polls
+            name: Text stickers and polls
+            example: Instagram stickers
+          - id: music-attachment
+            name: Music attachment
+            example: Instagram music stickers
+          - id: link-or-product-sticker
+            name: Link or product sticker
+            example: Instagram shopping
+          - id: boomerang-or-layout
+            name: Boomerang or layout
+            example: Instagram camera modes
+  - name: Advance and pace
+    family: flow
+    question: How do frames advance?
+    subdimensions:
+      - id: advance
+        name: Advance
+        select: many
+        values:
+          - id: auto-advance-on-timer
+            name: Auto-advance on timer
+            example: Instagram
+          - id: tap-next-previous
+            name: Tap next previous
+            example: Snapchat
+          - id: hold-to-pause
+            name: Hold to pause
+            example: Instagram
+          - id: swipe-up-for-more
+            name: Swipe up for more
+            example: Link stickers
+          - id: skip-unwatched-authors
+            name: Skip unwatched authors
+            example: Tray navigation
+  - name: Tray and order
+    family: composition
+    question: How are authors ordered in the tray?
+    subdimensions:
+      - id: ordering
+        name: Ordering
+        select: one
+        values:
+          - id: unseen-first
+            name: Unseen first
+            example: Instagram
+          - id: close-friends-priority
+            name: Close friends priority
+            example: Instagram Close Friends
+          - id: chronological-authors
+            name: Chronological authors
+            example: Some Twitter/X flashes
+          - id: algorithmic-ranking
+            name: Algorithmic ranking
+            example: Facebook Stories
+          - id: self-always-first
+            name: Self always first
+            example: Add-your-story affordance
+  - name: Ephemerality
+    family: lifecycle
+    question: How long do frames last, and can they persist?
+    subdimensions:
+      - id: lifetime
+        name: Lifetime
+        select: one
+        values:
+          - id: 24-hour-expiry
+            name: 24-hour expiry
+            example: Instagram Stories
+          - id: view-once
+            name: View-once
+            example: Snapchat
+          - id: highlights-archive
+            name: Highlights archive
+            example: Instagram Highlights
+          - id: story-saved-to-profile-grid
+            name: Story saved to profile grid
+            example: Optional keep
+          - id: live-story-window
+            name: Live story window
+            example: Event-duration stories
+          - id: no-expiry
+            name: No expiry
+            description: Frames persist indefinitely at a stable URL or in a library, with no archive step
+              needed
+            example: Google Web Stories — Publisher web story
+          - id: 48-hour-expiry
+            name: 48-hour expiry
+            description: A fixed expiry longer than a day
+            example: Twitch — Stories
+  - name: Audience and privacy
+    family: scope
+    question: Who can see a frame?
+    subdimensions:
+      - id: audience
+        name: Audience
+        select: one
+        values:
+          - id: all-followers
+            name: All followers
+            example: Default Instagram
+          - id: close-friends-list
+            name: Close friends list
+            example: Instagram Close Friends
+          - id: custom-exclude-list
+            name: Custom exclude list
+            example: Hide story from
+          - id: public-web
+            name: Public web
+            example: News org stories
+          - id: contacts-only
+            name: Contacts only
+            example: WhatsApp Status
+          - id: just-me
+            name: Just me
+            description: The frames are personal and have no audience at all unless their owner explicitly
+              shares one out — the story form used for a private artefact
+            example: Spotify — Wrapped
+  - name: Presentation
+    family: layout
+    question: How is the story experienced on screen?
+    subdimensions:
+      - id: presentation
+        name: Presentation
+        select: one
+        values:
+          - id: full-bleed-vertical
+            name: Full-bleed vertical
+            example: Instagram
+          - id: tray-above-feed
+            name: Tray above feed
+            example: Instagram home
+          - id: standalone-status-tab
+            name: Standalone status tab
+            example: WhatsApp Status
+          - id: inline-in-chat-list
+            name: Inline in chat list
+            example: Signal
+          - id: desktop-column
+            name: Desktop column
+            example: Instagram web
+          - id: on-a-profile
+            name: On a profile
+            description: Stories live on a profile page (highlight circles under the bio, a status behind the
+              avatar) rather than in a tray, tab or column
+            example: Instagram — Highlights on a profile
+wild:
+  score: 1
+  note: Close Friends and hide-from lists exist; timer length and tray ranking are almost never
+    user-tunable.
+  examples:
+    - name: Instagram
+      note: Close Friends and hide story from
+    - name: Snapchat
+      note: Custom story audiences
+techniques:
+  - name: Pace the timer
+    dimension: Advance and pace
+    how: Let people set default dwell time and tap-skip size as a personal stories pace, separate from
+      feed scroll speed.
+    ai: false
+  - name: Tray as overview
+    dimension: Tray and order
+    how: Surface why an author is high in the tray and allow pin, mute and regroup by attribute
+      (mutuals, brands, news).
+    ai: false
+  - name: Catch me up
+    dimension: Ephemerality
+    how: Summarize unseen stories from selected authors with links back to each frame before they
+      expire.
+    ai: true
+signature: Pace the timer
+sample: Instagram, Snapchat, WhatsApp Status, Facebook Stories and TikTok Stories.
+unit: One author stack viewed in one session.
+relations:
+  uses:
+    - progress-indicator
+    - reactions
+    - badge
+    - carousel
+  specializes:
+    - consume-media
+  neighbors:
+    - feed
+    - media-player
+scores:
+  ubiquity: 5
+  potential: 3
+  spec: 3
+evidence: agent-coded
+usage:
+  - People binge a tray then feel behind when new rings appear
+questions:
+  - Are stories a sequence media-player or a specialized feed?
+  - Should expiry be a personal preference as well as an author choice?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.48121735476951943
+  agreementFirstPass: 0.6
+  kappaFinal: 0.8232044229607582
+  agreementFinal: 0.8535714285714285
+  pass: true
+  perSub:
+    content:
+      kappaFirstPass: 0.5196584237680129
+      agreementFirstPass: 0.64
+      kappaFinal: 0.9030426150791817
+      agreementFinal: 0.93
+      flag: null
+    advance:
+      kappaFirstPass: 0.3849170975218404
+      agreementFirstPass: 0.54
+      kappaFinal: 0.8263888888888885
+      agreementFinal: 0.88
+      flag: null
+    ordering:
+      kappaFirstPass: 0.5089285714285715
+      agreementFirstPass: 0.55
+      kappaFinal: 0.6407185628742518
+      agreementFinal: 0.6
+      flag: null
+    lifetime:
+      kappaFirstPass: 0.490861618798956
+      agreementFirstPass: 0.75
+      kappaFinal: 0.7606382978723406
+      agreementFinal: 0.85
+      flag: null
+    audience:
+      kappaFirstPass: 0.5742904841402338
+      agreementFirstPass: 0.6
+      kappaFinal: 0.6861377506538799
+      agreementFinal: 0.7
+      flag: null
+    presentation:
+      kappaFirstPass: 0.6400846859562456
+      agreementFirstPass: 0.6
+      kappaFinal: 0.7902097902097902
+      agreementFinal: 0.75
+      flag: null
+  distribution:
+    content:
+      Photo or video: 20
+      Text stickers and polls: 16
+      Music attachment: 14
+      Link or product sticker: 8
+      Boomerang or layout: 2
+    advance:
+      Auto-advance on timer: 19
+      Tap next previous: 20
+      Hold to pause: 15
+      Swipe up for more: 5
+      Skip unwatched authors: 1
+    ordering:
+      Unseen first: 5
+      Close friends priority: 0
+      Chronological authors: 2
+      Algorithmic ranking: 5
+      Self always first: 0
+      n/a: 5
+      "?": 3
+    lifetime:
+      24-hour expiry: 15
+      View-once: 0
+      Highlights archive: 1
+      Story saved to profile grid: 0
+      Live story window: 1
+      No expiry: 2
+      48-hour expiry: 1
+    audience:
+      All followers: 11
+      Close friends list: 0
+      Custom exclude list: 0
+      Public web: 2
+      Contacts only: 5
+      Just me: 2
+    presentation:
+      Full-bleed vertical: 3
+      Tray above feed: 6
+      Standalone status tab: 5
+      Inline in chat list: 1
+      Desktop column: 3
+      On a profile: 2
+  exemplars:
+    content:
+      Photo or video:
+        - Instagram — Stories on phone
+        - Instagram — Stories on the web
+        - Snapchat — Friends' Stories
+      Text stickers and polls:
+        - Instagram — Stories on phone
+        - Instagram — Stories on the web
+        - Snapchat — Friends' Stories
+      Music attachment:
+        - Instagram — Stories on phone
+        - Instagram — Stories on the web
+        - Snapchat — Friends' Stories
+      Link or product sticker:
+        - Instagram — Stories on phone
+        - Instagram — Stories on the web
+        - Snapchat — Friends' Stories
+      Boomerang or layout:
+        - Instagram — Stories on phone
+        - Instagram — Highlights on a profile
+    advance:
+      Auto-advance on timer:
+        - Instagram — Stories on phone
+        - Instagram — Stories on the web
+        - Snapchat — Friends' Stories
+      Tap next previous:
+        - Instagram — Stories on phone
+        - Instagram — Stories on the web
+        - Snapchat — Friends' Stories
+      Hold to pause:
+        - Instagram — Stories on phone
+        - Snapchat — Friends' Stories
+        - Snapchat — Discover publisher stories
+      Swipe up for more:
+        - Instagram — Stories on phone
+        - Snapchat — Friends' Stories
+        - Snapchat — Discover publisher stories
+      Skip unwatched authors:
+        - Instagram — Stories on phone
+    ordering:
+      Unseen first:
+        - Instagram — Stories on phone
+        - Instagram — Stories on the web
+        - WhatsApp — Status
+      Close friends priority: []
+      Chronological authors:
+        - Snapchat — Friends' Stories
+        - Signal — Stories
+      Algorithmic ranking:
+        - Snapchat — Discover publisher stories
+        - Facebook — Stories on phone
+        - Facebook — Stories on the web
+      Self always first: []
+    lifetime:
+      24-hour expiry:
+        - Instagram — Stories on phone
+        - Instagram — Stories on the web
+        - Snapchat — Friends' Stories
+      View-once: []
+      Highlights archive:
+        - Instagram — Highlights on a profile
+      Story saved to profile grid: []
+      Live story window:
+        - Spotify — Wrapped
+      No expiry:
+        - Google Web Stories — Publisher web story
+        - Google Photos — Memories
+      48-hour expiry:
+        - Twitch — Stories
+    audience:
+      All followers:
+        - Instagram — Stories on phone
+        - Instagram — Stories on the web
+        - Facebook — Stories on phone
+      Close friends list: []
+      Custom exclude list: []
+      Public web:
+        - Snapchat — Discover publisher stories
+        - Google Web Stories — Publisher web story
+      Contacts only:
+        - Snapchat — Friends' Stories
+        - WhatsApp — Status
+        - Signal — Stories
+      Just me:
+        - Spotify — Wrapped
+        - Google Photos — Memories
+    presentation:
+      Full-bleed vertical:
+        - TikTok — Stories
+        - Google Web Stories — Publisher web story
+        - Spotify — Wrapped
+      Tray above feed:
+        - Instagram — Stories on phone
+        - Facebook — Stories on phone
+        - VK — Stories
+      Standalone status tab:
+        - Snapchat — Friends' Stories
+        - Snapchat — Discover publisher stories
+        - WhatsApp — Status
+      Inline in chat list:
+        - Telegram — Stories
+      Desktop column:
+        - Instagram — Stories on the web
+        - Facebook — Stories on the web
+        - WhatsApp — Status on the web
+      On a profile:
+        - Instagram — Highlights on a profile
+        - WeChat — Status
+  unobserved:
+    - sub: ordering
+      var: Close friends priority
+    - sub: ordering
+      var: Self always first
+    - sub: lifetime
+      var: View-once
+    - sub: lifetime
+      var: Story saved to profile grid
+    - sub: audience
+      var: Close friends list
+    - sub: audience
+      var: Custom exclude list
+  unresolved: []
+  proposals:
+    raised: 6
+    adopted:
+      - sub: presentation
+        name: On a profile
+        raters:
+          - fable
+          - sonnet
+      - sub: lifetime
+        name: No expiry
+        raters:
+          - fable
+          - sonnet
+      - sub: lifetime
+        name: 48-hour expiry
+        raters:
+          - fable
+          - sonnet
+      - sub: audience
+        name: Just me
+        raters:
+          - opus
+          - sonnet
+    recorded:
+      - place: sub:lifetime
+        sub: lifetime
+        dim: null
+        name: Permanent page
+        gloss: "The frames never expire: the story is a durable page or artefact (a publisher URL, a yearly
+          recap, a generated memory) that happens to use the story form"
+        raters:
+          - opus
+        instances:
+          - 12
+          - 14
+          - 20
+        status: raised
+      - place: sub:presentation
+        sub: presentation
+        dim: Presentation
+        name: Tied to profile picture
+        gloss: A single ambient status is shown behind or attached to a person's profile picture itself,
+          rather than in a feed tray, a standalone tab, inline in the chat list, or a desktop column
+        raters:
+          - sonnet
+        instances:
+          - 16
+        status: raised
+  raterNotes:
+    fable:
+      - presentation was read as where the stories live (tray, tab, column, profile) since three of
+        its five variations are entry points; 'Full-bleed vertical' was kept for stacks with no home
+        surface. ordering is unobservable from memory for VK, Twitch and LINE.
+    opus:
+      - "The pattern assumes an author tray, an expiry and an audience, and four instances (Web
+        Stories, Wrapped, Memories, and Highlights to a lesser degree) borrow the story grammar
+        without any of the three — hence two proposals and several n/a in ordering. presentation
+        also mixes the playback surface with where stories live in the app: Full-bleed vertical is
+        true of every mobile instance, so I used it only where nothing more specific applied and
+        coded the tray, tab or chat-list home otherwise."
+    sonnet:
+      - "presentation required a consistent rule since the codebook cites Instagram for two
+        different values (Full-bleed vertical and Tray above feed): coded the product's structural
+        home for stories (tray-in-feed vs standalone tab vs inline-in-chat vs desktop split) where
+        that distinction was the more informative fact, and Full-bleed vertical only for
+        single-author/personal experiences with no such structural placement (Web Stories,
+        Highlights, Wrapped, Memories)."
+      - "`presentation` is the entry's real problem: it is pick one but its five values sit on two
+        axes — Full-bleed vertical describes how a frame plays, while Tray above feed, Standalone
+        status tab, Inline in chat list and Desktop column describe where you enter from — and the
+        codebook itself cites Instagram for two of them, which is why the three raters split on
+        Snapchat, TikTok, Telegram, Signal, Highlights and Memories. It wants to be pick any, or to
+        be split into two sub-dimensions. `ordering` has the same shape at a smaller scale:
+        unseen-first is a layer over a chronological or ranked base order, so 'Unseen first'
+        swallows almost every tray if read strictly. Two smaller findings: `lifetime`'s 24-hour
+        expiry hard-codes a duration that Twitch (48h) and Telegram (6/12/24/48h, selectable) do not
+        share — one 'fixed expiry window' variation carrying the duration would fix it — and
+        `audience` has no value for 'everyone on this platform' short of the open web (Snapchat
+        Discover, Telegram's default Everyone), nor for a story with no audience at all until it is
+        shared (adopted here as +Just me)."
+  codedAt: 2026-09-22
+previews:
+  - file: stories.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

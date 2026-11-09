@@ -1,0 +1,340 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "popover". Edit between batches only — see README "Rules".
+id: popover
+name: Popover
+level: component
+parent: navigate
+aliases:
+  - pop-over
+  - flyout
+  - hover card
+  - preview card
+definition: A small, non-blocking surface anchored to an element that shows detail or controls about it.
+data: object
+platforms:
+  - web
+  - desktop
+  - mobile
+domains:
+  - productivity
+  - communication
+  - news
+  - software
+anatomy:
+  - name: Anchor
+    role: The element it belongs to
+  - name: Surface
+    role: The popover itself
+  - name: Arrow
+    role: What ties it to the anchor
+roles:
+  - title
+  - subtitle
+  - action
+dimensions:
+  - name: Opening and closing
+    family: invocation
+    question: What brings it up, and what makes it go away?
+    subdimensions:
+      - id: openBy
+        name: Opened by
+        select: one
+        values:
+          - id: click
+            name: Click
+            example: Google Calendar event details
+          - id: hover
+            name: Hover
+            example: Wikipedia page previews
+          - id: focus
+            name: Focus
+            example: Form field help
+          - id: long-press
+            name: Long-press
+            example: iOS link previews
+      - id: dismissBy
+        name: Dismissed by
+        select: many
+        values:
+          - id: click-outside
+            name: Click outside
+            example: Most popovers
+          - id: escape
+            name: Escape
+            example: Desktop popovers
+          - id: pointer-leaves
+            name: Pointer leaves
+            example: Hover cards
+          - id: close-button
+            name: Close button
+            example: Pinned popovers
+  - name: Placement
+    family: layout
+    question: Where does it sit relative to the anchor?
+    subdimensions:
+      - id: placement
+        name: Placement
+        select: one
+        values:
+          - id: below-the-anchor
+            name: Below the anchor
+            example: Dropdown-like popovers
+          - id: auto-flip-to-fit
+            name: Auto-flip to fit
+            example: Floating UI libraries
+          - id: beside-with-an-arrow
+            name: Beside, with an arrow
+            example: macOS popovers
+  - name: Contents
+    family: content
+    question: What does it hold?
+    subdimensions:
+      - id: contents
+        name: Contents
+        select: one
+        values:
+          - id: read-only-preview
+            name: Read-only preview
+            example: GitHub user hover cards
+          - id: quick-actions
+            name: Quick actions
+            example: Calendar event popover
+          - id: mini-form
+            name: Mini form
+            example: Inline date editing
+          - id: nested-choices
+            name: Nested choices
+            example: Colour pickers
+  - name: Persistence
+    family: lifecycle
+    question: How long does it last?
+    subdimensions:
+      - id: persistence
+        name: Persistence
+        select: one
+        values:
+          - id: transient
+            name: Transient
+            example: Hover cards
+          - id: until-dismissed
+            name: Until dismissed
+            example: Click popovers
+          - id: detachable-into-a-window
+            name: Detachable into a window
+            example: Detachable macOS popovers
+wild:
+  score: 0
+  note: Hover vs click invocation is fixed; CHI '25 participant P6 asked for exactly this choice.
+  examples:
+    - name: Wikipedia
+      note: Page previews can be turned off
+techniques:
+  - name: Tear off
+    dimension: Persistence
+    how: Detach a popover into a persistent panel so several details stay open for comparison.
+    ai: false
+  - name: Choose the trigger
+    dimension: Opening and closing
+    how: A person decides whether previews open on hover or click, per product or globally.
+    ai: false
+signature: Tear off
+sample: Calendars, social and developer sites, knowledge bases.
+unit: One popover type.
+relations:
+  uses: []
+  specializes:
+    - overview-detail
+  neighbors:
+    - tooltip
+    - modal-dialog
+    - menu
+scores:
+  ubiquity: 4
+  potential: 3
+  spec: 5
+evidence: agent-coded
+usage:
+  - Accidental hover openings irritate pointer users; touch users never see hover content
+questions:
+  - When does a popover become a detail view, and should it be allowed to?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.775602811643012
+  agreementFirstPass: 0.83125
+  kappaFinal: 0.9392602480300649
+  agreementFinal: 0.95
+  pass: true
+  perSub:
+    openBy:
+      kappaFirstPass: 1
+      agreementFirstPass: 1
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    dismissBy:
+      kappaFirstPass: 0.7406606977462181
+      agreementFirstPass: 0.825
+      kappaFinal: 0.9823736780258517
+      agreementFinal: 0.9875
+      flag: null
+    placement:
+      kappaFirstPass: 0.4915254237288136
+      agreementFirstPass: 0.55
+      kappaFinal: 0.7081712062256814
+      agreementFinal: 0.75
+      flag: null
+    contents:
+      kappaFirstPass: 0.9486740804106075
+      agreementFirstPass: 0.95
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    persistence:
+      kappaFirstPass: 0.8019801980198019
+      agreementFirstPass: 0.85
+      kappaFinal: 0.8764160659114314
+      agreementFinal: 0.9
+      flag: null
+  distribution:
+    openBy:
+      Click: 8
+      Hover: 10
+      Focus: 0
+      Long-press: 2
+    dismissBy:
+      Click outside: 10
+      Escape: 9
+      Pointer leaves: 10
+      Close button: 2
+    placement:
+      Below the anchor: 7
+      Auto-flip to fit: 11
+      Beside, with an arrow: 2
+    contents:
+      Read-only preview: 10
+      Quick actions: 5
+      Mini form: 3
+      Nested choices: 2
+    persistence:
+      Transient: 10
+      Until dismissed: 9
+      Detachable into a window: 1
+  exemplars:
+    openBy:
+      Click:
+        - Google Calendar — Event details bubble
+        - Slack — Profile card
+        - macOS Calendar — Event editing bubble
+      Hover:
+        - Wikipedia — Page preview on hover
+        - GitHub — User hover card
+        - X (Twitter) — Profile hover card
+      Focus: []
+      Long-press:
+        - iOS Safari — Link preview
+        - iOS Mail — Message preview
+    dismissBy:
+      Click outside:
+        - Google Calendar — Event details bubble
+        - Slack — Profile card
+        - macOS Calendar — Event editing bubble
+      Escape:
+        - Google Calendar — Event details bubble
+        - Slack — Profile card
+        - macOS Calendar — Event editing bubble
+      Pointer leaves:
+        - Wikipedia — Page preview on hover
+        - GitHub — User hover card
+        - X (Twitter) — Profile hover card
+      Close button:
+        - Google Calendar — Event details bubble
+        - Figma — Fill colour picker
+    placement:
+      Below the anchor:
+        - GitHub — User hover card
+        - X (Twitter) — Profile hover card
+        - Notion — Date property
+      Auto-flip to fit:
+        - Google Calendar — Event details bubble
+        - Wikipedia — Page preview on hover
+        - Slack — Profile card
+      Beside, with an arrow:
+        - macOS Calendar — Event editing bubble
+        - macOS Mail — Sender address card
+    contents:
+      Read-only preview:
+        - Wikipedia — Page preview on hover
+        - GitHub — User hover card
+        - X (Twitter) — Profile hover card
+      Quick actions:
+        - Google Calendar — Event details bubble
+        - Slack — Profile card
+        - Google Docs — Link preview chip
+      Mini form:
+        - macOS Calendar — Event editing bubble
+        - Notion — Date property
+        - Airbnb — Guests picker under the search bar
+      Nested choices:
+        - Figma — Fill colour picker
+        - Google Chrome — Site information
+    persistence:
+      Transient:
+        - Wikipedia — Page preview on hover
+        - GitHub — User hover card
+        - X (Twitter) — Profile hover card
+      Until dismissed:
+        - Google Calendar — Event details bubble
+        - Slack — Profile card
+        - iOS Safari — Link preview
+      Detachable into a window:
+        - macOS Calendar — Event editing bubble
+  unobserved:
+    - sub: openBy
+      var: Focus
+  unresolved: []
+  proposals:
+    raised: 0
+    adopted: []
+    recorded: []
+  raterNotes:
+    fable:
+      - Hover cards with one action button (Follow, Add Friend) were coded Read-only preview; Quick
+        actions was reserved for cards whose point is the actions.
+      - "Below the anchor and Auto-flip to fit are not exclusive: nearly every web popover is below
+        by default and flips at the viewport edge, so the placement split is about how much a rater
+        knows of the edge case, not the product; dismissBy on touch has no 'release' value and
+        Pointer leaves gets stretched to cover it."
+    opus:
+      - placement came out as Auto-flip to fit for half the sample because modern popover libraries
+        all flip, which makes the variation a statement about the library rather than the design;
+        Beside, with an arrow really means the AppKit look, not a position. Detachable into a window
+        went unused — no instance in this sample can be torn off. contents also forces a choice
+        where a card is a preview with one action in it (GitHub, X, Docs chips).
+      - "placement mixes three incompatible things — a side (Below), a behaviour every modern
+        popover library has (Auto-flip), and a platform ornament (Beside, with an arrow) — so an
+        arrowless surface that sits beside its anchor, like a Sheets note or Figma's picker, has
+        nowhere honest to go, and a rater who codes the flip can code almost everything Auto-flip.
+        It should be two subs: habitual side, and whether it flips. persistence and dismissBy also
+        have to agree and the codebook never says so: iOS long-press previews look transient but
+        dismiss like click popovers."
+    sonnet:
+      - Contents was the closest call for hover cards that mix informational content with one action
+        button (GitHub, X, Facebook, Outlook people cards) — I followed the codebook's own precedent
+        of calling the GitHub user card 'Read-only preview' and treated the others the same way for
+        consistency, versus cards where the action is more central (Slack, macOS Mail, Chrome site
+        info), which I coded Quick actions.
+  codedAt: 2026-09-22
+previews:
+  - file: popover.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

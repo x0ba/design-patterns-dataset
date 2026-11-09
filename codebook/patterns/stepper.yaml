@@ -1,0 +1,349 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "stepper". Edit between batches only — see README "Rules".
+id: stepper
+name: Stepper
+level: component
+parent: navigate
+aliases:
+  - progress steps
+  - step indicator
+definition: A visual trail of ordered steps showing how far a person has come and, often, letting
+  them move between steps.
+data: sequence
+platforms:
+  - web
+  - mobile
+domains:
+  - commerce
+  - finance
+  - government
+  - enterprise
+anatomy:
+  - name: Step
+    role: One stage
+  - name: Connector
+    role: Between stages
+  - name: State
+    role: Current, done, error
+roles: []
+dimensions:
+  - name: Navigation rule
+    family: flow
+    question: Can a person move freely between steps?
+    subdimensions:
+      - id: rule
+        name: Rule
+        select: one
+        values:
+          - id: linear-locked
+            name: Linear, locked
+            example: Identity verification
+          - id: linear-with-back
+            name: Linear with back
+            example: Checkout
+          - id: free-jump
+            name: Free jump
+            example: Profile setup
+          - id: branching
+            name: Branching
+            description: Later steps depend on answers
+            example: Tax software
+  - name: Form
+    family: layout
+    question: How is it drawn?
+    subdimensions:
+      - id: form
+        name: Form
+        select: one
+        values:
+          - id: horizontal
+            name: Horizontal
+            example: Web checkouts
+          - id: vertical-with-content
+            name: Vertical with content
+            example: Material vertical stepper
+          - id: compact-count
+            name: Compact count
+            description: Step 2 of 5
+            example: Mobile flows
+          - id: progress-bar-only
+            name: Progress bar only
+            example: Surveys
+          - id: vertical-list
+            name: Vertical list
+            description: Steps stacked in a rail beside the content, without the content expanding under each
+              step (Stripe activation, GOV.UK task list, macOS Installer)
+            example: Stripe — Activate your account
+  - name: Step states
+    family: feedback
+    question: What states can a step show?
+    subdimensions:
+      - id: states
+        name: States
+        select: many
+        values:
+          - id: current
+            name: Current
+            example: All
+          - id: completed
+            name: Completed
+            example: Checkmarks
+          - id: error
+            name: Error
+            example: Form steps with problems
+          - id: optional
+            name: Optional
+            example: Setup flows
+          - id: not-started
+            name: Not started
+            description: A step explicitly marked as not yet begun or not yet available, distinct from merely
+              being after the current one (GOV.UK task list tags)
+            example: GOV.UK — Task list
+          - id: in-progress
+            name: In progress
+            description: A step is explicitly marked as started-but-not-finished, distinct from not yet started,
+              currently active, fully completed, or in error.
+            example: GOV.UK — Task list
+  - name: Step labels
+    family: content
+    question: What does a step say?
+    subdimensions:
+      - id: labels
+        name: Labels
+        select: one
+        values:
+          - id: numbers-only
+            name: Numbers only
+            example: Compact steppers
+          - id: titles
+            name: Titles
+            example: Checkout steps
+          - id: titles-with-entered-values
+            name: Titles with entered values
+            example: Shopify checkout contact and shipping summaries
+          - id: no-labels
+            name: No labels
+            description: The stepper shows only a progress indicator (a growing or filling bar) with no step
+              numbers, percentages, or titles printed on it at all.
+            example: Typeform — Respondent view
+wild:
+  score: 0
+  note: Step order and form are fixed.
+  examples: []
+techniques:
+  - name: Summary surfacing
+    dimension: Step labels
+    how: Surface what was entered in a step into its label so the trail doubles as a review; Fluid
+      Attributes applied to a flow.
+    ai: false
+signature: Summary surfacing
+sample: Checkout, onboarding, application and setup flows.
+unit: One stepper within one flow.
+relations:
+  uses: []
+  specializes: []
+  neighbors:
+    - progress-indicator
+    - breadcrumbs
+scores:
+  ubiquity: 4
+  potential: 2
+  spec: 5
+evidence: agent-coded
+usage:
+  - People jump back to check values more than to change them
+questions:
+  - Would reordering optional steps help or confuse?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.6761361941960969
+  agreementFirstPass: 0.7888888888888889
+  kappaFinal: 0.8053433475416456
+  agreementFinal: 0.8611111111111112
+  pass: true
+  perSub:
+    rule:
+      kappaFirstPass: 0.4974874371859294
+      agreementFirstPass: 0.75
+      kappaFinal: 0.8800000000000003
+      agreementFinal: 0.95
+      flag: null
+    form:
+      kappaFirstPass: 0.8188679245283016
+      agreementFirstPass: 0.8
+      kappaFinal: 0.865771812080537
+      agreementFinal: 0.85
+      flag: null
+    states:
+      kappaFirstPass: 0.6955418629938377
+      agreementFirstPass: 0.825
+      kappaFinal: 0.8049460118425634
+      agreementFinal: 0.8833333333333333
+      flag: null
+    labels:
+      kappaFirstPass: 0.5956192080876159
+      agreementFirstPass: 0.6
+      kappaFinal: 0.6726422447388932
+      agreementFinal: 0.65
+      flag: null
+  distribution:
+    rule:
+      Linear, locked: 0
+      Linear with back: 17
+      Free jump: 3
+      Branching: 0
+    form:
+      Horizontal: 6
+      Vertical with content: 2
+      Compact count: 2
+      Progress bar only: 7
+      Vertical list: 3
+    states:
+      Current: 19
+      Completed: 11
+      Error: 1
+      Optional: 0
+      Not started: 1
+      In progress: 1
+    labels:
+      Numbers only: 2
+      Titles: 9
+      Titles with entered values: 2
+      No labels: 1
+      n/a: 6
+  exemplars:
+    rule:
+      Linear, locked: []
+      Linear with back:
+        - Shopify checkout — Three-page checkout steps
+        - Booking.com — Booking steps
+        - Slack — Create a workspace
+      Free jump:
+        - Stripe — Activate your account
+        - GOV.UK — Task list
+        - Zapier — Zap editor
+      Branching: []
+    form:
+      Horizontal:
+        - Shopify checkout — Three-page checkout steps
+        - Booking.com — Booking steps
+        - TurboTax — Section bar
+      Vertical with content:
+        - Google Ads — New campaign
+        - Zapier — Zap editor
+      Compact count:
+        - Slack — Create a workspace
+        - Google Forms — Multi-section form
+      Progress bar only:
+        - Typeform — Respondent view
+        - SurveyMonkey — Survey pages
+        - LinkedIn — Easy Apply
+      Vertical list:
+        - Stripe — Activate your account
+        - GOV.UK — Task list
+        - macOS Installer — Package installer
+    states:
+      Current:
+        - Shopify checkout — Three-page checkout steps
+        - Booking.com — Booking steps
+        - Slack — Create a workspace
+      Completed:
+        - Shopify checkout — Three-page checkout steps
+        - Booking.com — Booking steps
+        - Stripe — Activate your account
+      Error:
+        - Zapier — Zap editor
+      Optional: []
+      Not started:
+        - GOV.UK — Task list
+      In progress:
+        - GOV.UK — Task list
+    labels:
+      Numbers only:
+        - Slack — Create a workspace
+        - Google Forms — Multi-section form
+      Titles:
+        - Booking.com — Booking steps
+        - Stripe — Activate your account
+        - Google Ads — New campaign
+      Titles with entered values:
+        - Shopify checkout — Three-page checkout steps
+        - Zapier — Zap editor
+      No labels:
+        - Airbnb — Create a listing
+  unobserved:
+    - sub: rule
+      var: Linear, locked
+    - sub: rule
+      var: Branching
+    - sub: states
+      var: Optional
+  unresolved: []
+  proposals:
+    raised: 4
+    adopted:
+      - sub: form
+        name: Vertical list
+        raters:
+          - fable
+          - opus
+      - sub: states
+        name: Not started
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: states
+        name: In progress
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: labels
+        name: No labels
+        raters:
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - states and labels are n/a for plain progress bars, which are a third of the sample; the
+        codebook's form includes bars but its other sub-dimensions assume discrete steps.
+      - form has no value for a vertical rail whose content sits beside it; states and labels need a
+        stated rule for plain progress bars (Current applies, labels do not); rule mixes freedom of
+        movement with dependency, so a branching flow with back holds two values.
+    opus:
+      - "Half this sample is a bare progress bar, where labels has nothing to answer (coded n/a) and
+        states collapses to Current — the entry's richer sub-dimensions only bite on the six trails
+        that actually name their steps. Linear, locked and Branching went unused: no instance in the
+        sample forbids going back, and branching is invisible from the stepper itself even in flows
+        that do branch. states also has no variation for Not started, which the GOV.UK task list
+        shows explicitly."
+      - "The entry covers two different things under one set of subs: trails with drawn steps, and
+        bare progress bars. For a bar with no divisions, states and labels have nothing to point at
+        and raters split between n/a, an empty answer and 'Current' — the entry should either say
+        those subs are n/a when form is Progress bar only, or give both an explicit none. rule mixes
+        two axes: how freely you may move (locked / back / free) and whether the path branches on
+        your answers, which can be true under any of the first three (Duolingo, TurboTax). form's
+        'Vertical with content' silently means the Material accordion, leaving the far commoner
+        rail-beside-content vertical stepper with no value."
+    sonnet:
+      - Rule was often an inference rather than confirmed recall for flows I don't use daily
+        (Booking.com, Progressive, Vercel, Indeed) — I defaulted to Linear with back as the common
+        case for consumer setup/checkout flows rather than Linear locked, since most let you revisit
+        earlier answers.
+  codedAt: 2026-09-22
+previews:
+  - file: stepper.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

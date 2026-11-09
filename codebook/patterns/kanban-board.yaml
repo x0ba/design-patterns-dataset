@@ -1,0 +1,669 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "kanban-board". Edit between batches only — see README "Rules".
+id: kanban-board
+name: Kanban board
+level: pattern
+parent: browse-collections
+aliases:
+  - board
+  - task board
+  - pipeline
+definition: Items as cards in columns that stand for states or categories; moving a card between
+  columns changes its value.
+data: collection
+platforms:
+  - web
+  - desktop
+  - mobile
+domains:
+  - software
+  - productivity
+  - enterprise
+  - finance
+anatomy:
+  - name: Board
+    role: The whole set of columns
+  - name: Column
+    role: A value of the grouping attribute
+  - name: Card
+    role: One item’s key attributes
+  - name: Swimlane
+    role: An optional second grouping across columns
+roles:
+  - title
+  - assignee
+  - label
+  - due-date
+  - estimate
+  - cover
+dimensions:
+  - name: Grouping
+    family: composition
+    question: What do columns and swimlanes stand for?
+    subdimensions:
+      - id: columns
+        name: Column source
+        select: one
+        values:
+          - id: workflow-status
+            name: Workflow status
+            description: Columns are workflow states
+            example: Jira board
+          - id: any-single-select-field
+            name: Any single-select field
+            description: Group by a chosen property
+            example: Notion board, GitHub Projects
+          - id: assignee
+            name: Assignee
+            description: One column per person
+            example: Linear grouped by assignee
+          - id: manual-lists
+            name: Manual lists
+            description: Columns are free-form lists
+            example: Trello
+      - id: swimlanes
+        name: Swimlanes
+        select: one
+        values:
+          - id: none
+            name: None
+            example: Trello
+          - id: by-assignee
+            name: By assignee
+            example: Jira
+          - id: by-parent-or-epic
+            name: By parent or epic
+            example: Jira swimlanes by epic
+          - id: by-query
+            name: By query
+            description: Each lane is a saved filter
+            example: Jira query swimlanes
+          - id: manual-lanes
+            name: Manual lanes
+            description: Free-named lanes the team defines (e.g. Expedite) into which cards are placed by hand,
+              not derived from a field
+            example: Azure DevOps — Kanban board
+  - name: Card and column content
+    family: content
+    question: What does each card and column say about its items?
+    subdimensions:
+      - id: cardFields
+        name: Card attributes
+        select: many
+        values:
+          - id: title
+            name: Title
+            example: All boards
+          - id: assignee-avatar
+            name: Assignee avatar
+            example: Jira
+          - id: labels
+            name: Labels
+            example: Trello labels
+          - id: due-date
+            name: Due date
+            example: Trello
+          - id: estimate
+            name: Estimate
+            example: Jira story points
+          - id: cover-image
+            name: Cover image
+            example: Trello card covers
+          - id: sub-task-progress
+            name: Sub-task progress
+            example: Checklist progress in Trello
+          - id: amount-or-value
+            name: Amount or value
+            description: A monetary or numeric value on the card that is the point of the board — deal size,
+              contract value — distinct from an effort Estimate; columnSummary already names its
+              total but cardFields has no way to say the card carries it
+            example: Pipedrive — Deals pipeline
+      - id: columnSummary
+        name: Column summaries
+        select: many
+        values:
+          - id: none
+            name: None
+            example: Trello
+          - id: card-count
+            name: Card count
+            example: Most boards
+          - id: wip-limit
+            name: WIP limit
+            description: A maximum, flagged when exceeded
+            example: Jira column constraints
+          - id: sum-of-an-attribute
+            name: Sum of an attribute
+            description: Total estimate or value
+            example: Pipedrive deal value per stage
+  - name: Transitions
+    family: flow
+    question: What happens when a card moves?
+    subdimensions:
+      - id: transitions
+        name: Transition rules
+        select: many
+        values:
+          - id: free-movement
+            name: Free movement
+            description: Any column to any column
+            example: Trello
+          - id: allowed-transitions-only
+            name: Allowed transitions only
+            description: The workflow forbids some moves
+            example: Jira workflows
+          - id: required-fields
+            name: Required fields
+            description: A screen collects data on transition
+            example: Jira transition screens
+          - id: automation-on-move
+            name: Automation on move
+            description: Moves trigger actions
+            example: Trello Butler, Jira Automation
+  - name: Card size and columns
+    family: layout
+    question: How are cards and columns sized and arranged?
+    subdimensions:
+      - id: cardSize
+        name: Card size
+        select: one
+        values:
+          - id: compact
+            name: Compact
+            description: Title only
+            example: Linear compact board
+          - id: default
+            name: Default
+            description: Title plus key fields
+            example: Jira
+          - id: expanded
+            name: Expanded
+            description: Covers and descriptions
+            example: Trello with covers
+      - id: columnBehaviour
+        name: Column behaviour
+        select: many
+        values:
+          - id: horizontal-scroll
+            name: Horizontal scroll
+            example: Trello
+          - id: collapsible-columns
+            name: Collapsible columns
+            example: Linear, GitHub Projects
+          - id: fit-to-width
+            name: Fit to width
+            example: Small boards
+          - id: one-at-a-time
+            name: One at a time
+            description: Only one column fills the screen at a time; swiping left or right moves to the adjacent
+              column, e.g. Trello's mobile board
+            example: Trello — A board in the mobile app
+  - name: Card detail
+    family: invocation
+    question: Where does a card open?
+    subdimensions:
+      - id: openIn
+        name: Card opens in
+        select: one
+        values:
+          - id: modal
+            name: Modal
+            example: Trello card back
+          - id: side-by-side
+            name: Side-by-side
+            description: A panel beside the board
+            example: GitHub Projects item panel
+          - id: new-page
+            name: New page
+            example: Jira issue page
+          - id: in-place
+            name: In-place
+            description: The card expands
+            example: Lightweight boards
+  - name: Board scope
+    family: scope
+    question: Which cards are on the board?
+    subdimensions:
+      - id: filters
+        name: Filtering
+        select: many
+        values:
+          - id: quick-filters
+            name: Quick filters
+            description: One-click saved filters
+            example: Jira quick filters
+          - id: search
+            name: Search
+            example: Most boards
+          - id: only-my-items
+            name: Only my items
+            example: Linear “My issues”
+          - id: saved-views
+            name: Saved views
+            description: Named board configurations
+            example: GitHub Projects views
+wild:
+  score: 2
+  note: Productivity boards expose grouping, card fields and filters, often as an admin setting rather
+    than a personal one.
+  examples:
+    - name: Jira
+      note: Configure columns, swimlanes and card layout fields
+    - name: Linear
+      note: Display options for grouping, ordering and visible properties
+    - name: Notion
+      note: Group by any property, choose card preview and properties
+techniques:
+  - name: Fluid Grouping
+    dimension: Grouping
+    how: Drag any attribute from a card’s detail onto the column header strip and the board regroups by
+      it; drag a second one onto the lane gutter for swimlanes. Fluid Attributes, applied to
+      structure.
+    ai: false
+  - name: Transition preview
+    dimension: Transitions
+    how: "While dragging, the target column says what the drop will change: the new value, required
+      fields and the automations it will fire."
+    ai: false
+  - name: Surface card fields
+    dimension: Card and column content
+    how: Surface or hide attributes from the card detail into every card, per board and per person.
+    ai: false
+  - name: Generated columns
+    dimension: Grouping
+    how: “Group these by risk” creates an AI-generated attribute with sources and uses it as the column
+      source; wrong values can be dragged to correct them.
+    ai: true
+signature: Fluid Grouping
+sample: Project-management, CRM, applicant-tracking and help-desk products (G2 category leaders),
+  plus GitHub and GitLab.
+unit: One board configuration over one set of items.
+relations:
+  uses:
+    - card
+    - drag-reorder
+    - filter-controls
+    - modal-dialog
+    - drawer
+    - badge
+  specializes:
+    - overview-detail
+  neighbors:
+    - data-table
+    - gantt-timeline
+scores:
+  ubiquity: 4
+  potential: 5
+  spec: 5
+evidence: agent-coded
+usage:
+  - Teams keep one canonical board while individuals want personal card fields
+  - Regrouping is used as a thinking move (by risk, by owner), not only for workflow
+questions:
+  - Should a personal grouping change the shared board for others?
+  - How are illegal transitions shown before the drop?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.62136439124654
+  agreementFirstPass: 0.7327586206896551
+  kappaFinal: 0.9075830659846241
+  agreementFinal: 0.9410714285714286
+  pass: true
+  perSub:
+    columns:
+      kappaFirstPass: 0.8966408268733851
+      agreementFirstPass: 0.9
+      kappaFinal: 0.9473222124670766
+      agreementFinal: 0.95
+      flag: null
+    swimlanes:
+      kappaFirstPass: 0.8192771084337356
+      agreementFirstPass: 0.95
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    cardFields:
+      kappaFirstPass: 0.5847384311163671
+      agreementFirstPass: 0.69375
+      kappaFinal: 0.9164578111946532
+      agreementFinal: 0.9375
+      flag: null
+    columnSummary:
+      kappaFirstPass: 0.653401797175867
+      agreementFirstPass: 0.775
+      kappaFinal: 0.910707641937644
+      agreementFinal: 0.9375
+      flag: null
+    transitions:
+      kappaFirstPass: 0.7460317460317467
+      agreementFirstPass: 0.8125
+      kappaFinal: 0.9666666666666668
+      agreementFinal: 0.975
+      flag: null
+    cardSize:
+      kappaFirstPass: 0.5729537366548042
+      agreementFirstPass: 0.9
+      kappaFinal: 0.5729537366548042
+      agreementFinal: 0.9
+      flag: unreliable
+    columnBehaviour:
+      kappaFirstPass: 0.6812500000000006
+      agreementFirstPass: 0.7875
+      kappaFinal: 0.9468987388450475
+      agreementFinal: 0.9625
+      flag: null
+    openIn:
+      kappaFirstPass: 0.44020356234096714
+      agreementFirstPass: 0.45
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    filters:
+      kappaFirstPass: 0.45797009801707467
+      agreementFirstPass: 0.6
+      kappaFinal: 0.815823804773233
+      agreementFinal: 0.875
+      flag: null
+  distribution:
+    columns:
+      Workflow status: 10
+      Any single-select field: 5
+      Assignee: 0
+      Manual lists: 5
+    swimlanes:
+      None: 18
+      By assignee: 0
+      By parent or epic: 1
+      By query: 0
+      Manual lanes: 1
+    cardFields:
+      Title: 20
+      Assignee avatar: 18
+      Labels: 13
+      Due date: 14
+      Estimate: 4
+      Cover image: 6
+      Sub-task progress: 6
+      Amount or value: 3
+    columnSummary:
+      None: 3
+      Card count: 17
+      WIP limit: 4
+      Sum of an attribute: 6
+    transitions:
+      Free movement: 18
+      Allowed transitions only: 2
+      Required fields: 5
+      Automation on move: 15
+    cardSize:
+      Compact: 1
+      Default: 19
+      Expanded: 0
+    columnBehaviour:
+      Horizontal scroll: 19
+      Collapsible columns: 7
+      Fit to width: 3
+      One at a time: 1
+    openIn:
+      Modal: 8
+      Side-by-side: 4
+      New page: 8
+      In-place: 0
+    filters:
+      Quick filters: 8
+      Search: 19
+      Only my items: 15
+      Saved views: 11
+  exemplars:
+    columns:
+      Workflow status:
+        - Jira Software — Scrum sprint board
+        - Jira Software — Kanban board with epic swimlanes
+        - Linear — Board view grouped by status
+      Any single-select field:
+        - GitHub Projects — Board view
+        - GitLab — Issue board
+        - Notion — Database board view
+      Assignee: []
+      Manual lists:
+        - Trello — A project board
+        - Asana — Board view of a project
+        - Trello — A board in the mobile app
+    swimlanes:
+      None:
+        - Trello — A project board
+        - Jira Software — Scrum sprint board
+        - Linear — Board view grouped by status
+      By assignee: []
+      By parent or epic:
+        - Jira Software — Kanban board with epic swimlanes
+      By query: []
+      Manual lanes:
+        - Azure DevOps — Kanban board
+    cardFields:
+      Title:
+        - Trello — A project board
+        - Jira Software — Scrum sprint board
+        - Jira Software — Kanban board with epic swimlanes
+      Assignee avatar:
+        - Trello — A project board
+        - Jira Software — Scrum sprint board
+        - Jira Software — Kanban board with epic swimlanes
+      Labels:
+        - Trello — A project board
+        - Linear — Board view grouped by status
+        - GitHub Projects — Board view
+      Due date:
+        - Trello — A project board
+        - Linear — Board view grouped by status
+        - GitLab — Issue board
+      Estimate:
+        - Jira Software — Scrum sprint board
+        - Linear — Board view grouped by status
+        - ClickUp — Board view
+      Cover image:
+        - Trello — A project board
+        - Asana — Board view of a project
+        - Notion — Database board view
+      Sub-task progress:
+        - Trello — A project board
+        - Linear — Board view grouped by status
+        - Asana — Board view of a project
+      Amount or value:
+        - Pipedrive — Deals pipeline
+        - HubSpot — Deals board
+        - Salesforce — Opportunity Kanban view
+    columnSummary:
+      None:
+        - Trello — A project board
+        - Trello — A board in the mobile app
+        - Microsoft Planner — Board grouped by bucket
+      Card count:
+        - Jira Software — Scrum sprint board
+        - Jira Software — Kanban board with epic swimlanes
+        - Linear — Board view grouped by status
+      WIP limit:
+        - Jira Software — Kanban board with epic swimlanes
+        - GitHub Projects — Board view
+        - ClickUp — Board view
+      Sum of an attribute:
+        - GitHub Projects — Board view
+        - GitLab — Issue board
+        - monday.com — Kanban view
+    transitions:
+      Free movement:
+        - Trello — A project board
+        - Linear — Board view grouped by status
+        - GitHub Projects — Board view
+      Allowed transitions only:
+        - Jira Software — Scrum sprint board
+        - Jira Software — Kanban board with epic swimlanes
+      Required fields:
+        - Jira Software — Scrum sprint board
+        - Jira Software — Kanban board with epic swimlanes
+        - Azure DevOps — Kanban board
+      Automation on move:
+        - Trello — A project board
+        - Jira Software — Scrum sprint board
+        - Jira Software — Kanban board with epic swimlanes
+    cardSize:
+      Compact:
+        - Linear — Board view grouped by status
+      Default:
+        - Trello — A project board
+        - Jira Software — Scrum sprint board
+        - Jira Software — Kanban board with epic swimlanes
+      Expanded: []
+    columnBehaviour:
+      Horizontal scroll:
+        - Trello — A project board
+        - Jira Software — Scrum sprint board
+        - Jira Software — Kanban board with epic swimlanes
+      Collapsible columns:
+        - Trello — A project board
+        - Linear — Board view grouped by status
+        - GitHub Projects — Board view
+      Fit to width:
+        - Jira Software — Scrum sprint board
+        - Jira Software — Kanban board with epic swimlanes
+        - Pipedrive — Deals pipeline
+      One at a time:
+        - Trello — A board in the mobile app
+    openIn:
+      Modal:
+        - Trello — A project board
+        - Jira Software — Scrum sprint board
+        - Jira Software — Kanban board with epic swimlanes
+      Side-by-side:
+        - GitHub Projects — Board view
+        - GitLab — Issue board
+        - Asana — Board view of a project
+      New page:
+        - Linear — Board view grouped by status
+        - Pipedrive — Deals pipeline
+        - HubSpot — Deals board
+      In-place: []
+    filters:
+      Quick filters:
+        - Jira Software — Scrum sprint board
+        - Jira Software — Kanban board with epic swimlanes
+        - Asana — Board view of a project
+      Search:
+        - Trello — A project board
+        - Jira Software — Scrum sprint board
+        - Jira Software — Kanban board with epic swimlanes
+      Only my items:
+        - Trello — A project board
+        - Jira Software — Scrum sprint board
+        - Jira Software — Kanban board with epic swimlanes
+      Saved views:
+        - Linear — Board view grouped by status
+        - GitHub Projects — Board view
+        - GitLab — Issue board
+  unobserved:
+    - sub: columns
+      var: Assignee
+    - sub: swimlanes
+      var: By assignee
+    - sub: swimlanes
+      var: By query
+    - sub: cardSize
+      var: Expanded
+    - sub: openIn
+      var: In-place
+  unresolved: []
+  proposals:
+    raised: 4
+    adopted:
+      - sub: swimlanes
+        name: Manual lanes
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: cardFields
+        name: Amount or value
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: columnBehaviour
+        name: One at a time
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded:
+      - place: sub:filters
+        sub: filters
+        dim: null
+        name: Custom filter builder
+        gloss: An open-ended filter builder for arbitrary criteria assembled on the spot, distinct from a
+          one-click saved Quick filter, e.g. Asana's board Filter button
+        raters:
+          - sonnet
+        instances:
+          - 7
+        status: raised
+  raterNotes:
+    fable:
+      - cardFields depends on configuration for most tools; I coded what a typical default card
+        shows. Swimlanes and column source are coded as the sampled screen's default, with the
+        alternative noted.
+      - cardSize's Expanded example names a per-card option, not a board setting. cardFields cannot
+        say a card carries money, which is the point of every CRM board in the sample.
+        columnBehaviour has no value for a phone board that shows one column per screen. Quick
+        filters and Saved views overlap when saved filters sit in a one-click dropdown. Whether
+        paid-tier features count is uncoded and splits raters on GitLab. columns as pick one splits
+        raters between the instance's default grouping and the regroup capability.
+    opus:
+      - "columns is ambiguous for products where the grouping attribute is configurable but defaults
+        to status (Linear, ClickUp, Planner): I coded the instance as shown rather than the
+        capability, and said so per instance. transitions mixes enforcement (Allowed transitions
+        only, Required fields) with side effects (Automation on move), and nearly every modern
+        product has some automation, so Free movement plus Automation on move is the default shape.
+        columnSummary's card count is nearly universal and Trello's being opt-in is the only real
+        variation in it. openIn was the most informative sub: modal for database products,
+        side-by-side for issue trackers, new page for CRMs."
+      - "Two codebook faults account for most of this packet. (1) columnSummary puts None inside a
+        pick-any, so 'no summary' can be written ['None'] or [], and that alone is the Trello and
+        Basecamp disagreements — None should be the empty array. (2) columns cannot say whether to
+        code the board as configured or the product's capability: Linear, ClickUp and Planner all
+        ship grouped by status with a group-by-anything control, and the two readings give different
+        variations. Smaller: transitions mixes enforcement (Allowed transitions only, Required
+        fields) with side effects (Automation on move), and since nearly every product in this
+        sample can fire a rule on a move, Automation on move stops discriminating; and Quick
+        filters, Saved views and Sonnet's +Custom filter builder overlap badly — Pipedrive's
+        saved-filter dropdown is defensibly any of the three."
+    sonnet:
+      - cardFields and filters are coded from general product capability rather than only what a
+        single screenshot would show, per the protocol; swimlane basis for Azure DevOps (11) is a
+        best guess, not a confident recall.
+      - Three patterns stood out. (1) cardFields has no way to represent a monetary value that is
+        the point of a sales-pipeline card (Pipedrive, HubSpot deals, Salesforce Opportunities all
+        needed +Amount or value) — I had been forcing this into 'Estimate,' which is specifically an
+        effort/points field and reads wrong for a dollar figure. (2) 'openIn' for the same product
+        can differ by screen type within one product (Salesforce's Kanban card opens New page even
+        though the codebook's own Side-by-side exemplar is Salesforce's list-view split view) — the
+        codebook's per-product examples risk being read as per-product defaults when they are really
+        per-screen. (3) Several CRM/PM tools (HubSpot, ClickUp, Airtable, monday.com) converge on
+        the same four-part filter bar (a keyword search, an assignee-me toggle, one-click presets,
+        and named saved configurations), and getting the boundary between 'Quick filters' and 'Only
+        my items' right depended on whether a rater's note named a concrete mechanism or just
+        asserted the value — worth flagging that this sub-dimension rewards specific product recall
+        much more than most others in this entry.
+  codedAt: 2026-09-22
+previews:
+  - file: kanban-board.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

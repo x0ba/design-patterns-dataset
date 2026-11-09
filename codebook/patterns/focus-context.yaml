@@ -1,0 +1,511 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "focus-context". Edit between batches only — see README "Rules".
+id: focus-context
+name: Focus + context
+level: pattern
+parent: analyze
+aliases:
+  - focus and context
+  - fisheye
+  - detail-in-context
+definition: A detailed focus region shown inside a continuously visible surrounding context in the
+  same visual field—unlike overview–detail, which separates an overview of many items from a
+  distinct detail view of one selected item.
+data: space
+platforms:
+  - web
+  - desktop
+  - xr
+domains:
+  - science
+  - design
+  - mobility
+  - enterprise
+  - education
+anatomy:
+  - name: Focus region
+    role: The magnified or detailed area
+  - name: Context region
+    role: The surrounding situation
+  - name: Lens or distortion
+    role: How focus is carved from context
+  - name: Navigation
+    role: How the focus moves
+roles: []
+dimensions:
+  - name: Focus–context relation
+    family: composition
+    question: How do focus and context share one field without becoming separate overview and detail views?
+    subdimensions:
+      - id: relation
+        name: Relation
+        select: one
+        values:
+          - id: embedded-magnification
+            name: Embedded magnification
+            description: Focus sits inside context
+            example: Magnifying-glass lenses
+          - id: distortion-of-one-space
+            name: Distortion of one space
+            description: Space bends toward the focus
+            example: Fisheye menus
+          - id: semantic-zoom-levels
+            name: Semantic zoom levels
+            description: Detail density changes with scale
+            example: Pad++ style zoom
+          - id: inset-mini-map-with-live-focus
+            name: Inset mini-map with live focus
+            description: Small context map, large focus—still one navigational act
+            example: Maps with locator inset
+          - id: salience-only-focus
+            name: Salience-only focus
+            description: Focus is carved out by contrast rather than geometry — the attended region brightens or
+              the rest dims while every element keeps its size and place; the XR and attention-aware
+              case
+            example: Apple Vision Pro — Focused window
+  - name: Spatial arrangement
+    family: layout
+    question: How are focus and context laid out in the field?
+    subdimensions:
+      - id: arrangement
+        name: Arrangement
+        select: one
+        values:
+          - id: lens-over-a-base-map
+            name: Lens over a base map
+            example: ArcGIS magnifier
+          - id: fisheye-stretch
+            name: Fisheye stretch
+            example: Mac Dock magnification
+          - id: overview-inset
+            name: Overview inset
+            example: Photoshop Navigator
+          - id: edge-aware-focus-panel
+            name: Edge-aware focus panel
+            description: Focus dominates; context as a strip
+            example: Code minimap plus editor
+          - id: xr-egocentric-focus
+            name: XR egocentric focus
+            example: Headset world focus volumes
+          - id: whole-field-zoom
+            name: Whole-field zoom
+            description: "There is no separate focus region: the entire viewport is the focus and the context is
+              whatever remains visible around its edges, reached by zooming the one space; every
+              zoomable map, canvas and globe works this way and none of the five arrangements
+              describes it"
+            example: Google Maps — Zoom levels
+          - id: whole-view-zoom
+            name: Whole-view zoom
+            description: The entire viewport zooms in and out with no separate lens, inset or fisheye distortion
+              — a plain zoomable map/canvas/graph
+            example: Google Maps — Zoom levels
+  - name: Moving the focus
+    family: invocation
+    question: How does the focus region move or resize?
+    subdimensions:
+      - id: moveBy
+        name: Move by
+        select: many
+        values:
+          - id: drag-the-lens
+            name: Drag the lens
+            example: Map magnifiers
+          - id: pointer-driven-fisheye
+            name: Pointer-driven fisheye
+            example: Fisheye menus
+          - id: pan-and-zoom-the-space
+            name: Pan and zoom the space
+            example: Zoomable canvases
+          - id: search-then-frame
+            name: Search then frame
+            example: Map search to region
+          - id: follow-a-selection
+            name: Follow a selection
+            example: Focus tracks the selected object
+  - name: What densifies in focus
+    family: content
+    question: What extra information appears inside the focus?
+    subdimensions:
+      - id: focusContent
+        name: Focus content
+        select: many
+        values:
+          - id: geometric-magnification-only
+            name: Geometric magnification only
+            example: Pixel zoom
+          - id: extra-labels-and-attributes
+            name: Extra labels and attributes
+            example: Semantic zoom
+          - id: editable-detail-controls
+            name: Editable detail controls
+            example: In-place inspectors inside the lens
+          - id: hidden-context-declutter
+            name: Hidden context declutter
+            description: Context shows less while focus shows more
+            example: Degree-of-interest calc
+  - name: Degree of interest
+    family: scope
+    question: What determines what stays detailed versus compressed?
+    subdimensions:
+      - id: interest
+        name: Interest scope
+        select: one
+        values:
+          - id: pointer-locus
+            name: Pointer locus
+            example: Fisheye under cursor
+          - id: explicit-selection
+            name: Explicit selection
+            example: Selected node stays detailed
+          - id: search-match-set
+            name: Search match set
+            example: Matches stay expanded
+          - id: task-defined-doi-function
+            name: Task-defined DOI function
+            example: Furnas degree-of-interest trees
+          - id: uniform-zoom
+            name: Uniform zoom
+            description: No DOI; whole view scales
+            example: Simple map zoom
+  - name: Orientation feedback
+    family: feedback
+    question: How does a person stay oriented while focused?
+    subdimensions:
+      - id: orientation
+        name: Orientation
+        select: many
+        values:
+          - id: visible-surrounding-context
+            name: Visible surrounding context
+            example: True focus+context
+          - id: locator-inset
+            name: Locator inset
+            example: Navigator thumbnails
+          - id: breadcrumb-of-scale
+            name: Breadcrumb of scale
+            example: Zoom percentage
+          - id: distortion-cues
+            name: Distortion cues
+            example: Fisheye warping
+          - id: lost-without-leaving
+            name: Lost without leaving
+            description: Must jump to a separate detail page
+            example: Classic overview–detail drill
+wild:
+  score: 1
+  note: Authors set lens behaviour; end users rarely retune distortion or DOI functions.
+  examples:
+    - name: Photoshop
+      note: Navigator panel and loupe
+    - name: ArcGIS
+      note: Magnifier and overview map
+    - name: VS Code
+      note: Minimap with viewport highlight
+techniques:
+  - name: Keep context in frame
+    dimension: Focus–context relation
+    how: Prefer embedded magnification or distortion over navigating away to a separate detail surface
+      when spatial situation matters.
+    ai: false
+  - name: DOI as a visible lens
+    dimension: Degree of interest
+    how: Expose the degree-of-interest function (pointer, selection, search) as a controllable lens mode
+      rather than a hidden heuristic.
+    ai: false
+  - name: Focus on what answers…
+    dimension: Moving the focus
+    how: A question moves and densifies the focus region while context stays visible, instead of opening
+      a disconnected detail view.
+    ai: true
+signature: Keep context in frame
+sample: Maps, graph browsers, creative canvases and code editors that keep surroundings visible
+  while detailing a region.
+unit: One focus region inside one continuous context field.
+relations:
+  uses:
+    - split-pane
+    - slider
+    - tooltip
+  specializes:
+    - analyze
+  neighbors:
+    - overview-detail
+    - zoomable-canvas
+    - coordinated-views
+scores:
+  ubiquity: 3
+  potential: 4
+  spec: 3
+evidence: agent-coded
+usage:
+  - People lose place when detail replaces the overview; focus+context is chosen when orientation
+    matters
+questions:
+  - When does an inset mini-map still count as focus+context versus collapsing into overview–detail?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7170903834899541
+  agreementFirstPass: 0.7866666666666666
+  kappaFinal: 0.9475715118943913
+  agreementFinal: 0.9633333333333334
+  pass: true
+  perSub:
+    relation:
+      kappaFirstPass: 0.9315068493150684
+      agreementFirstPass: 0.95
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    arrangement:
+      kappaFirstPass: 0.5203197868087944
+      agreementFirstPass: 0.4
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    moveBy:
+      kappaFirstPass: 0.7537619699042405
+      agreementFirstPass: 0.85
+      kappaFinal: 0.9845956354300387
+      agreementFinal: 0.99
+      flag: null
+    focusContent:
+      kappaFirstPass: 0.6411483253588525
+      agreementFirstPass: 0.75
+      kappaFinal: 0.9000000000000004
+      agreementFinal: 0.9333333333333333
+      flag: null
+    interest:
+      kappaFirstPass: 0.5872742906276873
+      agreementFirstPass: 0.6
+      kappaFinal: 0.8776758409785931
+      agreementFinal: 0.9
+      flag: null
+    orientation:
+      kappaFirstPass: 0.7562500000000003
+      agreementFirstPass: 0.8375
+      kappaFinal: 0.9282296650717706
+      agreementFinal: 0.95
+      flag: null
+  distribution:
+    relation:
+      Embedded magnification: 4
+      Distortion of one space: 2
+      Semantic zoom levels: 7
+      Inset mini-map with live focus: 6
+      Salience-only focus: 1
+    arrangement:
+      Lens over a base map: 4
+      Fisheye stretch: 2
+      Overview inset: 1
+      Edge-aware focus panel: 5
+      XR egocentric focus: 1
+      Whole-field zoom: 7
+      Whole-view zoom: 0
+    moveBy:
+      Drag the lens: 8
+      Pointer-driven fisheye: 4
+      Pan and zoom the space: 13
+      Search then frame: 3
+      Follow a selection: 4
+    focusContent:
+      Geometric magnification only: 10
+      Extra labels and attributes: 9
+      Editable detail controls: 0
+      Hidden context declutter: 1
+    interest:
+      Pointer locus: 7
+      Explicit selection: 0
+      Search match set: 0
+      Task-defined DOI function: 1
+      Uniform zoom: 12
+    orientation:
+      Visible surrounding context: 14
+      Locator inset: 6
+      Breadcrumb of scale: 6
+      Distortion cues: 2
+      Lost without leaving: 0
+  exemplars:
+    relation:
+      Embedded magnification:
+        - macOS — Zoom accessibility lens
+        - Windows — Magnifier lens
+        - iOS — Text loupe
+      Distortion of one space:
+        - macOS — Dock magnification
+        - D3 — Fisheye distortion example
+      Semantic zoom levels:
+        - Google Maps — Zoom levels
+        - Apple Maps — Zoom
+        - Figma — Canvas zoom
+      Inset mini-map with live focus:
+        - VS Code — Minimap
+        - Sublime Text — Minimap
+        - Adobe Photoshop — Navigator panel
+      Salience-only focus:
+        - Apple Vision Pro — Focused window
+    arrangement:
+      Lens over a base map:
+        - macOS — Zoom accessibility lens
+        - Windows — Magnifier lens
+        - iOS — Text loupe
+      Fisheye stretch:
+        - macOS — Dock magnification
+        - D3 — Fisheye distortion example
+      Overview inset:
+        - Adobe Photoshop — Navigator panel
+      Edge-aware focus panel:
+        - VS Code — Minimap
+        - Sublime Text — Minimap
+        - Xcode — Minimap
+      XR egocentric focus:
+        - Apple Vision Pro — Focused window
+      Whole-field zoom:
+        - Google Maps — Zoom levels
+        - Apple Maps — Zoom
+        - Figma — Canvas zoom
+      Whole-view zoom: []
+    moveBy:
+      Drag the lens:
+        - VS Code — Minimap
+        - Sublime Text — Minimap
+        - Adobe Photoshop — Navigator panel
+      Pointer-driven fisheye:
+        - macOS — Dock magnification
+        - macOS — Zoom accessibility lens
+        - Windows — Magnifier lens
+      Pan and zoom the space:
+        - VS Code — Minimap
+        - Sublime Text — Minimap
+        - Adobe Photoshop — Navigator panel
+      Search then frame:
+        - Google Maps — Zoom levels
+        - Apple Maps — Zoom
+        - Google Earth — Globe zoom
+      Follow a selection:
+        - Figma — Canvas zoom
+        - Miro — Board zoom
+        - Apple Vision Pro — Focused window
+    focusContent:
+      Geometric magnification only:
+        - macOS — Dock magnification
+        - VS Code — Minimap
+        - Sublime Text — Minimap
+      Extra labels and attributes:
+        - Google Maps — Zoom levels
+        - Apple Maps — Zoom
+        - Figma — Canvas zoom
+      Editable detail controls: []
+      Hidden context declutter:
+        - Apple Vision Pro — Focused window
+    interest:
+      Pointer locus:
+        - macOS — Dock magnification
+        - macOS — Zoom accessibility lens
+        - Windows — Magnifier lens
+      Explicit selection: []
+      Search match set: []
+      Task-defined DOI function:
+        - Gephi — Graph view
+      Uniform zoom:
+        - VS Code — Minimap
+        - Sublime Text — Minimap
+        - Adobe Photoshop — Navigator panel
+    orientation:
+      Visible surrounding context:
+        - macOS — Dock magnification
+        - Google Maps — Zoom levels
+        - Apple Maps — Zoom
+      Locator inset:
+        - VS Code — Minimap
+        - Sublime Text — Minimap
+        - Adobe Photoshop — Navigator panel
+      Breadcrumb of scale:
+        - Adobe Photoshop — Navigator panel
+        - Google Maps — Zoom levels
+        - Apple Maps — Zoom
+      Distortion cues:
+        - macOS — Dock magnification
+        - D3 — Fisheye distortion example
+      Lost without leaving: []
+  unobserved:
+    - sub: arrangement
+      var: Whole-view zoom
+    - sub: focusContent
+      var: Editable detail controls
+    - sub: interest
+      var: Explicit selection
+    - sub: interest
+      var: Search match set
+    - sub: orientation
+      var: Lost without leaving
+  unresolved: []
+  proposals:
+    raised: 3
+    adopted:
+      - sub: arrangement
+        name: Whole-field zoom
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: relation
+        name: Salience-only focus
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: arrangement
+        name: Whole-view zoom
+        raters:
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - Spatial arrangement has no value for whole-field semantic zoom (maps, canvases), coded n/a
+        for seven instances; Relation has none for attention-based dimming (Vision Pro).
+      - arrangement has no value for whole-field semantic zoom, which is a third of the sample
+        (adopted +Whole-field zoom), and relation none for focus by contrast (adopted +Salience-only
+        focus). interest's Uniform zoom doubles as the no-DOI bucket for minimaps where nothing
+        scales, and has no value for a placed lens. focusContent's Geometric magnification only is
+        exclusive by its wording and Extra labels and Hidden context declutter describe one
+        level-of-detail rule from two sides. Pointer-driven fisheye conflates the driver with the
+        warp, so pointer-tracking lenses have no clean value.
+    opus:
+      - 'Arrangement assumed a lens, an inset or a panel, so the largest family in the sample —
+        plain zoomable spaces — had nowhere to go (see +Whole-field zoom). Interest is also nearly
+        constant: only Gephi has a real degree-of-interest function, and Uniform zoom ends up
+        meaning "no DOI at all", which makes it the default rather than a finding.'
+      - Three faults. `arrangement` had no value for the commonest case in the sample — a whole
+        viewport that zooms — so a third of the entry went to n/a or a proposal; two raters proposed
+        it independently and it should be adopted (I have taken sonnet's name). `focusContent`'s
+        first variation is named 'Geometric magnification only', which makes it illegal to combine
+        in a pick-any list, and it records only the focus even where the product densifies the
+        context instead (Xcode). And `moveBy`'s 'Pointer-driven fisheye' welds a mechanism to a
+        distortion, which is why a plain pointer-following lens landed in three different places.
+    sonnet:
+      - Plain 'zoom the whole view' interactions (Maps, Figma, Miro, Google Earth, Gephi, Prezi) are
+        semantic zoom in relation but have no arrangement among the five listed, since all five
+        presuppose a lens/inset/fisheye/XR structure distinct from the base view — proposed
+        +Whole-view zoom.
+      - Arrangement/relation had no value for a screen where the whole field zooms uniformly with
+        nothing carved into a separate focus -- filled by +Whole-field zoom and +Salience-only
+        focus; separately, focusContent's 'Geometric magnification only' is logically incompatible
+        with also picking any other value in the same pick-any list, since 'only' claims exclusivity
+        -- a design flaw when the sub allows multiple selections (this drove several of my
+        corrections on Premiere/Ableton/ArcGIS).
+  codedAt: 2026-09-22
+previews:
+  - file: focus-context.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

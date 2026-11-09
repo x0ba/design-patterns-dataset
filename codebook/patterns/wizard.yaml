@@ -1,0 +1,439 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "wizard". Edit between batches only — see README "Rules".
+id: wizard
+name: Wizard
+level: pattern
+parent: enter-data
+aliases:
+  - multi-step form
+  - guided flow
+  - setup assistant
+definition: A multi-step flow that breaks a complex task into ordered screens, often branching on
+  earlier answers.
+data: sequence
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - government
+  - finance
+  - software
+  - health
+anatomy:
+  - name: Step
+    role: One screen of questions
+  - name: Progress
+    role: How far along
+  - name: Navigation
+    role: Back, next, skip
+  - name: Review
+    role: Everything before committing
+roles: []
+dimensions:
+  - name: Sequence
+    family: flow
+    question: How do steps connect, and can the task be resumed?
+    subdimensions:
+      - id: sequence
+        name: Sequence
+        select: one
+        values:
+          - id: fixed-linear
+            name: Fixed linear
+            example: Account creation
+          - id: branching
+            name: Branching
+            description: Later steps depend on answers
+            example: TurboTax
+          - id: task-list
+            name: Task list
+            description: Sections in any order
+            example: GOV.UK task list pattern
+          - id: adaptive-skipping
+            name: Adaptive skipping
+            description: Known answers skip steps
+            example: Returning-customer checkouts
+      - id: resume
+        name: Resumability
+        select: one
+        values:
+          - id: one-sitting
+            name: One sitting
+            example: Short setups
+          - id: save-and-return
+            name: Save and return
+            example: Government applications
+          - id: automatic-resume
+            name: Automatic resume
+            example: TurboTax
+  - name: Progress
+    family: feedback
+    question: How is progress shown?
+    subdimensions:
+      - id: progress
+        name: Progress
+        select: one
+        values:
+          - id: none
+            name: None
+            example: Typeform
+          - id: stepper-with-titles
+            name: Stepper with titles
+            example: Checkouts
+          - id: percentage-bar
+            name: Percentage bar
+            example: Surveys
+          - id: task-list-with-status
+            name: Task list with status
+            example: GOV.UK task list
+          - id: step-counter
+            name: Step counter
+            description: Step n of m as a bare count, with no step titles (Slack workspace creation)
+            example: Slack — Create a workspace
+  - name: Step density
+    family: content
+    question: How much is asked per step?
+    subdimensions:
+      - id: density
+        name: Density
+        select: one
+        values:
+          - id: one-thing-per-page
+            name: One thing per page
+            example: GOV.UK guidance
+          - id: grouped-questions
+            name: Grouped questions
+            example: Tax software
+          - id: whole-sections
+            name: Whole sections
+            example: Enterprise onboarding
+  - name: Presentation
+    family: layout
+    question: Where does the wizard live?
+    subdimensions:
+      - id: presentation
+        name: Presentation
+        select: one
+        values:
+          - id: full-page
+            name: Full page
+            example: Government services
+          - id: modal
+            name: Modal
+            example: SaaS setup dialogs
+          - id: inline-accordion
+            name: Inline accordion
+            example: Single-page checkouts
+          - id: conversational
+            name: Conversational
+            example: Chat-style intake
+  - name: Review
+    family: scope
+    question: Can everything be reviewed before committing?
+    subdimensions:
+      - id: review
+        name: Review
+        select: one
+        values:
+          - id: no-review
+            name: No review
+            example: Short flows
+          - id: summary-page-with-change-links
+            name: Summary page with change links
+            example: GOV.UK check your answers
+          - id: running-summary
+            name: Running summary
+            example: Checkout order summary
+  - name: Assistance
+    family: initiative
+    question: Does the system help answer?
+    subdimensions:
+      - id: assistance
+        name: Assistance
+        select: one
+        values:
+          - id: none
+            name: None
+            example: Most wizards
+          - id: recommended-answers
+            name: Recommended answers
+            example: Setup defaults
+          - id: interview-that-fills-steps
+            name: Interview that fills steps
+            description: A conversation completes the flow
+            example: AI intake assistants
+wild:
+  score: 0
+  note: Pacing and order are always fixed by the product.
+  examples: []
+techniques:
+  - name: Collapse the wizard
+    dimension: Sequence
+    how: The same flow spec can render as one long form or as paced steps, and the person chooses, so
+      experts are not held to the novice’s pace.
+    ai: false
+  - name: Ask only what’s missing
+    dimension: Assistance
+    how: Answers are drawn from documents already given; only unanswerable steps remain.
+    ai: true
+signature: Collapse the wizard
+sample: Government applications, tax and insurance, device setup, SaaS onboarding.
+unit: One multi-step flow.
+relations:
+  uses:
+    - stepper
+    - progress-indicator
+    - text-field
+    - choice-control
+  specializes:
+    - form
+  neighbors:
+    - onboarding-tour
+    - checkout
+scores:
+  ubiquity: 4
+  potential: 4
+  spec: 5
+evidence: agent-coded
+usage:
+  - Returning users skim steps they have answered before
+questions:
+  - When a flow is collapsed, which branching rules still need to be visible?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.6860206998847368
+  agreementFirstPass: 0.7428571428571429
+  kappaFinal: 0.9189071260944555
+  agreementFinal: 0.9428571428571428
+  pass: true
+  perSub:
+    sequence:
+      kappaFirstPass: 0.5271453590192644
+      agreementFirstPass: 0.55
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    resume:
+      kappaFirstPass: 0.773798303487276
+      agreementFirstPass: 0.8
+      kappaFinal: 0.9453053783044669
+      agreementFinal: 0.95
+      flag: null
+    progress:
+      kappaFirstPass: 0.7185301016419078
+      agreementFirstPass: 0.7
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    density:
+      kappaFirstPass: 0.6749729144095339
+      agreementFirstPass: 0.75
+      kappaFinal: 0.855072463768116
+      agreementFinal: 0.9
+      flag: null
+    presentation:
+      kappaFirstPass: 0.7525773195876291
+      agreementFirstPass: 0.9
+      kappaFinal: 0.896193771626298
+      agreementFinal: 0.95
+      flag: null
+    review:
+      kappaFirstPass: 0.6780487804878051
+      agreementFirstPass: 0.75
+      kappaFinal: 0.8697068403908795
+      agreementFinal: 0.9
+      flag: null
+    assistance:
+      kappaFirstPass: 0.6770721205597416
+      agreementFirstPass: 0.75
+      kappaFinal: 0.8660714285714284
+      agreementFinal: 0.9
+      flag: null
+  distribution:
+    sequence:
+      Fixed linear: 5
+      Branching: 12
+      Task list: 2
+      Adaptive skipping: 1
+    resume:
+      One sitting: 10
+      Save and return: 6
+      Automatic resume: 4
+    progress:
+      None: 9
+      Stepper with titles: 5
+      Percentage bar: 3
+      Task list with status: 2
+      Step counter: 1
+    density:
+      One thing per page: 14
+      Grouped questions: 4
+      Whole sections: 2
+    presentation:
+      Full page: 16
+      Modal: 1
+      Inline accordion: 2
+      Conversational: 1
+    review:
+      No review: 12
+      Summary page with change links: 7
+      Running summary: 1
+    assistance:
+      None: 10
+      Recommended answers: 10
+      Interview that fills steps: 0
+  exemplars:
+    sequence:
+      Fixed linear:
+        - Sonos — Add a product
+        - Slack — Create a workspace
+        - "Airbnb — Become a host: create a listing"
+      Branching:
+        - TurboTax — Federal return interview
+        - GOV.UK — Apply online for a UK passport
+        - HealthCare.gov — Marketplace application
+      Task list:
+        - GOV.UK — Universal Credit application
+        - Shopify — Store setup guide
+      Adaptive skipping:
+        - Amazon — Checkout
+    resume:
+      One sitting:
+        - iOS Setup Assistant — New iPhone setup
+        - macOS Setup Assistant — New Mac setup
+        - Windows 11 OOBE — Out-of-box setup
+      Save and return:
+        - GOV.UK — Apply online for a UK passport
+        - GOV.UK — Universal Credit application
+        - HealthCare.gov — Marketplace application
+      Automatic resume:
+        - TurboTax — Federal return interview
+        - Lemonade — Get a quote with Maya
+        - "Airbnb — Become a host: create a listing"
+    progress:
+      None:
+        - GOV.UK — Apply online for a UK passport
+        - iOS Setup Assistant — New iPhone setup
+        - macOS Setup Assistant — New Mac setup
+      Stepper with titles:
+        - TurboTax — Federal return interview
+        - HealthCare.gov — Marketplace application
+        - Stripe — Activate your account
+      Percentage bar:
+        - "Airbnb — Become a host: create a listing"
+        - Duolingo — Onboarding
+        - Typeform — Respondent view
+      Task list with status:
+        - GOV.UK — Universal Credit application
+        - Shopify — Store setup guide
+      Step counter:
+        - Slack — Create a workspace
+    density:
+      One thing per page:
+        - GOV.UK — Apply online for a UK passport
+        - GOV.UK — Universal Credit application
+        - iOS Setup Assistant — New iPhone setup
+      Grouped questions:
+        - TurboTax — Federal return interview
+        - HealthCare.gov — Marketplace application
+        - Stripe — Activate your account
+      Whole sections:
+        - Shopify — Store setup guide
+        - Amazon — Checkout
+    presentation:
+      Full page:
+        - TurboTax — Federal return interview
+        - GOV.UK — Apply online for a UK passport
+        - GOV.UK — Universal Credit application
+      Modal:
+        - VLC installer for Windows — Setup wizard
+      Inline accordion:
+        - Shopify — Store setup guide
+        - Amazon — Checkout
+      Conversational:
+        - Lemonade — Get a quote with Maya
+    review:
+      No review:
+        - iOS Setup Assistant — New iPhone setup
+        - macOS Setup Assistant — New Mac setup
+        - Windows 11 OOBE — Out-of-box setup
+      Summary page with change links:
+        - TurboTax — Federal return interview
+        - GOV.UK — Apply online for a UK passport
+        - GOV.UK — Universal Credit application
+      Running summary:
+        - Amazon — Checkout
+    assistance:
+      None:
+        - GOV.UK — Apply online for a UK passport
+        - GOV.UK — Universal Credit application
+        - HealthCare.gov — Marketplace application
+      Recommended answers:
+        - TurboTax — Federal return interview
+        - iOS Setup Assistant — New iPhone setup
+        - macOS Setup Assistant — New Mac setup
+      Interview that fills steps: []
+  unobserved:
+    - sub: assistance
+      var: Interview that fills steps
+  unresolved: []
+  proposals:
+    raised: 1
+    adopted:
+      - sub: progress
+        name: Step counter
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - "Fixed linear vs Branching is a matter of degree: almost every setup flow has one branch, so
+        I coded Branching whenever an answer changes which screens come next."
+      - review wants pick any for checkouts (a running total beside a final summary with change
+        links); Grouped questions versus Whole sections has no threshold; Interview that fills steps
+        overlaps presentation Conversational when the wizard is itself the conversation;
+        presentation has no value for a standalone dialog window.
+    opus:
+      - "sequence forced a judgment call everywhere: nearly every real flow varies a little on
+        earlier answers, so I reserved Branching for flows where a whole section appears or
+        disappears and left Fixed linear for ones whose steps are the same every time. presentation
+        has no variation for an installer or setup assistant that owns its own window — I coded
+        those Full page rather than Modal. review conflates reviewing your answers with previewing
+        the result (Airbnb)."
+      - "review wants to be pick any: a checkout truthfully has both a running order-total summary
+        and a final summary with change links, and nothing in the codebook says which wins. Two
+        further gaps: presentation has no variation for a wizard that owns a window of its own
+        (installers, OS setup assistants), so they all land on Modal or Full page by force; and
+        assistance's Interview that fills steps overlaps presentation's Conversational, so a chat
+        intake gets counted twice unless the interview is read as something separate that fills an
+        otherwise ordinary form."
+    sonnet:
+      - "Resume was the hardest to pin down for consumer flows that don't advertise it (auto
+        insurance quotes, brokerage signup): absent a known save-and-resume feature I defaulted to
+        One sitting rather than guess Automatic/Save-and-return, which may undercount actual
+        resumability."
+      - "Two codebook findings recurred: (1) 'sequence' Branching vs Task list get confused when a
+        product both varies content by answer AND shows a resumable left rail of named parts
+        (Stripe) — Task list's gloss is really about order flexibility, not about a named/resumable
+        rail, and I'd been conflating the two. (2) 'assistance' Interview that fills steps overlaps
+        with 'presentation' Conversational — for a chatbot intake, coding assistance as
+        Interview-that-fills-steps just restates the modality rather than answering whether the
+        system recommends specific values."
+  codedAt: 2026-09-22
+previews:
+  - file: wizard.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

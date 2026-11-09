@@ -1,0 +1,353 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "toast". Edit between batches only — see README "Rules".
+id: toast
+name: Toast
+level: component
+parent: monitor
+aliases:
+  - snackbar
+  - transient message
+definition: A brief, non-blocking message about the outcome of an action that goes away on its own.
+data: object
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - productivity
+  - communication
+  - software
+  - commerce
+anatomy:
+  - name: Message
+    role: What happened
+  - name: Action
+    role: Often Undo
+  - name: Timer
+    role: How long it stays
+roles: []
+dimensions:
+  - name: Duration
+    family: lifecycle
+    question: How long does it stay?
+    subdimensions:
+      - id: duration
+        name: Duration
+        select: one
+        values:
+          - id: auto-dismiss
+            name: Auto-dismiss
+            example: Material snackbar
+          - id: until-dismissed
+            name: Until dismissed
+            example: Error toasts in some apps
+          - id: pause-while-hovered
+            name: Pause while hovered
+            example: Common toast libraries
+          - id: queued
+            name: Queued
+            description: One after another
+            example: Material snackbar queue
+  - name: Content
+    family: content
+    question: What does it carry?
+    subdimensions:
+      - id: content
+        name: Content
+        select: many
+        values:
+          - id: message-only
+            name: Message only
+            example: Saved
+          - id: action
+            name: Action
+            example: Gmail Undo
+          - id: progress
+            name: Progress
+            example: Uploading
+          - id: status-icon
+            name: Status icon
+            example: Success ticks
+  - name: Position
+    family: layout
+    question: Where does it appear?
+    subdimensions:
+      - id: position
+        name: Position
+        select: one
+        values:
+          - id: bottom-centre
+            name: Bottom centre
+            example: Material snackbar
+          - id: bottom-left
+            name: Bottom left
+            example: Gmail
+          - id: top-right-stack
+            name: Top right stack
+            example: Web apps
+          - id: near-the-control
+            name: Near the control
+            example: Inline confirmations
+          - id: bottom-right-stack
+            name: Bottom right stack
+            description: Cards slide in and stack in the lower-right corner (VS Code notifications, sonner-style
+              dashboards)
+            example: VS Code — Notification toast
+          - id: centre-of-screen
+            name: Centre of screen
+            description: A pill or HUD in the middle of the screen over the content, in the manner of Apple's
+              Music/volume HUDs
+            example: Apple Music — Added to Library
+          - id: centre-overlay
+            name: Centre overlay
+            description: A pill or HUD floating at the centre of the screen over the content, the iOS
+              system-confirmation shape; not anchored to an edge or to the control that caused it
+            example: Apple Music — Added to Library
+  - name: Severity
+    family: feedback
+    question: What kind of outcome is it?
+    subdimensions:
+      - id: severity
+        name: Severity
+        select: one
+        values:
+          - id: neutral
+            name: Neutral
+            example: Archived
+          - id: success
+            name: Success
+            example: Payment sent
+          - id: warning
+            name: Warning
+            example: Offline
+          - id: error
+            name: Error
+            example: Could not save
+wild:
+  score: 0
+  note: Duration and position are fixed; missed toasts are simply gone.
+  examples: []
+techniques:
+  - name: Toast history
+    dimension: Duration
+    how: Missed toasts can be reopened from a small history, and a person can lengthen the duration
+      everywhere.
+    ai: false
+signature: Toast history
+sample: Web and mobile apps with action feedback.
+unit: One toast system.
+relations:
+  uses:
+    - undo
+  specializes: []
+  neighbors:
+    - banner
+    - notification-center
+scores:
+  ubiquity: 5
+  potential: 2
+  spec: 5
+evidence: agent-coded
+usage:
+  - Screen-reader and slow readers miss auto-dismissing messages
+questions:
+  - Should error messages ever be toasts?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7704071411090081
+  agreementFirstPass: 0.8642857142857143
+  kappaFinal: 0.9587824097610577
+  agreementFinal: 0.9857142857142858
+  pass: true
+  perSub:
+    duration:
+      kappaFirstPass: 0.7356828193832607
+      agreementFirstPass: 0.95
+      kappaFinal: 0.7864768683274032
+      agreementFinal: 0.95
+      flag: null
+    content:
+      kappaFirstPass: 0.7281787979462403
+      agreementFirstPass: 0.8125
+      kappaFinal: 0.9812500000000003
+      agreementFinal: 0.9875
+      flag: null
+    position:
+      kappaFirstPass: 0.888682745825603
+      agreementFirstPass: 0.9
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    severity:
+      kappaFirstPass: 0.8557692307692313
+      agreementFirstPass: 0.95
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+  distribution:
+    duration:
+      Auto-dismiss: 18
+      Until dismissed: 1
+      Pause while hovered: 1
+      Queued: 0
+    content:
+      Message only: 9
+      Action: 13
+      Progress: 1
+      Status icon: 4
+    position:
+      Bottom centre: 11
+      Bottom left: 6
+      Top right stack: 0
+      Near the control: 0
+      Bottom right stack: 2
+      Centre of screen: 0
+      Centre overlay: 1
+    severity:
+      Neutral: 17
+      Success: 3
+      Warning: 0
+      Error: 0
+  exemplars:
+    duration:
+      Auto-dismiss:
+        - Gmail — Archive confirmation
+        - Google Drive — Trash confirmation
+        - Google Photos — Trash confirmation
+      Until dismissed:
+        - VS Code — Notification toast
+      Pause while hovered:
+        - Vercel — Dashboard toast
+      Queued: []
+    content:
+      Message only:
+        - Slack — Link copied
+        - Notion — Copied link
+        - Figma — Copied to clipboard
+      Action:
+        - Gmail — Archive confirmation
+        - Google Drive — Trash confirmation
+        - Google Photos — Trash confirmation
+      Progress:
+        - VS Code — Notification toast
+      Status icon:
+        - VS Code — Notification toast
+        - Vercel — Dashboard toast
+        - Apple Music — Added to Library
+    position:
+      Bottom centre:
+        - Google Photos — Trash confirmation
+        - iOS Mail — Undo Send
+        - Slack — Link copied
+      Bottom left:
+        - Gmail — Archive confirmation
+        - Google Drive — Trash confirmation
+        - Notion — Copied link
+      Top right stack: []
+      Near the control: []
+      Bottom right stack:
+        - VS Code — Notification toast
+        - Vercel — Dashboard toast
+      Centre of screen: []
+      Centre overlay:
+        - Apple Music — Added to Library
+    severity:
+      Neutral:
+        - Gmail — Archive confirmation
+        - Google Drive — Trash confirmation
+        - Google Photos — Trash confirmation
+      Success:
+        - X — Post sent
+        - Apple Music — Added to Library
+        - Jira — Issue created
+      Warning: []
+      Error: []
+  unobserved:
+    - sub: duration
+      var: Queued
+    - sub: position
+      var: Top right stack
+    - sub: position
+      var: Near the control
+    - sub: position
+      var: Centre of screen
+    - sub: severity
+      var: Warning
+    - sub: severity
+      var: Error
+  unresolved: []
+  proposals:
+    raised: 4
+    adopted:
+      - sub: position
+        name: Bottom right stack
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: position
+        name: Centre of screen
+        raters:
+          - fable
+          - opus
+      - sub: position
+        name: Centre overlay
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded:
+      - place: sub:position
+        sub: position
+        dim: Position
+        name: Screen centre
+        gloss: A brief confirmation pill appears vertically centred on screen rather than anchored to an
+          edge — an Apple HUD-style toast
+        raters:
+          - sonnet
+        instances:
+          - 16
+        status: raised
+  raterNotes:
+    fable:
+      - Position lacks bottom right, the commonest corner for desktop toast libraries; Severity for
+        a system with several variants was coded by its default (Neutral) and noted.
+      - content's Message only reads as exclusive but one rater lists it beside Action on every Undo
+        toast, which is all of the content disagreement; position omits bottom right and the
+        screen-centre HUD, and duration is pick one over toasts that both auto-dismiss and pause on
+        hover.
+    opus:
+      - Duration mixes three different questions — how long it stays, whether hovering holds it, and
+        whether several are shown at once — so Queued and Pause while hovered could not be coded
+        from product knowledge and stacking behaviour (Linear, Vercel, VS Code) had no place to go.
+        Severity is Neutral for almost everything, since most toasts acknowledge a small action
+        rather than report an outcome.
+      - "Most of this packet is one codebook fault: 'Message only' is named as an exclusive ('only')
+        but sits in a pick-any list, so a rater can read it either as 'carries a message' or as
+        'carries nothing else'. It should be renamed Message, or the gloss should say it excludes
+        Action. 'Duration' has the same shape of problem — Pause while hovered entails Auto-dismiss
+        rather than competing with it."
+    sonnet:
+      - "Severity: I treated routine housekeeping confirmations (archived, saved, copied, added) as
+        Neutral to match the codebook's own 'Archived' example, reserving Success for outcomes with
+        real stakes (payment/post/issue creation)."
+      - Content's 'Message only' reads as pick-any but is really an exclusivity flag (no
+        action/icon/progress present); I over-applied it in round 1 to every toast that also had an
+        action. The codebook could gloss it as 'no other content present' to head this off. Also a
+        three-way naming split on the same missing centre-screen position (three different names for
+        one gap) is itself a codebook finding, not a coding disagreement.
+  codedAt: 2026-09-22
+previews:
+  - file: toast.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

@@ -1,0 +1,475 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "schedule". Edit between batches only — see README "Rules".
+id: schedule
+name: Plan in time
+level: archetype
+aliases:
+  - scheduling
+  - time planning
+  - calendaring
+definition: Arrange things along time and coordinate availability with others — the activity behind
+  calendars, booking slots, project plans and personal to-dos.
+data: time
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - productivity
+  - enterprise
+  - health
+  - education
+  - travel
+  - entertainment
+anatomy:
+  - name: Time axis
+    role: How duration and position are represented
+  - name: Events or tasks
+    role: Things placed on or ordered by time
+  - name: Availability
+    role: When people or resources are free
+  - name: Coordination
+    role: How schedules meet across people
+roles:
+  - title
+  - start
+  - end
+  - attendee
+  - status
+dimensions:
+  - name: Time representation
+    family: encoding
+    question: How is time made visible, and at what grain?
+    subdimensions:
+      - id: granularity
+        name: Granularity
+        select: one
+        values:
+          - id: day-grid
+            name: Day grid
+            description: Hours within a day
+            example: Google Calendar day view
+          - id: week-grid
+            name: Week grid
+            description: Several days side by side
+            example: Outlook week view
+          - id: month-mosaic
+            name: Month mosaic
+            description: Days as cells
+            example: Apple Calendar month
+          - id: continuous-timeline
+            name: Continuous timeline
+            description: A scrollable span of any length
+            example: Notion timeline
+          - id: list-of-moments
+            name: List of moments
+            description: Time as ordered text, not a grid
+            example: Reminders due list
+      - id: scale
+        name: Scale control
+        select: one
+        values:
+          - id: fixed-views
+            name: Fixed views
+            description: Switch among preset ranges
+            example: Google Calendar Day/Week/Month
+          - id: zoomable-span
+            name: Zoomable span
+            description: Pinch or scroll changes the window
+            example: Figma FigJam timeline prototypes
+          - id: jump-to-date
+            name: Jump to date
+            description: Pick a date without changing scale
+            example: Outlook Go to date
+  - name: Placement and conflict
+    family: composition
+    question: How do items sit relative to each other on time, and what happens when they overlap?
+    subdimensions:
+      - id: placement
+        name: Placement model
+        select: one
+        values:
+          - id: absolute-on-a-calendar
+            name: Absolute on a calendar
+            description: Start and end on a clock
+            example: Google Calendar events
+          - id: relative-among-tasks
+            name: Relative among tasks
+            description: Order and dependencies, not clock time
+            example: Linear issues without due dates
+          - id: slots-from-availability
+            name: Slots from availability
+            description: Choose from offered free windows
+            example: Calendly
+          - id: duration-on-a-gantt
+            name: Duration on a Gantt
+            description: Bars spanning dates with dependencies
+            example: Microsoft Project
+          - id: pinned-to-a-day
+            name: Pinned to a day
+            description: An item sits on a date (optionally a time) without a duration and without ordering or
+              dependencies among items; neither Absolute on a calendar nor Relative among tasks fits
+              a dated to-do
+            example: Todoist — Upcoming
+      - id: conflicts
+        name: Conflicts
+        select: many
+        values:
+          - id: allow-overlaps
+            name: Allow overlaps
+            description: Stacked or side-by-side events
+            example: Google Calendar overlapping meetings
+          - id: warn-on-clash
+            name: Warn on clash
+            description: Surface conflict without blocking
+            example: Outlook conflict warning
+          - id: block-double-booking
+            name: Block double-booking
+            description: Refuse overlapping holds
+            example: Resource booking in Outlook rooms
+          - id: find-a-mutual-time
+            name: Find a mutual time
+            description: Search across calendars
+            example: Google Find a time
+  - name: Whose time
+    family: scope
+    question: Whose calendar or availability is in play?
+    subdimensions:
+      - id: whoseTime
+        name: Scope of people and resources
+        select: one
+        values:
+          - id: personal-only
+            name: Personal only
+            description: One person’s schedule
+            example: Apple Calendar personal
+          - id: shared-calendar
+            name: Shared calendar
+            description: A group reads or writes one calendar
+            example: Team Google Calendar
+          - id: multi-person-overlay
+            name: Multi-person overlay
+            description: Several calendars shown together
+            example: Outlook overlay calendars
+          - id: resource-schedules
+            name: Resource schedules
+            description: Rooms, equipment or seats
+            example: Google Calendar rooms
+          - id: anonymous-availability
+            name: Anonymous availability
+            description: Busy/free without event detail
+            example: Calendly host availability
+  - name: Editing commitment
+    family: lifecycle
+    question: When does placing something become binding, and how does it change later?
+    subdimensions:
+      - id: commitment
+        name: Commitment
+        select: one
+        values:
+          - id: draft-then-invite
+            name: Draft then invite
+            description: Create locally, then send
+            example: Outlook meeting invite
+          - id: immediate-hold
+            name: Immediate hold
+            description: Blocks time on create
+            example: Google Calendar create
+          - id: proposal-awaiting-accept
+            name: Proposal awaiting accept
+            description: Provisional until others confirm
+            example: Doodle polls
+          - id: recurring-series
+            name: Recurring series
+            description: One edit may affect many instances
+            example: Outlook recurring meeting edit
+wild:
+  score: 2
+  note: View grain and which calendars are overlaid are routinely personal; conflict policy and
+    placement model almost never are.
+  examples:
+    - name: Google Calendar
+      note: Day/Week/Month/Schedule and custom working hours
+    - name: Outlook
+      note: Overlay and overlay colour per calendar
+    - name: Notion
+      note: Calendar vs timeline vs list views of the same database
+techniques:
+  - name: Scale as a first-class attribute
+    dimension: Time representation
+    how: "Treat view grain as a bindable attribute of the schedule: zoom changes which fields appear on
+      events, as semantic zoom does for collection attributes."
+    ai: false
+  - name: Conflict as a surfaced attribute
+    dimension: Placement and conflict
+    how: Expose clash, free/busy and travel buffers as attributes that can be filtered, sorted and
+      colour-encoded rather than only as warnings.
+    ai: false
+  - name: Propose a mutual window
+    dimension: Whose time
+    how: Given constraints in words (“after school, under 45 minutes, no Fridays”), propose candidate
+      slots with inspectable sources from each calendar.
+    ai: true
+signature: Scale as a first-class attribute
+sample: Calendar, scheduling, project-management and booking products across productivity,
+  enterprise, health and travel; code every surface whose main job is placing or finding time.
+unit: One schedule surface for one set of people or resources (a screen can hold several).
+relations:
+  uses:
+    - date-picker
+    - filter-controls
+    - modal-dialog
+    - popover
+  specializes: []
+  neighbors:
+    - transact
+    - browse-collections
+    - monitor
+scores:
+  ubiquity: 4
+  potential: 5
+  spec: 4
+evidence: agent-coded
+usage:
+  - People switch grain mid-task (month to find a free day, then day to place the hour)
+  - Busy professionals treat conflict visibility as more important than event aesthetics
+questions:
+  - Is there one schedule grammar under calendar, Gantt and task list, or do absolute vs relative
+    time need separate spaces?
+  - How should personal working hours travel across products the way a Meridian spec travels across
+    shops?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7747087937565084
+  agreementFirstPass: 0.84
+  kappaFinal: 0.9619675456389453
+  agreementFinal: 0.98
+  pass: true
+  perSub:
+    granularity:
+      kappaFirstPass: 0.9092284417549168
+      agreementFirstPass: 0.9
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    scale:
+      kappaFirstPass: 0.6574225122349105
+      agreementFirstPass: 0.65
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    placement:
+      kappaFirstPass: 0.8525798525798528
+      agreementFirstPass: 0.85
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    conflicts:
+      kappaFirstPass: 0.7763621577663319
+      agreementFirstPass: 0.89
+      kappaFinal: 0.9239350912778906
+      agreementFinal: 0.96
+      flag: null
+    whoseTime:
+      kappaFirstPass: 0.9132321041214749
+      agreementFirstPass: 0.9
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    commitment:
+      kappaFirstPass: 0.5328142380422691
+      agreementFirstPass: 0.65
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+  distribution:
+    granularity:
+      Day grid: 1
+      Week grid: 5
+      Month mosaic: 2
+      Continuous timeline: 5
+      List of moments: 7
+    scale:
+      Fixed views: 8
+      Zoomable span: 2
+      Jump to date: 7
+      n/a: 3
+    placement:
+      Absolute on a calendar: 5
+      Relative among tasks: 0
+      Slots from availability: 8
+      Duration on a Gantt: 5
+      Pinned to a day: 2
+    conflicts:
+      Allow overlaps: 8
+      Warn on clash: 3
+      Block double-booking: 7
+      Find a mutual time: 4
+    whoseTime:
+      Personal only: 4
+      Shared calendar: 5
+      Multi-person overlay: 5
+      Resource schedules: 5
+      Anonymous availability: 1
+    commitment:
+      Draft then invite: 2
+      Immediate hold: 16
+      Proposal awaiting accept: 2
+      Recurring series: 0
+  exemplars:
+    granularity:
+      Day grid:
+        - Apple Calendar — Day and list on iPhone
+      Week grid:
+        - Google Calendar — Week view
+        - Microsoft Outlook — Calendar week view
+        - Fantastical — Calendar with quick add
+      Month mosaic:
+        - Calendly — Public booking page
+        - Airbnb — Listing date picker
+      Continuous timeline:
+        - Asana — Project Timeline
+        - Microsoft Project — Gantt Chart view
+        - Notion — Database timeline view
+      List of moments:
+        - Doodle — Group poll
+        - Todoist — Upcoming
+        - Apple Reminders — Scheduled smart list
+    scale:
+      Fixed views:
+        - Google Calendar — Week view
+        - Microsoft Outlook — Calendar week view
+        - Apple Calendar — Day and list on iPhone
+      Zoomable span:
+        - Microsoft Project — Gantt Chart view
+        - Jira — Timeline
+      Jump to date:
+        - Calendly — Public booking page
+        - Todoist — Upcoming
+        - Epic MyChart — Schedule an appointment
+    placement:
+      Absolute on a calendar:
+        - Google Calendar — Week view
+        - Microsoft Outlook — Calendar week view
+        - Apple Calendar — Day and list on iPhone
+      Relative among tasks: []
+      Slots from availability:
+        - Calendly — Public booking page
+        - Doodle — Group poll
+        - Epic MyChart — Schedule an appointment
+      Duration on a Gantt:
+        - Asana — Project Timeline
+        - Microsoft Project — Gantt Chart view
+        - Notion — Database timeline view
+      Pinned to a day:
+        - Todoist — Upcoming
+        - Apple Reminders — Scheduled smart list
+    conflicts:
+      Allow overlaps:
+        - Google Calendar — Week view
+        - Microsoft Outlook — Calendar week view
+        - Apple Calendar — Day and list on iPhone
+      Warn on clash:
+        - Microsoft Outlook — Calendar week view
+        - Microsoft Project — Gantt Chart view
+        - When I Work — Shift scheduler
+      Block double-booking:
+        - Microsoft Outlook — Calendar week view
+        - Calendly — Public booking page
+        - Epic MyChart — Schedule an appointment
+      Find a mutual time:
+        - Google Calendar — Week view
+        - Microsoft Outlook — Calendar week view
+        - Doodle — Group poll
+    whoseTime:
+      Personal only:
+        - Apple Calendar — Day and list on iPhone
+        - Todoist — Upcoming
+        - Apple Reminders — Scheduled smart list
+      Shared calendar:
+        - Asana — Project Timeline
+        - Microsoft Project — Gantt Chart view
+        - Notion — Database timeline view
+      Multi-person overlay:
+        - Google Calendar — Week view
+        - Microsoft Outlook — Calendar week view
+        - Doodle — Group poll
+      Resource schedules:
+        - Epic MyChart — Schedule an appointment
+        - Zocdoc — Doctor's available times
+        - OpenTable — Restaurant reservation times
+      Anonymous availability:
+        - Calendly — Public booking page
+    commitment:
+      Draft then invite:
+        - Microsoft Outlook — Calendar week view
+        - When I Work — Shift scheduler
+      Immediate hold:
+        - Google Calendar — Week view
+        - Apple Calendar — Day and list on iPhone
+        - Calendly — Public booking page
+      Proposal awaiting accept:
+        - Doodle — Group poll
+        - When2meet — Availability grid
+      Recurring series: []
+  unobserved:
+    - sub: placement
+      var: Relative among tasks
+    - sub: commitment
+      var: Recurring series
+  unresolved: []
+  proposals:
+    raised: 1
+    adopted:
+      - sub: placement
+        name: Pinned to a day
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - scale is n/a for booking and poll surfaces that offer no range control. conflicts is n/a for
+        dated to-do lists where items cannot collide. whoseTime for a staff scheduler (one row per
+        employee) was coded Multi-person overlay for want of a 'people as resources' variation.
+      - conflicts as pick any lets [] and n/a both mean nothing happens; the protocol should say
+        which to use when the concept is absent. commitment reads as invite-specific to one rater;
+        its gloss should say it covers any placement that binds.
+    opus:
+      - scale does not apply to booking and poll surfaces at all — Doodle, When2meet and Reminders
+        have no view switch, no zoom and no date jump, coded n/a. conflicts is empty for every
+        project-planning surface because a Gantt has no concept of two things clashing in clock
+        time; that may be worth saying in the codebook rather than leaving raters to guess between
+        an empty array and n/a.
+      - commitment has no value for surfaces where placing something is simply a save — every
+        timeline and to-do got Immediate hold from two of us and n/a from the third, because the
+        variation set is written for invitations.
+    sonnet:
+      - "'commitment' does not really apply to Gantt/task-bar tools (Asana, Project, Notion, Linear,
+        Jira) since editing a bar's dates isn't an RSVP-style binding step the way a calendar invite
+        is; coded n/a rather than force-fitting one of the four event-oriented values."
+      - "Three codebook problems surfaced here: (1) 'commitment' has no value for a surface where
+        placing something is simply saved — 'Immediate hold' ('blocks time on create') is
+        calendar-specific and reads oddly for a Gantt bar or a due date, and its gloss should be
+        widened to 'takes effect on save'; (2) 'Allow overlaps' conflates a display treatment
+        (stacked or side-by-side) with a permissive policy, which is what split every rater on the
+        Gantt instances; (3) 'Find a mutual time' is named as a behaviour but glossed as 'search
+        across calendars', which wrongly excludes poll-based products like Doodle. Also: 'whoseTime'
+        has no variation for a project plan, whose time is implied by resource assignment rather
+        than owned by a calendar."
+  codedAt: 2026-09-22
+previews:
+  - file: schedule.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

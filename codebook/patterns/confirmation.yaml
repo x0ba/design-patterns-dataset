@@ -1,0 +1,419 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "confirmation". Edit between batches only — see README "Rules".
+id: confirmation
+name: Confirmation
+level: component
+parent: transact
+aliases:
+  - confirm dialog
+  - are you sure
+  - destructive confirm
+definition: A deliberate pause asking a person to confirm a consequential action.
+data: object
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - software
+  - finance
+  - productivity
+  - enterprise
+anatomy:
+  - name: Question
+    role: What is about to happen
+  - name: Consequence
+    role: What cannot be undone
+  - name: Actions
+    role: Confirm or cancel
+roles: []
+dimensions:
+  - name: Friction
+    family: feedback
+    question: How much effort does confirming take?
+    subdimensions:
+      - id: friction
+        name: Friction
+        select: one
+        values:
+          - id: simple-confirm
+            name: Simple confirm
+            example: OK and Cancel
+          - id: consequence-in-the-button
+            name: Consequence in the button
+            description: Delete 3 files
+            example: Well-written dialogs
+          - id: type-to-confirm
+            name: Type to confirm
+            example: GitHub delete repository
+          - id: hold-to-confirm
+            name: Hold to confirm
+            example: Long-press destructive actions
+          - id: swipe-to-confirm
+            name: Swipe to confirm
+            description: A slider or swipe gesture commits the action, so it cannot be triggered by a stray tap
+            example: Robinhood — Swipe up to submit
+          - id: physical-button-plus-biometric
+            name: Physical button plus biometric
+            description: A hardware button press (double-click the side button) combined with Face ID or Touch
+              ID authorises the action
+            example: Apple Pay — Confirm with side button
+          - id: biometric-confirm
+            name: Biometric confirm
+            description: Confirming means authenticating — Face ID, a fingerprint, a hardware button press —
+              rather than pressing a button in the interface; the proof of intent comes from the
+              device
+            example: Apple Pay — Confirm with side button
+          - id: re-authenticate
+            name: Re-authenticate
+            description: Confirming requires proving who you are again — re-entering the password or a 2FA code
+              — rather than typing the object's name
+            example: Facebook — Delete account
+  - name: Explanation
+    family: content
+    question: What does it explain?
+    subdimensions:
+      - id: explanation
+        name: Explanation
+        select: many
+        values:
+          - id: what-will-happen
+            name: What will happen
+            example: Most
+          - id: what-cannot-be-undone
+            name: What cannot be undone
+            example: Permanent deletion
+          - id: affected-items
+            name: Affected items
+            example: Bulk deletes
+          - id: an-alternative
+            name: An alternative
+            description: Archive instead
+            example: Account deletion flows
+  - name: When to ask
+    family: initiative
+    question: Under what conditions does it appear?
+    subdimensions:
+      - id: when
+        name: When
+        select: one
+        values:
+          - id: always
+            name: Always
+            example: Legacy apps
+          - id: only-irreversible-actions
+            name: Only irreversible actions
+            example: Good practice
+          - id: above-a-threshold
+            name: Above a threshold
+            example: Large transfers
+          - id: never-rely-on-undo
+            name: Never, rely on undo
+            example: Gmail archive
+          - id: on-a-likely-mistake
+            name: On a likely mistake
+            description: The dialog appears only when a heuristic suggests a slip (empty subject, 'attached'
+              with no attachment), not on every action or only irreversible ones
+            example: Gmail — Send without subject
+          - id: on-a-detected-condition
+            name: On a detected condition
+            description: The dialog appears only because the system noticed something specific about this
+              particular action (an empty subject line, unsaved changes, a mentioned attachment that
+              is missing) — not because the action is always dangerous
+            example: Gmail — Send without subject
+  - name: Form
+    family: layout
+    question: Where does it ask?
+    subdimensions:
+      - id: form
+        name: Form
+        select: one
+        values:
+          - id: modal
+            name: Modal
+            example: Most
+          - id: inline-at-the-control
+            name: Inline at the control
+            example: Two-step inline buttons
+          - id: popover
+            name: Popover
+            example: Popconfirm components
+          - id: full-page
+            name: Full page
+            example: Account deletion
+wild:
+  score: 1
+  note: Don’t ask again checkboxes let people remove some confirmations.
+  examples:
+    - name: macOS
+      note: Warn before emptying the Trash setting
+techniques:
+  - name: Undo over asking
+    dimension: When to ask
+    how: A person chooses an undo window instead of a confirmation for a class of actions.
+    ai: false
+signature: Undo over asking
+sample: Destructive and financial actions across apps.
+unit: One confirmation.
+relations:
+  uses:
+    - modal-dialog
+    - popover
+  specializes: []
+  neighbors:
+    - undo
+scores:
+  ubiquity: 5
+  potential: 2
+  spec: 5
+evidence: agent-coded
+usage:
+  - Habitual confirmation clicks defeat the dialog
+questions:
+  - Which confirmations survive once undo is universal?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.6715363974890979
+  agreementFirstPass: 0.7285714285714285
+  kappaFinal: 0.981776909453021
+  agreementFinal: 0.9857142857142858
+  pass: true
+  perSub:
+    friction:
+      kappaFirstPass: 0.35555555555555585
+      agreementFirstPass: 0.3
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    explanation:
+      kappaFirstPass: 0.7442455242966757
+      agreementFirstPass: 0.8125
+      kappaFinal: 0.9832764267298445
+      agreementFinal: 0.9875
+      flag: null
+    when:
+      kappaFirstPass: 0.7199170124481324
+      agreementFirstPass: 0.8
+      kappaFinal: 0.9393326592517692
+      agreementFinal: 0.95
+      flag: null
+    form:
+      kappaFirstPass: 0.6483001172332944
+      agreementFirstPass: 0.75
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+  distribution:
+    friction:
+      Simple confirm: 8
+      Consequence in the button: 4
+      Type to confirm: 4
+      Hold to confirm: 0
+      Swipe to confirm: 2
+      Physical button plus biometric: 1
+      Biometric confirm: 0
+      Re-authenticate: 1
+    explanation:
+      What will happen: 20
+      What cannot be undone: 12
+      Affected items: 5
+      An alternative: 1
+    when:
+      Always: 7
+      Only irreversible actions: 11
+      Above a threshold: 0
+      Never, rely on undo: 0
+      On a likely mistake: 0
+      On a detected condition: 2
+    form:
+      Modal: 15
+      Inline at the control: 0
+      Popover: 0
+      Full page: 5
+  exemplars:
+    friction:
+      Simple confirm:
+        - Gmail — Send without subject
+        - Slack — Delete message
+        - Venmo — Pay confirmation
+      Consequence in the button:
+        - macOS Finder — Empty Trash
+        - iOS Photos — Delete photo
+        - Google Drive — Delete forever
+      Type to confirm:
+        - GitHub — Delete repository
+        - Discord — Delete server
+        - Notion — Delete workspace
+      Hold to confirm: []
+      Swipe to confirm:
+        - Robinhood — Swipe up to submit
+        - iOS — Slide to power off
+      Physical button plus biometric:
+        - Apple Pay — Confirm with side button
+      Biometric confirm: []
+      Re-authenticate:
+        - Facebook — Delete account
+    explanation:
+      What will happen:
+        - GitHub — Delete repository
+        - macOS Finder — Empty Trash
+        - iOS Photos — Delete photo
+      What cannot be undone:
+        - GitHub — Delete repository
+        - macOS Finder — Empty Trash
+        - Slack — Delete message
+      Affected items:
+        - GitHub — Delete repository
+        - Slack — Delete message
+        - Windows File Explorer — Permanently delete
+      An alternative:
+        - Facebook — Delete account
+    when:
+      Always:
+        - iOS Photos — Delete photo
+        - Venmo — Pay confirmation
+        - Chase — Zelle send review
+      Only irreversible actions:
+        - GitHub — Delete repository
+        - macOS Finder — Empty Trash
+        - Slack — Delete message
+      Above a threshold: []
+      Never, rely on undo: []
+      On a likely mistake: []
+      On a detected condition:
+        - Gmail — Send without subject
+        - Microsoft Word — Save changes on close
+    form:
+      Modal:
+        - GitHub — Delete repository
+        - macOS Finder — Empty Trash
+        - iOS Photos — Delete photo
+      Inline at the control: []
+      Popover: []
+      Full page:
+        - Chase — Zelle send review
+        - Robinhood — Swipe up to submit
+        - iOS — Slide to power off
+  unobserved:
+    - sub: friction
+      var: Hold to confirm
+    - sub: friction
+      var: Biometric confirm
+    - sub: when
+      var: Above a threshold
+    - sub: when
+      var: Never, rely on undo
+    - sub: when
+      var: On a likely mistake
+    - sub: form
+      var: Inline at the control
+    - sub: form
+      var: Popover
+  unresolved: []
+  proposals:
+    raised: 7
+    adopted:
+      - sub: friction
+        name: Swipe to confirm
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: friction
+        name: Physical button plus biometric
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: when
+        name: On a likely mistake
+        raters:
+          - fable
+          - opus
+      - sub: friction
+        name: Biometric confirm
+        raters:
+          - fable
+          - opus
+      - sub: friction
+        name: Re-authenticate
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: when
+        name: On a detected condition
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded:
+      - place: sub:friction
+        sub: friction
+        dim: null
+        name: Slide to confirm
+        gloss: "The commit requires dragging a control across a track (swipe up to submit, slide to power
+          off): deliberate and hard to do by accident, like hold-to-confirm but a different gesture"
+        raters:
+          - opus
+        instances:
+          - 11
+          - 12
+        status: raised
+  raterNotes:
+    fable:
+      - "friction: I read 'Consequence in the button' as any verb-labelled button (Delete, Send
+        money, Empty Trash) and 'Simple confirm' as OK/Yes/No; the codebook's 'Delete 3 files'
+        example may intend a stricter reading (count in the label), which would move most of these
+        to Simple confirm."
+      - Consequence in the button needs a line on whether a bare verb (Delete) counts or only a
+        button that names the outcome (Delete 3 files, Empty Trash); raters split on exactly that.
+        Sheets read as Modal to two raters and Popover to one; say that action sheets are modal.
+    opus:
+      - friction as written only covers button-shaped confirmations; three of twenty commit through
+        a gesture or an identity check instead, hence the proposals. Consequence in the button
+        versus Simple confirm also needs a rule — I read the button text alone (Empty Trash and
+        Delete forever name the consequence; a bare Delete does not) and noted it, but a rater
+        reading the whole dialog would code several of these differently.
+      - "friction has no threshold between Simple confirm and Consequence in the button: fable
+        counted every verb-labelled button, sonnet and I only buttons that name the object or its
+        permanence, and that one reading accounts for most of this entry's disagreement — the
+        gloss's own example ('Delete 3 files') should be made the test. friction also has no value
+        for confirming by authenticating: Apple Pay's side-button-plus-Face-ID and Facebook's
+        password re-entry are the same move and produced three different codes between us.
+        explanation's What will happen is glossed 'Most', which makes it either always true or a
+        residual category, and raters split on whether a permanence warning replaces it. when cannot
+        separate Always from Only irreversible actions for an action that is always irreversible."
+    sonnet:
+      - Gmail's missing-subject warning is the one case where 'when' didn't fit any of the four
+        listed values, since it fires on a specific content condition rather than
+        always/irreversible-only/above-a-threshold/never.
+      - "Three findings. (1) friction's Simple confirm and Consequence in the button kept splitting
+        on how specific a button's label has to be: a bare repeated verb (Delete, Pay, Send money,
+        Refund) versus a button that names a scoped outcome (Empty Trash, Delete Photo, Delete
+        forever, Save/Don't Save) — the codebook's own gloss example ('Delete 3 files') implies the
+        latter, but nothing states the threshold explicitly, and I initially coded almost everything
+        as Simple confirm by treating any action-verb button as generic. (2) Two raters
+        independently proposed near-identical friction variations under different names for the same
+        mechanics — 'Swipe to confirm' (fable, sonnet) vs 'Slide to confirm' (opus) for n11/n12, and
+        'Physical button plus biometric' (fable) vs 'Biometric confirm' (opus) for n10 — which is a
+        coordination gap worth a codebook line rather than three separate proposals surviving to
+        compete. (3) form's Modal and Popover collapsed for any iOS/mobile bottom sheet or action
+        sheet across four instances (n3, n6, n10, n14); Popover's own gloss example is a small
+        anchored Popconfirm-style callout, a narrower pattern than a full-width blocking sheet, and
+        I was applying it too broadly to anything that wasn't a centered desktop dialog box."
+  codedAt: 2026-09-22
+previews:
+  - file: confirmation.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

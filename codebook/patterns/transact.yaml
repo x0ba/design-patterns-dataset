@@ -1,0 +1,381 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "transact". Edit between batches only — see README "Rules".
+id: transact
+name: Transact and commit
+level: archetype
+aliases:
+  - commitment
+  - purchase
+  - decision
+definition: Make a consequential choice, commit to it, and be able to take it back.
+data: sequence
+platforms:
+  - web
+  - mobile
+domains:
+  - commerce
+  - finance
+  - travel
+  - government
+  - enterprise
+anatomy:
+  - name: Options
+    role: What can be chosen
+  - name: Commitment
+    role: The moment of choosing
+  - name: Confirmation
+    role: Proof it happened
+  - name: Reversal
+    role: How to undo it
+roles:
+  - price
+  - total
+  - deadline
+dimensions:
+  - name: Commit structure
+    family: flow
+    question: How many steps stand between choosing and committing?
+    subdimensions:
+      - id: structure
+        name: Structure
+        select: one
+        values:
+          - id: one-click
+            name: One-click
+            example: Amazon 1-Click
+          - id: review-then-confirm
+            name: Review then confirm
+            example: Checkout review pages
+          - id: multi-party-approval
+            name: Multi-party approval
+            example: Expense approvals
+          - id: hold-then-commit
+            name: Hold, then commit
+            example: Ticket holds
+  - name: Consequence disclosure
+    family: feedback
+    question: What is said about consequences before committing?
+    subdimensions:
+      - id: disclosure
+        name: Disclosure
+        select: many
+        values:
+          - id: cost-breakdown
+            name: Cost breakdown
+            example: Taxes and fees
+          - id: irreversibility-warning
+            name: Irreversibility warning
+            example: Non-refundable fares
+          - id: timing-estimate
+            name: Timing estimate
+            example: Delivery dates
+          - id: terms-summary
+            name: Terms summary
+            example: Subscription renewals
+  - name: Reversal
+    family: lifecycle
+    question: How can it be taken back?
+    subdimensions:
+      - id: reversal
+        name: Reversal
+        select: one
+        values:
+          - id: irreversible
+            name: Irreversible
+            example: Wire transfers
+          - id: undo-window
+            name: Undo window
+            example: Gmail undo send
+          - id: cancel-within-a-period
+            name: Cancel within a period
+            example: Free cancellation
+          - id: return-process
+            name: Return process
+            example: Retail returns
+  - name: Defaults and nudges
+    family: initiative
+    question: How does the system shape the choice?
+    subdimensions:
+      - id: nudges
+        name: Nudges
+        select: one
+        values:
+          - id: neutral
+            name: Neutral
+            example: Government forms
+          - id: recommended-option
+            name: Recommended option
+            example: Most popular plan
+          - id: pre-selected-add-ons
+            name: Pre-selected add-ons
+            description: A deceptive pattern
+            example: Travel insurance pre-ticked
+          - id: personalized-suggestion
+            name: Personalized suggestion
+            example: Buy again
+          - id: scarcity-pressure
+            name: Scarcity pressure
+            description: The choice is shaped by manufactured urgency rather than by a recommendation — only 2
+              left at this price, 12 other people are looking, this deal ends in 9 minutes
+            example: Booking.com — Hotel reservation confirm
+  - name: Unit
+    family: scope
+    question: What is being committed to?
+    subdimensions:
+      - id: unit
+        name: Unit
+        select: one
+        values:
+          - id: one-item
+            name: One item
+            example: Buy now
+          - id: a-cart
+            name: A cart
+            example: Checkout
+          - id: a-subscription
+            name: A subscription
+            example: Streaming plans
+          - id: a-group-transaction
+            name: A group transaction
+            example: Venmo requests
+wild:
+  score: 1
+  note: Saved payment and one-click settings are the only common levers.
+  examples:
+    - name: Amazon
+      note: 1-Click settings
+techniques:
+  - name: Consequence preview
+    dimension: Consequence disclosure
+    how: Before committing, a plain list of every effect (charges, notifications, cancellation
+      deadline), each an attribute that can be surfaced into the button itself.
+    ai: false
+  - name: Check this against my rules
+    dimension: Defaults and nudges
+    how: Compare a transaction with the person’s stated budget and preferences before commit.
+    ai: true
+signature: Consequence preview
+sample: Retail, travel, banking, subscription and government payment flows.
+unit: One commit flow.
+relations:
+  uses:
+    - confirmation
+    - undo
+    - stepper
+    - choice-control
+  specializes: []
+  neighbors:
+    - enter-data
+    - schedule
+scores:
+  ubiquity: 5
+  potential: 3
+  spec: 4
+evidence: agent-coded
+usage:
+  - Cost surprises at the last step drive abandonment
+questions:
+  - Which parts of a transaction may a person customize without weakening consent?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.6957418484323227
+  agreementFirstPass: 0.7875
+  kappaFinal: 0.9691129710927104
+  agreementFinal: 0.975
+  pass: true
+  perSub:
+    structure:
+      kappaFirstPass: 0.7530864197530863
+      agreementFirstPass: 0.9
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    disclosure:
+      kappaFirstPass: 0.6677353541241628
+      agreementFirstPass: 0.7625
+      kappaFinal: 0.9656135826348593
+      agreementFinal: 0.975
+      flag: null
+    reversal:
+      kappaFirstPass: 0.8486122792262404
+      agreementFirstPass: 0.85
+      kappaFinal: 0.9481417458945547
+      agreementFinal: 0.95
+      flag: null
+    nudges:
+      kappaFirstPass: 0.5741935483870971
+      agreementFirstPass: 0.75
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    unit:
+      kappaFirstPass: 0.7191011235955055
+      agreementFirstPass: 0.75
+      kappaFinal: 0.9423076923076925
+      agreementFinal: 0.95
+      flag: null
+  distribution:
+    structure:
+      One-click: 1
+      Review then confirm: 17
+      Multi-party approval: 1
+      Hold, then commit: 1
+    disclosure:
+      Cost breakdown: 14
+      Irreversibility warning: 6
+      Timing estimate: 7
+      Terms summary: 6
+    reversal:
+      Irreversible: 6
+      Undo window: 0
+      Cancel within a period: 9
+      Return process: 5
+    nudges:
+      Neutral: 15
+      Recommended option: 3
+      Pre-selected add-ons: 1
+      Personalized suggestion: 0
+      Scarcity pressure: 1
+    unit:
+      One item: 11
+      A cart: 6
+      A subscription: 2
+      A group transaction: 1
+  exemplars:
+    structure:
+      One-click:
+        - App Store — Buying a paid app
+      Review then confirm:
+        - Amazon — Buy Now on a product page
+        - Venmo — Pay or request
+        - Chase — Zelle transfer
+      Multi-party approval:
+        - Expensify — Submit an expense report
+      Hold, then commit:
+        - Ticketmaster — Ticket checkout with timer
+    disclosure:
+      Cost breakdown:
+        - Amazon — Buy Now on a product page
+        - Venmo — Pay or request
+        - Ticketmaster — Ticket checkout with timer
+      Irreversibility warning:
+        - Venmo — Pay or request
+        - Chase — Zelle transfer
+        - Ticketmaster — Ticket checkout with timer
+      Timing estimate:
+        - Amazon — Buy Now on a product page
+        - Chase — Zelle transfer
+        - IRS Direct Pay — Tax payment
+      Terms summary:
+        - Netflix — Choose a plan and start membership
+        - Booking.com — Hotel reservation confirm
+        - United Airlines — Fare purchase
+    reversal:
+      Irreversible:
+        - Venmo — Pay or request
+        - Chase — Zelle transfer
+        - Ticketmaster — Ticket checkout with timer
+      Undo window: []
+      Cancel within a period:
+        - Netflix — Choose a plan and start membership
+        - Booking.com — Hotel reservation confirm
+        - United Airlines — Fare purchase
+      Return process:
+        - Amazon — Buy Now on a product page
+        - App Store — Buying a paid app
+        - Shopify checkout — Store checkout
+    nudges:
+      Neutral:
+        - Amazon — Buy Now on a product page
+        - App Store — Buying a paid app
+        - Venmo — Pay or request
+      Recommended option:
+        - Netflix — Choose a plan and start membership
+        - United Airlines — Fare purchase
+        - Uber — Request a ride
+      Pre-selected add-ons:
+        - DoorDash — Checkout
+      Personalized suggestion: []
+      Scarcity pressure:
+        - Booking.com — Hotel reservation confirm
+    unit:
+      One item:
+        - Amazon — Buy Now on a product page
+        - App Store — Buying a paid app
+        - Chase — Zelle transfer
+      A cart:
+        - Ticketmaster — Ticket checkout with timer
+        - United Airlines — Fare purchase
+        - DoorDash — Checkout
+      A subscription:
+        - Netflix — Choose a plan and start membership
+        - Spotify — Premium upgrade
+      A group transaction:
+        - Venmo — Pay or request
+  unobserved:
+    - sub: reversal
+      var: Undo window
+    - sub: nudges
+      var: Personalized suggestion
+  unresolved: []
+  proposals:
+    raised: 1
+    adopted:
+      - sub: nudges
+        name: Scarcity pressure
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - "unit: coded every P2P payment (Venmo Pay, Zelle, Wise) as One item since a single transfer
+        has one counterparty; the codebook's 'A group transaction' exemplar (Venmo requests)
+        describes splits and requests, which the sample does not locate. Reversal is pick-one, so
+        flows with both a cancel period and returns (Amazon) took the later, longer mechanism."
+      - unit has no value for a transfer to one person; the Venmo exemplar under A group transaction
+        pulls two-party payments into it. nudges lacks scarcity, the commonest travel nudge. Cost
+        breakdown needs a line on whether a single price with plus taxes counts.
+    opus:
+      - "unit has no variation for a peer-to-peer payment: the codebook's A group transaction names
+        Venmo, so I used it for Venmo, Zelle and Wise while noting each is two-party. reversal is
+        pick-one but eBay's screen holds two flows at once (a binding bid and a returnable
+        purchase), and most subscriptions are cancel-before-renewal rather than cancel-for-refund,
+        which Cancel within a period only half describes."
+      - "unit has no value for a transfer to a person: One item means an item and A group
+        transaction means a split, so Venmo, Zelle and Wise all have to be filed under a name that
+        misdescribes them. Cost breakdown's gloss ('taxes and fees') does not say whether a single
+        stated price counts, which is where most of the disclosure disagreement sits. nudges is pick
+        one but Booking.com truthfully holds both a recommendation label and scarcity pressure — it
+        wants to be pick any."
+    sonnet:
+      - Whether an add-on or trial offer counts as a 'nudge' was often a judgment call; coded
+        Neutral wherever the sample didn't explicitly flag a highlighted, pre-ticked, or
+        personalized option.
+      - "Three codebook problems surfaced in reconciliation: (1) disclosure's Cost breakdown gloss
+        ('Taxes and fees') is ambiguous between 'a price is shown' and 'the price is broken into
+        summed components' — a flat subscription price (Netflix, Spotify) split raters until the
+        itemization reading was made explicit; it should be tightened to require multiple
+        components. (2) disclosure's Irreversibility warning got conflated with the separate
+        reversal characteristic more than once (Robinhood, Uber, Wise) — a warning is something said
+        on screen, not an inference from the reversal mechanism, and the gloss should say so
+        explicitly. (3) reversal and unit are pick-one but eBay's Bid-or-Buy-It-Now (irreversible
+        bid vs. return-process purchase) truthfully spans two variations at once, which is a real
+        gap rather than a rater error; nudges also had no variation for manufactured
+        scarcity/urgency (Booking.com's 'only 2 left'), which +Scarcity pressure now covers."
+  codedAt: 2026-09-22
+previews:
+  - file: transact.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

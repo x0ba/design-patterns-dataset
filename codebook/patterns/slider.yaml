@@ -1,0 +1,314 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "slider". Edit between batches only — see README "Rules".
+id: slider
+name: Slider
+level: component
+parent: enter-data
+aliases:
+  - range slider
+  - scrubber
+definition: A control for choosing a value or range by dragging along a track.
+data: schema
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - commerce
+  - design
+  - entertainment
+  - finance
+anatomy:
+  - name: Track
+    role: The range
+  - name: Thumb
+    role: The chosen value
+  - name: Labels
+    role: Scale and value
+roles: []
+dimensions:
+  - name: Values
+    family: scope
+    question: What is chosen?
+    subdimensions:
+      - id: values
+        name: Values
+        select: one
+        values:
+          - id: single-value
+            name: Single value
+            example: Volume
+          - id: range
+            name: Range
+            description: Two thumbs
+            example: Price range
+          - id: discrete-steps
+            name: Discrete steps
+            example: Rating scales
+  - name: Labels
+    family: content
+    question: What does the track tell you?
+    subdimensions:
+      - id: labels
+        name: Labels
+        select: many
+        values:
+          - id: none
+            name: None
+            example: Volume
+          - id: minimum-and-maximum
+            name: Minimum and maximum
+            example: Filters
+          - id: current-value
+            name: Current value
+            example: Material value label
+          - id: tick-marks
+            name: Tick marks
+            example: Stepped sliders
+          - id: distribution-behind-the-track
+            name: Distribution behind the track
+            example: Airbnb price histogram
+  - name: Scale
+    family: encoding
+    question: How are values spread along the track?
+    subdimensions:
+      - id: scale
+        name: Scale
+        select: one
+        values:
+          - id: linear
+            name: Linear
+            example: Most
+          - id: logarithmic
+            name: Logarithmic
+            example: Audio frequency
+          - id: custom-breakpoints
+            name: Custom breakpoints
+            example: Price sliders with uneven steps
+  - name: Precision
+    family: adaptation
+    question: How can a precise value be reached?
+    subdimensions:
+      - id: precision
+        name: Precision
+        select: many
+        values:
+          - id: drag-only
+            name: Drag only
+            example: Mobile volume
+          - id: paired-number-field
+            name: Paired number field
+            example: Design tools
+          - id: arrow-keys
+            name: Arrow keys
+            example: WAI-ARIA slider
+          - id: slow-scrubbing
+            name: Slow scrubbing
+            description: Move the finger away to slow down
+            example: iOS video scrubbing
+          - id: scrub-the-label
+            name: Scrub the label
+            description: Dragging directly on the numeric value's own label changes it, without needing to open
+              or grab a visible track.
+            example: Adobe Photoshop — Layer opacity
+wild:
+  score: 0
+  note: Scale and precision are fixed.
+  examples: []
+techniques:
+  - name: Paired precision
+    dimension: Precision
+    how: Every slider can reveal a numeric field and a scale choice on demand.
+    ai: false
+signature: Paired precision
+sample: Filters, media controls and design tools.
+unit: One slider.
+relations:
+  uses: []
+  specializes: []
+  neighbors:
+    - filter-controls
+    - rating
+scores:
+  ubiquity: 4
+  potential: 2
+  spec: 5
+evidence: agent-coded
+usage:
+  - Motor-impaired users cannot reach exact values by dragging
+questions:
+  - Should the distribution be shown on every range filter?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7083581183790053
+  agreementFirstPass: 0.8375
+  kappaFinal: 0.8964118052376239
+  agreementFinal: 0.9416666666666667
+  pass: true
+  perSub:
+    values:
+      kappaFirstPass: 0.9068322981366463
+      agreementFirstPass: 0.95
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    labels:
+      kappaFirstPass: 0.7416815302294106
+      agreementFirstPass: 0.86
+      kappaFinal: 0.8913765011164081
+      agreementFinal: 0.94
+      flag: null
+    scale:
+      kappaFirstPass: 0.751724137931034
+      agreementFirstPass: 0.85
+      kappaFinal: 0.7368421052631573
+      agreementFinal: 0.85
+      flag: null
+    precision:
+      kappaFirstPass: 0.626666666666666
+      agreementFirstPass: 0.79
+      kappaFinal: 0.9126434104012574
+      agreementFinal: 0.95
+      flag: null
+  distribution:
+    values:
+      Single value: 15
+      Range: 5
+      Discrete steps: 0
+    labels:
+      None: 4
+      Minimum and maximum: 2
+      Current value: 15
+      Tick marks: 1
+      Distribution behind the track: 3
+    scale:
+      Linear: 15
+      Logarithmic: 1
+      Custom breakpoints: 4
+    precision:
+      Drag only: 10
+      Paired number field: 6
+      Arrow keys: 8
+      Slow scrubbing: 1
+      Scrub the label: 1
+  exemplars:
+    values:
+      Single value:
+        - iOS Control Center — Volume
+        - macOS — Sound output volume
+        - YouTube — Playback progress bar
+      Range:
+        - Airbnb — Price range filter
+        - Amazon — Price filter
+        - Zillow — Price range
+      Discrete steps: []
+    labels:
+      None:
+        - iOS Control Center — Volume
+        - macOS — Sound output volume
+        - Spotify — Volume
+      Minimum and maximum:
+        - Amazon — Price filter
+        - Spotify — Equalizer
+      Current value:
+        - YouTube — Playback progress bar
+        - Airbnb — Price range filter
+        - Amazon — Price filter
+      Tick marks:
+        - iOS Photos — Adjust dial
+      Distribution behind the track:
+        - Airbnb — Price range filter
+        - Zillow — Price range
+        - Booking.com — Your budget (per night) filter
+    scale:
+      Linear:
+        - iOS Control Center — Volume
+        - macOS — Sound output volume
+        - YouTube — Playback progress bar
+      Logarithmic:
+        - GarageBand — Track volume
+      Custom breakpoints:
+        - Airbnb — Price range filter
+        - Amazon — Price filter
+        - Zillow — Price range
+    precision:
+      Drag only:
+        - iOS Control Center — Volume
+        - Spotify — Volume
+        - iOS Photos — Adjust dial
+      Paired number field:
+        - Airbnb — Price range filter
+        - Amazon — Price filter
+        - Zillow — Price range
+      Arrow keys:
+        - macOS — Sound output volume
+        - YouTube — Playback progress bar
+        - Airbnb — Price range filter
+      Slow scrubbing:
+        - Apple Music — Now Playing scrubber
+      Scrub the label:
+        - Adobe Photoshop — Layer opacity
+  unobserved:
+    - sub: values
+      var: Discrete steps
+  unresolved: []
+  proposals:
+    raised: 1
+    adopted:
+      - sub: precision
+        name: Scrub the label
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - Instances 14 and 19 bundle several sliders; I coded one of them each and said which. Scale
+        is rarely knowable from the outside beyond the obvious (dB, price steps).
+      - labels and precision overlap when the paired number boxes are also the value readout; Custom
+        breakpoints needs a rule for an open-ended top bucket on an otherwise linear track; the unit
+        of analysis is one slider, so a screen with two (Tinder) needs the sampler to say which.
+    opus:
+      - "scale is close to unobservable: a person cannot see whether a volume or price track is
+        linear, so I coded Linear where the mapping looks proportional, Logarithmic only where the
+        units say so (dB, Hz) and Custom breakpoints for price filters whose last bucket is an
+        and-up. precision also lacks the scrubby-number drag (Photoshop's label) that design tools
+        all use, and Drag only I read strictly as no other route in."
+      - precision's Drag only is an exclusive claim ('the only way in') sitting in a pick-any list,
+        so one rater read it as a value that can be added to others and two of us read it as one
+        that cannot — it should be phrased as 'No other route' or the sub should be pick one; the
+        list also had no scrubby-number drag until sonnet's Scrub the label, which every design tool
+        ships. scale is close to unobservable and cannot say which axis it describes (Spotify's log
+        frequency spacing versus each fader's gain). labels does not distinguish an end label
+        printed on the track from a number box that reads back the current value, which is where
+        three raters split on every price filter.
+    sonnet:
+      - Two instances (14 Tinder, 19 Spotify) actually bundle more than one physical slider under a
+        single sample entry; I picked the more distinguishing control to code and named the other in
+        the note rather than inventing a compound value.
+      - "Two systematic errors: (1) I was treating 'Drag only' as compatible with other precision
+        methods and adding it alongside Arrow keys/Paired number field in nearly every cell, when
+        the codebook's own gloss and both other raters read it as exclusive by definition — if any
+        other method works, the control isn't drag-only. (2) 'labels' Minimum and maximum conflates
+        two different real UI patterns across the four price-range filters in this sample: some
+        (Airbnb, Zillow) show only an editable min/max box pair, which belongs under precision's
+        Paired number field instead; others (Amazon) show a separate passive printed span alongside
+        a distinct editable box-and-Go control, where Minimum and maximum as a label is correct; and
+        Booking.com has no editable boxes at all, only a passive Current value span. Treating all
+        four as the same shape was the source of most of this archetype's disagreement."
+  codedAt: 2026-09-22
+previews:
+  - file: slider.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

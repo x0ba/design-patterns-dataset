@@ -1,0 +1,451 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "modal-dialog". Edit between batches only — see README "Rules".
+id: modal-dialog
+name: Modal dialog
+level: component
+parent: navigate
+aliases:
+  - modal
+  - dialog
+  - pop-up
+  - lightbox
+definition: A window over the page that holds interaction until it is dismissed, used for focused
+  tasks, confirmations and quick detail.
+data: object
+platforms:
+  - web
+  - mobile
+  - desktop
+domains:
+  - commerce
+  - productivity
+  - enterprise
+  - software
+anatomy:
+  - name: Backdrop
+    role: What dims the page
+  - name: Container
+    role: The dialog surface
+  - name: Actions
+    role: How it ends
+roles:
+  - title
+  - body
+  - action
+dimensions:
+  - name: Size and position
+    family: layout
+    question: How big is it, and where?
+    subdimensions:
+      - id: form
+        name: Form
+        select: one
+        values:
+          - id: centered-small
+            name: Centered small
+            example: Alert dialogs
+          - id: centered-large
+            name: Centered large
+            example: Airtable expanded record
+          - id: full-screen
+            name: Full screen
+            example: Material full-screen dialog on mobile
+          - id: sheet-from-an-edge
+            name: Sheet from an edge
+            example: iOS sheets
+          - id: lightbox
+            name: Lightbox
+            description: Media on a dark backdrop
+            example: Photo viewers
+          - id: anchored-bubble
+            name: Anchored bubble
+            description: The dialog opens attached to the element that raised it — a time slot, a cell — rather
+              than centred, at an edge or full screen, while still holding interaction until it is
+              answered
+            example: Google Calendar — Event creation box
+  - name: Opening and closing
+    family: invocation
+    question: What opens it, and what closes it?
+    subdimensions:
+      - id: openBy
+        name: Opened by
+        select: many
+        values:
+          - id: user-action
+            name: User action
+            example: Quick view buttons
+          - id: system-initiated
+            name: System-initiated
+            example: Session timeout warnings
+          - id: url
+            name: URL
+            description: The dialog has its own address
+            example: Instagram web posts
+          - id: keyboard-shortcut
+            name: Keyboard shortcut
+            example: Slack Cmd+K
+      - id: dismissBy
+        name: Dismissed by
+        select: many
+        values:
+          - id: close-button
+            name: Close button
+            example: Most dialogs
+          - id: escape
+            name: Escape
+            example: Most desktop dialogs
+          - id: click-the-backdrop
+            name: Click the backdrop
+            example: Lightboxes
+          - id: swipe-down
+            name: Swipe down
+            example: iOS sheets
+          - id: only-by-completing
+            name: Only by completing
+            example: Required consent dialogs
+  - name: Modality
+    family: scope
+    question: What does it block?
+    subdimensions:
+      - id: modality
+        name: Modality
+        select: one
+        values:
+          - id: blocking
+            name: Blocking
+            example: Alerts
+          - id: modeless
+            name: Modeless
+            description: The page stays usable
+            example: Word Find and Replace
+          - id: stacked
+            name: Stacked
+            description: Dialogs over dialogs
+            example: Settings sub-dialogs
+  - name: Contents
+    family: content
+    question: What is it for?
+    subdimensions:
+      - id: purpose
+        name: Purpose
+        select: one
+        values:
+          - id: confirmation
+            name: Confirmation
+            example: Delete dialogs
+          - id: form
+            name: Form
+            example: Create issue
+          - id: detail-view
+            name: Detail view
+            example: Retail quick view
+          - id: media
+            name: Media
+            example: Lightbox
+          - id: multi-step-task
+            name: Multi-step task
+            example: Setup wizards
+          - id: selection-list
+            name: Selection list
+            description: A list to choose one option from (which playlist to add to, where to share) — not a
+              confirmation, a filled-in form, a detail view, media, or a multi-step task.
+            example: Apple Music — Add to a Playlist sheet
+  - name: Unsaved work
+    family: feedback
+    question: What happens to work when it closes?
+    subdimensions:
+      - id: onDismiss
+        name: On dismiss
+        select: one
+        values:
+          - id: discard-silently
+            name: Discard silently
+            example: Simple forms
+          - id: confirm-before-discarding
+            name: Confirm before discarding
+            example: GitHub new issue
+          - id: keep-a-draft
+            name: Keep a draft
+            example: Slack message drafts
+          - id: already-saved
+            name: Already saved
+            description: Edits made inside the dialog persist as they are made, so closing discards nothing
+              (Airtable expanded record)
+            example: Airtable — Expanded record
+wild:
+  score: 0
+  note: Where a dialog opens is always fixed by the product, even though it is exactly the openIn
+    choice CHI '25 made malleable.
+  examples: []
+techniques:
+  - name: Undock
+    dimension: Size and position
+    how: Turn any dialog into a side-by-side panel, a new tab or an in-place expansion; the
+      overview–detail openIn customization for every modal.
+    ai: false
+  - name: Keep a draft
+    dimension: Unsaved work
+    how: A person-level preference that every dismissed form keeps a draft.
+    ai: false
+signature: Undock
+sample: Dialogs encountered in core flows of the top 50 sites and apps.
+unit: One dialog in one flow.
+relations:
+  uses: []
+  specializes: []
+  neighbors:
+    - drawer
+    - popover
+    - bottom-sheet
+scores:
+  ubiquity: 5
+  potential: 3
+  spec: 5
+evidence: agent-coded
+usage:
+  - Most people dismiss dialogs without reading them
+questions:
+  - Which dialogs lose their meaning when undocked?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.7851912742829753
+  agreementFirstPass: 0.8538461538461538
+  kappaFinal: 0.9491971363457459
+  agreementFinal: 0.9615384615384616
+  pass: true
+  perSub:
+    form:
+      kappaFirstPass: 0.7916666666666671
+      agreementFirstPass: 0.8
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    openBy:
+      kappaFirstPass: 0.8632367307066104
+      agreementFirstPass: 0.9125
+      kappaFinal: 0.9811305920276755
+      agreementFinal: 0.9875
+      flag: null
+    dismissBy:
+      kappaFirstPass: 0.770334928229665
+      agreementFirstPass: 0.84
+      kappaFinal: 0.9032971081230432
+      agreementFinal: 0.93
+      flag: null
+    modality:
+      kappaFirstPass: 0.7321428571428579
+      agreementFirstPass: 0.95
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    purpose:
+      kappaFirstPass: 0.8973481608212147
+      agreementFirstPass: 0.9
+      kappaFinal: 0.9508196721311477
+      agreementFinal: 0.95
+      flag: null
+    onDismiss:
+      kappaFirstPass: 0.48170731707317094
+      agreementFirstPass: 0.6
+      kappaFinal: 0.9477351916376309
+      agreementFinal: 0.95
+      flag: null
+  distribution:
+    form:
+      Centered small: 11
+      Centered large: 3
+      Full screen: 1
+      Sheet from an edge: 3
+      Lightbox: 1
+      Anchored bubble: 1
+    openBy:
+      User action: 16
+      System-initiated: 4
+      URL: 3
+      Keyboard shortcut: 3
+    dismissBy:
+      Close button: 16
+      Escape: 12
+      Click the backdrop: 8
+      Swipe down: 1
+      Only by completing: 4
+    modality:
+      Blocking: 18
+      Modeless: 2
+      Stacked: 0
+    purpose:
+      Confirmation: 9
+      Form: 6
+      Detail view: 2
+      Media: 1
+      Multi-step task: 0
+      Selection list: 2
+    onDismiss:
+      Discard silently: 6
+      Confirm before discarding: 2
+      Keep a draft: 1
+      Already saved: 1
+      n/a: 10
+  exemplars:
+    form:
+      Centered small:
+        - Google Drive — Delete forever confirmation
+        - Slack — Create a channel
+        - GitHub — Delete repository confirmation
+      Centered large:
+        - Jira — Create issue
+        - Airtable — Expanded record
+        - Instagram — Post opened from a profile grid
+      Full screen:
+        - Google Calendar — New event on Android
+      Sheet from an edge:
+        - macOS TextEdit — Save changes sheet
+        - iOS Photos — Delete photo alert
+        - Apple Music — Add to a Playlist sheet
+      Lightbox:
+        - Facebook — Photo viewer
+      Anchored bubble:
+        - Google Calendar — Event creation box
+    openBy:
+      User action:
+        - Google Drive — Delete forever confirmation
+        - macOS TextEdit — Save changes sheet
+        - iOS Photos — Delete photo alert
+      System-initiated:
+        - Windows 11 — User Account Control prompt
+        - The Guardian — Cookie consent
+        - Bank of America — Session timeout warning
+      URL:
+        - Airtable — Expanded record
+        - Instagram — Post opened from a profile grid
+        - Facebook — Photo viewer
+      Keyboard shortcut:
+        - Jira — Create issue
+        - Airtable — Expanded record
+        - Microsoft Word — Find and Replace
+    dismissBy:
+      Close button:
+        - Google Drive — Delete forever confirmation
+        - macOS TextEdit — Save changes sheet
+        - iOS Photos — Delete photo alert
+      Escape:
+        - Google Drive — Delete forever confirmation
+        - macOS TextEdit — Save changes sheet
+        - Jira — Create issue
+      Click the backdrop:
+        - iOS Photos — Delete photo alert
+        - Airtable — Expanded record
+        - Instagram — Post opened from a profile grid
+      Swipe down:
+        - Apple Music — Add to a Playlist sheet
+      Only by completing:
+        - Windows 11 — User Account Control prompt
+        - The Guardian — Cookie consent
+        - Bank of America — Session timeout warning
+    modality:
+      Blocking:
+        - Google Drive — Delete forever confirmation
+        - macOS TextEdit — Save changes sheet
+        - iOS Photos — Delete photo alert
+      Modeless:
+        - Google Calendar — Event creation box
+        - Microsoft Word — Find and Replace
+      Stacked: []
+    purpose:
+      Confirmation:
+        - Google Drive — Delete forever confirmation
+        - macOS TextEdit — Save changes sheet
+        - iOS Photos — Delete photo alert
+      Form:
+        - Jira — Create issue
+        - Slack — Create a channel
+        - Google Calendar — Event creation box
+      Detail view:
+        - Airtable — Expanded record
+        - Instagram — Post opened from a profile grid
+      Media:
+        - Facebook — Photo viewer
+      Multi-step task: []
+      Selection list:
+        - Apple Music — Add to a Playlist sheet
+        - YouTube — Share dialog
+    onDismiss:
+      Discard silently:
+        - Instagram — Post opened from a profile grid
+        - Facebook — Photo viewer
+        - Slack — Create a channel
+      Confirm before discarding:
+        - Jira — Create issue
+        - Google Calendar — New event on Android
+      Keep a draft:
+        - Microsoft Word — Find and Replace
+      Already saved:
+        - Airtable — Expanded record
+  unobserved:
+    - sub: modality
+      var: Stacked
+    - sub: purpose
+      var: Multi-step task
+  unresolved: []
+  proposals:
+    raised: 3
+    adopted:
+      - sub: onDismiss
+        name: Already saved
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: form
+        name: Anchored bubble
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: purpose
+        name: Selection list
+        raters:
+          - fable
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - onDismiss is n/a for confirmations, which are half the sample; Discard silently vs Already
+        saved needed a variation for autosaving dialogs.
+      - onDismiss is n/a for half the sample and has no value for autosaving dialogs; Only by
+        completing is ambiguous for confirmations, where Cancel is both a dismissal and an answer;
+        Centered small vs large has no size rule between an alert and a record view.
+    opus:
+      - onDismiss is n/a for half this sample, because confirmations, alerts and viewers hold no
+        work to lose; that is honest but it means the sub-dimension only bites on the five form
+        dialogs. modality is also Blocking almost everywhere — Stacked never appeared and Modeless
+        only in Word — so it discriminates little. The entry has no way to record a deliberate
+        friction like GitHub's type-the-name-to-enable.
+      - "onDismiss is the sub-dimension raters could not share: it never says whose work it means —
+        the draft typed inside the dialog, or the work behind it that the dialog is asking about
+        (the TextEdit save sheet) — and it has no value for a surface that commits as you type,
+        which is now the common case. dismissBy's 'Click the backdrop' is really two affordances:
+        clicking a dimmed backdrop, and light-dismissing a dialog that has none (Google Calendar's
+        bubble, Zoom's leave popup); the same conflation shows up as 'Tap the scrim' in
+        bottom-sheet. form and modality also fail together on anchored, scrimless dialogs."
+    sonnet:
+      - onDismiss only makes sense where there's actual draft content at risk; for plain
+        action-confirmations, permission prompts and consent dialogs (about half the sample) I coded
+        n/a rather than force-fit Discard silently, since nothing is being discarded — there was
+        never a draft to lose.
+  codedAt: 2026-09-22
+previews:
+  - file: modal-dialog.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

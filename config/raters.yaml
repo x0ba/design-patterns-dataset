@@ -1,0 +1,43 @@
+# Raters for a labeling batch. Each rater codes every site in its own context,
+# without seeing the others; IRR is computed across them (scripts/irr.ts).
+#
+# Default: three independent Claude Opus 5.5 raters (README "How": three agents,
+# independent contexts). To test whether agreement survives model/lab bias
+# (README "Questions"), switch to one of the alternatives below — e.g. three
+# different Claude models, or one rater per lab.
+#
+# fallbacks: on a policy refusal the API re-runs the turn on another Claude
+# model. The serving model of every turn is recorded in label.model.servedBy,
+# so you can drop or re-run labels where it differs. Set false to forbid it.
+
+raters:
+  - id: rater-1
+    provider: anthropic
+    model: claude-opus-5-5
+    effort: high
+    fallbacks: true
+  - id: rater-2
+    provider: anthropic
+    model: claude-opus-5-5
+    effort: high
+    fallbacks: true
+  - id: rater-3
+    provider: anthropic
+    model: claude-opus-5-5
+    effort: high
+    fallbacks: true
+
+# --- Alternative: three Claude models ------------------------------------
+# raters:
+#   - { id: opus,   provider: anthropic, model: claude-opus-5-5,   effort: high }
+#   - { id: sonnet, provider: anthropic, model: claude-sonnet-5-5, effort: high }
+#   - { id: fable,  provider: anthropic, model: claude-fable-5-1,  effort: high }
+#
+# --- Alternative: one rater per lab (openai-compatible provider is untested) -
+# raters:
+#   - { id: claude, provider: anthropic, model: claude-opus-5-5, effort: high }
+#   - { id: gpt,  provider: openai-compatible, model: <model>, baseURL: https://api.openai.com/v1, apiKeyEnv: OPENAI_API_KEY }
+#   - { id: grok, provider: openai-compatible, model: <model>, baseURL: https://api.x.ai/v1,     apiKeyEnv: XAI_API_KEY }
+
+# Sites whose mean per-field agreement falls below this are flagged for review.
+flagBelowAgreement: 0.67

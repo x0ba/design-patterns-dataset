@@ -1,0 +1,266 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "breadcrumbs". Edit between batches only — see README "Rules".
+id: breadcrumbs
+name: Breadcrumbs
+level: component
+parent: navigate
+aliases:
+  - path bar
+  - jump bar
+  - trail
+definition: A trail showing the path to the current place, each step a way back.
+data: hierarchy
+platforms:
+  - web
+  - desktop
+domains:
+  - commerce
+  - productivity
+  - software
+  - government
+anatomy:
+  - name: Step
+    role: One ancestor
+  - name: Separator
+    role: Between steps
+  - name: Current
+    role: Where you are
+roles: []
+dimensions:
+  - name: Trail
+    family: content
+    question: What path does it show, and how is a long path shortened?
+    subdimensions:
+      - id: type
+        name: Trail type
+        select: one
+        values:
+          - id: location
+            name: Location
+            description: Position in the hierarchy
+            example: Google Drive
+          - id: history
+            name: History
+            description: How you got here
+            example: Some documentation sites
+          - id: attribute
+            name: Attribute
+            description: Chosen facets as steps
+            example: Retail category and filter trails
+      - id: truncation
+        name: Truncation
+        select: one
+        values:
+          - id: full-path
+            name: Full path
+            example: Shallow sites
+          - id: collapsed-middle
+            name: Collapsed middle
+            description: An ellipsis hides middle steps
+            example: Google Drive
+          - id: last-few-steps
+            name: Last few steps
+            example: Mobile breadcrumbs
+  - name: Step interaction
+    family: invocation
+    question: What can be done with a step?
+    subdimensions:
+      - id: interaction
+        name: Interaction
+        select: many
+        values:
+          - id: click-to-go-up
+            name: Click to go up
+            example: All breadcrumbs
+          - id: sibling-menu-per-step
+            name: Sibling menu per step
+            example: Xcode jump bar, Windows Explorer chevrons
+          - id: drop-onto-a-step
+            name: Drop onto a step
+            example: Finder path bar
+          - id: edit-as-text
+            name: Edit as text
+            example: Windows Explorer address bar
+  - name: Placement
+    family: layout
+    question: Where does the trail sit?
+    subdimensions:
+      - id: placement
+        name: Placement
+        select: one
+        values:
+          - id: above-the-title
+            name: Above the title
+            example: Retail product pages
+          - id: in-the-top-bar
+            name: In the top bar
+            example: Figma file path
+          - id: bottom-path-bar
+            name: Bottom path bar
+            example: Finder path bar
+wild:
+  score: 1
+  note: A few file managers let people show or hide the path bar.
+  examples:
+    - name: Finder
+      note: Show Path Bar
+techniques:
+  - name: Sibling jump
+    dimension: Step interaction
+    how: Every step opens a menu of its siblings, turning a trail into a navigator.
+    ai: false
+signature: Sibling jump
+sample: Retail, documentation, file managers and admin consoles.
+unit: One breadcrumb trail.
+relations:
+  uses:
+    - menu
+  specializes: []
+  neighbors:
+    - tree-view
+    - stepper
+scores:
+  ubiquity: 4
+  potential: 2
+  spec: 5
+evidence: agent-coded
+usage:
+  - Arrivals from search use breadcrumbs to discover the hierarchy
+questions:
+  - Should attribute trails be editable like filters?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.9069442311218341
+  agreementFirstPass: 0.9428571428571428
+  kappaFinal: 0.9069442311218341
+  agreementFinal: 0.9428571428571428
+  pass: true
+  perSub:
+    type:
+      kappaFirstPass: null
+      agreementFirstPass: 1
+      kappaFinal: null
+      agreementFinal: 1
+      flag: constant
+    truncation:
+      kappaFirstPass: 0.8036006546644845
+      agreementFirstPass: 0.9
+      kappaFinal: 0.8036006546644845
+      agreementFinal: 0.9
+      flag: null
+    interaction:
+      kappaFirstPass: 0.9043900884391682
+      agreementFirstPass: 0.9375
+      kappaFinal: 0.9043900884391682
+      agreementFinal: 0.9375
+      flag: null
+    placement:
+      kappaFirstPass: 0.9274486094316811
+      agreementFirstPass: 0.95
+      kappaFinal: 0.9274486094316811
+      agreementFinal: 0.95
+      flag: null
+  distribution:
+    type:
+      Location: 20
+      History: 0
+      Attribute: 0
+    truncation:
+      Full path: 15
+      Collapsed middle: 5
+      Last few steps: 0
+    interaction:
+      Click to go up: 20
+      Sibling menu per step: 4
+      Drop onto a step: 1
+      Edit as text: 1
+    placement:
+      Above the title: 14
+      In the top bar: 5
+      Bottom path bar: 1
+  exemplars:
+    type:
+      Location:
+        - Google Drive — Folder path
+        - macOS Finder — Path bar
+        - Windows File Explorer — Address bar
+      History: []
+      Attribute: []
+    truncation:
+      Full path:
+        - macOS Finder — Path bar
+        - Amazon — Product page category trail
+        - The Home Depot — Product page
+      Collapsed middle:
+        - Google Drive — Folder path
+        - Windows File Explorer — Address bar
+        - Notion — Page path in the header
+      Last few steps: []
+    interaction:
+      Click to go up:
+        - Google Drive — Folder path
+        - macOS Finder — Path bar
+        - Windows File Explorer — Address bar
+      Sibling menu per step:
+        - Google Drive — Folder path
+        - Windows File Explorer — Address bar
+        - Xcode — Jump bar
+      Drop onto a step:
+        - macOS Finder — Path bar
+      Edit as text:
+        - Windows File Explorer — Address bar
+    placement:
+      Above the title:
+        - Google Drive — Folder path
+        - Amazon — Product page category trail
+        - The Home Depot — Product page
+      In the top bar:
+        - Windows File Explorer — Address bar
+        - Figma — File path in the top bar
+        - Notion — Page path in the header
+      Bottom path bar:
+        - macOS Finder — Path bar
+  unobserved:
+    - sub: type
+      var: History
+    - sub: type
+      var: Attribute
+    - sub: truncation
+      var: Last few steps
+  unresolved: []
+  proposals:
+    raised: 0
+    adopted: []
+    recorded: []
+  raterNotes:
+    fable:
+      - Every instance is a Location trail; History and Attribute never came up in this sample.
+        Editor jump bars were coded In the top bar as editor chrome.
+    opus:
+      - "Every instance in this sample came out as a Location trail, which says the sample is
+        uniform but also that the type sub-dimension barely discriminates: I read Attribute strictly
+        as a trail built from facets the person chose, so the retail category trails (which the
+        codebook cites as the Attribute example) are Location here — that is the cell most likely to
+        split the three of us. placement also has no variation for a trail that is the page heading
+        itself rather than a line above one, which is what Drive, Dropbox and the AWS console do; I
+        coded those Above the title."
+    sonnet:
+      - Every sampled instance is a Location-type trail with Click-to-go-up as its baseline
+        interaction — genuinely the dominant real-world pattern; History-type (documentation 'how
+        you got here' trails) and Attribute-type (retail filter trails) breadcrumbs exist but are
+        rarer, and I didn't stretch any of these 20 to fit them without real evidence.
+  codedAt: 2026-09-22
+previews:
+  - file: breadcrumbs.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

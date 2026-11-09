@@ -1,0 +1,472 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "notification-center". Edit between batches only — see README "Rules".
+id: notification-center
+name: Notification center
+level: pattern
+parent: monitor
+aliases:
+  - notifications
+  - activity inbox
+  - bell menu
+definition: A collected list of notifications from many sources, reviewed and cleared after the fact.
+data: stream
+platforms:
+  - mobile
+  - desktop
+  - web
+domains:
+  - software
+  - social
+  - enterprise
+  - communication
+anatomy:
+  - name: Notification
+    role: One event
+  - name: Groups
+    role: How events are bundled
+  - name: Actions
+    role: What can be done from here
+  - name: Settings entry
+    role: Where to change what arrives
+roles:
+  - source
+  - title
+  - preview
+  - timestamp
+  - reason
+dimensions:
+  - name: Grouping
+    family: composition
+    question: How are notifications bundled?
+    subdimensions:
+      - id: grouping
+        name: Grouping
+        select: one
+        values:
+          - id: chronological-list
+            name: Chronological list
+            example: Android default
+          - id: by-app
+            name: By app
+            example: iOS stacks
+          - id: by-object
+            name: By object
+            example: GitHub notifications by repository
+          - id: priority-sections
+            name: Priority sections
+            example: Android priority conversations
+  - name: What arrives
+    family: initiative
+    question: What decides which notifications get through?
+    subdimensions:
+      - id: filtering
+        name: Filtering
+        select: one
+        values:
+          - id: everything
+            name: Everything
+            example: Default settings
+          - id: per-source-toggles
+            name: Per-source toggles
+            example: App notification settings
+          - id: focus-modes
+            name: Focus modes
+            example: iOS Focus
+          - id: summaries
+            name: Summaries
+            example: Apple Intelligence notification summaries
+  - name: Clearing
+    family: lifecycle
+    question: How does a notification leave?
+    subdimensions:
+      - id: clearing
+        name: Clearing
+        select: one
+        values:
+          - id: dismiss
+            name: Dismiss
+            example: Swipe away on mobile
+          - id: mark-done
+            name: Mark done
+            example: GitHub Done
+          - id: expire
+            name: Expire
+            example: Time-sensitive alerts
+          - id: snooze
+            name: Snooze
+            example: Android notification snooze
+          - id: mark-read
+            name: Mark read
+            description: "The item never leaves: viewing it or an explicit Mark as read only clears its unread
+              styling (social feeds, Slack Activity, Jira, Teams, Discord)"
+            example: Slack — Activity
+          - id: read-on-view
+            name: Read on view
+            description: The notification is never removed — opening the surface or the item only clears its
+              unread state, and the entry stays in the list until it ages out; the default in social
+              and activity feeds, and distinct from an explicit Dismiss or Done
+            example: Slack — Activity
+  - name: Item content
+    family: content
+    question: What does a notification show?
+    subdimensions:
+      - id: content
+        name: Content
+        select: many
+        values:
+          - id: title-and-source
+            name: Title and source
+            example: All
+          - id: preview-text
+            name: Preview text
+            example: Messages
+          - id: rich-media
+            name: Rich media
+            example: Photos
+          - id: inline-actions
+            name: Inline actions
+            example: Reply from notification
+          - id: reason
+            name: Reason
+            description: Why you got it
+            example: GitHub reason labels
+  - name: Surface
+    family: layout
+    question: Where does the list live?
+    subdimensions:
+      - id: surface
+        name: Surface
+        select: one
+        values:
+          - id: pull-down-shade
+            name: Pull-down shade
+            example: Android
+          - id: side-panel
+            name: Side panel
+            example: Windows notification center
+          - id: dedicated-page
+            name: Dedicated page
+            example: GitHub notifications
+          - id: bell-popover
+            name: Bell popover
+            example: Web apps
+  - name: Bulk handling
+    family: scope
+    question: How are many handled at once?
+    subdimensions:
+      - id: bulk
+        name: Bulk
+        select: many
+        values:
+          - id: clear-all
+            name: Clear all
+            example: iOS
+          - id: clear-a-group
+            name: Clear a group
+            example: iOS stacks
+          - id: mark-all-read
+            name: Mark all read
+            example: Web apps
+          - id: filter-by-reason
+            name: Filter by reason
+            description: Mentioned, assigned, review requested
+            example: GitHub
+wild:
+  score: 2
+  note: Per-app settings and focus modes exist; conditions and rules rarely do.
+  examples:
+    - name: iOS
+      note: Focus modes and summaries
+    - name: GitHub
+      note: Filter by reason and custom filters
+techniques:
+  - name: Reason filters
+    dimension: Bulk handling
+    how: Filter by why a notification exists, then turn any filter into a rule for what arrives in
+      future.
+    ai: false
+  - name: Summaries with sources
+    dimension: What arrives
+    how: Stacks collapse into a summary whose every line opens the notification it came from.
+    ai: true
+signature: Reason filters
+sample: Mobile operating systems, developer platforms, social and SaaS products.
+unit: One notification surface.
+relations:
+  uses:
+    - badge
+    - toast
+    - menu
+    - bulk-actions
+    - popover
+  specializes:
+    - monitor
+  neighbors:
+    - inbox
+    - activity-log
+scores:
+  ubiquity: 5
+  potential: 4
+  spec: 4
+evidence: agent-coded
+usage:
+  - Notification centres become a second, neglected inbox
+questions:
+  - Should the notification centre and the inbox be the same overview?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.6379863781165994
+  agreementFirstPass: 0.75
+  kappaFinal: 0.9355102148522708
+  agreementFinal: 0.9535714285714286
+  pass: true
+  perSub:
+    grouping:
+      kappaFirstPass: 0.780420860018298
+      agreementFirstPass: 0.8
+      kappaFinal: 0.947598253275109
+      agreementFinal: 0.95
+      flag: null
+    filtering:
+      kappaFirstPass: 0.2963752665245204
+      agreementFirstPass: 0.45
+      kappaFinal: 0.7219003476245653
+      agreementFinal: 0.8
+      flag: null
+    clearing:
+      kappaFirstPass: 0.2888888888888889
+      agreementFirstPass: 0.45
+      kappaFinal: 0.8962834917891098
+      agreementFinal: 0.9
+      flag: null
+    content:
+      kappaFirstPass: 0.7163567601638827
+      agreementFirstPass: 0.79
+      kappaFinal: 0.9574085466849652
+      agreementFinal: 0.97
+      flag: null
+    surface:
+      kappaFirstPass: 0.8099762470308788
+      agreementFirstPass: 0.8
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    bulk:
+      kappaFirstPass: 0.6348728460700784
+      agreementFirstPass: 0.81
+      kappaFinal: 0.9488636363636364
+      agreementFinal: 0.97
+      flag: null
+  distribution:
+    grouping:
+      Chronological list: 10
+      By app: 4
+      By object: 5
+      Priority sections: 1
+    filtering:
+      Everything: 3
+      Per-source toggles: 13
+      Focus modes: 4
+      Summaries: 0
+    clearing:
+      Dismiss: 7
+      Mark done: 4
+      Expire: 0
+      Snooze: 0
+      Mark read: 8
+      Read on view: 0
+    content:
+      Title and source: 20
+      Preview text: 19
+      Rich media: 10
+      Inline actions: 10
+      Reason: 3
+    surface:
+      Pull-down shade: 3
+      Side panel: 3
+      Dedicated page: 9
+      Bell popover: 5
+    bulk:
+      Clear all: 7
+      Clear a group: 5
+      Mark all read: 7
+      Filter by reason: 7
+      "?": 1
+  exemplars:
+    grouping:
+      Chronological list:
+        - Slack — Activity
+        - Instagram — Notifications
+        - Facebook — Notifications
+      By app:
+        - iOS — Notification Center
+        - macOS — Notification Center
+        - Windows 11 — Notification center
+      By object:
+        - GitHub — Notifications inbox
+        - X — Notifications tab
+        - Discord — Inbox
+      Priority sections:
+        - Android — Notification shade
+    filtering:
+      Everything:
+        - Slack — Activity
+        - X — Notifications tab
+        - Instagram — Notifications
+      Per-source toggles:
+        - Android — Notification shade
+        - GitHub — Notifications inbox
+        - Facebook — Notifications
+      Focus modes:
+        - iOS — Notification Center
+        - macOS — Notification Center
+        - Windows 11 — Notification center
+      Summaries: []
+    clearing:
+      Dismiss:
+        - iOS — Notification Center
+        - Android — Notification shade
+        - macOS — Notification Center
+      Mark done:
+        - GitHub — Notifications inbox
+        - Notion — Inbox
+        - Discord — Inbox
+      Expire: []
+      Snooze: []
+      Mark read:
+        - Slack — Activity
+        - X — Notifications tab
+        - Instagram — Notifications
+      Read on view: []
+    content:
+      Title and source:
+        - iOS — Notification Center
+        - Android — Notification shade
+        - macOS — Notification Center
+      Preview text:
+        - iOS — Notification Center
+        - Android — Notification shade
+        - macOS — Notification Center
+      Rich media:
+        - iOS — Notification Center
+        - Android — Notification shade
+        - macOS — Notification Center
+      Inline actions:
+        - iOS — Notification Center
+        - Android — Notification shade
+        - macOS — Notification Center
+      Reason:
+        - GitHub — Notifications inbox
+        - Jira — Notifications panel
+        - Microsoft Teams — Activity
+    surface:
+      Pull-down shade:
+        - iOS — Notification Center
+        - Android — Notification shade
+        - Apple Watch — Notification Center
+      Side panel:
+        - macOS — Notification Center
+        - Windows 11 — Notification center
+        - Notion — Inbox
+      Dedicated page:
+        - GitHub — Notifications inbox
+        - Slack — Activity
+        - X — Notifications tab
+      Bell popover:
+        - Facebook — Notifications
+        - YouTube — Notifications popover
+        - Jira — Notifications panel
+    bulk:
+      Clear all:
+        - iOS — Notification Center
+        - Android — Notification shade
+        - Windows 11 — Notification center
+      Clear a group:
+        - iOS — Notification Center
+        - Android — Notification shade
+        - macOS — Notification Center
+      Mark all read:
+        - GitHub — Notifications inbox
+        - Facebook — Notifications
+        - Reddit — Inbox
+      Filter by reason:
+        - GitHub — Notifications inbox
+        - Slack — Activity
+        - X — Notifications tab
+  unobserved:
+    - sub: filtering
+      var: Summaries
+    - sub: clearing
+      var: Expire
+    - sub: clearing
+      var: Snooze
+    - sub: clearing
+      var: Read on view
+  unresolved:
+    - sub: clearing
+      n: 10
+  proposals:
+    raised: 2
+    adopted:
+      - sub: clearing
+        name: Mark read
+        raters:
+          - fable
+          - opus
+          - sonnet
+      - sub: clearing
+        name: Read on view
+        raters:
+          - fable
+          - opus
+    recorded: []
+  raterNotes:
+    fable:
+      - Half the sample never removes a notification at all, which none of the four clearing
+        variations covers; Grouping is hard when apps bundle by app inside chronological or priority
+        sections.
+      - clearing has no value for the commonest lifecycle, an item that never leaves and only loses
+        its unread state; two raters proposed it under different names, so it wants to be a
+        variation. filtering cannot say whether per-type settings that gate push but not the list
+        count, and iOS holds Focus, Summaries and per-app toggles at once. grouping conflates
+        ordering with bundling, so an inbox of task or issue rows in time order splits raters. bulk
+        lists with Message-only-style contradictions aside, most bulk disagreement is omission.
+    opus:
+      - Clearing assumes a notification leaves, which half the sample never does (see +Read on
+        view). Filtering is nearly degenerate — almost every product has per-type settings somewhere
+        — so I coded Per-source toggles only where muting a specific source is a first-class, used
+        control, and Everything where the surface shows all activity addressed to you; Snooze went
+        unused because it is always a secondary option beside dismissing.
+      - Clearing assumes a notification leaves; in half the sample it never does, and fable and I
+        proposed the same missing variation under two names (I have taken fable's, Mark read).
+        Filtering is close to degenerate — every product has per-type settings somewhere — so it
+        only discriminates if Per-source toggles is read strictly as muting a named source (channel,
+        repo, page, project) rather than as any notification setting.
+    sonnet:
+      - "Clearing was the hardest sub-dimension: several consumer feeds (Instagram, LinkedIn) have
+        no memorable explicit dismissal action beyond reading, coded '?'."
+      - "Two codebook-shaped findings: (1) filtering's Per-source toggles vs Everything split turns
+        on whether a rater credits any settings screen that gates notification generation somewhere
+        (per-type, per-channel, per-page) or requires proof that the specific SETTING changes THIS
+        SPECIFIC surface as opposed to a separate push channel — the stricter reading converges on
+        Everything far more often, and the codebook doesn't say which test to apply. (2) clearing
+        has no value for the common case where a notification is never removed and merely loses its
+        unread styling on view or on Mark all as read — fable's Mark read and opus's Read on view
+        are independent proposals for the same real gap; I'm adopting Mark read as the name since
+        some instances (Reddit, Facebook) trigger it via an explicit button rather than passive
+        viewing."
+  codedAt: 2026-09-22
+previews:
+  - file: notification-center.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

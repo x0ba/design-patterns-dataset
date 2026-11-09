@@ -1,0 +1,486 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "playlist-queue". Edit between batches only — see README "Rules".
+id: playlist-queue
+name: Playlist and queue
+level: pattern
+parent: consume-media
+aliases:
+  - queue
+  - up next
+  - play queue
+  - watchlist continuum
+definition: An ordered list of media items that defines what plays now and what comes after,
+  editable during consumption.
+data: sequence
+platforms:
+  - web
+  - mobile
+  - desktop
+  - voice
+domains:
+  - entertainment
+  - education
+  - social
+anatomy:
+  - name: Now playing
+    role: The current item
+  - name: Up next
+    role: Immediate successors
+  - name: Saved playlist
+    role: A reusable ordered collection
+  - name: Shuffle and repeat
+    role: Order policies
+roles:
+  - title
+  - creator
+  - duration
+  - artwork
+  - added-by
+dimensions:
+  - name: Queue structure
+    family: composition
+    question: How is the upcoming sequence structured?
+    subdimensions:
+      - id: structure
+        name: Structure
+        select: one
+        values:
+          - id: flat-up-next-list
+            name: Flat up-next list
+            example: YouTube Up next
+          - id: manual-queue-over-a-context
+            name: Manual queue over a context
+            description: Queue sits on top of an album or playlist
+            example: Spotify Queue
+          - id: episode-season-order
+            name: Episode season order
+            example: Netflix episodes
+          - id: radio-from-a-seed
+            name: Radio from a seed
+            example: Apple Music radio
+          - id: collaborative-playlist
+            name: Collaborative playlist
+            example: Spotify collaborative playlists
+          - id: rule-built-playlist
+            name: Rule-built playlist
+            description: The list is generated and maintained by a saved rule — these podcasts, sorted this way,
+              this many episodes — and refills itself as new items arrive; neither hand-ordered nor
+              algorithmically seeded
+            example: Overcast — Playlist
+  - name: Editing the order
+    family: flow
+    question: How does a person change what comes next?
+    subdimensions:
+      - id: edits
+        name: Edits
+        select: many
+        values:
+          - id: play-next
+            name: Play next
+            example: Spotify Play Next
+          - id: add-to-end
+            name: Add to end
+            example: YouTube Add to queue
+          - id: drag-reorder
+            name: Drag reorder
+            example: Spotify queue reorder
+          - id: remove-from-queue
+            name: Remove from queue
+            example: Most players
+          - id: clear-queue
+            name: Clear queue
+            example: Spotify
+  - name: Order policy
+    family: initiative
+    question: Who decides the order when the person does not?
+    subdimensions:
+      - id: policy
+        name: Policy
+        select: one
+        values:
+          - id: strict-manual-order
+            name: Strict manual order
+            example: User-built playlist
+          - id: shuffle
+            name: Shuffle
+            example: Spotify Shuffle
+          - id: algorithmic-radio
+            name: Algorithmic radio
+            example: Spotify Radio
+          - id: autoplay-similar-after-end
+            name: Autoplay similar after end
+            example: YouTube Autoplay
+          - id: editorial-continuation
+            name: Editorial continuation
+            example: Netflix next episode
+  - name: Item representation
+    family: content
+    question: What does each queued item show?
+    subdimensions:
+      - id: representation
+        name: Representation
+        select: many
+        values:
+          - id: title-and-creator
+            name: Title and creator
+            example: Spotify
+          - id: artwork
+            name: Artwork
+            example: Apple Music
+          - id: duration
+            name: Duration
+            example: YouTube
+          - id: source-playlist
+            name: Source playlist
+            example: Spotify queue context
+          - id: who-added-it
+            name: Who added it
+            example: Collaborative playlists
+          - id: tempo-and-key
+            name: Tempo and key
+            description: DJ software shows BPM, musical key and beat-grid state per track, which decide what can
+              be mixed next
+            example: rekordbox — DJ deck with playlist
+  - name: Queue surface
+    family: layout
+    question: Where is the queue shown?
+    subdimensions:
+      - id: surface
+        name: Surface
+        select: one
+        values:
+          - id: full-screen-list
+            name: Full-screen list
+            example: Spotify Queue sheet
+          - id: side-panel
+            name: Side panel
+            example: YouTube desktop Up next
+          - id: sheet-over-player
+            name: Sheet over player
+            example: Mobile Spotify
+          - id: voice-readout-only
+            name: Voice readout only
+            example: Alexa queue
+          - id: inline-under-now-playing
+            name: Inline under Now Playing
+            example: Apple Music
+  - name: Persistence
+    family: lifecycle
+    question: Does the queue survive across sessions and devices?
+    subdimensions:
+      - id: persistence
+        name: Persistence
+        select: one
+        values:
+          - id: session-only
+            name: Session only
+            example: Many web embeds
+          - id: saved-as-playlist
+            name: Saved as playlist
+            example: Convert queue to playlist
+          - id: synced-devices
+            name: Synced devices
+            example: Spotify Connect
+          - id: continue-watching-row
+            name: Continue watching row
+            description: Cross-session resume set
+            example: Netflix
+wild:
+  score: 2
+  note: Manual queue edits are common; policies for when autoplay may interrupt a queue are rarely
+    exposed.
+  examples:
+    - name: Spotify
+      note: Play Next, Add to Queue, reorder
+    - name: YouTube
+      note: Up next and Autoplay toggle
+    - name: Apple Music
+      note: Playing Next list
+techniques:
+  - name: Queue rules
+    dimension: Order policy
+    how: Make autoplay and shuffle into editable rules with priority over the manual queue (“finish
+      album, then radio”).
+    ai: false
+  - name: Surface then reorder
+    dimension: Item representation
+    how: Any surfaced attribute (energy, BPM, duration left) becomes a sort key for the remaining queue.
+    ai: false
+  - name: Build the night
+    dimension: Queue structure
+    how: Describe a listening plan in words; the model proposes a queue with inspectable sources and
+      swap alternatives.
+    ai: true
+signature: Queue rules
+sample: Spotify, Apple Music, YouTube, Netflix, podcast apps and DJ software.
+unit: One active queue or playlist playback context.
+relations:
+  uses:
+    - drag-reorder
+    - card
+    - menu
+    - toast
+  specializes:
+    - consume-media
+  neighbors:
+    - media-player
+    - feed
+scores:
+  ubiquity: 5
+  potential: 4
+  spec: 4
+evidence: agent-coded
+usage:
+  - People fight autoplay that inserts over a carefully built queue
+questions:
+  - Is a queue a sequence pattern specialized from browse-collections?
+  - Should collaborative queues show authorship on every item?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.6008624961330844
+  agreementFirstPass: 0.68125
+  kappaFinal: 0.8748535485717573
+  agreementFinal: 0.890625
+  pass: true
+  perSub:
+    structure:
+      kappaFirstPass: 0.5566502463054186
+      agreementFirstPass: 0.55
+      kappaFinal: 0.708029197080292
+      agreementFinal: 0.7
+      flag: null
+    edits:
+      kappaFirstPass: 0.39732142857142894
+      agreementFirstPass: 0.55
+      kappaFinal: 0.9104433056370961
+      agreementFinal: 0.94
+      flag: null
+    policy:
+      kappaFirstPass: 0.4531250000000001
+      agreementFirstPass: 0.5
+      kappaFinal: 0.5484949832775922
+      agreementFinal: 0.55
+      flag: unreliable
+    representation:
+      kappaFirstPass: 0.775795012582932
+      agreementFirstPass: 0.85
+      kappaFinal: 0.9391245530969176
+      agreementFinal: 0.9571428571428572
+      flag: null
+    surface:
+      kappaFirstPass: 0.5609756097560976
+      agreementFirstPass: 0.55
+      kappaFinal: 0.7568881685575365
+      agreementFinal: 0.75
+      flag: null
+    persistence:
+      kappaFirstPass: 0.6258768511301638
+      agreementFirstPass: 0.6
+      kappaFinal: 0.8581560283687942
+      agreementFinal: 0.85
+      flag: null
+  distribution:
+    structure:
+      Flat up-next list: 10
+      Manual queue over a context: 5
+      Episode season order: 2
+      Radio from a seed: 1
+      Collaborative playlist: 1
+      Rule-built playlist: 1
+    edits:
+      Play next: 10
+      Add to end: 16
+      Drag reorder: 14
+      Remove from queue: 16
+      Clear queue: 9
+    policy:
+      Strict manual order: 13
+      Shuffle: 0
+      Algorithmic radio: 1
+      Autoplay similar after end: 4
+      Editorial continuation: 2
+    representation:
+      Title and creator: 20
+      Artwork: 17
+      Duration: 11
+      Source playlist: 2
+      Who added it: 1
+      Tempo and key: 1
+    surface:
+      Full-screen list: 10
+      Side panel: 6
+      Sheet over player: 0
+      Voice readout only: 1
+      Inline under Now Playing: 2
+      n/a: 1
+    persistence:
+      Session only: 8
+      Saved as playlist: 4
+      Synced devices: 6
+      Continue watching row: 2
+  exemplars:
+    structure:
+      Flat up-next list:
+        - YouTube — Up next panel
+        - Apple Podcasts — Up Next
+        - Pocket Casts — Up Next
+      Manual queue over a context:
+        - Spotify — Queue
+        - Apple Music — Up Next
+        - YouTube Music — Up next
+      Episode season order:
+        - Netflix — Episodes and next episode
+        - Disney+ — Episode autoplay
+      Radio from a seed:
+        - Pandora — Station
+      Collaborative playlist:
+        - Spotify — Jam session
+      Rule-built playlist:
+        - Overcast — Playlist
+    edits:
+      Play next:
+        - Spotify — Queue
+        - Apple Music — Up Next
+        - YouTube Music — Up next
+      Add to end:
+        - Spotify — Queue
+        - Spotify — Jam session
+        - Apple Music — Up Next
+      Drag reorder:
+        - Spotify — Queue
+        - Apple Music — Up Next
+        - YouTube — Up next panel
+      Remove from queue:
+        - Spotify — Queue
+        - Spotify — Jam session
+        - Apple Music — Up Next
+      Clear queue:
+        - Spotify — Queue
+        - Apple Music — Up Next
+        - Pocket Casts — Up Next
+    policy:
+      Strict manual order:
+        - Spotify — Queue
+        - Spotify — Jam session
+        - Apple Podcasts — Up Next
+      Shuffle: []
+      Algorithmic radio:
+        - Pandora — Station
+      Autoplay similar after end:
+        - Apple Music — Up Next
+        - YouTube — Up next panel
+        - YouTube Music — Up next
+      Editorial continuation:
+        - Netflix — Episodes and next episode
+        - Disney+ — Episode autoplay
+    representation:
+      Title and creator:
+        - Spotify — Queue
+        - Spotify — Jam session
+        - Apple Music — Up Next
+      Artwork:
+        - Spotify — Queue
+        - Spotify — Jam session
+        - Apple Music — Up Next
+      Duration:
+        - YouTube — Up next panel
+        - Netflix — Episodes and next episode
+        - Apple Podcasts — Up Next
+      Source playlist:
+        - Spotify — Queue
+        - Sonos — Queue
+      Who added it:
+        - Spotify — Jam session
+      Tempo and key:
+        - rekordbox — DJ deck with playlist
+    surface:
+      Full-screen list:
+        - Spotify — Queue
+        - Spotify — Jam session
+        - Netflix — Episodes and next episode
+      Side panel:
+        - Apple Music — Up Next
+        - YouTube — Up next panel
+        - SoundCloud — Next up
+      Sheet over player: []
+      Voice readout only:
+        - Amazon Alexa — Queue by voice
+      Inline under Now Playing:
+        - YouTube Music — Up next
+        - Apple Podcasts — Up Next
+    persistence:
+      Session only:
+        - Spotify — Jam session
+        - Apple Music — Up Next
+        - YouTube — Up next panel
+      Saved as playlist:
+        - YouTube Music — Up next
+        - rekordbox — DJ deck with playlist
+        - VLC — Playlist
+      Synced devices:
+        - Spotify — Queue
+        - Apple Podcasts — Up Next
+        - Overcast — Playlist
+      Continue watching row:
+        - Netflix — Episodes and next episode
+        - Disney+ — Episode autoplay
+  unobserved:
+    - sub: policy
+      var: Shuffle
+    - sub: surface
+      var: Sheet over player
+  unresolved: []
+  proposals:
+    raised: 2
+    adopted:
+      - sub: representation
+        name: Tempo and key
+        raters:
+          - fable
+          - sonnet
+      - sub: structure
+        name: Rule-built playlist
+        raters:
+          - opus
+          - sonnet
+    recorded: []
+  raterNotes:
+    fable:
+      - policy is pick-one but nearly every queue is manual with shuffle/repeat toggles and an
+        autoplay tail; I coded Strict manual order unless autoplay-after-end is on by default (Apple
+        Music, YouTube, YouTube Music, SoundCloud). persistence conflates session/device sync with
+        saving; coded the mechanism the sample names.
+    opus:
+      - "policy asks who decides the order when the person does not, but most music queues answer
+        twice: shuffle while the context lasts, then autoplay-similar when it runs out. I coded the
+        toggle the product puts in front of you and noted the tail. surface also has no value for a
+        queue that is never shown (Pandora), which I coded n/a rather than forcing it into Voice
+        readout only."
+    sonnet:
+      - surface was a recurring judgment call between 'Full-screen list' and 'Sheet over player' for
+        mobile up-next screens reached from Now Playing; leaned Sheet over player only where the
+        product frames it as a tab/overlay on the player rather than its own dedicated page.
+      - "`policy` is the biggest problem in this entry: it is pick one but asks a question most
+        products answer several ways at once — a hand-built queue with a shuffle toggle and an
+        autoplay-after-end switch is all three at once, which is why opus read every shuffle toggle
+        as Shuffle while fable and I read the same screens as Strict manual order. It wants to be
+        pick any. Two smaller ones: `surface`'s Full-screen list and Sheet over player overlap so
+        far that the codebook's own Full-screen list exemplar (the Spotify Queue sheet) is a sheet
+        over the player, and `surface` has no value for a queue rendered as a section of an ordinary
+        page (Netflix's season list); `persistence` has no value for a queue that survives relaunch
+        on one device but does not sync (Apple Music Up Next)."
+  codedAt: 2026-09-22
+previews:
+  - file: playlist-queue.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0

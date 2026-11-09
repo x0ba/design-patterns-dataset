@@ -1,0 +1,492 @@
+# yaml-language-server: $schema=../schema/pattern.schema.json
+# Codebook entry "pivot-table". Edit between batches only — see README "Rules".
+id: pivot-table
+name: Pivot table
+level: pattern
+parent: analyze
+aliases:
+  - crosstab
+  - pivot
+  - OLAP cube view
+definition: A matrix that aggregates measures over chosen row and column dimensions, with drill,
+  pivot and filter as first-class operations.
+data: collection
+platforms:
+  - web
+  - desktop
+domains:
+  - finance
+  - enterprise
+  - science
+  - commerce
+  - government
+anatomy:
+  - name: Rows
+    role: Row dimension hierarchy
+  - name: Columns
+    role: Column dimension hierarchy
+  - name: Values
+    role: Aggregated measures
+  - name: Filters
+    role: What is included
+  - name: Grand totals
+    role: Rollups
+roles:
+  - dimension
+  - measure
+  - total
+dimensions:
+  - name: Axis binding
+    family: composition
+    question: What fields sit on rows, columns and values?
+    subdimensions:
+      - id: binding
+        name: Binding
+        select: many
+        values:
+          - id: flat-row-and-column-fields
+            name: Flat row and column fields
+            example: Excel PivotTable
+          - id: hierarchical-nesting
+            name: Hierarchical nesting
+            example: Tableau nested pills
+          - id: multiple-measures
+            name: Multiple measures
+            example: Value fields side by side
+          - id: calculated-measures
+            name: Calculated measures
+            example: Excel calculated fields
+          - id: swap-axes
+            name: Swap axes
+            example: Pivot / transpose
+  - name: Aggregation
+    family: encoding
+    question: How are cell values computed and shown?
+    subdimensions:
+      - id: aggregate
+        name: Aggregate
+        select: one
+        values:
+          - id: sum
+            name: Sum
+            example: Sales pivots
+          - id: count-or-distinct-count
+            name: Count or distinct count
+            example: Event pivots
+          - id: average
+            name: Average
+            example: Rating pivots
+          - id: percent-of-total
+            name: Percent of total
+            example: Share analysis
+          - id: running-total
+            name: Running total
+            example: Cumulative finance views
+      - id: cellDisplay
+        name: Cell display
+        select: one
+        values:
+          - id: number-only
+            name: Number only
+            example: Classic pivots
+          - id: heat-colour-on-cells
+            name: Heat colour on cells
+            example: Conditional formatting
+          - id: inline-mini-bars
+            name: Inline mini-bars
+            example: Excel data bars
+          - id: sparklines-in-cells
+            name: Sparklines in cells
+            example: Dense finance sheets
+  - name: Drill and expand
+    family: flow
+    question: How does a person move between aggregate and detail?
+    subdimensions:
+      - id: drill
+        name: Drill
+        select: many
+        values:
+          - id: expand-hierarchy
+            name: Expand hierarchy
+            example: Excel expand/collapse
+          - id: drill-down-one-level
+            name: Drill down one level
+            example: OLAP drill
+          - id: drill-through-to-rows
+            name: Drill through to rows
+            example: Show Details
+          - id: slice-by-filter
+            name: Slice by filter
+            example: Report filters
+          - id: keep-only-exclude
+            name: Keep only / exclude
+            example: Tableau
+  - name: Layout density
+    family: layout
+    question: How is the matrix arranged on screen?
+    subdimensions:
+      - id: layout
+        name: Layout
+        select: one
+        values:
+          - id: compact-form
+            name: Compact form
+            example: Excel compact
+          - id: tabular-form
+            name: Tabular form
+            example: Repeated labels
+          - id: outline-form
+            name: Outline form
+            example: Classic outline
+          - id: frozen-headers-with-scroll
+            name: Frozen headers with scroll
+            example: Large pivots
+  - name: Pivot authorship
+    family: initiative
+    question: Who chooses the pivot configuration?
+    subdimensions:
+      - id: authorship
+        name: Authorship
+        select: one
+        values:
+          - id: person-builds-the-pivot
+            name: Person builds the pivot
+            example: Excel field list
+          - id: saved-pivot-views
+            name: Saved pivot views
+            example: Named Excel pivots
+          - id: recommended-pivot
+            name: Recommended pivot
+            example: Excel Recommended PivotTables
+          - id: ask-for-a-crosstab
+            name: Ask for a crosstab
+            example: Natural-language pivot builders
+  - name: Update lifecycle
+    family: lifecycle
+    question: When do aggregates refresh?
+    subdimensions:
+      - id: refresh
+        name: Refresh
+        select: one
+        values:
+          - id: manual-refresh
+            name: Manual refresh
+            example: Excel Pivot refresh
+          - id: on-field-change
+            name: On field change
+            example: Live Tableau crosstabs
+          - id: scheduled-extract-refresh
+            name: Scheduled extract refresh
+            example: Published workbooks
+          - id: streaming-partial-updates
+            name: Streaming partial updates
+            example: Live operational pivots
+wild:
+  score: 3
+  note: Row, column, value and filter bindings are routinely rearranged by end users.
+  examples:
+    - name: Excel
+      note: Drag fields in the PivotTable field list
+    - name: Google Sheets
+      note: Explore and pivot editor
+    - name: Tableau
+      note: Rearrange pills on Rows and Columns
+techniques:
+  - name: Pills as bindings
+    dimension: Axis binding
+    how: Treat dimensions and measures as movable pills on row, column, filter and value shelves so
+      pivots are reversible configurations.
+    ai: false
+  - name: Pivot that answers…
+    dimension: Pivot authorship
+    how: A question proposes row, column and aggregate bindings the person can edit before materializing
+      the matrix.
+    ai: true
+  - name: Drill with provenance
+    dimension: Drill and expand
+    how: Every expand or drill-through keeps a visible path of aggregate decisions back to source rows.
+    ai: false
+signature: Pills as bindings
+sample: Spreadsheets, BI crosstabs and operational reporting tools.
+unit: One pivot configuration over one fact table or cube.
+relations:
+  uses:
+    - filter-controls
+    - sort-control
+    - pagination
+    - inline-edit
+  specializes:
+    - analyze
+  neighbors:
+    - data-table
+    - spreadsheet
+    - chart
+scores:
+  ubiquity: 4
+  potential: 5
+  spec: 5
+evidence: agent-coded
+usage:
+  - Analysts pivot axes to answer a new question instead of writing a new query
+questions:
+  - How should conflicting aggregate semantics be explained when multiple measures share a cell?
+coding:
+  tier: agent-coded
+  protocol: Shared sample of recalled instances; three model raters coded independently; Fleiss’ κ per
+    sub-dimension, item-weighted per entry; disagreements sent back for reconciliation; majority
+    consensus.
+  instances: 20
+  raters:
+    - fable
+    - opus
+    - sonnet
+  rounds: 3
+  kappaFirstPass: 0.44359542199842833
+  agreementFirstPass: 0.66
+  kappaFinal: 0.8974589249620396
+  agreementFinal: 0.97
+  pass: true
+  perSub:
+    binding:
+      kappaFirstPass: 0.4533333333333338
+      agreementFirstPass: 0.59
+      kappaFinal: 0.9709457169144352
+      agreementFinal: 0.98
+      flag: null
+    aggregate:
+      kappaFirstPass: 0.8009950248756219
+      agreementFirstPass: 0.9
+      kappaFinal: 0.9113737075332352
+      agreementFinal: 0.95
+      flag: null
+    cellDisplay:
+      kappaFirstPass: 0.5090016366612112
+      agreementFirstPass: 0.75
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    drill:
+      kappaFirstPass: 0.41463414634146434
+      agreementFirstPass: 0.62
+      kappaFinal: 0.9460528681891747
+      agreementFinal: 0.96
+      flag: null
+    layout:
+      kappaFirstPass: 0.35637663885578086
+      agreementFirstPass: 0.55
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+    authorship:
+      kappaFirstPass: -0.03448275862068811
+      agreementFirstPass: 0.9
+      kappaFinal: -0.03448275862068811
+      agreementFinal: 0.9
+      flag: unreliable
+    refresh:
+      kappaFirstPass: 0.6822033898305083
+      agreementFirstPass: 0.75
+      kappaFinal: 1
+      agreementFinal: 1
+      flag: null
+  distribution:
+    binding:
+      Flat row and column fields: 17
+      Hierarchical nesting: 14
+      Multiple measures: 18
+      Calculated measures: 10
+      Swap axes: 6
+    aggregate:
+      Sum: 15
+      Count or distinct count: 4
+      Average: 1
+      Percent of total: 0
+      Running total: 0
+    cellDisplay:
+      Number only: 14
+      Heat colour on cells: 6
+      Inline mini-bars: 0
+      Sparklines in cells: 0
+    drill:
+      Expand hierarchy: 14
+      Drill down one level: 3
+      Drill through to rows: 9
+      Slice by filter: 18
+      Keep only / exclude: 2
+    layout:
+      Compact form: 6
+      Tabular form: 14
+      Outline form: 0
+      Frozen headers with scroll: 0
+    authorship:
+      Person builds the pivot: 20
+      Saved pivot views: 0
+      Recommended pivot: 0
+      Ask for a crosstab: 0
+    refresh:
+      Manual refresh: 7
+      On field change: 12
+      Scheduled extract refresh: 1
+      Streaming partial updates: 0
+  exemplars:
+    binding:
+      Flat row and column fields:
+        - Microsoft Excel — PivotTable
+        - Google Sheets — Pivot table
+        - Apple Numbers — Pivot table
+      Hierarchical nesting:
+        - Microsoft Excel — PivotTable
+        - Google Sheets — Pivot table
+        - Apple Numbers — Pivot table
+      Multiple measures:
+        - Microsoft Excel — PivotTable
+        - Google Sheets — Pivot table
+        - Apple Numbers — Pivot table
+      Calculated measures:
+        - Microsoft Excel — PivotTable
+        - Google Sheets — Pivot table
+        - Tableau — Text table
+      Swap axes:
+        - Microsoft Excel — PivotTable
+        - Tableau — Text table
+        - Qlik Sense — Pivot table
+    aggregate:
+      Sum:
+        - Microsoft Excel — PivotTable
+        - Google Sheets — Pivot table
+        - Apple Numbers — Pivot table
+      Count or distinct count:
+        - Airtable — Pivot table extension
+        - Mixpanel — Insights table
+        - Amplitude — Data table
+      Average:
+        - pandas — pivot_table in a notebook
+      Percent of total: []
+      Running total: []
+    cellDisplay:
+      Number only:
+        - Microsoft Excel — PivotTable
+        - Google Sheets — Pivot table
+        - Apple Numbers — Pivot table
+      Heat colour on cells:
+        - Power BI — Matrix visual
+        - Looker Studio — Pivot table chart
+        - Amplitude — Data table
+      Inline mini-bars: []
+      Sparklines in cells: []
+    drill:
+      Expand hierarchy:
+        - Microsoft Excel — PivotTable
+        - Google Sheets — Pivot table
+        - Apple Numbers — Pivot table
+      Drill down one level:
+        - Power BI — Matrix visual
+        - Looker — Explore pivot
+        - SAP Analytics Cloud — Table
+      Drill through to rows:
+        - Microsoft Excel — PivotTable
+        - LibreOffice Calc — Pivot table
+        - Tableau — Text table
+      Slice by filter:
+        - Microsoft Excel — PivotTable
+        - Google Sheets — Pivot table
+        - Apple Numbers — Pivot table
+      Keep only / exclude:
+        - Tableau — Text table
+        - Google Analytics 4 — Free-form exploration
+    layout:
+      Compact form:
+        - Microsoft Excel — PivotTable
+        - Apple Numbers — Pivot table
+        - Power BI — Matrix visual
+      Tabular form:
+        - Google Sheets — Pivot table
+        - LibreOffice Calc — Pivot table
+        - Tableau — Text table
+      Outline form: []
+      Frozen headers with scroll: []
+    authorship:
+      Person builds the pivot:
+        - Microsoft Excel — PivotTable
+        - Google Sheets — Pivot table
+        - Apple Numbers — Pivot table
+      Saved pivot views: []
+      Recommended pivot: []
+      Ask for a crosstab: []
+    refresh:
+      Manual refresh:
+        - Microsoft Excel — PivotTable
+        - LibreOffice Calc — Pivot table
+        - Looker — Explore pivot
+      On field change:
+        - Google Sheets — Pivot table
+        - Apple Numbers — Pivot table
+        - Tableau — Text table
+      Scheduled extract refresh:
+        - Smartsheet — Pivot App
+      Streaming partial updates: []
+  unobserved:
+    - sub: aggregate
+      var: Percent of total
+    - sub: aggregate
+      var: Running total
+    - sub: cellDisplay
+      var: Inline mini-bars
+    - sub: cellDisplay
+      var: Sparklines in cells
+    - sub: layout
+      var: Outline form
+    - sub: layout
+      var: Frozen headers with scroll
+    - sub: authorship
+      var: Saved pivot views
+    - sub: authorship
+      var: Recommended pivot
+    - sub: authorship
+      var: Ask for a crosstab
+    - sub: refresh
+      var: Streaming partial updates
+  unresolved: []
+  proposals:
+    raised: 0
+    adopted: []
+    recorded: []
+  raterNotes:
+    fable:
+      - Cell display coded as the default rendering (Number only) even where the tool offers heat
+        colours, except pandas where the sample names the styling; Authorship is Person builds the
+        pivot for all twenty.
+      - cellDisplay is a pick one over products that offer plain numbers and conditional colour as
+        options; the sampler's naming the colouring is what I now code, and the sub wants pick any.
+        binding's Flat row and column fields is true of every pivot with one field per axis, so it
+        overlaps Hierarchical nesting and carries no information as a pick-any item. authorship and
+        refresh both depend on whether the sample means the builder or a person running the saved
+        object.
+    opus:
+      - Aggregate is pick-one over a pivot that usually carries several measures with different
+        functions, so the code records the default or headline one; Ask for a crosstab went unused,
+        since natural-language pivot building is not the way any of these twenty are actually
+        driven. Authorship also depends on the reader — a Salesforce matrix report or a published
+        Superset chart is built by one person and run by another.
+      - "`cellDisplay` is the fault behind a fifth of this packet: it is pick one, its first
+        variation is named 'Number only', and every BI product in the sample shows numbers with
+        optional conditional colour — so a rater who codes the default and a rater who codes the
+        sampled screen can never agree. `drill` mixes operations that coexist (expand in place vs
+        replace a level) with scoping ones (slice, keep only), which is why Expand hierarchy and
+        Drill down one level kept swapping places."
+    sonnet:
+      - Aggregate defaulted to Sum, the near-universal pivot default, except where the product's own
+        semantics point elsewhere (Mixpanel/Amplitude event counts, pandas' mean default).
+      - "Binding was systematically under-coded by me the same way notebook's assistance sub was --
+        calculated fields, multiple measures and swap-axes were often named in my own instance notes
+        but not coded into the pick-any list. One real ambiguity: pill/hierarchy-native tools
+        (Tableau, Power BI, SAP) don't have a meaningfully separate 'flat' mode the way Excel/Sheets
+        do, since a single pill is still drawn from the same always-nestable mechanism -- both other
+        raters consistently dropped 'Flat row and column fields' for those tools and I now think
+        that's right rather than an oversight."
+  codedAt: 2026-09-22
+previews:
+  - file: pivot-table.svg
+sources:
+  - note: Seed entry from the original Pattern Atlas (codebook.html)
+addedIn: 1.0.0
