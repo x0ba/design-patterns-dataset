@@ -4,6 +4,10 @@
 //   #/site/<batch>/<slug>   UI viewer
 //   #/codebook[/<id>]       codebook browser
 //   #/proposals             proposal review
+//
+// Live updates: the server streams file changes over /api/events. When one
+// touches the current view, the view re-renders with the same filters,
+// selection, scroll and focus (UI state lives in `ui`, not in the DOM).
 
 const app = document.getElementById('app');
 const tip = document.getElementById('tip');
@@ -25,38 +29,129 @@ const RSTATE = { pending: 'queued', running: 'labeling', done: 'labeled', failed
 
 let codebookCache;
 async function codebook() {
-  codebookCache ??= await api('/api/codebook');
+  codebookCache ??= api('/api/codebook').catch((e) => { codebookCache = undefined; throw e; });
   return codebookCache;
 }
 
+// Per-view UI state, kept across live re-renders (and across navigation).
+const ui = {
+  progress: { q: '', st: '', dis: false },
+  site: { key: '', source: undefined, showRegions: true, showPatterns: true, tags: false },
+  codebook: { level: '', q: '', sort: 'archetype' },
+  proposals: { filter: 'open' },
+};
+
+// A live re-render is skipped when the view's data hasn't changed.
+let lastData = null;
+const unchanged = (live, ...data) => {
+  const s = JSON.stringify(data);
+  if (live && s === lastData) return true;
+  lastData = s;
+  return false;
+};
+
 // ------------------------------------------------------------------ router
 
-async function route() {
-  const parts = location.hash.replace(/^#\/?/, '').split('/').map(decodeURIComponent);
-  document.querySelectorAll('[data-nav]').forEach((a) => a.classList.toggle('on',
-    (a.dataset.nav === 'progress' && (!parts[0] || parts[0] === 'batch' || parts[0] === 'site')) || a.dataset.nav === parts[0]));
-  hideTip();
+const parts = () => location.hash.replace(/^#\/?/, '').split('/').map(decodeURIComponent);
+
+async function render(live) {
+  const [view, a, b] = parts();
+  if (!live) {
+    document.querySelectorAll('[data-nav]').forEach((el) => el.classList.toggle('on',
+      (el.dataset.nav === 'progress' && (!view || view === 'batch' || view === 'site')) || el.dataset.nav === view));
+    hideTip();
+  }
   try {
-    if (!parts[0] || parts[0] === 'batch') await viewProgress(parts[1]);
-    else if (parts[0] === 'site') await viewSite(parts[1], parts[2]);
-    else if (parts[0] === 'codebook') await viewCodebook(parts[1]);
-    else if (parts[0] === 'proposals') await viewProposals();
-    else app.innerHTML = `<div class="empty">Not found</div>`;
+    if (!view || view === 'batch') return await viewProgress(a, live);
+    if (view === 'site') return await viewSite(a, b, live);
+    if (view === 'codebook') return await viewCodebook(a, live);
+    if (view === 'proposals') return await viewProposals(live);
+    app.innerHTML = `<div class="empty">Not found</div>`;
   } catch (e) {
+    if (live) return false; // keep what's on screen; the live dot shows the connection state
     app.innerHTML = `<div class="card err">${esc(e.message)}</div>`;
   }
 }
-addEventListener('hashchange', route);
 
-codebook().then((c) => {
-  document.getElementById('cb-version').textContent = `codebook ${c.version}${c.sourceVersion && c.sourceVersion !== c.version ? ` (source ${c.sourceVersion}, rebuild dist/)` : ''}`;
-}).catch(() => {});
-route();
+/** Re-render the current view in place, keeping window/list scroll and the focused input. */
+async function rerender() {
+  const y = scrollY;
+  const f = document.activeElement;
+  const focus = f?.id && app.contains(f) ? { id: f.id, s: f.selectionStart, e: f.selectionEnd } : null;
+  const scrolls = [...app.querySelectorAll('[id]')].filter((el) => el.scrollTop).map((el) => [el.id, el.scrollTop]);
+  if ((await render(true)) === false) return;
+  for (const [id, top] of scrolls) { const el = document.getElementById(id); if (el) el.scrollTop = top; }
+  scrollTo(scrollX, y);
+  const el = focus && document.getElementById(focus.id);
+  if (el) { el.focus({ preventScroll: true }); try { el.setSelectionRange(focus.s, focus.e); } catch {} }
+}
+
+// Renders run one at a time, so a slow live refresh can't overwrite a newer
+// navigation. At most one live refresh waits in the queue.
+let chain = Promise.resolve();
+let liveQueued = false;
+function navigate() { chain = chain.then(() => render(false)); }
+function refresh() {
+  if (liveQueued) return;
+  liveQueued = true;
+  chain = chain.then(async () => {
+    liveQueued = false;
+    // Don't yank boxes out from under the pointer in the viewer; retry once it leaves.
+    if (document.querySelector('#ov:hover')) return void document.getElementById('ov').addEventListener('mouseleave', refresh, { once: true });
+    await rerender();
+  });
+}
+addEventListener('hashchange', navigate);
+
+function showCodebookVersion() {
+  codebook().then((c) => {
+    document.getElementById('cb-version').textContent = `codebook ${c.version}${c.sourceVersion && c.sourceVersion !== c.version ? ` (source ${c.sourceVersion}, rebuild dist/)` : ''}`;
+  }).catch(() => {});
+}
+showCodebookVersion();
+navigate();
+
+// ------------------------------------------------------------------- live
+
+/** Does this file change affect what the current view shows? */
+function affects(c) {
+  const [view, a, b] = parts();
+  if (!view || view === 'batch') return c.scope === 'dataset';
+  if (view === 'site') return c.scope === 'dataset' && c.batch === a && (!c.slug || c.slug === b);
+  if (view === 'codebook') return c.scope !== 'dataset' || c.file === 'consensus.json' || !c.file;
+  if (view === 'proposals') return c.scope === 'proposals';
+  return false;
+}
+
+function connectLive() {
+  const dot = document.getElementById('live');
+  const set = (state, title) => { dot.dataset.state = state; dot.title = title; };
+  const es = new EventSource('/api/events');
+  let connectedBefore = false;
+  es.addEventListener('hello', () => {
+    set('on', 'Live: updates as the pipeline writes files');
+    // After a reconnect, anything could have changed while we were away.
+    if (connectedBefore) { codebookCache = undefined; showCodebookVersion(); refresh(); }
+    connectedBefore = true;
+  });
+  es.addEventListener('change', (e) => {
+    const { changes } = JSON.parse(e.data);
+    // Usage counts in the codebook bundle come from consensus labels.
+    if (changes.some((c) => c.scope === 'codebook' || c.scope === 'proposals' || (c.scope === 'dataset' && (c.file === 'consensus.json' || !c.file)))) codebookCache = undefined;
+    // Accepting a proposal bumps codebook/VERSION, which the badge compares against dist/.
+    if (changes.some((c) => c.scope === 'codebook' || c.scope === 'proposals')) showCodebookVersion();
+    if (changes.some(affects)) refresh();
+  });
+  es.onerror = () => set(es.readyState === EventSource.CLOSED ? 'off' : 'wait', 'Disconnected from the console server; reconnecting…');
+}
+connectLive();
 
 // --------------------------------------------------------------- progress
 
-async function viewProgress(batchName) {
+async function viewProgress(batchName, live) {
   const { batches } = await api('/api/batches');
+  if (unchanged(live, batchName, batches)) return false;
+  const f = ui.progress;
   if (!batches.length) {
     app.innerHTML = `<div class="card empty">No batches yet.<br><br><code>node scripts/label.ts --batch batch-001</code></div>`;
     return;
@@ -85,18 +180,19 @@ async function viewProgress(batchName) {
     <div class="card" style="margin-top:16px">${irrTable(b)}</div>
     <div class="card" style="margin-top:16px">
       <div class="row" style="margin-bottom:8px"><h2 style="margin:0">Sites</h2><div class="spacer"></div>
-        <input type="search" id="q" placeholder="Filter sites…">
-        <select id="st"><option value="">All states</option>${Object.keys(STATE).map((s) => `<option value="${s}">${STATE[s]}</option>`).join('')}</select>
-        <label class="small"><input type="checkbox" id="dis"> only with disagreements</label>
+        <input type="search" id="q" placeholder="Filter sites…" value="${esc(f.q)}">
+        <select id="st"><option value="">All states</option>${Object.keys(STATE).map((s) => `<option value="${s}" ${s === f.st ? 'selected' : ''}>${STATE[s]}</option>`).join('')}</select>
+        <label class="small"><input type="checkbox" id="dis" ${f.dis ? 'checked' : ''}> only with disagreements</label>
       </div>
       <table><thead><tr><th>Site</th><th>Domain</th><th>State</th><th>Raters</th><th class="num">Agreement</th><th>Disagreeing fields</th></tr></thead>
       <tbody id="sites"></tbody></table>
     </div>`;
 
   const renderSites = () => {
-    const q = document.getElementById('q').value.toLowerCase();
-    const st = document.getElementById('st').value;
-    const dis = document.getElementById('dis').checked;
+    f.q = document.getElementById('q').value;
+    f.st = document.getElementById('st').value;
+    f.dis = document.getElementById('dis').checked;
+    const q = f.q.toLowerCase(), st = f.st, dis = f.dis;
     const rows = b.sites.filter((s) => (!q || `${s.slug} ${s.title ?? ''} ${s.domain ?? ''}`.toLowerCase().includes(q)) && (!st || s.state === st) && (!dis || s.agreement?.disagreements));
     document.getElementById('sites').innerHTML = rows.map((s) => `
       <tr class="click" data-href="#/site/${encodeURIComponent(b.batch)}/${encodeURIComponent(s.slug)}">
@@ -130,12 +226,14 @@ function irrTable(b) {
 
 // ------------------------------------------------------------------ viewer
 
-async function viewSite(batch, slug) {
+async function viewSite(batch, slug, live) {
   const [d, cb] = await Promise.all([api(`/api/site/${encodeURIComponent(batch)}/${encodeURIComponent(slug)}`), codebook()]);
+  if (unchanged(live, d)) return false;
   const byId = new Map(cb.entries.map((e) => [e.id, e]));
   const sources = [...(d.consensus ? ['consensus'] : []), ...Object.keys(d.labels)];
-  let source = sources[0];
-  let showRegions = true, showPatterns = true, tags = false;
+  const v = ui.site;
+  if (v.key !== `${batch}/${slug}`) Object.assign(v, { key: `${batch}/${slug}`, source: undefined, showRegions: true, showPatterns: true, tags: false });
+  if (!sources.includes(v.source)) v.source = sources[0];
 
   const header = `
     <div class="row"><a href="#/batch/${encodeURIComponent(batch)}" class="small">← ${esc(batch)}</a></div>
@@ -155,9 +253,9 @@ async function viewSite(batch, slug) {
         <div class="row" style="margin-bottom:8px">
           <div class="tabs" id="srcs">${sources.map((s) => `<button data-src="${esc(s)}">${esc(s)}</button>`).join('') || '<span class="muted">No labels yet</span>'}</div>
           <div class="spacer"></div>
-          <label class="small"><input type="checkbox" id="t-reg" checked> regions</label>
-          <label class="small"><input type="checkbox" id="t-pat" checked> patterns</label>
-          <label class="small"><input type="checkbox" id="t-tag"> labels</label>
+          <label class="small"><input type="checkbox" id="t-reg" ${v.showRegions ? 'checked' : ''}> regions</label>
+          <label class="small"><input type="checkbox" id="t-pat" ${v.showPatterns ? 'checked' : ''}> patterns</label>
+          <label class="small"><input type="checkbox" id="t-tag" ${v.tags ? 'checked' : ''}> labels</label>
         </div>
         <div class="shot-wrap" id="shot"><img src="${esc(d.screenshot)}" alt="Full-page screenshot of ${esc(d.meta.title)}"><div class="ov" id="ov"></div></div>
       </div>
@@ -172,7 +270,7 @@ async function viewSite(batch, slug) {
   const ov = document.getElementById('ov');
 
   const current = () => {
-    if (source === 'consensus') {
+    if (v.source === 'consensus') {
       const c = d.consensus;
       const ref = Object.values(d.labels)[0];
       return {
@@ -183,19 +281,19 @@ async function viewSite(batch, slug) {
         consensus: true,
       };
     }
-    return d.labels[source];
+    return d.labels[v.source];
   };
 
   const dimText = (p) => Object.entries(p.dims ?? {}).map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join('+') : v}`).join(' · ');
 
   const draw = () => {
-    document.querySelectorAll('#srcs button').forEach((b) => b.classList.toggle('on', b.dataset.src === source));
+    document.querySelectorAll('#srcs button').forEach((b) => b.classList.toggle('on', b.dataset.src === v.source));
     const l = current();
     if (!l) { ov.innerHTML = ''; document.getElementById('side').innerHTML = '<p class="muted">No label.</p>'; return; }
     const pct = (b) => `left:${(b.x / W) * 100}%;top:${(b.y / H) * 100}%;width:${(b.width / W) * 100}%;height:${(b.height / H) * 100}%`;
     let html = '';
-    if (showRegions) for (const r of l.regions) html += `<div class="bx region" data-k="r:${esc(r.id)}" style="${pct(r.bbox)}"><span class="tag">${esc(r.id)}</span></div>`;
-    if (showPatterns) {
+    if (v.showRegions) for (const r of l.regions) html += `<div class="bx region" data-k="r:${esc(r.id)}" style="${pct(r.bbox)}"><span class="tag">${esc(r.id)}</span></div>`;
+    if (v.showPatterns) {
       for (const p of l.patterns.filter((p) => p.status !== 'absent')) {
         p.evidence.forEach((e, i) => {
           if (!e.bbox) return;
@@ -204,7 +302,7 @@ async function viewSite(batch, slug) {
       }
     }
     ov.innerHTML = html;
-    document.getElementById('shot').classList.toggle('show-tags', tags);
+    document.getElementById('shot').classList.toggle('show-tags', v.tags);
 
     const byRegion = new Map(l.regions.map((r) => [r.id, []]));
     const loose = [];
@@ -228,7 +326,7 @@ async function viewSite(batch, slug) {
 
     // aesthetics
     const a = l.aesthetics ?? {};
-    document.getElementById('aest').innerHTML = `<h2>Structure &amp; aesthetics <span class="muted small">(${esc(source)})</span></h2>
+    document.getElementById('aest').innerHTML = `<h2>Structure &amp; aesthetics <span class="muted small">(${esc(v.source)})</span></h2>
       ${a.palette ? `<div class="row" style="margin-bottom:10px">${a.palette.map((c) => `<span title="${esc(c)}" class="swatch" style="background:${esc(c)}"></span>`).join('')}</div>` : ''}
       <dl class="kv">
         ${l.structure?.layout ? `<dt>layout</dt><dd>${esc(l.structure.layout)}</dd>` : ''}
@@ -286,10 +384,10 @@ async function viewSite(batch, slug) {
     const box = li && ov.querySelector(`.bx[data-k="${CSS.escape(li.dataset.k)}"]`);
     box?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   });
-  document.getElementById('srcs').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { source = b.dataset.src; draw(); } });
-  document.getElementById('t-reg').addEventListener('change', (e) => { showRegions = e.target.checked; draw(); });
-  document.getElementById('t-pat').addEventListener('change', (e) => { showPatterns = e.target.checked; draw(); });
-  document.getElementById('t-tag').addEventListener('change', (e) => { tags = e.target.checked; draw(); });
+  document.getElementById('srcs').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { v.source = b.dataset.src; draw(); } });
+  document.getElementById('t-reg').addEventListener('change', (e) => { v.showRegions = e.target.checked; draw(); });
+  document.getElementById('t-pat').addEventListener('change', (e) => { v.showPatterns = e.target.checked; draw(); });
+  document.getElementById('t-tag').addEventListener('change', (e) => { v.tags = e.target.checked; draw(); });
   draw();
 }
 
@@ -304,29 +402,30 @@ function hideTip() { tip.hidden = true; }
 
 // ---------------------------------------------------------------- codebook
 
-async function viewCodebook(id) {
-  const cb = await codebook();
-  const { proposals } = await api('/api/proposals');
+async function viewCodebook(id, live) {
+  const [cb, { proposals }] = await Promise.all([codebook(), api('/api/proposals')]);
+  if (unchanged(live, id, cb.version, cb.sourceVersion, cb.generatedAt, cb.usage, proposals)) return false;
   const usage = cb.usage;
   const maxSites = Math.max(1, ...Object.values(usage.patterns).map((u) => u.sites));
-  let level = '', q = '', sort = 'archetype';
+  const f = ui.codebook;
   app.innerHTML = `
     <div class="row"><h1>Codebook ${esc(cb.version)}</h1><span class="muted small">${cb.entries.length} entries · usage from ${usage.sites} labeled site(s) (consensus)</span></div>
     <div class="cb" style="margin-top:14px">
       <div class="card">
         <div class="row" style="margin-bottom:8px">
-          <input type="search" id="cq" placeholder="Search patterns…" style="flex:1">
-          <select id="cl"><option value="">All levels</option><option>archetype</option><option>pattern</option><option>component</option></select>
-          <select id="cs"><option value="archetype">By archetype</option><option value="usage">By usage</option><option value="name">By name</option></select>
+          <input type="search" id="cq" placeholder="Search patterns…" style="flex:1" value="${esc(f.q)}">
+          <select id="cl"><option value="">All levels</option>${['archetype', 'pattern', 'component'].map((l) => `<option ${l === f.level ? 'selected' : ''}>${l}</option>`).join('')}</select>
+          <select id="cs">${[['archetype', 'By archetype'], ['usage', 'By usage'], ['name', 'By name']].map(([k, l]) => `<option value="${k}" ${k === f.sort ? 'selected' : ''}>${l}</option>`).join('')}</select>
         </div>
         <div class="cblist" id="cblist"></div>
       </div>
       <div class="card" id="cbdetail"></div>
     </div>`;
   const list = () => {
-    let es = cb.entries.filter((e) => (!level || e.level === level) && (!q || `${e.id} ${e.name} ${e.aliases.join(' ')} ${e.definition}`.toLowerCase().includes(q)));
-    if (sort === 'usage') es = [...es].sort((a, b) => (usage.patterns[b.id]?.sites ?? 0) - (usage.patterns[a.id]?.sites ?? 0));
-    if (sort === 'name') es = [...es].sort((a, b) => a.name.localeCompare(b.name));
+    const q = f.q.toLowerCase();
+    let es = cb.entries.filter((e) => (!f.level || e.level === f.level) && (!q || `${e.id} ${e.name} ${e.aliases.join(' ')} ${e.definition}`.toLowerCase().includes(q)));
+    if (f.sort === 'usage') es = [...es].sort((a, b) => (usage.patterns[b.id]?.sites ?? 0) - (usage.patterns[a.id]?.sites ?? 0));
+    if (f.sort === 'name') es = [...es].sort((a, b) => a.name.localeCompare(b.name));
     document.getElementById('cblist').innerHTML = es.map((e) => {
       const n = usage.patterns[e.id]?.sites ?? 0;
       const open = proposals.filter((p) => p.proposal.id === e.id && p.proposal.status === 'open').length;
@@ -335,9 +434,9 @@ async function viewCodebook(id) {
         <div class="ubar" title="${n} site(s)"><b style="width:${(n / maxSites) * 100}%"></b></div><div class="small num">${n}</div></div>`;
     }).join('') || '<div class="muted empty">No matches</div>';
   };
-  document.getElementById('cq').addEventListener('input', (e) => { q = e.target.value.toLowerCase(); list(); });
-  document.getElementById('cl').addEventListener('change', (e) => { level = e.target.value; list(); });
-  document.getElementById('cs').addEventListener('change', (e) => { sort = e.target.value; list(); });
+  document.getElementById('cq').addEventListener('input', (e) => { f.q = e.target.value; list(); });
+  document.getElementById('cl').addEventListener('change', (e) => { f.level = e.target.value; list(); });
+  document.getElementById('cs').addEventListener('change', (e) => { f.sort = e.target.value; list(); });
   document.getElementById('cblist').addEventListener('click', (e) => { const it = e.target.closest('[data-id]'); if (it) location.hash = `#/codebook/${it.dataset.id}`; });
   list();
 
@@ -374,16 +473,18 @@ async function viewCodebook(id) {
 
 // --------------------------------------------------------------- proposals
 
-async function viewProposals() {
+async function viewProposals(live) {
   const { proposals } = await api('/api/proposals');
-  let filter = 'open';
+  if (unchanged(live, proposals)) return false;
+  const v = ui.proposals;
   const render = () => {
+    const filter = v.filter;
     const rows = proposals.filter((r) => filter === 'all' || r.proposal.status === filter);
     app.innerHTML = `
       <div class="row"><h1>Proposals</h1><span class="muted small">Filed by raters during batches; the codebook only changes when one is accepted here (between batches).</span>
         <div class="spacer"></div><div class="tabs">${['open', 'accepted', 'rejected', 'all'].map((f) => `<button data-f="${f}" class="${f === filter ? 'on' : ''}">${f}</button>`).join('')}</div></div>
       <div class="stack" style="margin-top:14px">${rows.map(proposalCard).join('') || `<div class="card empty">No ${filter === 'all' ? '' : filter} proposals.</div>`}</div>`;
-    app.querySelectorAll('[data-f]').forEach((b) => b.addEventListener('click', () => { filter = b.dataset.f; render(); }));
+    app.querySelectorAll('[data-f]').forEach((b) => b.addEventListener('click', () => { v.filter = b.dataset.f; render(); }));
     app.querySelectorAll('[data-act]').forEach((b) => b.addEventListener('click', () => act(b.dataset.batch, b.dataset.id, b.dataset.act)));
   };
   const act = async (batch, id, action) => {
@@ -393,7 +494,7 @@ async function viewProposals() {
       const r = await api(`/api/proposals/${encodeURIComponent(batch)}/${encodeURIComponent(id)}/${action}`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ note }) });
       if (r.message) alert(r.message);
       codebookCache = undefined;
-      viewProposals();
+      refresh();
     } catch (e) {
       alert(e.message);
     }

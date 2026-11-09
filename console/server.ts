@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // Dataset console: progress, agreement, codebook usage, proposal review, and a
-// screenshot viewer with pattern boxes.
+// screenshot viewer with pattern boxes. Pages update live: /api/events streams
+// file changes under dataset/, proposals/ and dist/ as Server-Sent Events.
 //
 //   node console/server.ts [--port 4317]
 //
@@ -80,8 +81,15 @@ function siteDetail(batch: string, slug: string) {
     labels,
     agreement: readJson(path.join(dir, 'agreement.json')),
     consensus: readJson(path.join(dir, 'consensus.json')),
-    screenshot: fs.existsSync(path.join(dir, 'capture', 'screenshot.png')) ? `/files/dataset/${batch}/sites/${slug}/capture/screenshot.png` : null,
+    screenshot: screenshotUrl(batch, slug),
   };
+}
+
+/** Screenshot URL with its mtime, so a recapture busts the browser cache. */
+function screenshotUrl(batch: string, slug: string) {
+  const file = path.join(P.dataset, batch, 'sites', slug, 'capture', 'screenshot.png');
+  if (!fs.existsSync(file)) return null;
+  return `/files/dataset/${encodeURIComponent(batch)}/sites/${encodeURIComponent(slug)}/capture/screenshot.png?v=${Math.round(fs.statSync(file).mtimeMs)}`;
 }
 
 /** How often each pattern and value appears, from consensus labels (or single labels). */
@@ -108,6 +116,86 @@ function codebookUsage() {
   return { sites, patterns };
 }
 
+// ------------------------------------------------------------------ live
+
+// Watches the directories the console reads and pushes what changed to every
+// open page over SSE. Changes are coalesced for a short window, so a rater
+// rewriting status.json several times in a row becomes one event. The pages
+// decide whether a change touches what they show.
+
+type Change = { scope: 'dataset'; batch: string; slug?: string; file: string } | { scope: 'proposals' | 'codebook'; file: string };
+
+const clients = new Set<http.ServerResponse>();
+let queued: Change[] = [];
+let flushTimer: NodeJS.Timeout | undefined;
+
+function emit(event: string, data: unknown) {
+  const msg = `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;
+  for (const c of clients) c.write(msg);
+}
+
+function queue(change: Change) {
+  queued.push(change);
+  flushTimer ??= setTimeout(() => {
+    flushTimer = undefined;
+    const seen = new Set<string>();
+    const changes = queued.filter((c) => { const k = JSON.stringify(c); return !seen.has(k) && !!seen.add(k); });
+    queued = [];
+    emit('change', { changes });
+  }, 250);
+}
+
+// Ignore temp files from atomic writes and rater transcripts (appended on
+// every turn, never shown by the console).
+const ignored = (rel: string) => /\.tmp$|\.transcript\.jsonl$|(^|\/)\.|~$/.test(rel);
+
+function classify(root: 'dataset' | 'proposals' | 'codebook', rel: string): Change {
+  if (root !== 'dataset') return { scope: root, file: rel };
+  const [batch = '', sites, slug, ...rest] = rel.split('/');
+  return sites === 'sites' && slug ? { scope: 'dataset', batch, slug, file: rest.join('/') } : { scope: 'dataset', batch, file: rel.split('/').slice(1).join('/') };
+}
+
+/** fs.watch a directory recursively; if it doesn't exist yet (or is removed), keep checking until it does. */
+function watchDir(dir: string, root: 'dataset' | 'proposals' | 'codebook') {
+  let watcher: fs.FSWatcher | undefined;
+  const start = () => {
+    if (watcher || !fs.existsSync(dir)) return;
+    try {
+      watcher = fs.watch(dir, { recursive: true }, (_event, name) => {
+        const rel = name ? String(name).split(path.sep).join('/') : '';
+        if (rel && ignored(rel)) return;
+        queue(classify(root, rel));
+        if (!fs.existsSync(dir)) restart();
+      });
+      watcher.on('error', restart);
+    } catch {
+      watcher = undefined;
+    }
+  };
+  const restart = () => {
+    watcher?.close();
+    watcher = undefined;
+    queue(classify(root, ''));
+  };
+  start();
+  setInterval(start, 2000).unref();
+}
+
+watchDir(P.dataset, 'dataset');
+watchDir(P.proposals, 'proposals');
+watchDir(P.dist, 'codebook');
+
+// Keeps idle connections open through proxies and lets the page notice a dead server.
+setInterval(() => { for (const c of clients) c.write(': ping\n\n'); }, 20_000).unref();
+
+function events(req: http.IncomingMessage, res: http.ServerResponse) {
+  res.writeHead(200, { 'content-type': 'text/event-stream; charset=utf-8', 'cache-control': 'no-store', connection: 'keep-alive' });
+  res.write('retry: 2000\n\n');
+  res.write(`event: hello\ndata: ${JSON.stringify({ at: new Date().toISOString() })}\n\n`);
+  clients.add(res);
+  req.on('close', () => clients.delete(res));
+}
+
 // ---------------------------------------------------------------- server
 
 function send(res: http.ServerResponse, status: number, body: unknown, type = 'application/json; charset=utf-8') {
@@ -132,6 +220,7 @@ const server = http.createServer(async (req, res) => {
   const url = new URL(req.url ?? '/', 'http://x');
   const p = url.pathname;
   try {
+    if (req.method === 'GET' && p === '/api/events') return events(req, res);
     if (req.method === 'GET' && p === '/api/batches') {
       return send(res, 200, { batches: listDirs(P.dataset).map(batchSummary) });
     }

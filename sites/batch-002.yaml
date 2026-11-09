@@ -1,0 +1,94 @@
+# Batch 002 — gap-fill sampling frame.
+#
+# Fills what batch-001 under-covers: working app surfaces reachable without
+# login (playgrounds, public dashboards, search results, demos, docs), the
+# domains batch-001 sampled only lightly, non-English sites (ja, de, fr, pt-BR)
+# and older or dated designs. No host from batch-001 is repeated. `domain` is
+# the curated sampling stratum from schema/label.schema.json; raters assign
+# their own `site.domain` independently. Each note opens with where the site
+# came from: [popular] widely used site, [demo] public product or open-source
+# demo, [long-tail] niche, institutional or dated site.
+#
+# Every URL loaded with HTTP 200 in headless Chromium (same launch flags and
+# context as src/pipeline/capture.ts) on 2026-11-09. Sites that served a
+# Cloudflare, Akamai or other bot wall to headless Chromium were dropped.
+#
+# Check the frame before running:  node scripts/site-variety.ts sites/batch-002.yaml
+
+batch: batch-002
+sites:
+  # productivity (kanban, spreadsheet, admin dashboard)
+  - { url: https://trello.com/b/nC8QJJoZ/trello-development-roadmap, domain: productivity, note: "[popular] Public Trello board: kanban columns and cards." }
+  - { url: https://bossanova.uk/jspreadsheet/, domain: productivity, note: "[demo] Live spreadsheet / data-grid demo embedded in the page." }
+  - { url: https://preview.tabler.io/, domain: productivity, note: "[demo] Open-source admin dashboard template: internal-tool layout, tables, KPI cards." }
+  # developer tools
+  - { url: https://regex101.com/, domain: developer-tools, note: "[popular] Dense multi-pane tool UI." }
+  - { url: https://www.typescriptlang.org/play, domain: developer-tools, note: "[popular] Code playground: editor, output panes, settings menus." }
+  # reference & docs (dated / dense)
+  - { url: https://pkg.go.dev/net/http, domain: reference-docs, note: "[popular] Package API reference: long page with sidebar TOC, code blocks and an index." }
+  - { url: https://man7.org/linux/man-pages/man1/ls.1.html, domain: reference-docs, note: "[long-tail] Linux man page; 1990s-style monospace layout." }
+  # AI tools
+  - { url: https://huggingface.co/models, domain: ai-tools, note: "[popular] Model search results with facet filters." }
+  - { url: https://openrouter.ai/models, domain: ai-tools, note: "[popular] Model catalog with filters, pricing columns." }
+  # finance
+  - { url: https://finance.yahoo.com/quote/AAPL/, domain: finance, note: "[popular] Quote page: charts, data tables, ad slots. A consent or sign-in prompt may appear." }
+  - { url: https://www.tradingview.com/chart/, domain: finance, note: "[popular] Full-screen charting app with toolbars and drawing tools." }
+  - { url: https://www.bankrate.com/mortgages/mortgage-calculator/, domain: finance, note: "[popular] Calculator form with live results and amortization table." }
+  # commerce
+  - { url: https://demo.saleor.io/, domain: commerce, note: "[demo] Open-source storefront demo; product grid, product page and cart are reachable." }
+  - { url: https://www.rakuten.co.jp/, domain: commerce, note: "[popular] Japanese marketplace; very dense, banner-heavy layout." }
+  - { url: https://sfbay.craigslist.org/, domain: commerce, note: "[popular] Classifieds; dated, text-only link directory. Redirects to craigslist.org/area/sfbay." }
+  # media & entertainment (music / audio)
+  - { url: https://www.last.fm/music, domain: media-entertainment, note: "[popular] Music discovery: charts, artist cards, tag lists." }
+  - { url: https://musicbrainz.org/, domain: media-entertainment, note: "[long-tail] Open music database; dated wiki-style design." }
+  - { url: https://radio.garden/, domain: media-entertainment, note: "[long-tail] 3D globe of live radio stations; map-first audio app." }
+  # news & publishing (non-English, text-only)
+  - { url: https://www.asahi.com/, domain: news-publishing, note: "[popular] Japanese newspaper; dense, CJK typography." }
+  - { url: https://text.npr.org/, domain: news-publishing, note: "[long-tail] Text-only lite site; almost no styling." }
+  # social & community
+  - { url: https://bsky.app/, domain: social-community, note: "[popular] Public Discover feed with no login needed; feed and composer layout." }
+  - { url: https://mastodon.social/explore, domain: social-community, note: "[popular] Federated social explore page with a multi-column layout." }
+  # education (LMS, course catalogs)
+  - { url: https://school.moodledemo.net/, domain: education, note: "[demo] Official Moodle LMS demo site (Mount Orange). Course pages may need the demo login." }
+  - { url: https://ocw.mit.edu/, domain: education, note: "[long-tail] Course materials catalog." }
+  - { url: https://www.coursera.org/browse, domain: education, note: "[popular] Course catalog by topic; carousels and cards." }
+  # health
+  - { url: https://www.nhs.uk/conditions/, domain: health, note: "[popular] NHS A–Z index: GOV.UK-style design system." }
+  - { url: https://medlineplus.gov/, domain: health, note: "[long-tail] US NLM consumer health site; plain, dated gov styling." }
+  - { url: https://www.cdc.gov/flu/, domain: health, note: "[popular] Public-health topic page. Plain curl got 403 here; headless Chromium got 200." }
+  # travel & hospitality (maps)
+  - { url: https://www.openstreetmap.org/, domain: travel-hospitality, note: "[popular] Full-screen map app with sidebar search. Map tiles are canvas/img." }
+  - { url: https://www.hostelworld.com/, domain: travel-hospitality, note: "[popular] Booking search form with date pickers and destination cards." }
+  - { url: https://www.japan-guide.com/, domain: travel-hospitality, note: "[long-tail] Travel guide; dated, link-dense layout." }
+  # government & civic (non-English)
+  - { url: https://www.service-public.fr/, domain: government-civic, note: "[popular] French government services portal (DSFR design system). Redirects to service-public.gouv.fr." }
+  - { url: https://www.digital.go.jp/, domain: government-civic, note: "[long-tail] Japan Digital Agency; Japanese government design system." }
+  - { url: https://www.gov.br/pt-br, domain: government-civic, note: "[popular] Brazilian federal portal in Portuguese." }
+  # data visualization (public dashboards)
+  - { url: https://play.grafana.org/, domain: data-visualization, note: "[demo] Public Grafana dashboards with panels, time picker and sidebar nav." }
+  - { url: https://www.usaspending.gov/, domain: data-visualization, note: "[long-tail] Federal spending explorer; client-rendered." }
+  - { url: https://www.gapminder.org/tools/, domain: data-visualization, note: "[long-tail] Interactive bubble chart with timeline scrubber." }
+  # games
+  - { url: https://itch.io/games, domain: games, note: "[popular] Indie game browse page: filters and thumbnail grid." }
+  - { url: https://poki.com/, domain: games, note: "[popular] Browser-games portal with a dense mosaic tile grid." }
+  - { url: https://play2048.co/, domain: games, note: "[long-tail] Playable single-screen game UI." }
+  # design & creative (editors)
+  - { url: https://excalidraw.com/, domain: design-creative, note: "[popular] Whiteboard app: canvas, floating toolbar. Little DOM text." }
+  - { url: https://www.photopea.com/, domain: design-creative, note: "[popular] Photoshop-style editor: menus, panels, layers." }
+  - { url: https://coolors.co/generate, domain: design-creative, note: "[popular] Palette generator. Redirects to a random palette URL, so the capture differs on every run." }
+  # marketing / landing
+  - { url: https://teenage.engineering/, domain: marketing-landing, note: "[long-tail] Idiosyncratic hardware brand site." }
+  - { url: https://basecamp.com/, domain: marketing-landing, note: "[popular] Opinionated, copy-heavy, illustrated landing page." }
+  # portfolio / agency
+  - { url: https://www.instrument.com/, domain: portfolio-agency, note: "[long-tail] Agency site with heavy media (about 3.5 MB HTML)." }
+  - { url: https://brittanychiang.com/, domain: portfolio-agency, note: "[popular] Personal developer portfolio; dark, single-page layout." }
+  # utilities
+  - { url: https://crontab.guru/, domain: utilities, note: "[popular] Single-purpose tool; minimal." }
+  - { url: https://www.calculator.net/, domain: utilities, note: "[popular] Calculator directory; dated design." }
+  # science & research
+  - { url: https://pubmed.ncbi.nlm.nih.gov/?term=crispr, domain: science-research, note: "[popular] Search results page with filters, pagination and citation actions." }
+  - { url: https://www.rcsb.org/structure/4HHB, domain: science-research, note: "[long-tail] Protein structure entry: 3D viewer, tabs, dense tables." }
+  - { url: https://www.uniprot.org/uniprotkb/P69905/entry, domain: science-research, note: "[long-tail] Protein entry: sticky section nav and feature viewer; client-rendered." }
+  # nonprofit
+  - { url: https://www.eff.org/, domain: nonprofit, note: "[long-tail] Advocacy nonprofit; dated, Drupal-era layout." }
+  - { url: https://www.kiva.org/lend, domain: nonprofit, note: "[popular] Loan marketplace: filters and loan cards. Redirects to /lend/filter. Plain curl got 406; headless got 200." }

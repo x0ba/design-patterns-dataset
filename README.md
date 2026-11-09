@@ -227,6 +227,12 @@ Quality of design matters, but diversity across domains is the priority.
 1. Handwrote this document.
 2. Passed it to Claude Code (Opus 5.5 High Reasoning) for an initial
    implementation of the pipeline + codebook rewrite + dashboard.
+3. Asked Grok Bot to compile a list of websites that covers 25 UI domains,
+   filling each domain with mixed sources (e.g. design sites like Mobbin,
+   popularity lists like Tranco top sites, product directories like Product
+   Hunt, specific picks like university websites, government portals, etc.), and
+   preferring actual app pages over landing pages, if possible to reach the
+   dashboard without logging in.
 
 ## Implementation
 
@@ -252,8 +258,8 @@ claude auth status                  # real labeling runs use the local Claude Co
 | Run a batch (capture → 3 raters → agreement)                    | `node scripts/label.ts --batch batch-001`                            |
 | Compute IRR for a batch                                         | `node scripts/irr.ts --batch batch-001`                              |
 | Review proposals between batches                                | `node scripts/proposals.ts list` / `accept` / `reject` / `deprecate` |
-| Dataset console                                                 | `node console/server.ts` → http://127.0.0.1:4317                     |
-| End-to-end smoke test, no model and no cost                     | `pnpm smoke` (then `rm -rf dataset/dry-run proposals/dry-run`)        |
+| Dataset console (updates live as batches run)                   | `node console/server.ts` → http://127.0.0.1:4317                     |
+| End-to-end smoke test, no model and no cost                     | `pnpm smoke` (then `rm -rf dataset/dry-run proposals/dry-run`)       |
 | Tests / types                                                   | `pnpm test` / `pnpm typecheck`                                       |
 
 `scripts/extract-atlas.ts` has already been run: `codebook/` holds the 119
@@ -340,8 +346,8 @@ src/                   library code (codebook, pipeline, irr); scripts/ are thin
   agreement is reported as an extra row; it is the most useful signal for
   finding ambiguous dimensions in the codebook.
 - **Raters run through the local Claude Code CLI.** The `claude-code` provider
-  (`src/pipeline/providers/claude-code.ts`) runs `claude -p` once per rater
-  and site. It runs in an empty temp dir with built-in tools off, only the rater
+  (`src/pipeline/providers/claude-code.ts`) runs `claude -p` once per rater and
+  site. It runs in an empty temp dir with built-in tools off, only the rater
   tools (served over a local MCP server), and the codebook system prompt in
   place of Claude Code's own. It uses the CLI's login and removes
   `ANTHROPIC_API_KEY` from its environment. `label.model.servedBy` records the
@@ -373,10 +379,10 @@ src/                   library code (codebook, pipeline, irr); scripts/ are thin
 
 - **One live pilot only.** The Claude Code rater
   (`src/pipeline/providers/claude-code.ts`) has labeled a single site with a
-  single rater (`news-ycombinator-com`). It has not run a full batch.
-  Everything around it — capture, tools, validation, proposals, orchestration,
-  IRR, consensus and the console — was run end to end with the model-free
-  `dry-run` provider. Before batch-001, run one site with one rater:
+  single rater (`news-ycombinator-com`). It has not run a full batch. Everything
+  around it — capture, tools, validation, proposals, orchestration, IRR,
+  consensus and the console — was run end to end with the model-free `dry-run`
+  provider. Before batch-001, run one site with one rater:
   `node scripts/label.ts --batch pilot --sites sites/dry-run.yaml --only linear-app --rater rater-1`.
 - Some sites in `batch-001.yaml` may block headless browsers; they will show up
   as `failed`.
