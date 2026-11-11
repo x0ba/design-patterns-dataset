@@ -75,7 +75,7 @@ Leave `/tmp/verify-dataset-console/<run-id>/` in place. The README smoke cleanup
 
 ## Helpers
 
-No helper script is shipped. The drive commands are the Playwright calls in the feature map.
+No helper script is shipped. The feature map states each check in prose and names the selector. Progress reads a `.kpi` whose `.n` is `4` and whose label is `Labeled`, plus the line `Krippendorff's α over 4 site(s)`. The filter is `#q`. The site viewer reads `Structure & aesthetics` from `#aest`. Region boxes are `#ov .bx.region`. Pattern boxes are `#ov .bx:not(.region)`. The toggles are `#t-reg` and `#t-pat`. Rater buttons are `#srcs button[data-src]`. The codebook searches with `#cq` and opens `[data-id="card"]`. Before smoke the card says `Not yet observed in the dataset.` After smoke it says `Present on 1 labeled site(s), uncertain on 1.` Proposals filter with `button[data-f]` and count `button[data-act="accept"]`. Do not click Accept or Reject.
 
 ## Maintenance
 
