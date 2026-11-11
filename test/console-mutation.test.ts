@@ -41,7 +41,7 @@ function post(port: number, pathname: string, headers: Record<string, string>, b
 async function startConsole(port: number): Promise<ChildProcess> {
   const proc = spawn(process.execPath, ['console/server.ts', '--port', String(port), '--host', '127.0.0.1'], { stdio: ['ignore', 'pipe', 'pipe'] });
   let out = '';
-  await new Promise<void>((resolve, reject) => {
+  const ready = new Promise<void>((resolve, reject) => {
     const timer = setTimeout(() => reject(new Error(`console did not start\n${out}`)), 8000);
     const onData = (chunk: Buffer) => {
       out += chunk.toString();
@@ -51,34 +51,46 @@ async function startConsole(port: number): Promise<ChildProcess> {
     proc.stderr?.on('data', onData);
     proc.once('exit', (code) => { clearTimeout(timer); reject(new Error(`console exited ${code}\n${out}`)); });
   });
+  try {
+    await ready;
+  } catch (err) {
+    proc.kill('SIGTERM');
+    throw err;
+  }
   return proc;
 }
 
 test('a page on another origin cannot reject a proposal, and the console itself can', async () => {
-  const ids = ['csrf-cross', 'csrf-rebind', 'csrf-same', 'csrf-script'] as const;
-  for (const id of ids) writeOpen(id);
+  const ids = ['csrf-cross', 'csrf-site', 'csrf-origin', 'csrf-rebind', 'csrf-same', 'csrf-script'] as const;
   const version = fs.readFileSync('codebook/VERSION', 'utf8');
-  const port = await freePort();
-  const proc = await startConsole(port);
-  const reject = (id: string) => `/api/proposals/dry-run/${id}/reject`;
+  let proc: ChildProcess | undefined;
   try {
-    const plain = JSON.stringify({ note: 'cross-site probe', by: 'attacker' });
-    assert.equal(await post(port, reject('csrf-cross'), { 'content-type': 'text/plain;charset=UTF-8', origin: 'http://127.0.0.1:1', 'sec-fetch-site': 'cross-site' }, plain), 403);
+    for (const id of ids) writeOpen(id);
+    const port = await freePort();
+    proc = await startConsole(port);
+    const reject = (id: string) => `/api/proposals/dry-run/${id}/reject`;
+    const listen = `127.0.0.1:${port}`;
+    assert.equal(await post(port, reject('csrf-cross'), { 'content-type': 'text/plain;charset=UTF-8', host: listen }, JSON.stringify({ note: 'plain' })), 403);
     assert.equal(statusOf('csrf-cross'), 'open');
 
-    const rebound = JSON.stringify({ note: 'rebind' });
-    assert.equal(await post(port, reject('csrf-rebind'), { 'content-type': 'application/json', host: `evil.example:${port}`, origin: `http://evil.example:${port}`, 'sec-fetch-site': 'same-origin' }, rebound), 403);
+    assert.equal(await post(port, reject('csrf-site'), { 'content-type': 'application/json', host: listen, origin: `http://${listen}`, 'sec-fetch-site': 'cross-site' }, JSON.stringify({ note: 'site' })), 403);
+    assert.equal(statusOf('csrf-site'), 'open');
+
+    assert.equal(await post(port, reject('csrf-origin'), { 'content-type': 'application/json', host: listen, origin: 'http://evil.example', 'sec-fetch-site': 'same-origin' }, JSON.stringify({ note: 'origin' })), 403);
+    assert.equal(statusOf('csrf-origin'), 'open');
+
+    assert.equal(await post(port, reject('csrf-rebind'), { 'content-type': 'application/json', host: `evil.example:${port}`, origin: `http://evil.example:${port}`, 'sec-fetch-site': 'same-origin' }, JSON.stringify({ note: 'rebind' })), 403);
     assert.equal(statusOf('csrf-rebind'), 'open');
 
     const note = JSON.stringify({ note: 'reviewer' });
     assert.equal(await post(port, reject('csrf-same'), { 'content-type': 'application/json', origin: `http://127.0.0.1:${port}`, 'sec-fetch-site': 'same-origin', host: `127.0.0.1:${port}` }, note), 200);
     assert.equal(statusOf('csrf-same'), 'rejected');
 
-    assert.equal(await post(port, reject('csrf-script'), { 'content-type': 'application/json', host: `127.0.0.1:${port}` }, JSON.stringify({ note: 'script' })), 200);
+    assert.equal(await post(port, reject('csrf-script'), { 'content-type': 'application/json', host: listen }, JSON.stringify({ note: 'script' })), 200);
     assert.equal(statusOf('csrf-script'), 'rejected');
     assert.equal(fs.readFileSync('codebook/VERSION', 'utf8'), version);
   } finally {
-    proc.kill('SIGTERM');
+    proc?.kill('SIGTERM');
     for (const id of ids) fs.rmSync(fileFor(id), { force: true });
   }
 });
