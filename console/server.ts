@@ -216,6 +216,28 @@ async function body(req: http.IncomingMessage): Promise<any> {
   return s ? JSON.parse(s) : {};
 }
 
+function foreignMutation(req: http.IncomingMessage): boolean {
+  const rawType = req.headers['content-type'];
+  const type = (typeof rawType === 'string' ? rawType : '').split(';')[0].trim().toLowerCase();
+  if (type !== 'application/json') return true;
+  const site = req.headers['sec-fetch-site'];
+  if (typeof site === 'string' && site !== 'same-origin') return true;
+  const requestHost = req.headers.host;
+  if (typeof requestHost !== 'string') return true;
+  const listenHost = args.host ?? '127.0.0.1';
+  if (listenHost === '127.0.0.1' || listenHost === '::1' || listenHost === 'localhost') {
+    const expected = listenHost.includes(':') ? `[${listenHost}]:${args.port}` : `${listenHost}:${args.port}`;
+    if (requestHost !== expected) return true;
+  }
+  const origin = req.headers.origin;
+  if (typeof origin !== 'string') return false;
+  try {
+    return new URL(origin).host !== requestHost;
+  } catch {
+    return true;
+  }
+}
+
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url ?? '/', 'http://x');
   const p = url.pathname;
@@ -241,6 +263,7 @@ const server = http.createServer(async (req, res) => {
     }
     m = /^\/api\/proposals\/([^/]+)\/([^/]+)\/(accept|reject)$/.exec(p);
     if (req.method === 'POST' && m) {
+      if (foreignMutation(req)) return send(res, 403, { error: 'cross-site request refused' });
       const b = await body(req);
       if (m[3] === 'accept') {
         const r = acceptProposal(m[1], m[2], { by: b.by, note: b.note });
