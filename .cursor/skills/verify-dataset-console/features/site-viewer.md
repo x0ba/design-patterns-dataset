@@ -32,4 +32,4 @@ Preconditions:
 
 - `consensus` is a button even though it is not a rater file. The label files are `dry-1.json`, `dry-2.json`, and `dry-3.json`.
 - Boxes use screenshot pixels. A recapture changes the image URL with a `?v=` mtime query. Compare the file on disk if the image looks stale.
-- When pattern-status alpha is null, `#agree` renders it as `—`. On Linear the heading is `Agreement score 0.70 · pattern-status α —`. The batch table prints `n/a` for a field with no variation.
+- When pattern-status alpha is null, the site heading in `#agree` and the batch IRR table both render it as `—`. On Linear the heading is `Agreement score 0.70 · pattern-status α —`. The batch rows for density, elevation, and shape show `—` in the alpha column. `n/a` is only the CLI table in `scripts/irr.ts` and the smoke stdout.

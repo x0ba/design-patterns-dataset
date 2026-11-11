@@ -23,11 +23,11 @@ Preconditions:
 - **Open the list.** Click the link named `Codebook`. The URL contains `#/codebook`. The heading matches `Codebook 1.0.0`. The page text includes `119 entries`.
 - **Search.** Fill `#cq` with `card`. Click the element `[data-id="card"]`. The URL becomes `#/codebook/card`. The level-1 heading text includes `Card`.
 - **See the diagram.** `.preview img` has `src` `/files/dist/previews/card.svg`. A request for that URL returns 200.
-- **Read usage.** After this smoke, the `card` detail includes `Present on 1 labeled site(s), uncertain on 1.` An entry consensus did not mark, such as `wizard`, includes `Not yet observed in the dataset.` That same sentence is what an entry shows when no consensus file exists.
+- **Read usage.** `GET /api/codebook` returns `usage.patterns.card` with `sites` and `uncertain`. The `card` line is `Present on <sites> labeled site(s)`, and when `uncertain` is greater than 0 it continues `, uncertain on <uncertain>.` The visible sentence must match that object. An entry with no usage row, such as `wizard`, says `Not yet observed in the dataset.`
 - **Proof.** Save a screenshot under `/tmp/verify-dataset-console/<run-id>/`.
 
 ## Gotchas
 
-- The detail sentence comes from `consensus.json`. With no consensus file it is `Not yet observed in the dataset.` After this smoke, `card` is `Present on 1 labeled site(s), uncertain on 1.` The list column can still show `0` for an entry that consensus never marked.
+- Build the `card` line from `usage.patterns.card` on `GET /api/codebook`. Do not hardcode the counts. With no usage row the sentence is `Not yet observed in the dataset.` The list column can still show `0` for an entry consensus never marked.
 - The list is the built bundle, not the YAML files on disk. A hand edit under `codebook/patterns/` is invisible until `node scripts/build-codebook.ts`.
 - Open `#/codebook`. `GET /codebook` is not a route and returns 404.
