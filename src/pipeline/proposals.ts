@@ -10,7 +10,6 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { P } from '../paths.ts';
 import { PATTERN_HEADER, readVersion, readYaml, writeYaml } from '../codebook/io.ts';
-import { readAtlasMeta, readPatternFiles } from '../codebook/io.ts';
 import { validateCodebook } from '../codebook/validate.ts';
 import type { PatternDimension, PatternEntry, PatternValue } from '../codebook/types.ts';
 import type { BBox } from './label.ts';
@@ -317,12 +316,5 @@ function completeDim(d: ProposedDimension): PatternDimension {
     family: d.family ?? 'content',
     question: d.question ?? '',
     subdimensions: d.subdimensions.map((s) => ({ id: s.id, name: s.name ?? s.id, select: s.select ?? 'one', values: s.values })),
-  };
-}
-
-export function codebookIndexForProposals(): { entries: Map<string, PatternEntry>; familyIds: string[] } {
-  return {
-    entries: new Map(readPatternFiles().map((f) => [f.data.id, f.data])),
-    familyIds: readAtlasMeta().families.map((f) => f.id),
   };
 }

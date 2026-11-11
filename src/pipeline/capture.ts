@@ -144,7 +144,7 @@ function indexPage({ maxY }: { maxY: number }) {
     return '#' + [r, g, b].map((x) => Math.round(Number(x)).toString(16).padStart(2, '0')).join('');
   };
   const bump = <K,>(m: Map<K, number>, k: K | undefined, w = 1) => { if (k !== undefined) m.set(k, (m.get(k) ?? 0) + w); };
-  const visible = (el: Element, r: DOMRect, cs: CSSStyleDeclaration) =>
+  const visible = (r: DOMRect, cs: CSSStyleDeclaration) =>
     r.width > 1 && r.height > 1 && cs.visibility !== 'hidden' && cs.display !== 'none' && Number(cs.opacity) > 0.05;
   const textOf = (el: Element) => ((el as HTMLElement).innerText ?? el.textContent ?? '').replace(/\s+/g, ' ').trim();
 
@@ -153,7 +153,7 @@ function indexPage({ maxY }: { maxY: number }) {
     const r = el.getBoundingClientRect();
     const y = r.top + sy;
     if (cs.display === 'none') return;
-    if (visible(el, r, cs) && y < maxY) {
+    if (visible(r, cs) && y < maxY) {
       boxes++;
       const area = Math.min(r.width * r.height, 1440 * 3000);
       bump(colorArea, hex(cs.backgroundColor), area);

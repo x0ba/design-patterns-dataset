@@ -4,8 +4,6 @@ import YAML from 'yaml';
 import { P } from '../paths.ts';
 import type { AtlasMeta, Codebook, PatternEntry } from './types.ts';
 
-export const ATLAS_META_FILES = ['meta', 'families', 'levels', 'archetypes', 'method', 'crosswalk'] as const;
-
 export function readYaml<T>(file: string): T {
   return YAML.parse(fs.readFileSync(file, 'utf8')) as T;
 }
