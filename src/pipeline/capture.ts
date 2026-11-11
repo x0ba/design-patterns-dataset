@@ -69,7 +69,6 @@ export async function captureSite(browser: Browser, url: string, outDir: string)
     await page.waitForLoadState('load', { timeout: 20_000 }).catch(() => {});
     await page.waitForLoadState('networkidle', { timeout: 8_000 }).catch(() => {});
     await autoScroll(page);
-    await page.waitForTimeout(800);
 
     const pageHeight = await page.evaluate(() => Math.max(document.documentElement.scrollHeight, document.body?.scrollHeight ?? 0));
     const height = Math.min(pageHeight, MAX_SCREENSHOT_HEIGHT);
