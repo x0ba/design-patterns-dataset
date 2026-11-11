@@ -23,7 +23,7 @@ Preconditions:
 - **Open the list.** Click the link named `Codebook`. The URL contains `#/codebook`. The heading matches `Codebook 1.0.0`. The page text includes `119 entries`.
 - **Search.** Fill `#cq` with `card`. Click the element `[data-id="card"]`. The URL becomes `#/codebook/card`. The level-1 heading text includes `Card`.
 - **See the diagram.** `.preview img` has `src` `/files/dist/previews/card.svg`. A request for that URL returns 200.
-- **Read usage.** `GET /api/codebook` returns `usage.patterns.card` with `sites` and `uncertain`. The `card` line is `Present on <sites> labeled site(s)`, and when `uncertain` is greater than 0 it continues `, uncertain on <uncertain>.` The visible sentence must match that object. An entry with no usage row, such as `wizard`, says `Not yet observed in the dataset.`
+- **Read usage.** Read `usage.patterns.card` from `GET /api/codebook`. It has numeric `sites` and `uncertain`. The card line matches `Present on N labeled site(s)`, and when `uncertain` is greater than 0 it continues `, uncertain on M.` `N` is `sites` and `M` is `uncertain`. Do not hardcode `N` or `M`. An entry with no usage row, such as `wizard`, says `Not yet observed in the dataset.`
 - **Proof.** Save a screenshot under `/tmp/verify-dataset-console/<run-id>/`.
 
 ## Gotchas
