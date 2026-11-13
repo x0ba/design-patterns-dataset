@@ -1,0 +1,25 @@
+# Generated UIs (scripts/briefs.ts → scripts/generate.ts → scripts/label.ts).
+#
+# Each generator is a vanilla Claude Code session (`claude -p`, default system
+# prompt, built-in file/shell tools, no user settings/skills/MCP) run through the
+# local CLI login. Briefs are assigned to generators round-robin when the brief
+# frame is written, so the model is recorded per app and balanced across domains.
+# Different models have different default aesthetics; that variety is the point.
+
+# Writes the concrete product/user/moment/data for each domain × function cell.
+briefWriter: { model: claude-opus-5-5, effort: high }
+
+generators:
+  - { id: opus,   model: claude-opus-5-5,   effort: high }
+  - { id: sonnet, model: claude-sonnet-5-5, effort: high }
+  - { id: haiku,  model: claude-haiku-5-5,  effort: high }
+  # - { id: fable, model: claude-fable-5-2, effort: high }
+
+# Built-in tools the coding agent gets. It runs in an empty scratch dir with
+# --permission-mode dontAsk, so these run without prompts (incl. Bash: npm installs, builds).
+tools: [Bash, Read, Write, Edit, Glob, Grep]
+
+# Per app. A build that is missing or broken when the agent stops is reported
+# back to the same session, like a user would, up to repairRounds times.
+timeoutMinutes: 45
+repairRounds: 2

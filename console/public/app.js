@@ -193,11 +193,11 @@ async function viewProgress(batchName, live) {
     f.st = document.getElementById('st').value;
     f.dis = document.getElementById('dis').checked;
     const q = f.q.toLowerCase(), st = f.st, dis = f.dis;
-    const rows = b.sites.filter((s) => (!q || `${s.slug} ${s.title ?? ''} ${s.domain ?? ''}`.toLowerCase().includes(q)) && (!st || s.state === st) && (!dis || s.agreement?.disagreements));
+    const rows = b.sites.filter((s) => (!q || `${s.slug} ${s.title ?? ''} ${s.domain ?? ''} ${s.source ?? ''}`.toLowerCase().includes(q)) && (!st || s.state === st) && (!dis || s.agreement?.disagreements));
     document.getElementById('sites').innerHTML = rows.map((s) => `
       <tr class="click" data-href="#/site/${encodeURIComponent(b.batch)}/${encodeURIComponent(s.slug)}">
         <td><div>${esc(s.title || s.slug)}</div><div class="small muted mono">${esc(s.url ?? '')}</div>${s.error ? `<div class="small err">${esc(s.error)}</div>` : ''}${s.flags?.length ? `<div class="small">${s.flags.map(esc).join(' · ')}</div>` : ''}</td>
-        <td class="small">${esc(s.domain ?? '')}</td>
+        <td class="small">${esc(s.domain ?? '')}${s.source === 'generated' ? ' <span class="chip" title="Built by a coding agent from a brief">generated</span>' : ''}</td>
         <td>${stateChip(s.state)}</td>
         <td><div class="dots">${b.raters.map((r) => `<span class="st ${RSTATE[s.raters[r]?.state] ?? 'queued'}" title="${esc(r)}: ${esc(s.raters[r]?.state ?? 'pending')}${s.raters[r]?.error ? ' — ' + esc(s.raters[r].error) : ''}"><i></i></span>`).join('')}</div></td>
         <td class="num">${s.agreement ? `${fmt(s.agreement.score)}<div class="ubar" style="margin-top:4px"><b style="width:${Math.max(0, s.agreement.score) * 100}%"></b></div>` : '<span class="muted">—</span>'}</td>

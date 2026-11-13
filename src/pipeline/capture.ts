@@ -4,7 +4,14 @@
 // dataset/<batch>/sites/<slug>/capture/
 //   meta.json        url, finalUrl, status, title, capturedAt, viewport, screenshot size, userAgent
 //   screenshot.png   full page, CSS px == screenshot px (deviceScaleFactor 1)
-//   viewport.png     above the fold
+//   viewport.png     above the fold, at the real 1440×900 viewport
+//
+// App UIs often fill the window and scroll inside panels (sidebars, lists,
+// inspectors), so a full-page screenshot would show only the first 900px of
+// each panel. Before the full screenshot, unrollPanels() makes the window
+// taller until those panels show their content (the layout the app would have
+// on a tall screen), and expands in place any fixed-height panel that a taller
+// window does not help. meta.panels records what was done.
 //   a11y.yaml        Playwright ARIA snapshot of <body>
 //   elements.json    indexed landmarks/headings/controls/media with page-pixel bboxes + key styles
 //   styles.json      page-level style statistics (colors by area, fonts, radii, shadows, borders)
@@ -15,6 +22,8 @@ import { chromium, type Browser, type Page } from 'playwright';
 
 export const VIEWPORT = { width: 1440, height: 900 };
 export const MAX_SCREENSHOT_HEIGHT = 16000;
+/** Tallest window unrollPanels() will use (6 viewports); longer panels stay partly scrolled. */
+export const MAX_UNROLL_HEIGHT = 5400;
 
 export interface CaptureMeta {
   url: string;
@@ -25,9 +34,22 @@ export interface CaptureMeta {
   viewport: { width: number; height: number };
   screenshot: { ref: string; width: number; height: number; truncated: boolean; pageHeight: number };
   viewportShot: string;
+  /** Present when the page scrolled inside panels and they were unrolled for the full screenshot. */
+  panels?: PanelUnroll;
   userAgent: string;
   durationMs: number;
   error?: string;
+}
+
+export interface PanelUnroll {
+  /** Window height used for screenshot.png (viewport.png keeps the real height). */
+  viewportHeight: number;
+  /** Scroll containers that had hidden content. */
+  scrollers: number;
+  /** Fixed-height ones expanded in place because a taller window did not reveal them. */
+  expandedInPlace: number;
+  /** Content px still hidden inside panels (height cap, or panels that could not be expanded). */
+  hiddenRemaining: number;
 }
 
 export interface IndexedElement {
@@ -71,9 +93,10 @@ export async function captureSite(browser: Browser, url: string, outDir: string)
     await autoScroll(page);
     await page.waitForTimeout(800);
 
+    await page.screenshot({ path: path.join(outDir, 'viewport.png') });
+    const panels = await unrollPanels(page);
     const pageHeight = await page.evaluate(() => Math.max(document.documentElement.scrollHeight, document.body?.scrollHeight ?? 0));
     const height = Math.min(pageHeight, MAX_SCREENSHOT_HEIGHT);
-    await page.screenshot({ path: path.join(outDir, 'viewport.png') });
     await page.screenshot({
       path: path.join(outDir, 'screenshot.png'),
       fullPage: true,
@@ -97,6 +120,7 @@ export async function captureSite(browser: Browser, url: string, outDir: string)
       viewport: VIEWPORT,
       screenshot: { ref: 'capture/screenshot.png', width: VIEWPORT.width, height, truncated: pageHeight > height, pageHeight },
       viewportShot: 'capture/viewport.png',
+      ...(panels ? { panels } : {}),
       userAgent: await page.evaluate(() => navigator.userAgent),
       durationMs: Date.now() - t0,
     };
@@ -118,6 +142,88 @@ async function autoScroll(page: Page): Promise<void> {
     window.scrollTo(0, 0);
   }, MAX_SCREENSHOT_HEIGHT);
   await page.waitForLoadState('networkidle', { timeout: 5_000 }).catch(() => {});
+}
+
+/**
+ * Reveal content hidden inside scrolling panels. Grow the window by the most
+ * content any panel still hides, re-measure, and repeat; a panel whose hidden
+ * content did not shrink has a fixed height, so expand that one in place
+ * (its own height only; widths and flex sizing along rows are untouched).
+ * Returns undefined when nothing scrolls internally (ordinary documents).
+ */
+export async function unrollPanels(page: Page, maxHeight = MAX_UNROLL_HEIGHT): Promise<PanelUnroll | undefined> {
+  const measure = (skip: string[]) => page.evaluate((skip) => {
+    const w = window as any;
+    w.__captureScrollerN ??= 0;
+    const out: { id: string; hidden: number }[] = [];
+    for (const el of document.querySelectorAll<HTMLElement>('body *')) {
+      const cs = getComputedStyle(el);
+      if (!/(auto|scroll|overlay)/.test(cs.overflowY) || cs.visibility === 'hidden') continue;
+      const hidden = el.scrollHeight - el.clientHeight;
+      if (hidden < 24 || el.clientHeight < 60 || el.clientWidth < 80) continue;
+      const r = el.getBoundingClientRect();
+      if (r.width < 1 || r.height < 1) continue;
+      el.dataset.captureScroller ??= String(w.__captureScrollerN++);
+      if (!skip.includes(el.dataset.captureScroller)) out.push({ id: el.dataset.captureScroller, hidden });
+    }
+    return out;
+  }, skip);
+  const settle = async () => {
+    await page.waitForTimeout(400);
+    await page.waitForLoadState('networkidle', { timeout: 3_000 }).catch(() => {});
+  };
+
+  let cur = await measure([]);
+  if (!cur.length) return undefined;
+  const width = page.viewportSize()?.width ?? VIEWPORT.width;
+  let height = page.viewportSize()?.height ?? VIEWPORT.height;
+  const seen = new Set<string>();
+  const inPlace = new Set<string>();
+  const givenUp: string[] = [];
+  for (let i = 0; i < 8 && cur.length; i++) {
+    for (const s of cur) seen.add(s.id);
+    const before = new Map(cur.map((s) => [s.id, s.hidden]));
+    const next = Math.min(maxHeight, height + Math.max(...cur.map((s) => s.hidden)));
+    let after = cur;
+    if (next > height) {
+      height = next;
+      await page.setViewportSize({ width, height });
+      await settle();
+      after = await measure(givenUp);
+    }
+    const stuck = after.filter((s) => before.has(s.id) && s.hidden >= before.get(s.id)! - 8);
+    if (!stuck.length) { cur = after; continue; }
+    // Expanded once already and still hiding content: leave it scrolled.
+    givenUp.push(...stuck.filter((s) => inPlace.has(s.id)).map((s) => s.id));
+    const fresh = stuck.filter((s) => !inPlace.has(s.id)).map((s) => s.id);
+    if (!fresh.length && height >= maxHeight) { cur = after; break; }
+    for (const id of fresh) inPlace.add(id);
+    await page.evaluate((ids) => {
+      for (const id of ids) {
+        const el = document.querySelector<HTMLElement>(`[data-capture-scroller="${id}"]`);
+        if (!el) continue;
+        const h = el.clientHeight;
+        const parent = el.parentElement ? getComputedStyle(el.parentElement) : undefined;
+        el.style.setProperty('overflow-y', 'visible', 'important');
+        el.style.setProperty('height', 'auto', 'important');
+        el.style.setProperty('max-height', 'none', 'important');
+        el.style.setProperty('min-height', `${h}px`, 'important');
+        if (parent && /flex/.test(parent.display) && parent.flexDirection.startsWith('column')) {
+          el.style.setProperty('flex-shrink', '0', 'important');
+          el.style.setProperty('flex-basis', 'auto', 'important');
+        }
+      }
+    }, fresh);
+    await settle();
+    cur = await measure(givenUp);
+  }
+  const remaining = await measure([]);
+  return {
+    viewportHeight: height,
+    scrollers: seen.size,
+    expandedInPlace: inPlace.size,
+    hiddenRemaining: remaining.reduce((a, s) => a + s.hidden, 0),
+  };
 }
 
 /** Runs in the page. Must be self-contained. */

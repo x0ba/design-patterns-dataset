@@ -36,7 +36,19 @@
         },
         "userAgent": { "type": "string", "description": "(harness)" },
         "domain": { "$ref": "#/$defs/domain" },
-        "domainNote": { "type": "string", "description": "Optional refinement of the domain, e.g. 'personal finance / budgeting'." }
+        "domainNote": { "type": "string", "description": "Optional refinement of the domain, e.g. 'personal finance / budgeting'." },
+        "provenance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["source"],
+          "description": "(harness) Where this UI came from. 'generated' UIs were built by a coding agent from a brief (generated/<batch>/<slug>/generation.json); their aesthetics reflect model defaults, so filter on this before using them as aesthetic references.",
+          "properties": {
+            "source": { "enum": ["captured", "generated"] },
+            "generation": { "type": "string" },
+            "generator": { "type": "object", "additionalProperties": false, "required": ["id", "model"], "properties": { "id": { "type": "string" }, "model": { "type": "string" }, "effort": { "type": "string" } } },
+            "brief": { "type": "object", "additionalProperties": false, "required": ["domain", "archetype", "product"], "properties": { "domain": { "type": "string" }, "archetype": { "type": "string" }, "product": { "type": "string" } } }
+          }
+        }
       }
     },
     "regions": {

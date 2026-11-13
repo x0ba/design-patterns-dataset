@@ -31,6 +31,12 @@ export interface Label {
     viewport: { width: number; height: number };
     screenshot: { ref: string; width: number; height: number; truncated?: boolean };
     userAgent: string; domain: string; domainNote?: string;
+    provenance?: {
+      source: 'captured' | 'generated';
+      generation?: string;
+      generator?: { id: string; model: string; effort?: string };
+      brief?: { domain: string; archetype: string; product: string };
+    };
   };
   regions: LabelRegion[];
   patterns: LabelPattern[];

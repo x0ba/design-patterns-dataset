@@ -5,11 +5,19 @@ import path from 'node:path';
 import YAML from 'yaml';
 import { P } from '../paths.ts';
 
+export type SiteSource = 'captured' | 'generated';
+
 export interface SiteSpec {
   url: string;
   domain?: string; // curated sampling domain (see sites/README.md)
   note?: string;
   slug?: string;
+  /** Where the UI came from. Default 'captured' (a live website). */
+  source?: SiteSource;
+  /** Generated apps: static build dir (repo-relative) served at `url` during labeling. */
+  local?: string;
+  /** Generated apps: repo-relative path to generated/<batch>/<slug>/generation.json. */
+  generation?: string;
 }
 
 export interface SiteList { batch?: string; description?: string; sites: SiteSpec[] }
@@ -49,6 +57,7 @@ export interface SiteStatus {
   slug: string;
   url: string;
   domain?: string;
+  source?: SiteSource;
   state: SiteState;
   raters: Record<string, { state: RaterState; error?: string; updatedAt: string }>;
   flags: string[];

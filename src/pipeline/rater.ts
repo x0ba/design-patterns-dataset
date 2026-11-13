@@ -10,6 +10,7 @@ import { firstMessage, modelLabelSchema, NUDGE, systemPrompt } from './prompt.ts
 import { providerFor, type RaterConfig } from './provider.ts';
 import { RaterTools, toolSpecs } from './tools.ts';
 import { writeJson, type SiteSpec } from './sites.ts';
+import { P } from '../paths.ts';
 import type { Label } from './label.ts';
 import { usageGate, UsageLimitError } from './usage-limit.ts';
 
@@ -50,6 +51,7 @@ async function runRaterOnce(job: RaterJob): Promise<Label> {
 
   let submitted: Label | undefined;
   const tools = new RaterTools({
+    provenance: provenanceOf(job.site),
     batch: job.batch,
     slug: job.site.slug,
     siteUrl: job.site.url,
@@ -62,7 +64,10 @@ async function runRaterOnce(job: RaterJob): Promise<Label> {
   });
 
   try {
-    const first = await tools.crop({ y: 0, height: meta.viewport.height });
+    // With unrolled panels the top of screenshot.png is not what a person sees first; viewport.png is.
+    const first = meta.panels
+      ? { image: { mediaType: 'image/png' as const, data: fs.readFileSync(path.join(job.captureDir, 'viewport.png')).toString('base64') } }
+      : await tools.crop({ y: 0, height: meta.viewport.height });
     const provider = await providerFor(rater);
     const outcome = await provider.run(rater, {
       system: systemPrompt(codebook),
@@ -87,4 +92,20 @@ async function runRaterOnce(job: RaterJob): Promise<Label> {
   } finally {
     await tools.close();
   }
+}
+
+/** Harness-owned provenance for the label: where this UI came from. */
+export function provenanceOf(site: SiteSpec): Label['site']['provenance'] {
+  if (site.source !== 'generated') return { source: 'captured' };
+  const ref = site.generation;
+  let g: any;
+  try { g = ref ? JSON.parse(fs.readFileSync(path.resolve(P.root, ref), 'utf8')) : undefined; } catch { /* missing record */ }
+  return {
+    source: 'generated',
+    ...(ref ? { generation: ref } : {}),
+    ...(g ? {
+      generator: { id: g.generator?.id, model: g.generator?.model, ...(g.generator?.effort ? { effort: g.generator.effort } : {}) },
+      brief: { domain: g.brief?.domain, archetype: g.brief?.archetype, product: g.brief?.product },
+    } : {}),
+  };
 }

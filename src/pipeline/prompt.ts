@@ -103,7 +103,8 @@ URL: ${opts.url}${meta.finalUrl !== opts.url ? ` (final: ${meta.finalUrl})` : ''
 Title: ${meta.title}
 HTTP status: ${meta.status ?? 'unknown'}
 Screenshot: ${meta.screenshot.width}x${meta.screenshot.height}px${meta.screenshot.truncated ? ` (truncated; the page is ${meta.screenshot.pageHeight}px tall)` : ''}; viewport ${meta.viewport.width}x${meta.viewport.height}. The image above is the first viewport.
-Accessibility tree: ${opts.a11yLines} lines. Indexed elements: ${opts.elements.length}.
+${meta.panels ? `Scrolling panels: this page scrolls inside ${meta.panels.scrollers} panel(s) rather than (only) as a whole. So their contents are visible, the full screenshot was taken with the window ${meta.panels.viewportHeight}px tall${meta.panels.expandedInPlace ? ` and ${meta.panels.expandedInPlace} fixed-height panel(s) expanded in place` : ''}; panels and stretched areas are therefore taller than at ${meta.viewport.height}px${meta.panels.hiddenRemaining ? `, and about ${meta.panels.hiddenRemaining}px of panel content is still scrolled out of view (check it on the live page)` : ''}. The image above is the real ${meta.viewport.width}x${meta.viewport.height} first screen; bounding boxes and find_elements use the full screenshot. Code the interface, not the taller layout (e.g. density and whitespace as seen at ${meta.viewport.height}px).
+` : ''}Accessibility tree: ${opts.a11yLines} lines. Indexed elements: ${opts.elements.length}.
 ${opts.siteNote ? `Curator note: ${opts.siteNote}\n` : ''}
 Style summary (computed, whole page):
 - page background ${styles.pageBackground}; backgrounds by area: ${fmt(styles.backgroundsByArea.slice(0, 8), (b) => `${b.color} ${(b.share * 100).toFixed(1)}%`)}

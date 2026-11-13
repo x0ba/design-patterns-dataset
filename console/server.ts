@@ -47,6 +47,7 @@ function batchSummary(batch: string) {
       url: status?.url ?? meta?.url,
       title: meta?.title,
       domain: status?.domain,
+      source: status?.source ?? 'captured',
       state: status?.state ?? 'queued',
       raters: status?.raters ?? {},
       flags: status?.flags ?? [],

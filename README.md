@@ -259,6 +259,9 @@ claude auth status                  # real labeling runs use the local Claude Co
 | Compute IRR for a batch                                         | `node scripts/irr.ts --batch batch-001`                              |
 | Review proposals between batches                                | `node scripts/proposals.ts list` / `accept` / `reject` / `deprecate` |
 | Dataset console (updates live as batches run)                   | `node console/server.ts` → http://127.0.0.1:4317                     |
+| Write a brief frame for generated UIs (review it before generating) | `node scripts/briefs.ts --batch gen-001 --n 48` (`--plan-only` to preview cells) |
+| Generate apps from briefs; writes `sites/gen-001.yaml`          | `node scripts/generate.ts --batch gen-001`                           |
+| Label generated apps (served locally while labeling)            | `node scripts/label.ts --batch gen-001`                              |
 | End-to-end smoke test, no model and no cost                     | `pnpm smoke` (then `rm -rf dataset/dry-run proposals/dry-run`)       |
 | Tests / types                                                   | `pnpm test` / `pnpm typecheck`                                       |
 
@@ -281,6 +284,9 @@ dist/                  built output; agents and the console read only this
 schema/label.schema.json   the per-site label format (one file per rater)
 config/raters.yaml     which models rate (default: 3 × claude-opus-5-5, independent contexts)
 sites/<batch>.yaml     sampling frame per batch
+briefs/<batch>.yaml    generation briefs (generated batches): domain × software function × generator
+config/generators.yaml brief writer + generator models for generated batches
+generated/<batch>/<slug>/  generated apps: out/ (served build), src/, preview.png, transcript.jsonl, generation.json
 dataset/<batch>/
   batch.json           codebook version + hash frozen at batch start, raters
   irr.json             Krippendorff's α per README field, plus per-pattern reliability
@@ -303,6 +309,11 @@ src/                   library code (codebook, pipeline, irr); scripts/ are thin
    exact boxes and computed styles, and page-level style statistics. All three
    raters label this same capture. Live pages change between loads, and separate
    captures would show up as rater disagreement.
+   App UIs that scroll inside panels instead of as a page are unrolled first:
+   the window grows (up to 5,400 px) until the panels show their content, and
+   fixed-height panels that still hide content are expanded in place.
+   `viewport.png` keeps the real 1440×900 first screen, which is also the
+   raters' first image, and `meta.panels` records what was unrolled.
 2. **Three raters, independent contexts.** Each is a tool-using agent
    (`src/pipeline/tools.ts`). It can crop or zoom the screenshot and overlay its
    own boxes to check them, search elements for exact bboxes and colors, read
@@ -374,6 +385,59 @@ src/                   library code (codebook, pipeline, irr); scripts/ are thin
   mean pairwise Jaccard distance between sites' pattern sets, near-duplicate
   site pairs, and evenness of each aesthetic field. The seed frame
   `sites/batch-001.yaml` has 50 sites across 21 domains (evenness 0.98).
+
+### Generated UIs
+
+Most sites people can reach without logging in are marketing pages, so few of
+the captured sites are working application UIs (Linear, Figma, Notion…).
+Generated batches fill that gap: coding agents build app UIs across domains and
+software functions, and the same labeling pipeline adds the codebook semantics.
+
+1. **Brief frame (`briefs/<batch>.yaml`).** `scripts/briefs.ts` crosses the
+   label schema's domains (minus marketing-landing, portfolio-agency, other)
+   with the codebook's 16 archetypes as the software-function axis (analyze,
+   create, communicate, monitor, schedule, transact, delegate-ai, …). Cells come
+   from seeded shuffles walked in lockstep, so domain and function counts stay
+   even and pairs don't repeat. Generators from `config/generators.yaml` rotate
+   so no domain is tied to one model. A writer model then turns each cell into
+   a concrete product, user, moment and data. **Briefs describe the work, never
+   the interface.** If a brief asked for a kanban board, the raters would find
+   one, and the labels would only echo the prompt. `echo` lists codebook
+   pattern names that appear in a brief anyway; review those before
+   generating. The archetype is a sampling stratum and is not shown to the
+   generator.
+2. **Generation (`scripts/generate.ts`).** One vanilla Claude Code session per
+   brief: default system prompt, built-in file and shell tools, no user
+   settings, skills, plugins or MCP, in an empty scratch dir outside the repo.
+   The request reads like one a person would write. Any stack is allowed, but
+   the result must be a static build in `./out`. When the agent stops, the
+   harness serves `./out` the way labeling will and opens it at 1440×900. A
+   missing, blank or erroring build goes back to the same session as a
+   follow-up (up to `repairRounds`). Output goes to `generated/<batch>/<slug>/`
+   (gitignored): `out/`, `src/` (without node_modules), `preview.png`,
+   `transcript.jsonl` and `generation.json` (brief, generator, prompt,
+   verification, cost, chosen dependencies). Afterwards it writes
+   `sites/<batch>.yaml` with one entry per successful build.
+3. **Labeling is unchanged.** Site entries carry `source: generated` and a
+   `local:` build dir. `label.ts` serves each app at the root of its own origin,
+   `http://<slug>.localhost:4318/` (Chromium resolves `*.localhost` to
+   loopback), for both the capture and the raters' live page. Raters get no
+   brief, so they code what is on screen. Every label records
+   `site.provenance` (`captured` or `generated`, plus generator and brief cell
+   for generated ones). The console marks generated sites.
+
+**Caveat: generated aesthetics are model defaults.** This dataset exists so
+agents can build UIs that don't look vibecoded, and generated UIs are that
+baseline. Their pattern and composition labels are useful: which patterns a
+dispatch console or a lab notebook is made of, and how they nest. Their
+aesthetic fields mostly record what each model reaches for. Filter on
+`site.provenance.source` before using labels as aesthetic references. With both
+sources labeled under one schema, comparing their aesthetic distributions is a
+direct measure of the "vibecoded" look.
+
+**Safety.** Generators run `Bash` without prompts (`--permission-mode dontAsk`)
+so they can install packages and build. They work in a temp dir but are not
+sandboxed. Run generation on a machine where that's acceptable.
 
 ### Not yet verified
 

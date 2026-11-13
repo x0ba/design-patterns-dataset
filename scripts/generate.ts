@@ -1,0 +1,116 @@
+#!/usr/bin/env node
+// Generate apps from briefs/<batch>.yaml, then write sites/<batch>.yaml so the
+// batch can be labeled like any other:
+//
+//   node scripts/generate.ts --batch gen-001 [--concurrency 2] [--only slug,slug]
+//        [--regenerate] [--config config/generators.yaml]
+//   node scripts/label.ts --batch gen-001
+//
+// Resumable: briefs with a successful generation.json are skipped unless
+// --regenerate. A Claude Code usage limit pauses the run until the reset.
+
+import fs from 'node:fs';
+import path from 'node:path';
+import { parseArgs } from 'node:util';
+import YAML from 'yaml';
+import { P } from '../src/paths.ts';
+import { launchBrowser } from '../src/pipeline/capture.ts';
+import { localUrl, startLocalServer, LOCAL_PORT } from '../src/pipeline/serve.ts';
+import { readJson, type SiteSpec } from '../src/pipeline/sites.ts';
+import { usageGate } from '../src/pipeline/usage-limit.ts';
+import { readBriefs, readGenerationConfig } from '../src/generate/briefs.ts';
+import { generateApp, type GenerationRecord } from '../src/generate/app.ts';
+
+const { values: args } = parseArgs({
+  options: {
+    batch: { type: 'string' },
+    concurrency: { type: 'string', default: '2' },
+    only: { type: 'string' },
+    regenerate: { type: 'boolean', default: false },
+    config: { type: 'string', default: path.join(P.root, 'config', 'generators.yaml') },
+    port: { type: 'string', default: String(LOCAL_PORT) },
+  },
+});
+if (!args.batch) {
+  console.error('usage: node scripts/generate.ts --batch <name> [--concurrency N] [--only slugs] [--regenerate]');
+  process.exit(2);
+}
+const batch = args.batch;
+const briefFile = path.join(P.briefs, `${batch}.yaml`);
+if (!fs.existsSync(briefFile)) {
+  console.error(`${path.relative(P.root, briefFile)} is missing. Run: node scripts/briefs.ts --batch ${batch}`);
+  process.exit(1);
+}
+const briefs = readBriefs(briefFile);
+const cfg = readGenerationConfig(args.config!);
+const generators = new Map(cfg.generators.map((g) => [g.id, g]));
+const unknown = briefs.briefs.filter((b) => !generators.has(b.generator));
+if (unknown.length) {
+  console.error(`Briefs name generators not in ${path.relative(P.root, args.config!)}: ${[...new Set(unknown.map((b) => b.generator))].join(', ')}`);
+  process.exit(1);
+}
+const genDir = path.join(P.generated, batch);
+const recordFile = (slug: string) => path.join(genDir, slug, 'generation.json');
+
+let todo = briefs.briefs;
+if (args.only) todo = todo.filter((b) => args.only!.split(',').includes(b.slug));
+if (!args.regenerate) todo = todo.filter((b) => !readJson<GenerationRecord>(recordFile(b.slug))?.ok);
+console.log(`${batch}: ${briefs.briefs.length} briefs, ${todo.length} to generate (${[...generators.keys()].join(', ')})`);
+
+const server = await startLocalServer(0); // verification only; labeling serves on the fixed port
+let browser = await launchBrowser();
+let relaunching: Promise<void> | null = null;
+const getBrowser = async () => {
+  if (!browser.isConnected()) {
+    relaunching ??= (async () => { browser = await launchBrowser(); })().finally(() => { relaunching = null; });
+    await relaunching;
+  }
+  return browser;
+};
+
+let done = 0;
+try {
+  const queue = [...todo];
+  await Promise.all(Array.from({ length: Math.max(1, Number(args.concurrency)) }, async () => {
+    for (let b = queue.shift(); b; b = queue.shift()) {
+      await usageGate.wait();
+      const g = generators.get(b.generator)!;
+      const t0 = Date.now();
+      console.log(`→ ${b.slug} (${b.domain} · ${b.archetype} · ${g.id})`);
+      try {
+        const r = await generateApp({ batch, brief: b, generator: g, config: cfg, outDir: path.join(genDir, b.slug), browser: getBrowser, server, log: console.log });
+        const cost = r.session ? ` · $${r.session.costUsd.toFixed(2)} · ${r.session.numTurns} turns` : '';
+        const stack = r.stack.dependencies.slice(0, 4).join(', ') || (r.stack.packageJson ? 'node' : 'static');
+        console.log(`[${++done}/${todo.length}] ${b.slug} ${r.ok ? '✓' : '✗'} ${Math.round((Date.now() - t0) / 60_000)}m${cost} · ${stack}${r.error ? ` · ${r.error.slice(0, 200)}` : ''}`);
+      } catch (e) {
+        console.error(`[${++done}/${todo.length}] ${b.slug} ✗ ${(e as Error).message}`);
+      }
+    }
+  }));
+} finally {
+  await browser.close().catch(() => {});
+  await server.close();
+}
+
+// ------------------------------------------------- site list for labeling
+const port = Number(args.port);
+const sites: SiteSpec[] = [];
+const failed: string[] = [];
+for (const b of briefs.briefs) {
+  const r = readJson<GenerationRecord>(recordFile(b.slug));
+  if (!r?.ok) { failed.push(b.slug); continue; }
+  sites.push({
+    url: localUrl(b.slug, port),
+    slug: b.slug,
+    domain: b.domain,
+    source: 'generated',
+    local: path.relative(P.root, path.join(genDir, b.slug, 'out')),
+    generation: path.relative(P.root, recordFile(b.slug)),
+  });
+}
+const sitesFile = path.join(P.sites, `${batch}.yaml`);
+fs.writeFileSync(sitesFile, `# Generated by scripts/generate.ts from briefs/${batch}.yaml — do not edit; rerun generate.
+# Apps are served from generated/${batch}/<slug>/out by scripts/label.ts while labeling.
+` + YAML.stringify({ batch, description: `Generated app UIs (${sites.length} of ${briefs.briefs.length} briefs built)`, sites }, { lineWidth: 0 }));
+console.log(`\nWrote ${path.relative(P.root, sitesFile)}: ${sites.length} apps${failed.length ? `; not built: ${failed.join(', ')}` : ''}.`);
+console.log(`Next: node scripts/label.ts --batch ${batch}`);

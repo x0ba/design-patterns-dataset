@@ -24,6 +24,8 @@ export interface ToolContext {
   meta: CaptureMeta;
   codebook: CodebookBundle;
   browser: Browser;
+  /** Where the UI came from (harness-owned label field). Default: captured. */
+  provenance?: Label['site']['provenance'];
   /** Called with the complete label when submit_label succeeds. */
   onSubmit: (label: Label) => void;
 }
@@ -405,6 +407,7 @@ export class RaterTools {
         userAgent: meta.userAgent,
         domain: m.site?.domain,
         ...(m.site?.domainNote ? { domainNote: m.site.domainNote } : {}),
+        provenance: this.ctx.provenance ?? { source: 'captured' },
       },
       regions: m.regions,
       patterns: m.patterns,

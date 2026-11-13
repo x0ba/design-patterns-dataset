@@ -19,6 +19,7 @@ import { parseArgs } from 'node:util';
 import YAML from 'yaml';
 import { P } from '../src/paths.ts';
 import { captureSite, launchBrowser } from '../src/pipeline/capture.ts';
+import { startLocalServer, type LocalServer } from '../src/pipeline/serve.ts';
 import { loadBundle } from '../src/pipeline/label.ts';
 import { runRater } from '../src/pipeline/rater.ts';
 import { usageGate } from '../src/pipeline/usage-limit.ts';
@@ -83,6 +84,29 @@ let sites = list.sites as (SiteSpec & { slug: string })[];
 if (args.only) sites = sites.filter((s) => args.only!.split(',').includes(s.slug));
 for (const s of list.sites) initStatus(s as SiteSpec & { slug: string });
 
+// Generated apps (`local:` in the site list) are served from disk at their
+// http://<slug>.localhost:<port>/ URLs for capture and for the raters' live page.
+let local: LocalServer | undefined;
+const localSites = list.sites.filter((s) => s.local);
+if (localSites.length) {
+  const ports = new Set(localSites.map((s) => new URL(s.url).port));
+  if (ports.size !== 1) throw new Error(`${sitesFile}: local sites must share one port (have ${[...ports].join(', ')})`);
+  try {
+    local = await startLocalServer(Number([...ports][0]));
+  } catch (e) {
+    console.error(`Could not serve generated apps on port ${[...ports][0]}: ${(e as Error).message}. Is another label run using it?`);
+    process.exit(1);
+  }
+  for (const s of localSites) {
+    const host = new URL(s.url).hostname;
+    if (!host.endsWith('.localhost')) throw new Error(`${s.slug}: local site URL must be http://<name>.localhost:<port>/ (got ${s.url})`);
+    const dir = path.resolve(P.root, s.local!);
+    if (!fs.existsSync(path.join(dir, 'index.html'))) console.error(`  warning: ${s.slug}: ${s.local}/index.html is missing`);
+    local.mount(host.slice(0, -'.localhost'.length), dir);
+  }
+  console.log(`Serving ${localSites.length} generated app(s) on port ${local.port}`);
+}
+
 // One shared browser, relaunched if it dies (crash, SIGINT to the process group, ...)
 // so a single browser death can't fail every remaining site.
 let browser = await launchBrowser();
@@ -107,6 +131,7 @@ try {
   });
 } finally {
   await browser.close().catch(() => {});
+  await local?.close();
 }
 console.log(`\nDone. Next: node scripts/irr.ts --batch ${batch}   ·   console: node console/server.ts`);
 
@@ -167,7 +192,7 @@ function readStatus(slug: string) { return readJson<SiteStatus>(statusFile(slug)
 function initStatus(site: SiteSpec & { slug: string }) {
   if (readStatus(site.slug)) return;
   writeJson(statusFile(site.slug), {
-    slug: site.slug, url: site.url, ...(site.domain ? { domain: site.domain } : {}), state: 'queued',
+    slug: site.slug, url: site.url, ...(site.domain ? { domain: site.domain } : {}), source: site.source ?? 'captured', state: 'queued',
     raters: Object.fromEntries(info!.raters.map((r) => [r.id, { state: 'pending', updatedAt: new Date().toISOString() }])), flags: [], updatedAt: new Date().toISOString(),
   } satisfies SiteStatus);
 }

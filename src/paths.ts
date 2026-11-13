@@ -20,6 +20,8 @@ export const P = {
   labelSchema: path.join(ROOT, 'schema', 'label.schema.json'),
   proposals: path.join(ROOT, 'proposals'),
   sites: path.join(ROOT, 'sites'),
+  briefs: path.join(ROOT, 'briefs'),
+  generated: path.join(ROOT, 'generated'),
   dataset: path.join(ROOT, 'dataset'),
   originalAtlas: path.join(ROOT, 'codebook.html'),
 };
