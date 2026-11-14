@@ -20,6 +20,7 @@
           packages = [
             pkgs.nodejs_24 # runs the .ts sources directly (needs >= 23.6)
             pkgs.pnpm
+            pkgs.git-lfs # dataset/ and generated/ binaries live in LFS
           ];
 
           shellHook = ''

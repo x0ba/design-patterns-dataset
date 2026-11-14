@@ -1,0 +1,652 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "gen-pilot",
+  "site": {
+    "slug": "podcast-retention-ad-analysis",
+    "url": "http://podcast-retention-ad-analysis.localhost:4318/",
+    "finalUrl": "http://podcast-retention-ad-analysis.localhost:4318/",
+    "status": 200,
+    "title": "Earshot Analytics · Listening retention",
+    "capturedAt": "2026-11-13T22:25:38.413Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1752
+    },
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "data-visualization",
+    "domainNote": "podcast listening-retention analytics: before/after analysis of a mid-roll ad move",
+    "provenance": {
+      "source": "generated",
+      "generation": "generated/gen-pilot/podcast-retention-ad-analysis/generation.json",
+      "generator": {
+        "id": "haiku",
+        "model": "claude-haiku-5-5",
+        "effort": "high"
+      },
+      "brief": {
+        "domain": "media-entertainment",
+        "archetype": "analyze",
+        "product": "Earshot Analytics"
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Logo, product name, section tabs (Overview/Shows/Segments/Episodes/Method & data), 'Synthetic demo data' pill, date range",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 56
+      },
+      "patterns": [
+        "app-shell",
+        "tabs",
+        "badge"
+      ]
+    },
+    {
+      "id": "filter-sidebar",
+      "role": "sidebar",
+      "label": "Filters: split/window date inputs, show-format segmented control, show checkboxes, episode-length segmented grid, platform select, production-notes checkbox, episode counts, reset link",
+      "bbox": {
+        "x": 0,
+        "y": 56,
+        "width": 276,
+        "height": 1696
+      },
+      "patterns": [
+        "filter-controls",
+        "choice-control",
+        "date-picker"
+      ]
+    },
+    {
+      "id": "kpi-row",
+      "role": "stats-strip",
+      "label": "Headline question and four KPI tiles (completion before/after, adjusted change, listeners lost at mid-roll)",
+      "bbox": {
+        "x": 298,
+        "y": 74,
+        "width": 1120,
+        "height": 234
+      },
+      "patterns": [
+        "dashboard",
+        "stat-tile"
+      ]
+    },
+    {
+      "id": "retention-charts",
+      "role": "chart-panel",
+      "label": "Share still listening by minute (before/after lines with mid-roll reference lines) and change-per-minute diverging bars",
+      "bbox": {
+        "x": 298,
+        "y": 322,
+        "width": 645,
+        "height": 1077
+      },
+      "patterns": [
+        "chart"
+      ]
+    },
+    {
+      "id": "findings-panel",
+      "role": "narrative",
+      "label": "'What the data says' generated findings with colored left rules, plus per-show chips that drill to Shows tab",
+      "bbox": {
+        "x": 957,
+        "y": 322,
+        "width": 461,
+        "height": 1077
+      },
+      "patterns": [
+        "card"
+      ]
+    },
+    {
+      "id": "monthly-chart",
+      "role": "chart-panel",
+      "label": "Completion by month time series, narrative vs comparison with split-date reference line",
+      "bbox": {
+        "x": 298,
+        "y": 1412,
+        "width": 1120,
+        "height": 312
+      },
+      "patterns": [
+        "chart"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "dashboard",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 298,
+            "y": 172,
+            "width": 1120,
+            "height": 136
+          },
+          "note": "KPI tiles row atop charts and narrative",
+          "region": "kpi-row"
+        },
+        {
+          "bbox": {
+            "x": 957,
+            "y": 322,
+            "width": 461,
+            "height": 1077
+          },
+          "quote": "What the data says",
+          "note": "narrative findings widget",
+          "region": "findings-panel"
+        }
+      ],
+      "dims": {
+        "widgets": [
+          "kpi-tiles",
+          "time-series-charts",
+          "narrative-text",
+          "categorical-charts"
+        ],
+        "purpose": "strategic-decisions",
+        "arrangement": "story-layout",
+        "density": "dense-wall",
+        "linking": "global-filters",
+        "refresh": "on-visit",
+        "alerting": "threshold-colours",
+        "ownership": "shared-read-only"
+      }
+    },
+    {
+      "id": "stat-tile",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 298,
+            "y": 172,
+            "width": 270,
+            "height": 136
+          },
+          "quote": "Completion before 59.0%",
+          "region": "kpi-row"
+        },
+        {
+          "bbox": {
+            "x": 865,
+            "y": 172,
+            "width": 270,
+            "height": 136
+          },
+          "quote": "−3.6 pts",
+          "note": "red signed change with CI",
+          "region": "kpi-row"
+        },
+        {
+          "bbox": {
+            "x": 1149,
+            "y": 172,
+            "width": 270,
+            "height": 136
+          },
+          "quote": "11%→14%",
+          "region": "kpi-row"
+        }
+      ],
+      "dims": {
+        "context": [
+          "label",
+          "change-vs-previous-period",
+          "benchmark"
+        ],
+        "encoding": "signed-change-with-arrow",
+        "window": "follows-the-dashboard-filter",
+        "drill": "none"
+      }
+    },
+    {
+      "id": "chart",
+      "status": "present",
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 315,
+            "y": 390,
+            "width": 600,
+            "height": 280
+          },
+          "quote": "Share still listening, by minute",
+          "note": "two-series line chart with dashed reference lines labelled before: min 18 / after: min 25; hover shows crosshair tooltip with both values",
+          "region": "retention-charts"
+        },
+        {
+          "bbox": {
+            "x": 315,
+            "y": 685,
+            "width": 600,
+            "height": 125
+          },
+          "quote": "Change at each minute (after minus before)",
+          "note": "diverging green/red bar chart",
+          "region": "retention-charts"
+        },
+        {
+          "bbox": {
+            "x": 315,
+            "y": 1427,
+            "width": 1090,
+            "height": 290
+          },
+          "quote": "Completion by month",
+          "note": "time-series with dashed comparison line and split 4 Aug reference",
+          "region": "monthly-chart"
+        }
+      ],
+      "dims": {
+        "markType": "lines",
+        "channels": [
+          "position",
+          "colour-hue-or-value"
+        ],
+        "scale": "linear",
+        "faceting": "layered-series",
+        "inspectBy": [
+          "hover-tooltip"
+        ],
+        "authorship": "author-specified",
+        "annotation": [
+          "reference-lines",
+          "callout-labels"
+        ],
+        "adaptation": "fixed-desktop-chart"
+      }
+    },
+    {
+      "id": "filter-controls",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 56,
+            "width": 276,
+            "height": 1250
+          },
+          "quote": "COMPARISON SPLIT",
+          "note": "left sidebar of filters; changing a filter updates tiles, charts and narrative live",
+          "region": "filter-sidebar"
+        },
+        {
+          "bbox": {
+            "x": 16,
+            "y": 1049,
+            "width": 243,
+            "height": 175
+          },
+          "quote": "EPISODES IN THIS VIEW",
+          "note": "result counts per group",
+          "region": "filter-sidebar"
+        }
+      ],
+      "dims": {
+        "placement": "sidebar-facets",
+        "types": [
+          "checkbox-values",
+          "toggle-chips",
+          "date-range"
+        ],
+        "preview": "live-results",
+        "origin": "developer-defined",
+        "logic": "and-across-or-within",
+        "persistence": "per-query"
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 16,
+            "y": 415,
+            "width": 243,
+            "height": 32
+          },
+          "quote": "All Narrative Interview Daily",
+          "note": "segmented control",
+          "region": "filter-sidebar"
+        },
+        {
+          "bbox": {
+            "x": 16,
+            "y": 457,
+            "width": 243,
+            "height": 150
+          },
+          "quote": "The Salt Road",
+          "note": "checkbox list with colour dots",
+          "region": "filter-sidebar"
+        },
+        {
+          "bbox": {
+            "x": 16,
+            "y": 834,
+            "width": 243,
+            "height": 32
+          },
+          "quote": "All platforms",
+          "note": "native select",
+          "region": "filter-sidebar"
+        }
+      ],
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "segmented-control",
+        "option": [
+          "label-only"
+        ],
+        "timing": "immediately",
+        "largeSets": "show-all"
+      }
+    },
+    {
+      "id": "date-picker",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 16,
+            "y": 96,
+            "width": 243,
+            "height": 32
+          },
+          "quote": "08/04/2026",
+          "note": "native date input with calendar icon",
+          "region": "filter-sidebar"
+        },
+        {
+          "bbox": {
+            "x": 16,
+            "y": 237,
+            "width": 243,
+            "height": 32
+          },
+          "quote": "11/13/2026",
+          "region": "filter-sidebar"
+        }
+      ],
+      "dims": {
+        "presentation": "calendar-popover",
+        "selection": "single-date",
+        "openBy": "calendar-icon"
+      }
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 327,
+            "y": 0,
+            "width": 458,
+            "height": 56
+          },
+          "quote": "Overview Shows Segments Episodes Method & data",
+          "note": "underlined active tab; clicking switches main view in place (verified)",
+          "region": "header"
+        }
+      ],
+      "dims": {
+        "placement": "top",
+        "label": [
+          "text"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      }
+    },
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 56
+          },
+          "quote": "Earshot Analytics",
+          "note": "persistent top bar with section nav; filter sidebar persists across tabs",
+          "region": "header"
+        }
+      ],
+      "dims": {
+        "primary": "top-navigation-bar",
+        "secondary": "contextual-panel",
+        "items": [
+          "fixed-destinations"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1073,
+            "y": 15,
+            "width": 142,
+            "height": 25
+          },
+          "quote": "Synthetic demo data",
+          "note": "amber label pill",
+          "region": "header"
+        }
+      ],
+      "dims": {
+        "meaning": "label"
+      }
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 298,
+            "y": 322,
+            "width": 645,
+            "height": 1077
+          },
+          "note": "white outlined panels with 10px radius hold charts and narrative",
+          "region": "retention-charts"
+        },
+        {
+          "bbox": {
+            "x": 957,
+            "y": 322,
+            "width": 461,
+            "height": 1077
+          },
+          "region": "findings-panel"
+        }
+      ],
+      "dims": {
+        "media": "none",
+        "actions": "none",
+        "style": "outlined"
+      }
+    },
+    {
+      "id": "coordinated-views",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Views share global sidebar filters and show chips drill to Shows tab, but no cross-highlighting between charts was observed; may simply be a dashboard with global filters.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 974,
+            "y": 1296,
+            "width": 303,
+            "height": 87
+          },
+          "quote": "The Salt Road −8.2 pts",
+          "note": "chips open Shows tab with that show selected",
+          "region": "findings-panel"
+        }
+      ],
+      "dims": {
+        "linkChannel": [
+          "filter",
+          "derived-aggregates"
+        ],
+        "arrangement": "tiled-dashboard",
+        "trigger": [
+          "change-a-control"
+        ],
+        "scope": "all-linked-views",
+        "authorship": "fixed-published-dashboard"
+      }
+    },
+    {
+      "id": "ai-provenance",
+      "status": "absent",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 974,
+            "y": 337,
+            "width": 330,
+            "height": 20
+          },
+          "quote": "Generated from the current filters",
+          "note": "rule-based generated text, no AI markers"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "data-table",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 16,
+            "y": 1049,
+            "width": 243,
+            "height": 175
+          },
+          "note": "only a small definition list of counts on Overview; tables exist on other tabs"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "analytics app shell: top bar with tab nav, fixed left filter sidebar (276px), main area with question headline, 4 KPI tiles, two-column row (retention line chart + diverging bar chart | auto-generated narrative findings), full-width monthly time-series chart",
+    "regions": [
+      "header",
+      "filter-sidebar",
+      "kpi-row",
+      "retention-charts",
+      "findings-panel",
+      "monthly-chart"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#f4f5f2",
+      "#ffffff",
+      "#1c1f24",
+      "#667085",
+      "#344054",
+      "#0f766e",
+      "#b42318",
+      "#fdf4e7",
+      "#7a4106",
+      "#e2e5df",
+      "#b45309"
+    ],
+    "colorRoles": {
+      "background": "#f4f5f2",
+      "surface": "#ffffff",
+      "text": "#1c1f24",
+      "muted": "#667085",
+      "primary": "#0f766e",
+      "accent": "#b42318",
+      "border": "#e2e5df",
+      "warning-surface": "#fdf4e7",
+      "warning-text": "#7a4106"
+    },
+    "typography": "Inter throughout: 20px semibold H1 question headline, 14-15px semibold panel titles, 26px semibold KPI numerals, 13-14px body, 11px bold letter-spaced uppercase sidebar section labels, 11-12px chart axes and captions",
+    "typeScale": "Compact scale 11–26px; hierarchy from weight and color (dark #1c1f24 vs grey #667085) more than size; KPI numerals 26px are the largest element",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "data-visualization"
+    ],
+    "iconStyle": "none",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "clean",
+      "technical",
+      "analytical",
+      "sober",
+      "editorial"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-13T22:27:04.044Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 10,
+    "usage": {
+      "input_tokens": 20,
+      "cache_creation_input_tokens": 40632,
+      "cache_read_input_tokens": 365515,
+      "output_tokens": 10296
+    }
+  },
+  "notes": "Analysis-as-report: H1 is a question ('Did completion change after the ad move?'), KPI tiles answer it, and a 'What the data says' column of findings with colored left rules (red = drop, grey = neutral, orange = caveat, green = reassurance) reads like a statistician's write-up with CIs and caveats. Teal #0f766e is the 'after/narrative' series and active state; grey for 'before'/comparison; red for negative change; orange dashed line for split date. Sidebar filter help text is unusually explanatory (placebo-check instructions). Show chips in findings drill into the Shows tab. Filters update every widget live. Amber 'Synthetic demo data' pill in header."
+}

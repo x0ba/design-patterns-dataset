@@ -300,6 +300,31 @@ proposals/<batch>/<id>.yaml   agent proposals (merged across raters and sites)
 src/                   library code (codebook, pipeline, irr); scripts/ are thin CLIs
 ```
 
+### Versioning data
+
+`dataset/`, `generated/` and `proposals/` are committed. Screenshots, built
+bundles (`out/`), fonts and transcripts go through Git LFS (`.gitattributes`);
+labels, consensus, agreement, IRR and status JSON stay plain git so they diff.
+Run `git lfs install` once per machine (the nix shell provides `git-lfs`).
+
+Every run writes only under its own batch name (`dataset/<batch>/`,
+`generated/<batch>/`, `proposals/<batch>/`, `sites/<batch>.yaml`), so the
+rules that keep branches merging cleanly are about batch names:
+
+1. **A batch lives on one branch.** Start a new batch name on a branch instead
+   of re-running an existing batch there. Two branches that write different
+   batches touch disjoint paths and merge without conflicts. Two branches that
+   both write the same batch conflict on LFS files, which cannot be merged —
+   you can only keep one side.
+2. **Experiments use `scratch-<name>`.** Those batches are gitignored, so a test
+   branch can run anything without producing data to merge. Rename to a real
+   batch (or re-run) once the result is worth keeping.
+3. **Commit a batch when its run has finished**, not mid-run, so committed
+   `status.json` files are terminal states.
+4. Accepting proposals edits `codebook/` (entries, `VERSION`, `CHANGELOG.md`).
+   Those are the only data-driven changes that can genuinely conflict; resolve
+   them like code, then rebuild `dist/`.
+
 ### How a site is labeled
 
 1. **Capture once.** Playwright loads the page at 1440×900 with
@@ -414,7 +439,7 @@ software functions, and the same labeling pipeline adds the codebook semantics.
    harness serves `./out` the way labeling will and opens it at 1440×900. A
    missing, blank or erroring build goes back to the same session as a
    follow-up (up to `repairRounds`). Output goes to `generated/<batch>/<slug>/`
-   (gitignored): `out/`, `src/` (without node_modules), `preview.png`,
+   (versioned, binaries in Git LFS): `out/`, `src/` (without node_modules), `preview.png`,
    `transcript.jsonl` and `generation.json` (brief, generator, prompt,
    verification, cost, chosen dependencies). Afterwards it writes
    `sites/<batch>.yaml` with one entry per successful build.

@@ -1,0 +1,777 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "gen-pilot",
+  "site": {
+    "slug": "hexcrawl-campaign-travel-planner",
+    "url": "http://hexcrawl-campaign-travel-planner.localhost:4318/",
+    "finalUrl": "http://hexcrawl-campaign-travel-planner.localhost:4318/",
+    "status": 200,
+    "title": "Wayfarer's Ledger — The Ashen March",
+    "capturedAt": "2026-11-13T22:12:16.699Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 900
+    },
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "games",
+    "domainNote": "tabletop RPG game-master tool: hexcrawl campaign travel/session planner",
+    "provenance": {
+      "source": "generated",
+      "generation": "generated/gen-pilot/hexcrawl-campaign-travel-planner/generation.json",
+      "generator": {
+        "id": "sonnet",
+        "model": "claude-sonnet-5-5",
+        "effort": "high"
+      },
+      "brief": {
+        "domain": "games",
+        "archetype": "explore-space",
+        "product": "Wayfarer's Ledger"
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Dark top bar: brand, campaign name, Saturday's plan, explored/rumored/unknown counts, Session log button",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 54
+      },
+      "patterns": [
+        "app-shell",
+        "badge"
+      ]
+    },
+    {
+      "id": "left-sidebar",
+      "role": "sidebar",
+      "label": "Party roster with rations/forage stepper, in-game weather week, hex inspector detail of selected hex",
+      "bbox": {
+        "x": 0,
+        "y": 54,
+        "width": 290,
+        "height": 846
+      },
+      "patterns": [
+        "overview-detail",
+        "card",
+        "badge",
+        "chart"
+      ]
+    },
+    {
+      "id": "map",
+      "role": "main",
+      "label": "Hex map toolbar (mode toggle, layer chips, Seen-by select, zoom-to buttons), interactive hex map with routes and sites, zoom buttons, terrain legend footer",
+      "bbox": {
+        "x": 290,
+        "y": 54,
+        "width": 740,
+        "height": 846
+      },
+      "patterns": [
+        "map-explorer",
+        "coordinated-views",
+        "choice-control",
+        "filter-controls",
+        "tooltip",
+        "overview-detail"
+      ]
+    },
+    {
+      "id": "route-panel",
+      "role": "sidebar",
+      "label": "Route A/B tabs with stat tiles, day strip, warning banner, route actions (Trace, Undo, Clear, Fastest, Safest), hex itinerary table, route note",
+      "bbox": {
+        "x": 1039,
+        "y": 62,
+        "width": 393,
+        "height": 571
+      },
+      "patterns": [
+        "tabs",
+        "stat-tile",
+        "banner",
+        "undo",
+        "data-table",
+        "text-field",
+        "chart",
+        "badge"
+      ]
+    },
+    {
+      "id": "prep-panel",
+      "role": "sidebar",
+      "label": "Where to spend prep time: ranked list of hexes with rationale and time cost, star pins, prep-time budget stepper",
+      "bbox": {
+        "x": 1039,
+        "y": 641,
+        "width": 393,
+        "height": 251
+      },
+      "patterns": [
+        "recommendations"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "map-explorer",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 290,
+            "y": 96,
+            "width": 740,
+            "height": 776
+          },
+          "quote": "Hex map of the Ashen March",
+          "note": "Fictional hex terrain map with site icons, numbered route polylines, knowledge shading, lair-reach markers; zoom +/- buttons",
+          "region": "map"
+        },
+        {
+          "bbox": {
+            "x": 866,
+            "y": 62,
+            "width": 153,
+            "height": 25
+          },
+          "quote": "Routes Frontier All",
+          "note": "Zoom-to fit buttons",
+          "region": "map"
+        }
+      ],
+      "dims": {
+        "basemap": "terrain",
+        "overlays": [
+          "poi-pins",
+          "routes-and-polylines",
+          "choropleth-heat"
+        ],
+        "mapNav": [
+          "bounds-fit-to-results"
+        ],
+        "coupling": "synchronized-list-plus-map",
+        "markDesign": [
+          "category-icon",
+          "selected-elevation",
+          "colour-of-a-metric"
+        ],
+        "mapNarrowing": [
+          "category-chips"
+        ],
+        "mapAdapt": [
+          "desktop-side-panel"
+        ]
+      }
+    },
+    {
+      "id": "coordinated-views",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 290,
+            "y": 96,
+            "width": 740,
+            "height": 776
+          },
+          "note": "Clicking a hex outlines it on the map and swaps the left Hex inspector content (verified live)",
+          "region": "map"
+        },
+        {
+          "bbox": {
+            "x": 1040,
+            "y": 63,
+            "width": 391,
+            "height": 49
+          },
+          "note": "Switching route tab B re-highlights route B on the map and updates stats/list (verified live)",
+          "region": "route-panel"
+        }
+      ],
+      "dims": {
+        "linkChannel": [
+          "selection-highlight",
+          "parameters"
+        ],
+        "arrangement": "overview-detail-split",
+        "trigger": [
+          "click-a-mark",
+          "change-a-control"
+        ],
+        "scope": "one-mark",
+        "feedback": [
+          "highlight-in-place"
+        ],
+        "authorship": "fixed-published-dashboard"
+      }
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 10,
+            "y": 474,
+            "width": 269,
+            "height": 416
+          },
+          "quote": "Hex inspector",
+          "note": "Detail view of the hex selected on the map, side-by-side with map overview",
+          "region": "left-sidebar"
+        }
+      ],
+      "dims": {
+        "openIn": "side-by-side",
+        "overviewType": [
+          "map"
+        ],
+        "detailMultiplicity": "one-at-a-time",
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "whole-item",
+        "attributePlacement": [
+          "in-both-views",
+          "in-detail-view-only"
+        ],
+        "abstraction": [
+          "graphic",
+          "style"
+        ],
+        "attributeScope": [
+          "per-item"
+        ]
+      }
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1040,
+            "y": 63,
+            "width": 391,
+            "height": 49
+          },
+          "quote": "A Road and ford Likely · 12 d · 8 hexes",
+          "note": "role=tablist with two route tabs; switching changes the panel",
+          "region": "route-panel"
+        }
+      ],
+      "dims": {
+        "placement": "top",
+        "label": [
+          "text",
+          "icon"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      }
+    },
+    {
+      "id": "stat-tile",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1048,
+            "y": 120,
+            "width": 375,
+            "height": 63
+          },
+          "quote": "DAYS 12 no rain delay",
+          "note": "Four tiles: Days, Hexes, Rations (−6 d shortfall, red), Lair reach 4/8",
+          "region": "route-panel"
+        }
+      ],
+      "dims": {
+        "context": [
+          "label",
+          "benchmark"
+        ],
+        "encoding": "number-only",
+        "drill": "none"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 203,
+            "y": 485,
+            "width": 62,
+            "height": 17
+          },
+          "quote": "Rumored",
+          "note": "Status pill for knowledge state of hex",
+          "region": "left-sidebar"
+        },
+        {
+          "bbox": {
+            "x": 147,
+            "y": 870,
+            "width": 110,
+            "height": 18
+          },
+          "quote": "Ruin Sketched",
+          "note": "Label/status pills on site card",
+          "region": "left-sidebar"
+        },
+        {
+          "bbox": {
+            "x": 1210,
+            "y": 367,
+            "width": 75,
+            "height": 18
+          },
+          "quote": "P S K L",
+          "note": "Per-character knowledge letter badges in itinerary rows",
+          "region": "route-panel"
+        }
+      ],
+      "dims": {
+        "meaning": "status",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "banner",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1049,
+            "y": 262,
+            "width": 372,
+            "height": 22
+          },
+          "quote": "Rations run out on day 7 inside 1406.",
+          "note": "Inline warning callout inside route panel",
+          "region": "route-panel"
+        }
+      ],
+      "dims": {
+        "scope": "section",
+        "severity": "warning",
+        "action": "none",
+        "placement": "beside-the-problem",
+        "dismissal": "clears-with-the-condition"
+      }
+    },
+    {
+      "id": "undo",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1158,
+            "y": 290,
+            "width": 53,
+            "height": 28
+          },
+          "quote": "Undo",
+          "note": "Toolbar button, aria 'Remove last hex' for route tracing",
+          "region": "route-panel"
+        }
+      ],
+      "dims": {
+        "access": [
+          "toolbar-button"
+        ],
+        "unit": "many-levels",
+        "multiUser": "single-user-stack"
+      }
+    },
+    {
+      "id": "data-table",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1048,
+            "y": 323,
+            "width": 375,
+            "height": 236
+          },
+          "quote": "HEX DAYS KNOWN SITES ON / BESIDE",
+          "note": "Column-headed itinerary of route hexes; rows are clickable, internal scroll; implemented as role=list",
+          "region": "route-panel"
+        }
+      ],
+      "dims": {
+        "columnSet": "fixed",
+        "cellRendering": [
+          "plain-text",
+          "chips-and-avatars"
+        ],
+        "density": "compact",
+        "rowExpansion": "none",
+        "selection": "single-row",
+        "aggregation": [
+          "flat"
+        ]
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1050,
+            "y": 580,
+            "width": 371,
+            "height": 40
+          },
+          "quote": "ROUTE A NOTE",
+          "note": "Labeled textarea with placeholder 'What happens if they pick this one?'",
+          "region": "route-panel"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "label",
+          "placeholder"
+        ],
+        "validation": "none",
+        "style": "outlined",
+        "assistance": [
+          "none"
+        ],
+        "inputType": "plain"
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 432,
+            "y": 62,
+            "width": 222,
+            "height": 25
+          },
+          "quote": "Knowledge Sites Lair reach",
+          "note": "Checkbox layer toggles styled as chips",
+          "region": "map"
+        },
+        {
+          "bbox": {
+            "x": 301,
+            "y": 62,
+            "width": 122,
+            "height": 25
+          },
+          "quote": "Inspect Trace A",
+          "note": "Segmented map-mode toggle",
+          "region": "map"
+        },
+        {
+          "bbox": {
+            "x": 713,
+            "y": 62,
+            "width": 73,
+            "height": 25
+          },
+          "quote": "Anyone",
+          "note": "Seen-by dropdown select",
+          "region": "map"
+        }
+      ],
+      "dims": {
+        "cardinality": "multiple-choice",
+        "form": "chips",
+        "option": [
+          "label-only"
+        ],
+        "timing": "immediately",
+        "largeSets": "show-all"
+      }
+    },
+    {
+      "id": "filter-controls",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "'Seen by' select and layer chips change what the map shows (layers/knowledge perspective) rather than strictly narrowing a collection; not verified live.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 662,
+            "y": 62,
+            "width": 124,
+            "height": 25
+          },
+          "quote": "Seen by Anyone",
+          "note": "Select restricting knowledge shading to one party member",
+          "region": "map"
+        }
+      ],
+      "dims": {
+        "placement": "filter-bar-with-chips",
+        "types": [
+          "toggle-chips"
+        ],
+        "preview": "live-results",
+        "origin": "developer-defined"
+      }
+    },
+    {
+      "id": "tooltip",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 290,
+            "y": 96,
+            "width": 740,
+            "height": 776
+          },
+          "note": "Hovering a hex shows a small label '1505 forest · explored · Ford Watch' (observed live, not in capture)",
+          "region": "map"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 23,
+            "y": 861,
+            "width": 243,
+            "height": 30
+          },
+          "quote": "Corvane Watch Ruin Sketched",
+          "note": "Outlined white site card with title, badges, description, prepared encounter",
+          "region": "left-sidebar"
+        },
+        {
+          "bbox": {
+            "x": 23,
+            "y": 586,
+            "width": 243,
+            "height": 207
+          },
+          "quote": "WHAT THE PLAYERS HAVE HEARD",
+          "note": "Outlined rumor card with nested DM-only note",
+          "region": "left-sidebar"
+        }
+      ],
+      "dims": {
+        "media": "none",
+        "actions": "none",
+        "style": "outlined",
+        "shape": "vertical"
+      }
+    },
+    {
+      "id": "recommendations",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Ranked list appears system-generated from route/keying context with rationale labels, but could be a static GM checklist; ranking source not verifiable.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1039,
+            "y": 641,
+            "width": 393,
+            "height": 251
+          },
+          "quote": "Where to spend prep time",
+          "note": "Ranked suggestions with reasons 'On both routes · Only sketched' and time costs, star to pin, 4 h budget",
+          "region": "prep-panel"
+        }
+      ],
+      "dims": {
+        "basis": [
+          "context"
+        ],
+        "rationale": "short-label",
+        "placement": "inside-a-detail-view",
+        "nesting": "single-shelf",
+        "freshness": "live-with-actions"
+      }
+    },
+    {
+      "id": "chart",
+      "status": "uncertain",
+      "confidence": 0.45,
+      "rationale": "The 12-cell day strip encodes terrain/rain/after-rations per travel day as coloured cells; it is a small glyph strip rather than a full chart.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1048,
+            "y": 191,
+            "width": 375,
+            "height": 24
+          },
+          "note": "Per-day cell strip with legend 'rain', 'after rations end'",
+          "region": "route-panel"
+        }
+      ],
+      "dims": {
+        "markType": "cells",
+        "channels": [
+          "position",
+          "colour-hue-or-value"
+        ],
+        "scale": "ordinal-or-band",
+        "faceting": "single-plot",
+        "authorship": "author-specified"
+      }
+    },
+    {
+      "id": "app-shell",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "rationale": "Persistent top bar and fixed side panels frame the map, but there are no navigation destinations, so it's a single-screen tool rather than a navigational shell.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 54
+          },
+          "quote": "Wayfarer’s Ledger",
+          "note": "Dark top bar with identity and campaign stats",
+          "region": "header"
+        }
+      ],
+      "dims": {
+        "visibility": "always-visible",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "comparison-table",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1048,
+            "y": 240,
+            "width": 375,
+            "height": 16
+          },
+          "quote": "VS ROUTE B +1 hex · +1 day",
+          "note": "Only a delta line, not a side-by-side table"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "three-column desktop app: dark top bar with campaign stats; left sidebar of stacked panels (party, weather, hex inspector); central hex map with toolbar and legend footer; right sidebar with route A/B tabs, route stats, hex itinerary list, note, and prep-time picks",
+    "regions": [
+      "header",
+      "left-sidebar",
+      "map",
+      "route-panel",
+      "prep-panel"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#f3eee3",
+      "#faf6ec",
+      "#ebe4d3",
+      "#e2dac6",
+      "#2a241d",
+      "#26221d",
+      "#5d554a",
+      "#8a8070",
+      "#7d221d",
+      "#d9cfba",
+      "#f3e4cf"
+    ],
+    "colorRoles": {
+      "background": "#f3eee3",
+      "surface": "#faf6ec",
+      "text": "#26221d",
+      "muted": "#5d554a",
+      "primary": "#7d221d",
+      "header": "#2a241d",
+      "border": "#d9cfba",
+      "accent": "#f3e4cf",
+      "sidebar": "#ebe4d3",
+      "map": "#e2dac6"
+    },
+    "typography": "Iowan Old Style serif for brand, campaign title and panel headings (14–20px/600); -apple-system sans for body and controls (10–13px); ui-monospace for hex numbers and numeric values (e.g. large '1409', stat values, hex labels on map)",
+    "typeScale": "Compact utilitarian scale: 22px monospace hex id and ~20px stat numbers, 14–20px serif headings, 12–13px body, 10–11px uppercase tracked micro-labels (DAYS, RATIONS, DM ONLY); hierarchy via weight and small caps more than size",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "iconography",
+      "illustration"
+    ],
+    "iconStyle": "line",
+    "whitespace": "tight",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "parchment",
+      "technical",
+      "warm",
+      "dense",
+      "tabletop",
+      "cartographic"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-13T22:14:16.017Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 8,
+    "usage": {
+      "input_tokens": 16,
+      "cache_creation_input_tokens": 66714,
+      "cache_read_input_tokens": 292820,
+      "output_tokens": 13948
+    }
+  },
+  "notes": "Game-master hexcrawl planner with an old-ledger/parchment character: warm cream paper surfaces, a near-black brown top bar, oxblood red for route A and warnings, slate blue for route B. Hex map is SVG with pale terrain fills (hatched rumored hexes, faded unknown hexes), monospace 4-digit hex coordinates, line-icon site glyphs, numbered red circle route waypoints, triangle warning icons. Distinctive domain encodings: per-character knowledge letter badges (P S K L filled vs outlined), DM-only notes on tan callouts separated from player-facing rumor text, rain-aware day strip, prep-time budget stepper. Hovering a hex shows a tooltip; clicking updates the Hex inspector; route tabs repaint the map route."
+}

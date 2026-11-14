@@ -7,13 +7,19 @@ result
 # scripts/build-codebook.ts output. CI rebuilds it; codebook/ is the source.
 dist/
 
-# Labeling runs: screenshots, captures, labels, transcripts.
-dataset/
-
-# Generated apps (builds, sources, transcripts). briefs/ and sites/ stay tracked.
-generated/
-
-# pnpm smoke writes throwaway proposals here. Reviewed batches stay tracked.
+# dataset/ and generated/ are versioned (binaries via Git LFS, see
+# .gitattributes). Throwaway batches are not: `pnpm smoke` uses dry-run, and
+# experiments should be named scratch-* so nothing they write gets committed.
+dataset/dry-run/
+generated/dry-run/
 proposals/dry-run/
+dataset/scratch-*/
+generated/scratch-*/
+proposals/scratch-*/
+sites/scratch-*.yaml
+briefs/scratch-*.yaml
+
+# Rewritten by the rater's box-overlay tool on every call.
+dataset/**/capture/_viewer.html
 
 .DS_Store
