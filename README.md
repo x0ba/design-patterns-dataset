@@ -237,11 +237,10 @@ Quality of design matters, but diversity across domains is the priority.
 ## Implementation
 
 Node ≥ 23.6 runs the TypeScript directly (no build step). Dependencies are
-managed with pnpm; `nix develop` (or direnv with `use flake`) provides Node 24
-and pnpm. Setup:
+managed with pnpm. Run output is stored with Git LFS. Setup:
 
 ```sh
-nix develop                         # optional: Node + pnpm from flake.nix
+brew install git-lfs && git lfs install   # once per machine, before cloning or pulling data
 pnpm install
 pnpm exec playwright install chromium
 claude auth status                  # real labeling runs use the local Claude Code CLI and its login
@@ -305,7 +304,7 @@ src/                   library code (codebook, pipeline, irr); scripts/ are thin
 `dataset/`, `generated/` and `proposals/` are committed. Screenshots, built
 bundles (`out/`), fonts and transcripts go through Git LFS (`.gitattributes`);
 labels, consensus, agreement, IRR and status JSON stay plain git so they diff.
-Run `git lfs install` once per machine (the nix shell provides `git-lfs`).
+Run `git lfs install` once per machine (see Setup above).
 
 Every run writes only under its own batch name (`dataset/<batch>/`,
 `generated/<batch>/`, `proposals/<batch>/`, `sites/<batch>.yaml`), so the
