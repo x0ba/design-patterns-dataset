@@ -91,7 +91,6 @@ export async function captureSite(browser: Browser, url: string, outDir: string)
     await page.waitForLoadState('load', { timeout: 20_000 }).catch(() => {});
     await page.waitForLoadState('networkidle', { timeout: 8_000 }).catch(() => {});
     await autoScroll(page);
-    await page.waitForTimeout(800);
 
     await page.screenshot({ path: path.join(outDir, 'viewport.png') });
     const panels = await unrollPanels(page);
