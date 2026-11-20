@@ -262,7 +262,7 @@ reference.
 | Run a batch (capture → 3 raters → agreement)                    | `node scripts/label.ts --batch batch-001`                            |
 | Compute IRR for a batch                                         | `node scripts/irr.ts --batch batch-001`                              |
 | Review proposals between batches                                | `node scripts/proposals.ts list` / `accept` / `reject` / `deprecate` |
-| Dataset console (updates live as batches run)                   | `node console/server.ts` → http://127.0.0.1:4317                     |
+| Dataset console (updates live as batches run)                   | `pnpm console` → http://127.0.0.1:4317 (Next.js; `PORT=` to change)   |
 | Write a brief frame for generated UIs (review it before generating) | `node scripts/briefs.ts --batch gen-001 --n 48` (`--plan-only` to preview cells) |
 | Generate apps from briefs; writes `sites/gen-001.yaml`          | `node scripts/generate.ts --batch gen-001`                           |
 | Label generated apps (served locally while labeling)            | `node scripts/label.ts --batch gen-001`                              |
