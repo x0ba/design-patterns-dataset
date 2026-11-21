@@ -15,6 +15,8 @@ function affects(c: Change, pathname: string) {
   return false;
 }
 
+const THROTTLE_MS = 1500;
+
 const TEXT = { wait: 'Connecting…', on: 'Live', off: 'Offline' } as const;
 const TITLE = {
   wait: 'Connecting to the console server…',
@@ -37,7 +39,17 @@ export function Live() {
     const es = new EventSource('/api/events');
     let connectedBefore = false;
     let held = false;
+    // Each refresh refetches the whole route, which is slow over a port forward.
+    // While the pipeline writes steadily, refresh at most once per THROTTLE_MS:
+    // the first change refreshes at once, later ones fold into one trailing refresh.
+    let last = 0;
+    let trailing: ReturnType<typeof setTimeout> | undefined;
     const refresh = () => {
+      const wait = last + THROTTLE_MS - Date.now();
+      if (wait > 0) {
+        trailing ??= setTimeout(() => { trailing = undefined; refresh(); }, wait);
+        return;
+      }
       if (held) return;
       // Don't move boxes out from under the pointer in the viewer; refresh once it leaves.
       const hold = document.querySelector('[data-live-hold]:hover');
@@ -46,6 +58,7 @@ export function Live() {
         hold.addEventListener('mouseleave', () => { held = false; refresh(); }, { once: true });
         return;
       }
+      last = Date.now();
       startTransition(() => router.refresh());
     };
     es.addEventListener('hello', () => {
@@ -59,7 +72,7 @@ export function Live() {
       if (changes.some((c) => affects(c, path.current))) refresh();
     });
     es.onerror = () => setState(es.readyState === EventSource.CLOSED ? 'off' : 'wait');
-    return () => es.close();
+    return () => { es.close(); clearTimeout(trailing); };
   }, [router]);
 
   return (
