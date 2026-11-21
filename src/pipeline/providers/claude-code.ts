@@ -28,7 +28,8 @@ import os from 'node:os';
 import path from 'node:path';
 import readline from 'node:readline';
 import type { AgentOutcome, AgentRun, ImagePart, Provider, RaterConfig, ToolResult } from '../provider.ts';
-import { usageGate, usageLimitFromText, UsageLimitError } from '../usage-limit.ts';
+import { observeStreamEvent, usageGate, usageLimitFromText, UsageLimitError } from '../usage-limit.ts';
+import '../usage-probe.ts'; // registers the usage-cap probe
 
 const SERVER = 'rater';
 const MAX_NUDGES = 2;
@@ -127,6 +128,7 @@ export const claudeCodeProvider: Provider = {
           if (finished || reason) break;
           let ev: any;
           try { ev = JSON.parse(line); } catch { continue; }
+          observeStreamEvent(ev);
 
           if (ev.type === 'system' && ev.subtype === 'init') {
             const s = (ev.mcp_servers ?? []).find((m: any) => m.name === SERVER);

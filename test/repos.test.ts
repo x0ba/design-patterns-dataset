@@ -299,7 +299,7 @@ test('archiveContract keeps the agent\'s scripts, not builds, caches or installs
   fs.rmSync(out, { recursive: true, force: true });
 });
 
-test('server apps run sandboxed: localhost works, writes outside the checkout and outbound network do not', { skip: !runtimeSandboxAvailable() && 'needs macOS sandbox-exec' }, async () => {
+test('server apps run sandboxed: localhost works, writes outside the checkout and outbound network do not', { skip: !runtimeSandboxAvailable() && 'needs macOS sandbox-exec or Linux bubblewrap' }, async () => {
   const co = tmp('srv-');
   const outside = path.join(os.homedir(), `.ui-capture-sandbox-probe-${process.pid}`);
   fs.mkdirSync(path.join(co, '.ui-capture'));
@@ -323,7 +323,8 @@ http.createServer((q, s) => s.end(JSON.stringify(r))).listen(+process.env.PORT);
     const url = await host.acquire(spec);
     await host.acquire(spec); // second view of the same app shares the server
     const r = await (await fetch(url)).json();
-    assert.deepEqual(r, { outside: 'EPERM', inside: 'written', net: 'blocked', secret: null });
+    // sandbox-exec denies the write (EPERM); bubblewrap mounts it read-only (EROFS).
+    assert.deepEqual(r, { outside: process.platform === 'linux' ? 'EROFS' : 'EPERM', inside: 'written', net: 'blocked', secret: null });
     assert.equal(fs.readFileSync(victim, 'utf8'), 'keep me', 'the log is not opened through a path in the checkout');
     await host.release(spec);
     assert.ok(await portInUse(port), 'still running while a view holds it');

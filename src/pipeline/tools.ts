@@ -223,8 +223,24 @@ export class RaterTools {
 
   // ------------------------------------------------------------ screenshot
 
-  /** Render a crop of screenshot.png (optionally with boxes) through a local viewer page. */
+  /**
+   * Render a crop of screenshot.png (optionally with boxes) through a local viewer page.
+   * Without a GPU (Linux/WSL: SwiftShader), Chromium sometimes fails a screenshot with
+   * "Unable to capture screenshot" while other pages render WebGL; retry once on a fresh page.
+   */
   async crop(r: { x?: number; y: number; width?: number; height?: number; zoom?: number; boxes?: any[] }): Promise<{ image: ImagePart; desc: string }> {
+    try {
+      return await this.cropOnce(r);
+    } catch (e) {
+      if (!/Unable to capture screenshot/i.test((e as Error).message)) throw e;
+      await this.viewer?.context().close().catch(() => {});
+      this.viewer = undefined;
+      await new Promise((res) => setTimeout(res, 3000));
+      return this.cropOnce(r);
+    }
+  }
+
+  private async cropOnce(r: { x?: number; y: number; width?: number; height?: number; zoom?: number; boxes?: any[] }): Promise<{ image: ImagePart; desc: string }> {
     const W = this.ctx.meta.screenshot.width, H = this.ctx.meta.screenshot.height;
     const x = clamp(Math.round(r.x ?? 0), 0, W - 1);
     const y = clamp(Math.round(r.y ?? 0), 0, H - 1);

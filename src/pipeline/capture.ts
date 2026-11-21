@@ -84,6 +84,18 @@ export async function openPage(browser: Browser): Promise<Page> {
     colorScheme: 'light',
     reducedMotion: 'reduce',
   });
+  // Without an audio device (Linux/WSL), Chromium's audio runs at 44.1 kHz; apps that
+  // build 48 kHz buffers (the usual hardware rate on macOS) then throw on load. Default
+  // new AudioContexts to 48 kHz so pages behave as they do on a typical desktop.
+  await ctx.addInitScript(() => {
+    for (const name of ['AudioContext', 'webkitAudioContext'] as const) {
+      const Base = (window as any)[name];
+      if (!Base) continue;
+      (window as any)[name] = class extends Base {
+        constructor(opts?: AudioContextOptions) { super({ sampleRate: 48000, ...opts }); }
+      };
+    }
+  });
   return ctx.newPage();
 }
 

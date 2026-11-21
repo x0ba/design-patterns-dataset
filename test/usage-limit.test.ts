@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { parseUsageLimit, UsageGate, UsageLimitError, usageLimitFromText } from '../src/pipeline/usage-limit.ts';
+import { capsFromEnv, parseUsageLimit, UsageGate, UsageLimitError, usageLimitFromText } from '../src/pipeline/usage-limit.ts';
 
 const FIVE_HOUR = "You've hit your 5-hour limit · resets 5:30am (America/Los_Angeles)";
 
@@ -108,4 +108,89 @@ test('a notice with no parseable reset time still pauses briefly instead of labe
   await gate.wait();
   assert.ok(now - 10_000 >= 30_000);
   assert.ok(now - 10_000 < 60_000);
+});
+
+// rate_limit_event.rate_limit_info as the CLI's stream-json reports it.
+const reading = (weekly: number, weeklyResetsAt: number, fiveHour = 0.1) => ({
+  status: 'allowed',
+  unifiedWindows: {
+    five_hour: { utilization: fiveHour, resetsAt: weeklyResetsAt - 86_400, status: 'allowed' },
+    seven_day: { utilization: weekly, resetsAt: weeklyResetsAt, status: 'allowed' },
+  },
+});
+
+test('usage caps come from the environment as a fraction or a percent', () => {
+  assert.deepEqual(capsFromEnv({}), {});
+  assert.deepEqual(capsFromEnv({ USAGE_CAP_WEEKLY: '0.47' }), { seven_day: 0.47 });
+  assert.deepEqual(capsFromEnv({ USAGE_CAP_WEEKLY: '50', USAGE_CAP_FIVE_HOUR: '80%' }), { seven_day: 0.5, five_hour: 0.8 });
+  assert.throws(() => capsFromEnv({ USAGE_CAP_WEEKLY: 'half' }), /USAGE_CAP_WEEKLY/);
+});
+
+test('below the weekly cap, work starts; at it, new work waits for the weekly reset but running work is not stopped', async () => {
+  let now = Date.parse('2026-11-17T15:00:00.000Z');
+  const reset = Date.parse('2026-11-22T11:00:00.000Z') / 1000;
+  const logs: string[] = [];
+  const gate = new UsageGate({ now: () => now, sleep: async (ms) => { now += ms; }, log: (l) => logs.push(l), caps: { seven_day: 0.47 } });
+
+  gate.observe(reading(0.3, reset));
+  await gate.wait();
+  assert.equal(now, Date.parse('2026-11-17T15:00:00.000Z'));
+
+  gate.observe(reading(0.48, reset));
+  gate.observe(reading(0.49, reset)); // same window: one notice
+  assert.equal(logs.filter((l) => l.startsWith('Usage cap: weekly usage is at')).length, 1);
+  assert.ok(logs.some((l) => /weekly usage is at 48% \(cap 47%\)/.test(l)));
+  assert.equal(gate.pending(), undefined); // sessions in flight keep running
+
+  await gate.wait();
+  assert.ok(now >= reset * 1000);
+  assert.match(logs.at(-1)!, /Continuing/);
+});
+
+test('a window without a cap is ignored, and a stale reading is probed before work starts', async () => {
+  let now = Date.parse('2026-11-17T15:00:00.000Z');
+  const reset = Date.parse('2026-11-22T11:00:00.000Z') / 1000;
+  const gate = new UsageGate({ now: () => now, sleep: async (ms) => { now += ms; }, log: () => {}, caps: { seven_day: 0.5 } });
+  let probes = 0;
+  let next = reading(0.2, reset, 0.99); // 5-hour is not capped
+  gate.setProbe(async () => { probes++; gate.observe(next); });
+
+  await gate.wait();
+  assert.equal(probes, 1);
+  await gate.wait(); // fresh reading: no second probe
+  assert.equal(probes, 1);
+
+  now += 20 * 60_000; // stale again; this time the probe finds the cap reached
+  next = reading(0.55, reset);
+  await gate.wait();
+  assert.equal(probes >= 2, true);
+  assert.ok(now >= reset * 1000);
+});
+
+test('without caps, readings never block and no probe runs', async () => {
+  let now = 1_000;
+  const gate = new UsageGate({ now: () => now, sleep: async (ms) => { now += ms; }, log: () => {} });
+  let probes = 0;
+  gate.setProbe(async () => { probes++; });
+  gate.observe(reading(1, 10_000_000));
+  await gate.wait();
+  assert.equal(now, 1_000);
+  assert.equal(probes, 0);
+});
+
+test('a cap pause lifts early when a re-read shows usage dropped (e.g. the account was reset)', async () => {
+  let now = Date.parse('2026-11-18T08:00:00.000Z');
+  const reset = Date.parse('2026-11-22T11:00:00.000Z') / 1000;
+  const logs: string[] = [];
+  const gate = new UsageGate({ now: () => now, sleep: async (ms) => { now += ms; }, log: (l) => logs.push(l), caps: { seven_day: 0.75 } });
+  const started = now;
+  let probes = 0;
+  // The usage resets 2 hours into the pause; the next heartbeat's re-read lifts it.
+  gate.setProbe(async () => { probes++; gate.observe(reading(now - started >= 2 * 3600_000 ? 0 : 0.76, reset)); });
+  gate.observe(reading(0.76, reset));
+  await gate.wait();
+  assert.ok(now < reset * 1000, 'resumed before the window reset');
+  assert.ok(now - started <= 2.5 * 3600_000 + 1);
+  assert.ok(probes >= 4);
+  assert.ok(logs.some((l) => /back under every cap/.test(l)));
 });

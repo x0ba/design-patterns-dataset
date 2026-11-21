@@ -19,7 +19,8 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import readline from 'node:readline';
-import { usageGate, usageLimitFromText, UsageLimitError } from '../pipeline/usage-limit.ts';
+import { observeStreamEvent, usageGate, usageLimitFromText, UsageLimitError } from '../pipeline/usage-limit.ts';
+import '../pipeline/usage-probe.ts'; // registers the usage-cap probe
 
 export interface ModelChoice { model: string; effort?: string; command?: string }
 
@@ -172,6 +173,7 @@ export async function runCodingSession(o: CodingSessionOpts): Promise<CodingSess
     for await (const line of readline.createInterface({ input: proc.stdout })) {
       let ev: any;
       try { ev = JSON.parse(line); } catch { continue; }
+      observeStreamEvent(ev);
       if (ev.type === 'assistant' && ev.parent_tool_use_id == null) {
         const m = ev.message;
         if (m.model && m.model !== '<synthetic>') models.add(m.model);
