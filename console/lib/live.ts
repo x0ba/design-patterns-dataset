@@ -8,7 +8,7 @@ import path from 'node:path';
 import { P } from '../../src/paths.ts';
 
 export type Change =
-  | { scope: 'dataset'; batch: string; slug?: string; file: string }
+  | { scope: 'dataset' | 'generated'; batch: string; slug?: string; file: string }
   | { scope: 'proposals' | 'codebook'; file: string };
 
 type Listener = (changes: Change[]) => void;
@@ -20,9 +20,20 @@ const g = globalThis as typeof globalThis & { __consoleLive?: Hub };
 
 // Temp files from atomic writes and rater transcripts (appended on every
 // turn, never shown) would otherwise fire constantly.
+// Generator sessions append to <slug>/transcript.jsonl the same way; out/ and src/
+// are copied in file by file when a build finishes, after generation.json says so.
 const ignored = (rel: string) => /\.tmp$|\.transcript\.jsonl$|(^|\/)\.|~$|_viewer\.html$/.test(rel);
+const ignoredGenerated = (rel: string) => /^[^/]+\/[^/]+\/(transcript\.jsonl$|out\/|src\/)/.test(rel);
 
-function classify(root: 'dataset' | 'proposals' | 'codebook', rel: string): Change {
+type Root = 'dataset' | 'generated' | 'briefs' | 'proposals' | 'codebook';
+
+function classify(root: Root, rel: string): Change {
+  // A brief file is the generated batch of the same name.
+  if (root === 'briefs') return { scope: 'generated', batch: rel.replace(/\.yaml$/, ''), file: '' };
+  if (root === 'generated') {
+    const [batch = '', slug, ...rest] = rel.split('/');
+    return { scope: 'generated', batch, slug, file: rest.join('/') };
+  }
   if (root !== 'dataset') return { scope: root, file: rel };
   const [batch = '', sites, slug, ...rest] = rel.split('/');
   return sites === 'sites' && slug
@@ -47,7 +58,7 @@ function hub(): Hub {
   };
 
   // fs.watch a directory recursively; if it doesn't exist yet (or is removed), keep checking until it does.
-  const watchDir = (dir: string, root: 'dataset' | 'proposals' | 'codebook') => {
+  const watchDir = (dir: string, root: Root) => {
     let watcher: fs.FSWatcher | undefined;
     const restart = () => {
       watcher?.close();
@@ -59,7 +70,7 @@ function hub(): Hub {
       try {
         watcher = fs.watch(dir, { recursive: true }, (_event, name) => {
           const rel = name ? String(name).split(path.sep).join('/') : '';
-          if (rel && ignored(rel)) return;
+          if (rel && (ignored(rel) || (root === 'generated' && ignoredGenerated(rel)))) return;
           queue(classify(root, rel));
           if (!fs.existsSync(dir)) restart();
         });
@@ -73,6 +84,8 @@ function hub(): Hub {
   };
 
   watchDir(P.dataset, 'dataset');
+  watchDir(P.generated, 'generated');
+  watchDir(P.briefs, 'briefs');
   watchDir(P.proposals, 'proposals');
   watchDir(P.dist, 'codebook');
   return h;

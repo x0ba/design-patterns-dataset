@@ -7,8 +7,11 @@ import type { Change } from '@/lib/live';
 /** Does this file change affect what the page at `pathname` shows? */
 function affects(c: Change, pathname: string) {
   // The header's codebook version compares dist/ with codebook/VERSION, which accepting a proposal bumps.
-  if (c.scope !== 'dataset') return true;
   const [view, a, b] = pathname.split('/').slice(1).map(decodeURIComponent);
+  // Generation only shows on its own page, which also links apps once labeling starts.
+  if (view === 'generate') return c.scope === 'generated' || (c.scope === 'dataset' && !c.file);
+  if (c.scope === 'generated') return false;
+  if (c.scope !== 'dataset') return true;
   if (!view || view === 'batch') return true;
   if (view === 'site') return c.batch === a && (!c.slug || c.slug === b);
   if (view === 'codebook') return c.file === 'consensus.json' || !c.file;
