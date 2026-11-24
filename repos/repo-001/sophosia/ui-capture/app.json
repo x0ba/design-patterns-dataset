@@ -1,0 +1,28 @@
+{
+  "mode": "server",
+  "entry": "/",
+  "login": null,
+  "stubs": [
+    {
+      "service": "Tauri desktop host (Rust IPC: fs, path, os, app, window, event, dialog, shell, updater, custom show_in_folder command)",
+      "how": "Server injects .ui-capture/server/bridge.js into index.html; it defines window.__TAURI_IPC__/__TAURI_METADATA__/__TAURI__.convertFileSrc. Fs/Path/Os/App calls are POSTed to /__ipc on the local Node server (server.mjs), which does real file I/O on .ui-capture/data/home exposed to the app as the virtual home /home/dana. Window/event/dialog/shell are answered in the browser (native file pickers return 'cancelled'; updater replies UPTODATE). convertFileSrc -> /__asset?path=... streams files (PDFs, images) from disk."
+    },
+    {
+      "service": "tauri-plugin-sql (SQLite search index) and tauri-plugin-fs-extra (file metadata)",
+      "how": "Implemented in server.mjs: plugin:sql|load/execute/select run on a real SQLite file via better-sqlite3 (FTS5 enabled, $1 placeholders mapped to named params); plugin:fs-extra|metadata/exists use fs.stat."
+    },
+    {
+      "service": "Community plugin index (raw.githubusercontent.com/sophosia/sophosia-releases/main/plugins.json) and GitHub repo API (stars)",
+      "how": "bridge.js reroutes all cross-origin fetch/XHR from the page to /__stub/proxy; stubs.mjs returns a 5-plugin community list and GitHub-style repo JSON. Tauri http client calls (plugin downloads) go to the same stub."
+    },
+    {
+      "service": "DOI / Crossref / ISBN metadata lookups (citation-js) and updater manifest",
+      "how": "Same /__stub/proxy route: DOI lookups answer from .ui-capture/server/doi-table.json if present, otherwise 404 'Resource not found'; latest.json reports the current version v0.18.2; anything else returns 503 offline."
+    },
+    {
+      "service": "Google Fonts (DM Sans) and EmbedPDF's pdfium.wasm CDN download",
+      "how": "Server rewrites the Google Fonts <link> to /__fonts/dm-sans.css backed by the @fontsource-variable/dm-sans npm package. PDFReader.vue passes wasmUrl from the bundled @embedpdf/pdfium/pdfium.wasm (Vite ?url import) instead of the jsDelivr default - the only source change."
+    }
+  ],
+  "notes": "Sophosia is a Tauri v1 + Vue 3/Quasar desktop app with no web backend; its UI talks to Rust via the Tauri IPC. Setup: mise.toml pins node 22.14.0 + yarn 1.22.22; `yarn install --no-default-rc --use-yarnrc .yarnrc --frozen-lockfile --ignore-engines` (the parent-dir .npmrc walk hits an unreadable ~/.npmrc otherwise; optional canvas fails to build, harmless); `npx quasar build` -> dist/spa. .ui-capture/server (npm: better-sqlite3, @fontsource-variable/dm-sans) is the local host. Data: .ui-capture/seed/seed.mjs writes a workspace in the app's own on-disk format at /home/dana/Documents/Sophosia (project folders with folder-note JSON meta, generated multi-page PDFs, markdown + Excalidraw notes, .sophosia/{appState,layout,pdfAnnotation} JSON, workspace.json in the app config dir), then seed/build-data.sh runs the real front end headlessly so the app's own indexer builds its SQLite FTS index, and freezes the result in .ui-capture/data-snapshot. start.sh restores that snapshot on each start (so state is reset every run) and serves on $PORT. Persona: Dana, 4th-year PhD student in clinical NLP / efficient transformers. Library: 62 projects (real papers and textbooks with authors, venues, DOIs, paraphrased abstracts; 2 half-filled/'New Project' entries), nested categories (Thesis/Ch2..Ch5, NLP/*, Clinical NLP, Reading Group/Fall 2026, Books, Teaching...), tags, favorites, added dates spread from late 2024 to Nov 2026 (8 in the last 30 days for 'Added'), 24 attached PDFs, 34 markdown notes (reading notes, run logs with tables, LaTeX, TODOs, reading-group minutes, TA plans; one subfolder), 3 Excalidraw diagrams, 35 PDF highlights/underlines with comments, 23 note->project links for the related-items graph. Main areas: left sidebar (opened projects tree with notes, category tree), Library page (Library/Added/Favorite tabs, meta and full-text search, right-side meta info panel), PDF reader (EmbedPDF) with annotations, markdown note editor (Vditor), Excalidraw page, graph view, settings (theme, citation keys, plugins with community list), workspace switcher. Tabs open on start: Library, a PDF (Li_2023 Clinical-Longformer) and Mamba 'Reading notes.md'. Bridge detail: SQL plugin calls are queued in issue order in bridge.js (Tauri's IPC is a single ordered channel; the app fires author INSERTs without awaiting). Rebuild everything: yarn install (flags above) -> npx quasar build -> (cd .ui-capture/server && npm ci) -> .ui-capture/seed/build-data.sh (needs the local Playwright chromium_headless_shell; only for re-seeding, not at runtime)."
+}

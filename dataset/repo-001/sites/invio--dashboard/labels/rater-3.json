@@ -1,0 +1,352 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "invio--dashboard",
+    "url": "http://localhost:4416/dashboard",
+    "finalUrl": "http://localhost:4416/dashboard",
+    "status": 200,
+    "title": "Invio",
+    "capturedAt": "2026-11-18T03:33:01.233Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 900
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "finance",
+    "domainNote": "self-hosted invoicing app (Invio) — admin dashboard",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/invio/explore.json",
+      "repo": {
+        "name": "kittendevv/Invio",
+        "url": "https://github.com/kittendevv/Invio",
+        "commit": "c1d6b7a950e1f693b869fb7abad355004b93b576",
+        "license": "Unlicense"
+      },
+      "view": {
+        "slug": "dashboard",
+        "name": "Dashboard",
+        "description": "Revenue and invoice status overview with stat cards and a recent invoices table."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Top bar with Invio logo and nav links Dashboard / Invoices / Customers / More dropdown",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 66
+      },
+      "patterns": [
+        "app-shell",
+        "menu"
+      ]
+    },
+    {
+      "id": "kpi-tiles",
+      "role": "stats-grid",
+      "label": "Dashboard h1 plus three rows of KPI tiles: counts, money totals, invoice-status counts",
+      "bbox": {
+        "x": 96,
+        "y": 90,
+        "width": 1248,
+        "height": 370
+      },
+      "patterns": [
+        "dashboard",
+        "stat-tile"
+      ]
+    },
+    {
+      "id": "recent-invoices",
+      "role": "table",
+      "label": "Recent Invoices table with 5 rows and status pills",
+      "bbox": {
+        "x": 96,
+        "y": 484,
+        "width": 1248,
+        "height": 317
+      },
+      "patterns": [
+        "data-table",
+        "badge",
+        "dashboard"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "dashboard",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 96,
+            "y": 90,
+            "width": 1248,
+            "height": 710
+          },
+          "quote": "Dashboard",
+          "note": "KPI tile rows plus a recent-invoices table on one overview",
+          "region": "kpi-tiles"
+        }
+      ],
+      "dims": {
+        "widgets": [
+          "kpi-tiles",
+          "tables"
+        ],
+        "purpose": "operational-decisions",
+        "arrangement": "fixed-grid",
+        "density": "a-few-glanceable-tiles",
+        "linking": "independent",
+        "refresh": "on-visit",
+        "alerting": "threshold-colours",
+        "ownership": "shared-read-only"
+      }
+    },
+    {
+      "id": "stat-tile",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 97,
+            "y": 139,
+            "width": 301,
+            "height": 96
+          },
+          "quote": "Invoices 254",
+          "region": "kpi-tiles"
+        },
+        {
+          "bbox": {
+            "x": 97,
+            "y": 253,
+            "width": 406,
+            "height": 92
+          },
+          "quote": "Total Billed €504,914.16",
+          "region": "kpi-tiles"
+        },
+        {
+          "bbox": {
+            "x": 937,
+            "y": 371,
+            "width": 196,
+            "height": 88
+          },
+          "quote": "Overdue 8",
+          "note": "value rendered in red as a warning colour",
+          "region": "kpi-tiles"
+        }
+      ],
+      "dims": {
+        "context": [
+          "label"
+        ],
+        "encoding": "number-only",
+        "window": "fixed",
+        "drill": "none"
+      }
+    },
+    {
+      "id": "data-table",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 97,
+            "y": 525,
+            "width": 1246,
+            "height": 275
+          },
+          "quote": "Invoice No Customer Total Status Issue Date",
+          "region": "recent-invoices"
+        }
+      ],
+      "dims": {
+        "columnSet": "fixed",
+        "cellRendering": [
+          "plain-text",
+          "chips-and-avatars"
+        ],
+        "density": "standard",
+        "rowExpansion": "none",
+        "selection": "none",
+        "opScope": [
+          "row"
+        ],
+        "aggregation": [
+          "flat"
+        ],
+        "openIn": "new-page"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 993,
+            "y": 630,
+            "width": 43,
+            "height": 18
+          },
+          "quote": "Paid",
+          "note": "green status pill",
+          "region": "recent-invoices"
+        },
+        {
+          "bbox": {
+            "x": 993,
+            "y": 584,
+            "width": 48,
+            "height": 18
+          },
+          "quote": "Draft",
+          "note": "pale grey status pill",
+          "region": "recent-invoices"
+        }
+      ],
+      "dims": {
+        "meaning": "status",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 66
+          },
+          "quote": "Invio",
+          "note": "Top bar with logo and global nav destinations",
+          "region": "header"
+        }
+      ],
+      "dims": {
+        "primary": "top-navigation-bar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations"
+        ],
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1259,
+            "y": 16,
+            "width": 97,
+            "height": 33
+          },
+          "quote": "More",
+          "note": "details/summary dropdown; live check shows Products, Settings, Users, Logout with icons",
+          "region": "header"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click",
+        "structure": "flat",
+        "item": [
+          "label",
+          "icon"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    }
+  ],
+  "structure": {
+    "layout": "single-column admin dashboard in a 1280px centered container with top nav bar, stacked KPI tile rows (4/3/6 columns) and a recent-items table",
+    "regions": [
+      "header",
+      "kpi-tiles",
+      "recent-invoices"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#eef1f9",
+      "#f7f8fc",
+      "#202269",
+      "#4fbf8c",
+      "#c0404a",
+      "#e2e6f0",
+      "#ffffff"
+    ],
+    "colorRoles": {
+      "background": "#eef1f9",
+      "surface": "#f7f8fc",
+      "text": "#202269",
+      "primary": "#202269",
+      "accent": "#4fbf8c",
+      "danger": "#c0404a",
+      "border": "#e2e6f0"
+    },
+    "typography": "Inter throughout (rendered with a DejaVu-like fallback in capture): headings 600 weight, body 14px regular, links 500",
+    "typeScale": "h1 24px/600, h2 20px/600, KPI values 30px and 24px bold, status counts 20px bold, labels/table 14px, pills 12px; strong contrast between bold numbers and light labels",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "clean",
+      "calm",
+      "utilitarian",
+      "monochrome-navy"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T03:33:55.632Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 5,
+    "usage": {
+      "input_tokens": 10,
+      "cache_creation_input_tokens": 17676,
+      "cache_read_input_tokens": 121238,
+      "output_tokens": 2585
+    }
+  },
+  "notes": "Single navy ink colour (#202269) for all text on a pale periwinkle page (#eef1f9) with near-white tiles (#f7f8fc), 16px radii and hairline borders, no shadows. KPI tiles are arranged in descending size rows: 4 wide count tiles, 3 currency tiles, 6 small status-count tiles. The only colour accents are the red Overdue count and green 'Paid' pills. 'Version 2.4.1' is shown as a KPI tile, which is unusual. The More menu is a native details/summary dropdown (closed in the capture) with Products/Settings/Users/Logout. Invoice numbers in the table link to detail pages; stat tiles are not links."
+}

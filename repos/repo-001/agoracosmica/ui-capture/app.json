@@ -1,0 +1,36 @@
+{
+  "mode": "server",
+  "entry": "/app",
+  "login": null,
+  "stubs": [
+    {
+      "service": "Content CDN media.agoracosmica.org (seeds/teachings, figure bios, factchecks, voice profiles, instructions, story chapter texts)",
+      "how": "Unreachable from the sandbox, so .ui-capture/gen-content.mjs writes the same files into client/src/assets (where `pnpm setup:assets` would put them), built from text the repo tracks: chapter titles in src/assets/translations/seedsdata/ui-{en,de}.json, authored Q&A and page content in src/data/public/figureContent/*.ts, SEO lines in figureSeo.ts. The build points VITE_MEDIA_BASE_URL at /media and server.mjs serves that tree same-origin."
+    },
+    {
+      "service": "Figure portraits, UI images, starry background (R2 images/*)",
+      "how": ".ui-capture/gen-media.mjs renders painted-style placeholder portrait plates and a star field with sharp into .ui-capture/media/images; server.mjs maps every requested width/format onto them."
+    },
+    {
+      "service": "Recorded audio (story narration, prisms, councils, trailers)",
+      "how": "One 13-minute silent WAV (.ui-capture/media/audio/narration.wav) served for every story/prism/council audio path that has text, so players load and show real durations."
+    },
+    {
+      "service": "llm-proxy Cloudflare Worker (/v1/session, /v1/quota, /v1/chat, /v1/council, /v1/summary) - Nebius DeepSeek/Qwen free tier",
+      "how": "server.mjs + stubs/llm.mjs: session token JSON, quota 7/30 used, OpenAI-style SSE streams of in-character Echo replies with X-Quota-* headers. Beacons (/v1/funnel etc.) and /api/conversions return 204."
+    },
+    {
+      "service": "Community worker (community.agoracosmica.org voting power snapshot)",
+      "how": "Build sets VITE_COMMUNITY_API_URL=/community; server.mjs answers with stubs/community.json (1,843 joined, 27,615 total power)."
+    },
+    {
+      "service": "Live audio server (/v1/audio, retired Nov 2026)",
+      "how": "Returns 503 like the retired service; recorded audio is unaffected."
+    },
+    {
+      "service": "Cloudflare Turnstile",
+      "how": "Placeholder test site key baked at build; the session stub accepts any token."
+    }
+  ],
+  "notes": "Setup: mise.toml pins node 22.21.1 + pnpm 8.15.5; `pnpm install` in client/; .ui-capture/build.sh generates content (gen-content.mjs), the returning-user seed (gen-seed.mjs), media (gen-media.mjs), runs the repo's extract-public-data.mjs and a production `vite build` into client/build. start.sh runs .ui-capture/server.mjs (plain Node http) on PORT: SPA at /app (router basename), / redirects to /app, /media = local content mirror, /v1/* and /community/* stubs. Data: the app has no accounts; a visitor's state lives in localStorage. server.mjs injects /__uicap/seed.js before the bundle, which writes (once per browser) ~200 records in the app's own key formats: terms consent (current version 1.1.0) so the welcome gate is passed, the persisted domain store (onboarding complete, last figure Virginia Woolf), 74 story chapters completed across 14 of the 30 figures (all 12 of Marcus Aurelius and Einstein, 9 Lovelace, 8 Tubman, ...), 7 chapters in progress with saved playback positions, 7 prisms and 7 councils heard, and Wisdom/Quest/Free Talk conversation histories with Marcus Aurelius, Woolf, Lovelace, Gautama, Einstein from before the chat ended, dated May-Nov 2026. Clear site data to reseed. Main areas: figure gallery/carousel (30 figures, sages/reformers/creators), figure chapter wheel (Story/Wisdom/Prism/Quest), story reader + player with facts panel, wisdom map/gallery, council setup and recorded councils, audio library, history modal, settings, community panel. Caveats: portraits are generated placeholders (the real paintings are on the CDN), audio is silent, story texts are assembled from the repo's tracked authored text rather than the real narrated chapters. Headless Chromium could not launch in the build sandbox, so the UI was verified via HTTP and code reading, not screenshots. Two audio URLs are hardcoded to https://media.agoracosmica.org in app code (a HomePage audio path builder and Settings voice previews) and were left untouched, so those clips simply do not load offline."
+}

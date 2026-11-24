@@ -1,0 +1,22 @@
+# Shared environment for start.sh and the seed script (placeholders only).
+UI_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export QMREADER_DATA_DIR="${QMREADER_DATA_DIR:-$UI_DIR/data}"
+export DEEPSEEK_API_KEY="sk-local-placeholder-0000000000000000"
+export DEEPSEEK_MODEL="deepseek-flash"
+export DEEPSEEK_BASE_URL="https://api.deepseek.com/v1"
+export AI_PROVIDER="deepseek"
+export AI_DAILY_BUDGET_MICROS=5000000
+export ADMIN_EMAIL="qiaomu@qmreader.local"
+export ADMIN_PASSWORD="qiaomu-reader-2026"
+export ADMIN_NAME="向阳乔木"
+export COOKIE_SECURE=""
+export QMREADER_SECRET_KEY="local-ui-capture-secret-key-0123456789"
+export UMAMI_WEBSITE_ID=""
+export STARTUP_REFRESH_DELAY_MS=-1
+export FRESHNESS_SWEEP_INTERVAL_MS=-1
+export REWRITE_CATCHUP_INTERVAL_MS=-1
+export QM_AI_STUB_PORT="${QM_AI_STUB_PORT:-4437}"
+export QM_AI_STUB_URL="http://127.0.0.1:${QM_AI_STUB_PORT}"
+export NODE_OPTIONS="--require $UI_DIR/stubs/offline-preload.cjs --no-warnings"
+export RSS_APP_DIR="$(cd "$UI_DIR/.." && pwd)"
+export FETCH_SOURCE_CONCURRENCY=1

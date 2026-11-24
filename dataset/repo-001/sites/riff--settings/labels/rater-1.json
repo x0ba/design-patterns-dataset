@@ -1,0 +1,666 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "riff--settings",
+    "url": "http://localhost:4431/",
+    "finalUrl": "http://localhost:4431/",
+    "status": 200,
+    "title": "Riff",
+    "capturedAt": "2026-11-18T20:18:40.871Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 4588
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "media-entertainment",
+    "domainNote": "desktop music streaming client (Riff) aggregating YouTube Music and SoundCloud, captured with the Settings modal open",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/riff/explore.json",
+      "repo": {
+        "name": "rootscripts/riff",
+        "url": "https://github.com/rootscripts/riff",
+        "commit": "ea3a1a2be443a5f11630c99527d23c65eb20ba73",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "settings",
+        "name": "Settings modal",
+        "description": "Settings modal with category navigation (Interface, Theme, Tracks, Integrations…) and Interface options: toggles, language select, font chips and card size slider."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "top-bar",
+      "role": "header",
+      "label": "Window title bar with menu, back/forward, home button, centered pill search, account and window controls",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 64
+      },
+      "patterns": [
+        "app-shell",
+        "text-field"
+      ]
+    },
+    {
+      "id": "library-sidebar",
+      "role": "sidebar",
+      "label": "Your Library: create, search, type icons, Custom sort, list of playlists with thumbnails and track counts, settings/presets buttons",
+      "bbox": {
+        "x": 8,
+        "y": 64,
+        "width": 339,
+        "height": 4432
+      },
+      "patterns": [
+        "app-shell",
+        "sort-control"
+      ]
+    },
+    {
+      "id": "home-main",
+      "role": "content",
+      "label": "Home feed: quick picks grid, For you mixes, Trending now, Top chart, Favorite artists shelves",
+      "bbox": {
+        "x": 355,
+        "y": 64,
+        "width": 702,
+        "height": 4432
+      },
+      "patterns": [
+        "card",
+        "carousel"
+      ]
+    },
+    {
+      "id": "now-playing-panel",
+      "role": "sidebar",
+      "label": "Now Playing panel with large cover art, title, credits, Following button, audio source",
+      "bbox": {
+        "x": 1065,
+        "y": 64,
+        "width": 367,
+        "height": 4432
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "settings-modal",
+      "role": "modal",
+      "label": "Centered Settings dialog: search + vertical category list (Interface active), scrolling list of toggles, dropdown, segmented choices and sliders, ESC close",
+      "bbox": {
+        "x": 190,
+        "y": 1916,
+        "width": 1064,
+        "height": 754
+      },
+      "patterns": [
+        "modal-dialog",
+        "settings",
+        "tabs",
+        "choice-control",
+        "slider",
+        "text-field",
+        "drag-reorder"
+      ]
+    },
+    {
+      "id": "player-bar",
+      "role": "footer",
+      "label": "Bottom playback bar: track info, favorite, transport, progress, queue/lyrics/panel toggles, volume slider",
+      "bbox": {
+        "x": 0,
+        "y": 4504,
+        "width": 1440,
+        "height": 84
+      },
+      "patterns": [
+        "media-player",
+        "slider"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "settings",
+      "status": "present",
+      "confidence": 0.95,
+      "dims": {
+        "ia": "tabbed-categories",
+        "controls": [
+          "boolean-toggles",
+          "single-and-multi-select",
+          "numeric-and-ranges"
+        ],
+        "discovery": [
+          "browse-hierarchy",
+          "search-by-label"
+        ],
+        "timing": "instant",
+        "safety": [
+          "no-confirm",
+          "reset-to-default",
+          "show-side-effects"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 202,
+            "y": 1991,
+            "width": 232,
+            "height": 516
+          },
+          "quote": "Interface",
+          "note": "Category list: Interface, Theme, Banners, Tracks, Integrations, Storage, About, Advanced, Custom themes, Plugins",
+          "region": "settings-modal"
+        },
+        {
+          "bbox": {
+            "x": 210,
+            "y": 1937,
+            "width": 215,
+            "height": 42
+          },
+          "quote": "Search settings...",
+          "note": "settings search",
+          "region": "settings-modal"
+        },
+        {
+          "bbox": {
+            "x": 484,
+            "y": 1950,
+            "width": 692,
+            "height": 716
+          },
+          "quote": "Disable animations",
+          "note": "Options with label + description explaining side effects; no save button; ARIA shows Reset buttons on several sliders",
+          "region": "settings-modal"
+        }
+      ]
+    },
+    {
+      "id": "modal-dialog",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "form": "centered-large",
+        "openBy": [
+          "user-action"
+        ],
+        "dismissBy": [
+          "close-button",
+          "escape"
+        ],
+        "modality": "blocking",
+        "onDismiss": "already-saved"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 190,
+            "y": 1916,
+            "width": 1064,
+            "height": 754
+          },
+          "note": "Large dialog over a dimmed/blurred app",
+          "region": "settings-modal"
+        },
+        {
+          "bbox": {
+            "x": 1194,
+            "y": 1939,
+            "width": 36,
+            "height": 52
+          },
+          "quote": "ESC",
+          "note": "Close Settings (Esc) button",
+          "region": "settings-modal"
+        }
+      ]
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.7,
+      "dims": {
+        "placement": "vertical",
+        "label": [
+          "text",
+          "icon"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 202,
+            "y": 1991,
+            "width": 232,
+            "height": 516
+          },
+          "quote": "Interface",
+          "note": "Vertical icon+text category tabs; active one is a light filled pill",
+          "region": "settings-modal"
+        }
+      ]
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.9,
+      "dims": {
+        "cardinality": "on-or-off",
+        "form": "switch",
+        "option": [
+          "label-and-description"
+        ],
+        "timing": "immediately",
+        "largeSets": "show-all"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1108,
+            "y": 2158,
+            "width": 52,
+            "height": 32
+          },
+          "quote": "Hide top titlebar",
+          "note": "Dominant: pill switches with label+description. Also segmented pills (Interface font, Top moment icon, alignment) and a dropdown select (Interface language)",
+          "region": "settings-modal"
+        },
+        {
+          "bbox": {
+            "x": 500,
+            "y": 2315,
+            "width": 660,
+            "height": 40
+          },
+          "quote": "Google Sans",
+          "note": "segmented single choice with icons",
+          "region": "settings-modal"
+        },
+        {
+          "bbox": {
+            "x": 502,
+            "y": 2081,
+            "width": 656,
+            "height": 42
+          },
+          "quote": "English (en)",
+          "note": "dropdown select",
+          "region": "settings-modal"
+        }
+      ]
+    },
+    {
+      "id": "slider",
+      "status": "present",
+      "confidence": 0.9,
+      "dims": {
+        "values": "single-value",
+        "labels": [
+          "minimum-and-maximum",
+          "current-value",
+          "tick-marks"
+        ],
+        "scale": "linear"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 500,
+            "y": 2380,
+            "width": 660,
+            "height": 90
+          },
+          "quote": "Track card size",
+          "note": "68px value, ticks, Compact (48px) / Default (64px) / Spacious (84px) labels",
+          "region": "settings-modal"
+        },
+        {
+          "bbox": {
+            "x": 1308,
+            "y": 4530,
+            "width": 92,
+            "height": 20
+          },
+          "note": "volume slider, no labels",
+          "region": "player-bar"
+        }
+      ]
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "supporting": [
+          "placeholder"
+        ],
+        "style": "filled",
+        "inputType": "plain"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 494,
+            "y": 10,
+            "width": 506,
+            "height": 44
+          },
+          "quote": "Search tracks, artists, or albums...",
+          "note": "pill filled search field",
+          "region": "top-bar"
+        },
+        {
+          "bbox": {
+            "x": 210,
+            "y": 1937,
+            "width": 215,
+            "height": 42
+          },
+          "quote": "Search settings...",
+          "region": "settings-modal"
+        }
+      ]
+    },
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "contextual-panel",
+        "items": [
+          "user-pinned-items"
+        ],
+        "visibility": "toggle-button",
+        "structure": "single-app"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 64,
+            "width": 339,
+            "height": 900
+          },
+          "quote": "Your Library",
+          "note": "left library sidebar with collapse (dock_to_left) toggle",
+          "region": "library-sidebar"
+        },
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 64
+          },
+          "note": "top bar with home, search, account",
+          "region": "top-bar"
+        },
+        {
+          "bbox": {
+            "x": 1065,
+            "y": 64,
+            "width": 367,
+            "height": 500
+          },
+          "note": "right Now Playing contextual panel",
+          "region": "now-playing-panel"
+        }
+      ]
+    },
+    {
+      "id": "media-player",
+      "status": "present",
+      "confidence": 0.9,
+      "dims": {
+        "controls": [
+          "play-pause",
+          "scrubber",
+          "skip-forward-back",
+          "volume-and-mute"
+        ],
+        "position": [
+          "time-scrubber"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 4504,
+            "width": 1440,
+            "height": 84
+          },
+          "quote": "adore u",
+          "note": "bottom bar: shuffle, previous, play, next, repeat, progress 1:14/3:11, volume",
+          "region": "player-bar"
+        }
+      ]
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "media": "top-image",
+        "actions": "none",
+        "shape": "vertical",
+        "style": "borderless",
+        "target": "whole-card"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 375,
+            "y": 330,
+            "width": 180,
+            "height": 230
+          },
+          "quote": "For you",
+          "note": "cover art tile with title/subtitle on page bg; quick-pick tiles are horizontal compact rows; artists are circular",
+          "region": "home-main"
+        },
+        {
+          "bbox": {
+            "x": 375,
+            "y": 640,
+            "width": 182,
+            "height": 232
+          },
+          "quote": "luther",
+          "region": "home-main"
+        }
+      ]
+    },
+    {
+      "id": "carousel",
+      "status": "present",
+      "confidence": 0.7,
+      "dims": {
+        "visible": "multi-item-strip",
+        "autoplay": "off",
+        "indicator": "none"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 375,
+            "y": 592,
+            "width": 662,
+            "height": 280
+          },
+          "quote": "Trending now",
+          "note": "13 items in ARIA, 4th tile clipped at right edge; Show all arrow",
+          "region": "home-main"
+        },
+        {
+          "bbox": {
+            "x": 375,
+            "y": 1208,
+            "width": 662,
+            "height": 255
+          },
+          "quote": "Favorite artists",
+          "region": "home-main"
+        }
+      ]
+    },
+    {
+      "id": "sort-control",
+      "status": "present",
+      "confidence": 0.6,
+      "dims": {
+        "default": "manual",
+        "indicator": "label"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 238,
+            "y": 135,
+            "width": 91,
+            "height": 30
+          },
+          "quote": "Custom",
+          "note": "Custom sort button in library",
+          "region": "library-sidebar"
+        }
+      ]
+    },
+    {
+      "id": "drag-reorder",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Only in ARIA below the visible scroll of the settings pane ('Customize sidebar & home layout — Drag and drop to reorder' with Move up/Move down buttons); not visible in the screenshot.",
+      "dims": {
+        "grab": [
+          "move-up-or-down-commands"
+        ],
+        "destinations": [
+          "within-the-list"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 484,
+            "y": 1950,
+            "width": 692,
+            "height": 716
+          },
+          "note": "settings pane containing the reorder lists further down (scrolled out of view)",
+          "region": "settings-modal"
+        }
+      ]
+    },
+    {
+      "id": "menu",
+      "status": "absent",
+      "confidence": 0.6,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 502,
+            "y": 2081,
+            "width": 656,
+            "height": 42
+          },
+          "note": "Dropdown triggers present but no menu open in capture"
+        }
+      ]
+    }
+  ],
+  "structure": {
+    "layout": "desktop app shell: top title/search bar, three columns (library sidebar, home content, now-playing panel), bottom player bar; centered large Settings modal with left category nav over a darkened, blurred background",
+    "regions": [
+      "top-bar",
+      "library-sidebar",
+      "home-main",
+      "now-playing-panel",
+      "settings-modal",
+      "player-bar"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#000000",
+      "#121212",
+      "#1a1a1a",
+      "#dbdbdb",
+      "#8a8a8a",
+      "#ffffff",
+      "#2fae6a"
+    ],
+    "colorRoles": {
+      "background": "#000000",
+      "surface": "#121212",
+      "text": "#dbdbdb",
+      "muted": "#8a8a8a",
+      "primary": "#dbdbdb",
+      "accent": "#2fae6a",
+      "border": "#8a8a8a"
+    },
+    "typography": "Inter for all UI text (headings, labels, descriptions); Material Symbols Rounded for icon glyphs",
+    "typeScale": "Modest contrast: section headings 22px/700, settings nav 19px/500, option labels ~17px/500, descriptions 15px/400 muted, meta 12–13px; active items switch to 700 weight",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "none",
+    "imagery": [
+      "illustration",
+      "abstract-gradients",
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "dark",
+      "sleek",
+      "minimal",
+      "technical",
+      "moody"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T20:20:26.560Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 10,
+    "usage": {
+      "input_tokens": 20,
+      "cache_creation_input_tokens": 40399,
+      "cache_read_input_tokens": 348779,
+      "output_tokens": 7625
+    }
+  },
+  "notes": "Monochrome dark UI: near-black panels, light grey (#dbdbdb) used as both text and 'active' fill (active settings category is a light pill with dark text, toggles on = light pill with black knob). Options are separated by subtle row tints rather than borders. Settings modal is translucent with background blur (Interface opacity 54%, floating panel blur in ARIA). Album art is generated stripe/concentric-circle placeholder art. Settings content is a scrollable pane; ARIA reveals many more options (visualizer, UI scale, corner radius sliders with Reset, drag-reorder sidebar/home sections, BETA badge on Icon style) clipped in the capture."
+}

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en" data-base="../">
+<head>
+  <meta charset="UTF-8" />
+  <!-- 不禁用缩放：WCAG 1.4.4 要求文本可放大。画布上的手势由 CSS touch-action:none 独占，
+       受影响；界面元素与文本仍可双指缩放。 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Solar Wanderer · 遨游太阳系 — A 1:1 Real-Time Solar System Explorer in Your Browser</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='7' fill='%23ffcc55'/><circle cx='26' cy='16' r='2' fill='%234a90d9'/></svg>" />
+  <link rel="manifest" href="../manifest.json" />
+
+  <!-- Open Graph / Social sharing -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://sw.icodestar.net/en/" />
+  <meta property="og:title" content="Solar Wanderer — A 1:1 Real-Time Solar System in Your Browser" />
+  <meta property="og:description" content="A 1:1 scale, real-time solar system explorer powered by NASA JPL ephemerides. Land on the Moon, walk on Mars, dive underwater on Earth, fly to the Oort Cloud. No install." />
+  <meta property="og:image" content="https://sw.icodestar.net/preview.png" />
+  <meta property="og:image:width" content="1280" />
+  <meta property="og:image:height" content="720" />
+  <meta property="og:image:alt" content="Solar Wanderer — 1:1 real-time solar system explorer screenshot" />
+  <meta property="og:site_name" content="Solar Wanderer 遨游太阳系" />
+  <meta property="og:video" content="https://youtu.be/3rwShi6oF0o" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://sw.icodestar.net/en/" />
+  <meta name="twitter:title" content="Solar Wanderer — A 1:1 Real-Time Solar System in Your Browser" />
+  <meta name="twitter:description" content="A 1:1 scale solar system explorer powered by NASA JPL ephemerides. Land, walk, dive, fly. No install." />
+  <meta name="twitter:image" content="https://sw.icodestar.net/preview.png" />
+
+  <meta name="description" content="Solar Wanderer: a 1:1 real-time solar system explorer in your browser, powered by NASA JPL ephemerides. Land on planets, walk on the Moon, dive underwater on Earth, fly to the Oort Cloud. Free and open source." />
+  <meta name="keywords" content="solar system, space simulator, WebGL, Three.js, NASA, JPL, astronomy, planets, real-time ephemeris, educational, open source" />
+  <meta name="theme-color" content="#05070f" />
+  <link rel="canonical" href="https://sw.icodestar.net/en/" />
+
+  <!-- Hreflang for bilingual SEO -->
+  <link rel="alternate" hreflang="zh-CN" href="https://sw.icodestar.net/" />
+  <link rel="alternate" hreflang="en" href="https://sw.icodestar.net/en/" />
+  <link rel="alternate" hreflang="x-default" href="https://sw.icodestar.net/" />
+
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:locale:alternate" content="zh_CN" />
+
+  <!-- Structured data: rich results in search -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Solar Wanderer",
+    "alternateName": "遨游太阳系",
+    "url": "https://sw.icodestar.net/en/",
+    "description": "Solar Wanderer: a 1:1 real-time solar system explorer that runs entirely in your browser, powered by NASA JPL ephemerides. Land on planets, walk on the Moon, dive underwater on Earth, fly to the edge of the solar system.",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Any (modern web browser, WebGL2)",
+    "browserRequirements": "Requires WebGL2",
+    "softwareVersion": "2.2.0",
+    "inLanguage": ["en", "zh-CN"],
+    "image": "https://sw.icodestar.net/preview.png",
+    "screenshot": "https://sw.icodestar.net/preview.png",
+    "featureList": [
+      "True 1:1 km scale, from the Sun's surface to the Oort Cloud at 100,000 AU",
+      "Real-time planet/moon positions from NASA JPL ephemerides (accuracy ≤0.074°)",
+      "Seamless landing, walking on the Moon and Mars, ocean diving on Earth, 6DOF free flight",
+      "Physically-based atmospheres: Mars blue sunset, Venus orange sky",
+      "Time acceleration, reversal and pause to watch orbits and rotations",
+      "Bilingual UI (English/Chinese), works on desktop and mobile, no install"
+    ],
+    "license": "https://opensource.org/licenses/MIT",
+    "isAccessibleForFree": true,
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "author": { "@type": "Person", "name": "hyqzz", "url": "https://github.com/hyqzz" },
+    "codeRepository": "https://github.com/hyqzz/Solar-Wanderer"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Solar Wanderer 遨游太阳系",
+    "alternateName": ["Solar Wanderer", "遨游太阳系"],
+    "url": "https://sw.icodestar.net/",
+    "inLanguage": ["zh-CN", "en"]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    "name": "Solar Wanderer — Demo Video",
+    "description": "3-minute demo: land on planets, walk on the Moon, dive underwater on Earth, and fly to the edge of the solar system — all in a browser.",
+    "thumbnailUrl": "https://sw.icodestar.net/preview.png",
+    "uploadDate": "2026-06-14",
+    "contentUrl": "https://youtu.be/3rwShi6oF0o",
+    "embedUrl": "https://www.youtube.com/embed/3rwShi6oF0o"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is Solar Wanderer?",
+        "acceptedAnswer": { "@type": "Answer", "text": "A free, open-source, browser-based 1:1 real-time solar system explorer powered by real NASA JPL ephemerides. Every planet and moon is at its true position right now. Land, walk, dive, and fly — no install required." }
+      },
+      {
+        "@type": "Question",
+        "name": "How accurate are the planet positions?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Verified against NASA JPL Horizons: planets within 0.074°, the Moon about 0.12°, major moons within 0.22°. Time can be accelerated, reversed, or paused." }
+      },
+      {
+        "@type": "Question",
+        "name": "Which bodies can I land on?",
+        "acceptedAnswer": { "@type": "Answer", "text": "All rocky bodies are landable: Mercury, Venus, Earth, the Moon, Mars, Pluto, and 21 major moons. Mars has a physically accurate blue sunset, Venus has a Venera-style orange sky, and you can dive into Earth's oceans. Gas giants have no solid surface but you can fly into their atmospheres." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is it free? Do I need to install anything?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Completely free, MIT open source, no ads, no account. Any modern browser with WebGL2 (desktop or mobile) can run it at sw.icodestar.net." }
+      }
+    ]
+  }
+  </script>
+
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <canvas id="app" role="img" aria-label="Solar Wanderer — 1:1 real-time solar system canvas. Drag or use arrow keys to explore, H for help."></canvas>
+
+  <!-- Semantic content and internal links for no-JS crawlers (search engines / AI) -->
+  <noscript>
+    <main style="max-width:820px;margin:0 auto;padding:2rem 1rem;color:#e8ecf5;background:#05070f;font-family:sans-serif;line-height:1.7">
+      <h1>Solar Wanderer — A 1:1 Real-Time Solar System in Your Browser</h1>
+      <p>A free, open-source solar system explorer powered by real NASA JPL ephemerides. Every planet and moon is at its true position right now (accuracy ≤0.074°), at true 1:1 km scale — from the Sun's surface to the Oort Cloud at 100,000 AU. Land seamlessly on planets, walk on the Moon and Mars, dive into Earth's oceans, fly freely at up to 2 AU/s, and accelerate or reverse time. Physically-based atmospheric scattering reproduces the Mars blue sunset and the Venus orange sky. No install, no account, no ads.</p>
+      <p>This app requires JavaScript and WebGL2.</p>
+      <h2>Explore Bodies</h2>
+      <ul>
+        <li><a href="../bodies/sun.html">Sun 太阳</a></li>
+        <li><a href="../bodies/mercury.html">Mercury 水星</a></li>
+        <li><a href="../bodies/venus.html">Venus 金星</a></li>
+        <li><a href="../bodies/earth.html">Earth 地球</a> · <a href="../bodies/moon.html">Moon 月球</a></li>
+        <li><a href="../bodies/mars.html">Mars 火星</a></li>
+        <li><a href="../bodies/jupiter.html">Jupiter 木星</a> · <a href="../bodies/io.html">Io</a> · <a href="../bodies/europa.html">Europa</a> · <a href="../bodies/ganymede.html">Ganymede</a> · <a href="../bodies/callisto.html">Callisto</a></li>
+        <li><a href="../bodies/saturn.html">Saturn 土星</a> · <a href="../bodies/titan.html">Titan</a> · <a href="../bodies/enceladus.html">Enceladus</a></li>
+        <li><a href="../bodies/uranus.html">Uranus 天王星</a> · <a href="../bodies/neptune.html">Neptune 海王星</a> · <a href="../bodies/triton.html">Triton</a></li>
+        <li><a href="../bodies/pluto.html">Pluto 冥王星</a> · <a href="../bodies/charon.html">Charon</a></li>
+        <li><a href="../bodies/">All 31 bodies directory →</a></li>
+      </ul>
+      <p><a href="../">中文版</a> · <a href="https://github.com/hyqzz/Solar-Wanderer">GitHub (MIT open source)</a> · <a href="https://youtu.be/3rwShi6oF0o">Demo video</a></p>
+    </main>
+  </noscript>
+
+  <div id="immersion"></div>
+
+  <div id="labels"></div>
+
+  <div id="left-col">
+    <div id="hud-time" class="panel"></div>
+  </div>
+
+  <!-- Directory moved out of #left-col: mobile .touch #left-col sets display:none, which would hide fixed children too -->
+  <div id="directory" class="open">
+    <div class="dir-head"><span data-i18n="dir.title">🪐 天体目录</span> <span class="dim" data-i18n="dir.sub">点击即前往</span></div>
+    <div id="search-box" style="display:none">
+      <input id="search-input" data-i18n-ph="search.ph" placeholder="🔍 搜索天体 / Search…" autocomplete="off" />
+      <div id="search-results"></div>
+    </div>
+    <div id="dir-body"></div>
+  </div>
+
+  <div id="hud">
+    <div id="hud-nav" class="panel"></div>
+    <div id="hud-target" class="panel"></div>
+    <div id="hud-tip" role="status" aria-live="polite"></div>
+    <div id="hud-bgload" style="display:none"></div>
+    <div id="crosshair">+</div>
+  </div>
+
+  <div id="start">
+    <div class="start-bg">
+      <div class="nebula-glow"></div>
+      <div class="star-particles"></div>
+    </div>
+    <div class="start-inner">
+      <div class="title-block">
+        <h1 class="main-title">Solar Wanderer</h1>
+        <span class="sub-title">遨游太阳系</span>
+      </div>
+
+      <p class="sub" data-i18n="start.sub">太阳系 1:1 实时模拟 · 基于 NASA JPL 星历还原此刻太阳系 · 自由探索整个太阳系</p>
+
+      <button id="start-btn" disabled>
+        <span class="btn-fill" id="start-btn-fill"></span>
+        <span class="btn-text" id="start-btn-text" data-i18n="start.loading">加载中…</span>
+        <span class="btn-shimmer"></span>
+      </button>
+
+      <p class="hint" data-i18n="start.hint">进入后单击画面锁定鼠标 · H 查看完整操作说明</p>
+
+      <a id="github-star" href="https://github.com/hyqzz/Solar-Wanderer" target="_blank" rel="noopener">
+        <span class="star-icon">⭐</span><span data-i18n="start.star">Star on GitHub</span>
+      </a>
+
+      <!-- ICP filing number only shown on the official *.icodestar.net domain; hidden on self-deployments (issue #60) -->
+      <a id="beian" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" hidden></a>
+      <script>
+        if (/(^|\.)icodestar\.net$/.test(location.hostname)) {
+          var beianEl = document.getElementById('beian');
+          beianEl.textContent = '陕ICP备2025072864号';
+          beianEl.hidden = false;
+        }
+      </script>
+    </div>
+  </div>
+
+  <div id="help" style="display:none">
+    <div class="help-inner">
+      <h2 data-i18n="help.toggle">Controls (H to close)</h2>
+      <div class="help-cols">
+        <div>
+          <h3>🌐 Explore mode (default · Google Earth style)</h3>
+          <table>
+            <tr><td>Left-drag</td><td>Orbit around focus (with inertia, slows near ground)</td></tr>
+            <tr><td>Ctrl+Left-drag</td><td>Rotate heading / tilt (3D look-around)</td></tr>
+            <tr><td>Right/Middle-drag</td><td>Pan the whole space (no rotation, R resets)</td></tr>
+            <tr><td>W S A D / Arrows</td><td>Pan view (N/S/W/E, speed scales with altitude)</td></tr>
+            <tr><td>Shift+A / Shift+D</td><td>Rotate heading (CCW / CW)</td></tr>
+            <tr><td>Shift+W / Shift+S</td><td>Tilt toward horizon / back to top-down</td></tr>
+            <tr><td>Click a body</td><td><b>Lock focus</b> (wheel then approaches/retreats toward it, down to landing)</td></tr>
+            <tr><td>Wheel / PageUp PageDown / + −</td><td>Zoom toward screen center (altitude-proportional: meter steps at ground, hover at <b>any altitude</b>; gentle = fine, repeated/held = accelerates)</td></tr>
+            <tr><td>Wheel all the way in</td><td><b>Seamless surface landing</b> (auto-switches to walk); oceans land on water</td></tr>
+            <tr><td>V</td><td>Inertial view mode (camera does not co-rotate · pair with time warp to watch moons orbit)</td></tr>
+            <tr><td>Z</td><td><b>Clean mode</b>: hide every overlay (HUD / directory / labels / crosshair / compass) and leave only the universe (press Z again to restore; <code>?clean=1</code> starts in it)</td></tr>
+            <tr><td>R</td><td>Reset view (north up, top-down)</td></tr>
+            <tr><td>🪐 Body directory</td><td>Click a body → fly-to animation (left side, expanded by default)</td></tr>
+            <tr><td>Double-click label / T / 1–9,0</td><td>GE-style fly-to (target centered)</td></tr>
+            <tr><td>Drag (mid-flight)</td><td>Interrupt fly-to animation</td></tr>
+            <tr><td>G</td><td>Land and walk when near surface</td></tr>
+            <tr><td>F</td><td>Toggle free-flight mode</td></tr>
+          </table>
+          <h3>🚶 Surface walking</h3>
+          <table>
+            <tr><td>Mouse / W S A D</td><td>View (360° free look) / walk (true surface gravity)</td></tr>
+            <tr><td>Wheel back / PageUp</td><td><b>Seamless takeoff</b> back to explore mode (view direction kept)</td></tr>
+            <tr><td>Wheel forward on water / PageDown</td><td><b>Dive</b> — low-sensitivity wheel ascent/descent, hover when stopped (hold any depth), auto-resurface</td></tr>
+            <tr><td>Shift / Space</td><td>Run / jump (6× higher on the Moon); Space ascends underwater</td></tr>
+            <tr><td>G</td><td>Back to explore mode</td></tr>
+          </table>
+        </div>
+        <div>
+          <h3>🚀 Free flight (F to enter)</h3>
+          <table>
+            <tr><td>Mouse / Q E</td><td>Pitch & yaw / roll</td></tr>
+            <tr><td>W S A D R F</td><td>Six-direction translation</td></tr>
+            <tr><td>Wheel / Shift</td><td>Speed tier (1 m/s → 2 AU/s) / boost</td></tr>
+            <tr><td>X</td><td>Full stop (hover anywhere)</td></tr>
+            <tr><td>Esc</td><td>Back to explore mode</td></tr>
+          </table>
+          <h3>⏱ Time</h3>
+          <table>
+            <tr><td>[ / ]</td><td>Time warp down / up (reversible)</td></tr>
+            <tr><td>P / N</td><td>Pause / back to now</td></tr>
+          </table>
+          <h3>🖥 Display</h3>
+          <table>
+            <tr><td>O / L / H</td><td>Orbit lines / labels / this help</td></tr>
+            <tr><td>K</td><td>Toggle TNO orbit lines (off by default)</td></tr>
+          </table>
+        </div>
+      </div>
+      <p class="credit">Ephemerides: NASA JPL (planets: Standish elements + Horizons-fitted moon orbits, verified against official data)<br>
+      Textures: NASA/USGS measured data (Solar System Scope CC-BY-4.0 / Steve Albers SOS / JPL Photojournal)</p>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

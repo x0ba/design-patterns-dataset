@@ -1,0 +1,419 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "flight-path--globe",
+    "url": "http://flight-path.localhost:4319/",
+    "finalUrl": "http://flight-path.localhost:4319/",
+    "status": 200,
+    "title": "Flight Path - GPU Instanced Rendering",
+    "capturedAt": "2026-11-18T01:41:27.113Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 900
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "data-visualization",
+    "domainNote": "WebGL/Three.js demo: GPU-instanced flight paths animated over a 3D Earth globe",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/flight-path/explore.json",
+      "repo": {
+        "name": "jeantimex/flight-path",
+        "url": "https://github.com/jeantimex/flight-path",
+        "commit": "3e48cf54741f73861032cb9f73329a0928ef595b",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "globe",
+        "name": "Flight globe",
+        "description": "Full-screen 3D Earth globe with thousands of animated, region-colored planes on dashed great-circle flight arcs, a starfield background, author credit and lat/lng readout."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "globe-canvas",
+      "role": "visualization-stage",
+      "label": "Full-bleed 3D Earth with thousands of dashed colored great-circle flight arcs and plane sprites, nebula/starfield backdrop",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 900
+      },
+      "patterns": [
+        "map-explorer",
+        "object-viewer-3d"
+      ]
+    },
+    {
+      "id": "controls-panel",
+      "role": "settings-panel",
+      "label": "dat.GUI panel collapsed to an 'Open Controls' bar; holds folders Flight/Flight Path/Plane/Space/Performance/Earth/Brightness controls",
+      "bbox": {
+        "x": 1180,
+        "y": 0,
+        "width": 245,
+        "height": 20
+      },
+      "patterns": [
+        "settings",
+        "accordion",
+        "slider",
+        "choice-control",
+        "color-picker",
+        "text-field"
+      ]
+    },
+    {
+      "id": "footer-overlay",
+      "role": "footer",
+      "label": "GitHub 'Made by jeantimex' credit bottom-left and monospace Lat/Lng camera readout bottom-right",
+      "bbox": {
+        "x": 0,
+        "y": 866,
+        "width": 1440,
+        "height": 28
+      },
+      "patterns": []
+    }
+  ],
+  "patterns": [
+    {
+      "id": "map-explorer",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 395,
+            "y": 105,
+            "width": 665,
+            "height": 665
+          },
+          "note": "Satellite-textured 3D globe with flight route polylines and plane markers; day/night shading",
+          "region": "globe-canvas"
+        },
+        {
+          "bbox": {
+            "x": 1236,
+            "y": 870,
+            "width": 190,
+            "height": 20
+          },
+          "quote": "Lat: 19.79°, Lng: 135.22°",
+          "note": "Geographic camera coordinate readout, updates as globe rotates",
+          "region": "footer-overlay"
+        }
+      ],
+      "dims": {
+        "basemap": "satellite-aerial",
+        "overlays": [
+          "routes-and-polylines",
+          "live-traffic-or-vehicles"
+        ],
+        "mapNav": [
+          "rotate-and-tilt"
+        ],
+        "coupling": "map-only",
+        "markDesign": [
+          "category-icon"
+        ]
+      }
+    },
+    {
+      "id": "object-viewer-3d",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "The stage is a rotatable 3D globe in a WebGL canvas, but its purpose is geographic flight-route visualization rather than inspecting an object's form; coded primarily as map-explorer. Orbit drag not verified.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 395,
+            "y": 105,
+            "width": 665,
+            "height": 665
+          },
+          "note": "Realistically lit 3D Earth mesh with atmosphere glow, auto-rotating",
+          "region": "globe-canvas"
+        }
+      ],
+      "dims": {
+        "appearanceModes": [
+          "realistic-materials"
+        ],
+        "cameraControls": [
+          "turntable-auto-spin"
+        ],
+        "partSelection": "whole-object-only",
+        "viewerChrome": "full-bleed-with-floating-tools",
+        "sceneGuidance": "free-explore"
+      }
+    },
+    {
+      "id": "settings",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1180,
+            "y": 0,
+            "width": 245,
+            "height": 20
+          },
+          "quote": "Open Controls",
+          "note": "Collapsed dat.GUI panel; accessibility tree shows 7 folders (Flight Controls, Flight Path, Plane Controls, Space Controls, Performance Controls, Earth Controls, Brightness Controls) with toggles, sliders, select and color field",
+          "region": "controls-panel"
+        }
+      ],
+      "dims": {
+        "ia": "sectioned-page",
+        "controls": [
+          "boolean-toggles",
+          "single-and-multi-select",
+          "numeric-and-ranges"
+        ],
+        "discovery": [
+          "browse-hierarchy"
+        ],
+        "timing": "instant",
+        "scope": "device-local",
+        "safety": [
+          "no-confirm"
+        ]
+      }
+    },
+    {
+      "id": "accordion",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1180,
+            "y": 0,
+            "width": 245,
+            "height": 20
+          },
+          "quote": "Open Controls",
+          "note": "Whole panel collapses/expands; live check: each folder header (e.g. 'Plane Controls') expands its rows in place with a caret indicator, others stay closed",
+          "region": "controls-panel"
+        }
+      ],
+      "dims": {
+        "policy": "many-at-a-time",
+        "header": [
+          "title-only"
+        ],
+        "toggle": [
+          "header-click"
+        ]
+      }
+    },
+    {
+      "id": "slider",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1180,
+            "y": 0,
+            "width": 245,
+            "height": 20
+          },
+          "quote": "Flight Count",
+          "note": "Hidden in capture inside collapsed panel; dat.GUI numeric sliders (Flight Count 5000, Dash Length, Plane Size, Fly Speed, Time Slider, Day/Night brightness) with paired number box",
+          "region": "controls-panel"
+        }
+      ],
+      "dims": {
+        "values": "single-value",
+        "labels": [
+          "current-value"
+        ],
+        "scale": "linear",
+        "precision": [
+          "paired-number-field"
+        ]
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1180,
+            "y": 0,
+            "width": 245,
+            "height": 20
+          },
+          "quote": "Plane Style",
+          "note": "Inside collapsed panel: checkboxes (Return Flight, Hide Path, Star Cloud, Day/Night Effect...) and a Pane/SVG dropdown select",
+          "region": "controls-panel"
+        }
+      ],
+      "dims": {
+        "cardinality": "on-or-off",
+        "form": "checkbox-list",
+        "option": [
+          "label-only"
+        ],
+        "timing": "immediately",
+        "largeSets": "show-all"
+      }
+    },
+    {
+      "id": "color-picker",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "rationale": "dat.GUI color controller (Plane Color #ff0000) exists in the collapsed panel; its picker popup was not opened.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1180,
+            "y": 0,
+            "width": 245,
+            "height": 20
+          },
+          "quote": "#ff0000",
+          "note": "Plane Color field shown as red swatch with hex value when panel is open",
+          "region": "controls-panel"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "text-field",
+      "status": "uncertain",
+      "confidence": 0.4,
+      "rationale": "Only numeric boxes paired with sliders and a disabled Time (UTC) field; not standalone text inputs.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1180,
+            "y": 0,
+            "width": 245,
+            "height": 20
+          },
+          "quote": "01:40:46",
+          "note": "Disabled Time (UTC) textbox in Earth Controls",
+          "region": "controls-panel"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "drawer",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1180,
+            "y": 0,
+            "width": 245,
+            "height": 20
+          },
+          "note": "Controls panel is a collapsible floating dat.GUI box, not an edge-sliding drawer"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "chart",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 395,
+            "y": 105,
+            "width": 665,
+            "height": 665
+          },
+          "note": "Flight arcs are geographic overlays, not a chart"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "full-viewport WebGL canvas (3D globe in starfield) with a floating dat.GUI controls panel top-right (collapsed to 'Open Controls'), attribution bottom-left and lat/lng readout bottom-right",
+    "regions": [
+      "globe-canvas",
+      "controls-panel",
+      "footer-overlay"
+    ],
+    "density": "sparse"
+  },
+  "aesthetics": {
+    "palette": [
+      "#000000",
+      "#1f6f8b",
+      "#eeeeee",
+      "#303030",
+      "#2a2a2a",
+      "#2fa1d6",
+      "#ff0000",
+      "#58a6ff",
+      "#ffffff"
+    ],
+    "colorRoles": {
+      "background": "#000000",
+      "text": "#eeeeee",
+      "surface": "#303030",
+      "primary": "#2fa1d6",
+      "accent": "#ff0000",
+      "link": "#58a6ff",
+      "border": "#2a2a2a"
+    },
+    "typography": "Lucida Grande 11px for dat.GUI panel labels; Arial 13–14px for inputs and 'Made by jeantimex' credit; monospace 12px for Lat/Lng readout",
+    "typeScale": "Flat, utilitarian: 11px panel labels, 12px mono readout, 14px credit; no headings",
+    "shape": "sharp",
+    "elevation": "flat",
+    "borders": "none",
+    "imagery": [
+      "3d-renders",
+      "data-visualization"
+    ],
+    "iconStyle": "filled",
+    "whitespace": "generous",
+    "backgroundTreatment": "image",
+    "mood": [
+      "cosmic",
+      "technical",
+      "immersive",
+      "dark",
+      "demo"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T02:19:29.695Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 8,
+    "usage": {
+      "input_tokens": 16,
+      "cache_creation_input_tokens": 20353,
+      "cache_read_input_tokens": 198595,
+      "output_tokens": 4084
+    }
+  },
+  "notes": "Three.js tech demo: photoreal Earth (blue ocean tint, clouds, atmosphere rim glow, day/night terminator) slowly auto-rotating against a colourful nebula + starfield; ~5000 instanced flights drawn as rainbow-coloured dashed great-circle arcs with plane sprites/markers. All UI is overlay: stock dark dat.GUI panel (black/#303030 rows, coloured left-edge type stripes, #2fa1d6 slider fills) collapsed to 'Open Controls' in the capture; GitHub credit bottom-left; monospace lat/lng readout bottom-right that updates live. No headings or landmarks."
+}

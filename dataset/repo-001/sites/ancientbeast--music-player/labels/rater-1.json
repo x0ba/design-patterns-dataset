@@ -1,0 +1,332 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "ancientbeast--music-player",
+    "url": "http://ancientbeast.localhost:4319/",
+    "finalUrl": "http://ancientbeast.localhost:4319/",
+    "status": 200,
+    "title": "Ancient Beast v0.6-α",
+    "capturedAt": "2026-11-18T02:20:00.718Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 900
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "games",
+    "domainNote": "browser turn-based hex-grid tactics game (Ancient Beast) in an active match",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/ancientbeast/explore.json",
+      "repo": {
+        "name": "FreezingMoon/AncientBeast",
+        "url": "https://github.com/FreezingMoon/AncientBeast",
+        "commit": "2dad015855a07e3d3f75bc15ba892846059c7853",
+        "license": "AGPL-3.0"
+      },
+      "view": {
+        "slug": "music-player",
+        "name": "Music player overlay",
+        "description": "In-match music player overlay with SFX/volume sliders, Epic/Rock playlists, a track list, and the supporter marquee with a Become a Sponsor button."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "battlefield",
+      "role": "game-canvas",
+      "label": "Painted desert battlefield with hex grid, units, HP counters and floating status text",
+      "bbox": {
+        "x": 0,
+        "y": 45,
+        "width": 1440,
+        "height": 810
+      },
+      "patterns": [
+        "badge"
+      ]
+    },
+    {
+      "id": "ability-bar",
+      "role": "toolbar",
+      "label": "Left column of four ability icon buttons with vertical health/energy meters",
+      "bbox": {
+        "x": 0,
+        "y": 480,
+        "width": 100,
+        "height": 320
+      },
+      "patterns": []
+    },
+    {
+      "id": "control-bar",
+      "role": "toolbar",
+      "label": "Right column: audio, skip/delay, timer, fullscreen buttons with hover tooltip",
+      "bbox": {
+        "x": 1340,
+        "y": 480,
+        "width": 100,
+        "height": 320
+      },
+      "patterns": [
+        "tooltip"
+      ]
+    },
+    {
+      "id": "combat-log",
+      "role": "log",
+      "label": "Pill showing latest combat log entry with timestamp",
+      "bbox": {
+        "x": 490,
+        "y": 757,
+        "width": 460,
+        "height": 40
+      },
+      "patterns": [
+        "activity-log"
+      ]
+    },
+    {
+      "id": "turn-queue",
+      "role": "queue",
+      "label": "Turn-order queue of unit portraits with status captions and Round divider",
+      "bbox": {
+        "x": 0,
+        "y": 800,
+        "width": 740,
+        "height": 100
+      },
+      "patterns": [
+        "badge"
+      ]
+    },
+    {
+      "id": "player-panel",
+      "role": "stats",
+      "label": "Current player stats: points, plasma, units",
+      "bbox": {
+        "x": 1340,
+        "y": 800,
+        "width": 100,
+        "height": 100
+      },
+      "patterns": []
+    }
+  ],
+  "patterns": [
+    {
+      "id": "tooltip",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1081,
+            "y": 482,
+            "width": 255,
+            "height": 54
+          },
+          "quote": "hotkey A/Shift+A Audio Mode: Full Listen to some really fine epic tracks.",
+          "region": "control-bar",
+          "note": "Hover tooltip beside the audio button with title, hotkey and description"
+        }
+      ],
+      "dims": {
+        "trigger": [
+          "hover"
+        ],
+        "timing": "until-the-pointer-leaves",
+        "content": "label-and-shortcut",
+        "placement": "beside"
+      }
+    },
+    {
+      "id": "activity-log",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 490,
+            "y": 757,
+            "width": 460,
+            "height": 40
+          },
+          "quote": "00:00:07 Uncle Fungus gained 18 regrowth for now",
+          "region": "combat-log",
+          "note": "Latest entry of a timestamped combat log; full log present in accessibility tree"
+        }
+      ],
+      "dims": {
+        "detail": "one-line-summary",
+        "subject": "the-whole-system",
+        "aggregation": "every-event",
+        "actions": "read-only"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 100,
+            "y": 880,
+            "width": 640,
+            "height": 20
+          },
+          "quote": "Protected Protected Sickened Round 2 Queued",
+          "region": "turn-queue",
+          "note": "Coloured status captions attached to each unit portrait"
+        },
+        {
+          "bbox": {
+            "x": 490,
+            "y": 564,
+            "width": 110,
+            "height": 18
+          },
+          "quote": "117 113",
+          "region": "battlefield",
+          "note": "HP count pills under units"
+        }
+      ],
+      "dims": {
+        "meaning": "status",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "toast",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 490,
+            "y": 757,
+            "width": 460,
+            "height": 40
+          },
+          "note": "Bottom-centre pill is a persistent last-log-line, not an action outcome toast"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "progress-indicator",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 480,
+            "width": 20,
+            "height": 320
+          },
+          "note": "Vertical bars are health/energy meters, not task progress"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "stat-tile",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1340,
+            "y": 800,
+            "width": 100,
+            "height": 100
+          },
+          "quote": "Player2 0 Points 55 Plasma 1 / 4 Units",
+          "note": "Small stats list, not a single key-number tile"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "full-viewport game canvas (battlefield painting with hex grid) framed by HUD: left ability column, right control column, bottom turn-order queue and player stats panel, bottom-centre combat-log line",
+    "regions": [
+      "battlefield",
+      "ability-bar",
+      "control-bar",
+      "combat-log",
+      "turn-queue",
+      "player-panel"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#000000",
+      "#d9a35f",
+      "#ffffff",
+      "#dddddd",
+      "#8888ff",
+      "#ff5555",
+      "#ffff00",
+      "#cc55ff",
+      "#6b8e23",
+      "#b8860b",
+      "#4a4a6a"
+    ],
+    "colorRoles": {
+      "background": "#000000",
+      "text": "#ffffff",
+      "surface": "#d9a35f",
+      "primary": "#8888ff",
+      "accent": "#ffff00",
+      "muted": "#dddddd",
+      "danger": "#ff5555",
+      "border": "#4a4a6a"
+    },
+    "typography": "Play (sans, techno-rounded) for all HUD text: queue captions, tooltip, log, stats",
+    "typeScale": "Small, uniform HUD text: 18px log/overhead labels, 14px queue captions and tooltip, 12px hotkey hints; hierarchy via color and weight rather than size",
+    "shape": "mixed",
+    "elevation": "subtle-shadows",
+    "borders": "heavy",
+    "imagery": [
+      "illustration",
+      "iconography"
+    ],
+    "iconStyle": "filled",
+    "whitespace": "tight",
+    "backgroundTreatment": "image",
+    "mood": [
+      "fantasy",
+      "gritty",
+      "game-like",
+      "dramatic"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T02:22:10.524Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 9,
+    "usage": {
+      "input_tokens": 18,
+      "cache_creation_input_tokens": 19550,
+      "cache_read_input_tokens": 230433,
+      "output_tokens": 4773
+    }
+  },
+  "notes": "Canvas-rendered (Phaser) game; DOM index has only canvas + audio icon. Painted desert backdrop with sci-fantasy creature sprites on a black-outlined hex grid. Turn-order queue (proposed new entry turn-order-queue) uses team-colored (red/blue) frames around portraits, active unit enlarged at left, and colored status strips (yellow Protected, green Sickened, purple Queued). Ability buttons are sepia silhouette icons on parchment tiles; right control column has white glyph icons. Floating combat text ('Skipped', creature names) above units. Live page autoplays and opens a music/sponsor overlay, differing from capture."
+}

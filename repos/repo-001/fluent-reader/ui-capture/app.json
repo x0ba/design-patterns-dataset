@@ -1,0 +1,24 @@
+{
+  "mode": "server",
+  "entry": "/",
+  "login": null,
+  "stubs": [
+    {
+      "service": "Electron main process / preload IPC bridges (window.settings, window.utils, window.db)",
+      "how": ".ui-capture/shim/bridge.js re-implements src/bridges/* with the same signatures; .ui-capture/server.mjs answers db:execute/db:batch against SQLite (node:sqlite, the app's own drizzle migrations from dist/drizzle) and stores electron-store settings in .ui-capture/data/config.json. Window controls are no-ops; platform reported as win32 (frameless window chrome)."
+    },
+    {
+      "service": "<webview> article guest (Electron-only tag)",
+      "how": "bridge.js mounts an <iframe> inside each <webview> element showing the same dist/article/article.html URL and fires did-stop-loading; external pages (webpage mode) go through /__stub/page."
+    },
+    {
+      "service": "The outside web: RSS/Atom feeds, publisher favicons, article photos, article web pages",
+      "how": "A service worker (/sw.js) rewrites every non-localhost request to /__stub/proxy on the local server, which returns RSS XML generated from the seeded items for each subscribed feed URL, HTML article pages for item links (used by full-content/webpage modes), SVG favicons per publisher and deterministic SVG 'photos' for image URLs. AnandTech's feed returns 404 (site closed) so the app logs a realistic fetch failure."
+    },
+    {
+      "service": "Native dialogs, clipboard, font list, cache size",
+      "how": "showMessageBox uses window.confirm, error boxes log to console, export downloads /__api/db/export, font list is a fixed set, cache size is a fixed figure."
+    }
+  ],
+  "notes": "Setup: mise.toml pins node 24.22.3 (npm 11); deps installed with `npm ci --ignore-scripts` (skips the Electron binary download and the better-sqlite3 native rebuild, which the browser run doesn't need); `npm run build` produced dist/. No app source files were changed. On startup the app refreshes all feeds through the stub (no duplicate items are created) and logs one failure for the closed AnandTech feed. Fluent Reader is an Electron app; here its production renderer build (npm run build -> dist/) runs in a normal browser. start.sh reseeds (.ui-capture/seed.mjs: schema from the app's drizzle migrations, dates relative to now) and runs .ui-capture/server.mjs on PORT (4432), which serves dist/ with the bridge shim injected. Data: 28 subscriptions of a long-time user (The Verge, Ars Technica, TechCrunch, WIRED, Hacker News, Simon Willison, GitHub Blog, Julia Evans, LWN, Rust Blog, Quanta, Nature, NASA, Nautilus, BBC, Guardian, NPR, Economist, Smashing Magazine, CSS-Tricks, Daring Fireball, kottke.org, Aeon, Serious Eats, Polygon, 少数派, a dead AnandTech feed and a hidden Japan Times feed) in 5 named groups plus ungrouped feeds; 260 articles spread from minutes ago back several months (AnandTech's are 1-2 years old); 163 read / 97 unread (older ones mostly read, recent ones mostly unread), 14 starred, 3 hidden by rules, 184 with thumbnails, with thumbnails, authors and full HTML bodies; per-source/group rules (hide sponsored posts, mark LWN security updates read, star 'quantum' in Science). Main areas: left nav menu with groups/sources and unread counts, the article feed (Cards view by default; List/Magazine/Compact selectable), article reader overlay, search/filter, the alerts log, and Settings (Sources, Grouping, Rules, Service, App, About)."
+}

@@ -1,0 +1,327 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "video-call-app-nodejs--call-with-chat",
+    "url": "http://localhost:4441/join",
+    "finalUrl": "http://localhost:4441/?room=Tidewater_Weekly%20Sync_2813309571",
+    "status": 200,
+    "title": "Multi-User Video Call",
+    "capturedAt": "2026-11-18T06:34:19.830Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 5400
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "productivity",
+    "domainNote": "browser-based multi-user video conferencing app (WebRTC-style) with in-call text chat",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/video-call-app-nodejs/explore.json",
+      "repo": {
+        "name": "amirsanni/Video-Call-App-NodeJS",
+        "url": "https://github.com/amirsanni/Video-Call-App-NodeJS",
+        "commit": "152e649ef76b04bc6b15ff5390a5cddd1dd21bf0",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "call-with-chat",
+        "name": "Call room with chat pane",
+        "description": "Video call room with the navbar controls and the open chat pane showing the team's sync messages and a message composer."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Teal top bar: 'Video Call' title, unique user identifier, and icon-only call controls (hide video, mute, share screen, record, chat toggle, leave)",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 47
+      },
+      "patterns": [
+        "video-call",
+        "tooltip"
+      ]
+    },
+    {
+      "id": "stage",
+      "role": "video-stage",
+      "label": "Large white video stage area, empty in the capture; small self-view video element anchored at bottom-left",
+      "bbox": {
+        "x": 0,
+        "y": 47,
+        "width": 1080,
+        "height": 5353
+      },
+      "patterns": [
+        "video-call"
+      ]
+    },
+    {
+      "id": "chat-panel",
+      "role": "side-panel",
+      "label": "Teal right-hand CHAT side panel: wheat-coloured message boxes with text, links, sender name+ID and timestamp; textarea composer with dark Send button",
+      "bbox": {
+        "x": 1080,
+        "y": 41,
+        "width": 360,
+        "height": 5359
+      },
+      "patterns": [
+        "chat-thread",
+        "text-field",
+        "video-call"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "video-call",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1210,
+            "y": 8,
+            "width": 214,
+            "height": 31
+          },
+          "note": "Call controls: Hide Video, Mute, Share screen, Record, chat toggle, leave (exit link to /)",
+          "region": "header"
+        },
+        {
+          "bbox": {
+            "x": 0,
+            "y": 47,
+            "width": 1080,
+            "height": 5353
+          },
+          "note": "Video stage, empty in capture (no remote participants rendered); self-view <video> 216x150 at bottom-left",
+          "region": "stage"
+        },
+        {
+          "bbox": {
+            "x": 1080,
+            "y": 41,
+            "width": 360,
+            "height": 5359
+          },
+          "note": "Chat side channel panel beside the stage, toggled by header chat button (verified live)",
+          "region": "chat-panel"
+        }
+      ],
+      "dims": {
+        "subspaces": "one-room"
+      }
+    },
+    {
+      "id": "chat-thread",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1084,
+            "y": 110,
+            "width": 303,
+            "height": 55
+          },
+          "quote": "Morning all! Giving it 2 min for people to trickle in",
+          "note": "Message box: text, then sender name with ID and timestamp below",
+          "region": "chat-panel"
+        },
+        {
+          "bbox": {
+            "x": 1070,
+            "y": 479,
+            "width": 317,
+            "height": 91
+          },
+          "quote": "Board is here if you want to follow along",
+          "note": "Message with raw URL link, no preview",
+          "region": "chat-panel"
+        },
+        {
+          "bbox": {
+            "x": 1085,
+            "y": 4396,
+            "width": 350,
+            "height": 72
+          },
+          "note": "Composer: textarea 'Type here...' + Send button",
+          "region": "chat-panel"
+        }
+      ],
+      "dims": {
+        "layout": "compact-lines",
+        "replies": "flat",
+        "content": [
+          "text"
+        ],
+        "metadata": [
+          "timestamp"
+        ],
+        "unread": "latest-message"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1085,
+            "y": 4396,
+            "width": 288,
+            "height": 72
+          },
+          "quote": "Type here...",
+          "note": "Multi-line textarea composer with placeholder only, no label",
+          "region": "chat-panel"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "placeholder"
+        ],
+        "style": "outlined",
+        "inputType": "plain"
+      }
+    },
+    {
+      "id": "tooltip",
+      "status": "uncertain",
+      "confidence": 0.4,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1210,
+            "y": 8,
+            "width": 141,
+            "height": 31
+          },
+          "note": "Icon-only buttons have accessible names (Hide Video, Mute, Share screen, Record), likely native title hover labels; no rendered tooltip visible on live hover",
+          "region": "header"
+        }
+      ],
+      "dims": {
+        "trigger": [
+          "hover"
+        ],
+        "content": "label"
+      },
+      "rationale": "Hovering in the live page did not render a visible custom tooltip; names may come from title attributes (native browser tooltip not captured)."
+    },
+    {
+      "id": "drawer",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1080,
+            "y": 41,
+            "width": 360,
+            "height": 859
+          },
+          "note": "Chat panel toggles show/hide via header button but is a fixed column, not a sliding overlay drawer"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "app-shell",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 47
+          },
+          "note": "Top bar holds call controls, not navigation destinations"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "full-viewport call screen: fixed teal top bar with icon controls, large empty video stage left (~75%), fixed-width (360px) internally scrolling chat column right",
+    "regions": [
+      "header",
+      "stage",
+      "chat-panel"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#17a2b8",
+      "#f5deb3",
+      "#ffffff",
+      "#000000",
+      "#007bff",
+      "#343a40",
+      "#495057"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "text": "#000000",
+      "primary": "#17a2b8",
+      "surface": "#f5deb3",
+      "accent": "#007bff",
+      "button": "#343a40",
+      "muted": "#495057"
+    },
+    "typography": "System UI stack (-apple-system / Helvetica/Arial fallback) everywhere: header title and ID 16px white, 'CHAT' heading 32px white, message bodies 12px black, sender/timestamp meta 10px, Send button 16px",
+    "typeScale": "Flat, small: single 32px 'CHAT' heading, 16px header/button text, 12px message text, 10px metadata; all regular weight 400, no bold hierarchy",
+    "shape": "mixed",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "filled",
+    "whitespace": "tight",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "utilitarian",
+      "bootstrap-default",
+      "dated",
+      "functional",
+      "unstyled"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T06:35:23.996Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 8,
+    "usage": {
+      "input_tokens": 16,
+      "cache_creation_input_tokens": 29585,
+      "cache_read_input_tokens": 247935,
+      "output_tokens": 3998
+    }
+  },
+  "notes": "Bootstrap-default look (bg-info teal #17a2b8, btn-dark #343a40, link blue #007bff) with Font Awesome filled icons in the top bar. Chat messages are wheat (#f5deb3) boxes with 6px radius and thin border, flush-left text with almost no padding; each shows body text, then 'Name (__id__id__) - 17th November, 2026 10:34 pm' in 10px. No avatars, no sender alignment differences. URLs are shown raw as blue links with no previews. The chat column scrolls internally and is pinned to the latest message; the composer is a square-cornered textarea with an adjoining full-height dark Send button. The video stage is entirely blank white in the capture; a 216x150 self-view <video> element sits at the bottom-left of the stage. Header shows a long random 'Unique Identifier' string instead of a user name. The chat icon toggles the chat column on and off (checked live), and the stage then fills the full width."
+}

@@ -1,0 +1,146 @@
+# Codebook proposal (new-entry) — review with: node scripts/proposals.ts show repo-001 timed-text-sync-editor
+id: timed-text-sync-editor
+kind: new-entry
+status: open
+batch: repo-001
+codebookVersion: 1.0.0
+name: Timed-text sync editor
+level: pattern
+parent: create
+definition: Aligning lines (and optionally words) of text to positions in an audio/video track. Each
+  line is a list row with start/end timestamps stamped from current playback, nudged by small
+  increments, or retimed word by word, alongside a playback transport. Used for LRC lyrics,
+  subtitles and captions.
+aliases:
+  - lyrics sync editor
+  - subtitle timing editor
+  - LRC editor
+  - caption timing
+relations:
+  neighbors:
+    - timeline-editor
+    - media-player
+    - document-editor
+  uses:
+    - media-player
+    - slider
+dimensions:
+  - name: Timing granularity
+    family: scope
+    question: What unit of text gets a timestamp?
+    subdimensions:
+      - id: granularity
+        name: Granularity
+        select: many
+        values:
+          - id: line-start
+            name: Line start
+          - id: line-start-and-end
+            name: Line start and end
+          - id: word-level
+            name: Word level
+            example: LRCGET word sync, enhanced LRC
+          - id: per-word
+            name: Per word
+            example: LRCGET word sync
+      - id: syncMethod
+        name: Sync method
+        select: many
+        values:
+          - id: tap-to-current-playback
+            name: Tap to current playback (keyboard)
+          - id: nudge-buttons
+            name: Nudge buttons (±ms)
+          - id: type-timecode
+            name: Type timecode
+          - id: drag-on-waveform
+            name: Drag on waveform
+          - id: tap-to-stamp
+            name: Tap to stamp current playback
+          - id: nudge-increments
+            name: Nudge by fixed increments
+          - id: type-timestamp
+            name: Type timestamp
+          - id: auto-align
+            name: Automatic alignment
+  - name: Timing input
+    family: invocation
+    question: How is a timestamp set?
+    subdimensions:
+      - id: timingInput
+        name: Timing input
+        select: many
+        values:
+          - id: stamp-from-playhead
+            name: Stamp from playhead (key press)
+          - id: nudge-increments
+            name: Nudge by fixed increments
+          - id: type-timestamp
+            name: Type the timestamp
+          - id: drag-on-waveform
+            name: Drag on waveform
+            example: Aegisub
+rationale:
+  - rater: rater-3
+    site: lrcget--lyrics-editor-synced
+    text: timeline-editor assumes clips on tracks against a horizontal time axis; here time is encoded
+      as timestamp pills per text line in a vertical list, edited by stamping from the playhead and
+      ±100ms nudges, plus a word-level sync strip. No codebook entry covers text-to-media alignment.
+  - rater: rater-2
+    site: lrcget--lyrics-editor-synced
+    text: timeline-editor assumes clips on tracks along a horizontal time axis; media-player covers
+      playback but not authoring. Lyric/subtitle timing tools are a list of text lines each with
+      editable time codes, tap-to-sync shortcuts and word-level segmentation — no existing entry
+      describes this.
+  - rater: rater-1
+    site: lrcget--lyrics-editor-synced
+    text: timeline-editor assumes clips arranged on tracks along a horizontal time axis; here time is
+      encoded as timestamp chips on a vertical list of text lines with tap-to-sync and ±100ms
+      nudges, plus a per-word timing strip. Neither timeline-editor, document-editor nor
+      media-player describes this.
+sources:
+  - batch: repo-001
+    site: lrcget--lyrics-editor-synced
+    url: http://lrcget.localhost:4319/
+    note: proposed by rater-3, rater-2, rater-1
+evidence:
+  - site: lrcget--lyrics-editor-synced
+    rater: rater-3
+    bbox:
+      x: 232
+      y: 385
+      width: 976
+      height: 610
+    note: Lyric lines with start/end timestamp pills, sync, nudge and delete buttons
+    quote: Sync line to current playback (Space)
+  - site: lrcget--lyrics-editor-synced
+    rater: rater-3
+    bbox:
+      x: 232
+      y: 289
+      width: 976
+      height: 80
+    note: Word-level sync strip
+    quote: SYNC WORD
+  - site: lrcget--lyrics-editor-synced
+    rater: rater-2
+    bbox:
+      x: 232
+      y: 289
+      width: 976
+      height: 700
+    note: "LRCGET synced lyrics editor: word timing strip, line rows with start/end timestamp chips and
+      nudge buttons"
+    quote: Sync line to current playback (Space)
+  - site: lrcget--lyrics-editor-synced
+    rater: rater-1
+    bbox:
+      x: 232
+      y: 289
+      width: 976
+      height: 700
+    note: "Synced lyrics editor: word timing strip, line rows with start/end timestamp chips,
+      sync/rewind/forward buttons"
+    quote: Sync line to current playback (Space)
+createdAt: 2026-11-18T02:07:46.385Z
+updatedAt: 2026-11-18T02:08:13.482Z

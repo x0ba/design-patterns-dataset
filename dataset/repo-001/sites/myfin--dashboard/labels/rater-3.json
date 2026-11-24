@@ -1,0 +1,399 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "myfin--dashboard",
+    "url": "http://localhost:4419/",
+    "finalUrl": "http://localhost:4419/#/dashboard",
+    "status": 200,
+    "title": "MyFin Budget",
+    "capturedAt": "2026-11-18T03:35:01.316Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1408
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "finance",
+    "domainNote": "personal finance / budgeting app (MyFin Budget) dashboard",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/myfin/explore.json",
+      "repo": {
+        "name": "afaneca/myfin",
+        "url": "https://github.com/afaneca/myfin",
+        "commit": "d6ed7022868ad69a09ae4cf95415585deb72acc5",
+        "license": "GPL-3.0"
+      },
+      "view": {
+        "slug": "dashboard",
+        "name": "Dashboard",
+        "description": "Monthly financial dashboard with net worth summary chips, budget overview gauge, monthly savings bars and income/expense distribution donuts."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Logo, hamburger toggle and primary navigation list (Dashboard, Transactions, Budgets, Accounts, Investments, Goals, Meta submenu, Stats)",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 250,
+        "height": 1408
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "top-bar",
+      "role": "header",
+      "label": "Four summary balance chips (Operating Funds, Investing, Debt, Net Worth) and theme/profile/logout icon buttons",
+      "bbox": {
+        "x": 250,
+        "y": 0,
+        "width": 1190,
+        "height": 80
+      },
+      "patterns": [
+        "stat-tile",
+        "app-shell"
+      ]
+    },
+    {
+      "id": "filter-bar",
+      "role": "toolbar",
+      "label": "Month picker field and current date stamp",
+      "bbox": {
+        "x": 266,
+        "y": 88,
+        "width": 1158,
+        "height": 66
+      },
+      "patterns": [
+        "date-picker"
+      ]
+    },
+    {
+      "id": "chart-grid",
+      "role": "dashboard-grid",
+      "label": "Six chart panels: monthly overview gauge, monthly savings bars, income/expense/investment/debt donuts",
+      "bbox": {
+        "x": 266,
+        "y": 168,
+        "width": 1158,
+        "height": 1224
+      },
+      "patterns": [
+        "dashboard",
+        "chart",
+        "tooltip"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 250,
+            "height": 505
+          },
+          "note": "Persistent left sidebar with fixed destinations; hamburger collapses it to an icon rail (verified live)",
+          "quote": "Dashboard",
+          "region": "sidebar"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations"
+        ],
+        "visibility": "toggle-button",
+        "narrowing": "collapse-to-icons",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "dashboard",
+      "status": "present",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 266,
+            "y": 168,
+            "width": 1158,
+            "height": 1224
+          },
+          "note": "Grid of six chart widgets, scoped by month filter",
+          "quote": "MONTHLY OVERVIEW",
+          "region": "chart-grid"
+        },
+        {
+          "bbox": {
+            "x": 266,
+            "y": 18,
+            "width": 419,
+            "height": 44
+          },
+          "note": "KPI chips in top bar",
+          "quote": "Net Worth €132,140.51",
+          "region": "top-bar"
+        }
+      ],
+      "dims": {
+        "widgets": [
+          "kpi-tiles",
+          "time-series-charts",
+          "categorical-charts"
+        ],
+        "purpose": "motivation-and-learning",
+        "arrangement": "fixed-grid",
+        "density": "a-few-glanceable-tiles",
+        "linking": "global-filters",
+        "refresh": "on-visit",
+        "alerting": "none",
+        "ownership": "personal"
+      }
+    },
+    {
+      "id": "chart",
+      "status": "present",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 853,
+            "y": 448,
+            "width": 571,
+            "height": 464
+          },
+          "note": "Donut with leader-line callout labels; hover shows tooltip with value",
+          "quote": "EXPENSE DISTRIBUTION",
+          "region": "chart-grid"
+        },
+        {
+          "bbox": {
+            "x": 657,
+            "y": 168,
+            "width": 767,
+            "height": 264
+          },
+          "note": "Monthly savings bars with value labels on bars, negative bar below zero line",
+          "quote": "€4,234.37",
+          "region": "chart-grid"
+        },
+        {
+          "bbox": {
+            "x": 266,
+            "y": 168,
+            "width": 375,
+            "height": 264
+          },
+          "note": "Semicircle gauge Current vs Remaining",
+          "quote": "Current",
+          "region": "chart-grid"
+        }
+      ],
+      "dims": {
+        "markType": "arcs",
+        "channels": [
+          "length",
+          "colour-hue-or-value"
+        ],
+        "scale": "radial",
+        "faceting": "single-plot",
+        "inspectBy": [
+          "hover-tooltip"
+        ],
+        "authorship": "author-specified",
+        "annotation": [
+          "callout-labels"
+        ],
+        "adaptation": "fixed-desktop-chart"
+      }
+    },
+    {
+      "id": "stat-tile",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 266,
+            "y": 18,
+            "width": 118,
+            "height": 44
+          },
+          "quote": "Operating Funds €34,273.10",
+          "region": "top-bar"
+        },
+        {
+          "bbox": {
+            "x": 590,
+            "y": 18,
+            "width": 95,
+            "height": 44
+          },
+          "quote": "Net Worth €132,140.51",
+          "region": "top-bar"
+        }
+      ],
+      "dims": {
+        "context": [
+          "label"
+        ],
+        "encoding": "number-only",
+        "window": "fixed",
+        "drill": "none"
+      }
+    },
+    {
+      "id": "date-picker",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 266,
+            "y": 96,
+            "width": 246,
+            "height": 56
+          },
+          "note": "Outlined 'Month' field with calendar icon; opens month-grid popover (Jan–Dec) verified live",
+          "quote": "November 2026",
+          "region": "filter-bar"
+        }
+      ],
+      "dims": {
+        "presentation": "calendar-popover",
+        "selection": "single-date",
+        "openBy": "calendar-icon"
+      },
+      "novel": [
+        {
+          "subdimension": "selection",
+          "description": "Chooses a month (month + year), not a specific day",
+          "proposedValueId": "month"
+        }
+      ]
+    },
+    {
+      "id": "tooltip",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 853,
+            "y": 448,
+            "width": 571,
+            "height": 464
+          },
+          "note": "Hovering a donut slice shows dark tooltip 'Shopping & Clothing: €1,303.24' (live only)",
+          "region": "chart-grid"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "card",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 266,
+            "y": 168,
+            "width": 375,
+            "height": 264
+          },
+          "note": "Panels are chart widget containers, not item summary cards"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "app shell with collapsible left sidebar nav, top bar of net-worth summary chips and account icons, month filter, then 2-column grid of chart panels (gauge + bar row, then 2x2 donuts)",
+    "regions": [
+      "sidebar",
+      "top-bar",
+      "filter-bar",
+      "chart-grid"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#1f2d3d",
+      "#253649",
+      "#f5f5f5",
+      "#bdbdbd",
+      "#aed581",
+      "#ff5252",
+      "#3949ab",
+      "#1de9b6",
+      "#90caf9"
+    ],
+    "colorRoles": {
+      "background": "#1f2d3d",
+      "surface": "#253649",
+      "text": "#f5f5f5",
+      "muted": "#bdbdbd",
+      "primary": "#aed581",
+      "accent": "#ff5252",
+      "focus": "#90caf9"
+    },
+    "typography": "Roboto throughout: 16px nav labels and field value, 12px letter-spaced uppercase panel titles in muted grey, 11-12px chip labels/values and chart labels",
+    "typeScale": "flat, small scale: max 16px (nav, month value), panel titles 12px uppercase tracked, chart labels 11px; weight mostly 400",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "none",
+    "imagery": [
+      "data-visualization",
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "dark",
+      "calm",
+      "technical",
+      "utilitarian"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T03:36:30.572Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 9,
+    "usage": {
+      "input_tokens": 18,
+      "cache_creation_input_tokens": 28477,
+      "cache_read_input_tokens": 265523,
+      "output_tokens": 4161
+    }
+  },
+  "notes": "Material-style dark navy theme (Vue/Vuetify-like). Charts use vertical gradient fills on arcs and bars (darker top fading to light). Panel titles are small tracked uppercase. Top bar KPI chips are tiny dark rounded pills rather than large tiles. Negative savings bar rendered white/grey instead of green. Sidebar active item marked by slightly darker band. Month picker selects a month from a 3x4 month grid popover."
+}

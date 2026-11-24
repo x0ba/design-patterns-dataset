@@ -1,0 +1,36 @@
+{
+  "mode": "server",
+  "entry": "/dashboard",
+  "login": {
+    "username": "maya.lindqvist",
+    "email": "maya@trek.local",
+    "password": "Wanderlust2026!"
+  },
+  "stubs": [
+    {
+      "service": "Remembered sign-in for the seeded user (a fresh browser has no session, so TREK would bounce /dashboard to /login and cancel its boot requests)",
+      "how": "start.sh puts session-proxy.mjs on $PORT and runs TREK on 127.0.0.1 (HOST) at a free port picked at startup. At startup the proxy signs maya@trek.local in through TREK's own /api/auth/login (remember_me) and attaches that trek_session cookie to any request that arrives without one (also setting it in the browser); WebSocket upgrades (/ws) are piped through, and requests that arrive while TREK is still booting are held until it answers instead of failing. Requests that already carry a session pass untouched. Signing out works, but the next request is signed in again."
+    },
+    {
+      "service": "Open-Meteo weather & wind API (forecast + archive), used by the day plan, journal and wind widgets",
+      "how": "start.sh runs stub-server.mjs on a free loopback port picked at startup, which returns deterministic, plausible daily/hourly/current weather for any lat/lng/date (temperatures follow latitude and season). The server is started with --require fetch-redirect.cjs, which sends its fetch() calls for api.open-meteo.com / archive-api.open-meteo.com to that stub; no app source is changed."
+    },
+    {
+      "service": "TREK hosted services (place search, routing, Photon/Valhalla relays, place photos)",
+      "how": "Turned off with TREK_SERVICES=off and TREK_PLACES_ENABLED=false (the app's own self-hosted/offline switches); places carry their own coordinates from the seed."
+    },
+    {
+      "service": "Plugins registry",
+      "how": "TREK_PLUGINS_ENABLED=false."
+    },
+    {
+      "service": "OIDC / SSO, SMTP mail, Web Push, LLM assistant, Immich/Synology/Dawarich/AirTrail integrations",
+      "how": "Left unconfigured (no env vars), which TREK treats as 'feature off'; local password login is used. VAPID keys are generated locally on first run."
+    },
+    {
+      "service": "Secrets",
+      "how": "ENCRYPTION_KEY is a fixed placeholder in .ui-capture/env.sh; the JWT secret is generated into server/data on first start."
+    }
+  ],
+  "notes": "TREK 5.1.4 (NestJS + SQLite server, React/Vite client). Built with `npm ci && npm run build` (Node 24.22.3 via mise; better-sqlite3 uses its bundled prebuild), client/dist copied to server/public as the Dockerfile does. start.sh sources .ui-capture/env.sh, runs `node dist/index.js` from server/ bound to 127.0.0.1 on a free internal port and serves it on $PORT through session-proxy.mjs (opens already signed in as Maya) in production mode with COOKIE_SECURE=false; the SQLite DB is .ui-capture/data/travel.db (TREK_DB_FILE). Data was loaded through the REST API by .ui-capture/seed/seed.mjs (content in seed/data.mjs): main admin account Maya Lindqvist (maya@trek.local) plus 5 friends (jonas.weber, priya.r, tomas_herrera, lena.f, samwhit) who share trips. 10 trips: Copenhagen long weekend (ongoing, 14–18 Nov 2026), Mexico City & Oaxaca New Year (upcoming, heavily planned: 27 places, flights/hotels/restaurant bookings, polls, chat, notes, budget split 4 ways, todos incl. overdue), Kyoto & Tokyo (Oct 2026, done), Lisbon & Porto (Apr 2026), Amalfi & Rome (May 2027, partly planned), Patagonia W Trek (Feb 2027, early), Iceland Ring Road and Scottish Highlands (archived), Berlin TechConf 2025, Dolomites ski week (no dates yet). Each has places with real coordinates, day plans with times, reservations, accommodations, costs with payers/FX, packing lists with bags, to-dos, collab notes/polls/links/messages. Also: Atlas with 26 visited countries + bucket list, 3 Collections of saved places, 2 Journeys (journal) with entries, Vacay days for 2026. Main areas: Dashboard (/dashboard) with trip cards, trip planner (/trips/:id) with map + day plan + bookings/lists/costs/files/collab tabs, Atlas, Vacay, Collections, Journey, Settings and Admin. Map tiles are loaded by the browser from public tile servers and are not stubbed, so the map background stays blank offline (markers, routes and the rest of the UI work). Also seeded: 9 PDF booking documents in trip Files (seed/files.mjs, stored in server/uploads), and creation timestamps spread over the past months (seed/backdate.mjs). To rebuild the data from scratch: delete .ui-capture/data/travel.db*, start the server, then run node seed/seed.mjs, node seed/files.mjs and node seed/notices.mjs (base URL as argument; notices.mjs dismisses the release-notes modal like a long-time user) and, from server/, node ../.ui-capture/seed/backdate.mjs ../.ui-capture/data/travel.db."
+}

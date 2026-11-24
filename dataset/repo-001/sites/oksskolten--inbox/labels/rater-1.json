@@ -1,0 +1,481 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "oksskolten--inbox",
+    "url": "http://localhost:4435/inbox",
+    "finalUrl": "http://localhost:4435/inbox",
+    "status": 200,
+    "title": "Oksskolten",
+    "capturedAt": "2026-11-18T06:52:39.574Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 9197
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "news-publishing",
+    "domainNote": "self-hosted RSS / feed reader app (unread Inbox view)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/oksskolten/explore.json",
+      "repo": {
+        "name": "babarot/oksskolten",
+        "url": "https://github.com/babarot/oksskolten",
+        "commit": "737526230a9c5907f1a253dd82d93c828526790b",
+        "license": "AGPL-3.0"
+      },
+      "view": {
+        "slug": "inbox",
+        "name": "Inbox article list",
+        "description": "Unread articles list with titles, excerpts, source favicons, timestamps and cover thumbnails, next to the feed sidebar grouped by category with unread counts."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Left sidebar: wordmark, collapse toggle, primary destinations with count badges, FEEDS folder tree, account footer",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 280,
+        "height": 1833
+      },
+      "patterns": [
+        "app-shell",
+        "tree-view",
+        "badge",
+        "command-palette"
+      ]
+    },
+    {
+      "id": "top-bar",
+      "role": "header",
+      "label": "Centered 'Inbox' page title bar",
+      "bbox": {
+        "x": 280,
+        "y": 0,
+        "width": 1160,
+        "height": 48
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "info-banner",
+      "role": "banner",
+      "label": "Dismissible grey info callout explaining the Inbox",
+      "bbox": {
+        "x": 548,
+        "y": 60,
+        "width": 624,
+        "height": 60
+      },
+      "patterns": [
+        "banner"
+      ]
+    },
+    {
+      "id": "article-list",
+      "role": "feed",
+      "label": "Single-column list of article rows: title, snippet, favicon+domain, relative time, square thumbnail; ends in 'You're all caught up!' mascot",
+      "bbox": {
+        "x": 524,
+        "y": 132,
+        "width": 672,
+        "height": 9065
+      },
+      "patterns": [
+        "feed",
+        "inbox",
+        "overview-detail",
+        "card"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 280,
+            "height": 1833
+          },
+          "region": "sidebar",
+          "quote": "Inbox 2",
+          "note": "Persistent left sidebar with fixed destinations, unread counts, feed folders; toggle button at top"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations",
+          "user-pinned-items",
+          "live-counts"
+        ],
+        "visibility": "toggle-button",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "tree-view",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 360,
+            "width": 263,
+            "height": 480
+          },
+          "region": "sidebar",
+          "quote": "Languages",
+          "note": "Folders with chevron disclosures; indented feeds with letter favicons and unread counts; 'News' shown collapsed"
+        }
+      ],
+      "dims": {
+        "content": [
+          "label",
+          "type-icon",
+          "count-badge",
+          "status-decoration"
+        ],
+        "expandBy": [
+          "disclosure-triangle"
+        ],
+        "selection": "single-node",
+        "source": "containment",
+        "density": "comfortable"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 238,
+            "y": 72,
+            "width": 28,
+            "height": 22
+          },
+          "region": "sidebar",
+          "quote": "2",
+          "note": "Light-blue pill counts on Inbox, Read Later (25), Liked (18), folders and feeds"
+        },
+        {
+          "bbox": {
+            "x": 240,
+            "y": 590,
+            "width": 26,
+            "height": 20
+          },
+          "region": "sidebar",
+          "quote": "1",
+          "note": "Infrastructure folder count rolled up from Cloudflare Blog"
+        }
+      ],
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "rule": "everything-unread",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "banner",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 548,
+            "y": 60,
+            "width": 624,
+            "height": 60
+          },
+          "region": "info-banner",
+          "quote": "The front door of Oksskolten, where only unread articles live. Once marked as read, they won't appear in Inbox anymore.",
+          "note": "Grey informational callout with close X"
+        }
+      ],
+      "dims": {
+        "scope": "page",
+        "severity": "information",
+        "dismissal": "dismissible",
+        "action": "none",
+        "placement": "top-of-content"
+      }
+    },
+    {
+      "id": "feed",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 524,
+            "y": 132,
+            "width": 672,
+            "height": 91
+          },
+          "region": "article-list",
+          "quote": "Announcing TypeScript 7.0 Beta",
+          "note": "Article row from subscribed RSS source, newest first"
+        },
+        {
+          "bbox": {
+            "x": 780,
+            "y": 9060,
+            "width": 160,
+            "height": 130
+          },
+          "region": "article-list",
+          "quote": "You're all caught up!",
+          "note": "Pixel-art mascot end marker"
+        }
+      ],
+      "dims": {
+        "density": "card-preview",
+        "heterogeneity": [
+          "uniform-posts"
+        ],
+        "ordering": "chronological",
+        "sources": [
+          "followed-accounts"
+        ],
+        "arrangement": "single-column",
+        "position": "caught-up-marker",
+        "nesting": [
+          "flat"
+        ]
+      }
+    },
+    {
+      "id": "inbox",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 524,
+            "y": 132,
+            "width": 672,
+            "height": 91
+          },
+          "region": "article-list",
+          "quote": "Inbox",
+          "note": "View is titled Inbox; unread articles leave the list once marked read; source, title, snippet per row"
+        }
+      ],
+      "dims": {
+        "organization": "folders",
+        "grouping": "individual-messages",
+        "openIn": "new-page",
+        "density": "comfortable",
+        "triage": "mark-as-read",
+        "rowAttributes": [
+          "sender",
+          "subject",
+          "snippet"
+        ],
+        "priority": "chronological",
+        "deferral": [
+          "none"
+        ]
+      },
+      "rationale": "RSS articles rather than messages; Inbox semantics (unread queue cleared by marking read) fit but the codebook entry is message-oriented."
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 524,
+            "y": 132,
+            "width": 672,
+            "height": 91
+          },
+          "region": "article-list",
+          "quote": "Announcing TypeScript 7.0 Beta",
+          "note": "Row is a link to an in-app article route (/devblogs.microsoft.com/...)"
+        }
+      ],
+      "dims": {
+        "attributePlacement": [
+          "in-both-views"
+        ],
+        "truncation": "ellipsis",
+        "relationship": "one-to-one",
+        "openIn": "new-page",
+        "overviewType": [
+          "list"
+        ],
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "whole-item"
+      }
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 524,
+            "y": 132,
+            "width": 672,
+            "height": 91
+          },
+          "region": "article-list",
+          "quote": "Introducing concurrent writes in Turso",
+          "note": "Borderless horizontal item rows separated by hairline dividers, side thumbnail at right, whole row is the link"
+        }
+      ],
+      "dims": {
+        "media": "side-thumbnail",
+        "actions": "none",
+        "shape": "horizontal",
+        "style": "borderless",
+        "target": "whole-card"
+      }
+    },
+    {
+      "id": "command-palette",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 99,
+            "width": 263,
+            "height": 32
+          },
+          "region": "sidebar",
+          "quote": "Search K",
+          "note": "Sidebar Search item carries a ⌘⇧K shortcut hint; live page opens a centered article-search overlay"
+        }
+      ],
+      "dims": {
+        "types": [
+          "objects-and-files"
+        ],
+        "detail": "name-and-description",
+        "summon": [
+          "in-app-shortcut",
+          "visible-search-button"
+        ],
+        "scope": "current-app",
+        "placement": "centered-overlay"
+      },
+      "rationale": "The palette itself is not in the capture; only the trigger with shortcut hint. Live overlay searches articles (with filter chips) rather than commands."
+    },
+    {
+      "id": "empty-state",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 780,
+            "y": 9060,
+            "width": 160,
+            "height": 130
+          },
+          "quote": "You're all caught up!",
+          "note": "End-of-list marker below populated list, not an empty view"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "two-pane app: fixed 280px left sidebar (nav + feed folder tree) and a centered ~672px single-column article list under a slim title bar",
+    "regions": [
+      "sidebar",
+      "top-bar",
+      "info-banner",
+      "article-list"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#f0f0f2",
+      "#f7f7f7",
+      "#111111",
+      "#6b7280",
+      "#2563eb",
+      "#d8d8dc"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "surface": "#f0f0f2",
+      "text": "#111111",
+      "muted": "#6b7280",
+      "primary": "#2563eb",
+      "border": "#d8d8dc",
+      "callout": "#f7f7f7"
+    },
+    "typography": "TeX Gyre Pagella (serif) bold for the 'Oksskolten' wordmark only; Noto Sans for sidebar nav, banner and page title; ui-sans-serif (system) for article rows",
+    "typeScale": "Flat, utilitarian scale: 26px serif wordmark; 15px row titles; 14px nav; 13px snippets; 12px domain/time meta; 11px uppercase FEEDS label. Weight contrast minimal (400/500).",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "iconography",
+      "abstract-gradients",
+      "illustration"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "calm",
+      "minimal",
+      "utilitarian",
+      "quiet",
+      "technical"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T06:54:03.281Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 9,
+    "usage": {
+      "input_tokens": 18,
+      "cache_creation_input_tokens": 41675,
+      "cache_read_input_tokens": 313051,
+      "output_tokens": 6107
+    }
+  },
+  "notes": "RSS reader 'Oksskolten'. Distinctive: serif wordmark against an otherwise all-sans UI; light grey sidebar (#f0f0f2) with colored letter-square favicons for each feed; pale blue rounded count pills; article rows are borderless with hairline dividers and 64px rounded square thumbnails (generated gradient-bokeh placeholders or a letter tile when no image). In the capture all article titles render in muted grey (#6b7280) with no unread dot; the live page shows bold black titles with blue unread dots for unread items. Pixel-art pink mascot with 'You're all caught up!' at list end. Search opens a ⌘⇧K centered overlay with filter chips (Read Later/Liked/Unread/Today/Week/Month); 'Get Started' opens a modal to add Feed/Clip/Folder. A hidden 'Notifications alt+T' toast region exists. Live page content differed from the capture (only 2 unread items)."
+}

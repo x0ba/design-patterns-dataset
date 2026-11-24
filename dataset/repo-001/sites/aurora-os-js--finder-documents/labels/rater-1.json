@@ -1,0 +1,536 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "aurora-os-js--finder-documents",
+    "url": "http://aurora-os-js.localhost:4319/",
+    "finalUrl": "http://aurora-os-js.localhost:4319/",
+    "status": 200,
+    "title": "Aurora OS.js v0.8.5",
+    "capturedAt": "2026-11-18T02:20:26.194Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 3446
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "other",
+    "domainNote": "browser-based desktop OS simulation (Aurora OS.js) with Finder, Mail, Terminal, Browser apps — narrative/CTF-style game environment",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/aurora-os-js/explore.json",
+      "repo": {
+        "name": "mental-os/Aurora-OS.js",
+        "url": "https://github.com/mental-os/Aurora-OS.js",
+        "commit": "599b454fc2ceeb5b3ef0de470c094171006ff2bc",
+        "license": "AGPL-3.0"
+      },
+      "view": {
+        "slug": "finder-documents",
+        "name": "Finder file manager",
+        "description": "Finder window focused on the Documents folder in grid view with sidebar favorites, breadcrumb path bar and folder/file icons, over the desktop."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "menubar",
+      "role": "header",
+      "label": "Global macOS-style menu bar: app menu (Finder File Edit View Go Window Help), status icons, notification bell with badge 3, clock",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 28
+      },
+      "patterns": [
+        "app-shell",
+        "menu",
+        "badge"
+      ]
+    },
+    {
+      "id": "finder-window",
+      "role": "app-window",
+      "label": "Finder window: back/forward/trash toolbar, path pills home > mira > Documents, grid/list view toggle, search, sidebar of Favorites/System/Locations with counts, icon grid of folders",
+      "bbox": {
+        "x": 101,
+        "y": 76,
+        "width": 860,
+        "height": 560
+      },
+      "patterns": [
+        "file-manager",
+        "breadcrumbs",
+        "view-switcher",
+        "badge"
+      ]
+    },
+    {
+      "id": "mail-window",
+      "role": "app-window",
+      "label": "Mail window behind Finder: account bar with Sign Out, mailbox folders with Inbox count, search field, message list with stars, empty reading pane 'Select an email to read'",
+      "bbox": {
+        "x": 420,
+        "y": 158,
+        "width": 960,
+        "height": 620
+      },
+      "patterns": [
+        "inbox",
+        "text-field",
+        "empty-state",
+        "badge"
+      ]
+    },
+    {
+      "id": "dock",
+      "role": "navigation-rail",
+      "label": "Vertical dock on left edge: Finder, Browser, Mail, Spreadsheet, Terminal, System Settings, Trash with running-app dots",
+      "bbox": {
+        "x": 16,
+        "y": 1500,
+        "width": 66,
+        "height": 446
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "desktop-icons",
+      "role": "desktop",
+      "label": "Desktop file icons on right: halloween-party-playlist.txt, SEC-331 final project proposal.md, scratch.txt",
+      "bbox": {
+        "x": 1330,
+        "y": 48,
+        "width": 80,
+        "height": 300
+      },
+      "patterns": []
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "primary": "navigation-rail",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations",
+          "live-counts"
+        ],
+        "visibility": "always-visible"
+      },
+      "novel": [
+        {
+          "subdimension": "structure",
+          "description": "Windowed desktop: multiple apps as overlapping movable windows over a wallpaper with dock and global menu bar",
+          "proposedValueId": "windowed-desktop"
+        }
+      ],
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 28
+          },
+          "region": "menubar",
+          "quote": "Finder File Edit View Go Window Help",
+          "note": "global menu bar changes with focused app (Mail menus when Mail focused)"
+        },
+        {
+          "bbox": {
+            "x": 16,
+            "y": 1500,
+            "width": 66,
+            "height": 446
+          },
+          "region": "dock",
+          "note": "left dock of app launchers (in the 900px viewport it sits at y≈232-667)"
+        }
+      ]
+    },
+    {
+      "id": "file-manager",
+      "status": "present",
+      "confidence": 0.95,
+      "dims": {
+        "view": "icons",
+        "preview": "none",
+        "traversal": "drill-down-with-breadcrumbs",
+        "multi": "single-window",
+        "metadata": [
+          "name"
+        ],
+        "grouping": "none",
+        "ownership": [
+          "local-only"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 101,
+            "y": 76,
+            "width": 860,
+            "height": 560
+          },
+          "region": "finder-window",
+          "quote": "CTF 3 items",
+          "note": "Finder with sidebar locations, path, icon grid; folders show item counts; list view adds size and unix permissions"
+        }
+      ]
+    },
+    {
+      "id": "breadcrumbs",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "type": "location",
+        "truncation": "full-path",
+        "interaction": [
+          "click-to-go-up"
+        ],
+        "placement": "in-the-top-bar"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 251,
+            "y": 129,
+            "width": 250,
+            "height": 30
+          },
+          "region": "finder-window",
+          "quote": "home mira Documents",
+          "note": "path pills; current step filled magenta"
+        }
+      ]
+    },
+    {
+      "id": "view-switcher",
+      "status": "present",
+      "confidence": 0.9,
+      "dims": {
+        "views": [
+          "grid",
+          "list"
+        ],
+        "form": "icon-toggle-group"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 848,
+            "y": 130,
+            "width": 60,
+            "height": 28
+          },
+          "region": "finder-window",
+          "note": "grid/list icon toggle; verified live that list view shows rows with size and permissions"
+        }
+      ]
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "openBy": "menu-bar",
+        "structure": "sections",
+        "item": [
+          "label",
+          "shortcut-hint"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 0,
+            "width": 295,
+            "height": 28
+          },
+          "region": "menubar",
+          "quote": "File",
+          "note": "live: File opens dropdown 'New Window ⌘N, New Folder ⇧⌘N | Close Window ⌘W'"
+        }
+      ]
+    },
+    {
+      "id": "inbox",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "organization": "folders",
+        "grouping": "individual-messages",
+        "openIn": "side-by-side",
+        "density": "comfortable",
+        "rowAttributes": [
+          "sender",
+          "subject",
+          "snippet",
+          "attachment-chips"
+        ],
+        "priority": "importance-markers",
+        "triage": "read-and-file"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 420,
+            "y": 158,
+            "width": 960,
+            "height": 620
+          },
+          "region": "mail-window",
+          "quote": "Devon Kerr proposal draft v2",
+          "note": "mailboxes Inbox/Starred/Archived/Trash, list with star toggles, reading pane at right"
+        }
+      ]
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "aggregation": "per-item"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1230,
+            "y": 2,
+            "width": 20,
+            "height": 20
+          },
+          "region": "menubar",
+          "quote": "3",
+          "note": "magenta count on notification bell"
+        },
+        {
+          "bbox": {
+            "x": 110,
+            "y": 209,
+            "width": 239,
+            "height": 32
+          },
+          "region": "finder-window",
+          "quote": "Home 9",
+          "note": "per-location item counts in sidebar"
+        },
+        {
+          "bbox": {
+            "x": 429,
+            "y": 291,
+            "width": 239,
+            "height": 32
+          },
+          "region": "mail-window",
+          "quote": "Inbox 5"
+        }
+      ]
+    },
+    {
+      "id": "empty-state",
+      "status": "present",
+      "confidence": 0.75,
+      "dims": {
+        "cause": "first-use",
+        "content": [
+          "illustration",
+          "explanation"
+        ],
+        "starters": "none",
+        "recovery": "none"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1060,
+            "y": 460,
+            "width": 225,
+            "height": 110
+          },
+          "region": "mail-window",
+          "quote": "Select an email to read",
+          "note": "inbox-tray line icon + prompt in empty reading pane"
+        }
+      ]
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.7,
+      "dims": {
+        "supporting": [
+          "placeholder"
+        ],
+        "style": "outlined",
+        "inputType": "plain"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 685,
+            "y": 259,
+            "width": 271,
+            "height": 36
+          },
+          "region": "mail-window",
+          "quote": "Search emails...",
+          "note": "search input with magnifier icon (hidden behind Finder in capture)"
+        }
+      ]
+    },
+    {
+      "id": "notification-center",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Only the bell trigger with count is in the capture; live click opens a popover grouped by app (Mail, Messages) with Clear All, but it is not open in the captured state.",
+      "dims": {
+        "grouping": "by-app",
+        "surface": "bell-popover",
+        "content": [
+          "title-and-source",
+          "preview-text"
+        ],
+        "bulk": [
+          "clear-all",
+          "clear-a-group"
+        ],
+        "clearing": "dismiss"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1230,
+            "y": 2,
+            "width": 20,
+            "height": 24
+          },
+          "region": "menubar",
+          "quote": "3",
+          "note": "Notifications button"
+        }
+      ]
+    },
+    {
+      "id": "split-pane",
+      "status": "absent",
+      "confidence": 0.6,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 102,
+            "y": 169,
+            "width": 256,
+            "height": 466
+          },
+          "note": "fixed sidebars, no visible resize divider"
+        }
+      ]
+    },
+    {
+      "id": "modal-dialog",
+      "status": "absent",
+      "confidence": 0.6,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 384,
+            "y": 1535,
+            "width": 672,
+            "height": 377
+          },
+          "quote": "SYSTEM HALT",
+          "note": "portrait-mode error overlay only appears because of the 3446px-tall capture window; not part of the 900px interface"
+        }
+      ]
+    }
+  ],
+  "structure": {
+    "layout": "full-viewport simulated desktop OS: top global menu bar, left floating vertical dock, wallpaper desktop with file icons, overlapping app windows (Finder in front, Mail behind) each with traffic-light title bar, toolbar, sidebar and content",
+    "regions": [
+      "menubar",
+      "finder-window",
+      "mail-window",
+      "dock",
+      "desktop-icons"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#332038",
+      "#171717",
+      "#d453f6",
+      "#ffffff",
+      "#374151",
+      "#fb2c36",
+      "#000000"
+    ],
+    "colorRoles": {
+      "background": "#332038",
+      "text": "#ffffff",
+      "primary": "#d453f6",
+      "surface": "#171717",
+      "muted": "#374151",
+      "accent": "#fb2c36"
+    },
+    "typography": "ui-sans-serif system stack for all UI (menu bar 12px, sidebar/list 14px, folder names 14-16px); ui-monospace for unix permissions in list view and the SYSTEM HALT error overlay",
+    "typeScale": "compact desktop scale: 12px menu bar and counts, 14px body/sidebar, 16px window content, 18px titles; little contrast, hierarchy via weight (600 for active path/app name) and magenta color",
+    "shape": "soft",
+    "elevation": "elevated",
+    "borders": "thin",
+    "imagery": [
+      "photography",
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "image",
+    "mood": [
+      "dark",
+      "moody",
+      "playful",
+      "technical",
+      "retro-desktop",
+      "neon"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T02:22:44.244Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 13,
+    "usage": {
+      "input_tokens": 26,
+      "cache_creation_input_tokens": 47229,
+      "cache_read_input_tokens": 523740,
+      "output_tokens": 6880
+    }
+  },
+  "notes": "The full-page capture was taken in a 1440x3446 window, which triggers the app's own portrait guard: everything is covered by a black screen with a red monospace 'SYSTEM HALT / PORTRAIT_MODE_DETECTED' terminal-style card. Coding follows the real 900px desktop (DOM boxes for Finder, Mail, menubar are valid; the dock DOM sits at y≈1500 in the tall layout but y≈232 at 900px). Character: macOS clone with aurora/night-coast photo wallpaper, translucent plum (#332038) blurred windows, hot-magenta (#d453f6) accents for folder icons, active path pill, counts and Sign Out button, red/yellow/green traffic lights, gradient-filled dock tiles (blue Finder, purple Browser, cyan Mail). Content is a narrative security/CTF scenario (student Mira, emails about captive portal project). Proposed app-shell structure value 'windowed-desktop'."
+}

@@ -1,0 +1,432 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "selfoss--newest-stream",
+    "url": "http://localhost:4433/",
+    "finalUrl": "http://localhost:4433/newest/all",
+    "status": 200,
+    "title": "selfoss (63)",
+    "capturedAt": "2026-11-18T06:25:48.353Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 12112
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "news-publishing",
+    "domainNote": "self-hosted RSS/feed reader (selfoss) — article stream view",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/selfoss/explore.json",
+      "repo": {
+        "name": "fossar/selfoss",
+        "url": "https://github.com/fossar/selfoss",
+        "commit": "4f97e67e1dcab2c2e7d63a5bd12ab6fbaca6a21d",
+        "license": "GPL-3.0"
+      },
+      "view": {
+        "slug": "newest-stream",
+        "name": "Newest article stream",
+        "description": "Main reader workspace: sidebar with filters, colored tags and sources, and a list of articles with tag badges, source, author and time."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Dark nav sidebar: logo, Mark as read button, collapsible FILTER (Newest/Unread/Starred with counts), TAGS list with counts and color swatches, SOURCES, refresh and settings buttons",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 180,
+        "height": 985
+      },
+      "patterns": [
+        "app-shell",
+        "filter-controls",
+        "accordion",
+        "badge"
+      ]
+    },
+    {
+      "id": "search-toggle",
+      "role": "toolbar",
+      "label": "Collapsed search toggle button (magnifier) beside the sidebar",
+      "bbox": {
+        "x": 180,
+        "y": 25,
+        "width": 36,
+        "height": 46
+      },
+      "patterns": []
+    },
+    {
+      "id": "article-list",
+      "role": "feed",
+      "label": "Chronological list of article rows: source favicon, title, colored tag labels, source/author/time/read-time meta; some rows show a lead image; rows expand inline with content and action bar",
+      "bbox": {
+        "x": 220,
+        "y": 0,
+        "width": 1220,
+        "height": 12047
+      },
+      "patterns": [
+        "feed",
+        "overview-detail",
+        "badge"
+      ]
+    },
+    {
+      "id": "load-more",
+      "role": "pagination",
+      "label": "'More' button that loads the next batch of articles",
+      "bbox": {
+        "x": 220,
+        "y": 12047,
+        "width": 1220,
+        "height": 35
+      },
+      "patterns": [
+        "pagination"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 180,
+            "height": 985
+          },
+          "region": "sidebar",
+          "note": "Persistent left sidebar with destinations, counts, refresh and settings",
+          "quote": "Newest296"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations",
+          "live-counts"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "feed",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 222,
+            "y": 20,
+            "width": 1168,
+            "height": 360
+          },
+          "region": "article-list",
+          "quote": "Europa Clipper completes its Mars gravity assist",
+          "note": "Article row with lead image"
+        },
+        {
+          "bbox": {
+            "x": 222,
+            "y": 382,
+            "width": 1168,
+            "height": 44
+          },
+          "region": "article-list",
+          "quote": "Show Lobby: I built a self-hosted alternative to Pocket after it shut down",
+          "note": "Headline-only row; time-ordered newest first"
+        }
+      ],
+      "dims": {
+        "density": "headline",
+        "heterogeneity": [
+          "uniform-posts"
+        ],
+        "ordering": "chronological",
+        "sources": [
+          "followed-accounts"
+        ],
+        "arrangement": "single-column",
+        "loading": [
+          "paged"
+        ],
+        "nesting": [
+          "flat"
+        ]
+      }
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 222,
+            "y": 426,
+            "width": 1168,
+            "height": 44
+          },
+          "region": "article-list",
+          "quote": "Quoting myself on local-first software",
+          "note": "Live check: clicking a row expands its full content plus action bar (Unstar, Mark as read, Open, share) in place; URL updates to /newest/all/77"
+        }
+      ],
+      "dims": {
+        "openIn": "in-place",
+        "overviewType": [
+          "list"
+        ],
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "whole-item",
+        "attributePlacement": [
+          "in-both-views",
+          "in-detail-view-only"
+        ],
+        "abstraction": [
+          "style",
+          "category"
+        ],
+        "relationship": "one-to-one",
+        "recursion": [
+          "none"
+        ]
+      }
+    },
+    {
+      "id": "filter-controls",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 143,
+            "width": 175,
+            "height": 128
+          },
+          "region": "sidebar",
+          "quote": "Unread",
+          "note": "Newest/Unread/Starred status filters with counts"
+        },
+        {
+          "bbox": {
+            "x": 0,
+            "y": 317,
+            "width": 175,
+            "height": 481
+          },
+          "region": "sidebar",
+          "quote": "Blogs 9",
+          "note": "Tag filters with counts; route URL /newest/tag-Blogs"
+        }
+      ],
+      "dims": {
+        "placement": "sidebar-facets",
+        "preview": "counts-per-value",
+        "persistence": "in-the-url"
+      }
+    },
+    {
+      "id": "accordion",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 110,
+            "width": 175,
+            "height": 28
+          },
+          "region": "sidebar",
+          "quote": "FILTER",
+          "note": "Collapsible section header with caret, aria-expanded"
+        },
+        {
+          "bbox": {
+            "x": 0,
+            "y": 290,
+            "width": 175,
+            "height": 28
+          },
+          "region": "sidebar",
+          "quote": "TAGS",
+          "note": "Collapsible; SOURCES collapsed by default"
+        }
+      ],
+      "dims": {
+        "policy": "many-at-a-time",
+        "header": [
+          "title-only"
+        ],
+        "toggle": [
+          "header-click"
+        ]
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 82,
+            "y": 200,
+            "width": 34,
+            "height": 14
+          },
+          "region": "sidebar",
+          "quote": "63",
+          "note": "Red unread count pill with cloud icon"
+        },
+        {
+          "bbox": {
+            "x": 609,
+            "y": 31,
+            "width": 96,
+            "height": 20
+          },
+          "region": "article-list",
+          "quote": "Science",
+          "note": "Colored tag labels on articles (label badges)"
+        }
+      ],
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "rule": "everything-unread",
+        "aggregation": "rolled-up-to-parent"
+      }
+    },
+    {
+      "id": "pagination",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 220,
+            "y": 12047,
+            "width": 1220,
+            "height": 35
+          },
+          "region": "load-more",
+          "quote": "More"
+        }
+      ],
+      "dims": {
+        "mechanism": "load-more",
+        "position": "scroll-position-only"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 180,
+            "y": 25,
+            "width": 36,
+            "height": 46
+          },
+          "note": "Search box is collapsed to an icon button in the capture"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "two-pane reader app: fixed dark left sidebar (filters, tags, sources, refresh/settings) and a scrolling single-column list of article rows that expand in place; 'More' load button at end",
+    "regions": [
+      "sidebar",
+      "search-toggle",
+      "article-list",
+      "load-more"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#191718",
+      "#272325",
+      "#3d6d69",
+      "#f5f5f5",
+      "#333333",
+      "#aaaaaa",
+      "#c0392b",
+      "#1f6feb",
+      "#27ae60",
+      "#8e44ad"
+    ],
+    "colorRoles": {
+      "background": "#f5f5f5",
+      "text": "#333333",
+      "surface": "#191718",
+      "primary": "#3d6d69",
+      "muted": "#aaaaaa",
+      "accent": "#c0392b",
+      "sidebar-active": "#272325",
+      "tag-blue": "#1f6feb"
+    },
+    "typography": "Open Sans throughout: 16px article titles, 11px light-grey meta, 13px tag labels and sidebar tags, 18px active filter; 13px bold uppercase section headings",
+    "typeScale": "Compact and flat: 18/16/13/11px, mostly regular weight; hierarchy from colour (dark titles vs grey meta, read items greyed) rather than size",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "illustration",
+      "iconography"
+    ],
+    "iconStyle": "filled",
+    "whitespace": "tight",
+    "backgroundTreatment": "texture",
+    "mood": [
+      "utilitarian",
+      "technical",
+      "dense",
+      "colorful-tags"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T06:27:01.598Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 9,
+    "usage": {
+      "input_tokens": 18,
+      "cache_creation_input_tokens": 35027,
+      "cache_read_input_tokens": 292444,
+      "output_tokens": 4822
+    }
+  },
+  "notes": "selfoss RSS reader. Dark charcoal sidebar with teal 'Mark as read' button and teal vertical accent stripe; main area has a faint diagonal crosshatch texture. Each article row has a colored square source favicon letter, a left teal border marking unread items (read items have greyed titles and no border), saturated solid tag pills colour-coded per tag (color changeable via sidebar swatches). Clicking a row expands content inline with an action bar (Unstar, Mark as read, Open, Twitter/Facebook/Pocket/email share)."
+}

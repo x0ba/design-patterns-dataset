@@ -1,0 +1,20 @@
+{
+  "mode": "server",
+  "entry": "/datasets/coco-everyday-objects-v3",
+  "login": null,
+  "stubs": [
+    {
+      "service": "MongoDB (normally fiftyone-db's auto-launched mongod or a hosted DB)",
+      "how": "start.sh runs the mongod 7.0 binary bundled by the fiftyone-db pip package on 127.0.0.1:27118 with data in .ui-capture/data/db (--nounixsocket for the sandbox); FIFTYONE_DATABASE_URI points FiftyOne at it"
+    },
+    {
+      "service": "Usage analytics / tracking",
+      "how": "Disabled via FIFTYONE_DO_NOT_TRACK=true (the app's own opt-out)"
+    },
+    {
+      "service": "Dataset/model zoo downloads",
+      "how": "Not used; images come from Ultralytics coco128 / coco128-seg zips downloaded once at setup into .ui-capture/media (real COCO photos + labels)"
+    }
+  ],
+  "notes": "FiftyOne open-source App served by its own Python server (python -m fiftyone.server.main) on PORT, backed by local MongoDB. Python 3.11 venv in .ui-capture/venv with `pip install -e .`; shared env in env.sh. Frontend built from this checkout with `yarn workspace @fiftyone/app build` (vite build, copied into fiftyone/server/static by the repo's script). Tools pinned in ../mise.toml (node 22.14.0, python 3.11.11, yarn 4.17.1). yarn install needed two setup-time workarounds: registry_relay.py (local curl-based registry relay, since yarn fetches through the sandbox proxy kept aborting) and removing .vscode/ dirs from 4 cached zips (sandbox forbids writing .vscode/settings.json), installed with YARN_CHECKSUM_BEHAVIOR=ignore. seed.py (run automatically by start.sh if the DB is empty) creates 8 persistent datasets: coco-everyday-objects-v3 (128 COCO images, GT detections, two simulated detector prediction fields yolo11s_v2 and rtdetr_l_baseline with confidences, two detection evaluations with mAP, uniqueness/mistakenness, PCA embeddings visualization and similarity index, review_status/difficulty/annotator/camera/city/captured_at/notes fields, geolocations, sample+label tags, 7 saved views), coco-instance-seg-polygons (128 images, polygon instance masks), and 6 task subsets (street-scenes-adas-pilot, kitchen-and-dining, animals-wildlife-mix, qa-round2-label-errors, hard-negatives-oct, night-low-light) with creation dates spread over ~5 months. Main areas: dataset picker/home (/), sample grid with sidebar filters, sample modal with label overlays, saved views dropdown, panels (Embeddings, Model Evaluation, Histograms, Map). Re-seed: delete .ui-capture/data/db contents and run start.sh (or run seed.py with env.sh sourced and mongod running)."
+}

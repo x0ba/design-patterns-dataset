@@ -1,0 +1,20 @@
+{
+  "mode": "server",
+  "entry": "/",
+  "login": {
+    "username": "maya",
+    "email": "maya.lindqvist@example.no",
+    "password": "Fjordline-2026"
+  },
+  "stubs": [
+    {
+      "service": "nginx + php-fpm (Docker image runtime)",
+      "how": "No native PHP/Docker available, so PHP 8.5 runs as WebAssembly via @php-wasm/node (npm, pinned 3.1.65) inside .ui-capture/server/server.mjs, a small Node HTTP server that reproduces docker/nginx/default.conf routing (static files from src/public, /api/v1/* -> api/v1/index.php, /api/health -> api_health.php, pretty public-share URLs -> public_*.php, /data and dotfiles denied). src/ is mounted at /var/www/html and .ui-capture/data at /var/www/html/data, as in the container. No app code changed."
+    },
+    {
+      "service": "Outbound network from PHP (update check, git sync, S3, SMTP, AI providers, webhooks)",
+      "how": "Not configured (all optional in Poznote and off by default); php-wasm has no outbound network, so any such call fails fast and the app treats the feature as unavailable (e.g. /api/v1/system/updates returns has_updates:false with an 'Unable to reach update server' message in ~30 ms). No API keys are needed to start."
+    }
+  ],
+  "notes": "Start: .ui-capture/start.sh (PORT=4500). On each start it copies the seeded volume .ui-capture/seed-data to .ui-capture/data and runs node .ui-capture/server/server.mjs. Tools pinned in mise.toml (node 24.22.3); npm deps in .ui-capture/server/node_modules. Seed: `node .ui-capture/seed/seed.mjs` rebuilds seed-data by driving the app's own REST API (/api/v1 with Basic Auth on the default admin), then shifts created/updated timestamps over the past year in the user's SQLite DB (the API always stamps 'now'), then changes the password and renames the default admin (admin_change_me/admin) to 'maya' through /api/v1/users/me. Content (seed/content.mjs): one user, Maya Lindqvist, a product engineer in Oslo; 3 workspaces - Work (projects: Route Optimizer v3, Billing migration, Dispatcher console redesign; Meetings: one-on-ones, weekly planning, retros; Engineering runbooks/ADRs; Inbox), Personal (kitchen renovation, recipes, Japan trip, reading notes, running log, finance, gift ideas, a Diary folder with ~26 daily entries, the original Welcome note) and Side projects; ~130 notes mixing Markdown, rich-text HTML and task-list notes, with tags, favorites, pinned notes, colors/icons, reminders (upcoming and overdue), 2 public shares, 3 archived notes (Archives workspace) and 3 notes in the trash. Login at /login.php; main UI at / (index.php): workspace switcher, folder tree + notes list, note editor/preview; also Tasks, Favorites, Tags, Diary/Calendar, Graph, Trash, Shared, Settings pages."
+}

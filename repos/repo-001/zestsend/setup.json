@@ -1,0 +1,87 @@
+{
+  "batch": "repo-001",
+  "slug": "zestsend",
+  "ok": true,
+  "repo": {
+    "name": "RavelloH/ZestSend",
+    "url": "https://github.com/RavelloH/ZestSend",
+    "commit": "da9f2f43f0d74c89086e3ef3ceafcb1f9c2e6ad7",
+    "branch": "main",
+    "license": "MIT"
+  },
+  "domain": "social-community",
+  "port": 4442,
+  "checkoutRoot": "~/.cache/design-patterns-dataset/repos",
+  "mode": "server",
+  "entry": "/en/room/2468",
+  "app": {
+    "mode": "server",
+    "entry": "/en/room/2468",
+    "login": null,
+    "stubs": [
+      {
+        "service": "Remote participant (the other person in the P2P room)",
+        "how": "ZestSend has no accounts or stored history: chat, files, the shared document and the canvas exist only between two connected peers. start.sh runs .ui-capture/peer/dist/bot.mjs, which runs the app's own client modules (NativeWebRTCSession, FileTransferManager, P2PCollaborationProvider from src/client/lib) in Node with @roamhq/wrtc as RTCPeerConnection. It joins room 2468 through the app's real signaling Durable Object and connects to the browser over a real WebRTC data-channel connection on localhost. Every time a browser joins, it replays its side of the session: 31 chat messages, 9 file offers (files can actually be accepted and downloaded), and a Yjs document and canvas that sync into the Document and Canvas tabs."
+      },
+      {
+        "service": "InsightFlare analytics (insight.ravelloh.com script loaded by production builds)",
+        "how": "Layout.tsx now reads the script origin from VITE_INSIGHTFLARE_ORIGIN, falling back to the real host. The build sets it to the same-origin path /__stubs/insightflare. The front server on :4442 (.ui-capture/stub-server.mjs) serves a compatible script.js there (window.insightflare.track/trackOnce) and records events (GET /__stubs/insightflare/api/events)."
+      },
+      {
+        "service": "Cloudflare Realtime TURN API (/api/turn/credentials -> rtc.live.cloudflare.com generate-ice-servers) and the TURN relay itself",
+        "how": "start.sh sets placeholder TURN_ID/TURN_TOKEN and writes them into dist/zestsend/.dev.vars together with TURN_API_ORIGIN=http://127.0.0.1:$PORT/__stubs/turn. src/worker/index.ts reads TURN_API_ORIGIN, falling back to the real Cloudflare origin. The front server answers POST /__stubs/turn/v1/turn/keys/:id/credentials/generate-ice-servers like the real API: it checks the bearer token, then returns {iceServers:[stun, turn + username/credential]} with fresh per-request credentials. Those credentials are registered on a real local STUN/TURN server (node-turn, UDP 127.0.0.1 on a port picked free at startup) run by the same process. So /api/turn/credentials returns 200 and the TURN probe gets real relay candidates."
+      },
+      {
+        "service": "Public STUN servers (stun.l.google.com etc., hardcoded in webrtc.ts)",
+        "how": "Not stubbed. With no network the STUN probes time out after about 4.5s and the connection diagnostics show STUN as unavailable. The P2P connection still forms over localhost host candidates (route: direct)."
+      }
+    ],
+    "notes": "Setup: mise.toml pins node 22.23.5 and pnpm 11.1.3 (GitHub attestation checks turned off because api.github.com/sigstore are unreachable from the sandbox). .ui-capture/build.sh runs pnpm install, then `pnpm build` (tsc + vite with @cloudflare/vite-plugin) with VITE_INSIGHTFLARE_ORIGIN pointed at the stub, then installs and bundles the peer bot (esbuild). lib0 is installed from a repack of the same 0.2.117 tarball without its .vscode/ folder (pnpm override in pnpm-workspace.yaml), because the sandbox cannot write .vscode paths. start.sh wipes .wrangler/state (ephemeral room seats) and picks free internal ports. It runs `vite preview` (the built Worker + Room Durable Object in local workerd/miniflare) on an internal port, and the front server .ui-capture/stub-server.mjs on $PORT (4442). The front server answers the stubs under /__stubs/ and proxies everything else, WebSocket signaling included, to the app. start.sh waits until the page, the analytics stub and /api/turn/credentials all answer successfully, then starts the peer bot in room 2468. If any process exits, start.sh exits non-zero. Open http://localhost:4442/en/room/2468. The browser joins as the second participant; after about 5s (offline STUN probes time out) the connection dialog closes and the room shows a live session with 'Mira', a designer working with the viewer on the 'Harbor Line 2.3' ferry-app release. Data: Chat has 31 incoming messages, short and long, with emoji, code-ish strings, a self-correction and a brb/back. Files has 9 incoming offers (hero PNG, contract .docx, release-notes PDF, a 24.6MB screenshot zip, a standup .m4a, an invoice .xlsx, brand-tokens.json, a 58MB onboarding .mp4, a .HEIC photo); accept any of them to see a real transfer. The Document tab has a launch checklist with headings, a task list with checked and unchecked items, bullets, a blockquote, a JSON code block and links. The Canvas tab has an onboarding-flow wireframe sketch (3 phone screens, swipe arrows, a red annotation circle, plus a few strokes by the viewer, one of them erased). Other main areas: the home page /en with a 4-digit room code entry, voice/video calls and screen share (need camera/mic permission), shared playback, connection diagnostics. Since the UI stores no history, messages show as 'just now' and only the peer's side of the chat exists until the viewer types something. Reload the page (or open it again) and the bot replays the session. I could not take screenshots myself: the sandbox kills headless Chromium. Verification used a Node stand-in client (.ui-capture/peer/probe.ts), which received all chats, offers, document, strokes and file bytes."
+  },
+  "tools": {
+    "node": "22.23.5",
+    "pnpm": "11.1.3"
+  },
+  "prompt": "This is a checkout of RavelloH/ZestSend (https://github.com/RavelloH/ZestSend) at commit da9f2f43f0d7. ZestSend 是一个开源的 WebRTC 点对点连接网页工具，可自行部署在 Cloudflare 上。  支持端对端加密的匿名实时聊天、文件互传、语音通话、视频通话、屏幕共享、同播共享、文本协作、画板等功能，支持点对点直连或 Cloudflare TURN 中转。\n\nI want to see its user interface in a desktop browser, in the state a real, established user would see it. Please get the app running locally with its main interface working and realistic data in it.\n\n# Running it\n- Follow the repo's own setup docs and tooling. Take the simplest route that shows the real app: a static production build if the front end works without a backend, otherwise the app's own server (production or dev mode).\n- If it needs a database or other services, run them locally with an embedded or file-based option (SQLite, in-memory, JSON files, an embedded Postgres such as PGlite) or the app's demo/mock mode.\n- Don't redesign or restyle anything. Change only what's needed to build and run it.\n\n# Tools: use mise\nInstall every runtime and tool you need (node, the package manager, python, bun, ...) with mise, pinned to exact versions in a mise.toml at the repo root, so the setup can be reproduced. Match what the repo asks for (engines, .nvmrc, .tool-versions, packageManager). mise is already configured for this directory: `mise install` installs into ./.ui-capture/mise, and its shims come first on PATH, so `node`, `pnpm` and the rest resolve to the pinned versions. Don't use other copies of these tools or download runtimes by hand.\n\n# Secrets, API keys and external services: fake them\nThe app must not depend on anything outside this machine, and when it runs it has no network except localhost. Wherever it expects secrets, environment variables, API keys or third-party services (hosted auth or OAuth, payment providers, email, LLM or other AI APIs, maps, storage buckets, analytics, hosted databases):\n- Give the required variables placeholder values so the app starts.\n- Where it actually calls the service, make the call succeed locally with realistic responses: use the app's own mock, test or offline mode if it has one; otherwise point the client at a small local stub server that start.sh also starts, or swap in a stub at the integration boundary (the API client or service module). Keep stubs out of UI code. Responses should look like what the real service returns for a real user, e.g. an AI reply that actually answers, a payment history with real-looking amounts.\n- Calls the browser makes directly to outside services count too; point them at the local stub.\n- For sign-in through an outside provider, create a local account or use the app's dev sign-in so you can get past it.\nList every stub in app.json.\n\n# Data: like real use\nSeed it the way an established user's data would look after months of actual use: specific, plausible names and content for this kind of app; dates spread over time; a realistic mix of states (done, in progress, overdue, archived, ...); realistic volume (dozens to hundreds of records where the app revolves around records); short and long text; some messiness real data has. Start from the app's own demo or seed data if it has realistic data, and extend it if it's thin. Load data through the app's own paths (its API, import, seed scripts, or its database schema), never by hardcoding it into UI code. If the app needs an account, create one and attach the data to it. No lorem ipsum or \"Test 1\".\n\n# Environment\nThis shell is sandboxed: you can write only inside this directory (package-manager caches already point into ./.ui-capture/cache), and the network reaches only package registries, mise's download sources and GitHub (registry.npmjs.org, registry.yarnpkg.com, repo.yarnpkg.com, github.com, codeload.github.com, objects.githubusercontent.com, raw.githubusercontent.com, nodejs.org, mise.jdx.dev, mise-versions.jdx.dev, release-assets.githubusercontent.com, pypi.org, files.pythonhosted.org, binaries.prisma.sh, cdn.jsdelivr.net, unpkg.com). Docker isn't available. A process you start in the background can't be seen or stopped from a later command, so test servers on another port than 4442 (e.g. 5442) or in the foreground under `timeout`; anything still listening on 4442 is stopped before I check.\n\n# When you're done, leave this in ./.ui-capture/\n- app.json: {\"mode\": \"static\" or \"server\", \"entry\": \"/path where the main UI opens\", \"login\": null or {\"username\": \"...\", \"email\": \"...\", \"password\": \"...\"}, \"stubs\": [{\"service\": \"what was faked\", \"how\": \"how\"}], \"notes\": \"how you set it up, what data is loaded, and the main areas of the app\"}\n- static mode: the production build in ./.ui-capture/out, with index.html as its entry. It will be served from the root of a plain static file server; unknown paths fall back to index.html.\n- server mode: ./.ui-capture/start.sh, which starts everything the app needs (stubs included) in the foreground and serves the UI at http://localhost:4442/ (it gets PORT=4442). It runs with the same PATH and restrictions as your shell, plus no network at all except localhost, so everything must already be installed, built and seeded (or seeded by start.sh itself).\n- Put any scripts you write for seeding or stubbing in ./.ui-capture/ too; they're kept with the setup record.\n\n# Order of work\nYou have 90 minutes in total, and anything unfinished when time runs out is lost. So work in this order:\n1. Get the app building and running with its stubs, and write the contract above (app.json plus out/ or start.sh), even if it has only a little data so far.\n2. Then build out the data, re-running your seed and checking the app still loads after each substantial step, so that a working state with the data loaded so far is always in place.\nWrite large data sets with a short generator script rather than as one long literal file.\n\nI'll open it at 1440×900.",
+  "model": {
+    "model": "claude-opus-5-5",
+    "effort": "high"
+  },
+  "sandbox": true,
+  "startedAt": "2026-11-17T05:20:01.815Z",
+  "finishedAt": "2026-11-17T05:41:55.282Z",
+  "verification": {
+    "ok": true,
+    "problems": [],
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedRequests": [],
+    "textChars": 403,
+    "visibleElements": 96,
+    "title": "Connecting to room 2468"
+  },
+  "repairs": 2,
+  "session": {
+    "rounds": 3,
+    "numTurns": 117,
+    "costUsd": 13.568415799999999,
+    "durationMs": 1311700,
+    "models": [
+      "claude-opus-5-5"
+    ],
+    "usage": {
+      "input_tokens": 220,
+      "cache_creation_input_tokens": 186821,
+      "cache_read_input_tokens": 11406202,
+      "output_tokens": 82746
+    },
+    "timedOut": false
+  },
+  "changes": {
+    "files": 5,
+    "insertions": 24,
+    "deletions": 8,
+    "patchBytes": 4359,
+    "patch": "setup.patch"
+  }
+}

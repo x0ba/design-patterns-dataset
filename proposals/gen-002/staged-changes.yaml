@@ -1,0 +1,67 @@
+# Codebook proposal (new-entry) — review with: node scripts/proposals.ts show gen-002 staged-changes
+id: staged-changes
+kind: new-entry
+status: open
+batch: gen-002
+codebookVersion: 1.0.0
+name: Staged changes (draft vs live)
+level: pattern
+parent: configure
+definition: Edits are made to a draft copy of a live configuration. The UI shows what differs from
+  the baseline, keeps a running list of pending changes that can each be reverted, and publishes or
+  schedules the whole set at once.
+relations:
+  neighbors:
+    - version-history
+    - settings
+dimensions:
+  - name: Publish
+    family: lifecycle
+    question: How does the draft go live?
+    subdimensions:
+      - id: publish
+        name: Publish
+        select: one
+        values:
+          - id: immediate
+            name: Publish now
+          - id: scheduled
+            name: Scheduled cutover
+            example: Sondewell schedule for Wed Dec 2
+          - id: review-then-merge
+            name: Review then merge
+            example: IaC plan/apply
+      - id: diffDisplay
+        name: Diff display
+        select: many
+        values:
+          - id: inline-was-value
+            name: Inline 'was' value
+          - id: change-list
+            name: Change list with revert
+          - id: side-by-side-live
+            name: Live value column
+rationale:
+  - rater: rater-1
+    site: lake-buoy-sampling-config
+    text: version-history covers browsing past states, and settings only records an application timing.
+      Neither covers a pending changeset with inline diffs, per-change revert and annotation, a
+      pre-publish checklist and a scheduled cutover.
+sources:
+  - batch: gen-002
+    site: lake-buoy-sampling-config
+    url: http://lake-buoy-sampling-config.localhost:4318/
+    note: proposed by rater-1
+evidence:
+  - site: lake-buoy-sampling-config
+    rater: rater-1
+    bbox:
+      x: 1100
+      y: 48
+      width: 340
+      height: 1373
+    note: "Draft panel: switch-over date, CHANGES with Revert, BEFORE YOU SCHEDULE checklist, Schedule
+      button"
+    quote: Copied from Winter 2025–26 today, 07:58
+createdAt: 2026-11-18T03:02:02.503Z
+updatedAt: 2026-11-18T03:02:02.503Z

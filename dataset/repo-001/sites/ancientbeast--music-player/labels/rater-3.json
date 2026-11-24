@@ -1,0 +1,378 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "ancientbeast--music-player",
+    "url": "http://ancientbeast.localhost:4319/",
+    "finalUrl": "http://ancientbeast.localhost:4319/",
+    "status": 200,
+    "title": "Ancient Beast v0.6-α",
+    "capturedAt": "2026-11-18T02:20:00.718Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 900
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "games",
+    "domainNote": "browser turn-based hex-grid tactics game (Ancient Beast v0.6-α), mid-match combat screen",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/ancientbeast/explore.json",
+      "repo": {
+        "name": "FreezingMoon/AncientBeast",
+        "url": "https://github.com/FreezingMoon/AncientBeast",
+        "commit": "2dad015855a07e3d3f75bc15ba892846059c7853",
+        "license": "AGPL-3.0"
+      },
+      "view": {
+        "slug": "music-player",
+        "name": "Music player overlay",
+        "description": "In-match music player overlay with SFX/volume sliders, Epic/Rock playlists, a track list, and the supporter marquee with a Become a Sponsor button."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "top-frame",
+      "role": "decorative-frame",
+      "label": "Dark textured skull-pattern band across the top of the game canvas",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 45
+      },
+      "patterns": []
+    },
+    {
+      "id": "battlefield",
+      "role": "game-stage",
+      "label": "Painted desert battlefield with creature sprites, HP badges on each unit, floating status text and a hex movement grid",
+      "bbox": {
+        "x": 0,
+        "y": 45,
+        "width": 1440,
+        "height": 755
+      },
+      "patterns": [
+        "badge"
+      ]
+    },
+    {
+      "id": "ability-bar",
+      "role": "toolbar",
+      "label": "Left vertical column of four ability icons for the active unit, with a red/yellow health and energy meter along the edge",
+      "bbox": {
+        "x": 0,
+        "y": 480,
+        "width": 100,
+        "height": 320
+      },
+      "patterns": []
+    },
+    {
+      "id": "game-controls",
+      "role": "toolbar",
+      "label": "Right vertical column of game controls (audio mode, fast-forward, skip-turn hourglass, fullscreen) with a hover tooltip and a purple plasma meter",
+      "bbox": {
+        "x": 1340,
+        "y": 480,
+        "width": 100,
+        "height": 320
+      },
+      "patterns": [
+        "tooltip"
+      ]
+    },
+    {
+      "id": "combat-log",
+      "role": "log",
+      "label": "Collapsed combat log pill showing the latest timestamped event; opens into a scrollable list of events",
+      "bbox": {
+        "x": 490,
+        "y": 757,
+        "width": 460,
+        "height": 40
+      },
+      "patterns": [
+        "activity-log"
+      ]
+    },
+    {
+      "id": "turn-queue",
+      "role": "turn-order-strip",
+      "label": "Initiative queue of unit portraits: the active unit is enlarged, followed by status captions (Protected, Sickened), a Round 2 divider tile and Queued units",
+      "bbox": {
+        "x": 0,
+        "y": 800,
+        "width": 740,
+        "height": 100
+      },
+      "patterns": [
+        "badge"
+      ]
+    },
+    {
+      "id": "player-info",
+      "role": "status-panel",
+      "label": "Current player panel: Player2, points, plasma, unit count",
+      "bbox": {
+        "x": 1340,
+        "y": 800,
+        "width": 100,
+        "height": 100
+      },
+      "patterns": []
+    }
+  ],
+  "patterns": [
+    {
+      "id": "tooltip",
+      "status": "present",
+      "confidence": 0.9,
+      "dims": {
+        "trigger": [
+          "hover"
+        ],
+        "timing": "until-the-pointer-leaves",
+        "content": "label-and-shortcut",
+        "placement": "beside"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1081,
+            "y": 481,
+            "width": 255,
+            "height": 56
+          },
+          "quote": "hotkey A/Shift+A Audio Mode: Full Listen to some really fine epic tracks.",
+          "region": "game-controls",
+          "note": "Dark tooltip with an arrow, placed to the left of the music button. It shows a title, the hotkey and a one-line description. On the live page, hovering fast-forward showed the same kind of tooltip ('hotkey F Fast Forward')."
+        }
+      ]
+    },
+    {
+      "id": "activity-log",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "detail": "one-line-summary",
+        "subject": "the-whole-system",
+        "aggregation": "every-event",
+        "presentation": "vertical-timeline",
+        "actions": "read-only"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 490,
+            "y": 757,
+            "width": 460,
+            "height": 40
+          },
+          "quote": "00:00:07 Uncle Fungus gained 18 regrowth for now",
+          "region": "combat-log",
+          "note": "Collapsed combat log that shows only the latest event. The accessibility tree holds the full timestamped history ('Dark Priest uses Godlet Printer', 'Stomper is hit: -18 health'). On the live page, clicking it opened a list of events with actor names in team colors."
+        }
+      ]
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.7,
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "aggregation": "per-item"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 220,
+            "y": 563,
+            "width": 40,
+            "height": 19
+          },
+          "quote": "55",
+          "region": "battlefield",
+          "note": "Pill-shaped health count under each unit, outlined in its team color (red or blue). Other examples: 117 and 113."
+        },
+        {
+          "bbox": {
+            "x": 100,
+            "y": 880,
+            "width": 240,
+            "height": 20
+          },
+          "quote": "Protected Protected Sickened",
+          "region": "turn-queue",
+          "note": "Colored status captions attached under the queue portraits"
+        }
+      ]
+    },
+    {
+      "id": "toast",
+      "status": "absent",
+      "confidence": 0.7,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 490,
+            "y": 757,
+            "width": 460,
+            "height": 40
+          },
+          "note": "The bottom-centre message pill is the collapsed log and stays in place; it is not a transient toast."
+        }
+      ]
+    },
+    {
+      "id": "contextual-help",
+      "status": "uncertain",
+      "confidence": 0.4,
+      "dims": {
+        "access": [
+          "hover"
+        ],
+        "content": [
+          "definitions",
+          "shortcut-reference"
+        ],
+        "proactivity": "on-request"
+      },
+      "rationale": "Hover tooltips explain the controls and their hotkeys. The log also carries tutorial lines ('Press the hourglass icon to skip the turn'), but they are not visible in the capture. This could amount to more than tooltips, but that is a judgment call.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1081,
+            "y": 481,
+            "width": 255,
+            "height": 56
+          },
+          "quote": "Listen to some really fine epic tracks.",
+          "region": "game-controls"
+        }
+      ]
+    },
+    {
+      "id": "status-tracker",
+      "status": "absent",
+      "confidence": 0.6,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 800,
+            "width": 740,
+            "height": 100
+          },
+          "note": "The turn-order queue shows who acts next, not the stages of a process. It was filed as a proposed new entry, turn-order-queue."
+        }
+      ]
+    },
+    {
+      "id": "modal-dialog",
+      "status": "absent",
+      "confidence": 0.7,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 45,
+            "width": 1440,
+            "height": 755
+          },
+          "note": "No modal in the capture. On the live page, a music-player overlay appeared at a later game state."
+        }
+      ]
+    }
+  ],
+  "structure": {
+    "layout": "Full-viewport game canvas: a painted battlefield fills the screen, framed by HUD strips on the left (abilities), right (game controls) and bottom (turn-order queue and player panel), with a collapsible log pill at the bottom centre",
+    "regions": [
+      "top-frame",
+      "battlefield",
+      "ability-bar",
+      "game-controls",
+      "combat-log",
+      "turn-queue",
+      "player-info"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#000000",
+      "#e3b072",
+      "#ffffff",
+      "#dddddd",
+      "#8888ff",
+      "#ff5555",
+      "#4a4a6a",
+      "#ffff00",
+      "#cc55ff",
+      "#6b8e23",
+      "#b8860b"
+    ],
+    "colorRoles": {
+      "background": "#000000",
+      "surface": "#e3b072",
+      "text": "#ffffff",
+      "muted": "#dddddd",
+      "primary": "#8888ff",
+      "accent": "#ffff00",
+      "danger": "#ff5555",
+      "plasma": "#cc55ff",
+      "status-positive": "#b8860b",
+      "status-negative": "#6b8e23",
+      "queued": "#4a4a6a"
+    },
+    "typography": "Play (a squared techno sans) for all HUD text: tooltips, the log, queue captions, player stats and floating combat text",
+    "typeScale": "Compact game-HUD scale. Floating unit names and status text are about 18px with a stroke or shadow. Log text is 18px, tooltip titles 14px bold, and captions and stats 12-14px. Hierarchy comes from color (team red/blue, yellow status) more than from size.",
+    "shape": "mixed",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "illustration",
+      "iconography"
+    ],
+    "iconStyle": "filled",
+    "whitespace": "tight",
+    "backgroundTreatment": "image",
+    "mood": [
+      "fantasy",
+      "gritty",
+      "game-like",
+      "dramatic",
+      "warm"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T02:22:55.853Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 12,
+    "usage": {
+      "input_tokens": 24,
+      "cache_creation_input_tokens": 28750,
+      "cache_read_input_tokens": 352627,
+      "output_tokens": 11017
+    }
+  },
+  "notes": "Ancient Beast is an open-source turn-based hex tactics game. HUD tiles are square stone or parchment buttons with engraved beige glyphs (abilities, music note, fast-forward arrows, an hourglass/stopwatch, fullscreen arrows). Team identity is carried by colored borders: red for player 1 and blue for player 2 on portraits, HP pills and log names. Thin vertical meters on the far edges show health/energy (red to yellow) and plasma (purple). The turn queue enlarges the active unit's portrait and puts a 'Round N' emblem tile among the portraits. Floating yellow status text ('Skipped') and a translucent 'ghost' preview of the unit sit over a hand-painted desert backdrop. The tooltip is a dark rounded box with an arrow, showing the hotkey on the left and a bold title on the right. I proposed a new entry, turn-order-queue. The live page had moved on to a later game state (round 6-7, and a music-player overlay with a track list and SFX/VOL sliders), but this label describes the capture."
+}

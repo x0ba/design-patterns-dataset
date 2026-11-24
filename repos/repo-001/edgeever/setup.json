@@ -1,0 +1,92 @@
+{
+  "batch": "repo-001",
+  "slug": "edgeever",
+  "ok": true,
+  "repo": {
+    "name": "tianma-if/edgeever",
+    "url": "https://github.com/tianma-if/edgeever",
+    "commit": "e1be9c897278c061ccc40c5a5c2c4049c471e7fa",
+    "branch": "main",
+    "license": "AGPL-3.0"
+  },
+  "domain": "productivity",
+  "port": 4501,
+  "checkoutRoot": "~/.cache/design-patterns-dataset/repos",
+  "mode": "server",
+  "entry": "/",
+  "app": {
+    "mode": "server",
+    "entry": "/",
+    "login": {
+      "username": "maya",
+      "email": null,
+      "password": "Fieldnotes-2026"
+    },
+    "stubs": [
+      {
+        "service": "LLM provider (OpenAI-compatible chat completions + model list) used by the AI assistant, tag suggestions and companion; the browser calls it directly",
+        "how": "Seeded AI provider 'OpenAI' with base URL http://127.0.0.1:4499/v1 and a placeholder API key. .ui-capture/stub-server.mjs (started by start.sh) serves /v1/models and /v1/chat/completions (SSE streaming and JSON, CORS enabled). Replies are built from the note text in the prompt: summaries, key points, todo extraction, <edgeever-tags> tag suggestions, rewrites and chat answers."
+      },
+      {
+        "service": "Community plugin registry (the API normally fetches it from the internet)",
+        "how": "EDGE_EVER_COMMUNITY_REGISTRY_URL points at the same stub server's /registry/index.json, which returns an empty catalog"
+      },
+      {
+        "service": "Cloudflare D1 database + R2 object storage (production backends)",
+        "how": "The app's own self-hosted mode: bun:sqlite file plus local filesystem resources in .ui-capture/run-data, copied from .ui-capture/seeded-data on every start"
+      },
+      {
+        "service": "Auth bootstrap password and credential-encryption secrets",
+        "how": "Placeholder EDGE_EVER_AUTH_PASSWORD and EDGE_EVER_CREDENTIALS_ENCRYPTION_KEY in .ui-capture/env.sh"
+      }
+    ],
+    "notes": "Runs the repo's self-hosted Bun server (scripts/self-hosted-server.mjs, the same entry the Docker image uses). It serves the production Vite build (apps/web/dist, built with `bun run build:web`) and the Hono API on PORT. Tools are pinned in mise.toml (bun 1.3.14 from packageManager, node 24.11.1). Only build change: bun.lock had 12 tarball URLs on registry.npmmirror.com, rewritten to registry.npmjs.org (same packages and integrity hashes). Data: .ui-capture/seed.sh boots the server on a spare port and drives the real HTTP API (seed.mjs + seed-content.mjs + seed-images.mjs) as user 'maya', a product designer at a SaaS company who has used the app since Feb 2026. That gives ~185 notes dated Feb\u2013Nov 2026 across 5 top-level and 13 nested notebooks with custom icons and colors: Harbor Dashboard v3 project docs, 12 customer interviews, ~37 weekly syncs and 1:1s, book notes, code snippets, newsletter drafts, photography, journal, Lisbon trip, recipes, home and finances, and an Inbox of quick captures. Also: the app's bundled English feature demos (table, poster, mind map, infographic, flowchart, architecture), markdown tables, task lists with mixed done/open items, code and mermaid blocks, 3 image notes, pinned notes, ~60 tags, 3 custom templates, 3 public share links, and a trash holding the unused Chinese demo notebook and a few deleted notes. Main areas: notebook sidebar, note list, rich editor (TipTap), search, tags, templates, trash, AI assistant/companion, settings. The UI language follows the browser (English for en-US). Sign in as maya / Fieldnotes-2026."
+  },
+  "tools": {
+    "bun": "1.3.14",
+    "node": "24.11.1"
+  },
+  "prompt": "This is a checkout of tianma-if/edgeever (https://github.com/tianma-if/edgeever) at commit e1be9c897278. AI-native note-taking app & Evernote/Obsidian alternative. Instant all-platform sync, rich notes (tables, mind maps, diagrams, posters), web clipper & MCP. 100% free on Cloudflare or Docker.\n\nI want to see its user interface in a desktop browser, in the state a real, established user would see it. Please get the app running locally with its main interface working and realistic data in it.\n\n# Running it\n- Follow the repo's own setup docs and tooling. Take the simplest route that shows the real app: a static production build if the front end works without a backend, otherwise the app's own server (production or dev mode).\n- If it needs a database or other services, run them locally with an embedded or file-based option (SQLite, in-memory, JSON files, an embedded Postgres such as PGlite) or the app's demo/mock mode.\n- Don't redesign or restyle anything. Change only what's needed to build and run it.\n\n# Tools: use mise\nInstall every runtime and tool you need (node, the package manager, python, bun, ...) with mise, pinned to exact versions in a mise.toml at the repo root, so the setup can be reproduced. Match what the repo asks for (engines, .nvmrc, .tool-versions, packageManager). mise is already configured for this directory: `mise install` installs into ./.ui-capture/mise, and its shims come first on PATH, so `node`, `pnpm` and the rest resolve to the pinned versions. Don't use other copies of these tools or download runtimes by hand.\n\n# Secrets, API keys and external services: fake them\nThe app must not depend on anything outside this machine, and when it runs it has no network except localhost. Wherever it expects secrets, environment variables, API keys or third-party services (hosted auth or OAuth, payment providers, email, LLM or other AI APIs, maps, storage buckets, analytics, hosted databases):\n- Give the required variables placeholder values so the app starts.\n- Where it actually calls the service, make the call succeed locally with realistic responses: use the app's own mock, test or offline mode if it has one; otherwise point the client at a small local stub server that start.sh also starts, or swap in a stub at the integration boundary (the API client or service module). Keep stubs out of UI code. Responses should look like what the real service returns for a real user, e.g. an AI reply that actually answers, a payment history with real-looking amounts.\n- Calls the browser makes directly to outside services count too; point them at the local stub.\n- For sign-in through an outside provider, create a local account or use the app's dev sign-in so you can get past it.\nList every stub in app.json.\n\n# Data: like real use\nSeed it the way an established user's data would look after months of actual use: specific, plausible names and content for this kind of app; dates spread over time; a realistic mix of states (done, in progress, overdue, archived, ...); realistic volume (dozens to hundreds of records where the app revolves around records); short and long text; some messiness real data has. Start from the app's own demo or seed data if it has realistic data, and extend it if it's thin. Load data through the app's own paths (its API, import, seed scripts, or its database schema), never by hardcoding it into UI code. If the app needs an account, create one and attach the data to it. No lorem ipsum or \"Test 1\".\n\n# Environment\nThis shell is sandboxed: you can write only inside this directory (package-manager caches already point into ./.ui-capture/cache), and the network reaches only package registries, mise's download sources and GitHub (registry.npmjs.org, registry.yarnpkg.com, repo.yarnpkg.com, github.com, codeload.github.com, objects.githubusercontent.com, raw.githubusercontent.com, nodejs.org, mise.jdx.dev, mise-versions.jdx.dev, release-assets.githubusercontent.com, pypi.org, files.pythonhosted.org, binaries.prisma.sh, cdn.jsdelivr.net, unpkg.com). Docker isn't available. A process you start in the background can't be seen or stopped from a later command, so test servers on another port than 4401 (e.g. 5401) or in the foreground under `timeout`; anything still listening on 4401 is stopped before I check.\n\n# When you're done, leave this in ./.ui-capture/\n- app.json: {\"mode\": \"static\" or \"server\", \"entry\": \"/path where the main UI opens\", \"login\": null or {\"username\": \"...\", \"email\": \"...\", \"password\": \"...\"}, \"stubs\": [{\"service\": \"what was faked\", \"how\": \"how\"}], \"notes\": \"how you set it up, what data is loaded, and the main areas of the app\"}\n- static mode: the production build in ./.ui-capture/out, with index.html as its entry. It will be served from the root of a plain static file server; unknown paths fall back to index.html.\n- server mode: ./.ui-capture/start.sh, which starts everything the app needs (stubs included) in the foreground and serves the UI at http://localhost:4401/ (it gets PORT=4401). It runs with the same PATH and restrictions as your shell, plus no network at all except localhost, so everything must already be installed, built and seeded (or seeded by start.sh itself).\n- Put any scripts you write for seeding or stubbing in ./.ui-capture/ too; they're kept with the setup record.\n\n# Order of work\nYou have 90 minutes in total, and anything unfinished when time runs out is lost. So work in this order:\n1. Get the app building and running with its stubs, and write the contract above (app.json plus out/ or start.sh), even if it has only a little data so far.\n2. Then build out the data, re-running your seed and checking the app still loads after each substantial step, so that a working state with the data loaded so far is always in place.\nWrite large data sets with a short generator script rather than as one long literal file.\n\nI'll open it at 1440\u00d7900.",
+  "model": {
+    "model": "claude-opus-5-5",
+    "effort": "high"
+  },
+  "sandbox": true,
+  "startedAt": "2026-11-17T01:59:29.144Z",
+  "finishedAt": "2026-11-17T02:12:44.818Z",
+  "verification": {
+    "ok": true,
+    "problems": [],
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedRequests": [],
+    "textChars": 94,
+    "visibleElements": 22,
+    "title": "EdgeEver"
+  },
+  "repairs": 0,
+  "session": {
+    "rounds": 1,
+    "numTurns": 71,
+    "costUsd": 3.3542076000000005,
+    "durationMs": 784646,
+    "models": [
+      "claude-opus-5-5"
+    ],
+    "usage": {
+      "input_tokens": 136,
+      "cache_creation_input_tokens": 130136,
+      "cache_read_input_tokens": 5673078,
+      "output_tokens": 58898
+    },
+    "timedOut": false
+  },
+  "changes": {
+    "files": 2,
+    "insertions": 15,
+    "deletions": 12,
+    "patchBytes": 9407,
+    "patch": "setup.patch"
+  },
+  "portMovedFrom": 4401
+}

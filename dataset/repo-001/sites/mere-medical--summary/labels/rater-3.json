@@ -1,0 +1,511 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "mere-medical--summary",
+    "url": "http://mere-medical.localhost:4319/summary",
+    "finalUrl": "http://mere-medical.localhost:4319/summary",
+    "status": 200,
+    "title": "Mere",
+    "capturedAt": "2026-11-18T03:39:52.173Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 4362
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "health",
+    "domainNote": "personal health record (PHR) aggregator, patient-facing summary view of medical records (Mere Medical demo)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/mere-medical/explore.json",
+      "repo": {
+        "name": "cfu288/mere-medical",
+        "url": "https://github.com/cfu288/mere-medical",
+        "commit": "e14c49318421c2182cf3cda8165d71458f7a2fcb",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "summary",
+        "name": "Health summary",
+        "description": "Two-column summary dashboard with collapsible sections for bookmarked labs, medications, conditions, immunizations, allergies and care plans."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Dark navy sidebar: logo, 4 nav links (Timeline, Summary active, Connections, Settings), user profile with View details at the bottom",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 256,
+        "height": 4362
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "topbar",
+      "role": "header",
+      "label": "Teal page-title bar reading SUMMARY",
+      "bbox": {
+        "x": 256,
+        "y": 0,
+        "width": 1184,
+        "height": 76
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "welcome-toast",
+      "role": "toast",
+      "label": "Top-right white toast with a green check: demo-mode welcome message and a close X",
+      "bbox": {
+        "x": 1032,
+        "y": 24,
+        "width": 384,
+        "height": 94
+      },
+      "patterns": [
+        "toast"
+      ]
+    },
+    {
+      "id": "labs-meds-row",
+      "role": "dashboard-row",
+      "label": "Bookmarked Labs table with sparklines and unpin buttons; Medications list (name + date)",
+      "bbox": {
+        "x": 256,
+        "y": 76,
+        "width": 1184,
+        "height": 1646
+      },
+      "patterns": [
+        "dashboard",
+        "accordion",
+        "data-table",
+        "chart"
+      ]
+    },
+    {
+      "id": "conditions-immunizations-row",
+      "role": "dashboard-row",
+      "label": "Conditions list; Immunizations list of expandable vaccine groups with counts",
+      "bbox": {
+        "x": 256,
+        "y": 1722,
+        "width": 1184,
+        "height": 1682
+      },
+      "patterns": [
+        "dashboard",
+        "accordion"
+      ]
+    },
+    {
+      "id": "careplan-allergies-row",
+      "role": "dashboard-row",
+      "label": "Care Plan with bullet goals; Allergies list with dates",
+      "bbox": {
+        "x": 256,
+        "y": 3404,
+        "width": 1184,
+        "height": 902
+      },
+      "patterns": [
+        "dashboard",
+        "accordion"
+      ]
+    },
+    {
+      "id": "edit-layout",
+      "role": "footer-action",
+      "label": "Centered 'Edit Layout' text button with a pencil icon; opens a modal to drag-reorder and hide sections",
+      "bbox": {
+        "x": 256,
+        "y": 4306,
+        "width": 1184,
+        "height": 56
+      },
+      "patterns": [
+        "modal-dialog",
+        "drag-reorder"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 256,
+            "height": 4362
+          },
+          "note": "Persistent left sidebar: logo, fixed destinations, user identity at the bottom",
+          "quote": "Timeline",
+          "region": "sidebar"
+        },
+        {
+          "bbox": {
+            "x": 256,
+            "y": 0,
+            "width": 1184,
+            "height": 76
+          },
+          "note": "Top bar showing the page title",
+          "quote": "SUMMARY",
+          "region": "topbar"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "dashboard",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 256,
+            "y": 76,
+            "width": 1184,
+            "height": 4230
+          },
+          "note": "Six health-record panels in a 2-column grid. The Edit Layout modal calls it 'your summary dashboard'.",
+          "quote": "Bookmarked Labs",
+          "region": "labs-meds-row"
+        }
+      ],
+      "dims": {
+        "widgets": [
+          "tables",
+          "status-lists"
+        ],
+        "arrangement": "fixed-grid",
+        "linking": "independent",
+        "refresh": "on-visit",
+        "alerting": "none",
+        "ownership": "personal"
+      }
+    },
+    {
+      "id": "accordion",
+      "status": "present",
+      "confidence": 0.88,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 288,
+            "y": 76,
+            "width": 552,
+            "height": 80
+          },
+          "note": "Section header with a chevron; clicking it collapses the panel (checked live). Each section toggles on its own.",
+          "quote": "Bookmarked Labs",
+          "region": "labs-meds-row"
+        },
+        {
+          "bbox": {
+            "x": 881,
+            "y": 1831,
+            "width": 502,
+            "height": 576
+          },
+          "note": "Nested expanders: each vaccine group header shows a count and expands to list dose dates (checked live)",
+          "quote": "DTaP (5)",
+          "region": "conditions-immunizations-row"
+        }
+      ],
+      "dims": {
+        "policy": "many-at-a-time",
+        "header": [
+          "title-only",
+          "title-plus-summary-value"
+        ],
+        "toggle": [
+          "header-click"
+        ]
+      }
+    },
+    {
+      "id": "data-table",
+      "status": "present",
+      "confidence": 0.82,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 288,
+            "y": 156,
+            "width": 552,
+            "height": 238
+          },
+          "note": "Name/Value column table of bookmarked labs with range subtext, in-cell sparkline buttons and per-row unpin buttons. Clicking a sparkline opens a detail row with a full chart (checked live).",
+          "quote": "WBC",
+          "region": "labs-meds-row"
+        }
+      ],
+      "dims": {
+        "columnSet": "fixed",
+        "cellRendering": [
+          "plain-text",
+          "in-cell-charts"
+        ],
+        "density": "compact",
+        "rowExpansion": "detail-row",
+        "selection": "none",
+        "opScope": [
+          "row"
+        ],
+        "aggregation": [
+          "flat"
+        ],
+        "openIn": "in-place"
+      }
+    },
+    {
+      "id": "chart",
+      "status": "present",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 759,
+            "y": 303,
+            "width": 32,
+            "height": 82
+          },
+          "note": "Sparkline line charts of lab history inside table cells. Clicking one expands a line chart with a time axis and a shaded normal-range band.",
+          "region": "labs-meds-row"
+        }
+      ],
+      "dims": {
+        "markType": "lines",
+        "channels": [
+          "position"
+        ],
+        "scale": "time",
+        "faceting": "single-plot",
+        "inspectBy": [
+          "click-to-select"
+        ],
+        "authorship": "author-specified",
+        "annotation": [
+          "reference-lines"
+        ]
+      }
+    },
+    {
+      "id": "toast",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1032,
+            "y": 24,
+            "width": 384,
+            "height": 94
+          },
+          "note": "White floating message in the top right with a green check icon and a close button. It auto-dismissed on the live page.",
+          "quote": "Welcome to the Mere Medical demo! We have added some test data for you. Some features are disabled while in demo mode.",
+          "region": "welcome-toast"
+        }
+      ],
+      "dims": {
+        "duration": "auto-dismiss",
+        "content": [
+          "message-only",
+          "status-icon"
+        ],
+        "position": "top-right-stack",
+        "severity": "success"
+      }
+    },
+    {
+      "id": "modal-dialog",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 780,
+            "y": 4314,
+            "width": 120,
+            "height": 40
+          },
+          "note": "The Edit Layout trigger opens a centered modal over a dimmed backdrop with a close X. The modal is not visible in the capture.",
+          "quote": "Edit Layout",
+          "region": "edit-layout"
+        }
+      ],
+      "dims": {
+        "form": "centered-small",
+        "openBy": [
+          "user-action"
+        ],
+        "dismissBy": [
+          "close-button"
+        ],
+        "modality": "blocking",
+        "purpose": "form"
+      }
+    },
+    {
+      "id": "drag-reorder",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 780,
+            "y": 4314,
+            "width": 120,
+            "height": 40
+          },
+          "note": "The modal behind Edit Layout lists the dashboard sections with grip handles and eye toggles: 'Drag and drop the cards to change the order'. Seen only on the live page.",
+          "quote": "Edit Layout",
+          "region": "edit-layout"
+        }
+      ],
+      "dims": {
+        "grab": [
+          "handle"
+        ],
+        "destinations": [
+          "within-the-list"
+        ]
+      }
+    },
+    {
+      "id": "card",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 856,
+            "y": 156,
+            "width": 552,
+            "height": 1540
+          },
+          "note": "The outlined panels are section containers holding lists, not cards that each summarize one item"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "banner",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1032,
+            "y": 24,
+            "width": 384,
+            "height": 94
+          },
+          "note": "The demo message floats and auto-dismisses, so it is a toast, not a persistent banner"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "App shell with a fixed dark-teal left sidebar and a teal title bar; content is a 2-column grid of collapsible section panels (labs table, medications, conditions, immunizations, care plan, allergies) with an Edit Layout button at the bottom",
+    "regions": [
+      "sidebar",
+      "topbar",
+      "welcome-toast",
+      "labs-meds-row",
+      "conditions-immunizations-row",
+      "careplan-allergies-row",
+      "edit-layout"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#09384e",
+      "#006183",
+      "#07455f",
+      "#e2f5fa",
+      "#111827",
+      "#4b5563",
+      "#c7d2fe",
+      "#d1d5db",
+      "#22c55e"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "text": "#111827",
+      "primary": "#006183",
+      "surface": "#09384e",
+      "accent": "#e2f5fa",
+      "muted": "#4b5563",
+      "border": "#d1d5db",
+      "link": "#c7d2fe",
+      "success": "#22c55e"
+    },
+    "typography": "Source Sans everywhere: bold uppercase page title in the top bar, bold section headings, semibold item names (medication names often all-caps from the source data), regular small dates and table text",
+    "typeScale": "Flat, compact scale: 20px bold section headings and title; 16px semibold item names and nav; 14px/12px dates, table headers and lab ranges. Hierarchy comes mostly from weight.",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "clinical",
+      "clean",
+      "utilitarian",
+      "calm",
+      "trustworthy"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T05:32:25.217Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 14,
+    "usage": {
+      "input_tokens": 28,
+      "cache_creation_input_tokens": 43993,
+      "cache_read_input_tokens": 539503,
+      "output_tokens": 6622
+    }
+  },
+  "notes": "Patient-facing PHR summary. Distinctive two-tone teal chrome: a deep navy-teal sidebar (#09384e) with a lighter active pill (#07455f), and a brighter teal (#006183) title bar holding an all-caps 'SUMMARY'. Content panels are thin-outlined, 8px-radius white boxes with bold headings and chevrons, and each collapses on its own. Lists are plain name + date pairs with no icons. The lab table uses tiny light-blue sparkline buttons (#e2f5fa) that expand into a full line chart with a shaded normal-range band, plus 'unpin' bookmark-slash icons. The Edit Layout modal (seen only on the live page) lets the user drag-reorder and hide/show dashboard sections. A demo-mode welcome toast appears top right and auto-dismisses. The page scrolls inside the content panel."
+}

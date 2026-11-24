@@ -1,0 +1,593 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "gen-002",
+  "site": {
+    "slug": "mutual-aid-grant-payouts",
+    "url": "http://mutual-aid-grant-payouts.localhost:4318/",
+    "finalUrl": "http://mutual-aid-grant-payouts.localhost:4318/",
+    "status": 200,
+    "title": "Kettlefund · November fund",
+    "capturedAt": "2026-11-18T03:30:49.815Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1269
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "nonprofit",
+    "domainNote": "mutual-aid emergency fund grant review and payout committee tool",
+    "provenance": {
+      "source": "generated",
+      "generation": "generated/gen-002/mutual-aid-grant-payouts/generation.json",
+      "generator": {
+        "id": "opus",
+        "model": "claude-opus-5-5",
+        "effort": "high"
+      },
+      "brief": {
+        "domain": "nonprofit",
+        "archetype": "transact",
+        "context": "community-nonprofit",
+        "product": "Kettlefund"
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Brand, org name, next-send countdown pill, signed-in committee member with avatar",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 56
+      },
+      "patterns": []
+    },
+    {
+      "id": "fund-summary",
+      "role": "stats-strip",
+      "label": "November fund available amount, stacked budget bar with legend, three KPI tiles (drafts, left, you tonight)",
+      "bbox": {
+        "x": 24,
+        "y": 72,
+        "width": 1392,
+        "height": 126
+      },
+      "patterns": [
+        "stat-tile",
+        "chart"
+      ]
+    },
+    {
+      "id": "requests-table",
+      "role": "data-table",
+      "label": "Your requests: table of 9 aid requests with need, deadline pill, ask/cap room, payment handle, grant amount input, Review & commit, quick-fill and Not this round; expandable detail rows",
+      "bbox": {
+        "x": 24,
+        "y": 214,
+        "width": 956,
+        "height": 1035
+      },
+      "patterns": [
+        "data-table",
+        "badge",
+        "text-field",
+        "approval-flow",
+        "confirmation",
+        "modal-dialog"
+      ]
+    },
+    {
+      "id": "batch-sidebar",
+      "role": "sidebar",
+      "label": "Tabbed aside: Thursday batch (committed payout cards with Void), Sent in Nov, Activity",
+      "bbox": {
+        "x": 996,
+        "y": 214,
+        "width": 420,
+        "height": 1035
+      },
+      "patterns": [
+        "tabs",
+        "card",
+        "badge",
+        "undo",
+        "activity-log"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "data-table",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 24,
+            "y": 293,
+            "width": 956,
+            "height": 956
+          },
+          "quote": "REQUESTER NEED ASKED / Q4 ROOM PAYS TO GRANT",
+          "region": "requests-table",
+          "note": "Column header row with one request per row; chevron expands a detail panel under the row (verified live)"
+        }
+      ],
+      "dims": {
+        "columnSet": "fixed",
+        "cellRendering": [
+          "plain-text",
+          "chips-and-avatars",
+          "editable-input"
+        ],
+        "density": "comfortable",
+        "rowExpansion": "detail-row",
+        "selection": "none",
+        "opScope": [
+          "row"
+        ],
+        "aggregation": [
+          "flat"
+        ],
+        "openIn": "in-place"
+      }
+    },
+    {
+      "id": "stat-tile",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 45,
+            "y": 90,
+            "width": 250,
+            "height": 90
+          },
+          "quote": "$2,140 left of the $4,500 donated for November",
+          "region": "fund-summary"
+        },
+        {
+          "bbox": {
+            "x": 676,
+            "y": 100,
+            "width": 195,
+            "height": 66
+          },
+          "quote": "Your drafts $0",
+          "region": "fund-summary"
+        },
+        {
+          "bbox": {
+            "x": 903,
+            "y": 100,
+            "width": 175,
+            "height": 66
+          },
+          "quote": "Left if you commit them $2,140",
+          "region": "fund-summary"
+        },
+        {
+          "bbox": {
+            "x": 1111,
+            "y": 100,
+            "width": 270,
+            "height": 66
+          },
+          "quote": "You tonight $0",
+          "region": "fund-summary"
+        }
+      ],
+      "dims": {
+        "context": [
+          "label",
+          "target"
+        ],
+        "encoding": "number-only",
+        "window": "fixed",
+        "drill": "none"
+      }
+    },
+    {
+      "id": "chart",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 322,
+            "y": 96,
+            "width": 308,
+            "height": 75
+          },
+          "quote": "Sent $1,190 Committed $1,170 Your drafts $0 Unplanned $2,140",
+          "region": "fund-summary",
+          "note": "Single stacked horizontal bar (img 'November pot breakdown') with colour legend; updates live as drafts are entered"
+        }
+      ],
+      "dims": {
+        "markType": "bars",
+        "channels": [
+          "length",
+          "colour-hue-or-value"
+        ],
+        "scale": "linear",
+        "faceting": "single-plot",
+        "authorship": "author-specified",
+        "annotation": [
+          "none"
+        ]
+      }
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 997,
+            "y": 215,
+            "width": 418,
+            "height": 45
+          },
+          "quote": "Thursday batch 5 Sent in Nov 6 Activity",
+          "region": "batch-sidebar",
+          "note": "role=tablist; switching verified live"
+        }
+      ],
+      "dims": {
+        "placement": "top",
+        "label": [
+          "text",
+          "badge-count"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      }
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1011,
+            "y": 358,
+            "width": 390,
+            "height": 98
+          },
+          "quote": "Paulette $300 Cash pickup St. Brendan’s parish hall",
+          "region": "batch-sidebar",
+          "note": "Outlined white cards for each committed payout, one Void action each"
+        }
+      ],
+      "dims": {
+        "media": "none",
+        "actions": "one-primary-action",
+        "shape": "horizontal",
+        "style": "outlined"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 217,
+            "y": 357,
+            "width": 157,
+            "height": 19
+          },
+          "quote": "Shutoff Sat Nov 21",
+          "region": "requests-table",
+          "note": "Deadline/urgency status pills per row (red for imminent shutoff, amber others)"
+        },
+        {
+          "bbox": {
+            "x": 1138,
+            "y": 229,
+            "width": 22,
+            "height": 17
+          },
+          "quote": "5",
+          "region": "batch-sidebar",
+          "note": "Count badges on tabs"
+        }
+      ],
+      "dims": {
+        "meaning": "status",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 717,
+            "y": 336,
+            "width": 84,
+            "height": 32
+          },
+          "quote": "$",
+          "region": "requests-table",
+          "note": "Grant amount input with $ prefix; enabling Review & commit and showing co-reviewer check below as you type"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "prefix-or-suffix"
+        ],
+        "validation": "while-typing",
+        "style": "outlined",
+        "assistance": [
+          "none"
+        ]
+      }
+    },
+    {
+      "id": "approval-flow",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 698,
+            "y": 228,
+            "width": 265,
+            "height": 54
+          },
+          "quote": "Over $200 needs both reviewers",
+          "region": "requests-table",
+          "note": "Rule-based co-sign requirement; per-row decide (commit) or Not this round"
+        },
+        {
+          "bbox": {
+            "x": 717,
+            "y": 376,
+            "width": 170,
+            "height": 15
+          },
+          "quote": "Not this round",
+          "region": "requests-table"
+        }
+      ],
+      "dims": {
+        "routing": "conditional-by-rule",
+        "surface": [
+          "request-summary",
+          "policy-checks"
+        ],
+        "actions": [
+          "approve",
+          "reject"
+        ],
+        "visibility": "full-audit-trail",
+        "status": "who-is-holding-it"
+      }
+    },
+    {
+      "id": "confirmation",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 809,
+            "y": 336,
+            "width": 153,
+            "height": 32
+          },
+          "quote": "Review & commit",
+          "region": "requests-table",
+          "note": "Live: opens 'Commit $285 to Marisol' dialog with checks and asks to type last 4 digits of the phone number before commit"
+        }
+      ],
+      "dims": {
+        "friction": "type-to-confirm",
+        "explanation": [
+          "what-will-happen",
+          "affected-items"
+        ],
+        "when": "always",
+        "form": "modal"
+      }
+    },
+    {
+      "id": "modal-dialog",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 809,
+            "y": 336,
+            "width": 153,
+            "height": 32
+          },
+          "quote": "Review & commit",
+          "region": "requests-table",
+          "note": "Trigger of the centered review/commit dialog (not open in capture; verified live), with close X and Cancel"
+        }
+      ],
+      "dims": {
+        "form": "centered-small",
+        "openBy": [
+          "user-action"
+        ],
+        "dismissBy": [
+          "close-button",
+          "escape"
+        ],
+        "modality": "blocking",
+        "purpose": "confirmation"
+      }
+    },
+    {
+      "id": "undo",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1355,
+            "y": 420,
+            "width": 35,
+            "height": 18
+          },
+          "quote": "Void",
+          "region": "batch-sidebar",
+          "note": "Void reverses a committed payout until the treasurer marks it sent; money returns to the pot"
+        }
+      ],
+      "dims": {
+        "multiUser": "everyone-s"
+      }
+    },
+    {
+      "id": "activity-log",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1306,
+            "y": 215,
+            "width": 78,
+            "height": 45
+          },
+          "quote": "Activity",
+          "region": "batch-sidebar",
+          "note": "Activity tab (verified live) shows day-grouped timeline of who committed/sent/co-signed what"
+        }
+      ],
+      "dims": {
+        "detail": "one-line-summary",
+        "subject": "a-workspace",
+        "aggregation": "every-event",
+        "presentation": "vertical-timeline",
+        "actions": "read-only"
+      }
+    },
+    {
+      "id": "dashboard",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 24,
+            "y": 72,
+            "width": 1392,
+            "height": 126
+          }
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "app-shell",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 56
+          }
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "single-screen work tool: top header, full-width fund summary strip, then two columns — wide requests table (left) and tabbed batch sidebar (right), the table scrolling inside its panel",
+    "regions": [
+      "header",
+      "fund-summary",
+      "requests-table",
+      "batch-sidebar"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#f4f0e8",
+      "#fffdf8",
+      "#1f2522",
+      "#4c534f",
+      "#7a7f79",
+      "#1e5446",
+      "#e3dccd",
+      "#9a5b12",
+      "#a8382b",
+      "#fbefd9"
+    ],
+    "colorRoles": {
+      "background": "#f4f0e8",
+      "surface": "#fffdf8",
+      "text": "#1f2522",
+      "muted": "#7a7f79",
+      "primary": "#1e5446",
+      "border": "#e3dccd",
+      "warning": "#9a5b12",
+      "danger": "#a8382b",
+      "accent": "#fbefd9"
+    },
+    "typography": "System sans (-apple-system stack) for all UI; ui-monospace for payment handles/phone numbers so they can be checked digit by digit",
+    "typeScale": "36px bold green hero number; 20px bold stat values; 17px/650 section heading; 14-15px body and names; 12-13px secondary meta; 11-12px uppercase letterspaced column headers and labels",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "data-visualization"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "warm",
+      "calm",
+      "careful",
+      "utilitarian",
+      "trustworthy"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T03:32:53.322Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 12,
+    "usage": {
+      "input_tokens": 24,
+      "cache_creation_input_tokens": 49510,
+      "cache_read_input_tokens": 521032,
+      "output_tokens": 6918
+    }
+  },
+  "notes": "Warm cream paper palette with deep forest-green primary; flat panels with 1px tan borders and 12px radii. Money handles in monospace to support verification. Red left rule marks the most urgent row (shutoff). Disabled Review & commit buttons are pale green until an amount is entered; quick-fill chip 'Full $285' / 'Cap room $150' and link 'Not this round' under each input. Commit dialog (live) lists policy checks (amount, quarter cap, second reviewer, fund, timing) and requires typing last 4 digits of the payee handle — a deliberate anti-misdirection friction. Header pill counts down to the treasurer's next send. Summary strip recomputes live as drafts are entered (stacked bar gains a hatched 'drafts' segment)."
+}

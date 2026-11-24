@@ -1,0 +1,471 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "leon--session-feed",
+    "url": "http://localhost:4412/web-app/session/d4d1c54d-8964-49cd-8010-9e19cedaf3f9",
+    "finalUrl": "http://localhost:4412/web-app/session/d4d1c54d-8964-49cd-8010-9e19cedaf3f9",
+    "status": 200,
+    "title": "Leon",
+    "capturedAt": "2026-11-18T02:56:42.297Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1850
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "ai-tools",
+    "domainNote": "Leon — open-source personal AI assistant web app; coding/agent session view",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/leon/explore.json",
+      "repo": {
+        "name": "leon-ai/leon",
+        "url": "https://github.com/leon-ai/leon",
+        "commit": "677a516850a7c077fb0611900e0efc76d505fad9",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "session-feed",
+        "name": "Session conversation",
+        "description": "A chat session inside a workspace showing the user message, the expanded 'worked for' plan disclosure, the agent's answer with a code block, and the composer, with the sidebar of workspaces and recent sessions."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Brand + update badge, New session/Search/Inbox, Recents list with pinned project folders and timestamped sessions, footer with Discord, settings, version, mood avatar",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 265,
+        "height": 1850
+      },
+      "patterns": [
+        "app-shell",
+        "tree-view",
+        "badge"
+      ]
+    },
+    {
+      "id": "conversation",
+      "role": "chat-thread",
+      "label": "User prompt bubble, agent turn with collapsible 'Worked for 13s' and completed plan checklist, markdown answer with inline code and syntax-highlighted code block",
+      "bbox": {
+        "x": 466,
+        "y": 52,
+        "width": 772,
+        "height": 735
+      },
+      "patterns": [
+        "ai-chat",
+        "agent-run",
+        "accordion",
+        "ai-provenance"
+      ]
+    },
+    {
+      "id": "composer",
+      "role": "composer",
+      "label": "Rounded prompt box with add-files, placeholder 'Don’t be shy', model chooser, reasoning level and send button",
+      "bbox": {
+        "x": 466,
+        "y": 1766,
+        "width": 772,
+        "height": 60
+      },
+      "patterns": [
+        "prompt-input",
+        "menu"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 265,
+            "height": 1850
+          },
+          "region": "sidebar",
+          "note": "Persistent left sidebar with fixed destinations, pinned projects and recents; close-sidebar toggle",
+          "quote": "New session"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations",
+          "user-pinned-items",
+          "recents"
+        ],
+        "visibility": "toggle-button",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "tree-view",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 243,
+            "width": 248,
+            "height": 122
+          },
+          "region": "sidebar",
+          "note": "Project folder nodes (\"Expand Kitchen renovation\") expand to reveal child sessions; live check showed nested children with hover pin/new/more actions",
+          "quote": "Kitchen renovation"
+        }
+      ],
+      "dims": {
+        "content": [
+          "label",
+          "type-icon",
+          "hover-actions"
+        ],
+        "source": "containment",
+        "density": "comfortable",
+        "selection": "single-node"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 148,
+            "y": 20,
+            "width": 68,
+            "height": 32
+          },
+          "region": "sidebar",
+          "note": "Blue 'New' pill with cloud-download icon signalling an available update",
+          "quote": "New"
+        }
+      ],
+      "dims": {
+        "meaning": "label"
+      }
+    },
+    {
+      "id": "ai-chat",
+      "status": "present",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 684,
+            "y": 52,
+            "width": 554,
+            "height": 70
+          },
+          "region": "conversation",
+          "note": "User prompt bubble, right-aligned blue",
+          "quote": "The GPX import crashes on tracks with more than ~20k points."
+        },
+        {
+          "bbox": {
+            "x": 466,
+            "y": 353,
+            "width": 772,
+            "height": 434
+          },
+          "region": "conversation",
+          "note": "Markdown reply with inline code and highlighted code block",
+          "quote": "Found it. The importer built one giant"
+        }
+      ],
+      "dims": {
+        "turnContent": [
+          "markdown-with-code",
+          "tool-call-traces"
+        ],
+        "composition": "linear-thread",
+        "invokeBy": [
+          "text-field-submit",
+          "attach-file-or-image"
+        ],
+        "flow": "strict-turn-taking"
+      }
+    },
+    {
+      "id": "agent-run",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 466,
+            "y": 164,
+            "width": 772,
+            "height": 164
+          },
+          "region": "conversation",
+          "note": "Collapsible run summary with completed execution plan checklist",
+          "quote": "Completed plan"
+        }
+      ],
+      "dims": {
+        "brief": [
+          "natural-language-goal",
+          "repo-or-workspace-context"
+        ],
+        "structure": "plan-then-execute",
+        "control": [
+          "start-from-a-prompt"
+        ],
+        "feedback": [
+          "todo-checklist-progress"
+        ],
+        "lifecycle": "seconds-few-tools"
+      }
+    },
+    {
+      "id": "accordion",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 466,
+            "y": 164,
+            "width": 163,
+            "height": 62
+          },
+          "region": "conversation",
+          "note": "'Worked for 13s' and 'Completed plan' are expanded disclosure headers with chevrons",
+          "quote": "Worked for 13s"
+        }
+      ],
+      "dims": {
+        "policy": "many-at-a-time",
+        "header": [
+          "title-plus-summary-value"
+        ],
+        "toggle": [
+          "header-click"
+        ]
+      }
+    },
+    {
+      "id": "ai-provenance",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 930,
+            "y": 1780,
+            "width": 208,
+            "height": 32
+          },
+          "region": "composer",
+          "note": "Model identity shown in composer",
+          "quote": "anthropic/claude-sonnet-5.5"
+        },
+        {
+          "bbox": {
+            "x": 466,
+            "y": 164,
+            "width": 130,
+            "height": 25
+          },
+          "region": "conversation",
+          "note": "Reply header discloses work duration and expandable plan/steps",
+          "quote": "Worked for 13s"
+        }
+      ],
+      "dims": {
+        "disclosure": [
+          "model-identity",
+          "tool-calls-used"
+        ],
+        "placement": "header-of-a-reply",
+        "openBy": [
+          "expand-tool-trace"
+        ]
+      }
+    },
+    {
+      "id": "prompt-input",
+      "status": "present",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 466,
+            "y": 1766,
+            "width": 772,
+            "height": 60
+          },
+          "region": "composer",
+          "note": "Bottom composer with add files, textarea, model and reasoning modifiers, send",
+          "quote": "Don’t be shy"
+        }
+      ],
+      "dims": {
+        "content": [
+          "plain-prompt",
+          "attached-images-or-docs"
+        ],
+        "layout": "bottom-sticky-composer",
+        "submitBy": [
+          "click-send"
+        ],
+        "assistance": [
+          "none"
+        ]
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 930,
+            "y": 1780,
+            "width": 208,
+            "height": 32
+          },
+          "region": "composer",
+          "note": "Model chooser trigger; live check opens a searchable provider list with chevron submenus (not open in capture)",
+          "quote": "anthropic/claude-sonnet-5.5"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click",
+        "structure": "cascading-submenus",
+        "item": [
+          "label",
+          "icon"
+        ],
+        "form": "vertical-list",
+        "itemSet": "fixed"
+      }
+    },
+    {
+      "id": "status-tracker",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 466,
+            "y": 201,
+            "width": 300,
+            "height": 127
+          },
+          "note": "Plan checklist belongs to agent-run feedback, not a standalone process tracker"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "code-editor",
+      "status": "absent",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 466,
+            "y": 469,
+            "width": 772,
+            "height": 276
+          },
+          "note": "Read-only highlighted code block with copy button, not an editor"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "app shell: fixed left sidebar (brand, main menu, collapsible Recents tree of projects and sessions, footer with Discord/settings/version) beside a centred 772px conversation column with bottom sticky composer over a dark illustrated desk-scene backdrop",
+    "regions": [
+      "sidebar",
+      "conversation",
+      "composer"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#000000",
+      "#0a0a0a",
+      "#1e1e1e",
+      "#f5f5f7",
+      "#888888",
+      "#1c6fe0",
+      "#5ecc71",
+      "#9d6afb",
+      "#ff678d",
+      "#ffa359"
+    ],
+    "colorRoles": {
+      "background": "#000000",
+      "surface": "#0a0a0a",
+      "text": "#f5f5f7",
+      "muted": "#888888",
+      "primary": "#1c6fe0",
+      "border": "#1e1e1e",
+      "accent": "#9d6afb"
+    },
+    "typography": "Source Sans Pro for all UI and prose (16px sidebar/UI, 18px reply body); JetBrains Mono for inline code and code blocks (~12-16px) with multicolour syntax highlighting",
+    "typeScale": "Flat scale: 18px reply/prompt text, 16px nav and controls (600 weight only for 'Recents' heading), 12px timestamps and code; hierarchy via colour (white vs #888 grey) rather than size",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "illustration",
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "image",
+    "mood": [
+      "dark",
+      "calm",
+      "cozy",
+      "technical",
+      "minimal"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T02:58:09.569Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 9,
+    "usage": {
+      "input_tokens": 18,
+      "cache_creation_input_tokens": 32489,
+      "cache_read_input_tokens": 298395,
+      "output_tokens": 8005
+    }
+  },
+  "notes": "Pure-black UI; the main area has a dim illustrated night-desk scene (lamp, plant, window city view, mug) fading in at the bottom edges behind the composer, giving a cozy personal-assistant character. Project folders in Recents use coloured outline folder icons (orange, green, blue, teal, purple) and pin icons; sessions show relative timestamps (9h, 2d, 1mo) right-aligned in grey. User messages are saturated blue rounded bubbles; assistant replies are unboxed prose separated from the plan by a thin rule. Plan steps use small blue check circles on a vertical connector line. Composer is a 22px-radius pill-ish box with a provider-logo model chip and reasoning 'High' chip. Footer shows version string and a 'Happy mood' avatar."
+}

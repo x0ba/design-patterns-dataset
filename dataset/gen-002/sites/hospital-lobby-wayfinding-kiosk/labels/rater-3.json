@@ -1,0 +1,626 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "gen-002",
+  "site": {
+    "slug": "hospital-lobby-wayfinding-kiosk",
+    "url": "http://hospital-lobby-wayfinding-kiosk.localhost:4318/",
+    "finalUrl": "http://hospital-lobby-wayfinding-kiosk.localhost:4318/",
+    "status": 200,
+    "title": "Wardway Lobby Guide",
+    "capturedAt": "2026-11-18T02:51:00.377Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 903
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "health",
+    "domainNote": "hospital lobby wayfinding kiosk (indoor directions to a department)",
+    "provenance": {
+      "source": "generated",
+      "generation": "generated/gen-002/hospital-lobby-wayfinding-kiosk/generation.json",
+      "generator": {
+        "id": "sonnet",
+        "model": "claude-sonnet-5-5",
+        "effort": "high"
+      },
+      "brief": {
+        "domain": "health",
+        "archetype": "navigate",
+        "context": "shared-screen",
+        "product": "Wardway Lobby Guide"
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Dark teal kiosk bar: logo/name, 'You are here' location with Change, text size, language segmented group, clock",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 68
+      },
+      "patterns": [
+        "choice-control"
+      ]
+    },
+    {
+      "id": "destination-panel",
+      "role": "sidebar",
+      "label": "Search button, destination card (Cardiac Rehabilitation, location, open-now pill, phone, hours, aliases) and route options card (step-free switch, walking pace segmented)",
+      "bbox": {
+        "x": 24,
+        "y": 82,
+        "width": 376,
+        "height": 726
+      },
+      "patterns": [
+        "card",
+        "badge",
+        "choice-control",
+        "contextual-help"
+      ]
+    },
+    {
+      "id": "route-map",
+      "role": "map",
+      "label": "Trip summary (9 min walk, step-free/avoids closures pills, arrive time, appointment slack) above floor-plan route map with Level 1/Level 2 tabs and legend",
+      "bbox": {
+        "x": 416,
+        "y": 82,
+        "width": 464,
+        "height": 726
+      },
+      "patterns": [
+        "map-explorer",
+        "tabs",
+        "badge",
+        "stat-tile",
+        "card",
+        "coordinated-views"
+      ]
+    },
+    {
+      "id": "directions",
+      "role": "directions-list",
+      "label": "Numbered turn-by-turn steps with time/distance chips, inline closure warnings, arrival step, and Text to phone / Print / QR code actions",
+      "bbox": {
+        "x": 896,
+        "y": 82,
+        "width": 520,
+        "height": 726
+      },
+      "patterns": [
+        "banner",
+        "stepper",
+        "coordinated-views",
+        "card"
+      ]
+    },
+    {
+      "id": "closures-footer",
+      "role": "alert-strip",
+      "label": "'Closures right now' bottom strip with three closure cards noting whether the route avoids them",
+      "bbox": {
+        "x": 0,
+        "y": 820,
+        "width": 1440,
+        "height": 80
+      },
+      "patterns": [
+        "banner",
+        "card"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "map-explorer",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 428,
+            "y": 390,
+            "width": 440,
+            "height": 378
+          },
+          "note": "Schematic indoor floor plan with buildings, elevators A/B, route polyline, you-are-here dot, closed markers, legend",
+          "region": "route-map",
+          "quote": "Main Entrance"
+        }
+      ],
+      "dims": {
+        "basemap": "minimal-light",
+        "overlays": [
+          "routes-and-polylines",
+          "poi-pins"
+        ],
+        "coupling": "directions-panel-takes-over",
+        "markDesign": [
+          "category-icon",
+          "availability-shading"
+        ]
+      },
+      "rationale": "Indoor schematic route map rather than a pannable geographic map; no pan/zoom observed, floors switched via tabs. Closest codebook entry."
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 432,
+            "y": 337,
+            "width": 204,
+            "height": 48
+          },
+          "note": "Level 1 / Level 2 toggle switches the floor shown in the map (verified live)",
+          "region": "route-map",
+          "quote": "Level 1"
+        }
+      ],
+      "dims": {
+        "placement": "top",
+        "label": [
+          "text"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 304,
+            "y": 656,
+            "width": 74,
+            "height": 42
+          },
+          "note": "Step-free route switch with description",
+          "region": "destination-panel",
+          "quote": "Step-free route"
+        },
+        {
+          "bbox": {
+            "x": 180,
+            "y": 732,
+            "width": 198,
+            "height": 56
+          },
+          "note": "Walking pace segmented control; changing it recomputes times immediately (verified live)",
+          "region": "destination-panel",
+          "quote": "Slow"
+        },
+        {
+          "bbox": {
+            "x": 904,
+            "y": 8,
+            "width": 374,
+            "height": 52
+          },
+          "note": "Language segmented group (English pressed)",
+          "region": "header",
+          "quote": "Español"
+        }
+      ],
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "segmented-control",
+        "option": [
+          "label-only"
+        ],
+        "timing": "immediately",
+        "largeSets": "show-all"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 46,
+            "y": 317,
+            "width": 235,
+            "height": 32
+          },
+          "note": "Open-now status pill",
+          "region": "destination-panel",
+          "quote": "Open now · until 4:30 pm"
+        },
+        {
+          "bbox": {
+            "x": 434,
+            "y": 179,
+            "width": 344,
+            "height": 34
+          },
+          "note": "Route status pills",
+          "region": "route-map",
+          "quote": "Avoids all closures"
+        },
+        {
+          "bbox": {
+            "x": 790,
+            "y": 512,
+            "width": 60,
+            "height": 22
+          },
+          "note": "Closed status labels on the map",
+          "region": "route-map",
+          "quote": "Closed"
+        }
+      ],
+      "dims": {
+        "meaning": "status",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "banner",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 970,
+            "y": 321,
+            "width": 422,
+            "height": 55
+          },
+          "note": "Yellow inline warning attached to step 3",
+          "region": "directions",
+          "quote": "Level 2 skybridge is closed until Dec 3. This ground-floor way is open."
+        },
+        {
+          "bbox": {
+            "x": 970,
+            "y": 506,
+            "width": 422,
+            "height": 38
+          },
+          "note": "Inline warning attached to step 5",
+          "region": "directions",
+          "quote": "Bank B is out until Nov 20. Use bank A only."
+        },
+        {
+          "bbox": {
+            "x": 0,
+            "y": 820,
+            "width": 1440,
+            "height": 80
+          },
+          "note": "Persistent bottom strip listing current closures",
+          "region": "closures-footer",
+          "quote": "Closures right now"
+        }
+      ],
+      "dims": {
+        "scope": "section",
+        "severity": "warning",
+        "dismissal": "clears-with-the-condition",
+        "action": "none",
+        "placement": "beside-the-problem"
+      }
+    },
+    {
+      "id": "stat-tile",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 434,
+            "y": 221,
+            "width": 167,
+            "height": 79
+          },
+          "note": "Arrival time tile",
+          "region": "route-map",
+          "quote": "ARRIVE ABOUT 10:21 am"
+        },
+        {
+          "bbox": {
+            "x": 611,
+            "y": 221,
+            "width": 251,
+            "height": 79
+          },
+          "note": "Appointment tile with slack vs target",
+          "region": "route-map",
+          "quote": "9 min to spare"
+        }
+      ],
+      "dims": {
+        "context": [
+          "label",
+          "target"
+        ],
+        "encoding": "number-only",
+        "window": "fixed",
+        "drill": "none"
+      }
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 24,
+            "y": 168,
+            "width": 376,
+            "height": 447
+          },
+          "note": "Destination detail card",
+          "region": "destination-panel",
+          "quote": "Cardiac Rehabilitation"
+        },
+        {
+          "bbox": {
+            "x": 226,
+            "y": 829,
+            "width": 387,
+            "height": 74
+          },
+          "note": "Closure card in footer strip (one of three)",
+          "region": "closures-footer",
+          "quote": "Elevator bank B, Pavilion: out of service"
+        }
+      ],
+      "dims": {
+        "media": "none",
+        "actions": "none",
+        "shape": "horizontal",
+        "style": "outlined"
+      }
+    },
+    {
+      "id": "coordinated-views",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 908,
+            "y": 123,
+            "width": 496,
+            "height": 62
+          },
+          "note": "Selected step (orange) highlights the matching route segment on the map; clicking another step moves the highlight (verified live)",
+          "region": "directions",
+          "quote": "Walk straight ahead to the Main Building lobby."
+        },
+        {
+          "bbox": {
+            "x": 538,
+            "y": 570,
+            "width": 10,
+            "height": 70
+          },
+          "note": "Orange highlighted route segment linked to step 1",
+          "region": "route-map"
+        }
+      ],
+      "dims": {
+        "linkChannel": [
+          "selection-highlight",
+          "parameters"
+        ],
+        "arrangement": "split-panes",
+        "trigger": [
+          "click-a-mark",
+          "change-a-control"
+        ],
+        "scope": "one-mark",
+        "feedback": [
+          "highlight-in-place"
+        ],
+        "authorship": "fixed-published-dashboard"
+      }
+    },
+    {
+      "id": "stepper",
+      "status": "uncertain",
+      "confidence": 0.45,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 908,
+            "y": 123,
+            "width": 496,
+            "height": 560
+          },
+          "note": "Numbered vertical step list with current step highlighted; it is turn-by-turn directions rather than a task-flow stepper",
+          "region": "directions",
+          "quote": "Take elevator bank A up to Level 2."
+        }
+      ],
+      "dims": {
+        "rule": "free-jump",
+        "form": "vertical-list",
+        "states": [
+          "current"
+        ],
+        "labels": "titles"
+      },
+      "rationale": "Directions are a numbered sequence with a highlighted current step and free selection, but they describe a physical route, not app flow progress; codebook has no turn-by-turn directions entry."
+    },
+    {
+      "id": "contextual-help",
+      "status": "present",
+      "confidence": 0.55,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 46,
+            "y": 670,
+            "width": 240,
+            "height": 38
+          },
+          "note": "Hint text under the step-free switch",
+          "region": "destination-panel",
+          "quote": "No stairs or steps. For walkers and wheelchairs."
+        }
+      ],
+      "dims": {
+        "access": [
+          "the-control-itself"
+        ],
+        "content": [
+          "definitions"
+        ],
+        "placement": "inline-static-text",
+        "proactivity": "always-visible-hints",
+        "relevance": "field"
+      },
+      "rationale": "Only a single always-visible hint line; minor instance."
+    },
+    {
+      "id": "status-tracker",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 908,
+            "y": 123,
+            "width": 496,
+            "height": 560
+          },
+          "note": "Steps are route instructions, not a tracked process with live stage state"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "app-shell",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 68
+          },
+          "note": "Header holds identity/settings but no navigation destinations"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "text-field",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 24,
+            "y": 82,
+            "width": 376,
+            "height": 72
+          },
+          "note": "'Search for another place' is a button that opens a separate search screen with on-screen keyboard (not in capture)"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "single-screen kiosk app: dark top bar, three-column main (destination & options / trip summary + floor map / directions list), fixed closures strip at bottom; no scrolling",
+    "regions": [
+      "header",
+      "destination-panel",
+      "route-map",
+      "directions",
+      "closures-footer"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#f3f0e8",
+      "#ffffff",
+      "#07404b",
+      "#17212b",
+      "#4b5866",
+      "#1b6e3a",
+      "#dff1e4",
+      "#fff1cf",
+      "#e8650f",
+      "#b3261e",
+      "#d6cfbf"
+    ],
+    "colorRoles": {
+      "background": "#f3f0e8",
+      "surface": "#ffffff",
+      "text": "#17212b",
+      "muted": "#4b5866",
+      "primary": "#07404b",
+      "accent": "#e8650f",
+      "success": "#1b6e3a",
+      "warning": "#fff1cf",
+      "danger": "#b3261e",
+      "border": "#d6cfbf"
+    },
+    "typography": "Atkinson Hyperlegible Next throughout (headings, body, labels, numerals); small uppercase letter-spaced eyebrow labels",
+    "typeScale": "Large accessible sizes: giant '9' numeral (~50px), H1 31px bold, section heads 21px bold, body 20px, labels 13-14px uppercase tracked; strong weight contrast (700 vs 400)",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "iconography",
+      "illustration"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "accessible",
+      "calm",
+      "clinical",
+      "trustworthy",
+      "utilitarian"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T02:53:10.673Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 12,
+    "usage": {
+      "input_tokens": 24,
+      "cache_creation_input_tokens": 45429,
+      "cache_read_input_tokens": 507144,
+      "output_tokens": 8976
+    }
+  },
+  "notes": "Touch kiosk for a hospital lobby built for legibility: Atkinson Hyperlegible, big 2px warm-grey bordered white panels on cream, very large hit targets. Route state color code: orange = current step and its highlighted map segment, teal = route, red = closures (x markers + 'Closed' pills), blue dot = you are here. Accessibility affordances are first-class (text size toggle, 4 languages incl. Vietnamese/Tagalog, step-free switch, slow pace default). Appointment-aware slack tile ('9 min to spare') recomputes when pace changes. 'Search for another place' opens (live, not in capture) a full-screen search with category chips, filter chips, 212-place grid and on-screen keyboard. Codebook lacks an entry for turn-by-turn directions / indoor wayfinding route lists (proposal filed: turn-by-turn-directions)."
+}

@@ -1,0 +1,49 @@
+plugins:
+  - rubocop-minitest
+  - rubocop-rake
+
+inherit_from:
+  - .rubocop_todo.yml
+  - .rubocop_opinionated.yml
+
+AllCops:
+  Exclude:
+    # Exclude .gemspec files because they are generally auto-generated
+    - '*.gemspec'
+    # Exclude vendored folders
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+    # Exclude artifacts
+    - 'pkg/**/*'
+    # Other
+    - 'test/benchmarks/**/*'
+    - 'test/profilers/**/*'
+  TargetRubyVersion: 3.0
+
+# Dear Rubocop, I don't want to use String#strip_heredoc
+Layout/HeredocIndentation:
+  Enabled: false
+
+Minitest/MultipleAssertions:
+  Max: 10
+
+# I often use @_variable to avoid clashing.
+Naming/MemoizedInstanceVariableName:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Exclude:
+    - 'spec/**/*_spec.rb'
+    - 'test/**/*_test.rb'
+
+Style/OneClassPerFile:
+  Exclude:
+    - 'test/**/*_test.rb'
+
+Style/SymbolArray:
+  Enabled: false
+  MinSize: 3
+
+Style/WordArray:
+  Enabled: false
+  MinSize: 3

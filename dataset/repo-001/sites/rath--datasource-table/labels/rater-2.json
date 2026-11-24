@@ -1,0 +1,428 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "rath--datasource-table",
+    "url": "http://rath.localhost:4319/",
+    "finalUrl": "http://rath.localhost:4319/",
+    "status": 200,
+    "title": "RATH | the next generation of data analysis software",
+    "capturedAt": "2026-11-18T02:14:10.437Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 5400
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "data-visualization",
+    "domainNote": "open-source augmented analytics / exploratory data analysis tool (Kanaries RATH), data source preparation view",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/rath/explore.json",
+      "repo": {
+        "name": "Kanaries/Rath",
+        "url": "https://github.com/Kanaries/Rath",
+        "commit": "dc54fd90fd77cd1819a088a2a1823f98b3384994",
+        "license": "AGPL-3.0"
+      },
+      "view": {
+        "slug": "datasource-table",
+        "name": "DataSource table",
+        "description": "Loaded orders dataset shown as a data table with per-column distribution charts, transform badges, and a toolbar for cleaning, export and field selection."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Left navigation sidebar with RATH logo, data section, EDA group (Exploration, Copilot, Autopilot, Painter), Collection/Dashboard/Causal, Insiders, and utility links at bottom",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 255,
+        "height": 5400
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "toolbar",
+      "role": "toolbar",
+      "label": "Split Start Analysis button with mode menu, Import Data, Table/Meta/Statistics segmented tabs, action row (Clean Method, export data, Fast Selection, Enable/Disable All Fields) and dataset size info bar",
+      "bbox": {
+        "x": 272,
+        "y": 16,
+        "width": 1152,
+        "height": 151
+      },
+      "patterns": [
+        "menu",
+        "tabs",
+        "banner"
+      ]
+    },
+    {
+      "id": "data-grid",
+      "role": "data-table",
+      "label": "Wide horizontally scrolling data table whose column headers carry field name, explore/transform controls, transform-count badge, distribution histogram and unique/count stats; plain text rows below",
+      "bbox": {
+        "x": 272,
+        "y": 167,
+        "width": 1152,
+        "height": 5233
+      },
+      "patterns": [
+        "data-table",
+        "chart",
+        "badge"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 255,
+            "height": 900
+          },
+          "region": "sidebar",
+          "quote": "DataSource",
+          "note": "Persistent left sidebar with fixed destinations, active item highlighted, collapse navigation and toggle sidebar controls"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations"
+        ],
+        "visibility": "toggle-button",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "data-table",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 272,
+            "y": 167,
+            "width": 1152,
+            "height": 600
+          },
+          "region": "data-grid",
+          "quote": "NW-264953",
+          "note": "2400-row table, 16 columns, field headers with profile stats"
+        },
+        {
+          "bbox": {
+            "x": 272,
+            "y": 97,
+            "width": 714,
+            "height": 32
+          },
+          "region": "toolbar",
+          "quote": "Enable All Fields",
+          "note": "Collection operations: clean, export, enable/disable fields"
+        }
+      ],
+      "dims": {
+        "columnSet": "show-and-hide",
+        "cellRendering": [
+          "plain-text"
+        ],
+        "density": "standard",
+        "rowExpansion": "none",
+        "opScope": [
+          "column",
+          "whole-table"
+        ],
+        "aggregation": [
+          "flat"
+        ],
+        "smallScreen": "horizontal-scroll"
+      },
+      "novel": [
+        {
+          "subdimension": "cellRendering",
+          "description": "Column headers embed a per-field profile: distribution histogram/area chart plus Unique and Count summary stats, rather than charts in the cells",
+          "proposedValueId": "column-profile-header"
+        }
+      ]
+    },
+    {
+      "id": "chart",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 504,
+            "y": 274,
+            "width": 190,
+            "height": 90
+          },
+          "region": "data-grid",
+          "note": "order_date distribution area chart"
+        },
+        {
+          "bbox": {
+            "x": 724,
+            "y": 274,
+            "width": 190,
+            "height": 90
+          },
+          "region": "data-grid",
+          "note": "region bar histogram"
+        },
+        {
+          "bbox": {
+            "x": 944,
+            "y": 274,
+            "width": 190,
+            "height": 90
+          },
+          "region": "data-grid",
+          "note": "state bar histogram (one per column = small multiples)"
+        }
+      ],
+      "dims": {
+        "markType": "bars",
+        "channels": [
+          "position",
+          "length"
+        ],
+        "scale": "ordinal-or-band",
+        "faceting": "small-multiples",
+        "authorship": "author-specified",
+        "annotation": [
+          "none"
+        ]
+      }
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 272,
+            "y": 65,
+            "width": 261,
+            "height": 32
+          },
+          "region": "toolbar",
+          "quote": "Table Meta Statistics",
+          "note": "Segmented-style tablist; verified live that Meta switches to per-field cards"
+        }
+      ],
+      "dims": {
+        "placement": "segmented-control",
+        "label": [
+          "text",
+          "icon"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 272,
+            "y": 16,
+            "width": 165,
+            "height": 32
+          },
+          "region": "toolbar",
+          "quote": "Start Analysis",
+          "note": "Split button; arrow opens dropdown list (Start Analysis, Check Existed Results, Semi-auto Exploration, Manual Exploration, Causal Analysis) – verified live"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click",
+        "structure": "flat",
+        "item": [
+          "label"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 476,
+            "y": 209,
+            "width": 12,
+            "height": 12
+          },
+          "region": "data-grid",
+          "quote": "1",
+          "note": "Green count badge on each column's transforms button (state shows 2)"
+        }
+      ],
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "banner",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Gray info message bar with info icon summarizing dataset size; it is informational status rather than a condition needing attention, so it may just be a status line.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 272,
+            "y": 129,
+            "width": 1152,
+            "height": 38
+          },
+          "region": "toolbar",
+          "quote": "Origin: 16 columns × 2400 rows / Select: 14 columns × 2400 rows / Clean: 2400 rows"
+        }
+      ],
+      "dims": {
+        "scope": "section",
+        "severity": "information",
+        "action": "none",
+        "placement": "top-of-content"
+      }
+    },
+    {
+      "id": "stat-tile",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 504,
+            "y": 374,
+            "width": 66,
+            "height": 36
+          },
+          "note": "Unique/Count mini key-value tables inside headers, not stat tiles"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "filter-controls",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 537,
+            "y": 97,
+            "width": 135,
+            "height": 32
+          },
+          "note": "Fast Selection selects fields rather than filtering rows; filters only on Meta tab"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "desktop analytics app: fixed left sidebar nav + main workspace with action toolbar, segmented view tabs, info bar and a wide horizontally scrolling profiled data table",
+    "regions": [
+      "sidebar",
+      "toolbar",
+      "data-grid"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#fafafa",
+      "#32302f",
+      "#63615f",
+      "#0f0f0f",
+      "#f4f2f1",
+      "#4c84dc",
+      "#1a90ff",
+      "#ffcbc7",
+      "#9a1919"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "surface": "#fafafa",
+      "text": "#32302f",
+      "muted": "#63615f",
+      "primary": "#0f0f0f",
+      "accent": "#1a90ff",
+      "chart": "#4c84dc",
+      "highlight-row": "#ffcbc7",
+      "highlight-text": "#9a1919",
+      "control-surface": "#f4f2f1"
+    },
+    "typography": "Single system sans stack (-apple-system; rendered as Ubuntu on capture) for everything: nav, buttons, table cells, headers",
+    "typeScale": "Flat, utilitarian: 18px/400 column-name headings, 14px body/table/buttons (500 for buttons), 12px/500 for stats and nav group labels; little weight contrast",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "data-visualization",
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "technical",
+      "clean",
+      "utilitarian",
+      "neutral"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T02:16:03.303Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 10,
+    "usage": {
+      "input_tokens": 20,
+      "cache_creation_input_tokens": 33875,
+      "cache_read_input_tokens": 335204,
+      "output_tokens": 5344
+    }
+  },
+  "notes": "RATH DataSource view (Table tab). Column headers are a profiling strip: each field has a top color rule (gray for the disabled order_id, blue for enabled fields), name, lightbulb 'Explore In Dataset' icon button, light-blue 'transforms' chip with green count bubble, a Vega histogram/area chart and Unique/Count stats; numeric fields add min/max/mean/median/std. One row (NW-261747) is highlighted in salmon #ffcbc7 with dark red text, apparently flagging an anomalous/dirty record. Near-black primary split button vs warm-gray secondary button. Meta tab (verified live) switches to per-field cards with analytic/semantic type radios and disable toggles plus a field-suggestion message. 'Powered by Kanaries Rath' fixed footer."
+}

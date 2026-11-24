@@ -1,0 +1,15 @@
+import { createRequire } from 'node:module';
+const require = createRequire(new URL('../packages/app/package.json', import.meta.url));
+const { chromium } = require('playwright');
+const [url, out, waitMs = '6000'] = process.argv.slice(2);
+const browser = await chromium.launch();
+const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+const logs = [];
+page.on('console', (m) => { if (m.type() === 'error') logs.push(m.text()); });
+page.on('pageerror', (e) => logs.push('PAGEERROR ' + e.message));
+await page.goto(url, { waitUntil: 'domcontentloaded' });
+await page.waitForTimeout(Number(waitMs));
+await page.screenshot({ path: out });
+console.log('title:', await page.title(), 'url:', page.url());
+console.log(logs.slice(0, 15).join('\n'));
+await browser.close();

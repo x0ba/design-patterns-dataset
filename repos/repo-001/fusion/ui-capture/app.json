@@ -1,0 +1,20 @@
+{
+  "mode": "server",
+  "entry": "/",
+  "login": null,
+  "stubs": [
+    {
+      "service": "Google favicon service (https://www.google.com/s2/favicons), called directly by the browser for feed icons",
+      "how": "frontend/src/lib/api/favicon.ts now reads the base URL from VITE_FAVICON_SERVICE_URL (falls back to the original Google URL); build.sh sets it to http://localhost:4435/s2/favicons, served by .ui-capture/favicon-stub.mjs (started by start.sh), which returns a deterministic SVG site icon per domain"
+    },
+    {
+      "service": "Remote RSS/Atom feed servers (the app's feed puller)",
+      "how": "No network at runtime, so feeds aren't pulled. The seed writes feeds, items and fetch state straight into Fusion's SQLite schema and sets next_check_at 5-9 hours out, so the scheduler doesn't immediately log offline failures. Two feeds are seeded on purpose with realistic failure states (404, timeout)"
+    },
+    {
+      "service": "modernc.org/sqlite Go driver (GitLab-hosted, unreachable at build time)",
+      "how": "Build-time only: .ui-capture/gobuild/sqlite-shim provides the same API Fusion uses (driver name 'sqlite', RegisterConnectionHook) on top of github.com/mattn/go-sqlite3 built with -tags sqlite_fts5. It is wired in through an alternate modfile (go build -modfile=.ui-capture/gobuild/go.mod), which also maps golang.org/x/*, protobuf and mongo-driver to their GitHub mirrors. Fusion's source and go.mod are unchanged"
+    }
+  ],
+  "notes": "Fusion is a single-user, self-hosted RSS reader: a Go binary that serves the embedded React (Vite) UI and a JSON API, with SQLite storage. Toolchain is pinned in /mise.toml (Go 1.26.11 from actions/go-versions because dl.google.com is blocked, Node 24.22.3, pnpm 10.34.9). .ui-capture/build.sh runs the repo's own ./scripts.sh build-frontend (pnpm build, copied into backend/internal/web/dist for embedding) and then builds the backend to .ui-capture/bin/fusion. start.sh deletes the DB and re-creates it at .ui-capture/data/fusion.db on every start: it boots Fusion once so its own migrations build the schema, runs seed/seed.mjs (node:sqlite) with all timestamps relative to now, starts the favicon stub on :4435, then runs Fusion on $PORT (4434). No login: start.sh runs Fusion in its documented single-user no-auth mode (FUSION_PASSWORD empty + FUSION_ALLOW_EMPTY_PASSWORD=true, no OIDC), so GET /api/sessions returns 204 and / opens straight into the reader. Data: 9 groups plus Default (Tech News, Engineering Blogs, Languages & Tools, Security, Design & Frontend, Science & Space, Long Reads, Food, a Chinese-language group); 34 real-world feeds (Hacker News, Ars Technica, The Verge, Cloudflare, GitHub, Simon Willison, Julia Evans, Dan Luu, Go/Rust blogs, LWN, Krebs, Schneier, Quanta, NASA, xkcd, Stratechery, Daring Fireball, Serious Eats, 阮一峰, 少数派 and others); about 300 articles spread over roughly 8 months, a mix of excerpt-only and full-content posts, some with long hand-written bodies; about 130 unread, concentrated in recent posts and in a few neglected feeds; 33 bookmarks, including 3 orphaned ones from feeds unsubscribed long ago; one feed failing with 404 for 41 days, one with a recent timeout, one suspended feed (Hackaday), per-feed refresh overrides (HN 15 min, LWN 1 h, Dan Luu daily); settings: English, system theme, mark read after 5 s. Main areas: sidebar with All / Unread / Bookmarks and groups → feeds with unread counts; article list; article reader; search (FTS5); feed management (add, edit, groups); settings dialog."
+}

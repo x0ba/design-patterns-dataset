@@ -1,0 +1,57 @@
+import type { AlertType, Format } from "../types";
+
+// This week's alerts (Nov 10–16). Each points at an upcoming screening by id.
+export const WEEK_ALERTS: { at: string; type: AlertType; sid: string }[] = [
+  { at: "2026-11-16T18:09", type: "selling", sid: "s05" },
+  { at: "2026-11-16T08:40", type: "new", sid: "s01" },
+  { at: "2026-11-16T07:12", type: "new", sid: "s02" },
+  { at: "2026-11-15T16:20", type: "new", sid: "s03" },
+  { at: "2026-11-15T11:05", type: "new", sid: "s17" },
+  { at: "2026-11-14T21:30", type: "new", sid: "s06" },
+  { at: "2026-11-14T15:12", type: "new", sid: "s13" },
+  { at: "2026-11-13T18:45", type: "new", sid: "s07" },
+  { at: "2026-11-13T10:02", type: "new", sid: "s18" },
+  { at: "2026-11-12T17:30", type: "new", sid: "s08" },
+  { at: "2026-11-12T13:15", type: "last", sid: "s14" },
+  { at: "2026-11-11T19:50", type: "new", sid: "s09" },
+  { at: "2026-11-11T09:00", type: "upgrade", sid: "s33" },
+  { at: "2026-11-10T18:00", type: "new", sid: "s11" },
+];
+
+// Earlier alerts from the last 30 days (Oct 18 – Nov 9). Tuple columns:
+// [at, type, filmId, cinemaId, format, screeningDate, screeningTime, soldAtAlert, series]
+export const PAST_ALERTS: [string, AlertType, string, string, Format, string, string, number, string | null][] = [
+  ["2026-10-18T10:20", "new", "persona", "ufs", "16mm", "2026-10-30", "19:00", 12, "Bergman Winter"],
+  ["2026-10-18T09:05", "selling", "hunter", "avalon", "35mm", "2026-10-24", "20:00", 178, "Night Shadows"],
+  ["2026-10-19T18:40", "new", "chungking", "cinemateca", "DCP", "2026-10-28", "20:00", 60, "Wong Kar-wai Retrospective"],
+  ["2026-10-20T07:55", "selling", "mulholland", "parkside", "DCP", "2026-10-31", "23:50", 52, "Witching Hour Late Shows"],
+  ["2026-10-21T12:30", "last", "taxi", "avalon", "DCP", "2026-10-25", "19:30", 88, null],
+  ["2026-10-22T19:10", "new", "thing", "parkside", "16mm", "2026-10-31", "23:59", 30, "Witching Hour Late Shows"],
+  ["2026-10-23T17:45", "upgrade", "lawrence", "grandlake", "70mm", "2026-11-07", "14:00", 301, "Big Format Winter"],
+  ["2026-10-24T08:30", "new", "vagabond", "ufs", "16mm", "2026-11-05", "19:00", 22, "Cinema by Women"],
+  ["2026-10-25T13:10", "selling", "beau", "cinemateca", "35mm", "2026-11-06", "19:00", 196, null],
+  ["2026-10-26T19:00", "new", "bladerunner", "cinemateca", "DCP", "2026-11-01", "19:00", 102, null],
+  ["2026-10-27T16:40", "new", "once", "cinemateca", "DCP", "2026-11-04", "19:00", 41, null],
+  ["2026-10-28T09:15", "selling", "woman", "parkside", "16mm", "2026-11-06", "21:00", 55, null],
+  ["2026-10-29T11:00", "selling", "eraser", "parkside", "16mm", "2026-11-07", "23:59", 56, "Witching Hour Late Shows"],
+  ["2026-10-30T20:00", "new", "seven", "ufs", "35mm", "2026-11-02", "19:00", 140, "Campus Classics"],
+  ["2026-10-31T10:45", "last", "vertigo", "avalon", "35mm", "2026-11-01", "19:00", 190, "Hitchcock & Friends"],
+  ["2026-11-01T07:30", "selling", "space", "grandlake", "70mm", "2026-11-14", "19:00", 402, "Big Format Winter"],
+  ["2026-11-01T18:20", "new", "picnic", "avalon", "35mm", "2026-11-13", "19:30", 40, null],
+  ["2026-11-02T12:00", "upgrade", "cleo", "ufs", "35mm", "2026-11-08", "13:00", 105, "Cinema by Women"],
+  ["2026-11-02T19:55", "new", "mood", "cinemateca", "DCP", "2026-11-11", "19:30", 22, "Wong Kar-wai Retrospective"],
+  ["2026-11-03T09:40", "selling", "bladerunner", "cinemateca", "DCP", "2026-11-12", "19:00", 190, null],
+  ["2026-11-04T14:25", "new", "ikiru", "ufs", "35mm", "2026-11-15", "15:00", 61, "Campus Classics"],
+  ["2026-11-05T08:05", "selling", "mirror", "lumen", "35mm", "2026-11-15", "19:30", 170, "Tarkovsky in Print"],
+  ["2026-11-05T21:10", "selling", "days", "grandlake", "70mm", "2026-12-06", "19:00", 470, "Big Format Winter"],
+  ["2026-11-06T13:50", "new", "jeanne", "cinemateca", "35mm", "2026-11-15", "19:00", 180, null],
+  ["2026-11-06T17:35", "last", "chungking", "cinemateca", "DCP", "2026-11-07", "19:00", 210, "Wong Kar-wai Retrospective"],
+  ["2026-11-07T10:15", "selling", "lost", "parkside", "DCP", "2026-11-13", "23:59", 58, "Witching Hour Late Shows"],
+  ["2026-11-07T19:20", "selling", "taxi", "avalon", "DCP", "2026-11-13", "19:30", 180, null],
+  ["2026-11-08T06:50", "new", "playtime", "grandlake", "70mm", "2026-11-21", "19:00", 90, "Big Format Winter"],
+  ["2026-11-08T22:40", "new", "ran", "ufs", "35mm", "2026-11-22", "14:00", 38, "Campus Classics"],
+  ["2026-11-08T15:00", "last", "seven", "ufs", "35mm", "2026-11-09", "19:00", 210, "Campus Classics"],
+  ["2026-11-09T10:30", "new", "nosferatu", "avalon", "35mm", "2026-11-20", "20:30", 12, "Avalon Silent Nights"],
+  ["2026-11-09T16:00", "upgrade", "hunter", "avalon", "35mm", "2026-11-22", "20:00", 40, "Night Shadows"],
+  ["2026-11-09T09:20", "new", "thing", "parkside", "16mm", "2026-11-20", "23:59", 18, "Witching Hour Late Shows"],
+];

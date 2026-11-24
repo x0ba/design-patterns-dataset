@@ -1,0 +1,485 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "edgeever--workspace-note",
+    "url": "http://localhost:4501/",
+    "finalUrl": "http://localhost:4501/",
+    "status": 200,
+    "title": "EdgeEver",
+    "capturedAt": "2026-11-18T02:36:20.080Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 2120
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "productivity",
+    "domainNote": "note-taking app (Evernote-style notebooks, notes list, rich-text editor, AI assistant)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/edgeever/explore.json",
+      "repo": {
+        "name": "tianma-if/edgeever",
+        "url": "https://github.com/tianma-if/edgeever",
+        "commit": "e1be9c897278c061ccc40c5a5c2c4049c471e7fa",
+        "license": "AGPL-3.0"
+      },
+      "view": {
+        "slug": "workspace-note",
+        "name": "Three-pane workspace with note open",
+        "description": "Main Evernote-style workspace: notebook tree sidebar, note list for Customer Interviews, and rich editor with formatting toolbar showing a synthesis note."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Icon rail (tags, attachments, templates, plugins, trash), New note split button, All notes, collapsible notebook tree with counts, footer with clients and profile",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 240,
+        "height": 2120
+      },
+      "patterns": [
+        "app-shell",
+        "tree-view",
+        "badge",
+        "menu",
+        "split-pane"
+      ]
+    },
+    {
+      "id": "note-list",
+      "role": "list-pane",
+      "label": "Notebook header with note count, search field, list of 13 note cards with title, snippet, date and hashtags",
+      "bbox": {
+        "x": 240,
+        "y": 0,
+        "width": 360,
+        "height": 2120
+      },
+      "patterns": [
+        "overview-detail",
+        "card",
+        "text-field"
+      ]
+    },
+    {
+      "id": "editor",
+      "role": "editor",
+      "label": "Note title header with tag/lock/sync status/focus actions, formatting toolbar, rich-text body with headings and lists, outline toggle, floating AI assistant button",
+      "bbox": {
+        "x": 600,
+        "y": 0,
+        "width": 840,
+        "height": 2120
+      },
+      "patterns": [
+        "document-editor",
+        "ai-chat"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 240,
+            "height": 2120
+          },
+          "region": "sidebar",
+          "note": "Persistent left sidebar with icon row, notebook tree and profile footer; collapse button at bottom",
+          "quote": "Clients & Browser Extensions"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "second-sidebar-column",
+        "items": [
+          "fixed-destinations",
+          "live-counts"
+        ],
+        "visibility": "toggle-button",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "tree-view",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 12,
+            "y": 232,
+            "width": 215,
+            "height": 720
+          },
+          "region": "sidebar",
+          "note": "Notebook stacks with disclosure chevrons, icons, counts; hover ⋯ on Recipes, selected Customer Interviews",
+          "quote": "Work Projects 68"
+        }
+      ],
+      "dims": {
+        "content": [
+          "label",
+          "type-icon",
+          "count-badge",
+          "hover-actions"
+        ],
+        "expandBy": [
+          "disclosure-triangle"
+        ],
+        "selection": "single-node",
+        "source": "containment",
+        "density": "comfortable"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 160,
+            "y": 242,
+            "width": 30,
+            "height": 20
+          },
+          "region": "sidebar",
+          "note": "Plain gray note counts next to each notebook",
+          "quote": "15"
+        }
+      ],
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "aggregation": "rolled-up-to-parent"
+      }
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 258,
+            "y": 121,
+            "width": 323,
+            "height": 149
+          },
+          "region": "note-list",
+          "note": "Selected note highlighted in list, shown in editor to the right",
+          "quote": "Synthesis — discovery inte..."
+        },
+        {
+          "bbox": {
+            "x": 600,
+            "y": 0,
+            "width": 840,
+            "height": 620
+          },
+          "region": "editor",
+          "note": "Detail view of selected note"
+        }
+      ],
+      "dims": {
+        "attributePlacement": [
+          "in-both-views",
+          "in-overview-only"
+        ],
+        "abstraction": [
+          "summary",
+          "category"
+        ],
+        "truncation": "ellipsis",
+        "relationship": "one-to-one",
+        "recursion": [
+          "none"
+        ],
+        "openIn": "side-by-side",
+        "overviewType": [
+          "list",
+          "hierarchy"
+        ],
+        "detailMultiplicity": "one-at-a-time",
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "whole-item",
+        "attributeScope": [
+          "per-item"
+        ]
+      }
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 258,
+            "y": 274,
+            "width": 323,
+            "height": 149
+          },
+          "region": "note-list",
+          "note": "Note item: bold title, snippet, date and tags; separated by hairline dividers; selected one filled gray",
+          "quote": "Interview — Jess Moreau, Cop..."
+        }
+      ],
+      "dims": {
+        "media": "none",
+        "actions": "overflow-menu",
+        "shape": "horizontal",
+        "style": "borderless",
+        "target": "whole-card"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 256,
+            "y": 62,
+            "width": 287,
+            "height": 36
+          },
+          "region": "note-list",
+          "note": "Filled search box with magnifier icon and placeholder",
+          "quote": "Search notes"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "placeholder",
+          "prefix-or-suffix"
+        ],
+        "style": "filled"
+      }
+    },
+    {
+      "id": "document-editor",
+      "status": "present",
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 600,
+            "y": 36,
+            "width": 840,
+            "height": 37
+          },
+          "region": "editor",
+          "note": "Formatting toolbar: markdown source, attach, link, formula, heading, undo/redo, bold, italic, lists, quote, code, mermaid, divider, table"
+        },
+        {
+          "bbox": {
+            "x": 638,
+            "y": 90,
+            "width": 764,
+            "height": 505
+          },
+          "region": "editor",
+          "note": "Rich text body with H2s, ordered and bulleted lists",
+          "quote": "Themes (ranked by frequency)"
+        }
+      ],
+      "dims": {
+        "model": "flowing-rich-text",
+        "access": [
+          "ribbon-or-toolbar",
+          "keyboard-shortcuts"
+        ],
+        "page": "pageless",
+        "navAids": [
+          "outline-sidebar"
+        ],
+        "tracking": "none",
+        "modes": "standard"
+      }
+    },
+    {
+      "id": "split-pane",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 600,
+            "height": 900
+          },
+          "region": "sidebar",
+          "note": "Separators 'Resize notebook pane' and 'Resize note list'; collapse notebook pane button"
+        }
+      ],
+      "dims": {
+        "orientation": "side-by-side",
+        "sizing": "draggable-divider",
+        "relationship": "linked-selection"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 152,
+            "y": 58,
+            "width": 74,
+            "height": 48
+          },
+          "region": "sidebar",
+          "note": "'More' trigger opens note-type menu (Regular note, Mind map, Flowchart, ... Poster Beta, Database) — verified live, closed in capture",
+          "quote": "More"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click",
+        "structure": "flat",
+        "item": [
+          "label",
+          "icon"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    },
+    {
+      "id": "ai-chat",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Only the floating 'Open AI writing assistant' button is visible in the capture; the chat panel (Ask AI composer, Summarize/Improve writing/Translate chips, model switcher) exists in DOM but is hidden until clicked.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1364,
+            "y": 2044,
+            "width": 44,
+            "height": 44
+          },
+          "region": "editor",
+          "note": "Floating sparkle button opens AI side panel with composer"
+        }
+      ],
+      "dims": {
+        "invokeBy": [
+          "text-field-submit",
+          "attach-file-or-image",
+          "suggestion-chip"
+        ],
+        "scope": "live-page-or-selection"
+      }
+    },
+    {
+      "id": "tooltip",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1040,
+            "y": 6,
+            "width": 390,
+            "height": 24
+          },
+          "note": "Icon buttons only have aria labels; no visible tooltip in capture"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "three-pane desktop app: notebook tree sidebar (240px), scrolling note list (360px), rich-text editor pane filling the rest; resize separators between panes",
+    "regions": [
+      "sidebar",
+      "note-list",
+      "editor"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#eef1f4",
+      "#f4f6f8",
+      "#f8fafb",
+      "#ffffff",
+      "#dde3e9",
+      "#e5e5e5",
+      "#0a0a0a",
+      "#27272a",
+      "#737373",
+      "#a6a6a6",
+      "#16a06e"
+    ],
+    "colorRoles": {
+      "background": "#eef1f4",
+      "surface": "#f8fafb",
+      "text": "#0a0a0a",
+      "muted": "#737373",
+      "primary": "#16a06e",
+      "border": "#e5e5e5",
+      "selected": "#dde3e9",
+      "subtle": "#a6a6a6"
+    },
+    "typography": "System UI stack (-apple-system / sans) throughout: bold 16px note titles and editor title, 12px UI labels and list metadata, 16px editor body, 20px editor headings",
+    "typeScale": "Compact: 20px bold H2 in editor, 16px body and bold list titles, 14px search, 12px metadata/counts; hierarchy mostly via weight and gray tone",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "clean",
+      "calm",
+      "utilitarian",
+      "quiet"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T02:37:46.114Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 8,
+    "usage": {
+      "input_tokens": 16,
+      "cache_creation_input_tokens": 38676,
+      "cache_read_input_tokens": 281003,
+      "output_tokens": 5083
+    }
+  },
+  "notes": "Evernote-like three-column note app. Panes distinguished by slightly different grays (sidebar #eef1f4, list #f4f6f8, editor #f8fafb) rather than borders. Only color accents: green circular + New note button in a white pill split-button, colored notebook icons (yellow, purple, green, blue, red), star on selected note. Selected note card filled gray. Hashtags shown as light gray text. AI assistant panel (Ask AI composer with suggestion chips Summarize/Improve writing/Translate, 'Include current note', gpt-4.1-mini model switcher) hidden behind a floating sparkle FAB in capture. 'Synced · 582 chars' status in editor header."
+}

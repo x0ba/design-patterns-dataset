@@ -1,0 +1,159 @@
+import type { NextFunction, Request, Response } from 'express';
+import joi from 'joi';
+import { MYFIN } from '../consts.js';
+import APIError from '../errorHandling/apiError.js';
+import InvestAssetService from '../services/investAssetService.js';
+import Logger from '../utils/Logger.js';
+import CommonsController from './commonsController.js';
+
+const getAllAssetsForUser = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const sessionData = await CommonsController.checkAuthSessionValidity(req);
+    const data = await InvestAssetService.getAllAssetsForUser(sessionData.userId);
+    res.json(data);
+  } catch (err) {
+    Logger.addLog(err);
+    next(err || APIError.internalServerError());
+  }
+};
+
+const createAssetSchema = joi.object({
+  name: joi.string().required(),
+  type: joi
+    .string()
+    .allow(MYFIN.TRX_TYPES.EXPENSE, MYFIN.TRX_TYPES.INCOME, MYFIN.TRX_TYPES.TRANSFER)
+    .required(),
+  ticker: joi.string().required(),
+  broker: joi.string().required(),
+});
+
+const createAsset = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const sessionData = await CommonsController.checkAuthSessionValidity(req);
+    const input = await createAssetSchema.validateAsync(req.body);
+    await InvestAssetService.createAsset(sessionData.userId, input);
+    res.json('New account added!');
+  } catch (err) {
+    Logger.addLog(err);
+    next(err || APIError.internalServerError());
+  }
+};
+
+const updateAssetSchema = joi.object({
+  name: joi.string().required(),
+  type: joi
+    .string()
+    .allow(MYFIN.TRX_TYPES.EXPENSE, MYFIN.TRX_TYPES.INCOME, MYFIN.TRX_TYPES.TRANSFER)
+    .required(),
+  ticker: joi.string().optional().default(''),
+  broker: joi.string().optional().default(''),
+});
+
+const updateAsset = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const sessionData = await CommonsController.checkAuthSessionValidity(req);
+    const input = await updateAssetSchema.validateAsync(req.body);
+    const assetId = req.params.id;
+    await InvestAssetService.updateAsset(sessionData.userId, {
+      assetId: assetId,
+      ...input,
+    });
+    res.json('Account updated!');
+  } catch (err) {
+    Logger.addLog(err);
+    next(err || APIError.internalServerError());
+  }
+};
+
+const updateCurrentAssetValueSchema = joi.object({
+  new_value: joi.number().required(),
+  month: joi.number().optional(),
+  year: joi.number().optional(),
+});
+
+const updateCurrentAssetValue = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const sessionData = await CommonsController.checkAuthSessionValidity(req);
+    const input = await updateCurrentAssetValueSchema.validateAsync(req.body);
+    const assetId = req.params.id as string;
+    await InvestAssetService.updateCurrentAssetValue(
+      sessionData.userId,
+      BigInt(assetId),
+      input.new_value,
+      input.month,
+      input.year
+    );
+    res.json(`Asset value successfully updated!  - ${assetId} - ${input.new_value}`);
+  } catch (err) {
+    Logger.addLog(err);
+    next(err || APIError.internalServerError());
+  }
+};
+
+const deleteAssetValueSnapshotSchema = joi.object({
+  month: joi.number().integer().min(1).max(12).required(),
+  year: joi.number().integer().min(1970).required(),
+});
+
+const deleteAssetValueSnapshot = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const sessionData = await CommonsController.checkAuthSessionValidity(req);
+    const { month, year } = await deleteAssetValueSnapshotSchema.validateAsync({
+      month: req.params.month,
+      year: req.params.year,
+    });
+    const assetId = BigInt(req.params.id as string);
+
+    await InvestAssetService.deleteAssetValueSnapshot(sessionData.userId, assetId, month, year);
+    res.json('Asset value snapshot successfully deleted!');
+  } catch (err) {
+    Logger.addLog(err);
+    next(err || APIError.internalServerError());
+  }
+};
+
+const getAssetStatsForUser = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const sessionData = await CommonsController.checkAuthSessionValidity(req);
+    const data = await InvestAssetService.getAssetStatsForUser(sessionData.userId);
+    res.json(data);
+  } catch (err) {
+    Logger.addLog(err);
+    next(err || APIError.internalServerError());
+  }
+};
+
+const getAllAssetsSummaryForUser = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const sessionData = await CommonsController.checkAuthSessionValidity(req);
+    const data = await InvestAssetService.getAllAssetsSummaryForUser(sessionData.userId);
+    res.json(data);
+  } catch (err) {
+    Logger.addLog(err);
+    next(err || APIError.internalServerError());
+  }
+};
+
+const deleteAsset = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const sessionData = await CommonsController.checkAuthSessionValidity(req);
+    const assetId = req.params.id as string;
+
+    await InvestAssetService.deleteAsset(sessionData.userId, BigInt(assetId));
+    res.json('Asset successfully deleted!');
+  } catch (err) {
+    Logger.addLog(err);
+    next(err || APIError.internalServerError());
+  }
+};
+
+export default {
+  getAllAssetsForUser,
+  createAsset,
+  updateAsset,
+  updateCurrentAssetValue,
+  deleteAssetValueSnapshot,
+  getAssetStatsForUser,
+  getAllAssetsSummaryForUser,
+  deleteAsset,
+};

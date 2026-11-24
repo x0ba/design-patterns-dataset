@@ -1,0 +1,367 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "toothpaste--duckyscript-manager",
+    "url": "http://toothpaste.localhost:4319/",
+    "finalUrl": "http://toothpaste.localhost:4319/",
+    "status": 200,
+    "title": "ToothPaste",
+    "capturedAt": "2026-11-18T01:48:01.733Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 3304
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "utilities",
+    "domainNote": "web companion app for a Bluetooth HID keystroke-injection device (paste text / run DuckyScript macros on a target computer)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/toothpaste/explore.json",
+      "repo": {
+        "name": "Brisk4t/ToothPaste",
+        "url": "https://github.com/Brisk4t/ToothPaste",
+        "commit": "dd02af14332ddb735d68807a32643931ec046fd6",
+        "license": "AGPL-3.0"
+      },
+      "view": {
+        "slug": "duckyscript-manager",
+        "name": "Duckyscript manager",
+        "description": "Paste view's Duckyscript tab listing saved scripts with line counts, validity and estimated time, plus New Script and Import buttons."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Top bar: tooth logo + 'ToothPaste' wordmark, nav buttons (Live Capture, Paste [active, outlined], About, Update, Quick Start), red-outlined 'Connect to Device' button",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 96
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "mode-tabs",
+      "role": "tabs",
+      "label": "Full-width two-segment tab strip 'Text' / 'Duckyscript' (Duckyscript selected)",
+      "bbox": {
+        "x": 24,
+        "y": 140,
+        "width": 1392,
+        "height": 40
+      },
+      "patterns": [
+        "tabs"
+      ]
+    },
+    {
+      "id": "manager-header",
+      "role": "section-header",
+      "label": "Red work-in-progress warning line, 'Duckyscript Manager' heading, green 'New Script' and orange 'Import From .txt File' buttons",
+      "bbox": {
+        "x": 24,
+        "y": 188,
+        "width": 1392,
+        "height": 124
+      },
+      "patterns": [
+        "banner"
+      ]
+    },
+    {
+      "id": "script-list",
+      "role": "list",
+      "label": "Long list of saved DuckyScript scripts as full-width outlined rows: title + 'N lines • ✓ Valid / ❌ Errors • Nms'",
+      "bbox": {
+        "x": 28,
+        "y": 320,
+        "width": 1384,
+        "height": 2956
+      },
+      "patterns": [
+        "overview-detail",
+        "card"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "primary": "top-navigation-bar",
+        "secondary": "sub-tabs-under-the-header",
+        "items": [
+          "fixed-destinations"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 96
+          },
+          "region": "header",
+          "quote": "Live Capture Paste About Update Quick Start",
+          "note": "Persistent top bar with brand, top-level destinations (Paste active with white outline) and device-connection control"
+        }
+      ]
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.9,
+      "dims": {
+        "placement": "segmented-control",
+        "label": [
+          "text",
+          "icon"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 24,
+            "y": 140,
+            "width": 1392,
+            "height": 40
+          },
+          "region": "mode-tabs",
+          "quote": "Text Duckyscript",
+          "note": "role=tablist with two icon+text tabs; selected tab gets lighter fill. Verified live: clicking Text swaps to a large text area + 'Paste to Device' button"
+        }
+      ]
+    },
+    {
+      "id": "banner",
+      "status": "present",
+      "confidence": 0.65,
+      "dims": {
+        "scope": "section",
+        "severity": "warning",
+        "action": "none",
+        "placement": "top-of-content"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 28,
+            "y": 192,
+            "width": 710,
+            "height": 18
+          },
+          "region": "manager-header",
+          "quote": "The DuckyScript module is a work-in-progress. Features might not be fully functional.",
+          "note": "Inline red text notice with info/alert icon at top of the Duckyscript panel; no container, no dismiss"
+        }
+      ]
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "attributePlacement": [
+          "in-both-views",
+          "in-detail-view-only"
+        ],
+        "abstraction": [
+          "summary",
+          "category"
+        ],
+        "truncation": "full-text",
+        "relationship": "one-to-one",
+        "recursion": [
+          "none"
+        ],
+        "openIn": "replace",
+        "overviewType": [
+          "list"
+        ],
+        "detailMultiplicity": "one-at-a-time",
+        "openBy": [
+          "click",
+          "back-button"
+        ],
+        "openFrom": "whole-item",
+        "attributeScope": [
+          "per-item"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 28,
+            "y": 320,
+            "width": 1384,
+            "height": 2956
+          },
+          "region": "script-list",
+          "quote": "BIOS - Dell OptiPlex setup password 7 lines • ✓ Valid • 2840ms",
+          "note": "List of scripts with key attributes (line count, validity, est. time); verified live: clicking a row replaces the list with an 'Edit Script' view showing name field, script body, stats footer, Update/Delete/Export/Back buttons and Execute Script"
+        }
+      ]
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.75,
+      "dims": {
+        "media": "none",
+        "actions": "none",
+        "shape": "horizontal",
+        "style": "outlined",
+        "target": "whole-card"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 28,
+            "y": 320,
+            "width": 1384,
+            "height": 68
+          },
+          "region": "script-list",
+          "quote": "BIOS - Dell OptiPlex setup password",
+          "note": "Each script is a whole-row button with #111 fill, 2px #222 border, 4px radius; bold title + muted meta line"
+        },
+        {
+          "bbox": {
+            "x": 28,
+            "y": 548,
+            "width": 1384,
+            "height": 68
+          },
+          "region": "script-list",
+          "quote": "Hak5 - reverse shell (original, unported)",
+          "note": "Error variant shows red ❌ Errors in meta line"
+        }
+      ]
+    },
+    {
+      "id": "badge",
+      "status": "absent",
+      "confidence": 0.6,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 42,
+            "y": 585,
+            "width": 200,
+            "height": 18
+          },
+          "note": "Validity shown as inline meta text '❌ Errors' / '✓ Valid', not a separate badge/pill"
+        }
+      ]
+    },
+    {
+      "id": "onboarding-tour",
+      "status": "absent",
+      "confidence": 0.6,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 927,
+            "y": 16,
+            "width": 153,
+            "height": 64
+          },
+          "quote": "Quick Start",
+          "note": "Only a trigger button for a quick-start guide; no tour visible in capture"
+        }
+      ]
+    }
+  ],
+  "structure": {
+    "layout": "single-page web app: top nav bar with brand, page buttons and a prominent 'Connect to Device' button; full-width segmented tabs (Text / Duckyscript) above a tab panel containing a warning line, section heading, two full-width action buttons and a long single-column list of script rows that drill into an editor view",
+    "regions": [
+      "header",
+      "mode-tabs",
+      "manager-header",
+      "script-list"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#000000",
+      "#111111",
+      "#222222",
+      "#ffffff",
+      "#888888",
+      "#de6240",
+      "#00a878",
+      "#dd4058"
+    ],
+    "colorRoles": {
+      "background": "#000000",
+      "surface": "#111111",
+      "border": "#222222",
+      "text": "#ffffff",
+      "muted": "#888888",
+      "primary": "#00a878",
+      "accent": "#de6240",
+      "danger": "#dd4058"
+    },
+    "typography": "Monospace throughout: Ubuntu Sans Mono for UI text, buttons, list rows and meta; Roboto Mono bold for the 'ToothPaste' wordmark (36px) and h6 headings ('Duckyscript Manager', 'Connect to Device' at 20px).",
+    "typeScale": "Compact: 36px/700 wordmark, 20px headings, 16px nav, 14px bold row titles and buttons, 12px muted meta lines; hierarchy via weight and grey vs white rather than size.",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "texture",
+    "mood": [
+      "technical",
+      "hacker",
+      "terminal",
+      "dark",
+      "utilitarian"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T01:49:15.865Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 10,
+    "usage": {
+      "input_tokens": 20,
+      "cache_creation_input_tokens": 25826,
+      "cache_read_input_tokens": 266329,
+      "output_tokens": 4574
+    }
+  },
+  "notes": "Black page with a faint square grid-line texture (full-page SVG) evoking graph paper/terminal. Everything is monospace. Header bar is near-black; the 'Connect to Device' call-to-action is outlined in pinkish red (#dd4058) with a wireless-off icon and a hidden 'Hold to Rename' secondary label (press-and-hold interaction). Paste nav item marked active by a white 1px outline. The two primary action buttons split width 50/50 in saturated green and terracotta orange — the only filled color on the page. Script rows are uniform full-width dark bars; status uses ✓ text in grey and a red ❌ emoji for errors. Detail editor (seen live) replaces the list with a script textarea, stats footer ('Lines: 7 Commands: 5 Est. Time'), and a large 'Execute Script' button."
+}

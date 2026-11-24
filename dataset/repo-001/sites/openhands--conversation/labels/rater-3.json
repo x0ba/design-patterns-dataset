@@ -1,0 +1,628 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "openhands--conversation",
+    "url": "http://openhands.localhost:4319/conversations/c7a91e04d2f84b6b9e1f3a0c55d2e801?backend=default-local",
+    "finalUrl": "http://openhands.localhost:4319/conversations/c7a91e04d2f84b6b9e1f3a0c55d2e801?backend=default-local",
+    "status": 200,
+    "title": "✅ Fix N+1 queries on /v2/shipments list endpoint | OpenHands",
+    "capturedAt": "2026-11-18T02:05:00.798Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1437
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "ai-tools",
+    "domainNote": "AI coding agent workspace (OpenHands) — conversation with agent trace, git actions and workspace file panel",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/openhands/explore.json",
+      "repo": {
+        "name": "OpenHands/OpenHands",
+        "url": "https://github.com/OpenHands/OpenHands",
+        "commit": "5ed4ffa5ac2509e479acc12b83247fbb4c3612c8",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "conversation",
+        "name": "Conversation with terminal panel",
+        "description": "Agent conversation transcript with expanded tool-action group, composer with git actions, and a side panel showing terminal output."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Logo, collapse button, Search commands (Ctrl+K), New Chat/Customize/Automate nav, Conversations list with status dots, project tags, relative times, Load more, connection/backend selector and settings",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 300,
+        "height": 1437
+      },
+      "patterns": [
+        "app-shell",
+        "command-palette",
+        "badge",
+        "pagination"
+      ]
+    },
+    {
+      "id": "conversation-header",
+      "role": "toolbar",
+      "label": "Conversation title with status dot, more options, Git actions, overview and hide-panel toggle",
+      "bbox": {
+        "x": 300,
+        "y": 0,
+        "width": 570,
+        "height": 40
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "agent-thread",
+      "role": "chat-thread",
+      "label": "User prompts in grey bubbles, agent replies as markdown with inline code, collapsible tool-action groups ('Read a file, made 2 edits, ran 2 commands') with expandable steps, timestamps",
+      "bbox": {
+        "x": 316,
+        "y": 60,
+        "width": 538,
+        "height": 1180
+      },
+      "patterns": [
+        "agent-run",
+        "ai-chat",
+        "accordion",
+        "ai-provenance"
+      ]
+    },
+    {
+      "id": "composer",
+      "role": "composer",
+      "label": "'What do you want to build?' prompt box with + attach, model selector sonnet-4.5, dictation and send; below it repo/branch chips and Pull/Push/Pull Request buttons",
+      "bbox": {
+        "x": 316,
+        "y": 1261,
+        "width": 538,
+        "height": 150
+      },
+      "patterns": [
+        "prompt-input"
+      ]
+    },
+    {
+      "id": "workspace-panel",
+      "role": "side-panel",
+      "label": "Right tabbed panel: icon tabs (Files active), workspace path with copy, file tree pane ('No files in workspace') and file viewer empty state 'Select a file to view its contents'",
+      "bbox": {
+        "x": 870,
+        "y": 0,
+        "width": 570,
+        "height": 1437
+      },
+      "patterns": [
+        "tabs",
+        "empty-state",
+        "split-pane",
+        "file-manager"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "agent-run",
+      "status": "present",
+      "confidence": 0.9,
+      "dims": {
+        "brief": [
+          "natural-language-goal",
+          "repo-or-workspace-context"
+        ],
+        "structure": "linear-trace",
+        "control": [
+          "start-from-a-prompt",
+          "continue-redirect-mid-run"
+        ],
+        "lifecycle": "minutes-with-live-trace",
+        "feedback": [
+          "streaming-step-log"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 332,
+            "y": 296,
+            "width": 506,
+            "height": 320
+          },
+          "region": "agent-thread",
+          "quote": "Read a file, made 2 edits, ran 2 commands",
+          "note": "collapsible tool-step trace of agent actions"
+        },
+        {
+          "bbox": {
+            "x": 332,
+            "y": 636,
+            "width": 506,
+            "height": 393
+          },
+          "region": "agent-thread",
+          "quote": "Confirmed and fixed. The endpoint was issuing 203 queries",
+          "note": "agent summary of changes made to repo files"
+        },
+        {
+          "bbox": {
+            "x": 316,
+            "y": 1379,
+            "width": 538,
+            "height": 30
+          },
+          "region": "composer",
+          "quote": "jl/shipments-n-plus-one",
+          "note": "repo/branch context and git actions"
+        }
+      ]
+    },
+    {
+      "id": "ai-chat",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "turnContent": [
+          "markdown-with-code",
+          "tool-call-traces"
+        ],
+        "composition": "thread-plus-artifacts-panel",
+        "invokeBy": [
+          "text-field-submit",
+          "voice-input",
+          "attach-file-or-image"
+        ],
+        "flow": "hand-off-to-an-agent-run",
+        "scope": "project-knowledge"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 332,
+            "y": 80,
+            "width": 506,
+            "height": 116
+          },
+          "region": "agent-thread",
+          "quote": "The /v2/shipments list endpoint got really slow after we added carrier SLAs",
+          "note": "user turn bubble"
+        },
+        {
+          "bbox": {
+            "x": 416,
+            "y": 1061,
+            "width": 422,
+            "height": 44
+          },
+          "region": "agent-thread",
+          "quote": "Nice. Open a PR against main and mention it closes TIDE-1432.",
+          "note": "follow-up user turn"
+        }
+      ]
+    },
+    {
+      "id": "prompt-input",
+      "status": "present",
+      "confidence": 0.92,
+      "dims": {
+        "content": [
+          "plain-prompt",
+          "attached-images-or-docs"
+        ],
+        "layout": "bottom-sticky-composer",
+        "submitBy": [
+          "click-send",
+          "enter-key"
+        ],
+        "assistance": [
+          "placeholder-examples"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 316,
+            "y": 1261,
+            "width": 538,
+            "height": 106
+          },
+          "region": "composer",
+          "quote": "What do you want to build?",
+          "note": "composer with + attach, model picker sonnet-4.5, mic, send"
+        }
+      ]
+    },
+    {
+      "id": "ai-provenance",
+      "status": "present",
+      "confidence": 0.65,
+      "dims": {
+        "disclosure": [
+          "model-identity",
+          "tool-calls-used"
+        ],
+        "openBy": [
+          "expand-tool-trace"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 332,
+            "y": 404,
+            "width": 506,
+            "height": 212
+          },
+          "region": "agent-thread",
+          "quote": "Eager-load carrier, SLA policy and stops",
+          "note": "expandable trace of tool calls behind the reply"
+        },
+        {
+          "bbox": {
+            "x": 368,
+            "y": 1325,
+            "width": 98,
+            "height": 22
+          },
+          "region": "composer",
+          "quote": "sonnet-4.5",
+          "note": "model identity shown in composer"
+        }
+      ]
+    },
+    {
+      "id": "accordion",
+      "status": "present",
+      "confidence": 0.75,
+      "dims": {
+        "policy": "many-at-a-time",
+        "header": [
+          "title-only",
+          "title-plus-summary-value"
+        ],
+        "toggle": [
+          "header-click"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 332,
+            "y": 404,
+            "width": 506,
+            "height": 212
+          },
+          "region": "agent-thread",
+          "quote": "Read a file, made 2 edits, ran 2 commands",
+          "note": "expanded action group with each step collapsed behind ▸ chevrons; other groups ('Count SQL queries for a 100-row page', 'Commit and open pull request') collapsed"
+        }
+      ]
+    },
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "contextual-panel",
+        "items": [
+          "fixed-destinations",
+          "recents"
+        ],
+        "visibility": "toggle-button",
+        "structure": "single-app"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 300,
+            "height": 1437
+          },
+          "region": "sidebar",
+          "quote": "New Chat",
+          "note": "persistent left sidebar with nav and conversation recents; collapse button"
+        },
+        {
+          "bbox": {
+            "x": 300,
+            "y": 0,
+            "width": 570,
+            "height": 40
+          },
+          "region": "conversation-header",
+          "quote": "Fix N+1 queries on /v2/shipments list endpoint",
+          "note": "top bar with title and panel toggle"
+        }
+      ]
+    },
+    {
+      "id": "command-palette",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "types": [
+          "commands",
+          "places",
+          "settings-toggles"
+        ],
+        "detail": "name-and-description",
+        "summon": [
+          "in-app-shortcut",
+          "visible-search-button"
+        ],
+        "scope": "current-app",
+        "placement": "centered-overlay"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 10,
+            "y": 40,
+            "width": 279,
+            "height": 34
+          },
+          "region": "sidebar",
+          "quote": "Search commands",
+          "note": "visible trigger with CTRL+K hint; live page opens a centered overlay 'Search actions, pages, and settings…' with sectioned results and GO buttons"
+        }
+      ]
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.75,
+      "dims": {
+        "meaning": "status",
+        "aggregation": "per-item"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 16,
+            "y": 240,
+            "width": 270,
+            "height": 40
+          },
+          "region": "sidebar",
+          "quote": "Project: security",
+          "note": "green status dot / checkmark per conversation and small project label pill"
+        },
+        {
+          "bbox": {
+            "x": 16,
+            "y": 330,
+            "width": 270,
+            "height": 44
+          },
+          "region": "sidebar",
+          "quote": "Project: perf"
+        }
+      ]
+    },
+    {
+      "id": "pagination",
+      "status": "present",
+      "confidence": 0.75,
+      "dims": {
+        "mechanism": "load-more",
+        "position": "scroll-position-only"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 100,
+            "y": 992,
+            "width": 100,
+            "height": 24
+          },
+          "region": "sidebar",
+          "quote": "Load more",
+          "note": "load more for conversation list"
+        }
+      ]
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.88,
+      "dims": {
+        "placement": "top",
+        "label": [
+          "icon",
+          "text"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 875,
+            "y": 4,
+            "width": 280,
+            "height": 32
+          },
+          "region": "workspace-panel",
+          "quote": "Files",
+          "note": "tablist 'Conversation panels' (Files, Commits, Planner, Terminal, Browser, Usage); active tab shows icon+label, others icon-only; verified live switching to Planner"
+        }
+      ]
+    },
+    {
+      "id": "empty-state",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "cause": "first-use",
+        "content": [
+          "illustration",
+          "explanation"
+        ],
+        "starters": "none",
+        "recovery": "none"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1095,
+            "y": 730,
+            "width": 345,
+            "height": 90
+          },
+          "region": "workspace-panel",
+          "quote": "Select a file to view its contents",
+          "note": "cursor icon + explanatory text"
+        },
+        {
+          "bbox": {
+            "x": 871,
+            "y": 125,
+            "width": 224,
+            "height": 28
+          },
+          "region": "workspace-panel",
+          "quote": "No files in workspace"
+        }
+      ]
+    },
+    {
+      "id": "split-pane",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "rationale": "Three panes side by side with a hide-panel toggle and hide-file-tree toggle; could not verify draggable dividers.",
+      "dims": {
+        "orientation": "side-by-side",
+        "sizing": "collapsible-pane",
+        "relationship": "linked-selection"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 870,
+            "y": 113,
+            "width": 570,
+            "height": 1324
+          },
+          "region": "workspace-panel",
+          "note": "file tree pane beside file viewer pane; whole right panel hideable via 'Hide panel'"
+        }
+      ]
+    },
+    {
+      "id": "file-manager",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Files tab is a file tree + viewer for the workspace, but it is empty in the capture so item view/metadata cannot be observed.",
+      "dims": {
+        "preview": "preview-pane",
+        "traversal": "tree-plus-content"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 871,
+            "y": 41,
+            "width": 569,
+            "height": 1396
+          },
+          "region": "workspace-panel",
+          "quote": "Workspace: /Users/jonas/src/harbor-api",
+          "note": "workspace path, file tree pane (empty) and file viewer"
+        }
+      ]
+    }
+  ],
+  "structure": {
+    "layout": "three-column app: left sidebar (nav + conversation history), center agent conversation thread with bottom composer and git action bar, right tabbed panel (Files/Commits/Planner/Terminal/Browser/Usage) with file tree + empty viewer",
+    "regions": [
+      "sidebar",
+      "conversation-header",
+      "agent-thread",
+      "composer",
+      "workspace-panel"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#181818",
+      "#202020",
+      "#313131",
+      "#282828",
+      "#ececec",
+      "#979797",
+      "#737373",
+      "#404040",
+      "#1fbd53",
+      "#ffffff"
+    ],
+    "colorRoles": {
+      "background": "#181818",
+      "surface": "#202020",
+      "text": "#ececec",
+      "muted": "#979797",
+      "primary": "#ececec",
+      "accent": "#1fbd53",
+      "border": "#404040",
+      "bubble": "#313131"
+    },
+    "typography": "System sans (-apple-system, rendered as Ubuntu) for all UI and prose; monospace (source-code-pro / ui-monospace) for inline code chips, workspace path and the CTRL+K hint",
+    "typeScale": "Flat, compact scale: 16px title/body chat text, 14–15px sidebar/nav and action rows, 13px conversation titles (bold), 12px timestamps/buttons, 10px project tag pills and kbd hint; hierarchy from weight and grey value rather than size",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "dark",
+      "technical",
+      "minimal",
+      "calm",
+      "developer"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T02:06:35.268Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 9,
+    "usage": {
+      "input_tokens": 18,
+      "cache_creation_input_tokens": 41605,
+      "cache_read_input_tokens": 330977,
+      "output_tokens": 5699
+    }
+  },
+  "notes": "Dark near-black IDE-like agent workspace. Agent reasoning appears as grey muted one-line action summaries with ▸ triangles that expand into a thin-bordered list of tool steps; user turns are #313131 rounded (12px) bubbles right-aligned, agent replies are unboxed prose with inline code chips. Conversation list uses green dots for running and green checks for finished sessions plus tiny 'Project: x' tag pills. Bottom git action bar (repo icon, branch pill, Pull/Push/Pull Request pill buttons) sits under the composer. Right panel tabs are icon-only except the active one. Only accent color is the status green; everything else is greyscale."
+}

@@ -1,0 +1,24 @@
+{
+  "mode": "server",
+  "entry": "/join",
+  "login": null,
+  "stubs": [
+    {
+      "service": "CDN-hosted browser libraries (stackpath Bootstrap 4.4.1, use.fontawesome.com FontAwesome 5.7.2, cdnjs webrtc-adapter 7.3.0 / moment 2.24.0 / FileSaver 1.3.8, rawgit xss-filters)",
+      "how": "Same versions installed from npm into .ui-capture/stubs and copied to src/assets/vendor by .ui-capture/vendor.sh; src/index.html now points at those local copies (integrity attrs dropped)."
+    },
+    {
+      "service": "Other people in the call",
+      "how": ".ui-capture/participants.js (started by start.sh) connects 4 socket.io clients (Priya Raman, Marcus Oyelaran, Hannah Kowalczyk, Diego Fuentes) to the app's /stream namespace, subscribe to the seeded room like the browser client does, and when a new user arrives they replay the chat history in .ui-capture/seed-chat.js through the app's own 'chat' event, then post an occasional live message every 75s. They don't do WebRTC, so they show up in chat only, not as video tiles."
+    },
+    {
+      "service": "Sign-in / display name (the app stores it in sessionStorage via its Create Room / Enter Room forms)",
+      "how": ".ui-capture/dev-entry.js is preloaded with `node -r` in front of src/app.js and adds GET /join, which sets sessionStorage.username = 'Sam Okafor' and redirects to /?room=Tidewater_Weekly%20Sync_2813309571. /join?room=..&name=.. picks a different room or name."
+    },
+    {
+      "service": "Xirsys STUN/TURN servers (src/assets/js/helpers.js getIceServer)",
+      "how": "Left as is. They're only used when a real browser-to-browser peer connection forms. Two local tabs in the same room still connect over host candidates, and the stub participants never open a peer connection."
+    }
+  ],
+  "notes": "Plain Express + socket.io app (node 18.20.8 via mise; `npm ci`). There's no database: rooms and chat exist only while people are connected. start.sh runs `node -r .ui-capture/dev-entry.js src/app.js` on $PORT (src/app.js changed only to read process.env.PORT) and then starts the stub participants. Entry /join drops you, as 'Sam Okafor', into the team's recurring call room 'Tidewater_Weekly Sync_2813309571' (the odd underscore/space mix comes from the app's own room-link generator). There you get the navbar (Unique Identifier, video/mic/screen-share/record toggles, chat toggle with a red 'New' badge, leave), your local camera preview in the bottom-left (needs camera permission; it stays empty with no camera), and the chat pane (click the comment icon), filled with a 50-message weekly product sync among 4 teammates of a marina slip-reservation startup: agenda, incident notes, Jira/Figma/GitHub/Notion links (auto-linked), short replies, emoji, a dropped-connection aside. Every chat message carries the current time, because the app timestamps on receipt. Other screens: '/' = Create Room form (also where the Leave button goes); '/?room=<anything>' with no stored name = 'Your Name' form; the Record button opens the record video/screen modal. Opening the room in a second tab replays the history to everyone in the room again."
+}

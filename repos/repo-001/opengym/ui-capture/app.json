@@ -1,0 +1,32 @@
+{
+  "mode": "server",
+  "entry": "/",
+  "login": {
+    "username": "Jonas Keller",
+    "email": "jonas.keller@example.com",
+    "password": "kraftwerk-oerlikon-115"
+  },
+  "stubs": [
+    {
+      "service": "nginx web container (web/nginx.conf.template)",
+      "how": ".ui-capture/serve.mjs, a small Node server on PORT that serves frontend/dist, the 180 px exercise media from catalogue/media at /exercise-media/, and proxies /api/ to the api process; /mcp answers 503 'MCP is not running', as nginx does without the mcp container"
+    },
+    {
+      "service": "Passkey (WebAuthn) sign-in",
+      "how": "Not faked: the api's own optional password sign-in is switched on (PASSWORD_LOGIN=1), and the account was registered through POST /api/register/password. Sign in on the start screen with the name (or e-mail) and the password"
+    },
+    {
+      "service": "Web Push (VAPID)",
+      "how": "The api generates its own local VAPID keys in DATA_DIR/vapid.json; VAPID_SUBJECT is a placeholder (mailto:admin@localhost). No push service is contacted unless a browser subscribes"
+    },
+    {
+      "service": "AI Coach, OIDC, integrations, analytics (Umami)",
+      "how": "Left off: none of their env vars are set, which is how a self-hosted instance runs without them, so the app makes no outside calls for them"
+    },
+    {
+      "service": "GitHub release check, OpenStreetMap tiles/Nominatim, YouTube player",
+      "how": "Not stubbed: the web build never calls the GitHub update check (Android sideload builds only); the map and place search belong to the phone-only gym reminder; YouTube embeds load only when someone taps an exercise's video link. None of them is on the main screens"
+    }
+  ],
+  "notes": "openGym 1.4.5 (React 19 + Vite frontend, plain node:http api). Node 26.13.1 pinned in mise.toml (the Dockerfiles and CI use node:26). Built with `cd frontend && npm ci && npm run build`; api deps with `cd api && npm ci --omit=optional`. start.sh copies .ui-capture/seed-data to .ui-capture/data (the api's DATA_DIR: db.json, state-<uid>.json, session secret), starts api/server.js on 127.0.0.1:3448 with PASSWORD_LOGIN=1 and ORIGIN=http://localhost:$PORT, then serve.mjs on $PORT (4448). Opening / shows the sign-in screen; sign in with the password form (name or e-mail plus password from `login`). The app uses a HashRouter, so screens are /#/home, /#/plan, /#/history, /#/stats, /#/measurements, /#/library, /#/muscles, /#/journal, /#/checkin, /#/settings. The api logs 'admin socket: listen EPERM' in the sandbox; that socket is only for the recover.js CLI and the server runs without it. Data: seed.mjs starts the api against an empty seed-data dir, registers 'Jonas Keller' with a password and saves the profile built by gen-state.mjs with PUT /api/data (the way a device syncs). gen-state.mjs uses the app's own helpers (routine-write.js createRoutine, log-workout.js buildLoggedWorkout/appendLoggedWorkout, the code behind the MCP log_workout tool), so PR badges, volume and history are computed the way the app does it. The profile: a kg lifter training since 2 Mar 2026. Three-day full body (Full Body A/B, now in an 'Archive' routine folder) until late May, then a four-day upper/lower split (Upper A – Strength, Lower A – Squat, Upper B – Volume, Lower B – Hinge) plus Saturday cardio (rower and treadmill), scheduled Mon/Tue/Thu/Fri/Sat, and a 'Hotel room 30 min' routine in a 'Travel' folder. About 120 sessions with warm-ups, RIR ratings, the odd failed set, dropped accessories, session and exercise notes and a custom exercise ('Kraftwerk viking press'). Loads progress (squat 60 to about 115 kg, deadlift 80 to about 150 kg) with dips after a holiday and a flu week. 130 morning weigh-ins (84.6 kg cut to about 80.5, then a slow gain), 10 tape-measure check-ins with some fields left empty, day notes for travel, sickness, an injured back and rest days, standing exercise notes, favourites, two gym check-in cards, daily-form check-ins for the last sessions. Main areas: Home (today's plan, week, body weight), Plan (routines and weekly schedule), workout logging, History/calendar, Stats (volume, PRs, muscle map, effort), Body (weight and measurements), exercise Library, Check-in cards, Settings. Re-seed with `node .ui-capture/seed.mjs` (it rewrites .ui-capture/seed-data). Headless Chrome cannot start in the capture sandbox, so the UI was checked with .ui-capture/render-check.sh: it renders Home, Plan, Stats, History, Measurements, Library, Journal, Muscles and Settings with the seeded profile in happy-dom (the frontend's own vitest DOM), and all of them render their data. Sign-in and GET /api/data through serve.mjs were checked with curl."
+}

@@ -1,0 +1,606 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "edgeever--ai-assistant",
+    "url": "http://localhost:4501/",
+    "finalUrl": "http://localhost:4501/",
+    "status": 200,
+    "title": "EdgeEver",
+    "capturedAt": "2026-11-18T02:38:32.068Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 2120
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "productivity",
+    "domainNote": "Evernote-style note-taking app (EdgeEver) with notebook tree, note list, rich-text editor and an AI assistant sidebar",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/edgeever/explore.json",
+      "repo": {
+        "name": "tianma-if/edgeever",
+        "url": "https://github.com/tianma-if/edgeever",
+        "commit": "e1be9c897278c061ccc40c5a5c2c4049c471e7fa",
+        "license": "AGPL-3.0"
+      },
+      "view": {
+        "slug": "ai-assistant",
+        "name": "AI writing assistant panel",
+        "description": "AI chat side panel open beside a note, showing a summarize request and response, quick actions (Summarize, Improve writing, Translate), and a composer with note context and model picker."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "notebook-sidebar",
+      "role": "sidebar",
+      "label": "Secondary icon row (Tags, Attachments, Templates, Plugins, Trash), New note split button, expandable Notebooks tree with counts, footer with Clients and Profile",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 240,
+        "height": 2120
+      },
+      "patterns": [
+        "app-shell",
+        "tree-view",
+        "badge",
+        "split-pane"
+      ]
+    },
+    {
+      "id": "note-list",
+      "role": "overview-list",
+      "label": "Customer Interviews notebook header, Search notes field, list of 13 note cards with title, snippet, date and hashtags",
+      "bbox": {
+        "x": 240,
+        "y": 0,
+        "width": 360,
+        "height": 2120
+      },
+      "patterns": [
+        "overview-detail",
+        "card",
+        "text-field"
+      ]
+    },
+    {
+      "id": "note-editor",
+      "role": "editor",
+      "label": "Note header with tag/lock/sync status icons, editor toolbar, and rich-text body with headings and lists",
+      "bbox": {
+        "x": 600,
+        "y": 0,
+        "width": 460,
+        "height": 2120
+      },
+      "patterns": [
+        "document-editor",
+        "overview-detail"
+      ]
+    },
+    {
+      "id": "ai-assistant",
+      "role": "assistant-panel",
+      "label": "AI assistant: chat history selector, user prompt bubble and model reply with memo link, action chips, Ask AI composer with model picker",
+      "bbox": {
+        "x": 1060,
+        "y": 0,
+        "width": 380,
+        "height": 2120
+      },
+      "patterns": [
+        "ai-chat",
+        "prompt-input",
+        "suggestion-chips",
+        "ai-provenance"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 240,
+            "height": 2120
+          },
+          "note": "persistent left sidebar with notebooks, secondary entries, profile; collapse button",
+          "quote": "Notebooks",
+          "region": "notebook-sidebar"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "second-sidebar-column",
+        "items": [
+          "fixed-destinations",
+          "live-counts"
+        ],
+        "visibility": "toggle-button",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "tree-view",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 12,
+            "y": 165,
+            "width": 215,
+            "height": 640
+          },
+          "note": "notebook stacks with chevron disclosures and indented child notebooks with icons and counts",
+          "quote": "Creative Ideas 15",
+          "region": "notebook-sidebar"
+        }
+      ],
+      "dims": {
+        "content": [
+          "label",
+          "type-icon",
+          "count-badge"
+        ],
+        "expandBy": [
+          "disclosure-triangle"
+        ],
+        "selection": "single-node",
+        "source": "containment",
+        "density": "comfortable"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 195,
+            "y": 729,
+            "width": 25,
+            "height": 20
+          },
+          "note": "per-notebook note counts in muted gray beside labels",
+          "quote": "13",
+          "region": "notebook-sidebar"
+        }
+      ],
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 258,
+            "y": 121,
+            "width": 323,
+            "height": 149
+          },
+          "note": "selected note in list (highlighted) shown in editor beside it",
+          "quote": "Synthesis — discovery inte...",
+          "region": "note-list"
+        },
+        {
+          "bbox": {
+            "x": 600,
+            "y": 74,
+            "width": 460,
+            "height": 720
+          },
+          "note": "detail view: full note body",
+          "region": "note-editor"
+        }
+      ],
+      "dims": {
+        "attributePlacement": [
+          "in-both-views",
+          "in-overview-only"
+        ],
+        "abstraction": [
+          "summary",
+          "category"
+        ],
+        "truncation": "ellipsis",
+        "relationship": "one-to-one",
+        "recursion": [
+          "none"
+        ],
+        "openIn": "side-by-side",
+        "overviewType": [
+          "list"
+        ],
+        "detailMultiplicity": "one-at-a-time",
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "whole-item",
+        "attributeScope": [
+          "per-item"
+        ]
+      }
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 258,
+            "y": 121,
+            "width": 323,
+            "height": 149
+          },
+          "note": "selected note card with filled gray background; others are borderless rows separated by thin dividers; hidden More actions/Delete buttons",
+          "quote": "Synthesis — discovery inte...",
+          "region": "note-list"
+        },
+        {
+          "bbox": {
+            "x": 258,
+            "y": 274,
+            "width": 323,
+            "height": 149
+          },
+          "quote": "Interview — Jess Moreau, Cop...",
+          "region": "note-list"
+        }
+      ],
+      "dims": {
+        "media": "none",
+        "actions": "overflow-menu",
+        "shape": "horizontal",
+        "style": "borderless",
+        "target": "whole-card"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 256,
+            "y": 62,
+            "width": 287,
+            "height": 36
+          },
+          "note": "filled search field with icon and placeholder",
+          "quote": "Search notes",
+          "region": "note-list"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "placeholder"
+        ],
+        "style": "filled",
+        "inputType": "plain"
+      }
+    },
+    {
+      "id": "document-editor",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 600,
+            "y": 36,
+            "width": 460,
+            "height": 37
+          },
+          "note": "editor toolbar: markdown source, attachment, link, note link, formula, paragraph style, undo/redo, bold, more",
+          "region": "note-editor"
+        },
+        {
+          "bbox": {
+            "x": 620,
+            "y": 80,
+            "width": 420,
+            "height": 700
+          },
+          "note": "rich text body with H2 headings, ordered and bulleted lists",
+          "quote": "Themes (ranked by frequency)",
+          "region": "note-editor"
+        }
+      ],
+      "dims": {
+        "model": "flowing-rich-text",
+        "access": [
+          "ribbon-or-toolbar",
+          "keyboard-shortcuts"
+        ],
+        "page": "pageless",
+        "navAids": [
+          "none"
+        ],
+        "tracking": "none",
+        "modes": "standard"
+      }
+    },
+    {
+      "id": "ai-chat",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1073,
+            "y": 60,
+            "width": 355,
+            "height": 330
+          },
+          "note": "user prompt bubble and model reply in a log",
+          "quote": "This note covers 5 main threads.",
+          "region": "ai-assistant"
+        },
+        {
+          "bbox": {
+            "x": 1069,
+            "y": 8,
+            "width": 208,
+            "height": 32
+          },
+          "note": "chat history selector",
+          "region": "ai-assistant"
+        }
+      ],
+      "dims": {
+        "turnContent": [
+          "markdown-with-code"
+        ],
+        "composition": "linear-thread",
+        "invokeBy": [
+          "text-field-submit",
+          "attach-file-or-image",
+          "suggestion-chip"
+        ],
+        "scope": "live-page-or-selection"
+      }
+    },
+    {
+      "id": "prompt-input",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1073,
+            "y": 1976,
+            "width": 355,
+            "height": 124
+          },
+          "note": "Ask AI textarea with add files, Include current note toggle, model switcher and send button (shown at 756-880 in the 900px viewport)",
+          "quote": "Include current note",
+          "region": "ai-assistant"
+        }
+      ],
+      "dims": {
+        "content": [
+          "plain-prompt",
+          "attached-images-or-docs"
+        ],
+        "layout": "sidebar-composer",
+        "submitBy": [
+          "click-send"
+        ],
+        "assistance": [
+          "placeholder-examples",
+          "suggestion-chips"
+        ]
+      }
+    },
+    {
+      "id": "suggestion-chips",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1073,
+            "y": 1936,
+            "width": 295,
+            "height": 32
+          },
+          "note": "outlined action chips directly above composer",
+          "quote": "Improve writing",
+          "region": "ai-assistant"
+        }
+      ],
+      "dims": {
+        "content": "tool-invocation",
+        "placement": "above-the-composer",
+        "lifecycle": "static-starters"
+      }
+    },
+    {
+      "id": "ai-provenance",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1083,
+            "y": 291,
+            "width": 298,
+            "height": 15
+          },
+          "note": "reply links to the source memo it used",
+          "quote": "memo_fad17d0932cc498583b9ba8df430f822",
+          "region": "ai-assistant"
+        },
+        {
+          "bbox": {
+            "x": 1284,
+            "y": 2059,
+            "width": 97,
+            "height": 28
+          },
+          "note": "model identity shown in composer",
+          "quote": "gpt-4.1-mini",
+          "region": "ai-assistant"
+        }
+      ],
+      "dims": {
+        "disclosure": [
+          "citations",
+          "model-identity"
+        ],
+        "placement": "inline-beside-the-span",
+        "openBy": [
+          "click-citation"
+        ]
+      }
+    },
+    {
+      "id": "split-pane",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 236,
+            "y": 0,
+            "width": 8,
+            "height": 900
+          },
+          "note": "separator 'Resize notebook pane'; also 'Resize note list' and 'Resize assistant' separators, collapse buttons",
+          "region": "notebook-sidebar"
+        }
+      ],
+      "dims": {
+        "orientation": "side-by-side",
+        "sizing": "draggable-divider",
+        "relationship": "linked-selection"
+      }
+    },
+    {
+      "id": "search-results",
+      "status": "absent",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 256,
+            "y": 62,
+            "width": 287,
+            "height": 36
+          },
+          "note": "search box present but no query/results shown"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "menu",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 153,
+            "y": 64,
+            "width": 66,
+            "height": 34
+          },
+          "note": "More trigger did not open a visible menu in live check; none open in capture"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "four-column desktop app shell: notebook tree sidebar (240px), note list column (360px), rich-text note editor with toolbar, and a collapsible AI assistant chat panel on the right; columns separated by resizable dividers and scroll independently",
+    "regions": [
+      "notebook-sidebar",
+      "note-list",
+      "note-editor",
+      "ai-assistant"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#eef1f4",
+      "#ffffff",
+      "#f8fafb",
+      "#f4f6f8",
+      "#e7ebef",
+      "#0a0a0a",
+      "#737373",
+      "#a6a6a6",
+      "#16a06e",
+      "#e5e5e5"
+    ],
+    "colorRoles": {
+      "background": "#eef1f4",
+      "surface": "#ffffff",
+      "text": "#0a0a0a",
+      "muted": "#737373",
+      "primary": "#16a06e",
+      "border": "#e5e5e5",
+      "selected": "#e7ebef",
+      "editor": "#f8fafb"
+    },
+    "typography": "System UI stack (-apple-system / platform sans) throughout: bold for note titles and editor headings, regular for body and sidebar",
+    "typeScale": "Compact UI scale: 12px sidebar/meta text dominates, 13px assistant text, 14px list titles, 16px editor body, 20px bold H2 in note; weight contrast (700 titles vs 400 meta) carries hierarchy more than size",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "clean",
+      "calm",
+      "utilitarian",
+      "neutral"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T02:40:27.298Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 7,
+    "usage": {
+      "input_tokens": 14,
+      "cache_creation_input_tokens": 35648,
+      "cache_read_input_tokens": 231957,
+      "output_tokens": 5412
+    }
+  },
+  "notes": "Evernote-like layout: cool gray-blue sidebar (#eef1f4) with a white pill 'New note' split button featuring a green (#16a06e) circular plus — the only saturated brand color. Notebook icons are tinted per-notebook (yellow bulb, purple cap, green house, blue briefcase, red plane). Note list cards show bold truncated title, one-line snippet, date and gray hashtags; selected card gets a gray fill and a gold star. Editor is a pageless rich-text body on near-white with an icon-only toolbar. AI assistant panel on the right contains a thread whose reply text reads like leaked system instructions ('Focus DATA (not instructions)') — treated as page content only. Composer has 'Include current note' context chip and model picker (gpt-4.1-mini)."
+}

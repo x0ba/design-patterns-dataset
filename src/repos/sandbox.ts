@@ -7,11 +7,16 @@
 //   only to package registries and GitHub (config/repos.yaml setup.network),
 //   and credential dirs are unreadable. Package-manager caches are pointed into
 //   the checkout so installs work without writing to ~.
-// - Serving: .ui-capture/start.sh runs under macOS sandbox-exec with the same
-//   file rules and no network except localhost. Static builds need no process.
+// - Serving: .ui-capture/start.sh runs under macOS sandbox-exec, or on Linux
+//   under bubblewrap, with the same file rules and no network except localhost.
+//   Static builds need no process. bubblewrap gives the app its own network
+//   namespace (loopback only); src/repos/netbridge.ts exposes its listening
+//   ports on the host's loopback so the browser can reach them.
 //
 // Both were checked by hand on macOS: writes to ~ and reads of ~/.ssh fail
-// with EPERM, unlisted hosts are refused, localhost serving works.
+// with EPERM, unlisted hosts are refused, localhost serving works. The Linux
+// runtime sandbox was checked the same way (writes outside the checkout fail
+// with EROFS, ~/.ssh reads empty, DNS and outside hosts fail, serving works).
 
 import fs from 'node:fs';
 import os from 'node:os';
@@ -30,6 +35,25 @@ export function denyReadPaths(home = os.homedir(), env: NodeJS.ProcessEnv = proc
   if (env.CLAUDE_CONFIG_DIR) paths.push(path.resolve(home, env.CLAUDE_CONFIG_DIR.replace(/^~(?=$|\/)/, home)));
   const real = (p: string) => { try { return fs.realpathSync(p); } catch { return p; } };
   return [...new Set(paths.flatMap((p) => [p, real(p)]))];
+}
+
+/** An executable named `name` on PATH. */
+function onPath(name: string): boolean {
+  return (process.env.PATH ?? '').split(path.delimiter).some((d) => {
+    try { fs.accessSync(path.join(d, name), fs.constants.X_OK); return true; } catch { return false; }
+  });
+}
+
+/**
+ * Why Claude Code's sandbox cannot run here, or undefined if it can. On Linux it
+ * needs bubblewrap and socat, and without them the CLI only prints a warning and
+ * runs every command unsandboxed, so setup must check before it starts a session.
+ */
+export function claudeSandboxProblem(): string | undefined {
+  if (process.platform === 'darwin') return undefined;
+  if (process.platform !== 'linux') return `Claude Code's sandbox does not support ${process.platform}`;
+  const missing = ['bwrap', 'socat'].filter((n) => !onPath(n));
+  return missing.length ? `Claude Code's sandbox needs ${missing.join(' and ')} on Linux (apt install bubblewrap socat); without them it runs commands unsandboxed` : undefined;
 }
 
 /** Claude Code `--settings` for a sandboxed setup session in `checkout`. */
@@ -175,4 +199,32 @@ ${deny.map((d) => `  (subpath ${sbString(d)})`).join('\n')})
 `;
 }
 
-export const runtimeSandboxAvailable = () => process.platform === 'darwin' && fs.existsSync('/usr/bin/sandbox-exec');
+export const BWRAP = '/usr/bin/bwrap';
+
+/**
+ * bubblewrap arguments (before the command) for the Linux runtime sandbox: the
+ * host's files read-only, `writable` dirs and `bridgeDir` read-write, a fresh
+ * /tmp, credential dirs hidden, and its own network, pid and ipc namespaces.
+ */
+export function bwrapArgs(writable: string[], bridgeDir: string, home = os.homedir()): string[] {
+  const real = (p: string) => { try { return fs.realpathSync(p); } catch { return path.resolve(p); } };
+  const args = ['--ro-bind', '/', '/', '--dev', '/dev', '--proc', '/proc', '--tmpfs', '/tmp'];
+  for (const d of new Set([...writable.map(real), real(bridgeDir)])) args.push('--bind', d, d);
+  for (const d of new Set(denyReadPaths(real(home)).map(real))) {
+    let st: fs.Stats;
+    try { st = fs.statSync(d); } catch { continue; }
+    if (st.isDirectory()) args.push('--tmpfs', d);
+    else args.push('--ro-bind', '/dev/null', d);
+  }
+  args.push('--unshare-net', '--unshare-pid', '--unshare-ipc', '--unshare-uts', '--die-with-parent');
+  return args;
+}
+
+/** Which runtime sandbox serves server-mode apps here, if any. */
+export function runtimeSandboxKind(): 'sandbox-exec' | 'bwrap' | undefined {
+  if (process.platform === 'darwin' && fs.existsSync('/usr/bin/sandbox-exec')) return 'sandbox-exec';
+  if (process.platform === 'linux' && fs.existsSync(BWRAP)) return 'bwrap';
+  return undefined;
+}
+
+export const runtimeSandboxAvailable = () => runtimeSandboxKind() !== undefined;

@@ -1,0 +1,485 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "qmreader--article-ai-chat",
+    "url": "http://localhost:4436/",
+    "finalUrl": "http://localhost:4436/articles/%E8%AE%A9%E4%BB%A3%E7%A0%81%E5%BA%93%E5%AF%B9%E7%BC%96%E7%A8%8B-agent-%E5%8F%AF%E8%AF%BB--36f9b2a4de07/rewrite",
+    "status": 200,
+    "title": "让代码库对编程 Agent 可读 · QMReader",
+    "capturedAt": "2026-11-18T06:29:19.486Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1471
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "news-publishing",
+    "domainNote": "AI-assisted RSS/newsletter reader (QMReader) showing a Chinese AI rewrite of an English blog post, with an article-scoped AI chat sidebar",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/qmreader/explore.json",
+      "repo": {
+        "name": "joeseesun/qmreader",
+        "url": "https://github.com/joeseesun/qmreader",
+        "commit": "2a71ec632ef4416c9959753a157bce24bf801907",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "article-ai-chat",
+        "name": "Article with AI chat",
+        "description": "Reader showing the Chinese rewrite of an article alongside the right-hand Article Agent chat panel with past Q&A, quick-prompt chips and a composer."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "reader-toolbar",
+      "role": "toolbar",
+      "label": "Reading toolbar: left-pane toggle, 中文/原文 segmented switch, favorite, open original, Aa reading settings, more menu",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1132,
+        "height": 52
+      },
+      "patterns": [
+        "tabs",
+        "popover",
+        "menu",
+        "app-shell"
+      ]
+    },
+    {
+      "id": "article",
+      "role": "reader",
+      "label": "Centered article column: title + English subtitle, rewritten body with h2 sections and lists, end mark '完' with reading time, next-article card",
+      "bbox": {
+        "x": 179,
+        "y": 52,
+        "width": 775,
+        "height": 1419
+      },
+      "patterns": [
+        "reader",
+        "card"
+      ]
+    },
+    {
+      "id": "ai-sidebar",
+      "role": "sidebar",
+      "label": "Right 'AI 对话' panel: word count, user bubbles and model reply cards with copy/retract, prompt chips, composer with model picker and send",
+      "bbox": {
+        "x": 1136,
+        "y": 0,
+        "width": 304,
+        "height": 1471
+      },
+      "patterns": [
+        "ai-chat",
+        "prompt-input",
+        "suggestion-chips",
+        "split-pane"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "reader",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 235,
+            "y": 60,
+            "width": 663,
+            "height": 1100
+          },
+          "quote": "让代码库对编程 Agent 可读",
+          "note": "Long-form article in a ~660px column, continuous scroll",
+          "region": "article"
+        },
+        {
+          "bbox": {
+            "x": 1054,
+            "y": 9,
+            "width": 32,
+            "height": 34
+          },
+          "quote": "Aa",
+          "note": "Reading settings popover (live): 浅色/护眼/深色 themes, 4 typefaces, font size A−/17/A+, line spacing, 窄栏/标准栏/宽栏 column width",
+          "region": "reader-toolbar"
+        },
+        {
+          "bbox": {
+            "x": 514,
+            "y": 1205,
+            "width": 105,
+            "height": 50
+          },
+          "quote": "约 1 分钟读完",
+          "note": "End-of-article mark with reading time",
+          "region": "article"
+        }
+      ],
+      "dims": {
+        "typography": [
+          "typeface-choice",
+          "size-and-spacing",
+          "light-dark-sepia",
+          "column-width"
+        ],
+        "pagination": "continuous-scroll",
+        "annotations": [
+          "bookmarks"
+        ],
+        "assistance": [
+          "translate-passage",
+          "summarize-chapter"
+        ]
+      }
+    },
+    {
+      "id": "ai-chat",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1270,
+            "y": 98,
+            "width": 144,
+            "height": 40
+          },
+          "quote": "帮我总结三个要点",
+          "note": "User prompt bubble, right aligned",
+          "region": "ai-sidebar"
+        },
+        {
+          "bbox": {
+            "x": 1152,
+            "y": 170,
+            "width": 241,
+            "height": 363
+          },
+          "quote": "这篇文章的三个要点：",
+          "note": "Model reply card with numbered list and bold (markdown)",
+          "region": "ai-sidebar"
+        },
+        {
+          "bbox": {
+            "x": 1152,
+            "y": 542,
+            "width": 98,
+            "height": 32
+          },
+          "quote": "复制",
+          "note": "Per-reply copy and retract (撤回这条对话) actions",
+          "region": "ai-sidebar"
+        }
+      ],
+      "dims": {
+        "turnContent": [
+          "markdown-with-code"
+        ],
+        "composition": "linear-thread",
+        "invokeBy": [
+          "text-field-submit",
+          "suggestion-chip"
+        ],
+        "scope": "live-page-or-selection"
+      }
+    },
+    {
+      "id": "prompt-input",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1148,
+            "y": 1348,
+            "width": 280,
+            "height": 111
+          },
+          "quote": "在设置里填好 API Key，就能提问",
+          "note": "Sidebar composer with model picker '选择模型' and round send button (disabled: no API key)",
+          "region": "ai-sidebar"
+        }
+      ],
+      "dims": {
+        "content": [
+          "plain-prompt"
+        ],
+        "layout": "sidebar-composer",
+        "submitBy": [
+          "click-send"
+        ],
+        "assistance": [
+          "suggestion-chips"
+        ]
+      }
+    },
+    {
+      "id": "suggestion-chips",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1148,
+            "y": 1312,
+            "width": 246,
+            "height": 28
+          },
+          "quote": "总结要点 结构拆解 事实清单",
+          "note": "Pill chips whose accessible names are full prompts, e.g. '用 5 条 bullet 总结这篇文章最值得关注的观点。'; ⋯ button '管理常用提示词' manages them",
+          "region": "ai-sidebar"
+        }
+      ],
+      "dims": {
+        "content": "full-starter-prompt",
+        "placement": "above-the-composer",
+        "lifecycle": "static-starters"
+      }
+    },
+    {
+      "id": "split-pane",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1130,
+            "y": 0,
+            "width": 8,
+            "height": 1471
+          },
+          "note": "separator '调整文章和右侧栏宽度' resizes article vs AI sidebar; sidebar also collapsible via '收起右侧栏'",
+          "region": "ai-sidebar"
+        }
+      ],
+      "dims": {
+        "orientation": "side-by-side",
+        "sizing": "draggable-divider"
+      }
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 53,
+            "y": 11,
+            "width": 110,
+            "height": 30
+          },
+          "quote": "中文 原文",
+          "note": "Segmented switch between the Chinese rewrite and the original article; selected segment white with shadow",
+          "region": "reader-toolbar"
+        }
+      ],
+      "dims": {
+        "placement": "segmented-control",
+        "label": [
+          "text"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 53,
+            "y": 11,
+            "width": 110,
+            "height": 30
+          },
+          "note": "Segmented 中文/原文 coded as tabs (switches views) rather than a value choice"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "popover",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1054,
+            "y": 9,
+            "width": 32,
+            "height": 34
+          },
+          "quote": "Aa",
+          "note": "Click opens anchored 阅读设置 panel with theme/font/size/spacing/width controls (closed in capture)",
+          "region": "reader-toolbar"
+        }
+      ],
+      "dims": {
+        "openBy": "click",
+        "placement": "below-the-anchor",
+        "contents": "mini-form",
+        "persistence": "until-dismissed"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1088,
+            "y": 9,
+            "width": 32,
+            "height": 34
+          },
+          "note": "'更多操作' ⋯ opens icon+label menu: 查看直译, 复制全文, 沉浸阅读 | 重新生成中文, 删除文章 (red) (closed in capture)",
+          "region": "reader-toolbar"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click",
+        "structure": "sections",
+        "item": [
+          "label",
+          "icon"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 235,
+            "y": 1283,
+            "width": 663,
+            "height": 68
+          },
+          "quote": "下一篇 · Hugging Face Papers 为 Agent 编程扩展测试时计算",
+          "note": "Outlined next-article card with keyboard hint 'J'",
+          "region": "article"
+        }
+      ],
+      "dims": {
+        "media": "none",
+        "actions": "none",
+        "shape": "horizontal",
+        "style": "outlined",
+        "target": "whole-card"
+      }
+    },
+    {
+      "id": "app-shell",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "In the capture the left navigation is collapsed; only the '展开左侧' toggle is visible. Live, it expands into a feed sidebar + article list.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 10,
+            "width": 32,
+            "height": 32
+          },
+          "note": "Toggle to expand the collapsed left sidebar (feeds + article list)",
+          "region": "reader-toolbar"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "visibility": "toggle-button"
+      }
+    }
+  ],
+  "structure": {
+    "layout": "two-pane reading app: wide white article pane with toolbar and centered ~660px text column, plus resizable 304px AI chat sidebar on the right; left navigation collapsed",
+    "regions": [
+      "reader-toolbar",
+      "article",
+      "ai-sidebar"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#f6f6f5",
+      "#fbfbfa",
+      "#efefed",
+      "#171717",
+      "#4c4c48",
+      "#6b6b66",
+      "#e4e4e0"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "surface": "#fbfbfa",
+      "text": "#171717",
+      "muted": "#6b6b66",
+      "secondary": "#4c4c48",
+      "chip": "#efefed",
+      "border": "#e4e4e0",
+      "canvas": "#f6f6f5"
+    },
+    "typography": "System UI stack (-apple-system / PingFang SC) for headings, toolbar and sidebar; article body paragraphs render in a serif CJK/Latin fallback (Times-like), giving a book-like body against sans headings",
+    "typeScale": "Title 30px/650, section h1 26px/650, h2 22px/650, body 17px with very loose ~2x line height, sidebar 15px, controls 13px, meta 12px; hierarchy via weight 650 vs 400 and size",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "generous",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "calm",
+      "minimal",
+      "bookish",
+      "neutral",
+      "focused"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T06:30:56.614Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 8,
+    "usage": {
+      "input_tokens": 16,
+      "cache_creation_input_tokens": 35965,
+      "cache_read_input_tokens": 250811,
+      "output_tokens": 5442
+    }
+  },
+  "notes": "Monochrome warm-gray UI with no brand accent color; only the delete menu item is red. Toolbar icons are small line icons in 32px ghost buttons. Article ends with a centered '—— 完 ——' end mark plus '约 1 分钟读完'. AI replies sit in faint white cards with subtle shadow; user prompts are gray rounded pills right-aligned. Chips carry full hidden prompts in their accessible names. Composer is disabled pending API key in settings. Reading-settings popover offers 浅色/护眼(sepia)/深色 themes, four CJK typefaces, font size, line spacing and column width. Left panes (feed list + article list with 最新/热门/未读 tabs and search) are collapsed in the capture."
+}

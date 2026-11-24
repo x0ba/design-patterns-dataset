@@ -1,0 +1,596 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "gen-002",
+  "site": {
+    "slug": "book-index-structure-analysis",
+    "url": "http://book-index-structure-analysis.localhost:4318/",
+    "finalUrl": "http://book-index-structure-analysis.localhost:4318/",
+    "status": 200,
+    "title": "Indexwright — Harbors of Oil, draft index",
+    "capturedAt": "2026-11-18T03:23:19.923Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 2516
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "productivity",
+    "domainNote": "professional book indexing tool — reviewing a draft back-of-book index's locator density against chapter structure",
+    "provenance": {
+      "source": "generated",
+      "generation": "generated/gen-002/book-index-structure-analysis/generation.json",
+      "generator": {
+        "id": "opus",
+        "model": "claude-opus-5-5",
+        "effort": "high"
+      },
+      "brief": {
+        "domain": "reference-docs",
+        "archetype": "analyze",
+        "context": "freelancer",
+        "product": "Indexwright"
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Dark top bar: Indexwright logo, book title in serif, author/press/save status, length budget meter (31.5 pp vs limit 28), delivery date",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 56
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Review/Deliver navigation items with count badges; draft index and book stats pinned at bottom",
+      "bbox": {
+        "x": 0,
+        "y": 56,
+        "width": 204,
+        "height": 2460
+      },
+      "patterns": [
+        "app-shell",
+        "badge"
+      ]
+    },
+    {
+      "id": "overview-chart",
+      "role": "chart",
+      "label": "H1, explanatory sentence, legend and per-page locator bar chart for the whole book with chapter mean lines, median dashed line and selectable chapter bands",
+      "bbox": {
+        "x": 226,
+        "y": 74,
+        "width": 1192,
+        "height": 280
+      },
+      "patterns": [
+        "chart",
+        "coordinated-views",
+        "overview-detail"
+      ]
+    },
+    {
+      "id": "chapter-table",
+      "role": "data-table",
+      "label": "Chapter table: number, title, page range, locators, in-cell bar of locators per page, % vs median; selected row highlighted",
+      "bbox": {
+        "x": 226,
+        "y": 368,
+        "width": 492,
+        "height": 450
+      },
+      "patterns": [
+        "data-table",
+        "overview-detail",
+        "coordinated-views"
+      ]
+    },
+    {
+      "id": "chapter-detail",
+      "role": "detail-panel",
+      "label": "Selected chapter detail: prev/next chapter, serif title, four stat tiles, locators-by-page chart, thin runs, heading-type comparison bars, segmented tabs over a headings table with type labels",
+      "bbox": {
+        "x": 734,
+        "y": 368,
+        "width": 684,
+        "height": 2129
+      },
+      "patterns": [
+        "overview-detail",
+        "stat-tile",
+        "chart",
+        "tabs",
+        "data-table",
+        "badge",
+        "dashboard"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 56
+          },
+          "quote": "Indexwright",
+          "region": "header",
+          "note": "persistent top bar with project identity and global budget/deadline"
+        },
+        {
+          "bbox": {
+            "x": 0,
+            "y": 56,
+            "width": 204,
+            "height": 300
+          },
+          "quote": "Chapter structure",
+          "region": "sidebar",
+          "note": "sidebar destinations switch main view (verified: Long locator strings loads a different view)"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations",
+          "live-counts"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "chart",
+      "status": "present",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 239,
+            "y": 166,
+            "width": 1166,
+            "height": 182
+          },
+          "region": "overview-chart",
+          "quote": "book median, 36.5 per page",
+          "note": "per-page bars across whole book, chapter mean lines, median dashed line, chapter band labels with means; click a chapter selects it"
+        },
+        {
+          "bbox": {
+            "x": 751,
+            "y": 566,
+            "width": 650,
+            "height": 93
+          },
+          "region": "chapter-detail",
+          "note": "locators by page for selected chapter with thin threshold line; clicking a page opens its references"
+        },
+        {
+          "bbox": {
+            "x": 751,
+            "y": 800,
+            "width": 250,
+            "height": 90
+          },
+          "region": "chapter-detail",
+          "quote": "42% / 54%",
+          "note": "paired bars chapter vs book per heading type"
+        }
+      ],
+      "dims": {
+        "markType": "bars",
+        "channels": [
+          "position",
+          "length",
+          "colour-hue-or-value"
+        ],
+        "scale": "ordinal-or-band",
+        "faceting": "single-plot",
+        "inspectBy": [
+          "click-to-select",
+          "cross-filter-linked-views"
+        ],
+        "authorship": "author-specified",
+        "annotation": [
+          "reference-lines",
+          "callout-labels"
+        ],
+        "adaptation": "fixed-desktop-chart"
+      }
+    },
+    {
+      "id": "coordinated-views",
+      "status": "present",
+      "confidence": 0.82,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 226,
+            "y": 155,
+            "width": 1192,
+            "height": 663
+          },
+          "region": "overview-chart",
+          "quote": "Click a chapter or a page to inspect it",
+          "note": "chart chapter bands and table rows share selection; selecting Ch. 5 in table highlighted its band in the chart and swapped the detail panel"
+        }
+      ],
+      "dims": {
+        "linkChannel": [
+          "selection-highlight",
+          "derived-aggregates"
+        ],
+        "arrangement": "overview-detail-split",
+        "trigger": [
+          "click-a-mark",
+          "change-a-control"
+        ],
+        "scope": "one-mark",
+        "feedback": [
+          "highlight-in-place"
+        ],
+        "authorship": "fixed-published-dashboard"
+      }
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.88,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 226,
+            "y": 368,
+            "width": 492,
+            "height": 450
+          },
+          "region": "chapter-table",
+          "quote": "The Wives' Ports: H…",
+          "note": "chapter overview with selected row 9"
+        },
+        {
+          "bbox": {
+            "x": 734,
+            "y": 368,
+            "width": 684,
+            "height": 160
+          },
+          "region": "chapter-detail",
+          "quote": "The Wives' Ports: Households, Credit, and Waiting",
+          "note": "detail for selected chapter beside the overview, with prev/next"
+        }
+      ],
+      "dims": {
+        "attributePlacement": [
+          "in-both-views",
+          "in-detail-view-only"
+        ],
+        "abstraction": [
+          "graphic",
+          "sum-or-average",
+          "style"
+        ],
+        "truncation": "ellipsis",
+        "relationship": "many-overviews-to-one-detail-view",
+        "recursion": [
+          "overview-inside-detail-view"
+        ],
+        "linking": "synchronized-navigation",
+        "openIn": "side-by-side",
+        "overviewType": [
+          "table",
+          "plot"
+        ],
+        "detailMultiplicity": "one-at-a-time",
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "whole-item",
+        "attributeScope": [
+          "per-item",
+          "per-collection"
+        ]
+      }
+    },
+    {
+      "id": "data-table",
+      "status": "present",
+      "confidence": 0.88,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 226,
+            "y": 368,
+            "width": 492,
+            "height": 450
+          },
+          "region": "chapter-table",
+          "quote": "Locators per page",
+          "note": "chapter rows with in-cell bars against median tick; single row selection"
+        },
+        {
+          "bbox": {
+            "x": 1019,
+            "y": 768,
+            "width": 382,
+            "height": 1714
+          },
+          "region": "chapter-detail",
+          "quote": "consuls, American",
+          "note": "headings table with type label chips and Ch. 8 / Ch. 10 counts"
+        }
+      ],
+      "dims": {
+        "columnSet": "fixed",
+        "cellRendering": [
+          "plain-text",
+          "in-cell-charts",
+          "chips-and-avatars"
+        ],
+        "density": "compact",
+        "rowExpansion": "none",
+        "selection": "single-row",
+        "aggregation": [
+          "flat"
+        ],
+        "openIn": "side-by-side"
+      }
+    },
+    {
+      "id": "stat-tile",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 751,
+            "y": 440,
+            "width": 650,
+            "height": 92
+          },
+          "region": "chapter-detail",
+          "quote": "PER PAGE 20.8 57% of book median (36.5)",
+          "note": "four tiles; below-threshold tiles tinted orange"
+        }
+      ],
+      "dims": {
+        "context": [
+          "label",
+          "benchmark"
+        ],
+        "encoding": "number-only",
+        "window": "fixed",
+        "drill": "none"
+      }
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1019,
+            "y": 681,
+            "width": 283,
+            "height": 27
+          },
+          "region": "chapter-detail",
+          "quote": "In Ch. 8 & 10, not here (116)",
+          "note": "segmented tab control switches headings table (verified); clicking a page bar adds a third 'p. 152' tab"
+        }
+      ],
+      "dims": {
+        "placement": "segmented-control",
+        "label": [
+          "text",
+          "badge-count"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.82,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 97,
+            "width": 187,
+            "height": 132
+          },
+          "region": "sidebar",
+          "quote": "1 thin",
+          "note": "count badges on nav items for issues pending review"
+        },
+        {
+          "bbox": {
+            "x": 1125,
+            "y": 798,
+            "width": 62,
+            "height": 14
+          },
+          "region": "chapter-detail",
+          "quote": "CONCEPT",
+          "note": "category label chips on headings (secondary badge use)"
+        }
+      ],
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "rule": "pending-actions",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "dashboard",
+      "status": "uncertain",
+      "confidence": 0.45,
+      "rationale": "Combines KPI tiles, charts and tables on one view, but it is a focused selection-driven analysis view rather than a glanceable monitoring dashboard; better described as coordinated views / overview-detail.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 226,
+            "y": 74,
+            "width": 1192,
+            "height": 826
+          },
+          "region": "chapter-detail",
+          "note": "chart + table + KPI tiles on one screen"
+        }
+      ],
+      "dims": {
+        "widgets": [
+          "kpi-tiles",
+          "categorical-charts",
+          "tables"
+        ],
+        "linking": "drill-through",
+        "alerting": "threshold-colours"
+      }
+    },
+    {
+      "id": "progress-indicator",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 995,
+            "y": 6,
+            "width": 300,
+            "height": 44
+          },
+          "region": "header",
+          "quote": "LENGTH 31.5 pp",
+          "note": "bar is a length budget gauge vs limit, not progress of work"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "empty-state",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 751,
+            "y": 683,
+            "width": 250,
+            "height": 70
+          },
+          "region": "chapter-detail",
+          "note": "Thin runs has content for Ch. 9 in capture; 'No runs of three or more thin pages.' only appears for other chapters"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "desktop app shell: dark top bar with project title, length-budget meter and delivery deadline; left sidebar of review/deliver views with count badges and a pinned draft-index/book stats panel; main area with a full-width per-page bar chart above a two-column split of a chapter table (left) and a selected-chapter detail panel (right) holding KPI tiles, a per-page chart, a thin-runs list, a heading-type comparison and a tabbed headings table",
+    "regions": [
+      "header",
+      "sidebar",
+      "overview-chart",
+      "chapter-table",
+      "chapter-detail"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#f4f1ea",
+      "#fffdf9",
+      "#faf7f1",
+      "#1f2a36",
+      "#1e2227",
+      "#727780",
+      "#9bb3cb",
+      "#b0522a",
+      "#f8e9e0",
+      "#e2ddd2",
+      "#6c4a80",
+      "#3d6b4c",
+      "#87622e"
+    ],
+    "colorRoles": {
+      "background": "#f4f1ea",
+      "surface": "#fffdf9",
+      "sidebar": "#faf7f1",
+      "header": "#1f2a36",
+      "text": "#1e2227",
+      "muted": "#727780",
+      "primary": "#9bb3cb",
+      "accent": "#b0522a",
+      "accentTint": "#f8e9e0",
+      "border": "#e2ddd2",
+      "personTag": "#6c4a80",
+      "placeTag": "#3d6b4c",
+      "conceptTag": "#87622e"
+    },
+    "typography": "System sans (-apple-system) for UI chrome, labels, numbers and tables; Iowan Old Style serif for book content — book title in header, chapter titles, index headings in tables and the detail H2",
+    "typeScale": "Compact: H1 18px/600, detail H2 20px serif/500, stat values 19px bold, body/table 13px, labels 11–12px uppercase tracked/600, chart axis 9–10px; hierarchy carried by weight and caps rather than size",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "data-visualization"
+    ],
+    "iconStyle": "none",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "scholarly",
+      "technical",
+      "calm",
+      "warm-paper",
+      "editorial"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T03:25:17.865Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 13,
+    "usage": {
+      "input_tokens": 26,
+      "cache_creation_input_tokens": 51033,
+      "cache_read_input_tokens": 512572,
+      "output_tokens": 7206
+    }
+  },
+  "notes": "Warm paper palette (cream #f4f1ea, off-white panels) with a dark slate header; steel-blue bars and a burnt-orange alert colour used consistently for the under-median chapter (bars, table cell, % text, tinted stat tiles). Serif vs sans split separates book content from tool chrome. Main chart has a highlighted chapter band, black chapter-mean lines, dashed book median, hatched Bibl. region and a dark selected chapter label. Heading type chips (PERSON purple, PLACE green, SHIP blue, CONCEPT gold) are tinted uppercase tags. Clicking a page in the chapter chart adds a 'p. 152' tab showing that page's references with prev/next. Sidebar stats panel is pinned to the bottom of the sidebar."
+}

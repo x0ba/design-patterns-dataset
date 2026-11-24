@@ -1,0 +1,46 @@
+import { sha256 } from './crypto.ts';
+export const equal = (a, b)=>{
+  if (a === b) {
+    return true;
+  }
+  if (a.byteLength !== b.byteLength) {
+    return false;
+  }
+  const va = new DataView(a);
+  const vb = new DataView(b);
+  let i = va.byteLength;
+  while(i--){
+    if (va.getUint8(i) !== vb.getUint8(i)) {
+      return false;
+    }
+  }
+  return true;
+};
+export const timingSafeEqual = async (a, b, hashFunction)=>{
+  if (!hashFunction) {
+    hashFunction = sha256;
+  }
+  const sa = await hashFunction(a);
+  const sb = await hashFunction(b);
+  if (!sa || !sb) {
+    return false;
+  }
+  return sa === sb && a === b;
+};
+export const bufferToString = (buffer)=>{
+  if (buffer instanceof ArrayBuffer) {
+    const enc = new TextDecoder('utf-8');
+    return enc.decode(buffer);
+  }
+  return buffer;
+};
+export const bufferToFormData = (arrayBuffer, contentType)=>{
+  const response = new Response(arrayBuffer, {
+    headers: {
+      'Content-Type': contentType
+    }
+  });
+  return response.formData();
+};
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImZpbGU6Ly8vVXNlcnMvYnJ5YW5taW4vLmNhY2hlL2Rlc2lnbi1wYXR0ZXJucy1kYXRhc2V0L3JlcG9zL3JlcG8tMDAxL2ludmlvLy51aS1jYXB0dXJlL3ZlbmRvci9ob25vL2Rlbm9fZGlzdC91dGlscy9idWZmZXIudHMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgc2hhMjU2IH0gZnJvbSAnLi9jcnlwdG8udHMnXG5cbmV4cG9ydCBjb25zdCBlcXVhbCA9IChhOiBBcnJheUJ1ZmZlciwgYjogQXJyYXlCdWZmZXIpID0+IHtcbiAgaWYgKGEgPT09IGIpIHtcbiAgICByZXR1cm4gdHJ1ZVxuICB9XG4gIGlmIChhLmJ5dGVMZW5ndGggIT09IGIuYnl0ZUxlbmd0aCkge1xuICAgIHJldHVybiBmYWxzZVxuICB9XG5cbiAgY29uc3QgdmEgPSBuZXcgRGF0YVZpZXcoYSlcbiAgY29uc3QgdmIgPSBuZXcgRGF0YVZpZXcoYilcblxuICBsZXQgaSA9IHZhLmJ5dGVMZW5ndGhcbiAgd2hpbGUgKGktLSkge1xuICAgIGlmICh2YS5nZXRVaW50OChpKSAhPT0gdmIuZ2V0VWludDgoaSkpIHtcbiAgICAgIHJldHVybiBmYWxzZVxuICAgIH1cbiAgfVxuXG4gIHJldHVybiB0cnVlXG59XG5cbmV4cG9ydCBjb25zdCB0aW1pbmdTYWZlRXF1YWwgPSBhc3luYyAoXG4gIGE6IHN0cmluZyB8IG9iamVjdCB8IGJvb2xlYW4sXG4gIGI6IHN0cmluZyB8IG9iamVjdCB8IGJvb2xlYW4sXG4gIGhhc2hGdW5jdGlvbj86IEZ1bmN0aW9uXG4pID0+IHtcbiAgaWYgKCFoYXNoRnVuY3Rpb24pIHtcbiAgICBoYXNoRnVuY3Rpb24gPSBzaGEyNTZcbiAgfVxuXG4gIGNvbnN0IHNhID0gYXdhaXQgaGFzaEZ1bmN0aW9uKGEpXG4gIGNvbnN0IHNiID0gYXdhaXQgaGFzaEZ1bmN0aW9uKGIpXG5cbiAgaWYgKCFzYSB8fCAhc2IpIHtcbiAgICByZXR1cm4gZmFsc2VcbiAgfVxuXG4gIHJldHVybiBzYSA9PT0gc2IgJiYgYSA9PT0gYlxufVxuXG5leHBvcnQgY29uc3QgYnVmZmVyVG9TdHJpbmcgPSAoYnVmZmVyOiBBcnJheUJ1ZmZlcik6IHN0cmluZyA9PiB7XG4gIGlmIChidWZmZXIgaW5zdGFuY2VvZiBBcnJheUJ1ZmZlcikge1xuICAgIGNvbnN0IGVuYyA9IG5ldyBUZXh0RGVjb2RlcigndXRmLTgnKVxuICAgIHJldHVybiBlbmMuZGVjb2RlKGJ1ZmZlcilcbiAgfVxuICByZXR1cm4gYnVmZmVyXG59XG5cbmV4cG9ydCBjb25zdCBidWZmZXJUb0Zvcm1EYXRhID0gKGFycmF5QnVmZmVyOiBBcnJheUJ1ZmZlciwgY29udGVudFR5cGU6IHN0cmluZykgPT4ge1xuICBjb25zdCByZXNwb25zZSA9IG5ldyBSZXNwb25zZShhcnJheUJ1ZmZlciwge1xuICAgIGhlYWRlcnM6IHtcbiAgICAgICdDb250ZW50LVR5cGUnOiBjb250ZW50VHlwZSxcbiAgICB9LFxuICB9KVxuICByZXR1cm4gcmVzcG9uc2UuZm9ybURhdGEoKVxufVxuIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLFNBQVMsTUFBTSxRQUFRLGNBQWE7QUFFcEMsT0FBTyxNQUFNLFFBQVEsQ0FBQyxHQUFnQjtFQUNwQyxJQUFJLE1BQU0sR0FBRztJQUNYLE9BQU87RUFDVDtFQUNBLElBQUksRUFBRSxVQUFVLEtBQUssRUFBRSxVQUFVLEVBQUU7SUFDakMsT0FBTztFQUNUO0VBRUEsTUFBTSxLQUFLLElBQUksU0FBUztFQUN4QixNQUFNLEtBQUssSUFBSSxTQUFTO0VBRXhCLElBQUksSUFBSSxHQUFHLFVBQVU7RUFDckIsTUFBTyxJQUFLO0lBQ1YsSUFBSSxHQUFHLFFBQVEsQ0FBQyxPQUFPLEdBQUcsUUFBUSxDQUFDLElBQUk7TUFDckMsT0FBTztJQUNUO0VBQ0Y7RUFFQSxPQUFPO0FBQ1QsRUFBQztBQUVELE9BQU8sTUFBTSxrQkFBa0IsT0FDN0IsR0FDQSxHQUNBO0VBRUEsSUFBSSxDQUFDLGNBQWM7SUFDakIsZUFBZTtFQUNqQjtFQUVBLE1BQU0sS0FBSyxNQUFNLGFBQWE7RUFDOUIsTUFBTSxLQUFLLE1BQU0sYUFBYTtFQUU5QixJQUFJLENBQUMsTUFBTSxDQUFDLElBQUk7SUFDZCxPQUFPO0VBQ1Q7RUFFQSxPQUFPLE9BQU8sTUFBTSxNQUFNO0FBQzVCLEVBQUM7QUFFRCxPQUFPLE1BQU0saUJBQWlCLENBQUM7RUFDN0IsSUFBSSxrQkFBa0IsYUFBYTtJQUNqQyxNQUFNLE1BQU0sSUFBSSxZQUFZO0lBQzVCLE9BQU8sSUFBSSxNQUFNLENBQUM7RUFDcEI7RUFDQSxPQUFPO0FBQ1QsRUFBQztBQUVELE9BQU8sTUFBTSxtQkFBbUIsQ0FBQyxhQUEwQjtFQUN6RCxNQUFNLFdBQVcsSUFBSSxTQUFTLGFBQWE7SUFDekMsU0FBUztNQUNQLGdCQUFnQjtJQUNsQjtFQUNGO0VBQ0EsT0FBTyxTQUFTLFFBQVE7QUFDMUIsRUFBQyJ9
+// denoCacheMetadata=8184449922990998654,9024162091520425917

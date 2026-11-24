@@ -1,0 +1,609 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "riff--home",
+    "url": "http://localhost:4431/",
+    "finalUrl": "http://localhost:4431/",
+    "status": 200,
+    "title": "Riff",
+    "capturedAt": "2026-11-18T06:21:41.293Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1619
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "media-entertainment",
+    "domainNote": "desktop music streaming client (Spotify-like) aggregating YouTube Music / SoundCloud sources",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/riff/explore.json",
+      "repo": {
+        "name": "rootscripts/riff",
+        "url": "https://github.com/rootscripts/riff",
+        "commit": "ea3a1a2be443a5f11630c99527d23c65eb20ba73",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "home",
+        "name": "Home",
+        "description": "Main workspace: library sidebar of playlists, home feed with quick picks, top chart and favorite artists, now-playing panel and player bar."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "top-bar",
+      "role": "header",
+      "label": "Window chrome: menu, back/forward, home button, pill search field, account avatar and overflow",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 64
+      },
+      "patterns": [
+        "app-shell",
+        "text-field"
+      ]
+    },
+    {
+      "id": "library-sidebar",
+      "role": "sidebar",
+      "label": "Your Library: Create button, library search, Playlists/Albums/Queue segmented switch, Custom sort, list of playlists with thumbnails and track counts, settings/presets/create footer",
+      "bbox": {
+        "x": 8,
+        "y": 64,
+        "width": 339,
+        "height": 1463
+      },
+      "patterns": [
+        "app-shell",
+        "tabs",
+        "sort-control",
+        "menu",
+        "card",
+        "playlist-queue"
+      ]
+    },
+    {
+      "id": "home-main",
+      "role": "content",
+      "label": "Home: quick-access grid of 6 recent items, For you mixes, Trending now, Top chart by country, Favorite artists shelves",
+      "bbox": {
+        "x": 355,
+        "y": 64,
+        "width": 702,
+        "height": 1463
+      },
+      "patterns": [
+        "recommendations",
+        "carousel",
+        "card",
+        "menu"
+      ]
+    },
+    {
+      "id": "now-playing-panel",
+      "role": "detail-panel",
+      "label": "Now playing panel: large artwork on green gradient, title/artist, liked check, credits card with Following button, audio source",
+      "bbox": {
+        "x": 1065,
+        "y": 64,
+        "width": 367,
+        "height": 1463
+      },
+      "patterns": [
+        "media-player"
+      ]
+    },
+    {
+      "id": "player-bar",
+      "role": "player-bar",
+      "label": "Persistent player: artwork, title/artist, favorite, more, shuffle/prev/play/next/repeat, seek bar, queue/lyrics/panel/audio toggles, volume slider",
+      "bbox": {
+        "x": 0,
+        "y": 1535,
+        "width": 1440,
+        "height": 84
+      },
+      "patterns": [
+        "media-player",
+        "slider"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 64
+          },
+          "note": "top bar with back/forward, home, search, account",
+          "region": "top-bar"
+        },
+        {
+          "bbox": {
+            "x": 8,
+            "y": 64,
+            "width": 339,
+            "height": 1463
+          },
+          "quote": "Your Library",
+          "note": "left library sidebar with pinned playlists",
+          "region": "library-sidebar"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "contextual-panel",
+        "items": [
+          "user-pinned-items",
+          "fixed-destinations"
+        ],
+        "visibility": "toggle-button",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "media-player",
+      "status": "present",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 1535,
+            "width": 1440,
+            "height": 84
+          },
+          "quote": "adore u",
+          "note": "bottom transport bar: shuffle, previous, play, next, repeat, seek bar, volume",
+          "region": "player-bar"
+        },
+        {
+          "bbox": {
+            "x": 1065,
+            "y": 64,
+            "width": 367,
+            "height": 1463
+          },
+          "quote": "Credits",
+          "note": "now-playing side panel with artwork, credits and audio source; lyrics tools in panel header",
+          "region": "now-playing-panel"
+        }
+      ],
+      "dims": {
+        "controls": [
+          "play-pause",
+          "scrubber",
+          "skip-forward-back",
+          "volume-and-mute",
+          "fullscreen"
+        ],
+        "position": [
+          "time-scrubber",
+          "lyrics-synced-to-time"
+        ],
+        "mode": "standalone-window"
+      }
+    },
+    {
+      "id": "slider",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1310,
+            "y": 1566,
+            "width": 90,
+            "height": 24
+          },
+          "note": "volume slider, value 0.72, no labels",
+          "region": "player-bar"
+        },
+        {
+          "bbox": {
+            "x": 480,
+            "y": 1583,
+            "width": 480,
+            "height": 36
+          },
+          "note": "seek bar",
+          "region": "player-bar"
+        }
+      ],
+      "dims": {
+        "values": "single-value",
+        "labels": [
+          "none"
+        ],
+        "scale": "linear"
+      }
+    },
+    {
+      "id": "carousel",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 375,
+            "y": 644,
+            "width": 662,
+            "height": 228
+          },
+          "quote": "Trending now",
+          "note": "12 items in a horizontally overflowing strip, 4th clipped at edge; > button is Show all, no arrows/dots",
+          "region": "home-main"
+        },
+        {
+          "bbox": {
+            "x": 375,
+            "y": 952,
+            "width": 662,
+            "height": 228
+          },
+          "quote": "Top chart — United States",
+          "region": "home-main"
+        },
+        {
+          "bbox": {
+            "x": 375,
+            "y": 1260,
+            "width": 662,
+            "height": 203
+          },
+          "quote": "Favorite artists",
+          "note": "20 round artist avatars in a strip",
+          "region": "home-main"
+        }
+      ],
+      "dims": {
+        "visible": "multi-item-strip",
+        "advance": [
+          "swipe"
+        ],
+        "autoplay": "off",
+        "indicator": "none"
+      }
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 375,
+            "y": 644,
+            "width": 180,
+            "height": 228
+          },
+          "quote": "luther",
+          "note": "vertical borderless card: square rounded artwork, title, artist, play count",
+          "region": "home-main"
+        },
+        {
+          "bbox": {
+            "x": 375,
+            "y": 120,
+            "width": 215,
+            "height": 64
+          },
+          "quote": "Liked songs",
+          "note": "compact horizontal quick-access tile with side thumbnail on subtle filled background",
+          "region": "home-main"
+        },
+        {
+          "bbox": {
+            "x": 20,
+            "y": 188,
+            "width": 315,
+            "height": 80
+          },
+          "quote": "Liked songs",
+          "note": "library rows with side thumbnails",
+          "region": "library-sidebar"
+        }
+      ],
+      "dims": {
+        "media": "top-image",
+        "actions": "none",
+        "shape": "vertical",
+        "style": "borderless",
+        "target": "whole-card"
+      }
+    },
+    {
+      "id": "recommendations",
+      "status": "present",
+      "confidence": 0.88,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 375,
+            "y": 284,
+            "width": 662,
+            "height": 280
+          },
+          "quote": "For you Based on your taste",
+          "note": "For you + Daily Mix with Regenerate mixes button",
+          "region": "home-main"
+        },
+        {
+          "bbox": {
+            "x": 375,
+            "y": 592,
+            "width": 662,
+            "height": 280
+          },
+          "quote": "Trending now",
+          "region": "home-main"
+        },
+        {
+          "bbox": {
+            "x": 375,
+            "y": 900,
+            "width": 662,
+            "height": 280
+          },
+          "quote": "Top chart — United States",
+          "region": "home-main"
+        }
+      ],
+      "dims": {
+        "basis": [
+          "viewing-or-purchase-history",
+          "trending"
+        ],
+        "rationale": "short-label",
+        "placement": "home-shelves",
+        "nesting": "many-themed-shelves"
+      }
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 64,
+            "y": 134,
+            "width": 166,
+            "height": 32
+          },
+          "note": "icon-only segmented control Playlists / Albums / Queue; switches library panel content (verified live: Queue shows Now playing + Next up)",
+          "region": "library-sidebar"
+        }
+      ],
+      "dims": {
+        "placement": "segmented-control",
+        "label": [
+          "icon"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      }
+    },
+    {
+      "id": "sort-control",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 238,
+            "y": 135,
+            "width": 91,
+            "height": 30
+          },
+          "quote": "Custom",
+          "note": "opens dropdown Recents / Recently Added / Alphabetical / Custom (checked)",
+          "region": "library-sidebar"
+        }
+      ],
+      "dims": {
+        "keys": "fixed-list",
+        "form": "dropdown",
+        "default": "manual",
+        "indicator": "label"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 238,
+            "y": 135,
+            "width": 91,
+            "height": 30
+          },
+          "quote": "Custom",
+          "note": "sort trigger opens vertical menu with checkmark on current item (live)",
+          "region": "library-sidebar"
+        },
+        {
+          "bbox": {
+            "x": 552,
+            "y": 906,
+            "width": 170,
+            "height": 28
+          },
+          "quote": "United States",
+          "note": "country dropdown trigger in Top chart heading",
+          "region": "home-main"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click",
+        "structure": "flat",
+        "item": [
+          "label",
+          "checkmark-state"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 492,
+            "y": 10,
+            "width": 508,
+            "height": 44
+          },
+          "quote": "Search tracks, artists, or albums...",
+          "note": "filled pill search field with icon and placeholder",
+          "region": "top-bar"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "placeholder"
+        ],
+        "style": "filled"
+      }
+    },
+    {
+      "id": "playlist-queue",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Queue view (Now playing / Autoplay / Next up) exists behind the sidebar Queue tab but is not shown in the capture; only shuffle/repeat in player bar visible.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 163,
+            "y": 136,
+            "width": 28,
+            "height": 28
+          },
+          "note": "Queue tab in library segmented control",
+          "region": "library-sidebar"
+        }
+      ],
+      "dims": {
+        "surface": "side-panel",
+        "representation": [
+          "title-and-creator",
+          "artwork"
+        ]
+      }
+    },
+    {
+      "id": "filter-controls",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 26,
+            "y": 131,
+            "width": 30,
+            "height": 38
+          },
+          "note": "only a library search icon, no filter chips"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "desktop-app three-column shell: dark top bar with nav/search/account, left library sidebar, central scrolling home with stacked horizontal shelves, right now-playing/credits panel, and a full-width persistent player bar at the bottom",
+    "regions": [
+      "top-bar",
+      "library-sidebar",
+      "home-main",
+      "now-playing-panel",
+      "player-bar"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#3a3a3a",
+      "#0a0a0a",
+      "#141414",
+      "#ffffff",
+      "#dbdbdb",
+      "#9d968e",
+      "#2a5a3e",
+      "#e8304b"
+    ],
+    "colorRoles": {
+      "background": "#3a3a3a",
+      "surface": "#0a0a0a",
+      "text": "#ffffff",
+      "muted": "#9d968e",
+      "secondary": "#dbdbdb",
+      "accent": "#2a5a3e",
+      "primary": "#ffffff",
+      "highlight": "#e8304b",
+      "tile": "#141414"
+    },
+    "typography": "Inter throughout (section headings 22px/700, now-playing title 29px/800, list titles 20px/500-600, metadata 13-16px/400); Material Symbols Rounded for all icons",
+    "typeScale": "Moderate contrast: 29px/800 now-playing title, 22px/700 shelf headings, 20px library titles, 13-15px card titles and metadata; bold vs regular carries hierarchy",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "none",
+    "imagery": [
+      "abstract-gradients",
+      "illustration",
+      "iconography"
+    ],
+    "iconStyle": "filled",
+    "whitespace": "moderate",
+    "backgroundTreatment": "gradient",
+    "mood": [
+      "dark",
+      "immersive",
+      "moody",
+      "playful",
+      "media-rich"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T06:23:34.196Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 12,
+    "usage": {
+      "input_tokens": 24,
+      "cache_creation_input_tokens": 40592,
+      "cache_read_input_tokens": 446776,
+      "output_tokens": 7023
+    }
+  },
+  "notes": "Riff is a Spotify-desktop clone: three rounded near-black panels floating on a mid-grey (#3a3a3a) window chrome with 8px gutters, plus a full-width player bar. Album art is generative: concentric rings, diagonal stripes, blurred blobs, and sunset-horizon motifs with grain, giving a cohesive synthetic look. The right now-playing panel uses a green gradient tinted from the current artwork. Shelves overflow horizontally with the last card clipped; chevron at right of each heading is 'Show all'. Sidebar segmented control switches Playlists/Albums/Queue; sort dropdown offers Recents/Recently Added/Alphabetical/Custom. Window-control buttons (mini player, minimize, maximize, close) indicate an Electron-style desktop app. Source badges (YouTube Music red dot) mark audio provenance."
+}

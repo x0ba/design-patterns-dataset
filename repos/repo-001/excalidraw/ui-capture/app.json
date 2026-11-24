@@ -1,0 +1,28 @@
+{
+  "mode": "static",
+  "entry": "/#url=/seed/ledgerline-platform-planning.excalidraw",
+  "login": null,
+  "stubs": [
+    {
+      "service": "Font CDN (excalidraw.nyc3.cdn.digitaloceanspaces.com)",
+      "how": "Build-time OSS_FONTS_CDN=/ (env override added to scripts/woff2/woff2-vite-plugins.js) so all fonts load from the build's own /fonts and root .woff2 files; the Assistant UI font files the CDN hosts are copied from packages/excalidraw/fonts/Assistant into out/fonts/Assistant"
+    },
+    {
+      "service": "Simple Analytics script (scripts.simpleanalyticscdn.com)",
+      "how": "Built index.html points the script tag at /stubs/simpleanalytics-noop.js, a local no-op defining sa_event/sa_pageview"
+    },
+    {
+      "service": "Sentry error reporting",
+      "how": "VITE_APP_DISABLE_SENTRY=true in .env.production.local"
+    },
+    {
+      "service": "Firebase (collab room persistence / shared-link images)",
+      "how": "Placeholder VITE_APP_FIREBASE_CONFIG; only touched when starting a live-collaboration session, which is not part of the loaded state"
+    },
+    {
+      "service": "Share-link JSON backend, collab websocket, AI text-to-diagram backend, library backend",
+      "how": "VITE_APP_* URLs pointed at localhost placeholders (/stub-api, /stub-ai, ws localhost:4471); not called while viewing/editing the local scene"
+    }
+  ],
+  "notes": "Excalidraw's front end runs fully client-side, so this is the production Vite build of excalidraw-app (built by .ui-capture/build.sh with .ui-capture/env.production.local; toolchain pinned in mise.toml: node 24.22.3, yarn 1.22.22). Data: .ui-capture/seed/generate-scene.mjs writes a standard .excalidraw file (out/seed/ledgerline-platform-planning.excalidraw) that the app loads through its own '#url=' scene-import path on first open; the app then persists it to localStorage/IndexedDB like any user scene and strips the hash. The canvas is a fintech staff engineer's months-old planning board: architecture diagram with bound arrows, Q4 roadmap swimlanes with status colors and a 'today' marker, a sprint kanban board, a checkout flowchart with 3DS branches, a ledger ERD, a retro frame with an embedded incident chart image, scratch notes with links and freehand scribbles, and a faded archive frame. Main UI areas: top toolbar (shapes/tools), main menu (hamburger, top-left), properties panel when something is selected, library sidebar (top-right), zoom/undo controls (bottom-left), help (bottom-right). Setup: deps were installed offline from a curl-filled yarn mirror (.ui-capture/cache/yarn-mirror) with `yarn install --no-default-rc --offline --frozen-lockfile --ignore-scripts`; iconv-lite 0.6.3, moo-color 1.0.3 and prettier-linter-helpers 1.0.0 were repacked without their .idea/.vscode folders (sandbox forbids writing those) with yarn.lock hashes swapped only for the install and then restored. Rebuild everything with .ui-capture/build.sh; .ui-capture/seed/verify-scene.test.ts checks the seed survives the app restore path (vitest). The app opens at scroll 0 / 100% zoom on the board title and the architecture frame; the other frames (roadmap to the right, sprint board and checkout flow below, ERD and retro further right, archive at the bottom) are reached by panning or zooming out. The library sidebar starts empty (libraries can only be imported from allow-listed hosts behind a confirm prompt)."
+}

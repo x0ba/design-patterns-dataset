@@ -1,0 +1,472 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "oksskolten--chat-conversation",
+    "url": "http://localhost:4435/chat/c-weekly-digest-1",
+    "finalUrl": "http://localhost:4435/chat/c-weekly-digest-1",
+    "status": 200,
+    "title": "Oksskolten",
+    "capturedAt": "2026-11-18T20:59:59.739Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1833
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "ai-tools",
+    "domainNote": "Self-hosted RSS/feed reader (Oksskolten) with an AI chat over the user's article archive",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/oksskolten/explore.json",
+      "repo": {
+        "name": "babarot/oksskolten",
+        "url": "https://github.com/babarot/oksskolten",
+        "commit": "737526230a9c5907f1a253dd82d93c828526790b",
+        "license": "AGPL-3.0"
+      },
+      "view": {
+        "slug": "chat-conversation",
+        "name": "AI chat conversation",
+        "description": "An AI chat thread about the user's articles with user message bubbles, formatted assistant replies linking to articles, and a message composer at the bottom."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Brand wordmark, collapse toggle, primary destinations (Inbox, Search, Read Later, Liked, Clips, Read, Chat, Get Started) with counts, FEEDS tree of categories and feeds with unread badges, account footer",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 280,
+        "height": 1833
+      },
+      "patterns": [
+        "app-shell",
+        "tree-view",
+        "badge",
+        "command-palette"
+      ]
+    },
+    {
+      "id": "chat-header",
+      "role": "header",
+      "label": "Back button and centered conversation title 'Weekly digest: databases'",
+      "bbox": {
+        "x": 280,
+        "y": 0,
+        "width": 1160,
+        "height": 48
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "chat-thread",
+      "role": "main",
+      "label": "AI chat turns: blue user bubbles right-aligned, unboxed markdown assistant replies with links to source articles and inline code",
+      "bbox": {
+        "x": 520,
+        "y": 60,
+        "width": 680,
+        "height": 540
+      },
+      "patterns": [
+        "ai-chat",
+        "ai-provenance"
+      ]
+    },
+    {
+      "id": "composer",
+      "role": "composer",
+      "label": "Bottom textarea 'Ask anything about your articles...' with blue send button",
+      "bbox": {
+        "x": 540,
+        "y": 1727,
+        "width": 640,
+        "height": 95
+      },
+      "patterns": [
+        "prompt-input"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 280,
+            "height": 1833
+          },
+          "note": "Persistent sidebar with fixed destinations, feed list and unread counts; collapse toggle top right",
+          "quote": "Inbox 80",
+          "region": "sidebar"
+        },
+        {
+          "bbox": {
+            "x": 235,
+            "y": 18,
+            "width": 28,
+            "height": 28
+          },
+          "note": "Sidebar collapse toggle button",
+          "region": "sidebar"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations",
+          "live-counts",
+          "user-pinned-items"
+        ],
+        "visibility": "toggle-button",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "tree-view",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 364,
+            "width": 263,
+            "height": 224
+          },
+          "note": "Category node 'Languages' with chevron and nested feeds with letter icons and counts",
+          "quote": "Languages",
+          "region": "sidebar"
+        },
+        {
+          "bbox": {
+            "x": 8,
+            "y": 1548,
+            "width": 263,
+            "height": 32
+          },
+          "note": "Collapsed category 'News' with right-pointing chevron",
+          "quote": "News",
+          "region": "sidebar"
+        }
+      ],
+      "dims": {
+        "content": [
+          "label",
+          "type-icon",
+          "count-badge",
+          "status-decoration"
+        ],
+        "expandBy": [
+          "disclosure-triangle"
+        ],
+        "selection": "single-node",
+        "source": "containment",
+        "density": "compact"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 238,
+            "y": 74,
+            "width": 26,
+            "height": 18
+          },
+          "note": "Unread count pill on Inbox",
+          "quote": "80",
+          "region": "sidebar"
+        },
+        {
+          "bbox": {
+            "x": 238,
+            "y": 367,
+            "width": 26,
+            "height": 18
+          },
+          "note": "Category count rolled up from feeds (22 = 9+4+2+4+3)",
+          "quote": "22",
+          "region": "sidebar"
+        }
+      ],
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "rule": "everything-unread",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "ai-chat",
+      "status": "present",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 740,
+            "y": 64,
+            "width": 440,
+            "height": 36
+          },
+          "note": "User prompt bubble",
+          "quote": "Give me a quick digest of the database posts from this week.",
+          "region": "chat-thread"
+        },
+        {
+          "bbox": {
+            "x": 540,
+            "y": 112,
+            "width": 640,
+            "height": 240
+          },
+          "note": "Assistant reply in markdown: bullet list, links to articles, italic source names, inline code",
+          "quote": "Here's what landed in your Databases category this week:",
+          "region": "chat-thread"
+        },
+        {
+          "bbox": {
+            "x": 540,
+            "y": 470,
+            "width": 640,
+            "height": 115
+          },
+          "note": "Follow-up reply offering to search archive",
+          "quote": "Want me to search your archive for anything else on",
+          "region": "chat-thread"
+        }
+      ],
+      "dims": {
+        "turnContent": [
+          "markdown-with-code",
+          "citations"
+        ],
+        "composition": "linear-thread",
+        "invokeBy": [
+          "text-field-submit"
+        ],
+        "feedback": [
+          "citations-inline"
+        ],
+        "scope": "connected-apps"
+      }
+    },
+    {
+      "id": "ai-provenance",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 561,
+            "y": 159,
+            "width": 400,
+            "height": 18
+          },
+          "note": "Reply links the source article title plus source feed name inline",
+          "quote": "Postgres 18: asynchronous I/O in practice — Crunchy Data Blog",
+          "region": "chat-thread"
+        },
+        {
+          "bbox": {
+            "x": 561,
+            "y": 241,
+            "width": 325,
+            "height": 18
+          },
+          "quote": "Introducing concurrent writes in Turso — Turso Blog",
+          "region": "chat-thread"
+        }
+      ],
+      "dims": {
+        "disclosure": [
+          "citations"
+        ],
+        "placement": "inline-beside-the-span",
+        "openBy": [
+          "click-citation"
+        ]
+      }
+    },
+    {
+      "id": "prompt-input",
+      "status": "present",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 540,
+            "y": 1727,
+            "width": 640,
+            "height": 95
+          },
+          "note": "Bordered rounded composer at bottom with disabled blue send button",
+          "quote": "Ask anything about your articles...",
+          "region": "composer"
+        }
+      ],
+      "dims": {
+        "content": [
+          "plain-prompt"
+        ],
+        "layout": "bottom-sticky-composer",
+        "submitBy": [
+          "click-send"
+        ],
+        "assistance": [
+          "placeholder-examples"
+        ]
+      }
+    },
+    {
+      "id": "command-palette",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Only the 'Search K' trigger with shortcut hint is in the capture; live page shows a centered article-search overlay with filter chips and keyboard hints, which is closer to a quick-open search than a command runner.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 99,
+            "width": 263,
+            "height": 32
+          },
+          "note": "Search nav item with K shortcut hint; opens centered ⌘K search overlay live",
+          "quote": "Search",
+          "region": "sidebar"
+        }
+      ],
+      "dims": {
+        "types": [
+          "objects-and-files"
+        ],
+        "detail": "name-and-description",
+        "summon": [
+          "in-app-shortcut",
+          "visible-search-button"
+        ],
+        "placement": "centered-overlay",
+        "scope": "current-app"
+      }
+    },
+    {
+      "id": "suggestion-chips",
+      "status": "absent",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 540,
+            "y": 1727,
+            "width": 640,
+            "height": 95
+          },
+          "note": "No starter or follow-up chips near composer"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "chat-thread",
+      "status": "absent",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 520,
+            "y": 60,
+            "width": 680,
+            "height": 540
+          },
+          "note": "Conversation is with a model, coded as ai-chat"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "two-column app: fixed left sidebar (primary nav + collapsible feed tree with unread counts), right content pane showing an AI chat thread with centered 640px column and bottom composer",
+    "regions": [
+      "sidebar",
+      "chat-header",
+      "chat-thread",
+      "composer"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#f0f0f2",
+      "#111111",
+      "#2563eb",
+      "#6b7280",
+      "#e5e7eb",
+      "#f7f7f7"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "surface": "#f0f0f2",
+      "text": "#111111",
+      "primary": "#2563eb",
+      "muted": "#6b7280",
+      "border": "#e5e7eb",
+      "accent": "#2563eb"
+    },
+    "typography": "Noto Sans for UI chrome, sidebar, user bubbles and composer; ui-sans-serif (system) for assistant reply prose and links; ui-monospace for inline code; brand wordmark 'Oksskolten' in TeX Gyre Pagella serif bold",
+    "typeScale": "Flat scale: 26px serif bold wordmark, 15px header title semibold/composer, 14px body and nav, 11-12px count badges and FEEDS section label in uppercase",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "clean",
+      "calm",
+      "technical",
+      "utilitarian"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T21:01:07.916Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 7,
+    "usage": {
+      "input_tokens": 14,
+      "cache_creation_input_tokens": 22890,
+      "cache_read_input_tokens": 183567,
+      "output_tokens": 4215
+    }
+  },
+  "notes": "Feed reader with an AI 'Chat' over the user's article archive. User turns are saturated blue (#2563eb) pill/rounded bubbles right-aligned; assistant turns are unboxed prose with underlined blue links, em-dash + italic source name, and gray-chip inline code. Sidebar uses tiny colored letter-avatars per feed and pale-blue pill count badges; a warning glyph marks a broken feed (⚠ Increment). Serif bold wordmark contrasts the otherwise system sans UI. Search item shows a 'K' shortcut hint and opens a centered ⌘K search overlay with filter chips (Read Later, Liked, Unread, Today, Week, Month). A sonner 'Notifications alt+T' toast region exists but is empty."
+}

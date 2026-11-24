@@ -1,0 +1,307 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "betterbahn--analysis-progress",
+    "url": "http://localhost:4454/discount?vbid=a3c1f0e2-5b7d-4e8a-9c21-1f0b6d2e7a44&hasDeutschlandTicket=false&passengerAge=34&travelClass=2&bahnCard=25",
+    "finalUrl": "http://localhost:4454/discount?vbid=a3c1f0e2-5b7d-4e8a-9c21-1f0b6d2e7a44&hasDeutschlandTicket=false&passengerAge=34&travelClass=2&bahnCard=25",
+    "status": 200,
+    "title": "Better Bahn - Split-Ticketing",
+    "capturedAt": "2026-11-18T21:31:07.270Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 900
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "travel-hospitality",
+    "domainNote": "Deutsche Bahn split-ticketing price finder (third-party tool 'Better Bahn')",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/betterbahn/explore.json",
+      "repo": {
+        "name": "BetterBahn/betterbahn",
+        "url": "https://github.com/BetterBahn/betterbahn",
+        "commit": "bdfb30e2bbffd17420392190ed92e4c1d4e89616",
+        "license": "AGPL-3.0"
+      },
+      "view": {
+        "slug": "analysis-progress",
+        "name": "Split-ticket analysis in progress",
+        "description": "Journey page while the analysis streams: a progress box with spinner, current station and progress bar above the selected connection card."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Outlined 'BETTER BAHN' wordmark logo linking to home; no other nav",
+      "bbox": {
+        "x": 88,
+        "y": 17,
+        "width": 1264,
+        "height": 42
+      },
+      "patterns": []
+    },
+    {
+      "id": "progress-panel",
+      "role": "status-strip",
+      "label": "Dark green panel: spinner + 'Prüfe Würzburg Hbf...', linear bar, '63% — 5 / 8 Stationen geprüft'",
+      "bbox": {
+        "x": 88,
+        "y": 116,
+        "width": 1264,
+        "height": 96
+      },
+      "patterns": [
+        "progress-indicator"
+      ]
+    },
+    {
+      "id": "connection-select",
+      "role": "main-content",
+      "label": "'Wähle deine Verbindung' panel with one selected connection card (times, route, leg badges, price) and a success notice",
+      "bbox": {
+        "x": 88,
+        "y": 236,
+        "width": 1264,
+        "height": 379
+      },
+      "patterns": [
+        "choice-control",
+        "card",
+        "badge",
+        "banner"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "progress-indicator",
+      "status": "present",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 88,
+            "y": 116,
+            "width": 1264,
+            "height": 96
+          },
+          "quote": "63% — 5 / 8 Stationen geprüft",
+          "note": "Spinner icon + determinate linear bar with percentage and step count while checking stations",
+          "region": "progress-panel"
+        }
+      ],
+      "dims": {
+        "determinacy": "percentage",
+        "form": "linear-bar",
+        "coverage": "a-region",
+        "control": "no-control"
+      }
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 120,
+            "y": 312,
+            "width": 1200,
+            "height": 215
+          },
+          "quote": "Verbindung: 23:01 → 04:37",
+          "note": "Bordered, shadowed white card summarizing one train connection: times, duration, price, route, leg detail, total and class",
+          "region": "connection-select"
+        }
+      ],
+      "dims": {
+        "media": "none",
+        "actions": "none",
+        "shape": "horizontal",
+        "style": "outlined"
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "rationale": "Only one connection option is present; it is shown selected (blue outline) under 'Wähle deine Verbindung', implying option-card selection, but alternative options and click behavior are not visible in the capture.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 112,
+            "y": 304,
+            "width": 1216,
+            "height": 287
+          },
+          "quote": "Wähle deine Verbindung",
+          "note": "Selected option card with blue 2px outline and 'Diese Verbindung ausgewählt' confirmation",
+          "region": "connection-select"
+        }
+      ],
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "option-cards",
+        "option": [
+          "label-and-description",
+          "price-or-consequence"
+        ],
+        "timing": "immediately"
+      }
+    },
+    {
+      "id": "banner",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 120,
+            "y": 539,
+            "width": 1200,
+            "height": 44
+          },
+          "quote": "✅ Diese Verbindung ausgewählt - Scroll nach unten für Split-Ticket Analyse",
+          "note": "Light-blue inline notice with left accent border confirming the selection",
+          "region": "connection-select"
+        }
+      ],
+      "dims": {
+        "scope": "section",
+        "severity": "success",
+        "action": "none",
+        "placement": "beside-the-problem"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 180,
+            "y": 405,
+            "width": 104,
+            "height": 24
+          },
+          "quote": "ICE 589",
+          "note": "Blue filled pill for train number and grey 'train' pill for transport type on the leg row",
+          "region": "connection-select"
+        }
+      ],
+      "dims": {
+        "meaning": "label",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "app-shell",
+      "status": "absent",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 88,
+            "y": 17,
+            "width": 163,
+            "height": 42
+          },
+          "note": "Header holds only a logo link; no navigation destinations"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "booking-flow",
+      "status": "absent",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 88,
+            "y": 236,
+            "width": 1264,
+            "height": 379
+          },
+          "note": "Selecting a connection for price analysis, not reserving it"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "single-column centered tool page (1264px container) with logo header, progress panel, and a connection-selection panel; rest of page empty white",
+    "regions": [
+      "header",
+      "progress-panel",
+      "connection-select"
+    ],
+    "density": "sparse"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#4b6058",
+      "#171717",
+      "#2563eb",
+      "#dbeafe",
+      "#e5e7eb",
+      "#6b7280"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "text": "#171717",
+      "primary": "#4b6058",
+      "accent": "#2563eb",
+      "surface": "#ffffff",
+      "muted": "#6b7280",
+      "border": "#e5e7eb"
+    },
+    "typography": "Arial throughout: wordmark, headings, card text, badges",
+    "typeScale": "Small range: 20px bold/italic for logo, progress label and times, 18px bold section heading and price, 14px body, 12px secondary details; weight contrast carries hierarchy",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "none"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "utilitarian",
+      "clean",
+      "functional",
+      "calm"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T21:31:40.666Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 5,
+    "usage": {
+      "input_tokens": 10,
+      "cache_creation_input_tokens": 14946,
+      "cache_read_input_tokens": 107694,
+      "output_tokens": 656
+    }
+  },
+  "notes": "Muted dark sage-green (#4b6058) brand used for the outlined rounded-rectangle wordmark and the full-width progress panel; progress label set in italic. Connection card nested in a blue-outlined selected wrapper, with blue (#2563eb-ish) departure/arrival times and a blue ICE pill. A 1px black rule separates leg detail from the total. Page is mid-process: the split-ticket analysis is still loading so the lower page is blank."
+}

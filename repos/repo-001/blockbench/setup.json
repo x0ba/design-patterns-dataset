@@ -1,0 +1,96 @@
+{
+  "batch": "repo-001",
+  "slug": "blockbench",
+  "ok": true,
+  "repo": {
+    "name": "JannisX11/blockbench",
+    "url": "https://github.com/JannisX11/blockbench",
+    "commit": "ec0b2827104d0799c153bfb5f867579c0c44652f",
+    "branch": "master",
+    "license": "GPL-3.0"
+  },
+  "domain": "design-creative",
+  "port": 4471,
+  "checkoutRoot": "~/.cache/design-patterns-dataset/repos",
+  "mode": "static",
+  "entry": "/",
+  "app": {
+    "mode": "static",
+    "entry": "/",
+    "login": null,
+    "stubs": [
+      {
+        "service": "Blockbench news feed (web.blockbench.net/content/news.json, start screen)",
+        "how": "Network shim in out/seed/seed_loader.js rewrites the request to the repo's own bundled content/news.json"
+      },
+      {
+        "service": "Plugin store catalog (cdn.jsdelivr.net/gh/JannisX11/blockbench-plugins plugins.json, updates.json, per-plugin icons/about/changelog)",
+        "how": "Real catalog + icons snapshotted once into out/stub/plugins/; the shim rewrites XHR/fetch and <img src> URLs to those files"
+      },
+      {
+        "service": "Plugin download statistics (blckbn.ch/api/stats/plugins)",
+        "how": "Generated per-plugin download counts in out/stub/blckbn/plugin_stats.json"
+      },
+      {
+        "service": "Telemetry events (blckbn.ch/api/event/new_installation, recurring_user, install_plugin, successful_update)",
+        "how": "Rewritten to GET out/stub/blckbn/ok.json ({\"success\":true})"
+      },
+      {
+        "service": "Shared model links (blckbn.ch/api/models/<code>)",
+        "how": "Rewritten to out/stub/blckbn/models/<code>.json (none present -> app shows its normal 'invalid link' message)"
+      },
+      {
+        "service": "GitHub releases API (About dialog latest version) and plugin commit history",
+        "how": "out/stub/github/release_latest.json (v5.2.2) and an empty commits list"
+      }
+    ],
+    "notes": "Blockbench 5.2.2 web app (the same build as web.blockbench.net) built with `npm run build-web` (esbuild) and assembled into .ui-capture/out by .ui-capture/build_out.sh (index.html, dist/bundle.js, css, assets, font, lib, content). The front end needs no backend. Tooling: node 24.22.3 via mise.toml (matches CI). Data: Blockbench web keeps its user state in the browser, so .ui-capture/seed/seed_loader.js (a separate classic script injected before the bundle in out/index.html) seeds it on first load from out/seed/*.json, which .ui-capture/seed/generate.mjs produces: (1) localStorage settings of a long-time user (username 'mossbyte', ~148 launches, custom palette and color history, recently used actions); (2) the IndexedDB 'auto_backups' store that Blockbench uses for project recovery, holding 6 projects in the native .bbmodel 5.0 format (146 cubes, 14 animations total, each with editor_state: camera, selected element, saved flag) with generated pixel-art textures: red_panda (Bedrock entity, 15 cubes, 5 animations incl. a WIP climb), goblin_merchant (Bedrock entity with backpack/lantern/wares, 5 animations), sky_skiff_mk2 (Generic model airship, 76 cubes, 3 animations), copper_lantern_post (Java block, 4 textures, display transforms), mossy_mushroom_stool (Java block), ember_wisp (small Bedrock entity). After the app boots, the loader opens them with Blockbench's own AutoBackup.recoverAllBackups() (the 'Recover' action on the start screen) and focuses red_panda, so the editor opens with six project tabs. Open /?start to land on the start screen instead (it shows the 'Recover backup' banner plus model format list). Main areas: menu bar, project tabs, Edit/Paint/Animate modes (toolbar top right), 3D viewport, UV editor + Textures panel (left), Transform/Element and Outliner panels (right), Animate mode timeline/animations list, Display mode (Java block models), File > Plugins (store backed by the stub catalog), Settings, Keybindings. The browser needs WebGL. Rebuild everything with .ui-capture/build_out.sh; .ui-capture/tools/check.mjs is the headless screenshot check used during setup (serves out/ on :5471). The only console error is the app trying to register ./service_worker.js, which the web build does not produce without `npm run pwa`; it is harmless."
+  },
+  "tools": {
+    "node": "24.22.3"
+  },
+  "prompt": "This is a checkout of JannisX11/blockbench (https://github.com/JannisX11/blockbench) at commit ec0b2827104d. Blockbench - A low poly 3D model editor\n\nI want to see its user interface in a desktop browser, in the state a real, established user would see it. Please get the app running locally with its main interface working and realistic data in it.\n\n# Running it\n- Follow the repo's own setup docs and tooling. Take the simplest route that shows the real app: a static production build if the front end works without a backend, otherwise the app's own server (production or dev mode).\n- If it needs a database or other services, run them locally with an embedded or file-based option (SQLite, in-memory, JSON files, an embedded Postgres such as PGlite) or the app's demo/mock mode.\n- Don't redesign or restyle anything. Change only what's needed to build and run it.\n\n# Tools: use mise\nInstall every runtime and tool you need (node, the package manager, python, bun, ...) with mise, pinned to exact versions in a mise.toml at the repo root, so the setup can be reproduced. Match what the repo asks for (engines, .nvmrc, .tool-versions, packageManager). mise is already configured for this directory: `mise install` installs into ./.ui-capture/mise, and its shims come first on PATH, so `node`, `pnpm` and the rest resolve to the pinned versions. Don't use other copies of these tools or download runtimes by hand.\n\n# Secrets, API keys and external services: fake them\nThe app must not depend on anything outside this machine, and when it runs it has no network except localhost. Wherever it expects secrets, environment variables, API keys or third-party services (hosted auth or OAuth, payment providers, email, LLM or other AI APIs, maps, storage buckets, analytics, hosted databases):\n- Give the required variables placeholder values so the app starts.\n- Where it actually calls the service, make the call succeed locally with realistic responses: use the app's own mock, test or offline mode if it has one; otherwise point the client at a small local stub server that start.sh also starts, or swap in a stub at the integration boundary (the API client or service module). Keep stubs out of UI code. Responses should look like what the real service returns for a real user, e.g. an AI reply that actually answers, a payment history with real-looking amounts.\n- Calls the browser makes directly to outside services count too; point them at the local stub.\n- For sign-in through an outside provider, create a local account or use the app's dev sign-in so you can get past it.\nList every stub in app.json.\n\n# Data: like real use\nSeed it the way an established user's data would look after months of actual use: specific, plausible names and content for this kind of app; dates spread over time; a realistic mix of states (done, in progress, overdue, archived, ...); realistic volume (dozens to hundreds of records where the app revolves around records); short and long text; some messiness real data has. Start from the app's own demo or seed data if it has realistic data, and extend it if it's thin. Load data through the app's own paths (its API, import, seed scripts, or its database schema), never by hardcoding it into UI code. If the app needs an account, create one and attach the data to it. No lorem ipsum or \"Test 1\".\n\n# Environment\nThis shell is sandboxed: you can write only inside this directory (package-manager caches already point into ./.ui-capture/cache), and the network reaches only package registries, mise's download sources and GitHub (registry.npmjs.org, registry.yarnpkg.com, repo.yarnpkg.com, github.com, codeload.github.com, objects.githubusercontent.com, raw.githubusercontent.com, nodejs.org, mise.jdx.dev, mise-versions.jdx.dev, release-assets.githubusercontent.com, pypi.org, files.pythonhosted.org, binaries.prisma.sh, cdn.jsdelivr.net, unpkg.com). Docker isn't available. A process you start in the background can't be seen or stopped from a later command, so test servers on another port than 4471 (e.g. 5471) or in the foreground under `timeout`; anything still listening on 4471 is stopped before I check.\n\n# When you're done, leave this in ./.ui-capture/\n- app.json: {\"mode\": \"static\" or \"server\", \"entry\": \"/path where the main UI opens\", \"login\": null or {\"username\": \"...\", \"email\": \"...\", \"password\": \"...\"}, \"stubs\": [{\"service\": \"what was faked\", \"how\": \"how\"}], \"notes\": \"how you set it up, what data is loaded, and the main areas of the app\"}\n- static mode: the production build in ./.ui-capture/out, with index.html as its entry. It will be served from the root of a plain static file server; unknown paths fall back to index.html.\n- server mode: ./.ui-capture/start.sh, which starts everything the app needs (stubs included) in the foreground and serves the UI at http://localhost:4471/ (it gets PORT=4471). It runs with the same PATH and restrictions as your shell, plus no network at all except localhost, so everything must already be installed, built and seeded (or seeded by start.sh itself).\n- Put any scripts you write for seeding or stubbing in ./.ui-capture/ too; they're kept with the setup record.\n\n# Order of work\nYou have 90 minutes in total, and anything unfinished when time runs out is lost. So work in this order:\n1. Get the app building and running with its stubs, and write the contract above (app.json plus out/ or start.sh), even if it has only a little data so far.\n2. Then build out the data, re-running your seed and checking the app still loads after each substantial step, so that a working state with the data loaded so far is always in place.\nWrite large data sets with a short generator script rather than as one long literal file.\n\nI'll open it at 1440×900.",
+  "model": {
+    "model": "claude-opus-5-5",
+    "effort": "high"
+  },
+  "sandbox": true,
+  "startedAt": "2026-11-17T11:42:38.967Z",
+  "finishedAt": "2026-11-17T11:55:29.220Z",
+  "verification": {
+    "ok": true,
+    "problems": [],
+    "pageErrors": [],
+    "consoleErrors": [
+      "A bad HTTP response code (404) was received when fetching the script."
+    ],
+    "failedRequests": [],
+    "textChars": 1205,
+    "visibleElements": 545,
+    "title": "red_panda - Blockbench"
+  },
+  "repairs": 0,
+  "session": {
+    "rounds": 1,
+    "numTurns": 63,
+    "costUsd": 2.6969108000000004,
+    "durationMs": 766945,
+    "models": [
+      "claude-opus-5-5"
+    ],
+    "usage": {
+      "input_tokens": 118,
+      "cache_creation_input_tokens": 115360,
+      "cache_read_input_tokens": 3714994,
+      "output_tokens": 51528
+    },
+    "timedOut": false
+  },
+  "changes": {
+    "files": 1,
+    "insertions": 2,
+    "deletions": 0,
+    "patchBytes": 154,
+    "patch": "setup.patch"
+  }
+}

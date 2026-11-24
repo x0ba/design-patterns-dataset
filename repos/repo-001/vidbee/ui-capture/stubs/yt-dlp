@@ -1,0 +1,201 @@
+#!/usr/bin/env node
+// Local stand-in for the yt-dlp binary (the app's integration boundary with
+// video sites). Answers metadata requests from catalog.mjs and simulates a
+// slow resumable download with yt-dlp-formatted progress output.
+import fs from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath, pathToFileURL } from 'node:url'
+
+const here = path.dirname(fs.realpathSync(fileURLToPath(import.meta.url)))
+const catalogPath = [path.join(here, '../catalog.mjs'), path.join(here, '../../../catalog.mjs')].find((p) => fs.existsSync(p))
+const { findItemByUrl, ALL_ITEMS, CHANNELS } = await import(pathToFileURL(catalogPath).href)
+
+const VERSION = '2026.11.12'
+const args = process.argv.slice(2)
+const out = (s) => process.stdout.write(`${s}\n`)
+const err = (s) => process.stderr.write(`${s}\n`)
+
+if (args.includes('--version')) {
+  out(VERSION)
+  process.exit(0)
+}
+if (args.includes('-U') || args.includes('--update')) {
+  out(`Latest version: ${VERSION} from yt-dlp/yt-dlp\nyt-dlp is up to date (${VERSION} from yt-dlp/yt-dlp)`)
+  process.exit(0)
+}
+
+const url = [...args].reverse().find((a) => /^https?:\/\//.test(a)) ?? ''
+const item = findItemByUrl(url)
+
+const extractorOf = (u) => {
+  const h = (() => { try { return new URL(u).hostname } catch { return '' } })()
+  if (h.includes('youtube') || h.includes('youtu.be')) return ['youtube', 'Youtube']
+  if (h.includes('bilibili')) return ['BiliBili', 'BiliBili']
+  if (h.includes('vimeo')) return ['vimeo', 'Vimeo']
+  if (h.includes('soundcloud')) return ['soundcloud', 'Soundcloud']
+  if (h.includes('twitch')) return ['twitch:vod', 'TwitchVod']
+  if (h === 'x.com' || h.includes('twitter')) return ['twitter', 'Twitter']
+  if (h.includes('tiktok')) return ['TikTok', 'TikTok']
+  return ['generic', 'Generic']
+}
+
+const buildFormats = (duration) => {
+  const audio = [
+    ['139', 'm4a', 'mp4a.40.5', 48, 'low'],
+    ['140', 'm4a', 'mp4a.40.2', 129, 'medium'],
+    ['251', 'webm', 'opus', 135, 'medium']
+  ].map(([id, ext, acodec, tbr, note]) => ({
+    format_id: id, ext, acodec, vcodec: 'none', tbr, abr: tbr, format_note: note, protocol: 'https',
+    audio_ext: ext, video_ext: 'none', filesize: Math.round((tbr * 1000 / 8) * duration), language: 'en'
+  }))
+  const video = [
+    ['160', 256, 144, 'avc1.4d400c', 'mp4', 30, 110],
+    ['133', 426, 240, 'avc1.4d4015', 'mp4', 30, 240],
+    ['134', 640, 360, 'avc1.4d401e', 'mp4', 30, 480],
+    ['135', 854, 480, 'avc1.4d401f', 'mp4', 30, 900],
+    ['136', 1280, 720, 'avc1.4d401f', 'mp4', 30, 1700],
+    ['247', 1280, 720, 'vp9', 'webm', 30, 1500],
+    ['137', 1920, 1080, 'avc1.640028', 'mp4', 30, 3800],
+    ['248', 1920, 1080, 'vp9', 'webm', 30, 2900],
+    ['399', 1920, 1080, 'av01.0.08M.08', 'mp4', 30, 2200],
+    ['271', 2560, 1440, 'vp9', 'webm', 30, 8900],
+    ['313', 3840, 2160, 'vp9', 'webm', 30, 17800]
+  ].map(([id, width, height, vcodec, ext, fps, tbr]) => ({
+    format_id: id, ext, width, height, fps, vcodec, acodec: 'none', tbr, format_note: `${height}p`, protocol: 'https',
+    video_ext: ext, audio_ext: 'none', filesize: Math.round((tbr * 1000 / 8) * duration)
+  }))
+  return [...audio, ...video]
+}
+
+const infoFor = (u) => {
+  const [extractor, extractorKey] = extractorOf(u)
+  if (!item) {
+    const id = u.split(/[/=?]/).filter(Boolean).pop() ?? 'video'
+    return {
+      id, title: 'Untitled video', duration: 412, extractor, extractor_key: extractorKey, webpage_url: u,
+      uploader: 'Unknown', view_count: 0, thumbnail: null, formats: buildFormats(412), tags: []
+    }
+  }
+  const ch = item.channel
+  return {
+    id: item.id,
+    title: item.title,
+    fulltitle: item.title,
+    description: item.description,
+    uploader: ch.name,
+    channel: ch.name,
+    channel_id: ch.channelId ?? ch.uid ?? ch.slug,
+    channel_url: ch.sourceUrl,
+    duration: item.duration,
+    duration_string: undefined,
+    view_count: item.viewCount,
+    like_count: Math.round(item.viewCount * 0.031),
+    upload_date: '20261102',
+    availability: 'public',
+    thumbnail: item.thumbnail,
+    thumbnails: [{ url: item.thumbnail, width: 480, height: 360, id: '0' }],
+    tags: ch.tags,
+    categories: ['Education'],
+    webpage_url: item.url,
+    original_url: item.url,
+    extractor,
+    extractor_key: extractorKey,
+    formats: buildFormats(item.duration),
+    ext: 'mp4',
+    width: 1920,
+    height: 1080,
+    resolution: '1920x1080',
+    fps: 30,
+    _type: 'video'
+  }
+}
+
+if (args.includes('-j') || args.includes('--dump-json')) {
+  if (!item && !/^https?:\/\//.test(url)) {
+    err(`ERROR: '${url}' is not a valid URL.`)
+    process.exit(1)
+  }
+  out(JSON.stringify(infoFor(url)))
+  process.exit(0)
+}
+
+if (args.includes('-J') || args.includes('--dump-single-json')) {
+  const ch = CHANNELS.find((c) => c.sourceUrl && url.startsWith(c.sourceUrl)) ?? CHANNELS[0]
+  out(JSON.stringify({
+    id: `PL${ch.key}`, title: `${ch.name} — Uploads`, _type: 'playlist', webpage_url: url,
+    entries: ch.items.map((it) => ({ id: it.id, title: it.title, url: it.url, ie_key: extractorOf(it.url)[1], thumbnail: it.thumbnail, duration: it.duration }))
+  }))
+  process.exit(0)
+}
+
+// ---- Download simulation ----------------------------------------------------
+const argValue = (flag) => {
+  const i = args.indexOf(flag)
+  return i >= 0 ? args[i + 1] : undefined
+}
+const prints = []
+for (let i = 0; i < args.length; i++) if (args[i] === '--print') prints.push(args[i + 1])
+
+const info = infoFor(url)
+const isAudio = args.includes('-x') || args.includes('--extract-audio')
+const ext = isAudio ? (argValue('--audio-format') && argValue('--audio-format') !== 'best' ? argValue('--audio-format') : 'm4a') : (argValue('--merge-output-format') ?? 'mp4')
+const fields = { ...info, ext, title: info.title, uploader: info.uploader ?? 'NA', channel: info.channel ?? 'NA', id: info.id, filepath: '' }
+const fill = (tpl) => tpl.replace(/%\(([^)]+)\)([sd])/g, (_, key) => {
+  const k = key.split(/[,&|>]/)[0]
+  const v = fields[k]
+  return v === undefined || v === null || v === '' ? 'NA' : String(v)
+})
+
+const template = argValue('-o') ?? argValue('--output') ?? '%(title)s.%(ext)s'
+const target = fill(template).replace(/[:*?"<>|]/g, '_')
+fields.filepath = target
+
+for (const p of prints) {
+  const m = p.match(/^before_dl:(.*)$/)
+  if (m) out(fill(m[1]))
+}
+
+const totalBytes = Math.max(4_000_000, Math.round(info.duration * (isAudio ? 16_000 : 420_000)))
+const totalMiB = totalBytes / 1048576
+// Slow on purpose: a resumable transfer that takes a long time to finish.
+const durationSec = Math.min(Math.max(totalMiB * 2.4, 240), 2400)
+let done = Math.round(totalBytes * (0.12 + Math.random() * 0.5))
+const bytesPerTick = totalBytes / durationSec
+
+out(`[${extractorOf(url)[0]}] Extracting URL: ${url}`)
+out(`[${extractorOf(url)[0]}] ${info.id}: Downloading webpage`)
+out(`[info] ${info.id}: Downloading 1 format(s): ${isAudio ? '140' : '137+140'}`)
+out(`[download] Resuming download at byte ${done}`)
+out(`[download] Destination: ${target.replace(/\.[^.]+$/, '')}.f${isAudio ? '140' : '137'}.${isAudio ? 'm4a' : 'mp4'}`)
+
+const fmt = (n) => `${(n / 1048576).toFixed(2)}MiB`
+const eta = (s) => {
+  const m = Math.floor(s / 60)
+  const sec = Math.floor(s % 60)
+  return m >= 60 ? `${Math.floor(m / 60)}:${String(m % 60).padStart(2, '0')}:${String(sec).padStart(2, '0')}` : `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`
+}
+
+const tick = () => {
+  const jitter = 0.75 + Math.random() * 0.5
+  const step = bytesPerTick * jitter
+  done = Math.min(totalBytes, done + step)
+  const pct = ((done / totalBytes) * 100).toFixed(1).padStart(5)
+  const speed = step * 1
+  out(`[download] ${pct}% of  ${fmt(totalBytes)} at  ${fmt(speed)}/s ETA ${eta((totalBytes - done) / bytesPerTick)}`)
+  if (done >= totalBytes) {
+    clearInterval(timer)
+    fs.mkdirSync(path.dirname(target), { recursive: true })
+    const fd = fs.openSync(target, 'w')
+    fs.ftruncateSync(fd, totalBytes)
+    fs.closeSync(fd)
+    if (!isAudio) out(`[Merger] Merging formats into "${target}"`)
+    for (const p of prints) {
+      const m = p.match(/^after_move:(.*)$/)
+      if (m) out(fill(m[1]))
+    }
+    process.exit(0)
+  }
+}
+const timer = setInterval(tick, 1000)
+process.on('SIGTERM', () => process.exit(143))
+process.on('SIGINT', () => process.exit(130))

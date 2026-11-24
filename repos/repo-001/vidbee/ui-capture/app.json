@@ -1,0 +1,28 @@
+{
+  "mode": "server",
+  "entry": "/",
+  "login": null,
+  "stubs": [
+    {
+      "service": "yt-dlp (video-site extraction and downloading: YouTube, Bilibili, Vimeo, SoundCloud, Twitch, X, TikTok)",
+      "how": "Node script .ui-capture/stubs/yt-dlp passed via YTDLP_PATH. Answers --version, -j (video info with realistic format lists) and -J (playlist) from .ui-capture/catalog.mjs; for downloads it prints yt-dlp-formatted progress lines and slowly 'resumes' the transfer (several minutes), then writes a sparse output file and prints the after_move path, so queued/running items show live progress."
+    },
+    {
+      "service": "ffmpeg / ffprobe",
+      "how": "Shell scripts in .ui-capture/stubs/bin (FFMPEG_PATH) that only answer the version probe."
+    },
+    {
+      "service": "RSS feeds (YouTube channel Atom feeds, RSSHub bilibili feeds)",
+      "how": ".ui-capture/stubs/network-stub.mjs is preloaded into the API with NODE_OPTIONS=--import and wraps global fetch: feed URLs return Atom/RSS XML generated from the catalog (one channel, 'Urbanism Now', deliberately returns 404 so a failed subscription is shown)."
+    },
+    {
+      "service": "Thumbnail / avatar CDNs (i.ytimg.com, yt3.googleusercontent.com, hdslb.com, sndcdn, vimeocdn, jtvnw, twimg, tiktokcdn)",
+      "how": "Same fetch stub returns SVG title-card thumbnails and initial avatars, which the API's own /images/proxy route then serves to the browser; dns.promises.lookup is stubbed for these hosts so the proxy's private-host check passes."
+    },
+    {
+      "service": "GitHub releases API (latest yt-dlp version check)",
+      "how": "Fetch stub returns a fixed tag (2026.11.12) equal to the stub binary version, so Settings/About show the engine as up to date. All other outbound hosts fail like an offline machine."
+    }
+  ],
+  "notes": "Runs the official browser version of VidBee: apps/web (TanStack Start production build, served by apps/web/server.mjs on PORT) proxying /rpc, /events, /files and /images to the self-hosted API (apps/api, bundled to apps/api/dist with its own esbuild script, SQLite via better-sqlite3 at .ui-capture/data/vidbee/vidbee.db, API on PORT+10000). start.sh re-runs .ui-capture/seed.mjs on every start (dates stay relative to now), which writes into the app's own schema (schema.sql dumped from the API DDL): ~8 months of download history across YouTube, Bilibili, Vimeo, SoundCloud, Twitch, X and TikTok (mostly completed, plus failed downloads with real yt-dlp error messages such as 429, members-only, geo-blocked or removed videos, and some cancelled ones), a playlist download group ('Study Mixes 2026'), an active queue (3 downloading with live progress, 2 queued, 2 paused, 1 retry-scheduled after HTTP 429), and 8 RSS subscriptions with their feed items (one disabled, one failing with 404, keyword filters, audio-only podcast subscription). Completed downloads have sparse placeholder files of realistic size under .ui-capture/data/downloads so file-exists checks pass. Main areas: Download (active queue + history with platform/status filters, new-download dialog backed by the yt-dlp stub), Subscriptions, Settings, About. No login is required."
+}

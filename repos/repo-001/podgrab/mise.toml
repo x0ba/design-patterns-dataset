@@ -1,0 +1,14 @@
+# Go toolchain from GitHub-hosted builds (actions/go-versions) because dl.google.com
+# is not reachable from this sandbox. Same official Go 1.25.14 release.
+[tools]
+"http:go" = { version = "1.25.14", url = "https://github.com/actions/go-versions/releases/download/1.25.14-32325191436/go-1.25.14-darwin-arm64.tar.gz", bin_path = "bin" }
+
+[env]
+GOPATH = "{{config_root}}/.ui-capture/gopath"
+GOMODCACHE = "{{config_root}}/.ui-capture/cache/gomod"
+GOCACHE = "{{config_root}}/.ui-capture/cache/gobuild"
+GOTOOLCHAIN = "local"
+# Vanity module hosts are unreachable here; .ui-capture/goproxy is built from GitHub
+# mirrors by .ui-capture/tools/mkproxy (hashes still verified against go.sum).
+GOPROXY = "file://{{config_root}}/.ui-capture/goproxy,direct"
+GOSUMDB = "off"

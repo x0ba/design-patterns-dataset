@@ -1,0 +1,28 @@
+{
+  "mode": "static",
+  "entry": "/",
+  "login": null,
+  "stubs": [
+    {
+      "service": "Rath demo datasets on Aliyun OSS (https://chspace.oss-cn-hongkong.aliyuncs.com/api/*.json), which the production build fetches from the 'Demo' data-source tab",
+      "how": "The boot loader (out/__seed/boot.js, outside the app source) wraps window.fetch and redirects those URLs to the same files bundled in the build under /datasets/ (bike_dc-dataset-service.json, which isn't bundled, maps to the bundled Washington D.C. bike-sharing dataset ds-bikesharing-service.json)"
+    },
+    {
+      "service": "vega-lite world-110m topojson (https://vega.github.io/vega-lite/data/world-110m.json) used by geo charts",
+      "how": "The same fetch wrapper serves a local copy from /__seed/geo/world-110m.json"
+    },
+    {
+      "service": "Persisted user data (Rath keeps the dataset history in the browser's IndexedDB via localforage)",
+      "how": "On first load, out/__seed/boot.js writes the datasets from /__seed/rath-seed.json into IndexedDB 'rath_storage_instance' (stores 'meta' + 'datasource'), using the same record shape as Rath's setDataStorage(). It sets localStorage 'rath:ui-capture-seed' so this only runs once, then imports the real app entry"
+    },
+    {
+      "service": "Vercel Analytics (inject())",
+      "how": "inject() in main.tsx loads /_vercel/insights/script.js, which only Vercel's hosting serves. build.sh copies a local no-op stand-in (.ui-capture/stubs/_vercel/insights/script.js) to out/_vercel/insights/script.js. It drains the window.vaq queue and replaces window.va with a no-op, so nothing is sent"
+    },
+    {
+      "service": "Kanaries gateway (database connector, https://gateway.kanaries.net), Airtable API, causal server (causal.gateway.kanaries.net)",
+      "how": "Not stubbed. They are only called when the user sets up a new database or Airtable connection, or picks a server-side causal algorithm. The main UI and analysis (AutoPilot, Copilot, Painter, Dashboard, browser-side causal discovery) run in-browser web workers"
+    }
+  ],
+  "notes": "Rath is a client-only React/Vite SPA with no backend for its main features. Tools are pinned in mise.toml (node 24.11.1, yarn 1.22.22). Built with ./.ui-capture/build.sh, which runs the repo's `yarn build` steps (utils tsc -> vega-scenegraph rollup -> vega-renderer rollup -> rath-client vite build), copies packages/rath-client/build to .ui-capture/out, and routes index.html's entry script through /__seed/boot.js (data-app points at the real entry). Install workarounds for the sandbox: yarn runs with HOME=.ui-capture/home through a $TMPDIR symlink because the sandbox denies reading ~/.npmrc; yarn.lock entries that pointed at registry.npmmirror.com were rewritten to registry.npmjs.org; three tarballs (serialize-javascript 4.0.0, concurrently 4.1.2, iconv-lite 0.6.3) were repacked without .vscode/.idea folders, which the sandbox won't let anything write, and their lockfile hashes were updated. All tarballs sit in the yarn offline mirror .ui-capture/vendor (.yarnrc). Seed data (generator: .ui-capture/seed/gen-seed.mjs) is the dataset history of an analyst at a DTC outdoor-gear retailer after about 11 months of use: 17 datasets with edit times spread from today back to about 9 months ago, so the history groups Today / Week / Month / 3 months / 6 months / Year all fill. Three datasets are pinned with colour tags. They include e-commerce orders (2,400 rows), Airtable support tickets (940, mixed Open/Pending/Solved/Closed), web sessions from a REST API (3,000), Trail Club churn (1,250), weekly marketing spend (498), Postgres inventory snapshot, plant sensor readings, checkout A/B test, store traffic with lat/long, an employee pulse survey with short and long free-text comments, HR headcount, a messy PO export (mixed date formats, inconsistent vendor casing, blanks), a 2024 sales archive, and four of Rath's own demo datasets loaded earlier. They carry the tags @file, @air_table, @restful, @database and @demo. The app opens on the Data Connection page, which shows this history. Click any dataset to load it; the Data Source page then shows the table, meta and stats views, and the left nav opens AutoPilot (megaAuto), Copilot (semiAuto), Manual exploration (GraphicWalker), Painter, Dashboard designer, Collection, Dashboard and Causal analysis. Seeding runs once per browser profile; to re-seed, clear site data or remove localStorage 'rath:ui-capture-seed'."
+}

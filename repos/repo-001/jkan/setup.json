@@ -1,0 +1,91 @@
+{
+  "batch": "repo-001",
+  "slug": "jkan",
+  "ok": true,
+  "repo": {
+    "name": "timwis/jkan",
+    "url": "https://github.com/timwis/jkan",
+    "commit": "f4162636d231dd48bcf8f092eeb4ce08ffeea70a",
+    "branch": "main",
+    "license": "MIT"
+  },
+  "domain": "government-civic",
+  "port": 4458,
+  "checkoutRoot": "~/.cache/design-patterns-dataset/repos",
+  "mode": "static",
+  "entry": "/",
+  "app": {
+    "mode": "static",
+    "entry": "/",
+    "login": null,
+    "stubs": [
+      {
+        "service": "GitHub API (jekyll-github-metadata, called at build time)",
+        "how": ".ui-capture/jekyll.rb patches Jekyll::GitHubMetadata::Client#internet_connected? to false, so site.github.* (owner timwis, repo jkan, repository_url used by 'Open in GitHub' links and the editor config) is derived offline from PAGES_REPO_NWO=timwis/jkan, as the repo's CI sets it"
+      },
+      {
+        "service": "Bootstrap 5.3.8 CSS/JS (cdn.jsdelivr.net)",
+        "how": "vendored from the npm package (byte-identical, the SRI integrity hashes still match) into out/_cdn/bootstrap; build.sh rewrites the CDN URLs in the built HTML only"
+      },
+      {
+        "service": "Font Awesome 4.5.0 (maxcdn.bootstrapcdn.com)",
+        "how": "vendored from the npm package into out/_cdn/font-awesome; URLs rewritten in the built HTML"
+      },
+      {
+        "service": "Netlify/Decap CMS editor script (unpkg.com/netlify-cms@^2.0.0)",
+        "how": "netlify-cms 2.10.192 (what ^2.0.0 resolves to) vendored from npm into out/_cdn/netlify-cms; /editor/ loads it locally and shows its 'Login with GitHub' screen (GitHub OAuth itself is not reachable offline; the editor is not the main UI)"
+      },
+      {
+        "service": "sass-embedded gem (native; needs rubygems.org, which the sandbox blocks)",
+        "how": "no-op stub in .ui-capture/stubs/sass-embedded.rb; JKAN ships plain CSS, so nothing is ever compiled"
+      }
+    ],
+    "notes": "JKAN is a Jekyll static site, so this is its production build (JEKYLL_ENV=production) in .ui-capture/out, built with .ui-capture/build.sh. Ruby 4.0.9 and Node 24.22.3 are pinned in mise.toml (precompiled Ruby; sigstore attestation turned off because it is unreachable, checksum still verified). rubygems.org is blocked, so fetch-gems.sh downloads the exact Gemfile.lock versions of Jekyll 4.4.1 and its pure-Ruby dependencies/plugins as GitHub source tarballs into .ui-capture/vendor, and jekyll.rb runs Jekyll from them via $LOAD_PATH (no Bundler). build.sh copies the repo into .ui-capture/site-src (the checkout itself is untouched), runs seed/generate.rb there, and builds with _config.yml plus the overlay _config.ui-capture.yml (site title/greeting 'Westbrook Open Data', baseurl '' so it serves from /, schema: westbrook). DATA: a fictional mid-size city portal, 'City of Westbrook', written the way the CMS writes it: 17 department organizations (_organizations/*.md, each with an SVG logo in img/organizations) and 113 datasets (_datasets/*.md) with 320 resources (csv/geojson/shp/api/pdf/xlsx, per-year files), spread over all 14 categories (many datasets have more than one), with mixed licenses (PDDL, CC0, CC-BY, CC-BY-SA, ODbL, none), maintainers and emails. It uses JKAN's schema customization (_data/schemas/westbrook.yml = default + Last Updated / Update Frequency / Time Period), with last-updated dates from 2021 to Nov 2026. It includes real-world messiness: archived COVID datasets, a dataset with an empty description, a few resources with no format, datasets from partner bodies that have no organization page (Housing Authority, School District, Fleet, GIS Services Group), uncategorized datasets, and short and long markdown descriptions. The JKAN sample dataset/department are replaced (as a real deployer would do). MAIN AREAS: / home (hero + category tiles), /datasets/ (searchable list with client-side category and organization filters, e.g. /datasets/?category=public-safety), /datasets/<slug>/ (organization card, resources with Details toggles, Additional Info table), /organizations/ and /organizations/<slug>/, /categories/ and /categories/<slug>/, /editor/ (CMS login screen), /data.json and /datasets.json (Project Open Data catalogs). Category links in the templates omit the trailing slash (/categories/public-safety); a normal static server redirects them to the directory. To rebuild: .ui-capture/build.sh."
+  },
+  "tools": {
+    "node": "24.22.3",
+    "ruby": "4.0.9"
+  },
+  "prompt": "This is a checkout of timwis/jkan (https://github.com/timwis/jkan) at commit f4162636d231. A lightweight, backend-free open data portal, powered by Jekyll\n\nI want to see its user interface in a desktop browser, in the state a real, established user would see it. Please get the app running locally with its main interface working and realistic data in it.\n\n# Running it\n- Follow the repo's own setup docs and tooling. Take the simplest route that shows the real app: a static production build if the front end works without a backend, otherwise the app's own server (production or dev mode).\n- If it needs a database or other services, run them locally with an embedded or file-based option (SQLite, in-memory, JSON files, an embedded Postgres such as PGlite) or the app's demo/mock mode.\n- Don't redesign or restyle anything. Change only what's needed to build and run it.\n\n# Tools: use mise\nInstall every runtime and tool you need (node, the package manager, python, bun, ...) with mise, pinned to exact versions in a mise.toml at the repo root, so the setup can be reproduced. Match what the repo asks for (engines, .nvmrc, .tool-versions, packageManager). mise is already configured for this directory: `mise install` installs into ./.ui-capture/mise, and its shims come first on PATH, so `node`, `pnpm` and the rest resolve to the pinned versions. Don't use other copies of these tools or download runtimes by hand.\n\n# Secrets, API keys and external services: fake them\nThe app must not depend on anything outside this machine, and when it runs it has no network except localhost. Wherever it expects secrets, environment variables, API keys or third-party services (hosted auth or OAuth, payment providers, email, LLM or other AI APIs, maps, storage buckets, analytics, hosted databases):\n- Give the required variables placeholder values so the app starts.\n- Where it actually calls the service, make the call succeed locally with realistic responses: use the app's own mock, test or offline mode if it has one; otherwise point the client at a small local stub server that start.sh also starts, or swap in a stub at the integration boundary (the API client or service module). Keep stubs out of UI code. Responses should look like what the real service returns for a real user, e.g. an AI reply that actually answers, a payment history with real-looking amounts.\n- Calls the browser makes directly to outside services count too; point them at the local stub.\n- For sign-in through an outside provider, create a local account or use the app's dev sign-in so you can get past it.\nList every stub in app.json.\n\n# Data: like real use\nSeed it the way an established user's data would look after months of actual use: specific, plausible names and content for this kind of app; dates spread over time; a realistic mix of states (done, in progress, overdue, archived, ...); realistic volume (dozens to hundreds of records where the app revolves around records); short and long text; some messiness real data has. Start from the app's own demo or seed data if it has realistic data, and extend it if it's thin. Load data through the app's own paths (its API, import, seed scripts, or its database schema), never by hardcoding it into UI code. If the app needs an account, create one and attach the data to it. No lorem ipsum or \"Test 1\".\n\n# Environment\nThis shell is sandboxed: you can write only inside this directory (package-manager caches already point into ./.ui-capture/cache), and the network reaches only package registries, mise's download sources and GitHub (registry.npmjs.org, registry.yarnpkg.com, repo.yarnpkg.com, github.com, codeload.github.com, objects.githubusercontent.com, raw.githubusercontent.com, nodejs.org, mise.jdx.dev, mise-versions.jdx.dev, release-assets.githubusercontent.com, pypi.org, files.pythonhosted.org, binaries.prisma.sh, cdn.jsdelivr.net, unpkg.com). Docker isn't available. A process you start in the background can't be seen or stopped from a later command, so test servers on another port than 4458 (e.g. 5458) or in the foreground under `timeout`; anything still listening on 4458 is stopped before I check.\n\n# When you're done, leave this in ./.ui-capture/\n- app.json: {\"mode\": \"static\" or \"server\", \"entry\": \"/path where the main UI opens\", \"login\": null or {\"username\": \"...\", \"email\": \"...\", \"password\": \"...\"}, \"stubs\": [{\"service\": \"what was faked\", \"how\": \"how\"}], \"notes\": \"how you set it up, what data is loaded, and the main areas of the app\"}\n- static mode: the production build in ./.ui-capture/out, with index.html as its entry. It will be served from the root of a plain static file server; unknown paths fall back to index.html.\n- server mode: ./.ui-capture/start.sh, which starts everything the app needs (stubs included) in the foreground and serves the UI at http://localhost:4458/ (it gets PORT=4458). It runs with the same PATH and restrictions as your shell, plus no network at all except localhost, so everything must already be installed, built and seeded (or seeded by start.sh itself).\n- Put any scripts you write for seeding or stubbing in ./.ui-capture/ too; they're kept with the setup record.\n\n# Order of work\nYou have 90 minutes in total, and anything unfinished when time runs out is lost. So work in this order:\n1. Get the app building and running with its stubs, and write the contract above (app.json plus out/ or start.sh), even if it has only a little data so far.\n2. Then build out the data, re-running your seed and checking the app still loads after each substantial step, so that a working state with the data loaded so far is always in place.\nWrite large data sets with a short generator script rather than as one long literal file.\n\nI'll open it at 1440×900.",
+  "model": {
+    "model": "claude-opus-5-5",
+    "effort": "high"
+  },
+  "sandbox": true,
+  "startedAt": "2026-11-17T07:40:07.095Z",
+  "finishedAt": "2026-11-17T07:52:48.512Z",
+  "verification": {
+    "ok": true,
+    "problems": [],
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedRequests": [],
+    "textChars": 484,
+    "visibleElements": 48,
+    "title": "Westbrook Open Data"
+  },
+  "repairs": 0,
+  "session": {
+    "rounds": 1,
+    "numTurns": 55,
+    "costUsd": 2.836247,
+    "durationMs": 758385,
+    "models": [
+      "claude-opus-5-5"
+    ],
+    "usage": {
+      "input_tokens": 110,
+      "cache_creation_input_tokens": 112275,
+      "cache_read_input_tokens": 3454135,
+      "output_tokens": 62339
+    },
+    "timedOut": false
+  },
+  "changes": {
+    "files": 1,
+    "insertions": 8,
+    "deletions": 0,
+    "patchBytes": 342,
+    "patch": "setup.patch"
+  }
+}

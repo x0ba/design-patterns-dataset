@@ -1,0 +1,572 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "gen-002",
+  "site": {
+    "slug": "family-utility-accounts-hub",
+    "url": "http://family-utility-accounts-hub.localhost:4318/",
+    "finalUrl": "http://family-utility-accounts-hub.localhost:4318/",
+    "status": 200,
+    "title": "Pilotlight — Household utilities",
+    "capturedAt": "2026-11-18T02:16:10.652Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1409
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "finance",
+    "domainNote": "household utility account manager across multiple properties (bills, autopay, open items, notes)",
+    "provenance": {
+      "source": "generated",
+      "generation": "generated/gen-002/family-utility-accounts-hub/generation.json",
+      "generator": {
+        "id": "opus",
+        "model": "claude-opus-5-5",
+        "effort": "high"
+      },
+      "brief": {
+        "domain": "utilities",
+        "archetype": "navigate",
+        "context": "household",
+        "product": "Pilotlight"
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Dark nav: Pilotlight logo, Properties tree with expanded current property accounts, count badges, Open items list with status pills, user footer",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 280,
+        "height": 1409
+      },
+      "patterns": [
+        "app-shell",
+        "tree-view",
+        "badge",
+        "task-list"
+      ]
+    },
+    {
+      "id": "top-bar",
+      "role": "header",
+      "label": "'You're in My house' context chip, address, search field with / shortcut, date/time",
+      "bbox": {
+        "x": 280,
+        "y": 0,
+        "width": 1160,
+        "height": 62
+      },
+      "patterns": [
+        "text-field",
+        "breadcrumbs"
+      ]
+    },
+    {
+      "id": "property-header",
+      "role": "page-header",
+      "label": "Property icon, title 'My house', address, 3 stat tiles, 'Where I live' tag",
+      "bbox": {
+        "x": 312,
+        "y": 92,
+        "width": 1096,
+        "height": 120
+      },
+      "patterns": [
+        "stat-tile"
+      ]
+    },
+    {
+      "id": "accounts-grid",
+      "role": "card-grid",
+      "label": "Accounts at My house: 5 outlined account cards in 2-col grid, each opening the account page",
+      "bbox": {
+        "x": 312,
+        "y": 235,
+        "width": 726,
+        "height": 736
+      },
+      "patterns": [
+        "card",
+        "overview-detail",
+        "badge"
+      ]
+    },
+    {
+      "id": "open-items",
+      "role": "task-section",
+      "label": "Open items at My house: one issue-like item card with status pill, update log and actions",
+      "bbox": {
+        "x": 312,
+        "y": 991,
+        "width": 726,
+        "height": 358
+      },
+      "patterns": [
+        "task-list",
+        "badge",
+        "status-tracker"
+      ]
+    },
+    {
+      "id": "aside",
+      "role": "aside",
+      "label": "About this property key-value card and Notes list with Add note button and yellow note cards",
+      "bbox": {
+        "x": 1058,
+        "y": 235,
+        "width": 350,
+        "height": 588
+      },
+      "patterns": [
+        "card"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations",
+          "live-counts"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 280,
+            "height": 1409
+          },
+          "region": "sidebar",
+          "quote": "PROPERTIES",
+          "note": "persistent dark sidebar with properties and open items"
+        },
+        {
+          "bbox": {
+            "x": 280,
+            "y": 0,
+            "width": 1160,
+            "height": 62
+          },
+          "region": "top-bar",
+          "note": "top bar with context, search, date"
+        }
+      ]
+    },
+    {
+      "id": "tree-view",
+      "status": "present",
+      "confidence": 0.65,
+      "dims": {
+        "content": [
+          "label",
+          "type-icon",
+          "count-badge",
+          "status-decoration"
+        ],
+        "selection": "single-node",
+        "source": "containment",
+        "density": "comfortable"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 12,
+            "y": 101,
+            "width": 256,
+            "height": 227
+          },
+          "region": "sidebar",
+          "quote": "My house",
+          "note": "selected property node expanded to show its 5 accounts with type icons and an orange status dot; selecting another property expands it instead (verified live)"
+        }
+      ]
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "rule": "pending-actions",
+        "aggregation": "per-item"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 234,
+            "y": 118,
+            "width": 24,
+            "height": 22
+          },
+          "region": "sidebar",
+          "quote": "1",
+          "note": "open-item counts per property; red '2' on Dad's house"
+        },
+        {
+          "bbox": {
+            "x": 232,
+            "y": 478,
+            "width": 26,
+            "height": 22
+          },
+          "region": "sidebar",
+          "quote": "4",
+          "note": "open items total"
+        },
+        {
+          "bbox": {
+            "x": 196,
+            "y": 574,
+            "width": 62,
+            "height": 24
+          },
+          "region": "sidebar",
+          "quote": "Waiting",
+          "note": "status pills; also 'Nov 21' due pill"
+        },
+        {
+          "bbox": {
+            "x": 589,
+            "y": 315,
+            "width": 66,
+            "height": 24
+          },
+          "region": "accounts-grid",
+          "quote": "••3704",
+          "note": "masked account-number chip"
+        }
+      ]
+    },
+    {
+      "id": "task-list",
+      "status": "present",
+      "confidence": 0.65,
+      "dims": {
+        "rowFields": [
+          "due-date",
+          "project-or-tags"
+        ],
+        "itemRichness": "issue-like-task",
+        "timeBinding": "due-date-only",
+        "completionPath": [
+          "status-workflow"
+        ],
+        "createOpen": [
+          "open-full-page"
+        ],
+        "sharingModel": "private-list"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 12,
+            "y": 515,
+            "width": 256,
+            "height": 195
+          },
+          "region": "sidebar",
+          "quote": "Give Columbia Gas access to the meter",
+          "note": "open items list with property · provider, due/status pills, color-coded left bars"
+        },
+        {
+          "bbox": {
+            "x": 333,
+            "y": 1047,
+            "width": 684,
+            "height": 281
+          },
+          "region": "open-items",
+          "quote": "Budget billing enrollment",
+          "note": "rich item with status, age, log update and Mark done"
+        }
+      ]
+    },
+    {
+      "id": "status-tracker",
+      "status": "uncertain",
+      "confidence": 0.45,
+      "rationale": "Open item shows current status ('Waiting on provider', 'Provider status: Pending', open 18 days) as text, but no stage sequence; may be just a task status.",
+      "dims": {
+        "presentation": "status-statement",
+        "updates": "on-visit"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 354,
+            "y": 1062,
+            "width": 420,
+            "height": 160
+          },
+          "region": "open-items",
+          "quote": "Provider status: Pending"
+        }
+      ]
+    },
+    {
+      "id": "stat-tile",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "context": [
+          "label"
+        ],
+        "encoding": "number-only",
+        "window": "fixed",
+        "drill": "none"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1050,
+            "y": 98,
+            "width": 358,
+            "height": 66
+          },
+          "region": "property-header",
+          "quote": "$4,996.00 billed, last 12 mo",
+          "note": "three tiles: 5 accounts, 1 open items, $4,996.00"
+        }
+      ]
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.9,
+      "dims": {
+        "media": "none",
+        "actions": "none",
+        "shape": "vertical",
+        "style": "outlined",
+        "target": "whole-card"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 333,
+            "y": 291,
+            "width": 336,
+            "height": 240
+          },
+          "region": "accounts-grid",
+          "quote": "AEP Ohio",
+          "note": "whole card is a link; icon tile, masked account chip, holder/last bill/status/autopay grid, 'Open account' affordance"
+        },
+        {
+          "bbox": {
+            "x": 1079,
+            "y": 487,
+            "width": 308,
+            "height": 107
+          },
+          "region": "aside",
+          "quote": "Enrolled in budget billing",
+          "note": "yellow note cards with hidden edit/delete"
+        }
+      ]
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "attributePlacement": [
+          "in-both-views"
+        ],
+        "abstraction": [
+          "category",
+          "style"
+        ],
+        "truncation": "ellipsis",
+        "relationship": "one-to-one",
+        "recursion": [
+          "none"
+        ],
+        "openIn": "new-page",
+        "overviewType": [
+          "grid"
+        ],
+        "detailMultiplicity": "one-at-a-time",
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "whole-item"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 312,
+            "y": 235,
+            "width": 726,
+            "height": 736
+          },
+          "region": "accounts-grid",
+          "quote": "Open account",
+          "note": "clicking card routes to #/p/home/a/home-electric account detail page (verified live)"
+        }
+      ]
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "supporting": [
+          "placeholder"
+        ],
+        "style": "outlined"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 842,
+            "y": 12,
+            "width": 340,
+            "height": 38
+          },
+          "region": "top-bar",
+          "quote": "Search accounts, account numbers, notices, phone numbers…",
+          "note": "search with '/' keyboard hint"
+        }
+      ]
+    },
+    {
+      "id": "breadcrumbs",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "'YOU'RE IN My house' context chip in top bar becomes 'My house > AEP Ohio' trail on account pages; on the captured page it is a single-step location indicator.",
+      "dims": {
+        "type": "location",
+        "truncation": "full-path",
+        "interaction": [
+          "click-to-go-up"
+        ],
+        "placement": "in-the-top-bar"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 306,
+            "y": 14,
+            "width": 410,
+            "height": 32
+          },
+          "region": "top-bar",
+          "quote": "YOU’RE IN My house"
+        }
+      ]
+    },
+    {
+      "id": "command-palette",
+      "status": "absent",
+      "confidence": 0.7,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 842,
+            "y": 12,
+            "width": 340,
+            "height": 38
+          },
+          "note": "'/' focuses an ordinary search field, not a command palette"
+        }
+      ]
+    }
+  ],
+  "structure": {
+    "layout": "app shell: fixed dark left sidebar (properties tree + open items list + user), top context bar with search, main content with property header + stat tiles, 2-column body: account card grid and open-items section on left, About/Notes aside on right",
+    "regions": [
+      "sidebar",
+      "top-bar",
+      "property-header",
+      "accounts-grid",
+      "open-items",
+      "aside"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#f5f3ee",
+      "#ffffff",
+      "#1f2a37",
+      "#2a3645",
+      "#1d2430",
+      "#4a5260",
+      "#7a7468",
+      "#2f5f9e",
+      "#fffbea",
+      "#e6e1d7",
+      "#f0a030",
+      "#c0392b"
+    ],
+    "colorRoles": {
+      "background": "#f5f3ee",
+      "surface": "#ffffff",
+      "text": "#1d2430",
+      "muted": "#7a7468",
+      "primary": "#2f5f9e",
+      "accent": "#f0a030",
+      "border": "#e6e1d7",
+      "sidebar": "#1f2a37",
+      "note": "#fffbea",
+      "danger": "#c0392b"
+    },
+    "typography": "System ui-sans-serif throughout (headings bold 700, body 13-15px); ui-monospace for masked account numbers (••3704). Small uppercase letter-spaced eyebrow labels ('PROPERTY', 'PROPERTIES', 'YOU'RE IN').",
+    "typeScale": "Compact: h1 28px/700, card titles 16-17px/700, section h2 17px, body 13-15px, labels 12-13px muted; hierarchy via weight and color more than size",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "practical",
+      "calm",
+      "organized",
+      "homey",
+      "trustworthy"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T02:17:34.499Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 9,
+    "usage": {
+      "input_tokens": 18,
+      "cache_creation_input_tokens": 32042,
+      "cache_read_input_tokens": 284613,
+      "output_tokens": 5772
+    }
+  },
+  "notes": "Per-property theming: each property has its own accent color (My house blue #2f5f9e, Dad's house rust orange, Lake cottage green) that tints the 'You're in' chip, the 4px top border under the header, the eyebrow labels and link colors. Sidebar is a dark slate with the current property expanded into its accounts and a cross-property 'Open items' list with colored left stripes and due/waiting pills. Account cards use a 2x2 label/value grid (Holder, Last bill, Status, Autopay) with status coloured green (autopaid) or red (due, not paid). Notes are pale-yellow sticky-note cards linked to accounts. Warm off-white page background with white cards and beige borders gives a domestic, paperwork-like feel."
+}

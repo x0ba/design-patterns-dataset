@@ -1,0 +1,484 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "igdm--conversation",
+    "url": "http://localhost:4439/browser/index.html",
+    "finalUrl": "http://localhost:4439/browser/index.html",
+    "status": 200,
+    "title": "IGdm - Instagram Desktop Messenger",
+    "capturedAt": "2026-11-18T19:46:48.048Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 3357
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "social-community",
+    "domainNote": "Desktop client for Instagram direct messages (IGdm)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/igdm/explore.json",
+      "repo": {
+        "name": "igdmapps/igdm",
+        "url": "https://github.com/igdmapps/igdm",
+        "commit": "644fd213e2d7a9eaf6660729217021c2ba30fef4",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "conversation",
+        "name": "Conversation view",
+        "description": "Main DM workspace: chat list on the left and an open one-on-one conversation with jess.tran showing message bubbles, link preview, presence and the composer."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "top-bar",
+      "role": "header",
+      "label": "Light-gradient top bar with the account avatar (opens a settings menu) and the 'Search Instagram users' field",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 81
+      },
+      "patterns": [
+        "text-field",
+        "menu",
+        "app-shell"
+      ]
+    },
+    {
+      "id": "conversation-list",
+      "role": "sidebar",
+      "label": "List of DM and group conversations: avatar(s), bold name, truncated last-message snippet, relative time, blue unread dot plus blue snippet on unread threads; the selected row is shaded",
+      "bbox": {
+        "x": 0,
+        "y": 81,
+        "width": 480,
+        "height": 1640
+      },
+      "patterns": [
+        "inbox",
+        "overview-detail",
+        "badge",
+        "split-pane"
+      ]
+    },
+    {
+      "id": "chat-header",
+      "role": "header",
+      "label": "Active conversation header: avatar, username 'jess.tran', green '● Active Now' presence",
+      "bbox": {
+        "x": 480,
+        "y": 81,
+        "width": 960,
+        "height": 81
+      },
+      "patterns": [
+        "chat-thread"
+      ]
+    },
+    {
+      "id": "message-list",
+      "role": "main",
+      "label": "Message history: received messages left as light rectangular boxes with sender name and timestamp, sent messages right as blue rounded bubbles; includes images, a sticker and a link preview with image",
+      "bbox": {
+        "x": 480,
+        "y": 162,
+        "width": 960,
+        "height": 3113
+      },
+      "patterns": [
+        "chat-thread"
+      ]
+    },
+    {
+      "id": "composer",
+      "role": "composer",
+      "label": "'Start a message' borderless textarea with attachment (paperclip) and emoji buttons",
+      "bbox": {
+        "x": 480,
+        "y": 3275,
+        "width": 960,
+        "height": 82
+      },
+      "patterns": [
+        "chat-thread",
+        "text-field"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "chat-thread",
+      "status": "present",
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 480,
+            "y": 81,
+            "width": 960,
+            "height": 81
+          },
+          "region": "chat-header",
+          "quote": "jess.tran",
+          "note": "Header with participant and presence 'Active Now'"
+        },
+        {
+          "bbox": {
+            "x": 496,
+            "y": 3015,
+            "width": 928,
+            "height": 240
+          },
+          "region": "message-list",
+          "quote": "they have the cardamom buns on fridays",
+          "note": "Received messages left with sender name and timestamp; sent messages right in blue bubbles"
+        },
+        {
+          "bbox": {
+            "x": 496,
+            "y": 2434,
+            "width": 320,
+            "height": 311
+          },
+          "region": "message-list",
+          "quote": "this fixed my crawling problem fwiw",
+          "note": "Link message with image preview"
+        },
+        {
+          "bbox": {
+            "x": 1182,
+            "y": 1472,
+            "width": 242,
+            "height": 234
+          },
+          "region": "message-list",
+          "note": "Sent image message"
+        },
+        {
+          "bbox": {
+            "x": 480,
+            "y": 3275,
+            "width": 960,
+            "height": 82
+          },
+          "region": "composer",
+          "quote": "Start a message",
+          "note": "Composer with attachment and emoji buttons"
+        }
+      ],
+      "dims": {
+        "layout": "bubbles-by-sender",
+        "replies": "flat",
+        "content": [
+          "text",
+          "media-and-files",
+          "link-previews"
+        ],
+        "metadata": [
+          "timestamp"
+        ],
+        "composer": [
+          "attachments"
+        ],
+        "unread": "latest-message"
+      }
+    },
+    {
+      "id": "inbox",
+      "status": "present",
+      "confidence": 0.6,
+      "rationale": "It is a DM conversation list rather than an email inbox; it behaves like one (unread marking, sorted by recency, opened in a reading pane) but there are no explicit triage actions.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 81,
+            "width": 480,
+            "height": 1640
+          },
+          "region": "conversation-list",
+          "quote": "Saturday Market Crew 🧺 also who's doing the taco ...",
+          "note": "Conversation rows with sender, snippet, time; unread ones emphasized with a blue dot"
+        }
+      ],
+      "dims": {
+        "grouping": "conversation-threads",
+        "openIn": "side-by-side",
+        "density": "default",
+        "rowAttributes": [
+          "sender",
+          "snippet"
+        ],
+        "priority": "chronological",
+        "triage": "reading-is-triage",
+        "deferral": [
+          "none"
+        ]
+      }
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 81,
+            "width": 480,
+            "height": 1640
+          },
+          "region": "conversation-list",
+          "note": "Overview list of conversations; clicking a row (verified live) loads that conversation into the right pane"
+        },
+        {
+          "bbox": {
+            "x": 480,
+            "y": 81,
+            "width": 960,
+            "height": 3276
+          },
+          "region": "message-list",
+          "note": "Detail view: full conversation"
+        }
+      ],
+      "dims": {
+        "attributePlacement": [
+          "in-both-views"
+        ],
+        "abstraction": [
+          "style",
+          "summary"
+        ],
+        "truncation": "ellipsis",
+        "relationship": "one-to-one",
+        "recursion": [
+          "none"
+        ],
+        "openIn": "side-by-side",
+        "overviewType": [
+          "list"
+        ],
+        "detailMultiplicity": "one-at-a-time",
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "whole-item",
+        "attributeScope": [
+          "per-item"
+        ]
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 432,
+            "y": 176,
+            "width": 20,
+            "height": 20
+          },
+          "region": "conversation-list",
+          "note": "Blue unread dot on the 'Saturday Market Crew' row (also on marisol.vega_, glowskin.collective)"
+        }
+      ],
+      "dims": {
+        "meaning": "dot",
+        "rule": "everything-unread",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 79,
+            "y": 21,
+            "width": 322,
+            "height": 38
+          },
+          "region": "top-bar",
+          "quote": "Search Instagram users",
+          "note": "Outlined search input with placeholder"
+        },
+        {
+          "bbox": {
+            "x": 496,
+            "y": 3292,
+            "width": 928,
+            "height": 42
+          },
+          "region": "composer",
+          "quote": "Start a message",
+          "note": "Borderless composer textarea with placeholder"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "placeholder"
+        ],
+        "style": "outlined",
+        "inputType": "plain"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 16,
+            "y": 16,
+            "width": 48,
+            "height": 48
+          },
+          "region": "top-bar",
+          "note": "Avatar button; verified live that clicking opens a dropdown with Don't send 'Seen' receipts, Disable Notifications, Users not following back, Log out (closed in capture)"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click",
+        "structure": "flat",
+        "item": [
+          "label"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    },
+    {
+      "id": "split-pane",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 81,
+            "width": 1440,
+            "height": 819
+          },
+          "note": "Fixed side-by-side list pane and conversation pane; selection in the list drives the right pane"
+        }
+      ],
+      "dims": {
+        "orientation": "side-by-side",
+        "sizing": "fixed",
+        "relationship": "linked-selection"
+      }
+    },
+    {
+      "id": "app-shell",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "There is a persistent top bar with identity and search and a fixed sidebar, but no real global navigation destinations; it may just be the chat layout.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 81
+          },
+          "region": "top-bar",
+          "note": "Persistent top bar with account avatar and user search"
+        }
+      ],
+      "dims": {
+        "primary": "top-navigation-bar",
+        "secondary": "none",
+        "visibility": "always-visible",
+        "structure": "single-app"
+      }
+    }
+  ],
+  "structure": {
+    "layout": "Two-pane desktop messenger: a full-width top bar (account avatar + user search), a fixed 480px conversation list on the left, and the active chat on the right (header with presence, scrolling message history, composer docked at the bottom)",
+    "regions": [
+      "top-bar",
+      "conversation-list",
+      "chat-header",
+      "message-list",
+      "composer"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#efefef",
+      "#fcfcfc",
+      "#dfdfdf",
+      "#dadada",
+      "#212529",
+      "#666666",
+      "#168bf9",
+      "#007bff",
+      "#28a745"
+    ],
+    "colorRoles": {
+      "background": "#efefef",
+      "surface": "#fcfcfc",
+      "text": "#212529",
+      "muted": "#666666",
+      "primary": "#168bf9",
+      "accent": "#007bff",
+      "border": "#dadada",
+      "selected": "#dfdfdf",
+      "onPrimary": "#efefef"
+    },
+    "typography": "The system UI stack (-apple-system) everywhere: names bold 14–16px, message text 16px regular, timestamps and sender labels 10px",
+    "typeScale": "Low contrast: 16px for message body and header username (bold), 14px for list names and snippets, 10px for timestamps and sender names; weight (bold names) carries the hierarchy more than size",
+    "shape": "mixed",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "illustration",
+      "user-generated"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "gradient",
+    "mood": [
+      "clean",
+      "utilitarian",
+      "casual",
+      "bootstrap-plain"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T19:48:19.518Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 9,
+    "usage": {
+      "input_tokens": 18,
+      "cache_creation_input_tokens": 35158,
+      "cache_read_input_tokens": 292747,
+      "output_tokens": 5656
+    }
+  },
+  "notes": "Bootstrap-flavored Electron/desktop look. Sent messages are saturated blue (#168bf9-ish gradient) rounded bubbles with near-white text, aligned right; received messages are off-white (#fcfcfc), barely rounded boxes with a tiny 10px sender name above the text and a right-aligned '11:40 - Nov 18' timestamp. The top bar and message area use very soft gray gradients. Avatars are cartoon illustrations; group rows stack 3–5 circular avatars side by side. Unread conversations show a blue dot overlapping the time and a bold blue snippet. Snippets are cut with ' ...'. Presence is a small green ● 'Active Now' (or 'Last Seen 16:30 - Nov 16') under the header name. The avatar opens a settings dropdown (Seen receipts, notifications, unfollowers, log out)."
+}

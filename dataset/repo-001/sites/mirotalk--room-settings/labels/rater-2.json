@@ -1,0 +1,388 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "mirotalk--room-settings",
+    "url": "http://localhost:4438/join?room=northwind-product-weekly&name=Dana%20Okafor&audio=0&video=0&notify=0",
+    "finalUrl": "http://localhost:4438/join?room=northwind-product-weekly&name=Dana%20Okafor&audio=0&video=0&notify=0",
+    "status": 200,
+    "title": "MiroTalk WebRTC Video call, Chat Room & Screen Sharing.",
+    "capturedAt": "2026-11-18T06:31:19.234Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 900
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "productivity",
+    "domainNote": "WebRTC video conferencing (MiroTalk) — in-room settings modal",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/mirotalk/explore.json",
+      "repo": {
+        "name": "miroslavpejic85/mirotalk",
+        "url": "https://github.com/miroslavpejic85/mirotalk",
+        "commit": "91dac4da68d66c8ebccabb524b904cdd8c42283e",
+        "license": "AGPL-3.0"
+      },
+      "view": {
+        "slug": "room-settings",
+        "name": "Room settings dialog",
+        "description": "In-meeting settings modal with a sectioned sidebar (Room, Recording, Video, Share media, Profile, Shortcuts, etc.) and the Room panel showing room name, active rooms link and preference toggles."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "video-grid",
+      "role": "background-stage",
+      "label": "Gallery grid of 8 participant tiles (avatars, names, mute/pin/hand indicators), dimmed behind modal; bottom toolbar mostly obscured",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 900
+      },
+      "patterns": [
+        "video-call"
+      ]
+    },
+    {
+      "id": "settings-modal",
+      "role": "modal",
+      "label": "Centered settings dialog with vertical category tabs and Room settings pane",
+      "bbox": {
+        "x": 270,
+        "y": 26,
+        "width": 900,
+        "height": 849
+      },
+      "patterns": [
+        "modal-dialog",
+        "settings",
+        "tabs",
+        "choice-control"
+      ]
+    },
+    {
+      "id": "poll-toast",
+      "role": "notification",
+      "label": "Top-centre toast: 'Priya Raman started a poll' with info icon and close",
+      "bbox": {
+        "x": 550,
+        "y": 10,
+        "width": 340,
+        "height": 81
+      },
+      "patterns": [
+        "toast"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "video-call",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "people": "gallery-grid",
+        "subspaces": "one-room",
+        "tile": [
+          "name",
+          "mute-and-hand-raised"
+        ],
+        "attention": [
+          "pin-a-participant"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 21,
+            "y": 103,
+            "width": 342,
+            "height": 342
+          },
+          "note": "self tile with pin, video/audio disabled icons, avatar initials",
+          "region": "video-grid"
+        },
+        {
+          "bbox": {
+            "x": 1077,
+            "y": 103,
+            "width": 342,
+            "height": 342
+          },
+          "quote": "Hannah Schultz",
+          "region": "video-grid"
+        },
+        {
+          "bbox": {
+            "x": 411,
+            "y": 814,
+            "width": 618,
+            "height": 70
+          },
+          "note": "call toolbar (mic, camera, share, raise hand, chat, participants 8, leave) mostly hidden behind modal",
+          "region": "video-grid"
+        }
+      ]
+    },
+    {
+      "id": "modal-dialog",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "form": "centered-large",
+        "openBy": [
+          "user-action"
+        ],
+        "dismissBy": [
+          "close-button"
+        ],
+        "purpose": "form",
+        "onDismiss": "already-saved"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 270,
+            "y": 26,
+            "width": 900,
+            "height": 849
+          },
+          "note": "large centered settings window with close X over dimmed call",
+          "region": "settings-modal"
+        }
+      ]
+    },
+    {
+      "id": "settings",
+      "status": "present",
+      "confidence": 0.9,
+      "dims": {
+        "ia": "tabbed-categories",
+        "controls": [
+          "boolean-toggles"
+        ],
+        "discovery": [
+          "browse-hierarchy"
+        ],
+        "timing": "instant",
+        "scope": "device-local",
+        "safety": [
+          "no-confirm"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 481,
+            "y": 108,
+            "width": 664,
+            "height": 75
+          },
+          "quote": "Room settings",
+          "region": "settings-modal"
+        },
+        {
+          "bbox": {
+            "x": 493,
+            "y": 401,
+            "width": 640,
+            "height": 411
+          },
+          "quote": "PREFERENCES",
+          "note": "toggle rows with label and description",
+          "region": "settings-modal"
+        }
+      ]
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.75,
+      "dims": {
+        "placement": "vertical",
+        "label": [
+          "text",
+          "icon"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "tab-groups",
+        "switchBy": [
+          "click"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 283,
+            "y": 102,
+            "width": 188,
+            "height": 760
+          },
+          "quote": "Room",
+          "note": "vertical category list grouped under MEETING / DEVICES / SHARE AND STREAM / PERSONAL; Room selected",
+          "region": "settings-modal"
+        }
+      ]
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.9,
+      "dims": {
+        "cardinality": "on-or-off",
+        "form": "switch",
+        "option": [
+          "label-and-description",
+          "icon-or-image"
+        ],
+        "timing": "immediately",
+        "largeSets": "show-all"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1048,
+            "y": 463,
+            "width": 55,
+            "height": 24
+          },
+          "quote": "ON",
+          "region": "settings-modal"
+        },
+        {
+          "bbox": {
+            "x": 510,
+            "y": 575,
+            "width": 606,
+            "height": 40
+          },
+          "quote": "Room link on join",
+          "region": "settings-modal"
+        }
+      ]
+    },
+    {
+      "id": "toast",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "content": [
+          "message-only",
+          "status-icon"
+        ],
+        "severity": "neutral"
+      },
+      "novel": [
+        {
+          "subdimension": "position",
+          "description": "Toast at top centre of viewport",
+          "proposedValueId": "top-centre"
+        }
+      ],
+      "evidence": [
+        {
+          "bbox": {
+            "x": 550,
+            "y": 10,
+            "width": 340,
+            "height": 81
+          },
+          "quote": "Priya Raman started a poll",
+          "region": "poll-toast"
+        }
+      ]
+    },
+    {
+      "id": "badge",
+      "status": "absent",
+      "confidence": 0.6,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 711,
+            "y": 824,
+            "width": 50,
+            "height": 50
+          },
+          "note": "participants count 8 exists in DOM but hidden behind modal"
+        }
+      ]
+    }
+  ],
+  "structure": {
+    "layout": "full-viewport video-call stage (2x4 participant tile grid) with a centered settings modal overlay: left vertical category nav, right pane with card-like sections of toggle rows; toast at top centre",
+    "regions": [
+      "video-grid",
+      "settings-modal",
+      "poll-toast"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#121214",
+      "#121215",
+      "#3d3d42",
+      "#ffffff",
+      "#dcdce6",
+      "#008000",
+      "#e74c3c",
+      "#000000"
+    ],
+    "colorRoles": {
+      "background": "#121214",
+      "surface": "#121215",
+      "text": "#ffffff",
+      "muted": "#dcdce6",
+      "primary": "#3d3d42",
+      "accent": "#008000",
+      "danger": "#e74c3c",
+      "border": "#3d3d42"
+    },
+    "typography": "Montserrat throughout (headings 700, labels 600, body 400); Font Awesome 6 icons",
+    "typeScale": "Compact: 17px/700 pane title, 15px nav items and row titles, 14px/700 uppercase section headers, 12px descriptions, 11px uppercase group labels",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "filled",
+    "whitespace": "moderate",
+    "backgroundTreatment": "gradient",
+    "mood": [
+      "dark",
+      "technical",
+      "utilitarian",
+      "calm"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T06:32:34.694Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 8,
+    "usage": {
+      "input_tokens": 16,
+      "cache_creation_input_tokens": 27657,
+      "cache_read_input_tokens": 225574,
+      "output_tokens": 4010
+    }
+  },
+  "notes": "Near-black UI with subtle gradient panels and thin 1px light borders. Settings modal uses outlined button-like nav items with uppercase group captions; selected item filled #3d3d42. Toggles are pill switches with ON (green #008000) / OFF (black) text inside. A Polls dialog (two poll articles with vote percentages) exists in the DOM at 490,140 but is hidden behind the settings modal in the capture, so not coded. Participant tiles show colored initial avatars and one cartoon avatar; raised-hand indicator yellow."
+}

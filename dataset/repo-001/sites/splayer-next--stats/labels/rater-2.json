@@ -1,0 +1,520 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "splayer-next--stats",
+    "url": "http://splayer-next.localhost:4319/#/stats",
+    "finalUrl": "http://splayer-next.localhost:4319/#/stats",
+    "status": 200,
+    "title": "SPlayer Next",
+    "capturedAt": "2026-11-18T03:37:55.148Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1211
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "media-entertainment",
+    "domainNote": "desktop music player app (SPlayer) — personal listening statistics page",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/splayer-next/explore.json",
+      "repo": {
+        "name": "SPlayer-Dev/SPlayer-Next",
+        "url": "https://github.com/SPlayer-Dev/SPlayer-Next",
+        "commit": "6b26b685f67cfac9d3233747b399255620f45b87",
+        "license": "AGPL-3.0"
+      },
+      "view": {
+        "slug": "stats",
+        "name": "Listening statistics",
+        "description": "Stats dashboard with library totals, listening heatmap, time-of-day chart, format donut and top songs/albums/artists rankings."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Logo, primary nav (首页, 音乐库, 艺术家, 专辑, 文件夹, 统计 active), library links, user playlists list",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 240,
+        "height": 1131
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "top-bar",
+      "role": "header",
+      "label": "Back/forward, search pill, voice/waveform button, account, settings, window controls",
+      "bbox": {
+        "x": 240,
+        "y": 0,
+        "width": 1200,
+        "height": 64
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "stat-strip",
+      "role": "stats-strip",
+      "label": "Five KPI tiles: 285 歌曲, 44 专辑, 45 歌手, 20h57m 总时长, 9.7GB 总大小 with large faded watermark icons",
+      "bbox": {
+        "x": 260,
+        "y": 72,
+        "width": 1154,
+        "height": 77
+      },
+      "patterns": [
+        "stat-tile",
+        "dashboard",
+        "card"
+      ]
+    },
+    {
+      "id": "charts-row",
+      "role": "chart-row",
+      "label": "Listening heatmap (90 days), play-time-of-day area chart with callout and caption, audio format donut with legend",
+      "bbox": {
+        "x": 260,
+        "y": 169,
+        "width": 1154,
+        "height": 208
+      },
+      "patterns": [
+        "chart",
+        "tooltip",
+        "dashboard"
+      ]
+    },
+    {
+      "id": "top10-lists",
+      "role": "ranked-lists",
+      "label": "Three Top-10 panels: most played songs, albums, artists, each with a featured TOP 1 card and ranked rows with play counts",
+      "bbox": {
+        "x": 260,
+        "y": 397,
+        "width": 1154,
+        "height": 694
+      },
+      "patterns": [
+        "card",
+        "badge",
+        "dashboard"
+      ]
+    },
+    {
+      "id": "player-bar",
+      "role": "footer",
+      "label": "Docked now-playing bar: thin progress line, cover, title/artist, like/more, shuffle/prev/play/next/repeat, time, volume, lyrics, queue",
+      "bbox": {
+        "x": 0,
+        "y": 1131,
+        "width": 1440,
+        "height": 80
+      },
+      "patterns": [
+        "media-player"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 240,
+            "height": 1131
+          },
+          "region": "sidebar",
+          "quote": "统计",
+          "note": "Persistent left sidebar with active 统计 item and user playlists"
+        },
+        {
+          "bbox": {
+            "x": 240,
+            "y": 0,
+            "width": 1200,
+            "height": 64
+          },
+          "region": "top-bar",
+          "quote": "搜索歌曲、歌手或专辑"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations",
+          "user-pinned-items"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "dashboard",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 260,
+            "y": 72,
+            "width": 1154,
+            "height": 1019
+          },
+          "region": "stat-strip",
+          "note": "Grid of KPI tiles, charts and ranked top-10 panels summarizing personal listening"
+        }
+      ],
+      "dims": {
+        "widgets": [
+          "kpi-tiles",
+          "time-series-charts",
+          "categorical-charts"
+        ],
+        "purpose": "motivation-and-learning",
+        "arrangement": "fixed-grid",
+        "density": "a-few-glanceable-tiles",
+        "linking": "independent",
+        "refresh": "on-visit",
+        "alerting": "none",
+        "ownership": "personal"
+      }
+    },
+    {
+      "id": "stat-tile",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 260,
+            "y": 72,
+            "width": 215,
+            "height": 77
+          },
+          "region": "stat-strip",
+          "quote": "285 歌曲"
+        },
+        {
+          "bbox": {
+            "x": 964,
+            "y": 72,
+            "width": 215,
+            "height": 77
+          },
+          "region": "stat-strip",
+          "quote": "20 h 57 m 总时长"
+        }
+      ],
+      "dims": {
+        "context": [
+          "label"
+        ],
+        "encoding": "number-only",
+        "window": "fixed",
+        "drill": "none"
+      }
+    },
+    {
+      "id": "chart",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 580,
+            "y": 169,
+            "width": 414,
+            "height": 208
+          },
+          "region": "charts-row",
+          "quote": "你最喜欢在 20:00 听歌，共计 134 首",
+          "note": "Area chart of plays by hour with 最常播放 20:00 callout and caption"
+        },
+        {
+          "bbox": {
+            "x": 260,
+            "y": 169,
+            "width": 300,
+            "height": 208
+          },
+          "region": "charts-row",
+          "quote": "聆听足迹",
+          "note": "Calendar heatmap cells, colour-value encoding, hover tooltip per cell"
+        },
+        {
+          "bbox": {
+            "x": 1014,
+            "y": 169,
+            "width": 400,
+            "height": 208
+          },
+          "region": "charts-row",
+          "quote": "无损占比 73.0%",
+          "note": "Donut (arcs) of FLAC vs MP3 with legend"
+        }
+      ],
+      "dims": {
+        "markType": "areas",
+        "channels": [
+          "position",
+          "colour-hue-or-value"
+        ],
+        "scale": "time",
+        "faceting": "single-plot",
+        "inspectBy": [
+          "hover-tooltip"
+        ],
+        "authorship": "author-specified",
+        "annotation": [
+          "callout-labels",
+          "automated-insight-captions"
+        ],
+        "adaptation": "fixed-desktop-chart"
+      }
+    },
+    {
+      "id": "tooltip",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 322,
+            "y": 228,
+            "width": 208,
+            "height": 112
+          },
+          "region": "charts-row",
+          "note": "Hovering a heatmap cell shows '2026-09-28 · 5 次播放' above the cell (verified live)"
+        }
+      ],
+      "dims": {
+        "trigger": [
+          "hover"
+        ],
+        "content": "label",
+        "placement": "above"
+      }
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 273,
+            "y": 462,
+            "width": 345,
+            "height": 104
+          },
+          "region": "top10-lists",
+          "quote": "Skinny Love Bon Iver 45 次播放 TOP 1",
+          "note": "Featured TOP 1 card: filled grey container, side cover thumbnail, big count"
+        },
+        {
+          "bbox": {
+            "x": 664,
+            "y": 462,
+            "width": 345,
+            "height": 104
+          },
+          "region": "top10-lists",
+          "quote": "OK Computer"
+        },
+        {
+          "bbox": {
+            "x": 1056,
+            "y": 462,
+            "width": 345,
+            "height": 104
+          },
+          "region": "top10-lists",
+          "quote": "Radiohead"
+        }
+      ],
+      "dims": {
+        "media": "side-thumbnail",
+        "actions": "none",
+        "shape": "horizontal",
+        "style": "filled"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "rationale": "'TOP 1' is a small label on the featured card; could be read as plain text rather than a badge.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 565,
+            "y": 476,
+            "width": 45,
+            "height": 18
+          },
+          "region": "top10-lists",
+          "quote": "TOP 1"
+        }
+      ],
+      "dims": {
+        "meaning": "label",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "media-player",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 1131,
+            "width": 1440,
+            "height": 80
+          },
+          "region": "player-bar",
+          "quote": "Giorgio by Moroder Daft Punk 2:12 / 9:04"
+        }
+      ],
+      "dims": {
+        "controls": [
+          "play-pause",
+          "scrubber",
+          "skip-forward-back",
+          "volume-and-mute"
+        ],
+        "position": [
+          "time-scrubber"
+        ],
+        "mode": "mini-or-pip"
+      }
+    },
+    {
+      "id": "recommendations",
+      "status": "absent",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 260,
+            "y": 397,
+            "width": 1154,
+            "height": 694
+          },
+          "note": "Top-10 lists are history-based rankings/statistics, not proposals of new items"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "playlist-queue",
+      "status": "absent",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 620,
+            "width": 240,
+            "height": 460
+          },
+          "note": "Sidebar playlist names are navigation; no queue shown"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "desktop app shell: fixed left sidebar, top toolbar, scrolling main stats dashboard (5 KPI tiles row, 3 chart cards row, 3 top-10 list columns), docked bottom player bar",
+    "regions": [
+      "sidebar",
+      "top-bar",
+      "stat-strip",
+      "charts-row",
+      "top10-lists",
+      "player-bar"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#f6f6f6",
+      "#ffffff",
+      "#18181b",
+      "#71717a",
+      "#2c1513",
+      "#efedec",
+      "#a39894",
+      "#e4e4e7"
+    ],
+    "colorRoles": {
+      "background": "#f6f6f6",
+      "surface": "#ffffff",
+      "text": "#18181b",
+      "muted": "#71717a",
+      "primary": "#2c1513",
+      "accent": "#a39894",
+      "border": "#e4e4e7"
+    },
+    "typography": "System sans (-apple-system stack, rendering as Ubuntu/Noto CJK) throughout; custom 'logo' font for SPlayer wordmark",
+    "typeScale": "Big bold numerals 30px for KPI and counts (20px for list counts), 16px bold section titles, 14px item titles, 10–12px muted labels (次播放, TOP 10); strong number-vs-label contrast",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "photography",
+      "data-visualization",
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "clean",
+      "calm",
+      "warm-monochrome",
+      "personal",
+      "technical"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T03:39:28.468Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 9,
+    "usage": {
+      "input_tokens": 18,
+      "cache_creation_input_tokens": 34810,
+      "cache_read_input_tokens": 265502,
+      "output_tokens": 5391
+    }
+  },
+  "notes": "Monochrome warm brown-on-grey scheme (#2c1513 dark chocolate accent) used for chart strokes, heatmap ramp, donut and the dark callout pill. KPI tiles carry oversized, cropped, faded line icons as watermarks bottom-right. Top-10 panels use a featured hero row (filled grey #efedec rounded 16px block, larger cover/avatar, 'TOP 1' label) followed by ranked rows with 2-digit muted rank numbers, square album art or circular gradient artist avatars with initial letters, and right-aligned bold counts with tiny '次播放'. Bottom player has a thin dark progress line along its top edge. Window controls (min/max/close) in the top bar indicate an Electron desktop app."
+}

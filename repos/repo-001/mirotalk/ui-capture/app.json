@@ -1,0 +1,28 @@
+{
+    "mode": "server",
+    "entry": "/join?room=northwind-product-weekly&name=Dana%20Okafor&audio=0&video=0&notify=0",
+    "login": null,
+    "stubs": [
+        {
+            "service": "OpenAI Chat Completions API (in-room ChatGPT chat tab and chat-message translation)",
+            "how": ".ui-capture/openai-stub.js: local OpenAI-compatible server on 127.0.0.1:(PORT+12)/v1, started by start.sh; CHATGPT_BASE_PATH points to it and it returns realistic chat.completion JSON (meeting summaries, SQL/regex help, retro prompts, translations)"
+        },
+        {
+            "service": "Third-party CDNs the pages load in the browser (cdn.jsdelivr.net, cdnjs.cloudflare.com, unpkg.com, npmcdn.com, buttons.github.io, webrtc.github.io, fonts.googleapis.com / fonts.gstatic.com)",
+            "how": ".ui-capture/vendor.mjs mirrored the exact files once (cdnjs/unpkg/github.io resolved to the same package versions on jsdelivr, Google Fonts rebuilt from @fontsource woff2 files) into .ui-capture/vendor; .ui-capture/proxy.js serves the app on PORT and rewrites those absolute CDN URLs in HTML/CSS/JS responses to /__ext/<host>/..., served from the mirror. No repo files were modified."
+        },
+        {
+            "service": "STUN/TURN servers (Google STUN, metered.ca TURN)",
+            "how": "Disabled via STUN_SERVER_ENABLED=false / TURN_SERVER_ENABLED=false; WebRTC uses local host candidates only"
+        },
+        {
+            "service": "Other meeting participants",
+            "how": ".ui-capture/seed-rooms.js (started by start.sh) connects simulated attendees through the app's own socket.io signaling (join with camera off, mute/hand/recording status, poll create and vote) using the definitions in .ui-capture/rooms-data.js"
+        },
+        {
+            "service": "Analytics (stats.mirotalk.com), Sentry, email alerts, Slack, Mattermost, ngrok, webhooks, IP geolocation, Whisper, KLIPY GIFs, OIDC",
+            "how": "Disabled in .ui-capture/app.env (placeholder values only)"
+        }
+    ],
+    "notes": "MiroTalk P2P (Node/Express + socket.io signaling, WebRTC in the browser). There is no database: rooms, participants, polls and chat exist only while people are connected, so the 'data' is a set of live meetings created at startup through the app's own socket.io protocol. start.sh (Node 24.22.3 via mise; deps from `npm ci`) exports .ui-capture/app.env (placeholder JWT key, ChatGPT and chat translation on and pointed at the local stub, active-rooms page on, analytics/STUN/TURN off), copies app/src/config.template.js to config.js like `npm run prestart`, starts the OpenAI stub on PORT+12 and the MiroTalk server on PORT+1, seeds the meetings (.ui-capture/seed-rooms.js + rooms-data.js), then serves everything through the URL-rewriting proxy on PORT (4438). Seeded: 9 live rooms with 33 named participants (mixed desktop/mobile/tablet devices and browsers, most muted, two raised hands, one recording, bundled avatar images or generated initials avatars, one guest who joined with an email as their name) and 4 polls with votes (2 in the main room, one anonymous). Entry joins the main room 'northwind-product-weekly' (7 attendees, presenter Priya Raman) as 'Dana Okafor' with camera and mic off; the URL parameters skip the name prompt. You see the video grid of attendee avatar tiles, plus the participants list, the polls panel with live results, chat with its ChatGPT tab (answered by the stub), whiteboard, shared editor, settings and the bottom toolbar. Chat history starts empty because chat travels peer-to-peer over WebRTC data channels and the simulated attendees use signaling only. Other areas: / (landing page), /newcall (create a room), /activeRooms (the 9 live meetings with participant counts), /customizeRoom, /join/<room> for any seeded room (e.g. /join/eng-standup-platform, /join/book-club-tuesday), /api/v1/docs (Swagger; API key mirotalkp2p_local_capture_secret). Note: the attendees never answer WebRTC offers, so no remote video or audio streams arrive (tiles show avatars, as for any camera-off participant)."
+}

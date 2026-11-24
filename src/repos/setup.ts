@@ -41,7 +41,7 @@ import { writeJson } from '../pipeline/sites.ts';
 import { UsageLimitError } from '../pipeline/usage-limit.ts';
 import { checkMise, CONTRACT_DIR, readAppJson, startServer, staticDir, stopStrays, type AppJson } from './apps.ts';
 import { checkoutDir, recordDir, type ReposConfig, type RepoEntry } from './frame.ts';
-import { claudeSandboxSettings, setupEnv } from './sandbox.ts';
+import { claudeSandboxProblem, claudeSandboxSettings, setupEnv } from './sandbox.ts';
 
 const run = promisify(execFile);
 const MAX_PATCH = 5 * 1024 * 1024;
@@ -114,7 +114,7 @@ Write large data sets with a short generator script rather than as one long lite
 I'll open it at ${VIEWPORT.width}×${VIEWPORT.height}.`;
 }
 
-function repairMessage(v: Verification, mode: string | undefined): string {
+export function repairMessage(v: Verification, mode: string | undefined): string {
   const how = mode === 'server' ? `I ran ./${CONTRACT_DIR}/start.sh and opened the entry page` : mode === 'static' ? `I served ./${CONTRACT_DIR}/out from a plain static file server and opened the entry page` : 'I checked what you left';
   return `${how} in Chrome at ${VIEWPORT.width}×${VIEWPORT.height}, and it isn't working:\n\n${v.problems.join('\n\n')}\n\nPlease fix it.`;
 }
@@ -164,12 +164,12 @@ export function setupRepo(job: SetupJob): Promise<SetupRecord> {
   return withUsageRetry(() => setupOnce(job));
 }
 
-async function git(cwd: string, ...args: string[]): Promise<string> {
+export async function git(cwd: string, ...args: string[]): Promise<string> {
   const { stdout } = await run('git', args, { cwd, maxBuffer: 256 * 1024 * 1024, env: { ...process.env, GIT_TERMINAL_PROMPT: '0' } });
   return stdout;
 }
 
-async function clone(r: RepoEntry, dir: string): Promise<void> {
+export async function clone(r: RepoEntry, dir: string): Promise<void> {
   fs.rmSync(dir, { recursive: true, force: true });
   fs.mkdirSync(path.dirname(dir), { recursive: true });
   await git(path.dirname(dir), 'clone', '--quiet', '--filter=blob:none', '--no-checkout', `${r.url}.git`, dir);
@@ -228,6 +228,9 @@ async function setupOnce(job: SetupJob): Promise<SetupRecord> {
   const { repo: r, cfg } = job;
   const checkout = checkoutDir(cfg, job.batch, r.slug);
   const out = recordDir(job.batch, r.slug);
+  // Checked before the earlier record is removed: an unsandboxed session must never start.
+  const unsafe = cfg.setup.sandbox ? claudeSandboxProblem() : undefined;
+  if (unsafe) throw new Error(unsafe);
   fs.rmSync(out, { recursive: true, force: true });
   fs.mkdirSync(out, { recursive: true });
   const transcript = path.join(out, 'setup.transcript.jsonl');

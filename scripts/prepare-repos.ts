@@ -3,8 +3,13 @@
 // sites/<batch>.yaml so the views can be labeled like any other batch:
 //
 //   node scripts/prepare-repos.ts --batch repo-001 [--concurrency 2] [--only slug,slug]
-//        [--stage setup|explore|all] [--redo-setup] [--redo-explore] [--config config/repos.yaml]
+//        [--stage setup|explore|all] [--redo-setup] [--redo-explore] [--rebuild] [--config config/repos.yaml]
 //   node scripts/label.ts --batch repo-001 [--repos-config <same --config>]
+//
+// --rebuild: for server apps that set up and explored successfully but whose
+// checkout is missing here (the batch moved machines), rebuild the checkout from
+// the setup record instead of setting up from scratch (src/repos/rebuild.ts).
+// The saved views are kept.
 //
 // Per repo: clone at the pinned commit and have a sandboxed coding agent get
 // the app running (src/repos/setup.ts), then have a browser agent save its
@@ -25,7 +30,8 @@ import { usageGate } from '../src/pipeline/usage-limit.ts';
 import { AppHost, readAppJson } from '../src/repos/apps.ts';
 import { exploreRepo, type ExploreRecord } from '../src/repos/explore.ts';
 import { checkoutDir, checkoutIn, frameFile, readFrame, readReposConfig, recordDir, type RepoEntry } from '../src/repos/frame.ts';
-import { findMise, runtimeSandboxAvailable } from '../src/repos/sandbox.ts';
+import { rebuildRepo } from '../src/repos/rebuild.ts';
+import { claudeSandboxProblem, findMise, runtimeSandboxAvailable } from '../src/repos/sandbox.ts';
 import { setupRepo, type SetupRecord } from '../src/repos/setup.ts';
 import { repoSites } from '../src/repos/sites.ts';
 
@@ -37,6 +43,7 @@ const { values: args } = parseArgs({
     stage: { type: 'string', default: 'all' },
     'redo-setup': { type: 'boolean', default: false },
     'redo-explore': { type: 'boolean', default: false },
+    rebuild: { type: 'boolean', default: false },
     config: { type: 'string', default: path.join(P.root, 'config', 'repos.yaml') },
     port: { type: 'string', default: String(LOCAL_PORT) },
   },
@@ -54,7 +61,12 @@ if (!fs.existsSync(file)) {
 const frame = readFrame(file);
 const cfg = readReposConfig(args.config);
 if (cfg.setup.sandbox && !runtimeSandboxAvailable()) {
-  console.error('Server-mode apps run under macOS sandbox-exec, which is not available here. Run on macOS, or set setup.sandbox: false in config/repos.yaml on a throwaway machine.');
+  console.error('Server-mode apps run under macOS sandbox-exec or Linux bubblewrap (/usr/bin/bwrap), neither of which is available here. Install bubblewrap, or set setup.sandbox: false in config/repos.yaml on a throwaway machine.');
+  process.exit(1);
+}
+const unsafe = cfg.setup.sandbox && args.stage !== 'explore' ? claudeSandboxProblem() : undefined;
+if (unsafe) {
+  console.error(`${unsafe}. Setup sessions would run third-party code unsandboxed, so none will start.`);
   process.exit(1);
 }
 const mise = findMise();
@@ -109,6 +121,17 @@ try {
 async function prepare(r: RepoEntry): Promise<string> {
   const parts: string[] = [];
   let setup = readJson<SetupRecord>(setupFile(r.slug));
+  if (args.rebuild && setup?.ok && setup.mode === 'server' && !args['redo-setup']) {
+    const co = setup.checkoutRoot ? checkoutIn(setup.checkoutRoot, batch, r.slug) : checkoutDir(cfg, batch, r.slug);
+    const prev = readJson<{ ok: boolean }>(path.join(recordDir(batch, r.slug), 'rebuild.json'));
+    const present = fs.existsSync(path.join(co, '.ui-capture', 'start.sh')) && fs.existsSync(path.join(co, '.git'));
+    if (!present || (prev && !prev.ok)) {
+      console.log(`→ rebuild ${r.slug} (${r.repo} @ ${r.commit.slice(0, 8)} · ${r.domain})`);
+      const rb = await rebuildRepo({ batch, repo: r, cfg, browser: getBrowser, server, log: console.log });
+      const broken = rb.brokenViews?.length ? ` · ${rb.brokenViews.length} view(s) no longer load: ${rb.brokenViews.map((v) => v.view).join(', ')}` : '';
+      return `rebuild ${rb.ok ? '✓' : '✗'}${rb.session ? ` $${rb.session.costUsd.toFixed(2)}` : ''}${rb.appChanged ? ' · app.json changed' : ''}${broken}${rb.error ? ` · ${rb.error.slice(0, 200)}` : ''}`;
+    }
+  }
   if (doSetup && (args['redo-setup'] || !setup?.ok)) {
     console.log(`→ setup ${r.slug} (${r.repo} @ ${r.commit.slice(0, 8)} · ${r.domain})`);
     setup = await setupRepo({ batch, repo: r, cfg, browser: getBrowser, server, log: console.log });

@@ -1,0 +1,44 @@
+{
+  "mode": "server",
+  "entry": "/browser/index.html",
+  "login": {
+    "username": "maya.okafor",
+    "email": "maya@okaforclay.com",
+    "password": "kilnday-2026"
+  },
+  "stubs": [
+    {
+      "service": "Electron runtime (main process: app, BrowserWindow, ipcMain, dialog, Menu, shell)",
+      "how": ".ui-capture/lib/electron-main.js is resolved in place of `electron` so the app's real main/main.js runs under plain Node. BrowserWindow.loadURL decides which page the browser shows (/ redirects there); webContents.send and ipcMain are bridged to the page over Server-Sent Events + POST /__ipc. The delete-conversation dialog appears as a browser confirm()."
+    },
+    {
+      "service": "Electron runtime (renderer: ipcRenderer, remote.Menu/MenuItem context menus, shell, clipboard) and require()",
+      "how": ".ui-capture/public/electron-renderer.js is injected into the served HTML (repo files unchanged). It provides window.require('electron'|'moment'), an EventSource/fetch IPC bridge, and a small popup that stands in for native context menus."
+    },
+    {
+      "service": "Instagram private API (instagram-private-api: login/session, direct inbox, threads, older messages, send text/photo/voice, mark seen, hide thread, user search, user info, presence, followers/following, unfollow)",
+      "how": ".ui-capture/stubs/instagram-private-api replaces the package at the client boundary. It keeps the library's paging (20 threads per inbox page, 10 messages per thread page) and uses an in-memory store (.ui-capture/lib/store.js) loaded from .ui-capture/data/instagram.json. Writes such as sending, read receipts, hiding and unfollowing last until restart; after a message is sent, recipients who are 'active now' mark it seen about 9s later."
+    },
+    {
+      "service": "Instagram CDN (profile pictures, photos, shared posts, story media, GIFs, voice notes)",
+      "how": "The same server serves /cdn/*. It generates deterministic SVG avatars, scene photos (pottery, studio, food, landscape, market...), animated SVG 'GIFs' and synthesized WAV voice notes (.ui-capture/lib/media.js)."
+    },
+    {
+      "service": "Saved Instagram session (cookie jar)",
+      "how": "seed/generate.js writes userdata/session-cookie/maya.okafor.json, the file main/utils.js reads. app.getPath('userData') points at .ui-capture/userdata, so the app opens already logged in. Logging out and back in with the credentials above also works."
+    },
+    {
+      "service": "electron-updater (GitHub release update feed)",
+      "how": "stubs/electron-updater reports that no update is available."
+    },
+    {
+      "service": "auto-launch (OS login item)",
+      "how": "stubs/auto-launch keeps the setting in memory."
+    },
+    {
+      "service": "electron-connect (dev live reload)",
+      "how": "stubs/electron-connect does nothing."
+    }
+  ],
+  "notes": "IGdm is an Electron desktop client for Instagram DMs. Setup (see install.sh): mise.toml pins node 16.20.2 and yarn 1.22.22. Dependencies are installed with `yarn install --frozen-lockfile --ignore-scripts` (Electron binary skipped), and `gulp html` (the repo's own build task) compiles browser/views/*.pug into browser/*.html. start.sh re-runs the seed so timestamps are relative to now, then starts .ui-capture/server.js. That server loads the real main/main.js with the stubs above and serves browser/ plus the bootstrap/nojs/moment files it references. The UI opens at /browser/index.html ('/' redirects to whatever page the main process loaded). Data: the account is @maya.okafor (Maya Okafor, a Portland ceramicist who runs Okafor Clay Studio). There are 30 conversations and about 340 messages spread over roughly 2.5 months. They include: best friend/studio-mate Jess (unread, active now); group chats 'Saturday Market Crew 🧺', 'Okafor Fam 🏡' and a muted 'Wheel Class — Tues 6pm'; customer threads (custom dinnerware order awaiting reply, mug repair, wedding registry, discount ask); a wholesale order of 64 mugs for Fern & Foundry Coffee; a clay supplier, market organizer, kiln repair tech, podcast invite, photographer, logo designer; and an unanswered spam 'ambassador' brand DM. Message types: text, likes, photos, shared posts and carousels, story replies (live and expired), links with previews, GIFs, voice notes, action logs, a removed-message placeholder, a view-once photo and heart reactions. Read/seen states and 'Active now / Last seen' presence vary. There are 357 users in total, with 203 following and 329 followers; about 26 accounts don't follow back. Main areas: chat list (left; the inbox shows the 20 most recent threads), conversation view with older-message loading on scroll-up, message composer with emoji picker and attachment menu, user search (top bar, type 4+ characters, e.g. 'jess', 'pottery', 'studio'), settings dropdown (hover the avatar top-left: seen receipts, notifications, 'Users not following back' viewer, log out), media viewer (click a photo/post), right-click context menus (quote message, delete conversation). Verification: headless Chrome can't start inside this sandbox, so there are no screenshots. Instead, every IPC round trip was exercised against the running server, and the unmodified renderer scripts (browser/js/*.js) were run in a Node vm against real responses for all 20 inbox threads with no errors."
+}

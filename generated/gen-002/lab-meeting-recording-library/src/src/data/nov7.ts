@@ -1,0 +1,43 @@
+import { recording } from './build'
+
+export const nov7 = recording(
+  {
+    id: 'nov7',
+    kind: 'journal',
+    title: 'Journal club',
+    short: 'Journal club · Nov 7',
+    date: '2026-11-07',
+    length: '37:00',
+    presenter: 'tomas',
+    paper: 'Reusable at sea: metadata practices for small-lab oceanographic cruises',
+  },
+  [
+    ['0:00', 'Why this paper', 'skip', '', 'Tomás explains the choice and the authors’ survey of 40 small-lab cruises.'],
+    ['2:40', 'Summary of the recommendations', 'skim', 'dataplan', 'The paper’s checklist: minimum metadata, naming, QC and embargo practice.'],
+    ['11:40', 'What our cruise data plan should borrow', 'listen', 'dataplan', 'Tomás and Prof. Halvorsen pick the pieces of the checklist that go into the plan you present on the 19th.'],
+    ['21:40', 'Critique: is it practical for a small lab?', 'skip', '', 'Discussion of the checklist’s overhead and who audits it.'],
+    ['30:40', 'Next journal club logistics', 'skip', '', 'Next paper and who presents it.'],
+  ],
+  [
+    ['0:00', 'tomas', 'Thanks for coming. As Prof. Halvorsen mentioned on Thursday, this paper is on metadata for small-lab cruises, and the timing is not an accident. The authors surveyed forty cruises run by labs with fewer than fifteen people, and asked what happened to the data afterwards.'],
+    ['1:40', 'halv', 'And the headline finding, before we go into the details?'],
+    ['2:00', 'tomas', 'Roughly a third of the datasets couldn’t be fully reconstructed within two years, mostly because the station-to-sample mapping lived in someone’s notebook.'],
+    ['2:40', 'tomas', 'The recommendations are a checklist of twelve items. I’ll group them. First, minimum metadata: station ID, date and time in UTC, latitude and longitude, depth, and instrument serial number. Second, naming: one pattern for files, set before the cruise and never changed. Third, QC: first-pass QC by someone who didn’t collect the sample. Fourth, embargo: write down the operator’s rules in the plan.'],
+    ['6:30', 'lena', 'What do they say about paper logs?'],
+    ['7:00', 'tomas', 'They’re fine, if somebody scans them within forty-eight hours. The failures were paper logs that sat in a drawer for months.'],
+    ['9:00', 'priya', 'And the raw-data rule?'],
+    ['9:30', 'tomas', 'Raw data should be write-protected at the first opportunity and everything downstream should be done on copies.'],
+    ['11:40', 'tomas', 'So what should we borrow? My short list for a plan this size: the five minimum metadata fields, a file naming pattern fixed before the cruise, a second-person QC step, and a one-line embargo statement. The paper also suggests a checksum for every raw file when it’s copied to storage.'],
+    ['14:10', 'halv', 'Checksums, yes. That’s cheap and it tells you if a copy went wrong. Jun, is that easy on the NAS?'],
+    ['14:40', 'jun', 'Very. It’s one command and I can add it to the transfer script.'],
+    ['16:00', 'halv', 'I’d also take the scanning rule. If the station IDs are on paper, the scan goes into the plan with a forty-eight hour deadline after docking. That solves the problem we talked about on Thursday.', 'D'],
+    ['18:00', 'ama', 'I’d leave out the part about instrument serial numbers on every file name. It’s too much for a one-page plan.'],
+    ['18:40', 'halv', 'Agreed. Keep the serial numbers in the metadata, not in the file name. Let’s not borrow the whole checklist. Take the five fields, the naming pattern, the second-person check, the checksum and the embargo line.', 'D'],
+    ['21:40', 'sam', 'My worry is the overhead. Twelve items is a lot, and small labs don’t have a data manager. Who audits it?'],
+    ['23:30', 'tomas', 'The authors suggest a yearly self-audit. It’s honest, but I agree it’s the weakest part of the paper.'],
+    ['27:00', 'hana', 'In our case the audit is Jun, in practice. I’d say that out loud so it isn’t assumed.'],
+    ['28:20', 'jun', 'Fine by me, but I’d like it in the plan with a date.'],
+    ['30:40', 'ama', 'For the next journal club on the twenty-first, I’ll share the paper and some reading questions a week ahead. It’s on kelp holdfast communities and I think it will interest the cytometry people too.'],
+    ['33:20', 'halv', 'Good. Thank you, Tomás, that was well targeted. See you all Thursday.'],
+  ],
+)

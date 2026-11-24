@@ -1,0 +1,2 @@
+export GOPATH=/Users/bryanmin/.cache/design-patterns-dataset/repos/repo-001/fusion/.ui-capture/cache/go GOMODCACHE=/Users/bryanmin/.cache/design-patterns-dataset/repos/repo-001/fusion/.ui-capture/cache/go/mod GOCACHE=/Users/bryanmin/.cache/design-patterns-dataset/repos/repo-001/fusion/.ui-capture/cache/go/build
+export GOTOOLCHAIN=local GOPROXY=direct GOSUMDB=off GOFLAGS=-mod=mod GIT_TERMINAL_PROMPT=0

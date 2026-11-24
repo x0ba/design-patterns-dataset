@@ -1,0 +1,80 @@
+// Local Places API records returned by the PlacesService stub.
+const weekly = (open, close, closedDays = []) =>
+  ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((d) =>
+    closedDays.includes(d) ? `${d}: Closed` : `${d}: ${open} – ${close}`,
+  )
+
+export const PLACE_RECORDS = [
+  {
+    query: 'Bravo Farms Kettleman City CA',
+    place_id: 'ChIJx7Qk2bWKk4ARb3ravoFarmsKC',
+    name: 'Bravo Farms',
+    formatted_address: '33950 Bernard Dr, Kettleman City, CA 93239, USA',
+    lat: 35.9934, lng: -119.9617,
+    phone: '(559) 386-0340', website: 'https://www.bravofarms.com/',
+    rating: 4.5, user_ratings_total: 8124, hours: weekly('6:00 AM', '9:00 PM'),
+  },
+  {
+    query: 'Oakdale Cheese & Specialties Oakdale CA',
+    place_id: 'ChIJ5S4o0GtFkIARoakdaleCheese',
+    name: 'Oakdale Cheese & Specialties',
+    formatted_address: '10040 CA-120, Oakdale, CA 95361, USA',
+    lat: 37.7975, lng: -120.8108,
+    phone: '(209) 848-3139', website: 'https://www.oakdalecheese.com/',
+    rating: 4.7, user_ratings_total: 3311, hours: weekly('9:00 AM', '5:00 PM'),
+  },
+  {
+    query: 'The Grill at Pine Mountain Lake Groveland CA',
+    place_id: 'ChIJq9vC3tI6kYARgrillPMLclub',
+    name: 'The Grill at Pine Mountain Lake',
+    formatted_address: '12765 Mueller Dr, Groveland, CA 95321, USA',
+    lat: 37.8578, lng: -120.2004,
+    phone: '(209) 962-8638', website: 'https://www.pinemountainlake.com/dining',
+    rating: 4.2, user_ratings_total: 412, hours: weekly('11:00 AM', '8:00 PM', ['Monday', 'Tuesday']),
+  },
+  {
+    query: 'Two Guys Pizza Pies Groveland CA',
+    place_id: 'ChIJ8bA0m_Q6kYARtwoGuysPizza',
+    name: 'Two Guys Pizza Pies',
+    formatted_address: '18955 Ferretti Rd, Groveland, CA 95321, USA',
+    lat: 37.842208, lng: -120.2243368,
+    phone: '(209) 962-4897', website: 'https://www.twoguyspizzapies.com/',
+    rating: 4.4, user_ratings_total: 689, hours: weekly('11:30 AM', '8:30 PM', ['Tuesday']),
+  },
+  {
+    query: 'The Mountain Room Yosemite Valley CA',
+    place_id: 'ChIJ2xYw7mDvloARmountainRoomYV',
+    name: 'The Mountain Room',
+    formatted_address: '9006 Yosemite Lodge Dr, Yosemite Valley, CA 95389, USA',
+    lat: 37.7486, lng: -119.5887,
+    phone: '(209) 372-1274', website: 'https://www.travelyosemite.com/dining/mountain-room/',
+    rating: 4.3, user_ratings_total: 1788, hours: weekly('5:00 PM', '9:00 PM'),
+  },
+  {
+    query: 'Priest Station Cafe Groveland CA',
+    place_id: 'ChIJ6dJpQ6c6kYARpriestStation',
+    name: 'Priest Station Cafe',
+    formatted_address: '16756 Old Priest Grade Rd, Groveland, CA 95321, USA',
+    lat: 37.8188, lng: -120.0096,
+    phone: '(209) 962-1888', website: 'https://www.prieststation.com/',
+    rating: 4.6, user_ratings_total: 537, hours: weekly('11:00 AM', '7:30 PM', ['Wednesday']),
+  },
+  {
+    query: 'Around The Horn Brewing Company Groveland CA',
+    place_id: 'ChIJk1v1Kfc6kYARaroundTheHorn',
+    name: 'Around The Horn Brewing Company',
+    formatted_address: '17820 CA-120, Groveland, CA 95321, USA',
+    lat: 37.8387, lng: -120.2274,
+    phone: '(209) 962-0300', website: 'https://www.aroundthehornbrewing.com/',
+    rating: 4.6, user_ratings_total: 921, hours: weekly('12:00 PM', '9:00 PM'),
+  },
+  {
+    query: 'Big Oak Flat Entrance Yosemite National Park CA',
+    place_id: 'ChIJ0dEh3l7ulYARbigOakFlatEnt',
+    name: 'Big Oak Flat Entrance',
+    formatted_address: 'Big Oak Flat Rd, Yosemite National Park, CA 95321, USA',
+    lat: 37.8108, lng: -119.8744,
+    phone: '(209) 372-0200', website: 'https://www.nps.gov/yose/planyourvisit/hours.htm',
+    rating: 4.8, user_ratings_total: 2240, hours: weekly('Open 24 hours', '').map((t) => t.replace(' – ', '')),
+  },
+]

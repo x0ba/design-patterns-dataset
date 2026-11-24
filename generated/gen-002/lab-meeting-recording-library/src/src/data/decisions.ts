@@ -1,0 +1,21 @@
+// Short labels for the turns where the PI states a decision. Key: `${recordingId}@${m:ss}`.
+export const DECISION_LABELS: Record<string, string> = {
+  'oct22@8:00': 'Who counts as “time-sensitive”',
+  'oct22@9:55': 'Backlog runs in date order',
+  'oct22@12:50': 'Trial rules through end of term',
+  'oct29@9:00': 'Unclaimed priority holds return after 24 h',
+  'oct29@17:10': 'Cruise data plan gets a lab-meeting slot',
+  'oct29@22:40': 'Cruise samples get priority cytometer time',
+  'oct29@51:30': 'Author order set by CRediT statements',
+  'oct29@56:10': 'Contribution statements due Nov 20',
+  'nov5@30:30': 'Ruiz and Becker are co-first authors',
+  'nov5@32:40': 'How the middle authors are decided',
+  'nov5@35:20': 'Your position: same process as everyone',
+  'nov5@37:50': 'One week to object before submission',
+  'nov5@47:30': 'Reprocess CTD from the raw casts',
+  'nov5@49:30': 'Check the operator’s embargo first',
+  'nov5@51:30': 'Second person checks every station ID',
+  'nov5@52:30': 'Raw data to the NAS within 10 days',
+  'nov7@16:00': 'Scan paper logs within 48 h of docking',
+  'nov7@18:40': 'Which checklist items to borrow',
+}

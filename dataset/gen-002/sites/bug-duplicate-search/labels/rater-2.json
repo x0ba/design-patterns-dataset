@@ -1,0 +1,636 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "gen-002",
+  "site": {
+    "slug": "bug-duplicate-search",
+    "url": "http://bug-duplicate-search.localhost:4318/",
+    "finalUrl": "http://bug-duplicate-search.localhost:4318/",
+    "status": 200,
+    "title": "Dupehound · Find existing reports",
+    "capturedAt": "2026-11-18T02:08:17.621Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 3110
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "developer-tools",
+    "domainNote": "game QA bug-tracker duplicate search / triage tool (crash report deduplication)",
+    "provenance": {
+      "source": "generated",
+      "generation": "generated/gen-002/bug-duplicate-search/generation.json",
+      "generator": {
+        "id": "haiku",
+        "model": "claude-haiku-5-5",
+        "effort": "high"
+      },
+      "brief": {
+        "domain": "games",
+        "archetype": "search",
+        "context": "enterprise-internal",
+        "product": "Dupehound"
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Dark top bar with DH logo, product name/tagline, report count pill and tester identity",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 56
+      },
+      "patterns": []
+    },
+    {
+      "id": "session-strip",
+      "role": "context-strip",
+      "label": "Current session metadata: dump id, signature, session, clip, tester in monospace code chips",
+      "bbox": {
+        "x": 0,
+        "y": 56,
+        "width": 1440,
+        "height": 40
+      },
+      "patterns": []
+    },
+    {
+      "id": "filters",
+      "role": "sidebar",
+      "label": "Filters rail: status/platform/severity checkboxes with counts, build select, 'only reports with' checkboxes, Reset",
+      "bbox": {
+        "x": 12,
+        "y": 108,
+        "width": 236,
+        "height": 2990
+      },
+      "patterns": [
+        "faceted-search",
+        "filter-controls",
+        "choice-control"
+      ]
+    },
+    {
+      "id": "results",
+      "role": "search-results",
+      "label": "Search box with dump-signature toggle, 'Most likely match' callout, result count + sort, list of 17 report cards",
+      "bbox": {
+        "x": 260,
+        "y": 108,
+        "width": 596,
+        "height": 2990
+      },
+      "patterns": [
+        "search-results",
+        "overview-detail",
+        "card",
+        "badge",
+        "sort-control",
+        "text-field",
+        "banner",
+        "choice-control"
+      ]
+    },
+    {
+      "id": "detail",
+      "role": "detail-pane",
+      "label": "Selected report detail: verdict callout, 'against your session' comparison, report key-values, description, decision option cards, tracker draft textarea with Copy/Reset",
+      "bbox": {
+        "x": 868,
+        "y": 108,
+        "width": 560,
+        "height": 2990
+      },
+      "patterns": [
+        "overview-detail",
+        "badge",
+        "banner",
+        "choice-control",
+        "text-field"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "faceted-search",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 12,
+            "y": 108,
+            "width": 236,
+            "height": 640
+          },
+          "region": "filters",
+          "quote": "STATUS counts in current matches",
+          "note": "Left-rail checkbox facets for status, platform, severity with counts on status; instant update of result list (11 matches after unchecking Fixed on live page)"
+        }
+      ],
+      "dims": {
+        "types": [
+          "categorical"
+        ],
+        "valueDisplay": "values-with-counts",
+        "facetSet": "fixed-per-category",
+        "update": "instant-per-click",
+        "placement": "left-rail",
+        "logic": "or-within-and-across",
+        "visual": [
+          "text-lists"
+        ]
+      }
+    },
+    {
+      "id": "filter-controls",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 27,
+            "y": 158,
+            "width": 206,
+            "height": 535
+          },
+          "region": "filters",
+          "quote": "Closed: can't repro",
+          "note": "Checkbox filters plus 'Seen in build' select and 'Only reports with' toggles"
+        },
+        {
+          "bbox": {
+            "x": 188,
+            "y": 123,
+            "width": 45,
+            "height": 20
+          },
+          "region": "filters",
+          "quote": "Reset"
+        }
+      ],
+      "dims": {
+        "placement": "sidebar-facets",
+        "types": [
+          "checkbox-values"
+        ],
+        "preview": "counts-per-value",
+        "origin": "developer-defined",
+        "logic": "and-across-or-within"
+      }
+    },
+    {
+      "id": "search-results",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 277,
+            "y": 124,
+            "width": 562,
+            "height": 90
+          },
+          "region": "results",
+          "quote": "crash opening map in rain co-op teammate fast travel PS5",
+          "note": "Free-text query plus 'Match on dump signature' toggle"
+        },
+        {
+          "bbox": {
+            "x": 277,
+            "y": 372,
+            "width": 562,
+            "height": 25
+          },
+          "region": "results",
+          "quote": "17 matches of 48,600 reports"
+        },
+        {
+          "bbox": {
+            "x": 277,
+            "y": 405,
+            "width": 566,
+            "height": 141
+          },
+          "region": "results",
+          "quote": "same crash signature",
+          "note": "Result card with matched-term chips and verdict line explaining why it matched"
+        },
+        {
+          "bbox": {
+            "x": 277,
+            "y": 237,
+            "width": 562,
+            "height": 123
+          },
+          "region": "results",
+          "quote": "MOST LIKELY MATCH",
+          "note": "Top answer-like callout above ranked list"
+        }
+      ],
+      "dims": {
+        "representation": "rich-result-card",
+        "snippet": "static-description",
+        "grouping": "single-ranked-list",
+        "ranking": "sort-by-the-person",
+        "cues": [
+          "result-count",
+          "why-this-matched"
+        ],
+        "openIn": "side-by-side"
+      }
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 277,
+            "y": 405,
+            "width": 566,
+            "height": 290
+          },
+          "region": "results",
+          "note": "Result list items (selected one outlined in blue)"
+        },
+        {
+          "bbox": {
+            "x": 868,
+            "y": 108,
+            "width": 560,
+            "height": 780
+          },
+          "region": "detail",
+          "quote": "Map crash during storms",
+          "note": "Detail pane updates when another card is clicked (verified live)"
+        }
+      ],
+      "dims": {
+        "attributePlacement": [
+          "in-both-views",
+          "in-detail-view-only"
+        ],
+        "abstraction": [
+          "category",
+          "ranking-or-order"
+        ],
+        "truncation": "full-text",
+        "relationship": "one-to-one",
+        "recursion": [
+          "none"
+        ],
+        "openIn": "side-by-side",
+        "overviewType": [
+          "list"
+        ],
+        "detailMultiplicity": "one-at-a-time",
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "whole-item",
+        "attributeScope": [
+          "per-item"
+        ]
+      }
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 277,
+            "y": 554,
+            "width": 566,
+            "height": 141
+          },
+          "region": "results",
+          "quote": "Host crash opening map in rainy weather during trade",
+          "note": "Outlined result card, whole card is a button; selected card gets blue border + shadow"
+        },
+        {
+          "bbox": {
+            "x": 891,
+            "y": 901,
+            "width": 514,
+            "height": 199
+          },
+          "region": "detail",
+          "note": "Decision option cards (coded as choice-control)"
+        }
+      ],
+      "dims": {
+        "media": "none",
+        "actions": "none",
+        "shape": "horizontal",
+        "style": "outlined",
+        "target": "whole-card"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 356,
+            "y": 417,
+            "width": 52,
+            "height": 20
+          },
+          "region": "results",
+          "quote": "Fixed",
+          "note": "Status pills (Open/Fixed/Duplicate/Closed: can't repro) and severity labels on each card"
+        },
+        {
+          "bbox": {
+            "x": 1278,
+            "y": 920,
+            "width": 85,
+            "height": 20
+          },
+          "region": "detail",
+          "quote": "SUGGESTED"
+        }
+      ],
+      "dims": {
+        "meaning": "status",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "sort-control",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 675,
+            "y": 372,
+            "width": 164,
+            "height": 25
+          },
+          "region": "results",
+          "quote": "Sort Relevance"
+        }
+      ],
+      "dims": {
+        "keys": "fixed-list",
+        "form": "dropdown",
+        "default": "relevance",
+        "indicator": "label"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 277,
+            "y": 124,
+            "width": 562,
+            "height": 42
+          },
+          "region": "results",
+          "quote": "crash opening map in rain co-op teammate fast travel PS5",
+          "note": "Outlined search field with ⌕ prefix and '/' shortcut hint"
+        },
+        {
+          "bbox": {
+            "x": 891,
+            "y": 1116,
+            "width": 514,
+            "height": 290
+          },
+          "region": "detail",
+          "quote": "Draft for the tracker",
+          "note": "Monospace multi-line textarea prefilled with generated draft"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "label",
+          "prefix-or-suffix"
+        ],
+        "style": "outlined",
+        "validation": "none",
+        "inputType": "plain"
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 891,
+            "y": 901,
+            "width": 514,
+            "height": 199
+          },
+          "region": "detail",
+          "quote": "Reopen GW-31877 SUGGESTED",
+          "note": "Four option cards (one disabled with reason, one pressed & suggested) choosing the triage decision; also filter checkboxes in rail"
+        },
+        {
+          "bbox": {
+            "x": 27,
+            "y": 180,
+            "width": 206,
+            "height": 103
+          },
+          "region": "filters",
+          "note": "Checkbox list"
+        }
+      ],
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "option-cards",
+        "option": [
+          "label-and-description",
+          "recommended-badge"
+        ],
+        "timing": "immediately",
+        "largeSets": "show-all"
+      }
+    },
+    {
+      "id": "banner",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "The orange 'Reopen candidate' callouts are inline notices/verdicts; could equally be read as a recommendation summary rather than a condition banner.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 891,
+            "y": 197,
+            "width": 514,
+            "height": 151
+          },
+          "region": "detail",
+          "quote": "Reopen candidate",
+          "note": "Orange callout box with verdict and 'Rule-based suggestion … Your call.'"
+        },
+        {
+          "bbox": {
+            "x": 277,
+            "y": 237,
+            "width": 562,
+            "height": 123
+          },
+          "region": "results",
+          "quote": "MOST LIKELY MATCH"
+        }
+      ],
+      "dims": {
+        "scope": "section",
+        "severity": "warning",
+        "dismissal": "clears-with-the-condition",
+        "action": "none",
+        "placement": "top-of-content"
+      }
+    },
+    {
+      "id": "app-shell",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 56
+          },
+          "note": "Top bar has only identity/brand, no navigation destinations"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "ai-provenance",
+      "status": "absent",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 906,
+            "y": 300,
+            "width": 480,
+            "height": 35
+          },
+          "quote": "Rule-based suggestion from signature, status, build and trigger overlap. Your call.",
+          "note": "Explicitly rule-based, not model output"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "recommendations",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 277,
+            "y": 237,
+            "width": 562,
+            "height": 123
+          },
+          "note": "'Most likely match' is derived from the query, so treated as part of search results"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "three-pane desktop app: dark top bar plus session metadata strip, then left filter rail, center search box + ranked result cards, right detail pane with decision option cards and a draft textarea; each pane scrolls independently",
+    "regions": [
+      "header",
+      "session-strip",
+      "filters",
+      "results",
+      "detail"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#eef2f6",
+      "#ffffff",
+      "#1b2430",
+      "#18212b",
+      "#3c4a5a",
+      "#66768a",
+      "#2456c7",
+      "#fff4e8",
+      "#f3c99a",
+      "#17794a",
+      "#dbe2ea"
+    ],
+    "colorRoles": {
+      "background": "#eef2f6",
+      "surface": "#ffffff",
+      "text": "#18212b",
+      "muted": "#66768a",
+      "secondaryText": "#3c4a5a",
+      "primary": "#2456c7",
+      "header": "#1b2430",
+      "warningSurface": "#fff4e8",
+      "warningBorder": "#f3c99a",
+      "success": "#17794a",
+      "border": "#dbe2ea"
+    },
+    "typography": "system-ui for all UI text (headings, labels, body); ui-monospace for report IDs (GW-31877), dump IDs, crash signatures and the tracker draft textarea",
+    "typeScale": "compact utilitarian scale: 20px/700 detail title, 15px search input and match title, 14px body and card titles (700), 12–13px meta, 11px/700 uppercase letter-spaced section labels; hierarchy driven by weight and uppercase micro-labels more than size",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "none"
+    ],
+    "iconStyle": "none",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "technical",
+      "utilitarian",
+      "clean",
+      "focused",
+      "calm"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T02:09:47.575Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 10,
+    "usage": {
+      "input_tokens": 20,
+      "cache_creation_input_tokens": 41342,
+      "cache_read_input_tokens": 339334,
+      "output_tokens": 6229
+    }
+  },
+  "notes": "Duplicate-triage tool for game QA: the session's crash dump and signature sit in a persistent strip under the dark top bar, and every result is judged 'against your session' (✓/✗ trigger chips, 'Matches your dump' / 'Different:' signature, build-regression reasoning). Each card ends in a coloured verdict line (Reopen candidate / Possible duplicate / Related: link, do not merge / Duplicate: check canonical) and the top match is promoted in a pastel callout whose tint follows the verdict (orange reopen, lavender duplicate, blue related). The decision area uses option cards with a disabled one that explains why ('Unavailable: GW-31877 is fixed. Reopen it instead.') and a SUGGESTED badge; picking one regenerates a monospace tracker draft to copy, never submitted. Pill chips (999px radius) for tags/status; 9–10px radii for cards and panels; no icons beyond ⌕ and ✓ glyphs. Keyboard hints ('/' to focus search, ↑↓ to move between results)."
+}

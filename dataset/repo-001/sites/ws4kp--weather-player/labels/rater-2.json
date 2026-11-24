@@ -1,0 +1,455 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "ws4kp--weather-player",
+    "url": "http://localhost:4476/",
+    "finalUrl": "http://localhost:4476/",
+    "status": 200,
+    "title": "WeatherStar 4000+",
+    "capturedAt": "2026-11-18T20:35:15.405Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 900
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "utilities",
+    "domainNote": "Open-source web recreation of the 1990s Weather Channel WeatherStar 4000 local forecast display",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/ws4kp/explore.json",
+      "repo": {
+        "name": "vbguyny/ws4kp",
+        "url": "https://github.com/vbguyny/ws4kp",
+        "commit": "bb6a9aee9485b114cec0b7b834f84803151782ad",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "weather-player",
+        "name": "WeatherStar player with settings",
+        "description": "Main screen: location search bar, retro WeatherStar TV canvas showing the Current Conditions segment with playback controls, GitHub buttons, and the station info, units, theme, scroll-text and auto-refresh settings below."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "location-bar",
+      "role": "header",
+      "label": "Location text box 'Zip or City, State' with GPS button, GO and Reset buttons",
+      "bbox": {
+        "x": 8,
+        "y": 8,
+        "width": 640,
+        "height": 29
+      },
+      "patterns": [
+        "text-field",
+        "autocomplete"
+      ]
+    },
+    {
+      "id": "player",
+      "role": "media-stage",
+      "label": "Black frame with WeatherStar slideshow iframe; large icon controls left (menu, prev, next, pause) and right (refresh, mute, narration, fullscreen) plus compact duplicate control bar beneath",
+      "bbox": {
+        "x": 8,
+        "y": 55,
+        "width": 640,
+        "height": 236
+      },
+      "patterns": [
+        "media-player"
+      ]
+    },
+    {
+      "id": "github-buttons",
+      "role": "social-links",
+      "label": "GitHub-style buttons: GitHub, Star 412, Fork 121, Issue, Follow @vbguyny",
+      "bbox": {
+        "x": 8,
+        "y": 309,
+        "width": 636,
+        "height": 30
+      },
+      "patterns": [
+        "badge"
+      ]
+    },
+    {
+      "id": "station-info",
+      "role": "metadata",
+      "label": "Location, Station Id, Radar Id, Zone Id, last update time and Auto Refresh countdown checkbox",
+      "bbox": {
+        "x": 8,
+        "y": 360,
+        "width": 640,
+        "height": 75
+      },
+      "patterns": [
+        "choice-control"
+      ]
+    },
+    {
+      "id": "settings-panel",
+      "role": "settings",
+      "label": "Units, Themes, Scroll Options radios with Custom Text / RSS Feed inputs and Set buttons, Hazardous Weather checkbox",
+      "bbox": {
+        "x": 8,
+        "y": 445,
+        "width": 640,
+        "height": 182
+      },
+      "patterns": [
+        "settings",
+        "choice-control",
+        "text-field"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "media-player",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 55,
+            "width": 640,
+            "height": 236
+          },
+          "region": "player",
+          "note": "Stage (iframe slideshow of forecast screens) with prev/next/pause, mute, narration, fullscreen; pause toggles to play icon on live page"
+        },
+        {
+          "bbox": {
+            "x": 8,
+            "y": 263,
+            "width": 640,
+            "height": 28
+          },
+          "region": "player",
+          "note": "Compact duplicate transport bar"
+        }
+      ],
+      "dims": {
+        "controls": [
+          "play-pause",
+          "skip-forward-back",
+          "volume-and-mute",
+          "fullscreen"
+        ],
+        "mode": "inline-embed",
+        "overlays": [
+          "captions"
+        ]
+      }
+    },
+    {
+      "id": "settings",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 445,
+            "width": 640,
+            "height": 182
+          },
+          "region": "settings-panel",
+          "quote": "Themes: Classic Dark Sea Foam Cosmic",
+          "note": "Units, Themes, Scroll Options, Hazardous Weather options on one plain page"
+        },
+        {
+          "bbox": {
+            "x": 583,
+            "y": 8,
+            "width": 64,
+            "height": 29
+          },
+          "region": "location-bar",
+          "quote": "Reset",
+          "note": "Reset button returns to defaults"
+        }
+      ],
+      "dims": {
+        "ia": "single-long-page",
+        "controls": [
+          "boolean-toggles",
+          "single-and-multi-select",
+          "text-and-credentials"
+        ],
+        "timing": "instant",
+        "scope": "device-local",
+        "safety": [
+          "no-confirm"
+        ]
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 453,
+            "width": 215,
+            "height": 17
+          },
+          "region": "settings-panel",
+          "quote": "Units: English Metric",
+          "note": "Native radio buttons inline"
+        },
+        {
+          "bbox": {
+            "x": 8,
+            "y": 491,
+            "width": 370,
+            "height": 17
+          },
+          "region": "settings-panel",
+          "quote": "Themes: Classic Dark Sea Foam Cosmic"
+        },
+        {
+          "bbox": {
+            "x": 12,
+            "y": 609,
+            "width": 155,
+            "height": 17
+          },
+          "region": "settings-panel",
+          "quote": "Hazardous Weather",
+          "note": "Checkbox exception (on/off)"
+        },
+        {
+          "bbox": {
+            "x": 480,
+            "y": 417,
+            "width": 168,
+            "height": 17
+          },
+          "region": "station-info",
+          "quote": "Auto Refresh: 09:57",
+          "note": "Checkbox with live countdown"
+        }
+      ],
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "radio-list",
+        "option": [
+          "label-only"
+        ],
+        "timing": "immediately",
+        "largeSets": "show-all"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 8,
+            "width": 498,
+            "height": 29
+          },
+          "region": "location-bar",
+          "quote": "San Diego, California, USA",
+          "note": "Location input, accessible name 'Zip or City, State'"
+        },
+        {
+          "bbox": {
+            "x": 137,
+            "y": 567,
+            "width": 508,
+            "height": 19
+          },
+          "region": "settings-panel",
+          "quote": "Mission Bay Yacht Club: Saturday junior regatta moved to Sunday 10 AM",
+          "note": "Custom Text field with Set button; RSS Feed field below"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "label"
+        ],
+        "style": "outlined",
+        "inputType": "plain"
+      }
+    },
+    {
+      "id": "autocomplete",
+      "status": "uncertain",
+      "confidence": 0.4,
+      "rationale": "Location field likely offers geocoder suggestions as you type (as in the original ws4kp), but typing could not be tested on the live page and no list appears in the capture.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 8,
+            "width": 498,
+            "height": 29
+          },
+          "region": "location-bar",
+          "quote": "San Diego, California, USA",
+          "note": "Value looks like a full geocoder place name"
+        }
+      ],
+      "dims": {
+        "types": [
+          "places-and-addresses"
+        ]
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 194,
+            "y": 309,
+            "width": 45,
+            "height": 30
+          },
+          "region": "github-buttons",
+          "quote": "412",
+          "note": "Star count attached to the Star button"
+        },
+        {
+          "bbox": {
+            "x": 330,
+            "y": 309,
+            "width": 45,
+            "height": 30
+          },
+          "region": "github-buttons",
+          "quote": "121",
+          "note": "Fork count"
+        }
+      ],
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 55,
+            "width": 48,
+            "height": 48
+          },
+          "note": "Hamburger icon on the live page jumps the slideshow back to its first screen instead of opening a menu"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "form",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 8,
+            "width": 640,
+            "height": 29
+          },
+          "note": "Only a single location box with GO; options take effect immediately, nothing submitted together"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "Single narrow left-aligned column (~640px) on a blank white page: location search bar, black-framed slideshow player with side and bottom transport controls, GitHub social buttons, station metadata, and a plain radio/checkbox settings list",
+    "regions": [
+      "location-bar",
+      "player",
+      "github-buttons",
+      "station-info",
+      "settings-panel"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#000000",
+      "#e0e0e0",
+      "#24292f",
+      "#d0d7de",
+      "#1e0a5a",
+      "#c0601a",
+      "#ffff00",
+      "#2080ff"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "text": "#000000",
+      "surface": "#e0e0e0",
+      "primary": "#000000",
+      "accent": "#ffff00",
+      "border": "#000000",
+      "muted": "#24292f"
+    },
+    "typography": "Star4000, a retro bitmap/pixel font from the original WeatherStar, used for all app text, inputs and labels; -apple-system 14px/600 only in the embedded GitHub buttons",
+    "typeScale": "Nearly flat: 16px body labels, 21px for location input and buttons, 13px for scroll text inputs; regular weight throughout, no headings",
+    "shape": "mixed",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "iconography",
+      "illustration"
+    ],
+    "iconStyle": "filled",
+    "whitespace": "tight",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "retro",
+      "utilitarian",
+      "nostalgic",
+      "unstyled",
+      "technical"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T20:36:43.752Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 7,
+    "usage": {
+      "input_tokens": 14,
+      "cache_creation_input_tokens": 26070,
+      "cache_read_input_tokens": 203321,
+      "output_tokens": 6881
+    }
+  },
+  "notes": "Mostly browser-default styling: native radios and checkboxes, square grey buttons with 1px black borders, all in the Star4000 pixel font, packed into a 640px column with the rest of the 1440px page empty white. The player is a black frame around a cropped iframe showing the purple-to-orange gradient WeatherStar screens with yellow pixel text. Transport icons appear twice, large white icons beside the stage and a smaller bar under it. The only modern-looking element is the rounded GitHub button row. The 'Hamburger' control jumps the slideshow back to the start. The Auto Refresh countdown is a live timer."
+}

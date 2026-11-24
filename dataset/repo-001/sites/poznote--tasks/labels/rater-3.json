@@ -1,0 +1,529 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "poznote--tasks",
+    "url": "http://localhost:4500/",
+    "finalUrl": "http://localhost:4500/tasks.php?workspace=Work",
+    "status": 200,
+    "title": "Poznote",
+    "capturedAt": "2026-11-18T02:03:19.195Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 2527
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "productivity",
+    "domainNote": "self-hosted note-taking app (Poznote) — aggregated tasks page pulling checklists out of notes",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/poznote/explore.json",
+      "repo": {
+        "name": "timothepoznanski/Poznote",
+        "url": "https://github.com/timothepoznanski/Poznote",
+        "commit": "207591166c4110c3f2eec483548ddb9d99f7b05a",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "tasks",
+        "name": "Tasks overview",
+        "description": "Aggregated task lists across notes with overall progress bar, filter toolbar, and per-note checklist cards with completion counts."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Collapsible icon-only navigation rail (Home, Dashboard, Graph, Notes, Tasks, Folders, Tags, Trash, theme, settings, logout)",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 52,
+        "height": 900
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "page-header",
+      "role": "header",
+      "label": "'Tasks' title with workspace switcher pill, overall progress bar '19 of 25 tasks completed (76%)'",
+      "bbox": {
+        "x": 146,
+        "y": 16,
+        "width": 1060,
+        "height": 72
+      },
+      "patterns": [
+        "menu",
+        "progress-indicator"
+      ]
+    },
+    {
+      "id": "toolbar",
+      "role": "toolbar",
+      "label": "Icon buttons: search, calendar view, filters, collapse all; checkboxes 'Display tasks in notes (17)', 'Show hidden lists'",
+      "bbox": {
+        "x": 507,
+        "y": 106,
+        "width": 480,
+        "height": 37
+      },
+      "patterns": [
+        "filter-controls",
+        "view-switcher",
+        "choice-control"
+      ]
+    },
+    {
+      "id": "task-groups",
+      "role": "main-list",
+      "label": "Stack of outlined cards, one per note/checklist, each with chevron, linked title, folder chip, Note chip, mini progress bar, count and hide button, then checkbox task rows",
+      "bbox": {
+        "x": 279,
+        "y": 166,
+        "width": 934,
+        "height": 2303
+      },
+      "patterns": [
+        "task-list",
+        "card",
+        "accordion",
+        "badge",
+        "progress-indicator",
+        "choice-control",
+        "modal-dialog"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "task-list",
+      "status": "present",
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 279,
+            "y": 166,
+            "width": 934,
+            "height": 289
+          },
+          "quote": "Deploy checklist",
+          "note": "Grouped checklist with checkbox rows, strikethrough completed items, due-date icon buttons",
+          "region": "task-groups"
+        },
+        {
+          "bbox": {
+            "x": 279,
+            "y": 1955,
+            "width": 934,
+            "height": 172
+          },
+          "quote": "Invoice rounding bug — postmortem",
+          "region": "task-groups"
+        }
+      ],
+      "dims": {
+        "rowFields": [
+          "due-date",
+          "project-or-tags",
+          "sub-task-progress"
+        ],
+        "itemRichness": "checklist-inside-a-doc",
+        "taskStructure": "grouped-by-project-or-list",
+        "timeBinding": "due-date-and-time",
+        "completionPath": [
+          "check-off"
+        ],
+        "createOpen": [
+          "open-full-page"
+        ],
+        "sharingModel": "private-list"
+      }
+    },
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 52,
+            "height": 900
+          },
+          "note": "Icon rail with fixed destinations; collapse toggle button at bottom",
+          "region": "sidebar"
+        }
+      ],
+      "dims": {
+        "primary": "navigation-rail",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations",
+          "workspace-switcher"
+        ],
+        "visibility": "toggle-button",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "progress-indicator",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 296,
+            "y": 68,
+            "width": 905,
+            "height": 16
+          },
+          "quote": "19 of 25 tasks completed (76%)",
+          "region": "page-header"
+        },
+        {
+          "bbox": {
+            "x": 984,
+            "y": 184,
+            "width": 180,
+            "height": 14
+          },
+          "quote": "3 / 6",
+          "note": "Per-list mini progress bar",
+          "region": "task-groups"
+        }
+      ],
+      "dims": {
+        "determinacy": "steps-completed",
+        "form": "linear-bar",
+        "coverage": "a-region",
+        "control": "no-control"
+      }
+    },
+    {
+      "id": "accordion",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 296,
+            "y": 179,
+            "width": 24,
+            "height": 24
+          },
+          "note": "Chevron 'Collapse' button per section; 'Collapse all' in toolbar",
+          "region": "task-groups"
+        }
+      ],
+      "dims": {
+        "policy": "many-at-a-time",
+        "header": [
+          "title-plus-summary-value",
+          "status-indicator"
+        ],
+        "toggle": [
+          "indicator-only",
+          "expand-all-control"
+        ]
+      }
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 279,
+            "y": 473,
+            "width": 934,
+            "height": 96
+          },
+          "quote": "1:1 Tomasz — 2026-11-09",
+          "note": "White outlined 8px-radius container per note",
+          "region": "task-groups"
+        }
+      ],
+      "dims": {
+        "media": "none",
+        "actions": "one-primary-action",
+        "shape": "horizontal",
+        "style": "outlined",
+        "target": "title-only"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 633,
+            "y": 489,
+            "width": 56,
+            "height": 17
+          },
+          "quote": "Note",
+          "note": "Light-blue 'Note' label chip; grey folder chips ('One-on-ones', 'Runbooks')",
+          "region": "task-groups"
+        }
+      ],
+      "dims": {
+        "meaning": "label",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 304,
+            "y": 222,
+            "width": 16,
+            "height": 16
+          },
+          "note": "Task completion checkboxes",
+          "region": "task-groups"
+        },
+        {
+          "bbox": {
+            "x": 683,
+            "y": 117,
+            "width": 302,
+            "height": 16
+          },
+          "quote": "Display tasks in notes (17)",
+          "region": "toolbar"
+        }
+      ],
+      "dims": {
+        "cardinality": "on-or-off",
+        "form": "checkbox-list",
+        "option": [
+          "label-only"
+        ],
+        "timing": "immediately"
+      }
+    },
+    {
+      "id": "filter-controls",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 507,
+            "y": 108,
+            "width": 124,
+            "height": 33
+          },
+          "note": "Search (filter by task, title or folder) and Filters button opening popover of chips: All, To do, High, Medium, Low, Overdue, With due date, Completed (verified live)",
+          "region": "toolbar"
+        }
+      ],
+      "dims": {
+        "placement": "toolbar-popover",
+        "types": [
+          "toggle-chips",
+          "text-match"
+        ],
+        "preview": "live-results",
+        "origin": "developer-defined"
+      }
+    },
+    {
+      "id": "view-switcher",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 551,
+            "y": 108,
+            "width": 36,
+            "height": 33
+          },
+          "note": "'Calendar view' icon toggles list to month calendar (verified live)",
+          "region": "toolbar"
+        }
+      ],
+      "dims": {
+        "views": [
+          "list",
+          "calendar"
+        ],
+        "form": "icon-toggle-group"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 759,
+            "y": 21,
+            "width": 85,
+            "height": 26
+          },
+          "quote": "Work",
+          "note": "Workspace switcher dropdown: Personal, Side projects, Archives, Work ✓, Manage workspaces (verified live)",
+          "region": "page-header"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click",
+        "structure": "sections",
+        "item": [
+          "label",
+          "checkmark-state",
+          "icon"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    },
+    {
+      "id": "modal-dialog",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "rationale": "Not visible in capture; live click on a row's calendar icon opens a 'Due date' modal with date, time, repeat select, remind-me switch, Cancel/Save.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1168,
+            "y": 336,
+            "width": 18,
+            "height": 18
+          },
+          "note": "Due date icon button that opens the modal",
+          "region": "task-groups"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "date-picker",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Only the trigger icon is in the capture; the date/time fields appear inside a modal live.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1168,
+            "y": 336,
+            "width": 18,
+            "height": 18
+          },
+          "note": "'Due date' button",
+          "region": "task-groups"
+        }
+      ],
+      "dims": {
+        "openBy": "calendar-icon",
+        "selection": "date-and-time"
+      }
+    },
+    {
+      "id": "calendar",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 551,
+            "y": 108,
+            "width": 36,
+            "height": 33
+          },
+          "note": "Calendar only an alternate view, not in capture"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "app with narrow left icon rail; centered single-column content: title + workspace switcher, overall progress bar, icon toolbar, then a vertical stack of collapsible per-note task cards",
+    "regions": [
+      "sidebar",
+      "page-header",
+      "toolbar",
+      "task-groups"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#f8f9fa",
+      "#ffffff",
+      "#333333",
+      "#007db8",
+      "#6b7280",
+      "#9ca3af",
+      "#e0e0e0",
+      "#e9ecef"
+    ],
+    "colorRoles": {
+      "background": "#f8f9fa",
+      "surface": "#ffffff",
+      "text": "#333333",
+      "primary": "#007db8",
+      "muted": "#6b7280",
+      "subtle": "#9ca3af",
+      "border": "#e0e0e0",
+      "track": "#e9ecef"
+    },
+    "typography": "System UI stack (-apple-system / Helvetica-like) throughout; 24px/600 page title, 16px/500 blue link list titles, 14–16px task text, 11–13px chips, counts and toolbar labels",
+    "typeScale": "Restrained: one 24px semibold title, 16px list titles and tasks, 11–13px metadata; hierarchy mostly from colour (blue titles, grey strikethrough done items) not size",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "clean",
+      "utilitarian",
+      "calm",
+      "minimal"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T02:04:45.630Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 10,
+    "usage": {
+      "input_tokens": 20,
+      "cache_creation_input_tokens": 36185,
+      "cache_read_input_tokens": 340804,
+      "output_tokens": 5233
+    }
+  },
+  "notes": "Single-accent design: #007db8 blue for titles, checked boxes, progress fills and active rail item; everything else greys on #f8f9fa. Completed tasks greyed (#9ca3af) with strikethrough. Each card header row: chevron, blue link title (opens source note), tiny grey folder chip, light-blue 'Note' chip, right-aligned 120px progress bar, 'n / m' count, eye-slash hide icon. Unchecked tasks show faint calendar icon at row end that opens a Due date modal (date, time, repeat, remind-me toggle). Filter popover uses rounded pill chips with coloured priority flags. Left 52px icon rail with grouped separators and collapse handle."
+}

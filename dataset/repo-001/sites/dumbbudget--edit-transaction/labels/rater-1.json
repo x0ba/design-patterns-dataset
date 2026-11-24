@@ -1,0 +1,603 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "dumbbudget--edit-transaction",
+    "url": "http://localhost:4418/",
+    "finalUrl": "http://localhost:4418/",
+    "status": 200,
+    "title": "DumbBudget",
+    "capturedAt": "2026-11-18T05:51:23.688Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 900
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "finance",
+    "domainNote": "self-hosted personal budgeting / income-expense tracker (DumbBudget)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/dumbbudget/explore.json",
+      "repo": {
+        "name": "DumbWareio/DumbBudget",
+        "url": "https://github.com/DumbWareio/DumbBudget",
+        "commit": "b9db5cb32d14b7b78675d8be054611d4829253ef",
+        "license": "GPL-3.0"
+      },
+      "view": {
+        "slug": "edit-transaction",
+        "name": "Edit transaction modal",
+        "description": "Modal for editing an income transaction (amount, description, notes, date, Update button, recurring toggle) over the income-filtered transaction list."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Centered 'DumbBudget' h1 with moon theme-toggle icon at top right",
+      "bbox": {
+        "x": 243,
+        "y": 28,
+        "width": 970,
+        "height": 63
+      },
+      "patterns": []
+    },
+    {
+      "id": "summary",
+      "role": "stats-strip",
+      "label": "Balance tile (red negative), Income and Expenses tiles with colored left borders and filter-funnel toggles",
+      "bbox": {
+        "x": 243,
+        "y": 123,
+        "width": 954,
+        "height": 131
+      },
+      "patterns": [
+        "stat-tile",
+        "filter-controls"
+      ]
+    },
+    {
+      "id": "toolbar",
+      "role": "toolbar",
+      "label": "Add Transaction primary button and start/end date range filter card",
+      "bbox": {
+        "x": 433,
+        "y": 286,
+        "width": 574,
+        "height": 140
+      },
+      "patterns": [
+        "filter-controls",
+        "date-picker"
+      ]
+    },
+    {
+      "id": "transactions",
+      "role": "list",
+      "label": "Transactions list of outlined horizontal cards (description, notes, date, colored amount, delete icon) with sort-by date/amount segmented control and direction toggle",
+      "bbox": {
+        "x": 243,
+        "y": 450,
+        "width": 954,
+        "height": 227
+      },
+      "patterns": [
+        "overview-detail",
+        "card",
+        "sort-control"
+      ]
+    },
+    {
+      "id": "export-footer",
+      "role": "footer",
+      "label": "CSV / PDF export button group",
+      "bbox": {
+        "x": 647,
+        "y": 741,
+        "width": 146,
+        "height": 50
+      },
+      "patterns": []
+    },
+    {
+      "id": "edit-modal",
+      "role": "modal",
+      "label": "Edit-transaction modal: Income/Expense segmented choice, amount/description/notes/date fields, Update button, Recurring checkbox",
+      "bbox": {
+        "x": 520,
+        "y": 231,
+        "width": 400,
+        "height": 439
+      },
+      "patterns": [
+        "modal-dialog",
+        "form",
+        "text-field",
+        "date-picker",
+        "choice-control"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "modal-dialog",
+      "status": "present",
+      "confidence": 0.95,
+      "dims": {
+        "form": "centered-small",
+        "openBy": [
+          "user-action"
+        ],
+        "dismissBy": [
+          "close-button",
+          "click-the-backdrop"
+        ],
+        "modality": "blocking",
+        "purpose": "form",
+        "onDismiss": "discard-silently"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 520,
+            "y": 231,
+            "width": 400,
+            "height": 439
+          },
+          "region": "edit-modal",
+          "note": "White centered dialog over black semi-transparent backdrop, × close; opened by clicking a transaction row. Live check: backdrop click closes, Escape does not.",
+          "quote": "Update"
+        }
+      ]
+    },
+    {
+      "id": "form",
+      "status": "present",
+      "confidence": 0.9,
+      "dims": {
+        "labels": "placeholder-as-label",
+        "columns": "single-column",
+        "grouping": "collapsible-optional-sections",
+        "prefill": "from-account-profile",
+        "help": [
+          "none"
+        ],
+        "commit": "submit-button"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 552,
+            "y": 311,
+            "width": 336,
+            "height": 343
+          },
+          "region": "edit-modal",
+          "note": "Single-column fields with only placeholders ('Notes (optional)'), prefilled with the stored transaction; Update submit; Recurring checkbox reveals interval number + unit select (verified live)",
+          "quote": "Recurring"
+        }
+      ]
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "supporting": [
+          "placeholder",
+          "prefix-or-suffix"
+        ],
+        "style": "outlined",
+        "inputType": "plain"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 564,
+            "y": 323,
+            "width": 312,
+            "height": 34
+          },
+          "region": "edit-modal",
+          "note": "Amount field with '$' prefix, outlined 1px #ccc, 6px radius",
+          "quote": "300"
+        },
+        {
+          "bbox": {
+            "x": 564,
+            "y": 415,
+            "width": 312,
+            "height": 66
+          },
+          "region": "edit-modal",
+          "note": "Resizable notes textarea",
+          "quote": "Rush job"
+        }
+      ]
+    },
+    {
+      "id": "date-picker",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "presentation": "calendar-popover",
+        "openBy": "calendar-icon",
+        "annotations": [
+          "none"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 564,
+            "y": 493,
+            "width": 312,
+            "height": 36
+          },
+          "region": "edit-modal",
+          "note": "Native date input with calendar icon, single date",
+          "quote": "11/14/2026"
+        },
+        {
+          "bbox": {
+            "x": 466,
+            "y": 374,
+            "width": 508,
+            "height": 36
+          },
+          "region": "toolbar",
+          "note": "Start/end native date inputs form a date range ('to')"
+        }
+      ]
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "segmented-control",
+        "option": [
+          "label-only"
+        ],
+        "timing": "on-submit",
+        "largeSets": "show-all"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 580,
+            "y": 247,
+            "width": 280,
+            "height": 40
+          },
+          "region": "edit-modal",
+          "note": "Pill segmented Income/Expense type selector, active segment white with blue text and shadow",
+          "quote": "Income"
+        },
+        {
+          "bbox": {
+            "x": 570,
+            "y": 608,
+            "width": 96,
+            "height": 20
+          },
+          "region": "edit-modal",
+          "note": "Recurring checkbox (on/off) reveals interval fields",
+          "quote": "Recurring"
+        }
+      ]
+    },
+    {
+      "id": "stat-tile",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "context": [
+          "label"
+        ],
+        "encoding": "number-only",
+        "window": "follows-the-dashboard-filter",
+        "drill": "none"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 243,
+            "y": 123,
+            "width": 954,
+            "height": 59
+          },
+          "region": "summary",
+          "note": "Balance tile, negative value in red",
+          "quote": "-$1,008.89"
+        },
+        {
+          "bbox": {
+            "x": 243,
+            "y": 190,
+            "width": 473,
+            "height": 64
+          },
+          "region": "summary",
+          "note": "Income tile, green left border, filter funnel toggle",
+          "quote": "$2,913.97"
+        },
+        {
+          "bbox": {
+            "x": 724,
+            "y": 190,
+            "width": 473,
+            "height": 64
+          },
+          "region": "summary",
+          "note": "Expenses tile, red left border",
+          "quote": "$3,922.86"
+        }
+      ]
+    },
+    {
+      "id": "filter-controls",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "types": [
+          "date-range",
+          "toggle-chips"
+        ],
+        "preview": "live-results",
+        "origin": "developer-defined",
+        "persistence": "per-query"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 433,
+            "y": 358,
+            "width": 574,
+            "height": 68
+          },
+          "region": "toolbar",
+          "note": "Start/end date range filter card"
+        },
+        {
+          "bbox": {
+            "x": 498,
+            "y": 198,
+            "width": 22,
+            "height": 22
+          },
+          "region": "summary",
+          "note": "'Filter by income' funnel toggle (active, green tint) — list shows only income items"
+        }
+      ],
+      "novel": [
+        {
+          "subdimension": "placement",
+          "description": "Filter toggles are embedded inside the summary stat tiles (funnel icon next to Income/Expenses label) plus a standalone date-range card above the list; none of sidebar/chip bar/modal/header/popover fits.",
+          "proposedValueId": "embedded-in-summary-tiles"
+        }
+      ]
+    },
+    {
+      "id": "sort-control",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "keys": "fixed-list",
+        "form": "segmented-tabs",
+        "default": "recency",
+        "indicator": "none"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1075,
+            "y": 464,
+            "width": 112,
+            "height": 38
+          },
+          "region": "transactions",
+          "note": "Icon segmented control: calendar (date, active) vs $ (amount), plus arrow direction toggle"
+        }
+      ]
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "media": "none",
+        "actions": "one-primary-action",
+        "shape": "horizontal",
+        "style": "outlined",
+        "target": "whole-card"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 255,
+            "y": 521,
+            "width": 930,
+            "height": 57
+          },
+          "region": "transactions",
+          "note": "Outlined row-card with title, date, green amount and red trash icon",
+          "quote": "Paycheck - Hollis + Reed Design"
+        },
+        {
+          "bbox": {
+            "x": 255,
+            "y": 586,
+            "width": 930,
+            "height": 79
+          },
+          "region": "transactions",
+          "note": "Card with notes line",
+          "quote": "Freelance - holiday poster, Powells"
+        }
+      ]
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.75,
+      "dims": {
+        "attributePlacement": [
+          "in-both-views"
+        ],
+        "openIn": "pop-up",
+        "overviewType": [
+          "list"
+        ],
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "whole-item",
+        "relationship": "one-to-one",
+        "detailMultiplicity": "one-at-a-time"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 243,
+            "y": 450,
+            "width": 954,
+            "height": 227
+          },
+          "region": "transactions",
+          "note": "Clicking a transaction card opens its editable detail in the modal (verified live)"
+        }
+      ]
+    },
+    {
+      "id": "tabs",
+      "status": "absent",
+      "confidence": 0.75,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 580,
+            "y": 247,
+            "width": 280,
+            "height": 40
+          },
+          "note": "Income/Expense pill looks like tabs but sets the transaction type; coded as choice-control"
+        }
+      ]
+    },
+    {
+      "id": "dashboard",
+      "status": "absent",
+      "confidence": 0.6,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 243,
+            "y": 123,
+            "width": 954,
+            "height": 131
+          },
+          "note": "Only three summary tiles above a transaction list; no widget grid or charts"
+        }
+      ]
+    },
+    {
+      "id": "data-table",
+      "status": "absent",
+      "confidence": 0.8,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 243,
+            "y": 450,
+            "width": 954,
+            "height": 227
+          },
+          "note": "Transactions rendered as card list, not columns"
+        }
+      ]
+    }
+  ],
+  "structure": {
+    "layout": "single centered white card (986px) on light grey page: centered title with theme toggle, balance + income/expense summary tiles, Add Transaction button, date-range filter, transaction list with sort controls, CSV/PDF export footer; edit-transaction modal open over a dark backdrop in the capture",
+    "regions": [
+      "header",
+      "summary",
+      "toolbar",
+      "transactions",
+      "export-footer",
+      "edit-modal"
+    ],
+    "density": "sparse"
+  },
+  "aesthetics": {
+    "palette": [
+      "#f5f5f5",
+      "#ffffff",
+      "#333333",
+      "#2196f3",
+      "#4caf50",
+      "#f44336",
+      "#cccccc",
+      "#000000"
+    ],
+    "colorRoles": {
+      "background": "#f5f5f5",
+      "surface": "#ffffff",
+      "text": "#333333",
+      "primary": "#2196f3",
+      "positive": "#4caf50",
+      "negative": "#f44336",
+      "border": "#cccccc",
+      "overlay": "#000000"
+    },
+    "typography": "System UI stack (-apple-system, renders as Ubuntu) for headings, amounts, list text and date inputs; Arial for buttons and some form inputs (browser default font on controls)",
+    "typeScale": "Small, flat scale: h1 24px/500, amounts 20px/700, section labels 14px/700, body 14px/400, dates/notes 12px; contrast mainly from weight and color rather than size",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "generous",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "minimal",
+      "utilitarian",
+      "clean",
+      "friendly"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T05:53:02.831Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 14,
+    "usage": {
+      "input_tokens": 28,
+      "cache_creation_input_tokens": 45199,
+      "cache_read_input_tokens": 557453,
+      "output_tokens": 6437
+    }
+  },
+  "notes": "Material-ish color tokens (#2196f3 blue, #4caf50 green, #f44336 red) on a plain white card centered on #f5f5f5. Income/Expenses tiles have 4px colored left borders; amounts colored green/red by type; trash icons in light red. Pill segmented controls (100px radius, grey track, white active pill with shadow) used for both the modal's Income/Expense switch and the list's date/amount sort. Filter funnel icons live inside the summary tiles. Capture shows the edit modal open with a ~50% black backdrop; 'Add Transaction' opens the same modal. Export via CSV/PDF button group at the bottom. Delete click showed no visible in-page confirmation (possibly native confirm). Moon icon toggles dark theme."
+}

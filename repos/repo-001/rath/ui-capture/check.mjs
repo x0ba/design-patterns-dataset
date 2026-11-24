@@ -1,0 +1,14 @@
+import { chromium } from '@playwright/test';
+const url = process.argv[2] || 'http://localhost:5460/';
+const browser = await chromium.launch({ executablePath: process.env.CHROME_BIN });
+const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+const errs = [];
+page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') errs.push(m.type() + ': ' + m.text().slice(0, 200)); });
+page.on('pageerror', (e) => errs.push('pageerror: ' + e.message));
+page.on('requestfailed', (r) => errs.push('reqfailed: ' + r.url()));
+await page.goto(url);
+await page.waitForTimeout(6000);
+await page.screenshot({ path: process.argv[3] || 'shot-home.png' });
+console.log(errs.slice(0, 30).join('\n'));
+console.log((await page.innerText('body')).slice(0, 1500));
+await browser.close();

@@ -1,0 +1,15 @@
+const base = { width: 16, height: 16, viewBox: '0 0 16 16', fill: 'none', stroke: 'currentColor', strokeWidth: 1.8, strokeLinecap: 'round', strokeLinejoin: 'round', 'aria-hidden': true }
+
+export const Check = (p) => (<svg {...base} {...p}><path d="M3 8.5l3.2 3.2L13 4.8" /></svg>)
+export const Cross = (p) => (<svg {...base} {...p}><path d="M4 4l8 8M12 4l-8 8" /></svg>)
+export const Alert = (p) => (<svg {...base} {...p}><path d="M8 2.2l6.2 11H1.8z" /><path d="M8 6.6v3.2M8 11.7v.1" /></svg>)
+export const Search = (p) => (<svg {...base} {...p}><circle cx="7" cy="7" r="4.4" /><path d="M10.4 10.4L14 14" /></svg>)
+export const Arrow = (p) => (<svg {...base} {...p}><path d="M3 8h10M9 4l4 4-4 4" /></svg>)
+export const ArrowLeft = (p) => (<svg {...base} {...p}><path d="M13 8H3M7 4L3 8l4 4" /></svg>)
+export const Pencil = (p) => (<svg {...base} {...p}><path d="M2.5 13.5l.8-3.2 7.4-7.4 2.4 2.4-7.4 7.4z" /></svg>)
+export const Trash = (p) => (<svg {...base} {...p}><path d="M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.6 8.5h5.8l.6-8.5" /></svg>)
+export const Redo = (p) => (<svg {...base} {...p}><path d="M13 3.5v3.3H9.7" /><path d="M12.7 6.4A5 5 0 1 0 13 8.5" /></svg>)
+export const Doc = (p) => (<svg {...base} {...p}><path d="M4 1.8h5.2L12 4.6v9.6H4z" /><path d="M9 1.8v3h3" /></svg>)
+export const Link = (p) => (<svg {...base} {...p}><path d="M6.8 9.2a3 3 0 0 0 4.2 0l2-2a3 3 0 0 0-4.2-4.2l-.8.8" /><path d="M9.2 6.8a3 3 0 0 0-4.2 0l-2 2a3 3 0 0 0 4.2 4.2l.8-.8" /></svg>)
+export const Spinner = (p) => (<svg {...base} {...p} className="spin"><path d="M8 2a6 6 0 1 0 6 6" /></svg>)
+export const Undo = (p) => (<svg {...base} {...p}><path d="M3 3.5v3.3h3.3" /><path d="M3.3 6.4A5 5 0 1 1 3 8.5" /></svg>)

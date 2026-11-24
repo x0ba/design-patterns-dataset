@@ -1,0 +1,259 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "bubo-rss--feed-list",
+    "url": "http://bubo-rss.localhost:4319/",
+    "finalUrl": "http://bubo-rss.localhost:4319/",
+    "status": 200,
+    "title": "🦉 Bubo Reader",
+    "capturedAt": "2026-11-18T01:34:42.236Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1443
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "news-publishing",
+    "domainNote": "self-hosted static RSS/Atom feed aggregator (Bubo Reader)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/bubo-rss/explore.json",
+      "repo": {
+        "name": "georgemandis/bubo-rss",
+        "url": "https://github.com/georgemandis/bubo-rss",
+        "commit": "d9857c501e58092f3f208463ece64984588c273c",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "feed-list",
+        "name": "Feed list (collapsed)",
+        "description": "The reader's single page: feeds grouped under headings, each a collapsed disclosure showing feed title and URL, with errors and footer at the bottom."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Owl emoji plus 'Bubo Reader' h1 title",
+      "bbox": {
+        "x": 8,
+        "y": 24,
+        "width": 1424,
+        "height": 42
+      },
+      "patterns": []
+    },
+    {
+      "id": "feed-sections",
+      "role": "content",
+      "label": "Five categorized groups (Developer News, Blogs, Design, Reading & Misc, My GitHub Projects) of collapsible per-feed disclosures showing feed name + gray feed URL",
+      "bbox": {
+        "x": 8,
+        "y": 90,
+        "width": 1424,
+        "height": 1030
+      },
+      "patterns": [
+        "accordion",
+        "feed"
+      ]
+    },
+    {
+      "id": "errors",
+      "role": "status-section",
+      "label": "'Errors' heading with a bulleted list of feeds that failed to fetch/parse",
+      "bbox": {
+        "x": 8,
+        "y": 1141,
+        "width": 1424,
+        "height": 150
+      },
+      "patterns": []
+    },
+    {
+      "id": "footer",
+      "role": "footer",
+      "label": "hr separator, last-updated timestamp, powered-by credit links and sponsor link",
+      "bbox": {
+        "x": 8,
+        "y": 1340,
+        "width": 1424,
+        "height": 95
+      },
+      "patterns": []
+    }
+  ],
+  "patterns": [
+    {
+      "id": "accordion",
+      "status": "present",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 144,
+            "width": 680,
+            "height": 168
+          },
+          "quote": "Changelog Master Feed (https://changelog.com/feed)",
+          "note": "Native <details>/<summary> disclosures with triangle markers; clicking a header reveals that feed's dated item links in place",
+          "region": "feed-sections"
+        },
+        {
+          "bbox": {
+            "x": 8,
+            "y": 1098,
+            "width": 1424,
+            "height": 21
+          },
+          "quote": "Recent Commits to circuit-playground-midi-multi-tool:master",
+          "note": "Last disclosure on page",
+          "region": "feed-sections"
+        }
+      ],
+      "dims": {
+        "policy": "many-at-a-time",
+        "header": [
+          "title-only"
+        ],
+        "toggle": [
+          "header-click",
+          "keyboard"
+        ],
+        "memory": "resets"
+      }
+    },
+    {
+      "id": "feed",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "rationale": "It is an RSS reader whose content is chronological headline items from subscribed sources, but items are grouped per source inside collapsed disclosures rather than one continuous merged stream.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 90,
+            "width": 1424,
+            "height": 1030
+          },
+          "quote": "Developer News",
+          "note": "Subscribed feeds; expanding one shows date-ordered headline links (e.g. '11/7/2026 - Release Notes for Safari Technology Preview 232')",
+          "region": "feed-sections"
+        }
+      ],
+      "dims": {
+        "density": "headline",
+        "heterogeneity": [
+          "uniform-posts"
+        ],
+        "ordering": "chronological",
+        "sources": [
+          "followed-accounts"
+        ],
+        "arrangement": "single-column"
+      }
+    },
+    {
+      "id": "banner",
+      "status": "absent",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 1141,
+            "width": 1424,
+            "height": 150
+          },
+          "quote": "There were errors trying to parse these feeds:",
+          "note": "Plain unstyled section at page bottom, not a banner-style alert"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "tree-view",
+      "status": "absent",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 144,
+            "width": 680,
+            "height": 168
+          },
+          "note": "Only one disclosure level under static h2 headings; better coded as accordion"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "single-column unstyled static HTML page: h1 title, h2 category sections each holding a stack of <details> disclosures (one per feed) that expand to dated link lists, an errors section, and an hr-separated footer",
+    "regions": [
+      "header",
+      "feed-sections",
+      "errors",
+      "footer"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#000000",
+      "#0000ee",
+      "#aaaaaa"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "text": "#000000",
+      "primary": "#0000ee",
+      "muted": "#aaaaaa"
+    },
+    "typography": "system-ui throughout (browser defaults): bold headings, regular body; links in default browser blue underline",
+    "typeScale": "h1 36px bold, h2 27px bold, everything else 18px regular; hierarchy purely from browser-default heading sizes",
+    "shape": "sharp",
+    "elevation": "flat",
+    "borders": "none",
+    "imagery": [
+      "none"
+    ],
+    "iconStyle": "none",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "minimal",
+      "brutalist",
+      "utilitarian",
+      "technical"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T01:35:29.313Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 7,
+    "usage": {
+      "input_tokens": 14,
+      "cache_creation_input_tokens": 18249,
+      "cache_read_input_tokens": 166932,
+      "output_tokens": 4591
+    }
+  },
+  "notes": "Essentially unstyled HTML: browser-default <details> triangles, default link blue #0000ee, gray (#aaaaaa) feed URLs after each feed title, an owl emoji as the only graphic, an <hr> before the footer. All feed items collapsed by default; expanded panels list 'M/D/YYYY - Title' links newest first. Errors from failed feed fetches are shown verbatim as raw error strings. Footer shows build timestamp ('Last updated ...') revealing it's a statically generated page."
+}

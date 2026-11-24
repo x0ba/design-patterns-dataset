@@ -1,0 +1,308 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "ancientbeast--battlefield",
+    "url": "http://ancientbeast.localhost:4319/",
+    "finalUrl": "http://ancientbeast.localhost:4319/",
+    "status": 200,
+    "title": "Ancient Beast v0.6-α",
+    "capturedAt": "2026-11-18T01:41:55.656Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 900
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "games",
+    "domainNote": "browser-based turn-based hex-grid tactics game (Ancient Beast), mid-match battle screen",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/ancientbeast/explore.json",
+      "repo": {
+        "name": "FreezingMoon/AncientBeast",
+        "url": "https://github.com/FreezingMoon/AncientBeast",
+        "commit": "2dad015855a07e3d3f75bc15ba892846059c7853",
+        "license": "AGPL-3.0"
+      },
+      "view": {
+        "slug": "battlefield",
+        "name": "Battlefield – player's turn",
+        "description": "Hex battlefield in round 8 with summoned creatures, the turn queue along the bottom, the active Swampler's ability buttons on the left, game controls on the right and the combat log."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "top-frame",
+      "role": "frame",
+      "label": "Black textured skull-pattern frame strip above the stage",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 45
+      },
+      "patterns": []
+    },
+    {
+      "id": "battlefield",
+      "role": "game-stage",
+      "label": "Painted desert battlefield canvas with creatures, health pills under each unit, red hex highlights and floating combat text",
+      "bbox": {
+        "x": 0,
+        "y": 45,
+        "width": 1440,
+        "height": 755
+      },
+      "patterns": [
+        "badge"
+      ]
+    },
+    {
+      "id": "combat-log",
+      "role": "log",
+      "label": "Rounded translucent pill showing the latest timestamped combat log line",
+      "bbox": {
+        "x": 490,
+        "y": 757,
+        "width": 460,
+        "height": 40
+      },
+      "patterns": [
+        "activity-log"
+      ]
+    },
+    {
+      "id": "control-column",
+      "role": "toolbar",
+      "label": "Right-edge vertical stack of square icon buttons (music, fast-forward, timer, fullscreen) with a purple energy meter",
+      "bbox": {
+        "x": 1340,
+        "y": 480,
+        "width": 100,
+        "height": 320
+      },
+      "patterns": []
+    },
+    {
+      "id": "turn-queue",
+      "role": "hud",
+      "label": "Active-unit ability icon with health/energy bars and a row of creature portraits in turn order, captioned Round 4, Queued, Sickened, Protected, health counts",
+      "bbox": {
+        "x": 0,
+        "y": 720,
+        "width": 820,
+        "height": 180
+      },
+      "patterns": [
+        "badge"
+      ]
+    },
+    {
+      "id": "player-panel",
+      "role": "hud",
+      "label": "Player stat panel: Player1, 1 Points, 42 Plasma, 3 / 4 Units",
+      "bbox": {
+        "x": 1340,
+        "y": 800,
+        "width": 100,
+        "height": 100
+      },
+      "patterns": []
+    }
+  ],
+  "patterns": [
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.75,
+      "dims": {
+        "meaning": "status",
+        "aggregation": "per-item"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 260,
+            "y": 880,
+            "width": 560,
+            "height": 20
+          },
+          "quote": "Sickened",
+          "note": "Status captions under the turn-queue portraits (Queued, Sickened, Protected) and health counts like 26/37",
+          "region": "turn-queue"
+        },
+        {
+          "bbox": {
+            "x": 420,
+            "y": 563,
+            "width": 180,
+            "height": 20
+          },
+          "quote": "131",
+          "note": "Health count pills attached under each creature, outlined in team colour",
+          "region": "battlefield"
+        }
+      ]
+    },
+    {
+      "id": "activity-log",
+      "status": "present",
+      "confidence": 0.7,
+      "dims": {
+        "detail": "one-line-summary",
+        "subject": "the-whole-system",
+        "aggregation": "every-event",
+        "actions": "read-only"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 490,
+            "y": 757,
+            "width": 460,
+            "height": 40
+          },
+          "quote": "00:00:19 Active Creature: Uncle Fungus",
+          "note": "Collapsed combat log showing the latest timestamped event; the accessibility tree holds the full log of every event from round 1 onward"
+        }
+      ],
+      "novel": [
+        {
+          "subdimension": "presentation",
+          "description": "A collapsed single-line pill over the game stage that shows only the newest entry; the full history is in the DOM",
+          "proposedValueId": "collapsed-latest-line"
+        }
+      ]
+    },
+    {
+      "id": "toast",
+      "status": "absent",
+      "confidence": 0.6,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 500,
+            "y": 160,
+            "width": 200,
+            "height": 200
+          },
+          "note": "Floating combat text (Poisonous Vine, -27) is in-game feedback drawn on the canvas, not a UI toast"
+        }
+      ]
+    },
+    {
+      "id": "progress-indicator",
+      "status": "absent",
+      "confidence": 0.6,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 720,
+            "width": 20,
+            "height": 80
+          },
+          "note": "The vertical red/yellow bars are health and energy resource meters, not progress of work"
+        }
+      ]
+    },
+    {
+      "id": "stat-tile",
+      "status": "absent",
+      "confidence": 0.6,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1340,
+            "y": 800,
+            "width": 100,
+            "height": 100
+          },
+          "note": "The player panel lists several game stats, not a single KPI tile"
+        }
+      ]
+    }
+  ],
+  "structure": {
+    "layout": "Full-viewport canvas game: a black textured frame with a painted desert battlefield stage, a bottom-left turn-order portrait queue and active-unit ability icon, a centred collapsed combat-log line, a right-edge vertical button column (music, fast-forward, skip-turn timer, fullscreen) and a bottom-right player stat panel",
+    "regions": [
+      "top-frame",
+      "battlefield",
+      "combat-log",
+      "control-column",
+      "turn-queue",
+      "player-panel"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#000000",
+      "#d9a35f",
+      "#ffffff",
+      "#dddddd",
+      "#8888ff",
+      "#ff5555",
+      "#ffff00",
+      "#b8860b",
+      "#6b8e23",
+      "#4a4a6a"
+    ],
+    "colorRoles": {
+      "background": "#000000",
+      "text": "#ffffff",
+      "muted": "#dddddd",
+      "primary": "#8888ff",
+      "accent": "#ffff00",
+      "danger": "#ff5555",
+      "surface": "#4a4a6a",
+      "border": "#b8860b"
+    },
+    "typography": "Play (techno sans-serif) throughout: queue captions, log line and player panel; the floating combat text on the canvas is yellow with a dark outline",
+    "typeScale": "Small HUD text: 14px captions and panel text, 18px log line, 12px timestamps; little hierarchy beyond colour",
+    "shape": "mixed",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "illustration",
+      "iconography"
+    ],
+    "iconStyle": "filled",
+    "whitespace": "tight",
+    "backgroundTreatment": "image",
+    "mood": [
+      "fantasy",
+      "gritty",
+      "gamey",
+      "dramatic"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T01:43:52.400Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 11,
+    "usage": {
+      "input_tokens": 22,
+      "cache_creation_input_tokens": 22520,
+      "cache_read_input_tokens": 310496,
+      "output_tokens": 5769
+    }
+  },
+  "notes": "This is a game rather than a web page: nearly everything is drawn on one 1440x810 canvas inside a black skull-textured frame. Team colours are blue (#8888ff) for player 1 and red (#ff5555) for player 2, used on portrait outlines, health pills and log names. Status captions use coloured fills: olive for Sickened, dark gold for Protected, slate for Queued. The square HUD buttons on the right look like brown leather or parchment. The combat log is collapsed to its latest line. There is no codebook entry for a game HUD or turn-order queue, so I filed a proposal (game-hud). The live copy restarts the match, so it couldn't be compared state for state."
+}

@@ -1,0 +1,777 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "gen-002",
+  "site": {
+    "slug": "hobby-newsletter-ai-drafting",
+    "url": "http://hobby-newsletter-ai-drafting.localhost:4318/",
+    "finalUrl": "http://hobby-newsletter-ai-drafting.localhost:4318/",
+    "status": 200,
+    "title": "Eastside Ledger Desk — What Council Did, review",
+    "capturedAt": "2026-11-17T22:10:58.027Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1212
+    },
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "ai-tools",
+    "domainNote": "AI-drafted local newsletter section; editor verifies each claim against source minutes/press releases before publishing",
+    "provenance": {
+      "source": "generated",
+      "generation": "generated/gen-002/hobby-newsletter-ai-drafting/generation.json",
+      "generator": {
+        "id": "sonnet",
+        "model": "claude-sonnet-5-5",
+        "effort": "high"
+      },
+      "brief": {
+        "domain": "news-publishing",
+        "archetype": "delegate-ai",
+        "context": "solo-hobbyist",
+        "product": "Eastside Ledger Desk"
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Dark green top bar: app identity, breadcrumb trail, send time/audience, 'Assembled section' button",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 60
+      },
+      "patterns": [
+        "breadcrumbs"
+      ]
+    },
+    {
+      "id": "instruction-strip",
+      "role": "context-strip",
+      "label": "Your instruction strip quoting the original natural-language goal given to the assistant, with Show all",
+      "bbox": {
+        "x": 0,
+        "y": 60,
+        "width": 1440,
+        "height": 39
+      },
+      "patterns": [
+        "agent-run"
+      ]
+    },
+    {
+      "id": "left-sidebar",
+      "role": "sidebar",
+      "label": "Word budget tile with segmented bar vs 380 limit, 'Before this can go out' checklist, tabs Draft items / Work log, list of 7 draft item cards with confidence badges and warnings",
+      "bbox": {
+        "x": 0,
+        "y": 99,
+        "width": 320,
+        "height": 1113
+      },
+      "patterns": [
+        "stat-tile",
+        "task-list",
+        "tabs",
+        "badge",
+        "card",
+        "overview-detail",
+        "split-pane",
+        "agent-run"
+      ]
+    },
+    {
+      "id": "item-detail",
+      "role": "main",
+      "label": "Item 1 of 7 detail: title, confidence badge, prev/next, assistant's note, numbered claim cards with source citation chips and verify actions, sticky footer Ask to redo / Reject / Approve",
+      "bbox": {
+        "x": 320,
+        "y": 99,
+        "width": 620,
+        "height": 1113
+      },
+      "patterns": [
+        "overview-detail",
+        "card",
+        "ai-provenance",
+        "approval-flow",
+        "badge"
+      ]
+    },
+    {
+      "id": "source-panel",
+      "role": "source-viewer",
+      "label": "Source documents: search field, five document tabs, page chips with legend, rendered press release with highlighted cited span, page N of M, dark sticky claim verify bar",
+      "bbox": {
+        "x": 940,
+        "y": 99,
+        "width": 500,
+        "height": 1113
+      },
+      "patterns": [
+        "text-field",
+        "tabs",
+        "ai-provenance",
+        "pagination"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "ai-provenance",
+      "status": "present",
+      "confidence": 0.9,
+      "dims": {
+        "disclosure": [
+          "citations",
+          "verification-highlighting",
+          "tool-calls-used"
+        ],
+        "placement": "inline-beside-the-span",
+        "openBy": [
+          "click-citation"
+        ],
+        "trustCues": [
+          "source-count",
+          "conflict-among-sources",
+          "unverified-claim-mark"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 405,
+            "y": 382,
+            "width": 168,
+            "height": 25
+          },
+          "quote": "Press: Leaves Nov 9 p. 1",
+          "note": "Per-claim citation chip opens the cited page",
+          "region": "item-detail"
+        },
+        {
+          "bbox": {
+            "x": 989,
+            "y": 530,
+            "width": 370,
+            "height": 78
+          },
+          "quote": "Beginning Monday, Nov. 23, the Department of Public Works will collect leaves on a two-zone rotation",
+          "note": "Cited span highlighted in yellow in the source document",
+          "region": "source-panel"
+        },
+        {
+          "bbox": {
+            "x": 14,
+            "y": 713,
+            "width": 291,
+            "height": 80
+          },
+          "quote": "sources disagree",
+          "note": "Conflict and 'no source' warnings on draft items",
+          "region": "left-sidebar"
+        },
+        {
+          "bbox": {
+            "x": 346,
+            "y": 225,
+            "width": 567,
+            "height": 67
+          },
+          "quote": "All four claims come straight from the city’s leaf-collection release.",
+          "note": "Assistant's note on sourcing",
+          "region": "item-detail"
+        }
+      ]
+    },
+    {
+      "id": "agent-run",
+      "status": "present",
+      "confidence": 0.7,
+      "dims": {
+        "brief": [
+          "natural-language-goal",
+          "budget-or-step-limit"
+        ],
+        "structure": "linear-trace",
+        "control": [
+          "start-from-a-prompt",
+          "schedule-or-retry"
+        ],
+        "feedback": [
+          "streaming-step-log",
+          "errors-and-retries"
+        ],
+        "approvals": "approve-final-diff-only"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 60,
+            "width": 1440,
+            "height": 39
+          },
+          "quote": "Read the three council and planning meeting minutes from this week plus the two city press releases, and draft a “What Council Did” section",
+          "note": "Natural-language goal given to the assistant",
+          "region": "instruction-strip"
+        },
+        {
+          "bbox": {
+            "x": 143,
+            "y": 493,
+            "width": 120,
+            "height": 41
+          },
+          "quote": "Work log 11",
+          "note": "Tab revealing a timestamped step trace of what the assistant did (verified live), incl. skipped scanned pages",
+          "region": "left-sidebar"
+        },
+        {
+          "bbox": {
+            "x": 402,
+            "y": 1160,
+            "width": 216,
+            "height": 38
+          },
+          "quote": "Ask the assistant to redo",
+          "note": "Retry control; per-item approve/reject of the finished output",
+          "region": "item-detail"
+        }
+      ]
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "attributePlacement": [
+          "in-both-views",
+          "in-detail-view-only"
+        ],
+        "abstraction": [
+          "summary",
+          "category",
+          "style"
+        ],
+        "truncation": "full-text",
+        "relationship": "many-overviews-to-one-detail-view",
+        "recursion": [
+          "overview-inside-detail-view"
+        ],
+        "openIn": "side-by-side",
+        "overviewType": [
+          "list"
+        ],
+        "detailMultiplicity": "one-at-a-time",
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "whole-item",
+        "attributeScope": [
+          "per-item",
+          "per-collection"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 14,
+            "y": 544,
+            "width": 291,
+            "height": 647
+          },
+          "quote": "Leaf pickup goes to two zones",
+          "note": "List of 7 draft items; selected item outlined",
+          "region": "left-sidebar"
+        },
+        {
+          "bbox": {
+            "x": 346,
+            "y": 119,
+            "width": 567,
+            "height": 90
+          },
+          "quote": "Item 1 of 7",
+          "note": "Detail of selected item with prev/next",
+          "region": "item-detail"
+        },
+        {
+          "bbox": {
+            "x": 29,
+            "y": 189,
+            "width": 261,
+            "height": 30
+          },
+          "note": "Word-budget segments 1–7 are a second overview that opens items",
+          "region": "left-sidebar"
+        }
+      ]
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "media": "none",
+        "actions": "none",
+        "shape": "horizontal",
+        "style": "outlined",
+        "target": "whole-card"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 14,
+            "y": 628,
+            "width": 291,
+            "height": 78
+          },
+          "quote": "Fenwick Avenue water main contract",
+          "note": "Draft item card: number, title, words/checked, confidence badge; whole card is a button",
+          "region": "left-sidebar"
+        },
+        {
+          "bbox": {
+            "x": 346,
+            "y": 527,
+            "width": 567,
+            "height": 140
+          },
+          "quote": "Zone A, north of Fenwick Avenue",
+          "note": "Claim cards in detail; active claim card expands with an action row",
+          "region": "item-detail"
+        }
+      ]
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "meaning": "status",
+        "overflow": "exact-count",
+        "aggregation": "per-item"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 250,
+            "y": 554,
+            "width": 44,
+            "height": 20
+          },
+          "quote": "High",
+          "note": "Confidence status pill on each draft item",
+          "region": "left-sidebar"
+        },
+        {
+          "bbox": {
+            "x": 427,
+            "y": 123,
+            "width": 112,
+            "height": 20
+          },
+          "quote": "High confidence",
+          "region": "item-detail"
+        },
+        {
+          "bbox": {
+            "x": 105,
+            "y": 502,
+            "width": 26,
+            "height": 20
+          },
+          "quote": "7",
+          "note": "Count badges on tabs",
+          "region": "left-sidebar"
+        }
+      ]
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.9,
+      "dims": {
+        "placement": "top",
+        "overflow": "shrink",
+        "label": [
+          "text",
+          "badge-count"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 14,
+            "y": 493,
+            "width": 291,
+            "height": 41
+          },
+          "quote": "Draft items 7 Work log 11",
+          "note": "Underline tabs switching list/log (verified live)",
+          "region": "left-sidebar"
+        },
+        {
+          "bbox": {
+            "x": 956,
+            "y": 163,
+            "width": 468,
+            "height": 45
+          },
+          "quote": "Council Nov 10 · 14 pp.",
+          "note": "Document tabs with truncated labels switch the viewer (verified live)",
+          "region": "source-panel"
+        }
+      ]
+    },
+    {
+      "id": "breadcrumbs",
+      "status": "present",
+      "confidence": 0.75,
+      "dims": {
+        "type": "location",
+        "truncation": "full-path",
+        "placement": "in-the-top-bar"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 294,
+            "y": 20,
+            "width": 614,
+            "height": 20
+          },
+          "quote": "Issue of Thu, Nov 19 / What Council Did / Review the assistant’s draft",
+          "note": "nav 'Where you are'; plain-text steps",
+          "region": "header"
+        }
+      ]
+    },
+    {
+      "id": "stat-tile",
+      "status": "present",
+      "confidence": 0.7,
+      "dims": {
+        "context": [
+          "label",
+          "target"
+        ],
+        "encoding": "bullet-chart-against-target",
+        "drill": "open-a-detail-chart"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 14,
+            "y": 111,
+            "width": 291,
+            "height": 183
+          },
+          "quote": "512 / 380 words 132 over your house limit",
+          "note": "Word count vs house limit, segmented bar per item with 380 marker",
+          "region": "left-sidebar"
+        }
+      ]
+    },
+    {
+      "id": "task-list",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "'Before this can go out' is a checklist of publish blockers with status rings; could equally be read as policy checks of the approval flow rather than a task list.",
+      "dims": {
+        "rowFields": [
+          "title-only"
+        ],
+        "itemRichness": "checkbox-item",
+        "timeBinding": "no-dates"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 14,
+            "y": 303,
+            "width": 291,
+            "height": 178
+          },
+          "quote": "BEFORE THIS CAN GO OUT",
+          "region": "left-sidebar"
+        }
+      ]
+    },
+    {
+      "id": "approval-flow",
+      "status": "present",
+      "confidence": 0.6,
+      "dims": {
+        "routing": "single-approver",
+        "surface": [
+          "request-summary",
+          "evidence-attachments",
+          "policy-checks"
+        ],
+        "actions": [
+          "approve",
+          "reject",
+          "request-changes"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 402,
+            "y": 1160,
+            "width": 515,
+            "height": 38
+          },
+          "quote": "Ask the assistant to redo Reject item Approve item",
+          "note": "Per-item approve/reject/request-changes; approve disabled until claims checked",
+          "region": "item-detail"
+        },
+        {
+          "bbox": {
+            "x": 14,
+            "y": 303,
+            "width": 291,
+            "height": 178
+          },
+          "quote": "0 of 7 items decided",
+          "note": "Gating checks before publish",
+          "region": "left-sidebar"
+        }
+      ]
+    },
+    {
+      "id": "split-pane",
+      "status": "present",
+      "confidence": 0.65,
+      "dims": {
+        "orientation": "side-by-side",
+        "sizing": "fixed",
+        "relationship": "linked-selection"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 99,
+            "width": 1440,
+            "height": 1113
+          },
+          "note": "Three independently scrolling fixed panes; selecting item/claim drives detail and source",
+          "region": "item-detail"
+        }
+      ]
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "supporting": [
+          "placeholder"
+        ],
+        "style": "outlined"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 956,
+            "y": 111,
+            "width": 468,
+            "height": 42
+          },
+          "quote": "Search all five documents for a word or phrase",
+          "region": "source-panel"
+        }
+      ]
+    },
+    {
+      "id": "pagination",
+      "status": "present",
+      "confidence": 0.7,
+      "dims": {
+        "mechanism": "numbered-pages",
+        "position": "page-n-of-m",
+        "pageSize": "fixed"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 956,
+            "y": 262,
+            "width": 31,
+            "height": 29
+          },
+          "quote": "1",
+          "note": "Page chips (14 for Council minutes, verified live)",
+          "region": "source-panel"
+        },
+        {
+          "bbox": {
+            "x": 1113,
+            "y": 1074,
+            "width": 154,
+            "height": 28
+          },
+          "quote": "Page 1 of 1",
+          "region": "source-panel"
+        }
+      ]
+    },
+    {
+      "id": "app-shell",
+      "status": "absent",
+      "confidence": 0.6,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 60
+          },
+          "note": "Top bar has identity and breadcrumb but no global navigation destinations; task-focused review screen"
+        }
+      ]
+    },
+    {
+      "id": "annotation",
+      "status": "absent",
+      "confidence": 0.7,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 989,
+            "y": 530,
+            "width": 370,
+            "height": 78
+          },
+          "note": "Highlights show citation provenance, not collaborative comments"
+        }
+      ]
+    },
+    {
+      "id": "chart",
+      "status": "absent",
+      "confidence": 0.6,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 29,
+            "y": 189,
+            "width": 261,
+            "height": 30
+          },
+          "note": "Segmented word bar coded as stat-tile bullet chart instead"
+        }
+      ]
+    },
+    {
+      "id": "banner",
+      "status": "absent",
+      "confidence": 0.6,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 60,
+            "width": 1440,
+            "height": 39
+          },
+          "note": "Instruction strip is context, not an attention condition"
+        }
+      ]
+    }
+  ],
+  "structure": {
+    "layout": "Full-height three-pane review workspace under a dark top bar and an instruction strip: left sidebar (word budget, publish checklist, tabbed draft-items list / work log), center item detail with claim cards and a sticky approve/reject footer, right source-document viewer with search, document tabs, page chips and highlighted cited passage plus a dark sticky verify bar",
+    "regions": [
+      "header",
+      "instruction-strip",
+      "left-sidebar",
+      "item-detail",
+      "source-panel"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#efeadf",
+      "#fbf9f3",
+      "#ffffff",
+      "#1d3a2e",
+      "#22503d",
+      "#1c2823",
+      "#46544d",
+      "#9a2a22",
+      "#fde28a",
+      "#d8d0bd",
+      "#1f4e79"
+    ],
+    "colorRoles": {
+      "background": "#efeadf",
+      "surface": "#fbf9f3",
+      "text": "#1c2823",
+      "muted": "#46544d",
+      "primary": "#1d3a2e",
+      "accent": "#fde28a",
+      "danger": "#9a2a22",
+      "border": "#d8d0bd",
+      "link": "#1f4e79"
+    },
+    "typography": "Avenir Next for UI chrome, labels, buttons, badges and uppercase tracked eyebrow labels; Iowan Old Style serif for the app wordmark, item title, claim text and the rendered source documents (newspaper/document voice)",
+    "typeScale": "Moderate contrast: 32px serif word count, 27px serif H1, 18px serif claim/source body, 15px sans UI body, 12–14px sans meta, 12px uppercase tracked section labels; weights 400/600/700",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "editorial",
+      "calm",
+      "trustworthy",
+      "warm",
+      "newsroom",
+      "meticulous"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-17T22:13:32.771Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 13,
+    "usage": {
+      "input_tokens": 26,
+      "cache_creation_input_tokens": 52886,
+      "cache_read_input_tokens": 587060,
+      "output_tokens": 14085
+    }
+  },
+  "notes": "Warm paper-toned newsroom palette (cream #efeadf, deep forest green bars #1d3a2e) with serif document text versus sans UI. Core idea: human verification of AI-drafted claims — each claim card carries a source chip, Source-says-this/Doesn't-match buttons, and the right pane highlights the exact cited span in yellow (#fde28a) with a legend (cited by item 1 / hatched 'unreadable scan' pages). Word-budget bar segments each item by length against a 380-word house-limit marker. Approve is disabled until claims are checked; a dark sticky bar at bottom-right mirrors the active claim's verify actions. Work log tab holds the assistant's timestamped step trace including skipped scanned pages."
+}

@@ -1,0 +1,736 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "gbdraw--linear-workspace",
+    "url": "http://gbdraw.localhost:4319/",
+    "finalUrl": "http://gbdraw.localhost:4319/",
+    "status": 200,
+    "title": "gbdraw Web App",
+    "capturedAt": "2026-11-18T01:49:54.764Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1469
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "science-research",
+    "domainNote": "bioinformatics web app for drawing circular/linear genome diagrams with pairwise comparisons (gbdraw)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/gbdraw/explore.json",
+      "repo": {
+        "name": "satoshikawato/gbdraw",
+        "url": "https://github.com/satoshikawato/gbdraw",
+        "commit": "033a3aa899a6966925df6f413bd29e4a2d342777",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "linear-workspace",
+        "name": "Linear comparison workspace",
+        "description": "Main workspace in Linear mode: left settings pane with nine input genomes and LOSAT comparison settings, center preview canvas showing the 9-genome comparison diagram with export and zoom controls."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Logo, undo/redo/history, Reset/Save/Load session, Load example, Gallery CTA, session name, Circular/Linear toggle, language select",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 56
+      },
+      "patterns": [
+        "app-shell",
+        "undo",
+        "choice-control"
+      ]
+    },
+    {
+      "id": "settings-sidebar",
+      "role": "sidebar",
+      "label": "Scrolling settings panel: section icon rail, Input Genomes (format radio, file list with status chips and reorder buttons, add/remove), Comparison (LOSAT mode segmented, filters), sticky Generate Diagram button",
+      "bbox": {
+        "x": 16,
+        "y": 68,
+        "width": 322,
+        "height": 1360
+      },
+      "patterns": [
+        "app-shell",
+        "settings",
+        "form",
+        "choice-control",
+        "text-field",
+        "badge",
+        "accordion",
+        "file-upload",
+        "tooltip"
+      ]
+    },
+    {
+      "id": "notice-banner",
+      "role": "banner",
+      "label": "Dismissible 'Session loaded' notice above the preview",
+      "bbox": {
+        "x": 356,
+        "y": 68,
+        "width": 1068,
+        "height": 40
+      },
+      "patterns": [
+        "banner"
+      ]
+    },
+    {
+      "id": "result-preview",
+      "role": "workspace",
+      "label": "Result Preview with Preview/Run info toggle, DPI and export buttons, feature search bar, genome comparison diagram, edge Editor tab, bottom zoom/layout toolbar",
+      "bbox": {
+        "x": 356,
+        "y": 124,
+        "width": 1068,
+        "height": 1301
+      },
+      "patterns": [
+        "tabs",
+        "chart",
+        "drawer",
+        "choice-control",
+        "tooltip"
+      ]
+    },
+    {
+      "id": "footer",
+      "role": "footer",
+      "label": "Disclaimer, license, gallery, GitHub and author links",
+      "bbox": {
+        "x": 0,
+        "y": 1437,
+        "width": 1440,
+        "height": 32
+      },
+      "patterns": []
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.75,
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations"
+        ],
+        "visibility": "toggle-button",
+        "structure": "single-app"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 56
+          },
+          "note": "Persistent top toolbar with identity and session actions",
+          "region": "header"
+        },
+        {
+          "bbox": {
+            "x": 22,
+            "y": 73,
+            "width": 300,
+            "height": 26
+          },
+          "note": "'Settings sections' icon rail with 'Collapse settings to icons' toggle",
+          "region": "settings-sidebar"
+        }
+      ]
+    },
+    {
+      "id": "settings",
+      "status": "present",
+      "confidence": 0.65,
+      "dims": {
+        "ia": "sectioned-page",
+        "controls": [
+          "boolean-toggles",
+          "single-and-multi-select",
+          "numeric-and-ranges",
+          "text-and-credentials"
+        ],
+        "discovery": [
+          "browse-hierarchy"
+        ],
+        "timing": "save-button",
+        "safety": [
+          "reset-to-default"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 16,
+            "y": 112,
+            "width": 312,
+            "height": 1230
+          },
+          "note": "Long sectioned panel of drawing parameters (Input Genomes, Comparison, Layout, Font, Legend, Colors...) with 'Applies on Generate' markers",
+          "region": "settings-sidebar",
+          "quote": "Comparison"
+        },
+        {
+          "bbox": {
+            "x": 284,
+            "y": 14,
+            "width": 98,
+            "height": 26
+          },
+          "note": "Reset Settings",
+          "quote": "Reset Settings",
+          "region": "header"
+        }
+      ]
+    },
+    {
+      "id": "form",
+      "status": "present",
+      "confidence": 0.65,
+      "dims": {
+        "labels": "top-aligned",
+        "columns": "multiple-columns",
+        "grouping": "collapsible-optional-sections",
+        "prefill": "smart-defaults",
+        "help": [
+          "tooltip-help"
+        ],
+        "commit": "submit-button"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 42,
+            "y": 1060,
+            "width": 260,
+            "height": 240
+          },
+          "note": "Two-column labelled numeric fields (Bitscore, E-value, Min identity...)",
+          "quote": "Result filters",
+          "region": "settings-sidebar"
+        },
+        {
+          "bbox": {
+            "x": 20,
+            "y": 1352,
+            "width": 312,
+            "height": 68
+          },
+          "note": "Sticky submit that applies all pending parameters",
+          "quote": "Generate Diagram",
+          "region": "settings-sidebar"
+        }
+      ]
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.9,
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "segmented-control",
+        "option": [
+          "label-only"
+        ],
+        "timing": "on-submit",
+        "largeSets": "show-all"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 51,
+            "y": 934,
+            "width": 242,
+            "height": 36
+          },
+          "note": "LOSATN/LOSATP/TLOSATX segmented buttons",
+          "quote": "LOSATP",
+          "region": "settings-sidebar"
+        },
+        {
+          "bbox": {
+            "x": 30,
+            "y": 156,
+            "width": 230,
+            "height": 32
+          },
+          "note": "GenBank / GFF3 + FASTA radios",
+          "quote": "GenBank",
+          "region": "settings-sidebar"
+        },
+        {
+          "bbox": {
+            "x": 1050,
+            "y": 12,
+            "width": 190,
+            "height": 32
+          },
+          "note": "Circular/Linear mode toggle",
+          "quote": "Linear",
+          "region": "header"
+        },
+        {
+          "bbox": {
+            "x": 51,
+            "y": 1006,
+            "width": 242,
+            "height": 32
+          },
+          "note": "Dropdown select",
+          "quote": "Similarity groups",
+          "region": "settings-sidebar"
+        }
+      ]
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "supporting": [
+          "label",
+          "placeholder"
+        ],
+        "style": "outlined",
+        "inputType": "specialized-keyboard"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 51,
+            "y": 1114,
+            "width": 242,
+            "height": 30
+          },
+          "note": "Number/text inputs with top labels",
+          "quote": "0.001",
+          "region": "settings-sidebar"
+        },
+        {
+          "bbox": {
+            "x": 790,
+            "y": 227,
+            "width": 120,
+            "height": 26
+          },
+          "note": "Feature search field with placeholder",
+          "quote": "Search features",
+          "region": "result-preview"
+        }
+      ]
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.7,
+      "dims": {
+        "meaning": "status"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 78,
+            "y": 221,
+            "width": 90,
+            "height": 20
+          },
+          "note": "Green check filename pill showing file loaded OK",
+          "quote": "MjeNMV.gb",
+          "region": "settings-sidebar"
+        },
+        {
+          "bbox": {
+            "x": 168,
+            "y": 126,
+            "width": 22,
+            "height": 20
+          },
+          "note": "Clock 'Applies on Generate' pending indicator next to section titles",
+          "region": "settings-sidebar"
+        }
+      ]
+    },
+    {
+      "id": "accordion",
+      "status": "present",
+      "confidence": 0.7,
+      "dims": {
+        "policy": "many-at-a-time",
+        "header": [
+          "title-only"
+        ],
+        "toggle": [
+          "header-click"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 42,
+            "y": 866,
+            "width": 260,
+            "height": 32
+          },
+          "note": "Collapsible 'Settings' subsection with chevron",
+          "quote": "Settings",
+          "region": "settings-sidebar"
+        },
+        {
+          "bbox": {
+            "x": 29,
+            "y": 214,
+            "width": 286,
+            "height": 34
+          },
+          "note": "File rows with right chevron expand to per-file options",
+          "quote": "File 1",
+          "region": "settings-sidebar"
+        }
+      ]
+    },
+    {
+      "id": "file-upload",
+      "status": "present",
+      "confidence": 0.75,
+      "dims": {
+        "entry": [
+          "browse-button"
+        ],
+        "multiplicity": "multiple-files",
+        "preview": "filename",
+        "progress": "none"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 29,
+            "y": 214,
+            "width": 286,
+            "height": 402
+          },
+          "note": "List of uploaded GenBank files by filename with status chips",
+          "quote": "PemoMJNVA.gb",
+          "region": "settings-sidebar"
+        },
+        {
+          "bbox": {
+            "x": 29,
+            "y": 632,
+            "width": 286,
+            "height": 60
+          },
+          "note": "Add sequence / Remove",
+          "quote": "Add sequence",
+          "region": "settings-sidebar"
+        },
+        {
+          "bbox": {
+            "x": 176,
+            "y": 805,
+            "width": 126,
+            "height": 46
+          },
+          "note": "Upload BLAST TSV",
+          "quote": "Upload BLAST TSV",
+          "region": "settings-sidebar"
+        }
+      ]
+    },
+    {
+      "id": "undo",
+      "status": "present",
+      "confidence": 0.75,
+      "dims": {
+        "unit": "many-levels",
+        "access": [
+          "toolbar-button"
+        ],
+        "preview": "no"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 178,
+            "y": 17,
+            "width": 82,
+            "height": 22
+          },
+          "note": "Undo, Redo, History icon buttons (disabled in capture)",
+          "region": "header"
+        }
+      ]
+    },
+    {
+      "id": "tooltip",
+      "status": "present",
+      "confidence": 0.7,
+      "dims": {
+        "trigger": [
+          "info-icon-click"
+        ],
+        "content": "rich-content",
+        "placement": "above"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 678,
+            "y": 178,
+            "width": 16,
+            "height": 16
+          },
+          "note": "Help (?) icon; live click shows dark multi-sentence explanation bubble above",
+          "region": "result-preview"
+        },
+        {
+          "bbox": {
+            "x": 145,
+            "y": 910,
+            "width": 16,
+            "height": 16
+          },
+          "note": "Help: LOSAT Mode icon",
+          "region": "settings-sidebar"
+        }
+      ]
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.65,
+      "dims": {
+        "placement": "segmented-control",
+        "label": [
+          "text",
+          "icon"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 527,
+            "y": 134,
+            "width": 182,
+            "height": 32
+          },
+          "note": "Preview / Run info pressed-button view switch (Run info disabled)",
+          "quote": "Preview",
+          "region": "result-preview"
+        }
+      ]
+    },
+    {
+      "id": "banner",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "scope": "page",
+        "severity": "success",
+        "dismissal": "dismissible",
+        "action": "none",
+        "placement": "top-of-content"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 356,
+            "y": 68,
+            "width": 1068,
+            "height": 40
+          },
+          "note": "Light blue notice with check icon and close X",
+          "quote": "Session loaded: Streptomyces_AG-cluster-comparison.gbdraw-session.json.gz.",
+          "region": "notice-banner"
+        }
+      ]
+    },
+    {
+      "id": "chart",
+      "status": "present",
+      "confidence": 0.7,
+      "dims": {
+        "channels": [
+          "position",
+          "length",
+          "colour-hue-or-value"
+        ],
+        "scale": "linear",
+        "faceting": "small-multiples",
+        "authorship": "builder-ui",
+        "annotation": [
+          "callout-labels"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 370,
+            "y": 695,
+            "width": 1040,
+            "height": 232
+          },
+          "note": "Linear genome comparison map: 9 genome tracks with gene arrows coloured by category, red identity ribbons between tracks, legend and 100 kbp scale bar",
+          "quote": "Pairwise match identity",
+          "region": "result-preview"
+        }
+      ]
+    },
+    {
+      "id": "drawer",
+      "status": "present",
+      "confidence": 0.6,
+      "dims": {
+        "edge": "right",
+        "relationship": "push-content",
+        "holds": "settings",
+        "openBy": [
+          "menu-button"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1388,
+            "y": 788,
+            "width": 36,
+            "height": 60
+          },
+          "note": "Dark edge tab 'Editor'; live click opens a right panel (Legend/Features/Similarity groups) that narrows the preview",
+          "region": "result-preview"
+        }
+      ]
+    },
+    {
+      "id": "zoomable-canvas",
+      "status": "absent",
+      "confidence": 0.7,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 508,
+            "y": 1362,
+            "width": 764,
+            "height": 54
+          },
+          "note": "Only zoom/fit/pan controls over a fixed diagram, not an unbounded plane of free objects"
+        }
+      ]
+    },
+    {
+      "id": "drag-reorder",
+      "status": "absent",
+      "confidence": 0.7,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 220,
+            "y": 220,
+            "width": 60,
+            "height": 20
+          },
+          "note": "Files reordered via up/down arrow buttons, not dragging"
+        }
+      ]
+    }
+  ],
+  "structure": {
+    "layout": "Desktop tool app: top toolbar header, a fixed-height left settings panel that scrolls on its own (with an icon rail that jumps to sections and a sticky Generate button), a large result-preview workspace on the right with export toolbar, a floating find bar, and a bottom zoom/layout toolbar. Thin footer.",
+    "regions": [
+      "header",
+      "settings-sidebar",
+      "notice-banner",
+      "result-preview",
+      "footer"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#eef2f6",
+      "#ffffff",
+      "#f8fafc",
+      "#334155",
+      "#64748b",
+      "#2563eb",
+      "#eff6ff",
+      "#15803d",
+      "#f0fdf4",
+      "#dc2626",
+      "#e2e8f0"
+    ],
+    "colorRoles": {
+      "background": "#eef2f6",
+      "surface": "#ffffff",
+      "text": "#334155",
+      "muted": "#64748b",
+      "primary": "#2563eb",
+      "accent": "#15803d",
+      "border": "#e2e8f0",
+      "danger": "#dc2626",
+      "info-surface": "#eff6ff"
+    },
+    "typography": "Inter throughout the UI (headings, labels, buttons); ui-monospace for the DPI '300 (Print)' value; Liberation Sans/Arial inside the generated SVG diagram labels.",
+    "typeScale": "Compact tool scale: 18px/700 section titles and primary buttons, 14px body and labels, many 11-12px controls and chips; strong weight contrast (600-700 headings vs 400 inputs).",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "data-visualization",
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "technical",
+      "clean",
+      "utilitarian",
+      "scientific"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T01:52:00.029Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 14,
+    "usage": {
+      "input_tokens": 28,
+      "cache_creation_input_tokens": 51711,
+      "cache_read_input_tokens": 538726,
+      "output_tokens": 8873
+    }
+  },
+  "notes": "Tailwind slate/blue design. Distinctive: 'Applies on Generate' clock badges mark parameters that take effect only on the big sticky blue Generate Diagram button; file rows show green check filename chips plus up/down reorder arrow buttons; a floating find-in-diagram bar (search features, All selector, regex checkbox, prev/next, Open, Clear) overlays the preview; bottom floating pill toolbar with Reset Layout, Layout edit, Canvas padding, Search toggle and zoom (+ 39% − Fit). Export toolbar (DPI select, SVG/Interactive SVG/PNG/PDF). Right-edge dark 'Editor' tab opens a docked panel with Legend/Features/Similarity groups tabs and feature list with visibility toggles. Live page initially shows an empty state (DNA icon, Open Gallery example / Learn with tutorials) before the session loads; capture shows loaded session. 17-language selector in header."
+}

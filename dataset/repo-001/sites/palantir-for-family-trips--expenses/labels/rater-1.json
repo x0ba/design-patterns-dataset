@@ -1,0 +1,585 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "palantir-for-family-trips--expenses",
+    "url": "http://palantir-for-family-trips.localhost:4319/",
+    "finalUrl": "http://palantir-for-family-trips.localhost:4319/",
+    "status": 200,
+    "title": "Pine Mountain Lake Command Center",
+    "capturedAt": "2026-11-18T06:07:04.146Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1245
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "travel-hospitality",
+    "domainNote": "Group/family trip planning 'command center' — shared expense ledger with per-family cost splitting (Palantir-style parody UI)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/palantir-for-family-trips/explore.json",
+      "repo": {
+        "name": "andrewjiang/palantir-for-family-trips",
+        "url": "https://github.com/andrewjiang/palantir-for-family-trips",
+        "commit": "0c07345ebf2c8e75d2d2e56ea5a095e5aad4504e",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "expenses",
+        "name": "Expense ledger",
+        "description": "Shared-costs ledger with totals and expense list, an editable expense form with family split allocation, and inspector with briefing, checklist and notes."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "nav-rail",
+      "role": "sidebar",
+      "label": "64px icon navigation rail: logo, Itinerary/Stay/Meals/Activities/Expenses/Families, bottom Export/Messages/Settings",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 64,
+        "height": 1245
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "top-bar",
+      "role": "header",
+      "label": "Top bar: UNCLASSIFIED // FAMILY OPS, Family Trip Command Center, Working as Parkers/Jiangs/Riveras segmented switcher, AUTOSAVE LIVE, search field",
+      "bbox": {
+        "x": 64,
+        "y": 0,
+        "width": 1376,
+        "height": 48
+      },
+      "patterns": [
+        "app-shell",
+        "choice-control",
+        "text-field"
+      ]
+    },
+    {
+      "id": "expense-ledger",
+      "role": "overview-list",
+      "label": "Expense ledger: Add expense button, editing-as note, Total tracked / Outstanding stat tiles, list of expense rows with families, amount and Open/Settled status",
+      "bbox": {
+        "x": 64,
+        "y": 48,
+        "width": 483,
+        "height": 1197
+      },
+      "patterns": [
+        "overview-detail",
+        "stat-tile",
+        "badge"
+      ]
+    },
+    {
+      "id": "expense-detail",
+      "role": "detail-form",
+      "label": "Selected expense editor: title, payer select, amount, settlement; split-mode segmented control with per-family auto shares; expense note; per-family exposure; expenses note",
+      "bbox": {
+        "x": 547,
+        "y": 48,
+        "width": 533,
+        "height": 1197
+      },
+      "patterns": [
+        "overview-detail",
+        "form",
+        "text-field",
+        "choice-control"
+      ]
+    },
+    {
+      "id": "context-aside",
+      "role": "sidebar",
+      "label": "Right aside: expense summary with Checklist/Day tiles and Mark settled, Briefing key-value list, Planning tasks checklist with add row, Notes",
+      "bbox": {
+        "x": 1080,
+        "y": 48,
+        "width": 360,
+        "height": 1197
+      },
+      "patterns": [
+        "stat-tile",
+        "task-list",
+        "text-field"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 64,
+            "height": 1245
+          },
+          "note": "Icon nav rail with Expenses active",
+          "region": "nav-rail"
+        },
+        {
+          "bbox": {
+            "x": 64,
+            "y": 0,
+            "width": 1376,
+            "height": 48
+          },
+          "quote": "FAMILY TRIP COMMAND CENTER",
+          "region": "top-bar"
+        }
+      ],
+      "dims": {
+        "primary": "navigation-rail",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 88,
+            "y": 291,
+            "width": 434,
+            "height": 546
+          },
+          "quote": "Basecamp booking",
+          "note": "Ledger list; clicking a row (verified live) loads it into the middle editor and right aside",
+          "region": "expense-ledger"
+        },
+        {
+          "bbox": {
+            "x": 547,
+            "y": 48,
+            "width": 533,
+            "height": 1197
+          },
+          "quote": "SELECTED EXPENSE",
+          "region": "expense-detail"
+        }
+      ],
+      "dims": {
+        "attributePlacement": [
+          "in-both-views",
+          "in-detail-view-only"
+        ],
+        "abstraction": [
+          "category",
+          "summary"
+        ],
+        "truncation": "full-text",
+        "relationship": "one-overview-to-many-detail-views",
+        "recursion": [
+          "none"
+        ],
+        "openIn": "side-by-side",
+        "overviewType": [
+          "list"
+        ],
+        "detailMultiplicity": "one-at-a-time",
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "whole-item",
+        "attributeScope": [
+          "per-item",
+          "per-collection"
+        ]
+      }
+    },
+    {
+      "id": "form",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 571,
+            "y": 176,
+            "width": 485,
+            "height": 162
+          },
+          "quote": "EXPENSE TITLE",
+          "region": "expense-detail"
+        }
+      ],
+      "dims": {
+        "labels": "top-aligned",
+        "columns": "multiple-columns",
+        "grouping": "sections-with-headings",
+        "commit": "autosave-per-field",
+        "help": [
+          "none"
+        ]
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 571,
+            "y": 216,
+            "width": 236,
+            "height": 56
+          },
+          "quote": "Basecamp booking",
+          "region": "expense-detail"
+        },
+        {
+          "bbox": {
+            "x": 1160,
+            "y": 9,
+            "width": 256,
+            "height": 30
+          },
+          "quote": "Search...",
+          "region": "top-bar"
+        },
+        {
+          "bbox": {
+            "x": 1118,
+            "y": 718,
+            "width": 229,
+            "height": 34
+          },
+          "quote": "Add a task tied to this item...",
+          "region": "context-aside"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "label",
+          "placeholder"
+        ],
+        "style": "outlined",
+        "validation": "none",
+        "assistance": [
+          "none"
+        ],
+        "inputType": "plain"
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 588,
+            "y": 424,
+            "width": 389,
+            "height": 33
+          },
+          "quote": "EQUAL SPLIT",
+          "note": "Split mode segmented control",
+          "region": "expense-detail"
+        },
+        {
+          "bbox": {
+            "x": 799,
+            "y": 12,
+            "width": 219,
+            "height": 24
+          },
+          "quote": "WORKING AS",
+          "note": "Family identity switcher",
+          "region": "top-bar"
+        },
+        {
+          "bbox": {
+            "x": 819,
+            "y": 195,
+            "width": 237,
+            "height": 34
+          },
+          "quote": "Custom...",
+          "note": "Payer dropdown select",
+          "region": "expense-detail"
+        }
+      ],
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "segmented-control",
+        "option": [
+          "label-only"
+        ],
+        "timing": "immediately",
+        "largeSets": "show-all"
+      }
+    },
+    {
+      "id": "stat-tile",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 88,
+            "y": 188,
+            "width": 211,
+            "height": 83
+          },
+          "quote": "TOTAL TRACKED $1,892.09",
+          "region": "expense-ledger"
+        },
+        {
+          "bbox": {
+            "x": 311,
+            "y": 188,
+            "width": 211,
+            "height": 83
+          },
+          "quote": "OUTSTANDING $1,892.09",
+          "region": "expense-ledger"
+        },
+        {
+          "bbox": {
+            "x": 1101,
+            "y": 141,
+            "width": 156,
+            "height": 53
+          },
+          "quote": "CHECKLIST 2/2",
+          "region": "context-aside"
+        }
+      ],
+      "dims": {
+        "context": [
+          "label"
+        ],
+        "encoding": "number-only",
+        "window": "fixed",
+        "drill": "none"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 462,
+            "y": 352,
+            "width": 43,
+            "height": 14
+          },
+          "quote": "OPEN",
+          "region": "expense-ledger"
+        },
+        {
+          "bbox": {
+            "x": 445,
+            "y": 581,
+            "width": 60,
+            "height": 14
+          },
+          "quote": "SETTLED",
+          "region": "expense-ledger"
+        }
+      ],
+      "dims": {
+        "meaning": "status",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "task-list",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1101,
+            "y": 498,
+            "width": 319,
+            "height": 271
+          },
+          "quote": "PLANNING TASKS",
+          "note": "Checklist with checkboxes, day tag (ALL/SUN), inline add row",
+          "region": "context-aside"
+        }
+      ],
+      "dims": {
+        "itemRichness": "checkbox-item",
+        "timeBinding": "due-date-only",
+        "completionPath": [
+          "check-off"
+        ],
+        "createOpen": [
+          "inline-add-row"
+        ],
+        "sharingModel": "shared-list"
+      }
+    },
+    {
+      "id": "property-inspector",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1101,
+            "y": 280,
+            "width": 319,
+            "height": 198
+          },
+          "note": "Briefing key-value list is read-only; editable fields live in a form-style detail panel"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "co-editing-presence",
+      "status": "absent",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 571,
+            "y": 125,
+            "width": 485,
+            "height": 35
+          },
+          "quote": "Created by Parkers · Last edited by Parkers",
+          "note": "Authorship stamps and identity switcher only, no live presence"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "data-table",
+      "status": "absent",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 88,
+            "y": 291,
+            "width": 434,
+            "height": 546
+          },
+          "note": "Ledger rows have column-like alignment but no headers, sorting or table structure"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "card",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 88,
+            "y": 291,
+            "width": 434,
+            "height": 546
+          },
+          "note": "Ledger items are divided rows in one bordered list, not separate cards"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "Full-height app with a left icon navigation rail, a thin top bar (classification label, title, 'working as' family switcher, autosave status, search) and three independently scrolling columns: expense ledger list, selected-expense edit form, and right context aside (summary, briefing, checklist, notes)",
+    "regions": [
+      "nav-rail",
+      "top-bar",
+      "expense-ledger",
+      "expense-detail",
+      "context-aside"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#0a0c10",
+      "#0d1117",
+      "#161b22",
+      "#1f2a34",
+      "#30363d",
+      "#c9d1d9",
+      "#8b949e",
+      "#58a6ff",
+      "#3fb950",
+      "#d29922"
+    ],
+    "colorRoles": {
+      "background": "#0d1117",
+      "text": "#c9d1d9",
+      "surface": "#161b22",
+      "muted": "#8b949e",
+      "primary": "#58a6ff",
+      "accent": "#3fb950",
+      "warning": "#d29922",
+      "border": "#30363d",
+      "highlight": "#1f2a34"
+    },
+    "typography": "Inter for everything (UI labels, headings, values); Geist Mono for ledger amounts. Many tiny uppercase letter-spaced eyebrow labels in blue (#58a6ff) above uppercase tracked section headings.",
+    "typeScale": "Compressed small scale: 20px bold stat values, 15-16px titles, 13px uppercase tracked h2s, bulk of text 9-12px; hierarchy through weight, uppercase and letter-spacing rather than size",
+    "shape": "sharp",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "technical",
+      "dark",
+      "command-center",
+      "utilitarian",
+      "militaristic-parody"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T06:08:26.073Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 7,
+    "usage": {
+      "input_tokens": 14,
+      "cache_creation_input_tokens": 31215,
+      "cache_read_input_tokens": 205528,
+      "output_tokens": 5350
+    }
+  },
+  "notes": "GitHub-dark palette (#0d1117/#161b22/#30363d, #58a6ff blue, #3fb950 green, #d29922 amber) applied to a Palantir-style 'ops console' parody for family trip planning: 'UNCLASSIFIED // FAMILY OPS' green classification tag, uppercase tracked micro-labels, 2px radii, no shadows. Status chips: amber 'OPEN', green 'SETTLED', amber-outlined settlement field. Three columns scroll independently. Selected ledger row gets a lighter background; right aside header gets a blue top bar and #1f2a34 fill. 'Note to task' converts notes into checklist items."
+}

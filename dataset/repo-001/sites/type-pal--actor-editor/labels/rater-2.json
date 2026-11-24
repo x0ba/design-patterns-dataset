@@ -1,0 +1,619 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "type-pal--actor-editor",
+    "url": "http://localhost:4467/?module=actor&page=workspace",
+    "finalUrl": "http://localhost:4467/?module=actor&page=workspace",
+    "status": 200,
+    "title": "仙剑奇侠传·复刻 · type-pal 编辑器",
+    "capturedAt": "2026-11-18T20:00:44.050Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1765
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "games",
+    "domainNote": "Game modding/authoring editor for a Chinese RPG remake (仙剑奇侠传·复刻, type-pal) — character (actor) editing workspace",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/type-pal/explore.json",
+      "repo": {
+        "name": "IllegalCreed/type-pal",
+        "url": "https://github.com/IllegalCreed/type-pal",
+        "commit": "8fce7b6a485904d2b7e2adb076989fcb94ccb027",
+        "license": "GPL-3.0"
+      },
+      "view": {
+        "slug": "actor-editor",
+        "name": "Character editor",
+        "description": "Character (actor) editor with the roster of 8 characters on the left, the 李逍遥 detail page with tabs and form sections in the center, and a summary inspector on the right."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Top bar: project identity + baseline pill, menubar of editor modules, toolbar with panel toggles, undo/redo and save",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 41
+      },
+      "patterns": [
+        "app-shell",
+        "menu",
+        "tooltip",
+        "undo"
+      ]
+    },
+    {
+      "id": "actor-list",
+      "role": "sidebar",
+      "label": "Left object list of 8 characters with pixel-art avatars, ids and 可入队/NPC badges; add/duplicate buttons",
+      "bbox": {
+        "x": 0,
+        "y": 41,
+        "width": 193,
+        "height": 1698
+      },
+      "patterns": [
+        "overview-detail",
+        "badge",
+        "split-pane"
+      ]
+    },
+    {
+      "id": "main-editor",
+      "role": "main",
+      "label": "Selected character header with portrait, tabs (总览/战斗与成长/关系与脚本/外观资源) and stacked section cards with key-value rows, stat grid and edit buttons",
+      "bbox": {
+        "x": 194,
+        "y": 41,
+        "width": 956,
+        "height": 1698
+      },
+      "patterns": [
+        "overview-detail",
+        "tabs",
+        "card",
+        "stat-tile",
+        "text-field",
+        "badge"
+      ]
+    },
+    {
+      "id": "inspector",
+      "role": "sidebar",
+      "label": "Right inspector with 摘要/引用 segmented tabs, identity/resource key-values and current summary",
+      "bbox": {
+        "x": 1150,
+        "y": 41,
+        "width": 290,
+        "height": 1698
+      },
+      "patterns": [
+        "property-inspector",
+        "tabs",
+        "split-pane"
+      ]
+    },
+    {
+      "id": "status-bar",
+      "role": "status-bar",
+      "label": "Bottom status bar: diagnostics checking spinner text and save state",
+      "bbox": {
+        "x": 0,
+        "y": 1739,
+        "width": 1440,
+        "height": 26
+      },
+      "patterns": [
+        "progress-indicator"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 41
+          },
+          "quote": "文件 编辑 视图 场景 地图 剧情 角色 物品 战斗 战斗模拟器 资源 项目设置",
+          "region": "header",
+          "note": "Persistent top bar with menubar module destinations, toolbar, and status bar"
+        }
+      ],
+      "dims": {
+        "primary": "top-navigation-bar",
+        "secondary": "sub-tabs-under-the-header",
+        "items": [
+          "fixed-destinations"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 216,
+            "y": 0,
+            "width": 918,
+            "height": 40
+          },
+          "quote": "文件",
+          "region": "header",
+          "note": "menubar; clicking 文件 opens a vertical dropdown (新建项目, 打开项目, 保存 PAL 开发基线 ⌘S, 导出 ZIP) on live page"
+        }
+      ],
+      "dims": {
+        "openBy": "menu-bar",
+        "structure": "flat",
+        "item": [
+          "label",
+          "shortcut-hint"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    },
+    {
+      "id": "tooltip",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1134,
+            "y": 0,
+            "width": 306,
+            "height": 40
+          },
+          "quote": "撤销 · ⌘Z",
+          "region": "header",
+          "note": "Toolbar icon buttons show tooltip with label and shortcut below on hover (verified live)"
+        }
+      ],
+      "dims": {
+        "trigger": [
+          "hover"
+        ],
+        "content": "label-and-shortcut",
+        "placement": "below"
+      }
+    },
+    {
+      "id": "undo",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1212,
+            "y": 4,
+            "width": 64,
+            "height": 32
+          },
+          "quote": "撤销 · ⌘Z",
+          "region": "header",
+          "note": "Undo/redo toolbar buttons (disabled, no changes yet) with ⌘Z / ⇧⌘Z"
+        }
+      ],
+      "dims": {
+        "access": [
+          "keyboard-shortcut",
+          "toolbar-button"
+        ],
+        "preview": "no"
+      }
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 81,
+            "width": 193,
+            "height": 544
+          },
+          "quote": "李逍遥 li-xiaoyao 可入队",
+          "region": "actor-list",
+          "note": "List of characters; selected item highlighted"
+        },
+        {
+          "bbox": {
+            "x": 194,
+            "y": 41,
+            "width": 956,
+            "height": 149
+          },
+          "quote": "李逍遥",
+          "region": "main-editor",
+          "note": "Detail view of selected character beside the list"
+        }
+      ],
+      "dims": {
+        "attributePlacement": [
+          "in-both-views",
+          "in-detail-view-only"
+        ],
+        "abstraction": [
+          "category"
+        ],
+        "truncation": "full-text",
+        "relationship": "one-to-one",
+        "recursion": [
+          "none"
+        ],
+        "openIn": "side-by-side",
+        "overviewType": [
+          "list"
+        ],
+        "detailMultiplicity": "one-at-a-time",
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "whole-item",
+        "attributeScope": [
+          "per-item"
+        ]
+      }
+    },
+    {
+      "id": "property-inspector",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1150,
+            "y": 41,
+            "width": 290,
+            "height": 592
+          },
+          "quote": "身份与资源",
+          "region": "inspector",
+          "note": "Right inspector of selected character with key-value rows, tabbed 摘要/引用"
+        }
+      ],
+      "dims": {
+        "set": "contextual-to-the-selection-type",
+        "placement": "right-sidebar",
+        "multi": "single-object-only",
+        "grouping": "tabs"
+      }
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 194,
+            "y": 190,
+            "width": 956,
+            "height": 41
+          },
+          "quote": "总览 战斗与成长 关系与脚本 外观资源",
+          "region": "main-editor",
+          "note": "Underline tabs for editor sections"
+        },
+        {
+          "bbox": {
+            "x": 1151,
+            "y": 134,
+            "width": 289,
+            "height": 49
+          },
+          "quote": "摘要 引用",
+          "region": "inspector",
+          "note": "Segmented-style tabs in inspector"
+        }
+      ],
+      "dims": {
+        "placement": "top",
+        "label": [
+          "text"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      }
+    },
+    {
+      "id": "split-pane",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 190,
+            "y": 41,
+            "width": 8,
+            "height": 1698
+          },
+          "quote": "调整左侧面板宽度",
+          "region": "actor-list",
+          "note": "ARIA separators to resize left and right panels; toolbar toggles panels"
+        }
+      ],
+      "dims": {
+        "orientation": "side-by-side",
+        "sizing": "draggable-divider",
+        "relationship": "linked-selection"
+      }
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 212,
+            "y": 249,
+            "width": 920,
+            "height": 295
+          },
+          "quote": "角色定义",
+          "region": "main-editor",
+          "note": "Section cards with eyebrow, title, description, optional edit button and key-value body"
+        },
+        {
+          "bbox": {
+            "x": 212,
+            "y": 558,
+            "width": 920,
+            "height": 280
+          },
+          "quote": "编辑外观",
+          "region": "main-editor"
+        }
+      ],
+      "dims": {
+        "media": "none",
+        "actions": "one-primary-action",
+        "shape": "horizontal",
+        "style": "outlined"
+      }
+    },
+    {
+      "id": "stat-tile",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 233,
+            "y": 984,
+            "width": 878,
+            "height": 128
+          },
+          "quote": "当前 / 最大体力 150 / 150",
+          "region": "main-editor",
+          "note": "Grid of 8 small tiles: label + large monospace number"
+        }
+      ],
+      "dims": {
+        "context": [
+          "label"
+        ],
+        "encoding": "number-only",
+        "drill": "none"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 138,
+            "y": 105,
+            "width": 43,
+            "height": 18
+          },
+          "quote": "可入队",
+          "region": "actor-list",
+          "note": "Status pills per actor (可入队 / NPC); count pill '8 位'"
+        },
+        {
+          "bbox": {
+            "x": 1004,
+            "y": 65,
+            "width": 42,
+            "height": 17
+          },
+          "quote": "可参战",
+          "region": "main-editor"
+        }
+      ],
+      "dims": {
+        "meaning": "label",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 831,
+            "y": 389,
+            "width": 280,
+            "height": 30
+          },
+          "quote": "李逍遥",
+          "region": "main-editor",
+          "note": "显示名称 input in a key-value row"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "label"
+        ],
+        "style": "outlined",
+        "inputType": "plain"
+      }
+    },
+    {
+      "id": "progress-indicator",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 1739,
+            "width": 300,
+            "height": 26
+          },
+          "quote": "⟳ 检查中 正在建立当前项目诊断快照…",
+          "region": "status-bar",
+          "note": "Text status of background diagnostics; replaced by '181 项待处理' when done"
+        }
+      ],
+      "dims": {
+        "determinacy": "indeterminate",
+        "form": "text-status",
+        "delay": "moves-to-background",
+        "coverage": "background-task-tray",
+        "control": "no-control"
+      }
+    },
+    {
+      "id": "settings",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 212,
+            "y": 249,
+            "width": 920,
+            "height": 295
+          },
+          "note": "Editing object data, not app settings"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "form",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 212,
+            "y": 360,
+            "width": 920,
+            "height": 184
+          },
+          "note": "Only a single field among read-only key-values; no submitted form"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "three-pane desktop editor: top menubar/toolbar, left object list, center tabbed detail with stacked section cards, right inspector, bottom status bar",
+    "regions": [
+      "header",
+      "actor-list",
+      "main-editor",
+      "inspector",
+      "status-bar"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#1b1d23",
+      "#232732",
+      "#2b303c",
+      "#2d3852",
+      "#5aa2ff",
+      "#edf1f7",
+      "#aeb7c7",
+      "#96a1b3",
+      "#f27d84",
+      "#66728a"
+    ],
+    "colorRoles": {
+      "background": "#1b1d23",
+      "surface": "#232732",
+      "text": "#edf1f7",
+      "muted": "#aeb7c7",
+      "primary": "#5aa2ff",
+      "accent": "#2d3852",
+      "danger": "#f27d84",
+      "border": "#66728a"
+    },
+    "typography": "system-ui for UI text and headings; ui-monospace for IDs, codes and stat numbers; Arial in list buttons",
+    "typeScale": "Compact: h1 20px bold, section h2 16-17px bold, body 14px, labels 11-12px, eyebrows 12px blue; stat values ~17px monospace bold",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "illustration",
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "technical",
+      "dark",
+      "utilitarian",
+      "calm"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T20:02:17.756Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 9,
+    "usage": {
+      "input_tokens": 18,
+      "cache_creation_input_tokens": 34143,
+      "cache_read_input_tokens": 303097,
+      "output_tokens": 5081
+    }
+  },
+  "notes": "Dark IDE-style game editor. Pixel-art character portraits in the list and header give game character. Blue eyebrow labels (身份/外观/战斗) above section titles; key-value rows separated by hairlines with right-aligned bold values. Delete button outlined in red but disabled while references check. Status bar flips from '检查中' to '⚠ 181 项待处理' with diagnostics."
+}

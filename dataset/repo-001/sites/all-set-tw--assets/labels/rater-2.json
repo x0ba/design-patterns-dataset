@@ -1,0 +1,428 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "all-set-tw--assets",
+    "url": "http://localhost:4420/#/assets",
+    "finalUrl": "http://localhost:4420/#/assets",
+    "status": 200,
+    "title": "不用記帳 | ALL SET",
+    "capturedAt": "2026-11-18T05:53:07.239Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1230
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "finance",
+    "domainNote": "personal finance / net-worth and asset inventory tracker (Taiwanese banks, self-hosted)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/all-set-tw/explore.json",
+      "repo": {
+        "name": "TedLin1993/all-set-tw",
+        "url": "https://github.com/TedLin1993/all-set-tw",
+        "commit": "ecacc9ffb7591dfc17146f147559f441c93b6d6b",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "assets",
+        "name": "Assets register",
+        "description": "Asset register with net worth summary, list of institutions/investments, and a detail panel for the selected bank (accounts, loans, credit cards)."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Dark left sidebar with brand '不用記帳 ALL SET' and 4 icon+label nav items (總覽, 資產 active, 活動, 設定)",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 240,
+        "height": 1079
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "page-header",
+      "role": "header",
+      "label": "Page title 資產清冊 with subtitle and a round hide-amounts (eye-off) icon button",
+      "bbox": {
+        "x": 240,
+        "y": 0,
+        "width": 1200,
+        "height": 113
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "net-worth-summary",
+      "role": "stats-strip",
+      "label": "Large net-worth figure with deduction notes, then three category totals (銀行與現金, 投資, 其他資產) with counts",
+      "bbox": {
+        "x": 272,
+        "y": 137,
+        "width": 1136,
+        "height": 257
+      },
+      "patterns": [
+        "stat-tile"
+      ]
+    },
+    {
+      "id": "institution-list",
+      "role": "master-list",
+      "label": "Bordered list of institutions/asset groups, each row with name, account counts, NT$ balance and debt line; selected row has left accent bar",
+      "bbox": {
+        "x": 272,
+        "y": 419,
+        "width": 510,
+        "height": 620
+      },
+      "patterns": [
+        "overview-detail"
+      ]
+    },
+    {
+      "id": "institution-detail",
+      "role": "detail-pane",
+      "label": "Detail of selected institution: three summary figures, bank accounts, loan account with debit-account select, credit card section, collapsible statement list",
+      "bbox": {
+        "x": 783,
+        "y": 419,
+        "width": 625,
+        "height": 800
+      },
+      "patterns": [
+        "overview-detail",
+        "stat-tile",
+        "choice-control",
+        "accordion"
+      ]
+    },
+    {
+      "id": "footer",
+      "role": "footer",
+      "label": "Muted small-print disclaimer (免責聲明)",
+      "bbox": {
+        "x": 240,
+        "y": 1062,
+        "width": 1200,
+        "height": 88
+      },
+      "patterns": []
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 240,
+            "height": 900
+          },
+          "region": "sidebar",
+          "quote": "不用記帳",
+          "note": "Persistent dark sidebar with brand and fixed destinations, 資產 highlighted"
+        },
+        {
+          "bbox": {
+            "x": 240,
+            "y": 0,
+            "width": 1200,
+            "height": 113
+          },
+          "region": "page-header",
+          "quote": "資產清冊",
+          "note": "Top bar with page title and hide-amounts toggle"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 272,
+            "y": 535,
+            "width": 510,
+            "height": 476
+          },
+          "region": "institution-list",
+          "quote": "國泰世華銀行",
+          "note": "Button rows (aria-pressed) summarising each institution; selected row highlighted with left bar"
+        },
+        {
+          "bbox": {
+            "x": 783,
+            "y": 419,
+            "width": 625,
+            "height": 760
+          },
+          "region": "institution-detail",
+          "quote": "帳戶與信用卡依各自資料來源顯示",
+          "note": "Detail pane updates on click (verified live: clicking 玉山銀行 swaps detail)"
+        }
+      ],
+      "dims": {
+        "attributePlacement": [
+          "in-both-views",
+          "in-detail-view-only"
+        ],
+        "abstraction": [
+          "sum-or-average",
+          "summary"
+        ],
+        "truncation": "full-text",
+        "relationship": "one-to-one",
+        "recursion": [
+          "none"
+        ],
+        "openIn": "side-by-side",
+        "overviewType": [
+          "list"
+        ],
+        "detailMultiplicity": "one-at-a-time",
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "whole-item",
+        "attributeScope": [
+          "per-item",
+          "per-collection"
+        ]
+      }
+    },
+    {
+      "id": "stat-tile",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 272,
+            "y": 137,
+            "width": 340,
+            "height": 150
+          },
+          "region": "net-worth-summary",
+          "quote": "NT$6,994,722",
+          "note": "Hero net-worth figure with label and deduction context"
+        },
+        {
+          "bbox": {
+            "x": 272,
+            "y": 311,
+            "width": 1136,
+            "height": 83
+          },
+          "region": "net-worth-summary",
+          "quote": "NT$1,341,356",
+          "note": "Three borderless metric tiles: label, value, count"
+        },
+        {
+          "bbox": {
+            "x": 783,
+            "y": 527,
+            "width": 625,
+            "height": 89
+          },
+          "region": "institution-detail",
+          "quote": "貸款負債",
+          "note": "Per-institution summary figures"
+        }
+      ],
+      "dims": {
+        "context": [
+          "label"
+        ],
+        "encoding": "number-only",
+        "drill": "none"
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 803,
+            "y": 962,
+            "width": 300,
+            "height": 24
+          },
+          "region": "institution-detail",
+          "quote": "扣款帳戶 銀行約定：台新銀行 Richart 數位帳戶",
+          "note": "Native select styled as underlined text with chevron for loan debit account"
+        }
+      ],
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "dropdown-select",
+        "option": [
+          "label-only"
+        ],
+        "largeSets": "show-all"
+      }
+    },
+    {
+      "id": "accordion",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 803,
+            "y": 1172,
+            "width": 585,
+            "height": 45
+          },
+          "region": "institution-detail",
+          "quote": "查看信用卡帳單 8 筆",
+          "note": "<details>/<summary> disclosure of credit-card statements, header shows count"
+        }
+      ],
+      "dims": {
+        "policy": "many-at-a-time",
+        "header": [
+          "title-plus-summary-value"
+        ],
+        "toggle": [
+          "header-click"
+        ]
+      }
+    },
+    {
+      "id": "dashboard",
+      "status": "absent",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 272,
+            "y": 137,
+            "width": 1136,
+            "height": 257
+          },
+          "note": "Summary figures exist but page is an inventory list-detail, not a widget dashboard"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "data-table",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 272,
+            "y": 535,
+            "width": 510,
+            "height": 476
+          },
+          "note": "Rows are two-line list items, no columns/sorting"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "app layout: fixed dark left sidebar, page header, net-worth summary strip, then two-column list–detail split (institution list left, selected institution detail right), footer disclaimer",
+    "regions": [
+      "sidebar",
+      "page-header",
+      "net-worth-summary",
+      "institution-list",
+      "institution-detail",
+      "footer"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#f7f7f2",
+      "#1f2933",
+      "#4f5d69",
+      "#3e6f7c",
+      "#b75b45",
+      "#556b2f",
+      "#f0f0eb",
+      "#ffffff"
+    ],
+    "colorRoles": {
+      "background": "#f7f7f2",
+      "text": "#1f2933",
+      "muted": "#4f5d69",
+      "primary": "#3e6f7c",
+      "accent": "#b75b45",
+      "surface": "#f0f0eb",
+      "sidebar": "#1f2933",
+      "positive": "#556b2f"
+    },
+    "typography": "Inter throughout (with system CJK fallback for Traditional Chinese); bold Inter for monetary figures, light letter-spaced uppercase 'ALL SET' brand subline",
+    "typeScale": "Strong contrast: 44px bold net-worth hero, 30px page title, 24px category totals, 20px detail heading/figures, 14–16px row titles, 13px meta lines, 12px labels",
+    "shape": "mixed",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "calm",
+      "understated",
+      "technical",
+      "paper-like",
+      "trustworthy"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T05:54:06.218Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 6,
+    "usage": {
+      "input_tokens": 12,
+      "cache_creation_input_tokens": 24763,
+      "cache_read_input_tokens": 160804,
+      "output_tokens": 3561
+    }
+  },
+  "notes": "Warm off-white paper background (#f7f7f2) against a slate-charcoal sidebar; color is used semantically: teal-slate for asset balances, rust-red for debts (卡債/貸款), olive for 其他資產. Hairline dividers rather than cards; selected list row marked with a 3px left teal bar and slightly darker surface. Numbers are the hero — huge bold NT$ net worth with small deduction footnotes. Native selects restyled as dotted-underline inline text. Privacy 'hide amounts' eye-off icon button top-right. Footer disclaimer overlaps in capture due to panel expansion. Empty-state text ('此機構沒有貸款。') appears for other institutions live but not in the captured state."
+}

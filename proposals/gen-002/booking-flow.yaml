@@ -1,0 +1,74 @@
+# Codebook proposal (new-values) — review with: node scripts/proposals.ts show gen-002 booking-flow
+id: booking-flow
+kind: new-values
+status: open
+batch: gen-002
+codebookVersion: 1.0.0
+dimensions:
+  - subdimensions:
+      - id: hold
+        values:
+          - id: untimed-hold-until-commit
+            name: Untimed hold until commit
+            description: The selection is reserved while the person decides, with no visible expiry or
+              countdown; the hold is released on commit or clear.
+            example: "Staff-side class enrollment: 'seats are held until you confirm'"
+          - id: held-until-commit
+            name: Held until commit (untimed)
+            description: The chosen slot or seat is reserved while the draft is open and released on confirm or
+              clear, with no countdown shown.
+            example: "Staff enrollment desk: 'seats are held until you confirm'"
+          - id: untimed-hold-until-confirm
+            name: Untimed hold until confirm
+            description: Selected slots/seats are reserved while the person decides, with no visible expiry,
+              released on clear or abandon
+            example: "Music school enrollment: 'seats are held until you confirm'"
+rationale:
+  - rater: rater-3
+    site: music-school-term-enrollment
+    text: The page holds the chosen slots/seats until the staff member confirms, with no timer or
+      countdown ("seats are held until you confirm", "Slot held for this enrollment"). The existing
+      hold values are only no-hold or timed-hold-with-countdown, so neither fits.
+  - rater: rater-2
+    site: music-school-term-enrollment
+    text: The page holds the selected lesson slots/seats for as long as the enrollment draft is open
+      ("seats are held until you confirm", "Slot held for this enrollment") without any visible
+      timer. Existing hold values only have no-hold or a timed hold with countdown, so neither fits
+      an untimed hold that lasts until commit.
+  - rater: rater-1
+    site: music-school-term-enrollment
+    text: The hold values cover no hold, a timed hold with countdown, waitlist, and request-pending.
+      None of them fits a slot that is held for the whole session until the operator confirms, with
+      no timer shown.
+sources:
+  - batch: gen-002
+    site: music-school-term-enrollment
+    url: http://music-school-term-enrollment.localhost:4318/
+    note: proposed by rater-3, rater-2, rater-1
+evidence:
+  - site: music-school-term-enrollment
+    rater: rater-3
+    quote: 3 students · seats are held until you confirm
+    bbox:
+      x: 748
+      y: 256
+      width: 244
+      height: 18
+  - site: music-school-term-enrollment
+    rater: rater-2
+    bbox:
+      x: 750
+      y: 256
+      width: 242
+      height: 18
+    quote: 3 students · seats are held until you confirm
+  - site: music-school-term-enrollment
+    rater: rater-1
+    quote: 3 students · seats are held until you confirm
+    bbox:
+      x: 750
+      y: 256
+      width: 242
+      height: 16
+createdAt: 2026-11-18T03:01:21.347Z
+updatedAt: 2026-11-18T03:01:53.705Z

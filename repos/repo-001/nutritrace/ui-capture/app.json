@@ -1,0 +1,28 @@
+{
+  "mode": "server",
+  "entry": "/",
+  "login": {
+    "username": "maya",
+    "email": "maya.okafor@fastmail.com",
+    "password": "Lentil-Harbor-2026!"
+  },
+  "stubs": [
+    {
+      "service": "AI provider for the Trace assistant (Claude/OpenAI/Gemini/Ollama)",
+      "how": "start.sh env-locks Trace to AI_PROVIDER=oai-compat with AI_BASE_URL=http://127.0.0.1:4450 and a placeholder AI_API_KEY. The NutriTrace server proxies /api/ai/chat to .ui-capture/stubs/ai-stub.mjs, a local OpenAI-compatible /v1/chat/completions server. It asks the app to run its own get_diary_averages + get_goals tools, then answers with the user's real seeded averages, goals and weight trend."
+    },
+    {
+      "service": "GitHub release update checks",
+      "how": "Turned off with UPDATE_CHECK=off, so the server never contacts GitHub."
+    },
+    {
+      "service": "Secrets (JWT signing key, token encryption key)",
+      "how": "Local placeholder values for JWT_SECRET and TOKEN_ENC_KEY in start.sh. INSECURE_COOKIES=1 lets the auth cookie work over plain-HTTP localhost."
+    },
+    {
+      "service": "Open Food Facts / USDA / Mealie / Fitbit / Withings / Garmin / OIDC / SMTP",
+      "how": "Not configured (all optional in the app). OFF/USDA online search will show the app's normal offline/error state; local catalog search works fully. Fitbit/Withings/Garmin OAuth stay disconnected. The Wellness page instead shows Health Connect data, which the Android app normally pushes to the server; it was written straight into the server's wellness_data/workouts tables by seed.mjs, so no wearable API is called."
+    }
+  ],
+  "notes": "NutriTrace v1.4.0, a Svelte 5 PWA built with Vite (npm run build -> dist/). It is served by its own Express + better-sqlite3 server (server/index.js, NODE_ENV=production) on PORT. server/dist is a symlink to ../dist, standing in for the Dockerfile's COPY of the build. Node 20.20.2 is pinned in mise.toml (the Dockerfile uses node:20). better-sqlite3's prebuilt binary was fetched into the npm cache during install. Runtime data lives in .ui-capture/data (SQLite DB + uploads). start.sh starts the AI stub (port 4450) and the server. If the DB is missing or was seeded on a different day, start.sh first re-runs .ui-capture/seed.mjs (about 6 s, offline), so 'today' always has a partly logged day with months of history behind it. SIGN IN: opening / shows the app's own sign-in form when signed out. Use username 'maya' and the password in login. SEED (seed.mjs + seed-data.mjs): boots the real server on a side port with a fresh DB and loads everything through the app's REST API. That covers register/login (first user = admin Maya Okafor) and bulk settings: finished setup, per-weekday calorie goals (1900 weekdays / 2150 weekends), protein/carb/fat/fiber/sodium goals, lb/mi/°F, a 2.5 L water goal shown in fl oz, fasting tracker and activity section on, 3 goal templates. It also loads 77 foods (real brands, categories, barcodes, notes), 8 saved meals and 8 recipes (servings, method notes), and about 165 diary days over the past 175 days with 2,100+ items. Those include expanded saved meals, recipe servings, restaurant meals, quick-calorie entries, alcohol, long-run fuel, missed days and a patchy vacation week. Days also carry water logs, near-daily weigh-ins trending 172 -> 163 lb, Sunday body-fat readings, monthly waist/hip measurements and free-text day notes. Activity data is about 118 manual entries (runs, long runs, strength, yoga, hikes) plus 3 templates. There are 20 16:8 fasts, some broken early with notes; mornings after a fast have only black coffee. Usage counters and a prior Trace chat are set too. Wellness: 120 days of Health Connect data, as the Android app's sync stores it (steps, distance, floors, active minutes, calories out, sleep stages/efficiency, resting HR, HRV, SpO2, respiratory rate, VO2 max), plus 80 watch workouts, written into the wellness_data/workouts tables. TODAY holds whatever would have been eaten by the time the seed ran: oats breakfast, turkey-wrap lunch, string cheese, and chili dinner after 7pm. Plus a 5 mi tempo run, water and a weigh-in. MAIN AREAS (hash routes): Diary #/ (day view: meals, macro rings and goals, water, body stats, activity, fasting, notes; desktop side rail), Foods #/foods (Foods / Meals / Recipes catalog with categories), Statistics #/statistics (charts over time), Goals #/goals, Wellness #/wellness (activity, sleep and heart tabs from Health Connect), Settings #/settings, and the floating Trace AI assistant (answers from the seeded data via the stub). Food photos: none (no network to fetch them), so the catalog shows the app's own placeholder icons."
+}

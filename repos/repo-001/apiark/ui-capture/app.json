@@ -1,0 +1,28 @@
+{
+  "mode": "static",
+  "entry": "/",
+  "login": null,
+  "stubs": [
+    {
+      "service": "ApiArk Rust/Tauri backend (all `invoke` commands: collections & request files on disk, environments, history DB, settings/state persistence, runner, monitors, mock servers, cookie jar, git, audit log, trash, plugins, proxy capture, docs, cURL, OAuth token store)",
+      "how": "In-browser stand-in installed at the Tauri IPC boundary with the official @tauri-apps/api/mocks (mockIPC + mockWindows, events mocked). Code: .ui-capture/mock/tauri-backend.ts, data: .ui-capture/mock/seed-data.json. It is added to the build only through .ui-capture/vite.capture.config.mts, which prepends one import to src/main.tsx at build time. No repo source files change."
+    },
+    {
+      "service": "Outgoing HTTP requests the user sends (Ledgerly payments API, GitHub REST, Fleet tracking, httpbin)",
+      "how": "send_request / send_request_with_scripts return the saved example response for that request (real-looking JSON/XML bodies, headers, cookies, timing). Unknown ad-hoc URLs get an httpbin-style echo. Tests and assertions are evaluated against the stubbed response. Nothing leaves the browser."
+    },
+    {
+      "service": "WebSocket / SSE / gRPC / MQTT connections",
+      "how": "The mock emits ws:status/ws:message and sse:status/sse:event Tauri events with simulated vehicle-position and dispatch payloads. gRPC returns a parsed Telemetry service with a canned unary response. MQTT calls are no-ops."
+    },
+    {
+      "service": "AI assistant (OpenAI-compatible LLM endpoint)",
+      "how": "ai_chat / ai_generate_request / ai_generate_tests return canned but on-topic answers (a partial-refund request, generated ark.test scripts) after ~1s. Settings hold a placeholder key 'sk-placeholder-local-stub'."
+    },
+    {
+      "service": "Tauri plugins (updater, dialog, fs, notification, path, app version, window)",
+      "how": "Handled by the same IPC mock: no update available, file dialogs return null (cancelled), fs writes are no-ops, version 0.4.6, home dir /Users/dana.okafor."
+    }
+  ],
+  "notes": "ApiArk is a Tauri v2 desktop app. Its React front end (apps/desktop) talks to Rust only over IPC, so this setup is a static production build of the front end (vite build with the repo's own vite.config.ts) plus a local IPC mock. Build: `cd apps/desktop && pnpm exec vite build --config ../../.ui-capture/vite.capture.config.mts` writes .ui-capture/out (index.html at root, monaco workers in /monacoeditorwork). Regenerate data: `node .ui-capture/seed/generate.mjs`, then rebuild. Tools are pinned in mise.toml (node 22.21.1, pnpm 10.20.0). Seeded persona: Dana Okafor, a backend engineer at a payments company, about 4 months into using ApiArk. Collections (sidebar): 'Ledgerly Payments API' (Auth, Customers, Payments, Refunds, Invoices, Payouts, Webhooks folders, with bearer/basic auth, idempotency headers, pre/post scripts, tests, YAML assertions, 4 environments incl. a personal one, a cookie jar, and git state on branch feature/partial-refunds with staged/unstaged changes and commit log), 'Ledgerly Back-office' (disputes, KYC reviews, risk flags, feature flags, support tickets; OAuth2 PKCE default auth; plus some leftover clutter: a tmp debug request returning 500, a 'copy of' request, an empty Untitled request), 'GitHub REST', 'Fleet Tracking Service' (REST, XML, form-data, GraphQL, WebSocket, SSE, gRPC requests; API-key auth), plus the app's own 'Getting Started' sample. Five tabs are restored from the last session (Create payment intent is active). History has about 400 entries over 4 months with a mix of 2xx/4xx/5xx and network failures. Also seeded: 5 monitors with 40 runs each (some failures, one paused), 140 audit-log entries, trash items, 3 plugins (one disabled), 24 proxy captures, 1 running mock server (port 4010, 22 endpoints, shown in the Mock Server dialog). Main areas: activity bar (Collections, Environments, History, Git, etc.), request tabs with URL bar and Params/Headers/Body/Auth/Scripts/Tests, response panel (send a request to fill it), Settings, AI assistant, Collection Runner, Mock Server, Monitors, Docs preview, Command palette (Ctrl/Cmd+K). Note: the Git activity-bar button tooltip shows the raw key 'sidebar.git' because en.json lacks that translation (existing app behaviour, left unchanged). Verification: a real browser could not be launched in the build sandbox, so the build was checked by rendering the real <App/> in jsdom against the same mock (.ui-capture/smoke, run with vitest) and by serving out/ with .ui-capture/serve.mjs. In-session edits to settings and open tabs are saved in localStorage (key apiark-capture-state-v1). Clear it to get back to the seeded state."
+}

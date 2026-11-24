@@ -1,0 +1,555 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "kresus--charts",
+    "url": "http://localhost:4417/#/view/account/1/charts/all",
+    "finalUrl": "http://localhost:4417/#/view/account/1/charts/all",
+    "status": 200,
+    "title": "Kresus",
+    "capturedAt": "2026-11-18T05:49:44.291Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1575
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "finance",
+    "domainNote": "self-hosted personal finance manager (Kresus) — charts view of bank accounts",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/kresus/explore.json",
+      "repo": {
+        "name": "kresusapp/kresus",
+        "url": "https://github.com/kresusapp/kresus",
+        "commit": "574d4de662aeed180abc56a6eee03c36721192d0",
+        "license": "AGPL-3.0"
+      },
+      "view": {
+        "slug": "charts",
+        "name": "Charts by category",
+        "description": "Charts area with tabs, amount type and period filters, and a monthly per-category bar chart plus income/spending pie charts."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Dark top bar: hamburger toggle, KRESUS / Charts breadcrumb title, settings gear",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 40
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Account navigator: currency global view, collapsible bank groups with accounts and balances, custom views, section links Reports/Budget/Charts/Duplicates, version footer",
+      "bbox": {
+        "x": 0,
+        "y": 40,
+        "width": 320,
+        "height": 1535
+      },
+      "patterns": [
+        "app-shell",
+        "tree-view",
+        "badge"
+      ]
+    },
+    {
+      "id": "chart-controls",
+      "role": "toolbar",
+      "label": "Chart type tabs (by category/balance/differences), Default parameters button, Amount type select, Period date-range field with preset buttons, Categories select/unselect all",
+      "bbox": {
+        "x": 334,
+        "y": 54,
+        "width": 772,
+        "height": 360
+      },
+      "patterns": [
+        "tabs",
+        "filter-controls",
+        "choice-control",
+        "date-picker"
+      ]
+    },
+    {
+      "id": "bar-chart",
+      "role": "chart",
+      "label": "Monthly grouped bar chart of income/expenses per category with colour legend",
+      "bbox": {
+        "x": 334,
+        "y": 420,
+        "width": 772,
+        "height": 394
+      },
+      "patterns": [
+        "chart",
+        "tooltip",
+        "coordinated-views"
+      ]
+    },
+    {
+      "id": "pie-charts",
+      "role": "chart-grid",
+      "label": "2x2 pie charts: Raw income, Raw spendings, Net income, Net spendings, each with ? help icon",
+      "bbox": {
+        "x": 334,
+        "y": 814,
+        "width": 772,
+        "height": 747
+      },
+      "patterns": [
+        "chart",
+        "tooltip",
+        "contextual-help"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 40
+          },
+          "quote": "KRESUS / Charts",
+          "region": "header",
+          "note": "top bar with hamburger toggle and settings"
+        },
+        {
+          "bbox": {
+            "x": 0,
+            "y": 639,
+            "width": 320,
+            "height": 220
+          },
+          "quote": "Reports Budget Charts Duplicates",
+          "region": "sidebar",
+          "note": "section nav in left sidebar, Charts active"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "sub-tabs-under-the-header",
+        "items": [
+          "fixed-destinations",
+          "user-pinned-items"
+        ],
+        "visibility": "toggle-button",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "tree-view",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 20,
+            "y": 130,
+            "width": 300,
+            "height": 400
+          },
+          "quote": "Crédit Mutuel Total 20 164,22 €",
+          "region": "sidebar",
+          "note": "bank nodes with +/− disclosure buttons expanding to child accounts with balances"
+        }
+      ],
+      "dims": {
+        "content": [
+          "label",
+          "type-icon",
+          "status-decoration"
+        ],
+        "expandBy": [
+          "disclosure-triangle"
+        ],
+        "selection": "single-node",
+        "source": "containment",
+        "density": "comfortable"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Single red warning triangle on a bank row; status indicator but could be just an icon",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 75,
+            "y": 413,
+            "width": 20,
+            "height": 18
+          },
+          "region": "sidebar",
+          "note": "red warning triangle on Fortuneo bank"
+        }
+      ],
+      "dims": {
+        "meaning": "status",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 334,
+            "y": 99,
+            "width": 300,
+            "height": 45
+          },
+          "quote": "by category balance differences",
+          "region": "chart-controls",
+          "note": "underlined route tabs switching chart type; active tab bold"
+        }
+      ],
+      "dims": {
+        "placement": "top",
+        "label": [
+          "text"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "background": "unloaded-on-switch",
+        "switchBy": [
+          "click"
+        ]
+      }
+    },
+    {
+      "id": "filter-controls",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 334,
+            "y": 158,
+            "width": 772,
+            "height": 241
+          },
+          "quote": "Amount type / Period / Categories",
+          "region": "chart-controls",
+          "note": "labelled filter form above charts; changing period updates charts immediately (verified live)"
+        }
+      ],
+      "dims": {
+        "placement": "filter-bar-with-chips",
+        "types": [
+          "date-range",
+          "checkbox-values"
+        ],
+        "preview": "live-results",
+        "origin": "developer-defined",
+        "persistence": "saved-filters"
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 541,
+            "y": 158,
+            "width": 252,
+            "height": 34
+          },
+          "quote": "Incomes and expenses",
+          "region": "chart-controls",
+          "note": "native select with Incomes / Expenses options"
+        }
+      ],
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "dropdown-select",
+        "option": [
+          "label-only"
+        ],
+        "timing": "immediately",
+        "largeSets": "show-all"
+      }
+    },
+    {
+      "id": "date-picker",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 541,
+            "y": 220,
+            "width": 464,
+            "height": 100
+          },
+          "quote": "01/01/2026 to 12/31/2026",
+          "region": "chart-controls",
+          "note": "range field with clear button and preset buttons (Current week ... Last year); focusing opens a month calendar popover (verified live)"
+        }
+      ],
+      "dims": {
+        "presentation": "calendar-popover",
+        "selection": "range",
+        "annotations": [
+          "none"
+        ],
+        "openBy": "focusing-the-field"
+      }
+    },
+    {
+      "id": "chart",
+      "status": "present",
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 334,
+            "y": 420,
+            "width": 772,
+            "height": 394
+          },
+          "region": "bar-chart",
+          "note": "grouped bar chart, months on x axis, signed amounts on y, colour legend by category; hover shows tooltip (verified)"
+        },
+        {
+          "bbox": {
+            "x": 334,
+            "y": 814,
+            "width": 772,
+            "height": 747
+          },
+          "quote": "Raw income",
+          "region": "pie-charts",
+          "note": "four pie charts with legends"
+        }
+      ],
+      "dims": {
+        "markType": "bars",
+        "channels": [
+          "position",
+          "length",
+          "colour-hue-or-value"
+        ],
+        "scale": "linear",
+        "faceting": "layered-series",
+        "inspectBy": [
+          "hover-tooltip"
+        ],
+        "authorship": "author-specified",
+        "annotation": [
+          "none"
+        ],
+        "adaptation": "fixed-desktop-chart"
+      }
+    },
+    {
+      "id": "tooltip",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 438,
+            "y": 835,
+            "width": 22,
+            "height": 24
+          },
+          "region": "pie-charts",
+          "note": "? icon hover shows dark explanation bubble above (verified live)"
+        },
+        {
+          "bbox": {
+            "x": 380,
+            "y": 520,
+            "width": 140,
+            "height": 50
+          },
+          "region": "bar-chart",
+          "note": "chart datatip 'Jan 26 Income: 3,184.27' on bar hover"
+        }
+      ],
+      "dims": {
+        "trigger": [
+          "hover"
+        ],
+        "timing": "until-the-pointer-leaves",
+        "content": "rich-content",
+        "placement": "above"
+      }
+    },
+    {
+      "id": "contextual-help",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 438,
+            "y": 830,
+            "width": 172,
+            "height": 34
+          },
+          "quote": "Raw income",
+          "region": "pie-charts",
+          "note": "? info icon next to each pie heading explains what the chart includes"
+        }
+      ],
+      "dims": {
+        "access": [
+          "info-icon"
+        ],
+        "content": [
+          "definitions"
+        ],
+        "placement": "popover-at-the-field",
+        "proactivity": "on-request",
+        "relevance": "field"
+      }
+    },
+    {
+      "id": "coordinated-views",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "rationale": "One shared filter form drives the bar chart and all four pies (verified period change blanks all), but there is no mark-level linking between views",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 334,
+            "y": 158,
+            "width": 772,
+            "height": 1400
+          },
+          "region": "bar-chart",
+          "note": "shared amount type/period/category parameters across five charts"
+        }
+      ],
+      "dims": {
+        "linkChannel": [
+          "parameters"
+        ],
+        "arrangement": "tiled-dashboard",
+        "trigger": [
+          "change-a-control"
+        ],
+        "scope": "all-linked-views",
+        "authorship": "fixed-published-dashboard"
+      }
+    },
+    {
+      "id": "dashboard",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 334,
+            "y": 420,
+            "width": 772,
+            "height": 1140
+          },
+          "note": "analytical chart report page rather than a glanceable metrics dashboard"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "app shell: dark top bar with hamburger and settings, fixed left sidebar of banks/accounts and section nav, white centered content panel with route tabs, filter form, a grouped bar chart and a 2x2 grid of pie charts",
+    "regions": [
+      "header",
+      "sidebar",
+      "chart-controls",
+      "bar-chart",
+      "pie-charts"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#f8f9fa",
+      "#ffffff",
+      "#f5f6f7",
+      "#303641",
+      "#6792d8",
+      "#0d59d2",
+      "#444444",
+      "#717171",
+      "#f26c4f",
+      "#cfd9db"
+    ],
+    "colorRoles": {
+      "background": "#f8f9fa",
+      "surface": "#ffffff",
+      "text": "#444444",
+      "muted": "#717171",
+      "primary": "#0d59d2",
+      "accent": "#6792d8",
+      "header": "#303641",
+      "negative": "#f26c4f",
+      "border": "#cfd9db",
+      "sidebar": "#f5f6f7"
+    },
+    "typography": "Open Sans throughout (UI, nav, controls, headings); chart axes/legends in a default sans (Arial/Helvetica via C3); FontAwesome icons",
+    "typeScale": "Low contrast: 14px body/controls, 16px bank names, 20px bold logo, 24px light chart headings; weight used for hierarchy (600–700 labels vs 400)",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "data-visualization",
+      "iconography"
+    ],
+    "iconStyle": "filled",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "utilitarian",
+      "clean",
+      "technical",
+      "dense-data"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T05:51:05.159Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 10,
+    "usage": {
+      "input_tokens": 20,
+      "cache_creation_input_tokens": 42009,
+      "cache_read_input_tokens": 378484,
+      "output_tokens": 5631
+    }
+  },
+  "notes": "Kresus open-source finance app. Content panel is a fixed ~800px white column leaving empty grey space on the right at 1440. Selected account highlighted with solid periwinkle blue row; amounts in blue, negative in coral-red. Bank logos as square thumbnails. Period field has preset quick-range ghost buttons. Charts are C3/D3 with default categorical palette. Live check showed an empty state 'NO DATA FOR THIS PERIOD' grey panel when range is empty (not in capture)."
+}

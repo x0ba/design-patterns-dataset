@@ -1,0 +1,79 @@
+# Codebook proposal (new-entry) — review with: node scripts/proposals.ts show repo-001 usage-meter
+id: usage-meter
+kind: new-entry
+status: open
+batch: repo-001
+codebookVersion: 1.0.0
+name: Usage meter / quota gauge
+level: component
+parent: monitor
+definition: A bar or gauge showing how much of a bounded allowance (quota, rate limit, storage,
+  budget) has been consumed, often with a reset time and a pace/target marker. Unlike a progress
+  indicator it reports a level of consumption, not work in progress.
+aliases:
+  - meter
+  - quota bar
+  - usage bar
+  - capacity gauge
+relations:
+  neighbors:
+    - progress-indicator
+    - stat-tile
+    - chart
+dimensions:
+  - name: Context
+    family: content
+    question: What gives the consumed level meaning?
+    subdimensions:
+      - id: context
+        name: Context
+        select: many
+        values:
+          - id: percentage
+            name: Percentage
+          - id: absolute-of-limit
+            name: Absolute of limit (3.2 of 5 GB)
+          - id: reset-time
+            name: Reset time
+          - id: pace-marker
+            name: Pace or target marker
+            example: TokenTracker even-pace tick
+          - id: threshold-colours
+            name: Threshold colours
+  - name: Form
+    family: layout
+    question: How is the meter drawn?
+    subdimensions:
+      - id: form
+        name: Form
+        select: one
+        values:
+          - id: linear-bar
+            name: Linear bar
+          - id: radial-gauge
+            name: Radial gauge
+          - id: segmented
+            name: Segmented
+rationale:
+  - rater: rater-1
+    site: tokentracker--limits
+    text: progress-indicator is defined as 'work is happening'; chart is general data encoding.
+      Quota/usage meters (HTML <meter>, storage bars, API rate-limit bars) are a distinct, very
+      common component with reset time, threshold colours and pace markers.
+sources:
+  - batch: repo-001
+    site: tokentracker--limits
+    url: http://localhost:4407/limits
+    note: proposed by rater-1
+evidence:
+  - site: tokentracker--limits
+    rater: rater-1
+    bbox:
+      x: 272
+      y: 157
+      width: 1104
+      height: 157
+    quote: 5h 33% 2h
+    note: Rate-limit usage bars with even-pace tick marker and time-to-reset
+createdAt: 2026-11-18T03:22:29.943Z
+updatedAt: 2026-11-18T03:22:29.943Z

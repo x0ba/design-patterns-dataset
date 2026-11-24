@@ -1,0 +1,527 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "kresus--transactions",
+    "url": "http://localhost:4417/#/view/account/1/reports",
+    "finalUrl": "http://localhost:4417/#/view/account/1/reports",
+    "status": 200,
+    "title": "Kresus",
+    "capturedAt": "2026-11-18T05:46:41.406Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 5400
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "finance",
+    "domainNote": "self-hosted personal finance manager (Kresus) — bank account transaction report",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/kresus/explore.json",
+      "repo": {
+        "name": "kresusapp/kresus",
+        "url": "https://github.com/kresusapp/kresus",
+        "commit": "574d4de662aeed180abc56a6eee03c36721192d0",
+        "license": "AGPL-3.0"
+      },
+      "view": {
+        "slug": "transactions",
+        "name": "Account transactions (Reports)",
+        "description": "Main workspace: account sidebar grouped by bank, balance summary and the month-grouped transaction list for the everyday account."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "top-bar",
+      "label": "Dark bar with sidebar toggle, KRESUS / Reports title and settings cog menu",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 40
+      },
+      "patterns": [
+        "app-shell",
+        "menu"
+      ]
+    },
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Accounts grouped by bank (collapsible groups with totals), custom views, and Reports/Budget/Charts/Duplicates nav",
+      "bbox": {
+        "x": 0,
+        "y": 40,
+        "width": 320,
+        "height": 860
+      },
+      "patterns": [
+        "app-shell",
+        "accordion",
+        "badge"
+      ]
+    },
+    {
+      "id": "balance-summary",
+      "role": "stat-summary",
+      "label": "Cyan-bordered balance tile: current balance, ongoing and future balance",
+      "bbox": {
+        "x": 334,
+        "y": 54,
+        "width": 772,
+        "height": 125
+      },
+      "patterns": [
+        "stat-tile"
+      ]
+    },
+    {
+      "id": "toolbar",
+      "role": "toolbar",
+      "label": "Search (reveals filter panel), Synchronize, Add a transaction, Bulk Edit buttons",
+      "bbox": {
+        "x": 334,
+        "y": 193,
+        "width": 772,
+        "height": 34
+      },
+      "patterns": [
+        "filter-controls",
+        "bulk-actions"
+      ]
+    },
+    {
+      "id": "transactions-table",
+      "role": "data-table",
+      "label": "Transactions grouped by month with date, type, editable label, amount, category and category color stripe",
+      "bbox": {
+        "x": 334,
+        "y": 241,
+        "width": 772,
+        "height": 1420
+      },
+      "patterns": [
+        "data-table",
+        "inline-edit",
+        "choice-control"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 40
+          },
+          "quote": "KRESUS / Reports",
+          "region": "header",
+          "note": "top bar with hamburger toggle and settings cog"
+        },
+        {
+          "bbox": {
+            "x": 0,
+            "y": 655,
+            "width": 320,
+            "height": 200
+          },
+          "quote": "Reports",
+          "region": "sidebar",
+          "note": "section nav in left sidebar"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations"
+        ],
+        "visibility": "toggle-button",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1398,
+            "y": 10,
+            "width": 21,
+            "height": 20
+          },
+          "region": "header",
+          "note": "cog opens dropdown: Dashboard, Categories, Bank accesses, ... Customization, separator, About (verified live)"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click",
+        "structure": "sections",
+        "item": [
+          "label",
+          "icon"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    },
+    {
+      "id": "accordion",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 20,
+            "y": 130,
+            "width": 300,
+            "height": 205
+          },
+          "quote": "Crédit Mutuel Total 20 164,22 €",
+          "region": "sidebar",
+          "note": "expanded bank group with minus toggle showing its accounts"
+        },
+        {
+          "bbox": {
+            "x": 20,
+            "y": 349,
+            "width": 300,
+            "height": 172
+          },
+          "quote": "Boursorama – joint with J... Total 11 060,01 €",
+          "region": "sidebar",
+          "note": "collapsed groups with plus toggles; opening one leaves others open (verified live)"
+        }
+      ],
+      "dims": {
+        "policy": "many-at-a-time",
+        "header": [
+          "title-plus-summary-value",
+          "status-indicator"
+        ],
+        "toggle": [
+          "header-click"
+        ]
+      }
+    },
+    {
+      "id": "badge",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Only indicator is a red warning triangle icon next to a bank name; may be considered a plain status icon rather than a badge.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 76,
+            "y": 411,
+            "width": 24,
+            "height": 22
+          },
+          "region": "sidebar",
+          "note": "red warning triangle flags a bank access problem on Fortuneo"
+        }
+      ],
+      "dims": {
+        "meaning": "status",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "stat-tile",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 334,
+            "y": 54,
+            "width": 772,
+            "height": 125
+          },
+          "quote": "1 846,32 €",
+          "region": "balance-summary",
+          "note": "large balance with 'Today at 9:46 PM', Ongoing and Future balance sub-values"
+        }
+      ],
+      "dims": {
+        "context": [
+          "label"
+        ],
+        "encoding": "number-only",
+        "window": "fixed",
+        "drill": "none"
+      }
+    },
+    {
+      "id": "data-table",
+      "status": "present",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 334,
+            "y": 241,
+            "width": 772,
+            "height": 645
+          },
+          "quote": "Date Type Label Amount Category",
+          "region": "transactions-table",
+          "note": "column headers, month group row 'November 2026', rows with colored category stripe"
+        },
+        {
+          "bbox": {
+            "x": 334,
+            "y": 1205,
+            "width": 772,
+            "height": 50
+          },
+          "quote": "October 2026",
+          "region": "transactions-table",
+          "note": "second month group header"
+        }
+      ],
+      "dims": {
+        "columnSet": "fixed",
+        "cellRendering": [
+          "plain-text",
+          "editable-input"
+        ],
+        "density": "comfortable",
+        "rowExpansion": "grouped-rows",
+        "selection": "multiple-rows",
+        "opScope": [
+          "row",
+          "selection"
+        ],
+        "aggregation": [
+          "group-by-column"
+        ],
+        "openIn": "new-page"
+      }
+    },
+    {
+      "id": "inline-edit",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 596,
+            "y": 346,
+            "width": 238,
+            "height": 34
+          },
+          "quote": "SALAIRE NEXOPIA",
+          "region": "transactions-table",
+          "note": "label cell is an input 'Add a custom label' styled as text; type and category cells are comboboxes"
+        }
+      ],
+      "dims": {
+        "enter": "always-editable",
+        "unit": "one-field"
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 948,
+            "y": 350,
+            "width": 150,
+            "height": 30
+          },
+          "quote": "Income",
+          "region": "transactions-table",
+          "note": "category cell is a combobox select; type cell likewise"
+        }
+      ],
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "dropdown-select",
+        "option": [
+          "label-only"
+        ]
+      }
+    },
+    {
+      "id": "filter-controls",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 334,
+            "y": 193,
+            "width": 95,
+            "height": 34
+          },
+          "quote": "Search",
+          "region": "toolbar",
+          "note": "button toggles an inline search panel above the table (verified live): keywords, type, category multi-select, amount range slider, start/end date"
+        }
+      ],
+      "dims": {
+        "types": [
+          "text-match",
+          "checkbox-values",
+          "range",
+          "date-range"
+        ],
+        "origin": "developer-defined"
+      }
+    },
+    {
+      "id": "bulk-actions",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 997,
+            "y": 193,
+            "width": 109,
+            "height": 34
+          },
+          "quote": "Bulk Edit",
+          "region": "toolbar",
+          "note": "toggles checkbox column and an action row (type, label, category setters) under the table header (verified live)"
+        }
+      ],
+      "dims": {
+        "selection": [
+          "checkbox-per-row"
+        ],
+        "surface": "contextual-toolbar"
+      }
+    },
+    {
+      "id": "tree-view",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 20,
+            "y": 130,
+            "width": 300,
+            "height": 205
+          },
+          "region": "sidebar",
+          "note": "only one-level bank groups; coded as accordion"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "pagination",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 334,
+            "y": 241,
+            "width": 772,
+            "height": 1420
+          },
+          "region": "transactions-table",
+          "note": "long scrolling list without pager"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "web app shell: dark top bar with hamburger and settings cog, fixed left sidebar listing accounts grouped by bank plus section nav, content column (~770px) with balance summary tile, action toolbar and month-grouped transaction table; right area empty",
+    "regions": [
+      "header",
+      "sidebar",
+      "balance-summary",
+      "toolbar",
+      "transactions-table"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#303641",
+      "#f5f6f7",
+      "#ffffff",
+      "#f8f9fa",
+      "#6792d8",
+      "#0d59d2",
+      "#00bff3",
+      "#717171",
+      "#444444",
+      "#e67e22",
+      "#cfd9db"
+    ],
+    "colorRoles": {
+      "background": "#f8f9fa",
+      "surface": "#ffffff",
+      "text": "#717171",
+      "heading": "#444444",
+      "primary": "#0d59d2",
+      "accent": "#00bff3",
+      "selected": "#6792d8",
+      "header": "#303641",
+      "sidebar": "#f5f6f7",
+      "warning": "#e67e22",
+      "border": "#cfd9db"
+    },
+    "typography": "Open Sans throughout (headings 16px bold, body 14px, labels 600 weight); FontAwesome icons",
+    "typeScale": "Small, flat scale: 25px balance figure, 20px bold app title, 16px sidebar group headings/bank names, 14px for nearly everything else; hierarchy via weight (600/700) and colour",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "filled",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "utilitarian",
+      "clean",
+      "technical",
+      "calm"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T05:48:19.441Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 13,
+    "usage": {
+      "input_tokens": 26,
+      "cache_creation_input_tokens": 46847,
+      "cache_read_input_tokens": 491851,
+      "output_tokens": 6565
+    }
+  },
+  "notes": "Kresus open-source finance manager. Each transaction row has a coloured right-edge stripe matching its category; income amounts are green, negatives bold grey; future/pending transactions get a diagonal-hatched background (first row). Bank logos as square thumbnails in the sidebar; selected account highlighted in solid #6792d8 with white text. Balance tile has a cyan icon block (scales icon) on the left. Content column is fixed ~770px leaving a blank area on the right at 1440px. Search filter panel and bulk-edit mode are hidden until toggled from the toolbar. Row '+' icon opens a separate transaction details page."
+}

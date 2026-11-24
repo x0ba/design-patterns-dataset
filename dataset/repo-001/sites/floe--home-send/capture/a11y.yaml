@@ -1,0 +1,225 @@
+- navigation "Main":
+  - button "Floe home": Floe , Connected
+  - button "About"
+  - button "CLI"
+  - button "Desktop"
+  - button "FAQ"
+  - link "Download":
+    - /url: /download
+  - link "Docs":
+    - /url: https://www.floe.one/docs
+  - link "GitHub":
+    - /url: https://github.com/jannskiee/floe
+- heading "Floe" [level=1]
+- paragraph: Secure, encrypted P2P file transfer. No accounts, no file storage, and no registration required.
+- main:
+  - text: Send 9ms Ready
+  - status
+  - paragraph: Drop files or click to browse
+  - paragraph: No size limit from Floe over direct connections
+  - button "Choose files to send"
+  - paragraph: End-to-end encrypted. Files are never stored on a server.
+- text: 6 2 . 3 9 TB transferred globally
+- paragraph: How it works
+- heading "Your files never make a stop." [level=2]
+- paragraph: Two devices open an encrypted WebRTC channel and stream bytes to each other. A small server introduces them, then steps out of the way.
+- text: "01"
+- heading "Drop your files" [level=3]
+- paragraph: "Click Create secure link for a share link, with a QR code one click away. The link's secret part, after the #, never appears in page requests, server logs, or analytics."
+- text: "02"
+- heading "Share either one" [level=3]
+- paragraph: Your peer opens the link in a modern browser, scans the QR, or pastes the link into the desktop app or the CLI. No account on either side.
+- text: "03"
+- heading "Watch it stream" [level=3]
+- paragraph: Bytes move device to device over the encrypted channel. Close the tab and the transfer stops. No file is ever left on a server.
+- link "Read the overview":
+  - /url: /how-it-works
+- paragraph: Privacy
+- heading "The server can't read what it never receives." [level=2]
+- paragraph: Floe's signaling server exists to introduce two devices. These are the main things it handles.
+- paragraph: The signaling server handles
+- list:
+  - listitem: The messages two devices trade to connect, which carry their network addresses
+  - listitem: The room id in your link, or a short room code, held in memory and never in the server's own log
+  - listitem: Your IP address, in memory while your device is connected and, to rate-limit abuse, for up to about two minutes after its last request
+  - listitem: One anonymous running total of bytes for the public counter
+- paragraph: It never sees
+- list:
+  - listitem: Your files, file names, or folder structure
+  - listitem:
+    - text: The
+    - code: "#room"
+    - text: part of your share link in any page request, referrer, or analytics event. It travels in none of them
+  - listitem: "The link id in a request link's address (the part before the #), which only the web host sees"
+  - listitem: Any transfer traffic. Once the peers connect, the data channel bypasses it entirely
+  - listitem: Relayed traffic in the clear. Relay packets stay encrypted end to end
+- paragraph:
+  - text: The floe.one website also runs cookieless analytics (Umami) and error monitoring (Sentry). Floe Desktop and the CLI have neither. What they do send is in the
+  - link "privacy policy":
+    - /url: /privacy
+  - text: .
+- link "See the full list in the security model":
+  - /url: https://www.floe.one/docs/security-privacy#what-the-signaling-server-can-see
+- paragraph: Command line
+- heading "The same transfer, without the browser." [level=2]
+- paragraph: floe is one file with nothing else to install, and it uses the same server as the web app. Browser to terminal works in every direction, and a folder arrives with its structure intact in the CLI and Floe Desktop, or inside "Download ZIP" in a browser.
+- group "Install command by operating system":
+  - button "Windows" [pressed]
+  - button "macOS"
+  - button "Linux"
+- code: "> winget install jannskiee.floe"
+- button "Copy install command"
+- list:
+  - listitem:
+    - code: floe send <path>
+    - text: Share files or entire folders
+  - listitem:
+    - code: floe send <path> --to <link>
+    - text: Send through a Floe Desktop request link
+  - listitem:
+    - code: floe receive <code>
+    - text: A short code is all the other side needs
+  - listitem:
+    - code: floe update
+    - text: Updates itself in place, unless a package manager installed it
+- paragraph:
+  - text: Also available via Scoop, a PowerShell one-liner, and
+  - code: go install
+  - text: ", which gives a dev build that cannot update itself. On a Mac without Homebrew, the Linux command works too."
+  - link "Installation guide":
+    - /url: https://www.floe.one/docs/cli/installation
+- text: terminal
+- group "Example terminal session, scrollable"
+- paragraph: "Example terminal session: floe send shares three files totaling 10.1 MB, prints the short code olive-tiger-castle and a link, connects directly to the peer, and completes the transfer in 8 seconds at an average of 1.3 MB per second. Its summary includes the line Verified, SHA-256 matched."
+- paragraph: Desktop
+- heading "Transfers that outlive the tab." [level=2]
+- paragraph: Floe Desktop is the same app, running natively on Windows. Drop a folder to send it without zipping, paste a screenshot straight from the clipboard, get a notification when a transfer lands. Same rooms, same end-to-end encryption as browser and CLI peers.
+- list:
+  - listitem: Paste to send Ctrl+V a screenshot or files copied in Explorer
+  - listitem: Folders Sent as folders, no zipping
+  - listitem: History What you sent and received, stored locally
+  - listitem: Request link Someone sends files to your PC from their browser
+- link "Get the desktop app":
+  - /url: /download
+- paragraph: v1.1.1 · Windows
+- text: floe desktop · 1.1.1
+- paragraph: "Demo of the Floe desktop app: three files are staged, then a share panel opens a live room with the code quiet-fetch-sled and a share link, waiting for the receiver."
+- paragraph: Capabilities
+- heading "No asterisks." [level=2]
+- paragraph: The fine print, printed large. Every claim below holds for the current release.
+- heading "No size limit from Floe" [level=3]
+- paragraph: Floe sets no size limit on a direct connection; a browser that receives is limited by what that browser can hold. Relayed sessions cap at 2 GB, and the badge shows which one you are on.
+- heading "Browser to terminal" [level=3]
+- paragraph: The web app, Floe Desktop, and the CLI share one protocol. Send from a server, receive on a phone, any direction.
+- heading "Folders stay folders" [level=3]
+- paragraph: The CLI and Floe Desktop send a folder whole and rebuild its structure when they receive one. A browser keeps the structure when you use "Download ZIP".
+- heading "Honest progress" [level=3]
+- paragraph: Progress for each file with live speed and time left, in the browser and in the terminal.
+- link "Checked on arrival Each file is checked against its announced size and, when the sender sends one, a fingerprint of its contents (SHA-256). A mismatched file is discarded. Browser, CLI, and Floe Desktop receivers confirm delivery.":
+  - /url: https://www.floe.one/docs/how-it-works/file-checks
+  - heading "Checked on arrival" [level=3]
+  - paragraph: Each file is checked against its announced size and, when the sender sends one, a fingerprint of its contents (SHA-256). A mismatched file is discarded. Browser, CLI, and Floe Desktop receivers confirm delivery.
+- link "Open source, self-hostable MIT licensed, every line on GitHub. Run your own signaling server and relay with Docker; the docs cover production setup.":
+  - /url: https://www.floe.one/docs/self-hosting/overview
+  - heading "Open source, self-hostable" [level=3]
+  - paragraph: MIT licensed, every line on GitHub. Run your own signaling server and relay with Docker; the docs cover production setup.
+- paragraph: FAQ
+- heading "Questions, answered plainly." [level=2]
+- heading "What is Floe?" [level=3]:
+  - button "What is Floe?"
+- heading "What does 'Peer-to-Peer' (P2P) mean?" [level=3]:
+  - button "What does 'Peer-to-Peer' (P2P) mean?"
+- heading "How do I use Floe? (Step-by-step)" [level=3]:
+  - button "How do I use Floe? (Step-by-step)"
+- heading "Can I use Floe from the terminal?" [level=3]:
+  - button "Can I use Floe from the terminal?"
+- heading "Is there a desktop app?" [level=3]:
+  - button "Is there a desktop app?"
+- heading "Can someone send files to me?" [level=3]:
+  - button "Can someone send files to me?"
+- heading "Where are my files stored?" [level=3]:
+  - button "Where are my files stored?"
+- heading "Is there a file size limit?" [level=3]:
+  - button "Is there a file size limit?"
+- heading "How big a file can a browser receive?" [level=3]:
+  - button "How big a file can a browser receive?"
+- heading "Why do I need to keep the tab open?" [level=3]:
+  - button "Why do I need to keep the tab open?"
+- heading "Is this secure?" [level=3]:
+  - button "Is this secure?"
+- heading "How do I know a file arrived intact?" [level=3]:
+  - button "How do I know a file arrived intact?"
+- contentinfo:
+  - paragraph: Floe
+  - paragraph: Open-source, peer-to-peer file transfer. MIT licensed.
+  - link "GitHub":
+    - /url: https://github.com/jannskiee/floe
+  - link "Support on Ko-fi":
+    - /url: https://ko-fi.com/jannskiee
+  - paragraph: Product
+  - list:
+    - listitem:
+      - link "Floe":
+        - /url: /
+    - listitem:
+      - link "Download":
+        - /url: /download
+    - listitem:
+      - link "How It Works":
+        - /url: /how-it-works
+  - paragraph: Documentation
+  - list:
+    - listitem:
+      - link "Quickstart":
+        - /url: https://www.floe.one/docs/quickstart
+    - listitem:
+      - link "Web app":
+        - /url: https://www.floe.one/docs/web-app/sending
+    - listitem:
+      - link "CLI":
+        - /url: https://www.floe.one/docs/cli/installation
+    - listitem:
+      - link "Desktop app":
+        - /url: https://www.floe.one/docs/desktop/installation
+    - listitem:
+      - link "Self-hosting":
+        - /url: https://www.floe.one/docs/self-hosting/overview
+    - listitem:
+      - link "FAQ":
+        - /url: https://www.floe.one/docs/faq
+    - listitem:
+      - link "Changelog":
+        - /url: https://www.floe.one/docs/changelog
+  - paragraph: Project
+  - list:
+    - listitem:
+      - link "GitHub":
+        - /url: https://github.com/jannskiee/floe
+    - listitem:
+      - link "Releases":
+        - /url: https://github.com/jannskiee/floe/releases
+    - listitem:
+      - link "Report an Issue":
+        - /url: https://github.com/jannskiee/floe/issues
+    - listitem:
+      - link "Contributing":
+        - /url: https://github.com/jannskiee/floe/blob/main/CONTRIBUTING.md
+    - listitem:
+      - link "Sponsor":
+        - /url: https://github.com/sponsors/jannskiee
+  - paragraph: Legal
+  - list:
+    - listitem:
+      - link "Privacy Policy":
+        - /url: /privacy
+    - listitem:
+      - link "Terms of Use":
+        - /url: /terms
+    - listitem:
+      - link "Security Policy":
+        - /url: https://github.com/jannskiee/floe/security/policy
+    - listitem:
+      - link "License (MIT)":
+        - /url: https://github.com/jannskiee/floe/blob/main/LICENSE
+  - paragraph: © 2026 Floe. Built on WebRTC.
+- alert

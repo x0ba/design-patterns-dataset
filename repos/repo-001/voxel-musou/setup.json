@@ -1,0 +1,69 @@
+{
+  "batch": "repo-001",
+  "slug": "voxel-musou",
+  "ok": true,
+  "repo": {
+    "name": "mike007jd/voxel-musou",
+    "url": "https://github.com/mike007jd/voxel-musou",
+    "commit": "aba5fb8f43b713e88e8ac3a3105e48f01941dc7f",
+    "branch": "main",
+    "license": "MIT"
+  },
+  "domain": "games",
+  "port": 4469,
+  "checkoutRoot": "~/.cache/design-patterns-dataset/repos",
+  "mode": "static",
+  "entry": "/",
+  "app": {
+    "mode": "static",
+    "entry": "/",
+    "login": null,
+    "stubs": [],
+    "notes": "Voxel Musou is a no-build, backend-free Three.js game (plain ES modules + vendored three r186), so the 'production build' is a copy of index.html, src/ and vendor/ into .ui-capture/out (script: .ui-capture/build.sh; node 22.23.5 pinned in mise.toml, used only for the seed generator). There are no API keys, network services or accounts; the only persistent data is the browser save in localStorage ('voxel-musou.save' = per stage x officer x difficulty best rank / fastest clear / most KOs, and 'voxel-musou.diff' = last picked difficulty). Data: .ui-capture/gen-save.mjs replays 81 wins of a months-long play history (chapters in order, trials sprinkled in, harder tiers later, skill improving over time, some later grinding for S) through the game's own record() from src/core/progress.js and the chapters' own rank formula/thresholds, producing 37 record cells across all 4 story chapters and all 3 trials, all 7 officers and all 4 difficulties (8 S, 22 A, 6 B, 1 C; e.g. Liu Bei barely scraped a C on Hard at Hulao Gate, Zhao Yun has S on Changban up to Chaos and a 1:31 Thousand Slain). Rebuild with `.ui-capture/build.sh`; `.ui-capture/verify.mjs` serves out/ and checks the whole module import graph resolves; `.ui-capture/serve.mjs` is a tiny static server with index.html fallback for local testing. That save is written to out/seed-save.js, which out/index.html loads (classic script, before src/main.js) and which installs it into localStorage only when the browser has no save yet; difficulty is preset to Hard. Effects for the user: every chapter is cleared, Lu Bu is unlocked, Hold the Bridge and The Gauntlet trials are unlocked, and Chaos difficulty is open. Main areas: title screen (Story 劇情模式 -> chapter cards with best ranks -> difficulty -> officer select with rank chips), Trials 演武試煉 (Thousand Slain / Hold the Bridge / The Gauntlet / Free battle), Records 戰績 wall, and the battle itself with HUD, minimap, objectives, pause menu and result screen. Requires WebGL2; sound starts on first input. Menus are keyboard/mouse/gamepad driven (arrows/WASD + Enter, Esc to go back)."
+  },
+  "tools": {
+    "node": "22.23.5"
+  },
+  "prompt": "This is a checkout of mike007jd/voxel-musou (https://github.com/mike007jd/voxel-musou) at commit aba5fb8f43b7. Dynasty Warriors-style voxel action game in the browser: Zhao Yun vs 300 soldiers. Three.js, no build step.\n\nI want to see its user interface in a desktop browser, in the state a real, established user would see it. Please get the app running locally with its main interface working and realistic data in it.\n\n# Running it\n- Follow the repo's own setup docs and tooling. Take the simplest route that shows the real app: a static production build if the front end works without a backend, otherwise the app's own server (production or dev mode).\n- If it needs a database or other services, run them locally with an embedded or file-based option (SQLite, in-memory, JSON files, an embedded Postgres such as PGlite) or the app's demo/mock mode.\n- Don't redesign or restyle anything. Change only what's needed to build and run it.\n\n# Tools: use mise\nInstall every runtime and tool you need (node, the package manager, python, bun, ...) with mise, pinned to exact versions in a mise.toml at the repo root, so the setup can be reproduced. Match what the repo asks for (engines, .nvmrc, .tool-versions, packageManager). mise is already configured for this directory: `mise install` installs into ./.ui-capture/mise, and its shims come first on PATH, so `node`, `pnpm` and the rest resolve to the pinned versions. Don't use other copies of these tools or download runtimes by hand.\n\n# Secrets, API keys and external services: fake them\nThe app must not depend on anything outside this machine, and when it runs it has no network except localhost. Wherever it expects secrets, environment variables, API keys or third-party services (hosted auth or OAuth, payment providers, email, LLM or other AI APIs, maps, storage buckets, analytics, hosted databases):\n- Give the required variables placeholder values so the app starts.\n- Where it actually calls the service, make the call succeed locally with realistic responses: use the app's own mock, test or offline mode if it has one; otherwise point the client at a small local stub server that start.sh also starts, or swap in a stub at the integration boundary (the API client or service module). Keep stubs out of UI code. Responses should look like what the real service returns for a real user, e.g. an AI reply that actually answers, a payment history with real-looking amounts.\n- Calls the browser makes directly to outside services count too; point them at the local stub.\n- For sign-in through an outside provider, create a local account or use the app's dev sign-in so you can get past it.\nList every stub in app.json.\n\n# Data: like real use\nSeed it the way an established user's data would look after months of actual use: specific, plausible names and content for this kind of app; dates spread over time; a realistic mix of states (done, in progress, overdue, archived, ...); realistic volume (dozens to hundreds of records where the app revolves around records); short and long text; some messiness real data has. Start from the app's own demo or seed data if it has realistic data, and extend it if it's thin. Load data through the app's own paths (its API, import, seed scripts, or its database schema), never by hardcoding it into UI code. If the app needs an account, create one and attach the data to it. No lorem ipsum or \"Test 1\".\n\n# Environment\nThis shell is sandboxed: you can write only inside this directory (package-manager caches already point into ./.ui-capture/cache), and the network reaches only package registries, mise's download sources and GitHub (registry.npmjs.org, registry.yarnpkg.com, repo.yarnpkg.com, github.com, codeload.github.com, objects.githubusercontent.com, raw.githubusercontent.com, nodejs.org, mise.jdx.dev, mise-versions.jdx.dev, release-assets.githubusercontent.com, pypi.org, files.pythonhosted.org, binaries.prisma.sh, cdn.jsdelivr.net, unpkg.com). Docker isn't available. A process you start in the background can't be seen or stopped from a later command, so test servers on another port than 4469 (e.g. 5469) or in the foreground under `timeout`; anything still listening on 4469 is stopped before I check.\n\n# When you're done, leave this in ./.ui-capture/\n- app.json: {\"mode\": \"static\" or \"server\", \"entry\": \"/path where the main UI opens\", \"login\": null or {\"username\": \"...\", \"email\": \"...\", \"password\": \"...\"}, \"stubs\": [{\"service\": \"what was faked\", \"how\": \"how\"}], \"notes\": \"how you set it up, what data is loaded, and the main areas of the app\"}\n- static mode: the production build in ./.ui-capture/out, with index.html as its entry. It will be served from the root of a plain static file server; unknown paths fall back to index.html.\n- server mode: ./.ui-capture/start.sh, which starts everything the app needs (stubs included) in the foreground and serves the UI at http://localhost:4469/ (it gets PORT=4469). It runs with the same PATH and restrictions as your shell, plus no network at all except localhost, so everything must already be installed, built and seeded (or seeded by start.sh itself).\n- Put any scripts you write for seeding or stubbing in ./.ui-capture/ too; they're kept with the setup record.\n\n# Order of work\nYou have 90 minutes in total, and anything unfinished when time runs out is lost. So work in this order:\n1. Get the app building and running with its stubs, and write the contract above (app.json plus out/ or start.sh), even if it has only a little data so far.\n2. Then build out the data, re-running your seed and checking the app still loads after each substantial step, so that a working state with the data loaded so far is always in place.\nWrite large data sets with a short generator script rather than as one long literal file.\n\nI'll open it at 1440×900.",
+  "model": {
+    "model": "claude-opus-5-5",
+    "effort": "high"
+  },
+  "sandbox": true,
+  "startedAt": "2026-11-17T11:05:14.528Z",
+  "finishedAt": "2026-11-17T11:11:53.087Z",
+  "verification": {
+    "ok": true,
+    "problems": [],
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedRequests": [],
+    "textChars": 792,
+    "visibleElements": 223,
+    "title": "趙雲 — Voxel Musou"
+  },
+  "repairs": 0,
+  "session": {
+    "rounds": 1,
+    "numTurns": 35,
+    "costUsd": 1.054223,
+    "durationMs": 396308,
+    "models": [
+      "claude-opus-5-5"
+    ],
+    "usage": {
+      "input_tokens": 58,
+      "cache_creation_input_tokens": 52282,
+      "cache_read_input_tokens": 1119675,
+      "output_tokens": 20590
+    },
+    "timedOut": false
+  },
+  "changes": {
+    "files": 1,
+    "insertions": 2,
+    "deletions": 0,
+    "patchBytes": 152,
+    "patch": "setup.patch"
+  }
+}

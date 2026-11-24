@@ -1,0 +1,345 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "urlclash-converter--sing-box-mode",
+    "url": "http://urlclash-converter.localhost:4319/",
+    "finalUrl": "http://urlclash-converter.localhost:4319/",
+    "status": 200,
+    "title": "Clash (Mihomo) ↔ Link Converter",
+    "capturedAt": "2026-11-18T02:25:45.498Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 5400
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "utilities",
+    "domainNote": "proxy config converter: Clash/Mihomo or sing-box config to/from node share links (vless, ss, trojan...)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/urlclash-converter/explore.json",
+      "repo": {
+        "name": "siiway/urlclash-converter",
+        "url": "https://github.com/siiway/urlclash-converter",
+        "commit": "0fb1803d8132e32fd56b56aad585759207a7190d",
+        "license": "GPL-3.0"
+      },
+      "view": {
+        "slug": "sing-box-mode",
+        "name": "sing-box conversion mode",
+        "description": "Config type switched to sing-box: node links converted into a sing-box JSON outbounds config in the left editor, with the simplified right column."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Solid blue title bar with app title, supported-formats subtitle, language and theme toggle icon buttons",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 108
+      },
+      "patterns": []
+    },
+    {
+      "id": "config-pane",
+      "role": "input-pane",
+      "label": "sing-box Config pane: Paste/Copy buttons, Config Type radio group, Open File/Load URL/Download toolbar, JSON textarea, To Node Link button",
+      "bbox": {
+        "x": 144,
+        "y": 140,
+        "width": 560,
+        "height": 626
+      },
+      "patterns": [
+        "choice-control",
+        "text-field",
+        "file-upload",
+        "split-pane"
+      ]
+    },
+    {
+      "id": "links-pane",
+      "role": "output-pane",
+      "label": "Node Links pane: Paste/Copy, Open File/Load URL/Download toolbar, one-link-per-line textarea, To sing-box Config button",
+      "bbox": {
+        "x": 736,
+        "y": 140,
+        "width": 560,
+        "height": 552
+      },
+      "patterns": [
+        "text-field",
+        "file-upload",
+        "split-pane"
+      ]
+    },
+    {
+      "id": "footer",
+      "role": "footer",
+      "label": "Centered GitHub repo link and 'Made with heart by SiiWay Team - GPL-3.0 License'",
+      "bbox": {
+        "x": 0,
+        "y": 5307,
+        "width": 1440,
+        "height": 93
+      },
+      "patterns": []
+    }
+  ],
+  "patterns": [
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 145,
+            "y": 303,
+            "width": 558,
+            "height": 396
+          },
+          "region": "config-pane",
+          "note": "Multi-line outlined textarea holding sing-box JSON; placeholder explains accepted formats; plain text, no syntax colouring"
+        },
+        {
+          "bbox": {
+            "x": 737,
+            "y": 229,
+            "width": 558,
+            "height": 396
+          },
+          "region": "links-pane",
+          "note": "Multi-line textarea of node links; heading label 'Node Links (One per line)'",
+          "quote": "One node link per line (ss:// vmess:// vless:// trojan:// etc.)"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "label",
+          "placeholder"
+        ],
+        "validation": "on-submit",
+        "style": "outlined",
+        "assistance": [
+          "none"
+        ],
+        "inputType": "plain"
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 144,
+            "y": 188,
+            "width": 560,
+            "height": 58
+          },
+          "region": "config-pane",
+          "note": "Config Type radio group in a bordered box; switching it immediately retitles the pane and reveals an engine switch and output-format radios on the right (verified live)",
+          "quote": "Config Type:"
+        }
+      ],
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "radio-list",
+        "option": [
+          "label-only"
+        ],
+        "timing": "immediately",
+        "largeSets": "show-all"
+      }
+    },
+    {
+      "id": "file-upload",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 144,
+            "y": 262,
+            "width": 94,
+            "height": 24
+          },
+          "region": "config-pane",
+          "note": "Open File button loads a local file into the textarea; Load URL reveals an inline URL field with Fetch (verified live); Paste button too",
+          "quote": "Open File"
+        },
+        {
+          "bbox": {
+            "x": 736,
+            "y": 188,
+            "width": 94,
+            "height": 24
+          },
+          "region": "links-pane",
+          "quote": "Open File"
+        }
+      ],
+      "dims": {
+        "entry": [
+          "browse-button",
+          "paste",
+          "cloud-import"
+        ],
+        "multiplicity": "single-file",
+        "preview": "extracted-contents"
+      }
+    },
+    {
+      "id": "split-pane",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Two side-by-side fixed panes (source and converted output) share the window, but there is no resize divider; may be considered a plain two-column layout instead.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 144,
+            "y": 140,
+            "width": 1152,
+            "height": 626
+          },
+          "region": "config-pane",
+          "note": "Config pane and Node Links pane side by side, each its own editable view of the same proxy set"
+        }
+      ],
+      "dims": {
+        "orientation": "side-by-side",
+        "sizing": "fixed",
+        "relationship": "two-views-of-one-document"
+      }
+    },
+    {
+      "id": "form",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 144,
+            "y": 726,
+            "width": 560,
+            "height": 40
+          },
+          "note": "Convert buttons transform text rather than submitting a set of labelled fields"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "code-editor",
+      "status": "absent",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 145,
+            "y": 303,
+            "width": 558,
+            "height": 396
+          },
+          "note": "JSON is in a plain proportional-font textarea with no gutter, syntax colouring or folding"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "menu",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1256,
+            "y": 24,
+            "width": 32,
+            "height": 32
+          },
+          "note": "Language button toggles English/Chinese directly (verified live), no menu opens"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "single-screen two-column converter tool: blue title bar, left config pane and right node-links pane each with Paste/Copy, an Open File/Load URL/Download toolbar and a large textarea, a full-width convert button under each pane, centered footer",
+    "regions": [
+      "header",
+      "config-pane",
+      "links-pane",
+      "footer"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#0f6cbd",
+      "#115ea3",
+      "#fafafa",
+      "#ffffff",
+      "#242424",
+      "#424242",
+      "#616161",
+      "#d1d1d1"
+    ],
+    "colorRoles": {
+      "background": "#fafafa",
+      "surface": "#ffffff",
+      "text": "#242424",
+      "muted": "#616161",
+      "primary": "#0f6cbd",
+      "accent": "#115ea3",
+      "border": "#d1d1d1"
+    },
+    "typography": "Segoe UI throughout (Fluent UI defaults): bold for the title and pane headings, semibold for buttons, regular for textarea content and toolbar labels",
+    "typeScale": "32px bold app title in header, 24px semibold pane headings with 12px parenthetical hint, 16px semibold primary convert buttons, 14px body/textarea/buttons, 12px toolbar subtle buttons and footer",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "utilitarian",
+      "clean",
+      "technical",
+      "corporate-fluent"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T02:27:20.790Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 8,
+    "usage": {
+      "input_tokens": 16,
+      "cache_creation_input_tokens": 45646,
+      "cache_read_input_tokens": 334773,
+      "output_tokens": 8778
+    }
+  },
+  "notes": "Built with Microsoft Fluent UI v9 (Segoe UI, #0f6cbd brand blue, 4px radii, #d1d1d1 strokes). Symmetrical source/target layout: each pane has secondary Paste + primary Copy buttons top-right, a row of subtle icon+text buttons (Open File, Load URL, Download), a large textarea, and a full-width brand-blue convert button with directional arrow (To Node Link ->, <- To sing-box Config). Selecting Clash (Mihomo) adds a js-yaml engine card with a switch and an output-format radio group (proxies / payload / no prefix) to the right pane. Header has only icon buttons for language (EN/zh toggle) and dark theme. Textareas scroll internally."
+}

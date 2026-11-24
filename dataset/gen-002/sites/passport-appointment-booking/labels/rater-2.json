@@ -1,0 +1,713 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "gen-002",
+  "site": {
+    "slug": "passport-appointment-booking",
+    "url": "http://passport-appointment-booking.localhost:4318/",
+    "finalUrl": "http://passport-appointment-booking.localhost:4318/",
+    "status": 200,
+    "title": "Book a family visit · Countertime",
+    "capturedAt": "2026-11-18T02:02:33.621Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 3214
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "government-civic",
+    "domainNote": "passport / civil-ID registry appointment booking for a family, matching several people's schedules",
+    "provenance": {
+      "source": "generated",
+      "generation": "generated/gen-002/passport-appointment-booking/generation.json",
+      "generator": {
+        "id": "opus",
+        "model": "claude-opus-5-5",
+        "effort": "high"
+      },
+      "brief": {
+        "domain": "government-civic",
+        "archetype": "schedule",
+        "context": "mass-consumer",
+        "product": "Countertime"
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Dark teal top bar with the Countertime logo and registry name, main nav (Book a visit active, My appointments, Applications, Help & documents), household status and user avatar",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 56
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "hold-banner",
+      "role": "banner",
+      "label": "Purple hold banner: 14:46 countdown, 'Held for you: Northgate Mall · Saturday 5 December…', countdown progress bar, Release hold / Review & book this time buttons",
+      "bbox": {
+        "x": 0,
+        "y": 56,
+        "width": 1440,
+        "height": 68
+      },
+      "patterns": [
+        "banner",
+        "progress-indicator",
+        "booking-flow"
+      ]
+    },
+    {
+      "id": "plan-sidebar",
+      "role": "sidebar",
+      "label": "'Your plan' aside: trip date card, who needs passports list with status pills, attendance option cards, schedules being matched, holiday-closure warning",
+      "bbox": {
+        "x": 0,
+        "y": 124,
+        "width": 290,
+        "height": 1210
+      },
+      "patterns": [
+        "choice-control",
+        "badge",
+        "banner",
+        "card"
+      ]
+    },
+    {
+      "id": "finder-grid",
+      "role": "availability-grid",
+      "label": "Heading, explanation, office toggle buttons, legend, 'Hide times that don’t work' switch, and a week-row by weekday grid of colour-coded family slot chips",
+      "bbox": {
+        "x": 290,
+        "y": 124,
+        "width": 686,
+        "height": 810
+      },
+      "patterns": [
+        "availability-picker",
+        "filter-controls",
+        "choice-control",
+        "badge",
+        "booking-flow"
+      ]
+    },
+    {
+      "id": "openings-list",
+      "role": "result-list",
+      "label": "'31 family openings' heading with a Soonest / Fewest trade-offs sort and a list of horizontal opening cards (date block, office, times, per-person constraint checks, price badge, verdict)",
+      "bbox": {
+        "x": 314,
+        "y": 955,
+        "width": 638,
+        "height": 2227
+      },
+      "patterns": [
+        "sort-control",
+        "card",
+        "badge",
+        "overview-detail"
+      ]
+    },
+    {
+      "id": "compare-panel",
+      "role": "detail-panel",
+      "label": "Compare aside: two option cards (Your hold vs Option B) with attribute rows (Verdict, Dele, Ayo & Temi, You, Standard, Expedited, Extra cost), a passport-arrival timeline chart, day-plan charts and Book buttons",
+      "bbox": {
+        "x": 976,
+        "y": 124,
+        "width": 464,
+        "height": 1210
+      },
+      "patterns": [
+        "comparison-table",
+        "chart",
+        "badge",
+        "overview-detail"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "availability-picker",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 314,
+            "y": 331,
+            "width": 638,
+            "height": 602
+          },
+          "quote": "Family openings by week",
+          "note": "A week-by-day grid of computed family slots, colour-coded by whether they work for Dele, the kids and you",
+          "region": "finder-grid"
+        },
+        {
+          "bbox": {
+            "x": 314,
+            "y": 172,
+            "width": 560,
+            "height": 40
+          },
+          "quote": "Every time is checked against Dele’s shifts, school hours, your shift and processing time before 7 Feb.",
+          "region": "finder-grid"
+        }
+      ],
+      "dims": {
+        "availSource": "computed-mutual-free",
+        "slotDisclosure": "price-or-type-per-slot",
+        "selectionPath": "assist-then-confirm",
+        "slotLayout": "week-strip-of-slots",
+        "constraints": [
+          "working-hours",
+          "travel-or-location-rules",
+          "party-size-or-capacity"
+        ],
+        "holdBehaviour": "timed-hold-then-pay",
+        "initiative": "system-suggests-mutual-times"
+      }
+    },
+    {
+      "id": "booking-flow",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 56,
+            "width": 1440,
+            "height": 68
+          },
+          "quote": "Held for you: Northgate Mall · Saturday 5 December · Ayo 9:20 · Temi 9:40",
+          "note": "Timed hold with a live countdown (it went from 14:46 to 14:43 on the live page)",
+          "region": "hold-banner"
+        },
+        {
+          "bbox": {
+            "x": 314,
+            "y": 224,
+            "width": 638,
+            "height": 42
+          },
+          "quote": "Harbor Street",
+          "note": "Office (venue) choice beside the date grid",
+          "region": "finder-grid"
+        }
+      ],
+      "dims": {
+        "order": "flexible-across-dates",
+        "presentation": "calendar-with-availability",
+        "hold": "timed-hold-with-countdown",
+        "signals": [
+          "price-per-option"
+        ],
+        "extras": [
+          "several-units",
+          "group-coordination"
+        ]
+      }
+    },
+    {
+      "id": "comparison-table",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 997,
+            "y": 171,
+            "width": 423,
+            "height": 510
+          },
+          "quote": "Verdict",
+          "note": "Two options as columns (Your hold vs Option B) with attribute rows; 'PICK' marks the recommended processing per option",
+          "region": "compare-panel"
+        }
+      ],
+      "dims": {
+        "criteria": "fixed-spec-rows",
+        "valueForm": [
+          "raw-values",
+          "checkmarks"
+        ],
+        "origin": "added-from-the-overview",
+        "orientation": "items-as-columns",
+        "emphasis": "highlight-differences",
+        "decision": [
+          "pick-a-winner"
+        ]
+      }
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 670,
+            "y": 550,
+            "width": 74,
+            "height": 19
+          },
+          "note": "Clicking a slot chip loads it into the Compare panel as Option B (checked live)",
+          "region": "finder-grid"
+        },
+        {
+          "bbox": {
+            "x": 976,
+            "y": 124,
+            "width": 464,
+            "height": 1210
+          },
+          "quote": "Compare",
+          "region": "compare-panel"
+        }
+      ],
+      "dims": {
+        "openIn": "side-by-side",
+        "overviewType": [
+          "list",
+          "table"
+        ],
+        "relationship": "many-overviews-to-one-detail-view",
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "whole-item",
+        "abstraction": [
+          "style",
+          "category"
+        ],
+        "detailMultiplicity": "many-at-a-time",
+        "attributePlacement": [
+          "in-both-views"
+        ]
+      }
+    },
+    {
+      "id": "chart",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 997,
+            "y": 694,
+            "width": 423,
+            "height": 163
+          },
+          "quote": "When passports arrive",
+          "note": "Range bars on a time axis per option and processing type, with 'aim 7 Feb' and 'fly 14 Feb' reference lines and a shaded closure period",
+          "region": "compare-panel"
+        },
+        {
+          "bbox": {
+            "x": 997,
+            "y": 871,
+            "width": 423,
+            "height": 236
+          },
+          "quote": "On the day",
+          "note": "Day-plan timelines for Dele, the kids and you",
+          "region": "compare-panel"
+        }
+      ],
+      "dims": {
+        "markType": "bars",
+        "channels": [
+          "position",
+          "length",
+          "colour-hue-or-value"
+        ],
+        "scale": "time",
+        "faceting": "small-multiples",
+        "authorship": "author-specified",
+        "annotation": [
+          "reference-lines",
+          "callout-labels"
+        ],
+        "adaptation": "fixed-desktop-chart"
+      }
+    },
+    {
+      "id": "banner",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 56,
+            "width": 1440,
+            "height": 68
+          },
+          "quote": "Tentative hold — released automatically at 12:39. Nobody else can take these two slots until then.",
+          "region": "hold-banner"
+        },
+        {
+          "bbox": {
+            "x": 16,
+            "y": 1230,
+            "width": 257,
+            "height": 92
+          },
+          "quote": "Holiday closure 24 Dec – 1 Jan.",
+          "note": "Amber warning callout in the sidebar",
+          "region": "plan-sidebar"
+        }
+      ],
+      "dims": {
+        "scope": "page",
+        "severity": "information",
+        "dismissal": "clears-with-the-condition",
+        "action": "several-actions",
+        "placement": "top-of-content"
+      }
+    },
+    {
+      "id": "progress-indicator",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 152,
+            "y": 108,
+            "width": 518,
+            "height": 6
+          },
+          "note": "Thin orange bar under the hold message shows how much hold time is left; paired with the 14:46 countdown",
+          "region": "hold-banner"
+        }
+      ],
+      "dims": {
+        "determinacy": "time-remaining",
+        "form": "linear-bar",
+        "coverage": "a-region",
+        "control": "cancel"
+      }
+    },
+    {
+      "id": "filter-controls",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 314,
+            "y": 224,
+            "width": 638,
+            "height": 42
+          },
+          "quote": "Northgate Mall",
+          "note": "Three pressed office toggle buttons narrow the slots by office",
+          "region": "finder-grid"
+        },
+        {
+          "bbox": {
+            "x": 758,
+            "y": 291,
+            "width": 194,
+            "height": 18
+          },
+          "quote": "Hide times that don’t work",
+          "region": "finder-grid"
+        }
+      ],
+      "dims": {
+        "placement": "filter-bar-with-chips",
+        "types": [
+          "toggle-chips"
+        ],
+        "preview": "counts-per-value",
+        "origin": "developer-defined"
+      }
+    },
+    {
+      "id": "sort-control",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 762,
+            "y": 955,
+            "width": 190,
+            "height": 30
+          },
+          "quote": "Soonest",
+          "region": "openings-list"
+        }
+      ],
+      "dims": {
+        "keys": "fixed-list",
+        "form": "segmented-tabs",
+        "indicator": "label"
+      }
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 314,
+            "y": 992,
+            "width": 638,
+            "height": 64
+          },
+          "quote": "Linden Civic Center",
+          "note": "Horizontal opening card with a date block, office, times, constraint checks, price badge, verdict and an arrow",
+          "region": "openings-list"
+        }
+      ],
+      "dims": {
+        "media": "none",
+        "actions": "none",
+        "shape": "horizontal",
+        "style": "outlined",
+        "target": "whole-card"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 808,
+            "y": 1360,
+            "width": 105,
+            "height": 20
+          },
+          "quote": "Expedited +€120",
+          "region": "openings-list"
+        },
+        {
+          "bbox": {
+            "x": 205,
+            "y": 378,
+            "width": 53,
+            "height": 20
+          },
+          "quote": "At visit",
+          "region": "plan-sidebar"
+        },
+        {
+          "bbox": {
+            "x": 1334,
+            "y": 521,
+            "width": 38,
+            "height": 16
+          },
+          "quote": "PICK",
+          "region": "compare-panel"
+        }
+      ],
+      "dims": {
+        "meaning": "status",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 31,
+            "y": 794,
+            "width": 227,
+            "height": 88
+          },
+          "quote": "You & Dele",
+          "note": "Attendance radiogroup shown as option cards",
+          "region": "plan-sidebar"
+        }
+      ],
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "option-cards",
+        "option": [
+          "label-and-description"
+        ],
+        "largeSets": "show-all"
+      }
+    },
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 56
+          },
+          "quote": "Book a visit",
+          "region": "header"
+        }
+      ],
+      "dims": {
+        "primary": "top-navigation-bar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations"
+        ],
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "calendar",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "The week-row grid looks like a month calendar but holds bookable slots, not events; it is better described as an availability picker",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 314,
+            "y": 331,
+            "width": 638,
+            "height": 602
+          },
+          "region": "finder-grid"
+        }
+      ],
+      "dims": {
+        "primaryView": "month"
+      }
+    },
+    {
+      "id": "coordinated-views",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "The grid and the list both show the A/B markers, and selecting a grid slot updates the compare panel. I did not check whether selecting in the list also updates the grid.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 670,
+            "y": 382,
+            "width": 74,
+            "height": 19
+          },
+          "note": "B marker repeated in the grid and the list",
+          "region": "finder-grid"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "split-pane",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 976,
+            "y": 124,
+            "width": 464,
+            "height": 600
+          }
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "Full-width dark top nav bar, then a full-width purple hold banner with a countdown. Below are three columns: a left 'Your plan' sidebar of context cards, a centre 'Find a time' column with office filters, a week-by-day availability grid and a sortable ranked list of openings, and a right 'Compare' panel with a two-option comparison table, charts and booking CTAs. Each column scrolls on its own.",
+    "regions": [
+      "header",
+      "hold-banner",
+      "plan-sidebar",
+      "finder-grid",
+      "openings-list",
+      "compare-panel"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#f5f3ee",
+      "#ffffff",
+      "#0f3d4c",
+      "#5b3c9a",
+      "#142231",
+      "#687280",
+      "#1d7a4a",
+      "#e4f3ea",
+      "#a35a00",
+      "#fdf1dc",
+      "#b3261e",
+      "#e4e0d7"
+    ],
+    "colorRoles": {
+      "background": "#f5f3ee",
+      "surface": "#ffffff",
+      "text": "#142231",
+      "muted": "#687280",
+      "primary": "#0f3d4c",
+      "accent": "#5b3c9a",
+      "success": "#1d7a4a",
+      "warning": "#a35a00",
+      "danger": "#b3261e",
+      "border": "#e4e0d7"
+    },
+    "typography": "System UI sans-serif (-apple-system) used throughout, mostly at small sizes; bold weights for office names, dates and verdicts",
+    "typeScale": "Compact: 20–22px bold H1 and hold timer, 17–18px for card titles and dates, 13–14px body, 10–12px for the many labels and chips. Hierarchy comes from weight and colour more than size.",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "data-visualization",
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "practical",
+      "calm",
+      "civic",
+      "information-dense",
+      "trustworthy"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T02:04:24.963Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 12,
+    "usage": {
+      "input_tokens": 24,
+      "cache_creation_input_tokens": 57612,
+      "cache_read_input_tokens": 528156,
+      "output_tokens": 6998
+    }
+  },
+  "notes": "Colour carries meaning everywhere: green outlined slot chips mean 'works for everyone', grey struck-through chips mean 'doesn't work', dashed blue-grey chips mean 'need Dele's shift', and purple marks the current hold. Diagonal hatching marks registry closures; pale yellow hatching marks school holidays. Each person's constraints sit inline in every opening (Dele / Kids / You) with check, cross or dash icons. Markers A and B tie the grid, the list and the compare panel together. Dark teal header against a warm off-white canvas, with a purple hold banner. Each column scrolls on its own."
+}

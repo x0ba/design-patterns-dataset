@@ -1,0 +1,824 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "palantir-for-family-trips--command-center",
+    "url": "http://palantir-for-family-trips.localhost:4319/",
+    "finalUrl": "http://palantir-for-family-trips.localhost:4319/",
+    "status": 200,
+    "title": "Pine Mountain Lake Command Center",
+    "capturedAt": "2026-11-18T01:36:16.133Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1787
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "travel-hospitality",
+    "domainNote": "family group-trip planning tool styled as a Palantir-like ops/command-center console",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/palantir-for-family-trips/explore.json",
+      "repo": {
+        "name": "andrewjiang/palantir-for-family-trips",
+        "url": "https://github.com/andrewjiang/palantir-for-family-trips",
+        "commit": "0c07345ebf2c8e75d2d2e56ea5a095e5aad4504e",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "command-center",
+        "name": "Trip command center dashboard",
+        "description": "Main itinerary workspace with current situation/live items rail, live map with layer and weather panels, mission timeline, and right inspector with briefing and checklist."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "top-bar",
+      "role": "header",
+      "label": "Classification label, app title, 'Working as' family switcher, autosave status, search",
+      "bbox": {
+        "x": 64,
+        "y": 0,
+        "width": 1376,
+        "height": 48
+      },
+      "patterns": [
+        "app-shell",
+        "choice-control",
+        "text-field"
+      ]
+    },
+    {
+      "id": "nav-rail",
+      "role": "sidebar",
+      "label": "Icon navigation rail: itinerary, stay, meals, activities, expenses, families; export/messages/settings at bottom",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 64,
+        "height": 1787
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "left-panel",
+      "role": "sidebar",
+      "label": "Current situation tiles, live-now/coming-up item lists with status pills, travel units list, time-scrub controls, planner note",
+      "bbox": {
+        "x": 64,
+        "y": 48,
+        "width": 320,
+        "height": 1739
+      },
+      "patterns": [
+        "stat-tile",
+        "badge",
+        "card",
+        "overview-detail",
+        "choice-control",
+        "text-field",
+        "coordinated-views"
+      ]
+    },
+    {
+      "id": "map",
+      "role": "map",
+      "label": "Dark offline basemap with family routes, facility markers, zoom controls, floating Map Layer filter panel and Weather Intel panel",
+      "bbox": {
+        "x": 384,
+        "y": 48,
+        "width": 696,
+        "height": 1482
+      },
+      "patterns": [
+        "map-explorer",
+        "filter-controls",
+        "choice-control",
+        "coordinated-views"
+      ]
+    },
+    {
+      "id": "mission-timeline",
+      "role": "timeline",
+      "label": "Playback controls, per-day weather strip, swimlane bars (Transit / Main Ops / Support) over a 4-day hourly axis with cursor and now marker, mission scrub",
+      "bbox": {
+        "x": 384,
+        "y": 1530,
+        "width": 696,
+        "height": 257
+      },
+      "patterns": [
+        "gantt-timeline",
+        "coordinated-views"
+      ]
+    },
+    {
+      "id": "right-inspector",
+      "role": "detail-panel",
+      "label": "Selected activity header with tiles, briefing with key-value rows, planning task checklist with add field, location intel with photo cards, notes",
+      "bbox": {
+        "x": 1080,
+        "y": 48,
+        "width": 360,
+        "height": 1739
+      },
+      "patterns": [
+        "overview-detail",
+        "property-inspector",
+        "stat-tile",
+        "badge",
+        "task-list",
+        "card",
+        "text-field"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "primary": "navigation-rail",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 48,
+            "width": 64,
+            "height": 320
+          },
+          "note": "Icon-only navigation rail with active highlight on dashboard icon",
+          "region": "nav-rail"
+        },
+        {
+          "bbox": {
+            "x": 64,
+            "y": 0,
+            "width": 1376,
+            "height": 48
+          },
+          "note": "Top bar with title, identity switcher, autosave, search",
+          "quote": "FAMILY TRIP COMMAND CENTER",
+          "region": "top-bar"
+        }
+      ]
+    },
+    {
+      "id": "map-explorer",
+      "status": "present",
+      "confidence": 0.9,
+      "dims": {
+        "basemap": "minimal-light",
+        "overlays": [
+          "poi-pins",
+          "routes-and-polylines"
+        ],
+        "mapNav": [
+          "drag-pan",
+          "pinch-scroll-zoom"
+        ],
+        "coupling": "synchronized-list-plus-map",
+        "markDesign": [
+          "category-icon",
+          "colour-of-a-metric"
+        ],
+        "mapNarrowing": [
+          "category-chips"
+        ],
+        "mapAdapt": [
+          "dark-night-style",
+          "offline-packs",
+          "desktop-side-panel"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 384,
+            "y": 48,
+            "width": 696,
+            "height": 1482
+          },
+          "note": "Dark vector basemap with colored family routes and facility diamond markers; selecting a travel unit flies the map to that route (verified live)",
+          "quote": "Map data: offline basemap",
+          "region": "map"
+        },
+        {
+          "bbox": {
+            "x": 1030,
+            "y": 538,
+            "width": 40,
+            "height": 80
+          },
+          "note": "+/− zoom buttons",
+          "region": "map"
+        }
+      ]
+    },
+    {
+      "id": "filter-controls",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "placement": "toolbar-popover",
+        "types": [
+          "toggle-chips"
+        ],
+        "preview": "live-results",
+        "origin": "developer-defined",
+        "logic": "and-across-or-within",
+        "persistence": "per-query"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 408,
+            "y": 72,
+            "width": 360,
+            "height": 257
+          },
+          "note": "Floating collapsible Map Layer panel with layer chips, Family Focus and Day Focus chip groups; summary line updates live ('transit day focus') and map redraws",
+          "quote": "Showing all family routes, logistics facilities",
+          "region": "map"
+        }
+      ],
+      "novel": [
+        {
+          "subdimension": "placement",
+          "description": "Filters live in a persistent floating panel overlaid on the map (collapsible), not a toolbar popover or sidebar",
+          "proposedValueId": "floating-overlay-panel"
+        }
+      ]
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "segmented-control",
+        "option": [
+          "label-only"
+        ],
+        "timing": "immediately",
+        "largeSets": "show-all"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 798,
+            "y": 11,
+            "width": 220,
+            "height": 24
+          },
+          "note": "'Working as' Parkers / Jiangs / Riveras segmented selector",
+          "quote": "WORKING AS",
+          "region": "top-bar"
+        },
+        {
+          "bbox": {
+            "x": 97,
+            "y": 1100,
+            "width": 253,
+            "height": 92
+          },
+          "note": "Time scrub day and hour button groups (single select)",
+          "quote": "SAT 4/11",
+          "region": "left-panel"
+        },
+        {
+          "bbox": {
+            "x": 425,
+            "y": 167,
+            "width": 303,
+            "height": 25
+          },
+          "note": "Family focus chips",
+          "quote": "ALL FAMILIES",
+          "region": "map"
+        }
+      ]
+    },
+    {
+      "id": "gantt-timeline",
+      "status": "present",
+      "confidence": 0.75,
+      "dims": {
+        "barAttrs": [
+          "title-on-bar",
+          "health-or-status-colour",
+          "assignee-colour-or-avatar"
+        ],
+        "rowHierarchy": "swimlanes-by-person-or-team",
+        "linking": [
+          "no-links"
+        ],
+        "chrome": "multi-tier-time-header",
+        "ganttScale": "day",
+        "statusFeedback": [
+          "today-line"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 384,
+            "y": 1530,
+            "width": 696,
+            "height": 257
+          },
+          "note": "Bars for trip phases and stops on Transit / Main Ops / Support lanes against Thu–Sun hourly axis; cursor line and 'now' marker; play/restart/1x playback and click-to-place cursor (verified live, syncs time scrub and left lists)",
+          "quote": "MISSION SCRUB",
+          "region": "mission-timeline"
+        }
+      ],
+      "novel": [
+        {
+          "subdimension": "statusFeedback",
+          "description": "Playback transport (play, restart, 1x speed) animates a cursor through the plan, replaying trip state on the map",
+          "proposedValueId": "playback-cursor"
+        }
+      ]
+    },
+    {
+      "id": "timeline-editor",
+      "status": "absent",
+      "confidence": 0.7,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 384,
+            "y": 1530,
+            "width": 696,
+            "height": 257
+          },
+          "note": "Tracks with playhead resemble an NLE but content is a schedule of activities, not media composition"
+        }
+      ]
+    },
+    {
+      "id": "coordinated-views",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "linkChannel": [
+          "selection-highlight",
+          "filter",
+          "navigation-or-camera",
+          "parameters"
+        ],
+        "arrangement": "tiled-dashboard",
+        "trigger": [
+          "click-a-mark",
+          "change-a-control"
+        ],
+        "scope": "all-linked-views",
+        "feedback": [
+          "highlight-in-place",
+          "action-breadcrumb"
+        ],
+        "authorship": "fixed-published-dashboard"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 384,
+            "y": 1530,
+            "width": 696,
+            "height": 257
+          },
+          "note": "Clicking timeline moved cursor and updated left time scrub (FRI 4/10 15) and live/coming-up lists",
+          "region": "mission-timeline"
+        },
+        {
+          "bbox": {
+            "x": 80,
+            "y": 835,
+            "width": 287,
+            "height": 183
+          },
+          "note": "Selecting a travel unit re-centers map on its route and swaps right panel to family detail",
+          "quote": "JIANGS",
+          "region": "left-panel"
+        }
+      ]
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "attributePlacement": [
+          "in-both-views",
+          "in-detail-view-only"
+        ],
+        "abstraction": [
+          "category"
+        ],
+        "relationship": "many-overviews-to-one-detail-view",
+        "openIn": "side-by-side",
+        "overviewType": [
+          "list",
+          "map",
+          "timeline"
+        ],
+        "detailMultiplicity": "one-at-a-time",
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "whole-item",
+        "linking": "synchronized-navigation",
+        "attributeScope": [
+          "per-item"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1081,
+            "y": 48,
+            "width": 359,
+            "height": 212
+          },
+          "note": "Right panel shows selected activity detail; changes to family detail when a travel unit is clicked",
+          "quote": "TRANSIT + SETTLE IN",
+          "region": "right-inspector"
+        },
+        {
+          "bbox": {
+            "x": 80,
+            "y": 835,
+            "width": 287,
+            "height": 183
+          },
+          "note": "Overview list of travel units",
+          "region": "left-panel"
+        }
+      ]
+    },
+    {
+      "id": "property-inspector",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "rationale": "Right panel has key-value rows for the selection, but they appear read-only; editability not verified",
+      "dims": {
+        "set": "contextual-to-the-selection-type",
+        "placement": "right-sidebar",
+        "multi": "single-object-only",
+        "grouping": "flat"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1118,
+            "y": 557,
+            "width": 285,
+            "height": 113
+          },
+          "note": "Window / Route / Location key-value rows",
+          "quote": "Parkers inbound route",
+          "region": "right-inspector"
+        }
+      ]
+    },
+    {
+      "id": "task-list",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "rowFields": [
+          "title-only",
+          "due-date"
+        ],
+        "itemRichness": "checkbox-item",
+        "taskStructure": "grouped-by-project-or-list",
+        "timeBinding": "due-date-only",
+        "completionPath": [
+          "check-off"
+        ],
+        "createOpen": [
+          "inline-add-row"
+        ],
+        "sharingModel": "shared-list"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1101,
+            "y": 706,
+            "width": 319,
+            "height": 271
+          },
+          "note": "Planning tasks checklist with day tag, green checkboxes, 2/2 count and add-task field",
+          "quote": "Confirm gate access and arrival sequence",
+          "region": "right-inspector"
+        }
+      ]
+    },
+    {
+      "id": "stat-tile",
+      "status": "present",
+      "confidence": 0.75,
+      "dims": {
+        "context": [
+          "label"
+        ],
+        "encoding": "number-only",
+        "window": "follows-the-dashboard-filter",
+        "drill": "none"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 100,
+            "y": 168,
+            "width": 245,
+            "height": 56
+          },
+          "note": "Live 2 / Soon 4 tiles under current situation",
+          "quote": "LIVE",
+          "region": "left-panel"
+        },
+        {
+          "bbox": {
+            "x": 1101,
+            "y": 141,
+            "width": 319,
+            "height": 53
+          },
+          "note": "Checklist 2/2 and Day THU tiles",
+          "quote": "CHECKLIST",
+          "region": "right-inspector"
+        }
+      ]
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "meaning": "status",
+        "aggregation": "per-item"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 290,
+            "y": 342,
+            "width": 60,
+            "height": 18
+          },
+          "note": "Status pill on travel unit",
+          "quote": "TRANSIT",
+          "region": "left-panel"
+        },
+        {
+          "bbox": {
+            "x": 252,
+            "y": 463,
+            "width": 98,
+            "height": 18
+          },
+          "note": "Amber status pill",
+          "quote": "FRIDAY ARRIVAL",
+          "region": "left-panel"
+        },
+        {
+          "bbox": {
+            "x": 1387,
+            "y": 68,
+            "width": 33,
+            "height": 19
+          },
+          "note": "Green GO status",
+          "quote": "GO",
+          "region": "right-inspector"
+        }
+      ]
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.7,
+      "dims": {
+        "media": "none",
+        "actions": "none",
+        "shape": "horizontal",
+        "style": "outlined",
+        "target": "whole-card"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 97,
+            "y": 339,
+            "width": 253,
+            "height": 125
+          },
+          "note": "Live-now item rows: title, timestamp, status pill, whole row clickable",
+          "quote": "Yosemite day mission",
+          "region": "left-panel"
+        },
+        {
+          "bbox": {
+            "x": 1118,
+            "y": 1301,
+            "width": 285,
+            "height": 144
+          },
+          "note": "Exception: two vertical photo reference cards with top illustration and external-link icon",
+          "quote": "Basecamp exterior reference",
+          "region": "right-inspector"
+        }
+      ]
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "supporting": [
+          "placeholder",
+          "label"
+        ],
+        "validation": "none",
+        "style": "outlined",
+        "assistance": [
+          "none"
+        ],
+        "inputType": "plain"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1160,
+            "y": 8,
+            "width": 256,
+            "height": 31
+          },
+          "note": "Search field with icon",
+          "quote": "Search...",
+          "region": "top-bar"
+        },
+        {
+          "bbox": {
+            "x": 97,
+            "y": 1271,
+            "width": 253,
+            "height": 96
+          },
+          "note": "Planner note textarea",
+          "quote": "Add a planning note...",
+          "region": "left-panel"
+        }
+      ]
+    },
+    {
+      "id": "dashboard",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Ops-center layout mixes maps, status lists and KPI tiles like a dashboard, but it is primarily an interactive planning workspace; categorization judgment",
+      "dims": {
+        "widgets": [
+          "kpi-tiles",
+          "maps",
+          "status-lists",
+          "narrative-text"
+        ],
+        "purpose": "operational-decisions",
+        "arrangement": "fixed-grid",
+        "density": "dense-wall",
+        "linking": "cross-filtering",
+        "refresh": "live-stream",
+        "alerting": "threshold-colours",
+        "ownership": "team-editable"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 64,
+            "y": 48,
+            "width": 1376,
+            "height": 852
+          },
+          "note": "Command-center layout of status tiles, map, timeline and briefing",
+          "quote": "FAMILY TRIP COMMAND CENTER"
+        }
+      ]
+    },
+    {
+      "id": "tooltip",
+      "status": "absent",
+      "confidence": 0.6,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 156,
+            "width": 64,
+            "height": 50
+          },
+          "note": "Hovering rail icon showed no tooltip on live page"
+        }
+      ]
+    }
+  ],
+  "structure": {
+    "layout": "full-viewport desktop app: thin top bar + left icon rail; three columns below — left scrolling status/list panel (~300px), central dark map with floating filter and weather panels and a docked bottom swimlane timeline, right scrolling activity/detail inspector (360px)",
+    "regions": [
+      "top-bar",
+      "nav-rail",
+      "left-panel",
+      "map",
+      "mission-timeline",
+      "right-inspector"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#0a0c10",
+      "#0d1117",
+      "#161b22",
+      "#080a0f",
+      "#1f2a34",
+      "#30363d",
+      "#c9d1d9",
+      "#8b949e",
+      "#58a6ff",
+      "#d29922",
+      "#3fb950",
+      "#f85149",
+      "#a371f7"
+    ],
+    "colorRoles": {
+      "background": "#0d1117",
+      "text": "#c9d1d9",
+      "surface": "#161b22",
+      "muted": "#8b949e",
+      "primary": "#58a6ff",
+      "accent": "#d29922",
+      "border": "#30363d",
+      "success": "#3fb950",
+      "danger": "#f85149",
+      "highlight": "#1f2a34",
+      "map": "#080a0f"
+    },
+    "typography": "Inter for all UI text, heavily using uppercase letter-spaced micro-labels; Geist Mono for timeline hour ticks and time-scrub hour buttons; Roboto only in map attribution",
+    "typeScale": "Very flat and small: most text 7–11px (uppercase tracked eyebrows 8–9px in blue), headings 13–15px bold uppercase tracked, largest 18px (situation time). Hierarchy via color, caps and tracking rather than size",
+    "shape": "sharp",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "iconography",
+      "illustration"
+    ],
+    "iconStyle": "line",
+    "whitespace": "tight",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "technical",
+      "tactical",
+      "dark",
+      "militaristic-parody",
+      "dense",
+      "serious"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T01:38:45.145Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 16,
+    "usage": {
+      "input_tokens": 32,
+      "cache_creation_input_tokens": 56945,
+      "cache_read_input_tokens": 783742,
+      "output_tokens": 15541
+    }
+  },
+  "notes": "Playful parody of a Palantir/defense ops console applied to a family vacation: 'UNCLASSIFIED // FAMILY OPS' banner text in green caps, 'Response Plans', 'Mission scrub', 'Weather Intel / NOAA', 'Risk watch'. GitHub-dark palette (#0d1117/#161b22/#30363d with #58a6ff blue). Corners 1–2px — near-square. Status pills are tinted dark fills with colored caps text (blue transit, amber pending/watch, green go, gray dinner transit). Timeline bars are outlined colored rectangles color-coded per family/type with truncated caps labels; floating map panels are bordered cards with collapse chevrons. Selecting items re-centers the map and swaps the right inspector (verified live). Panels scroll independently. Filed novel values for filter placement (floating map overlay panel) and gantt playback cursor."
+}

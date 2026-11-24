@@ -1,0 +1,436 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "invio--invoices",
+    "url": "http://localhost:4416/dashboard",
+    "finalUrl": "http://localhost:4416/invoices",
+    "status": 200,
+    "title": "Invio",
+    "capturedAt": "2026-11-18T03:33:29.978Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 11978
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "finance",
+    "domainNote": "small-business invoicing app (Invio) — invoice list view",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/invio/explore.json",
+      "repo": {
+        "name": "kittendevv/Invio",
+        "url": "https://github.com/kittendevv/Invio",
+        "commit": "c1d6b7a950e1f693b869fb7abad355004b93b576",
+        "license": "Unlicense"
+      },
+      "view": {
+        "slug": "invoices",
+        "name": "Invoice list",
+        "description": "Table of all invoices with status filter tabs, status badges, totals, payment methods and a Create Invoice button."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "top-nav",
+      "role": "header",
+      "label": "App top bar: Invio logo and wordmark, nav links Dashboard / Invoices / Customers, and a More dropdown (Products, Settings, Users, Logout)",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 66
+      },
+      "patterns": [
+        "app-shell",
+        "menu"
+      ]
+    },
+    {
+      "id": "page-header",
+      "role": "page-title",
+      "label": "H1 'Invoices' with a lilac 'Create Invoice' primary button",
+      "bbox": {
+        "x": 96,
+        "y": 86,
+        "width": 1248,
+        "height": 40
+      },
+      "patterns": []
+    },
+    {
+      "id": "status-filter",
+      "role": "toolbar",
+      "label": "Rounded panel holding status toggle buttons: All, Sent, Draft, Complete, Paid, Voided",
+      "bbox": {
+        "x": 97,
+        "y": 139,
+        "width": 1246,
+        "height": 64
+      },
+      "patterns": [
+        "filter-controls",
+        "choice-control"
+      ]
+    },
+    {
+      "id": "invoice-table",
+      "role": "data-table",
+      "label": "Invoice table with sortable headers (Invoice No ▼, Customer, Total, Status, Issue Date, Paid with, Updated) and about 250 rows with colored status pills",
+      "bbox": {
+        "x": 97,
+        "y": 221,
+        "width": 1246,
+        "height": 11732
+      },
+      "patterns": [
+        "data-table",
+        "sort-control",
+        "badge"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 66
+          },
+          "quote": "Invio Dashboard Invoices Customers More",
+          "region": "top-nav",
+          "note": "Persistent top bar with global destinations; it scrolls away and is not sticky"
+        }
+      ],
+      "dims": {
+        "primary": "top-navigation-bar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations"
+        ],
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1259,
+            "y": 16,
+            "width": 97,
+            "height": 33
+          },
+          "quote": "More",
+          "region": "top-nav",
+          "note": "A details/summary trigger that, when clicked live, opens a vertical list: Products, Settings, Users, Logout, each with a line icon"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click",
+        "structure": "flat",
+        "item": [
+          "label",
+          "icon"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    },
+    {
+      "id": "filter-controls",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 113,
+            "y": 155,
+            "width": 419,
+            "height": 32
+          },
+          "quote": "All Sent Draft Complete Paid Voided",
+          "region": "status-filter",
+          "note": "Status toggle buttons. In the live page, clicking Sent filtered the table to 5 rows right away; the URL stayed /invoices"
+        }
+      ],
+      "dims": {
+        "placement": "filter-bar-with-chips",
+        "types": [
+          "toggle-chips"
+        ],
+        "preview": "live-results",
+        "origin": "developer-defined",
+        "persistence": "per-query"
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 113,
+            "y": 155,
+            "width": 419,
+            "height": 32
+          },
+          "quote": "All",
+          "region": "status-filter",
+          "note": "Single-select segmented button group. The active option ('All') gets a gray-blue #a8b2c1 fill"
+        }
+      ],
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "segmented-control",
+        "option": [
+          "label-only"
+        ],
+        "timing": "immediately",
+        "largeSets": "show-all"
+      }
+    },
+    {
+      "id": "tabs",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 113,
+            "y": 155,
+            "width": 419,
+            "height": 32
+          },
+          "note": "The status strip looks like a tab strip, but it narrows one table rather than switching between peer views. Coded as filter-controls."
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "data-table",
+      "status": "present",
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 97,
+            "y": 221,
+            "width": 1246,
+            "height": 49
+          },
+          "quote": "Invoice No ▼ Customer Total Status Issue Date Paid with Updated",
+          "region": "invoice-table",
+          "note": "Header row of sortable column buttons. 'Paid with' cannot be sorted."
+        },
+        {
+          "bbox": {
+            "x": 97,
+            "y": 270,
+            "width": 1246,
+            "height": 46
+          },
+          "quote": "INV-2026-190 Studio Noor Architecten €2,214.30 Draft",
+          "region": "invoice-table",
+          "note": "Row: the invoice number links to the invoice detail page; status shows as a colored pill"
+        }
+      ],
+      "dims": {
+        "columnSet": "fixed",
+        "cellRendering": [
+          "plain-text",
+          "chips-and-avatars"
+        ],
+        "density": "standard",
+        "rowExpansion": "none",
+        "selection": "none",
+        "opScope": [
+          "column"
+        ],
+        "aggregation": [
+          "flat"
+        ],
+        "openIn": "new-page"
+      }
+    },
+    {
+      "id": "sort-control",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 113,
+            "y": 233,
+            "width": 87,
+            "height": 24
+          },
+          "quote": "Invoice No ▼",
+          "region": "invoice-table",
+          "note": "By default the table is sorted by invoice number, descending (newest first). In the live page, clicking Customer re-sorted A→Z and moved the arrow to that header, inside a highlighted pill."
+        }
+      ],
+      "dims": {
+        "keys": "any-column",
+        "form": "column-header-click",
+        "default": "recency",
+        "indicator": "header-arrow"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 760,
+            "y": 330,
+            "width": 44,
+            "height": 17
+          },
+          "quote": "Sent",
+          "region": "invoice-table",
+          "note": "Status pill in each row: Draft (light), Sent (blue #5f95c9), Paid (green #4fbf8c), Complete (yellow-green #c9d92e), Overdue (red #b94b5c), Voided (gray #a8b2c1)"
+        },
+        {
+          "bbox": {
+            "x": 760,
+            "y": 836,
+            "width": 68,
+            "height": 17
+          },
+          "quote": "Overdue",
+          "region": "invoice-table"
+        }
+      ],
+      "dims": {
+        "meaning": "status",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "pagination",
+      "status": "absent",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 97,
+            "y": 11800,
+            "width": 1246,
+            "height": 160
+          },
+          "note": "The table ends at INV-2025-001 with no pager. All rows render on one page."
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "bulk-actions",
+      "status": "absent",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 97,
+            "y": 221,
+            "width": 1246,
+            "height": 100
+          },
+          "note": "No checkbox column and no selection toolbar"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "web app with a slim top navigation bar, then a centered 1280px main column: page title and primary action, a status filter strip in a rounded panel, and one very long data table holding every invoice (no pagination, no footer)",
+    "regions": [
+      "top-nav",
+      "page-header",
+      "status-filter",
+      "invoice-table"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#eef1f9",
+      "#f7f8fc",
+      "#202269",
+      "#17184b",
+      "#c79bfc",
+      "#a8b2c1",
+      "#4fbf8c",
+      "#5f95c9",
+      "#c9d92e",
+      "#b94b5c"
+    ],
+    "colorRoles": {
+      "background": "#eef1f9",
+      "surface": "#f7f8fc",
+      "text": "#202269",
+      "primary": "#c79bfc",
+      "muted": "#a8b2c1",
+      "accent": "#4fbf8c",
+      "success": "#4fbf8c",
+      "info": "#5f95c9",
+      "warning": "#c9d92e",
+      "danger": "#b94b5c",
+      "onPrimary": "#17184b"
+    },
+    "typography": "Inter is declared everywhere (the rendered glyphs look like a DejaVu-style sans fallback). Navy text throughout. Header labels and buttons are small 11–12px semibold; table cells are 14px regular, and invoice-number links are 14px medium.",
+    "typeScale": "Restrained: H1 24px/600, wordmark 20px/600, body and table cells 14px/400, filter buttons and the primary button 12px/600, column headers 11px/600 in muted slate-blue, status pills about 12px. Hierarchy comes mostly from weight and color, not size.",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "clean",
+      "calm",
+      "utilitarian",
+      "pastel",
+      "business"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T03:35:06.561Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 11,
+    "usage": {
+      "input_tokens": 22,
+      "cache_creation_input_tokens": 33979,
+      "cache_read_input_tokens": 359548,
+      "output_tokens": 4953
+    }
+  },
+  "notes": "Pale lavender-blue page (#eef1f9) with near-white rounded panels (16px radius) for the filter strip and the table. All text is a deep indigo/navy (#202269) instead of black. The primary 'Create Invoice' button is a pastel lilac (#c79bfc) with dark navy text. The selected filter and the active sort header get a gray-blue pill. Status pills are small and fully colored with white text (Draft is a pale chip with navy text). The Updated column is right-aligned in muted slate. Amounts mix currencies (€, $, £). There is no pagination, so about 250 rows render into an almost 12,000px page. The column set changes with the filter: 'Paid with' disappears under the Sent filter. Nav items carry small line icons (Lucide-like). The 'Paid with' header looks inconsistent: it is plain text in larger type than the other, sortable header buttons."
+}

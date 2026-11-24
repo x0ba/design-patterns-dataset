@@ -1,0 +1,406 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "speechgpt--chat-workspace",
+    "url": "http://localhost:4443/",
+    "finalUrl": "http://localhost:4443/",
+    "status": 200,
+    "title": "SpeechGPT",
+    "capturedAt": "2026-11-18T06:37:23.352Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 2289
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "ai-tools",
+    "domainNote": "voice-enabled ChatGPT client (SpeechGPT) for speaking/language practice",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/speechgpt/explore.json",
+      "repo": {
+        "name": "hahahumble/speechgpt",
+        "url": "https://github.com/hahahumble/speechgpt",
+        "commit": "daa4d49203c5c59ff23bd682d6f474789137e002",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "chat-workspace",
+        "name": "Chat workspace",
+        "description": "Main screen with the conversation sidebar (favorites and history) and the open chat showing markdown replies, voice controls and message input."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Conversation history: search, starred conversations, divider, recent conversations with color dots and message-count badges, New Conversation + clear-all",
+      "bbox": {
+        "x": 12,
+        "y": 12,
+        "width": 320,
+        "height": 2265
+      },
+      "patterns": [
+        "app-shell",
+        "badge",
+        "text-field",
+        "menu"
+      ]
+    },
+    {
+      "id": "top-bar",
+      "role": "header",
+      "label": "Gradient waveform logo, SpeechGPT gradient title, language select, top-right overflow menu",
+      "bbox": {
+        "x": 526,
+        "y": 16,
+        "width": 898,
+        "height": 196
+      },
+      "patterns": [
+        "choice-control",
+        "menu"
+      ]
+    },
+    {
+      "id": "chat-thread",
+      "role": "main",
+      "label": "Bordered linear AI conversation with gradient avatar dots, markdown replies, hover actions (speak, delete, copy)",
+      "bbox": {
+        "x": 526,
+        "y": 218,
+        "width": 720,
+        "height": 586
+      },
+      "patterns": [
+        "ai-chat"
+      ]
+    },
+    {
+      "id": "composer",
+      "role": "composer",
+      "label": "Mic/speaker toggles, regenerate and clear icons, message textarea, Record and Send buttons",
+      "bbox": {
+        "x": 526,
+        "y": 2145,
+        "width": 720,
+        "height": 132
+      },
+      "patterns": [
+        "prompt-input",
+        "ai-chat"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "ai-chat",
+      "status": "present",
+      "confidence": 0.95,
+      "dims": {
+        "turnContent": [
+          "markdown-with-code"
+        ],
+        "composition": "linear-thread",
+        "invokeBy": [
+          "text-field-submit",
+          "voice-input"
+        ],
+        "flow": "stop-and-regenerate",
+        "scope": "this-thread-only"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 526,
+            "y": 218,
+            "width": 720,
+            "height": 586
+          },
+          "region": "chat-thread",
+          "quote": "Ideas you haven't covered:",
+          "note": "alternating user/assistant turns with bold markdown lists; hover reveals speak/delete/copy actions"
+        },
+        {
+          "bbox": {
+            "x": 1162,
+            "y": 2145,
+            "width": 40,
+            "height": 40
+          },
+          "region": "composer",
+          "note": "regenerate icon button"
+        }
+      ]
+    },
+    {
+      "id": "prompt-input",
+      "status": "present",
+      "confidence": 0.9,
+      "dims": {
+        "content": [
+          "plain-prompt"
+        ],
+        "layout": "bottom-sticky-composer",
+        "submitBy": [
+          "click-send",
+          "push-to-talk"
+        ],
+        "assistance": [
+          "placeholder-examples"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 526,
+            "y": 2189,
+            "width": 720,
+            "height": 40
+          },
+          "region": "composer",
+          "quote": "Type your message..."
+        },
+        {
+          "bbox": {
+            "x": 1022,
+            "y": 2237,
+            "width": 224,
+            "height": 40
+          },
+          "region": "composer",
+          "quote": "Record",
+          "note": "Record (voice) and Send buttons"
+        }
+      ]
+    },
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "user-pinned-items",
+          "recents"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 12,
+            "y": 12,
+            "width": 320,
+            "height": 2265
+          },
+          "region": "sidebar",
+          "note": "persistent conversation sidebar; starred items pinned above divider, recents below"
+        }
+      ]
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "aggregation": "per-item"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 280,
+            "y": 100,
+            "width": 24,
+            "height": 24
+          },
+          "region": "sidebar",
+          "quote": "8",
+          "note": "per-conversation message count pill"
+        }
+      ]
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "openBy": "button-click",
+        "structure": "flat",
+        "item": [
+          "label",
+          "icon"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1388,
+            "y": 16,
+            "width": 36,
+            "height": 36
+          },
+          "region": "top-bar",
+          "note": "kebab opens Setting / Feedback / About menu (verified live)"
+        },
+        {
+          "bbox": {
+            "x": 252,
+            "y": 100,
+            "width": 28,
+            "height": 24
+          },
+          "region": "sidebar",
+          "note": "per-conversation hover kebab opens Like / Edit / Delete (verified live)"
+        }
+      ]
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "dropdown-select",
+        "option": [
+          "label-only"
+        ],
+        "timing": "immediately",
+        "largeSets": "show-all"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1137,
+            "y": 168,
+            "width": 107,
+            "height": 42
+          },
+          "region": "top-bar",
+          "quote": "English",
+          "note": "select: English / Español / 中文"
+        }
+      ]
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.7,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 28,
+            "y": 44,
+            "width": 288,
+            "height": 40
+          },
+          "region": "sidebar",
+          "quote": "Search...",
+          "note": "conversation search field with magnifier icon"
+        }
+      ]
+    },
+    {
+      "id": "suggestion-chips",
+      "status": "absent",
+      "confidence": 0.85,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 526,
+            "y": 2145,
+            "width": 720,
+            "height": 132
+          },
+          "note": "no suggestion chips near composer"
+        }
+      ]
+    }
+  ],
+  "structure": {
+    "layout": "two-column chat app: white rounded sidebar of conversation history on the left, centered narrow chat column with logo, title, language select, bordered message thread, toolbar, composer and Record/Send buttons; overflow kebab top-right",
+    "regions": [
+      "sidebar",
+      "top-bar",
+      "chat-thread",
+      "composer"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#f1f5f9",
+      "#ffffff",
+      "#374151",
+      "#1f2937",
+      "#6b7280",
+      "#8b5cf6",
+      "#ec4899",
+      "#ea580c",
+      "#eab308",
+      "#cbd5e1",
+      "#e2e8f0"
+    ],
+    "colorRoles": {
+      "background": "#f1f5f9",
+      "surface": "#ffffff",
+      "text": "#374151",
+      "primary": "#8b5cf6",
+      "accent": "#ec4899",
+      "border": "#cbd5e1",
+      "muted": "#6b7280"
+    },
+    "typography": "ui-sans-serif system stack throughout (renders as DejaVu Sans); bold weight for title and emphasis in replies",
+    "typeScale": "flat scale: 24px bold gradient title, 16px body/messages/sidebar items, 14px count badges and menu items",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "iconography",
+      "abstract-gradients"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "clean",
+      "friendly",
+      "utilitarian",
+      "playful-gradient"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T06:38:52.627Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 11,
+    "usage": {
+      "input_tokens": 22,
+      "cache_creation_input_tokens": 29279,
+      "cache_read_input_tokens": 339184,
+      "output_tokens": 7200
+    }
+  },
+  "notes": "Tailwind-slate ChatGPT-style clone focused on speech: mic and speaker toggle icons above the composer, red-orange gradient Record button next to violet gradient Send. Avatars are plain gradient circles (purple-pink for user, yellow-green for assistant) instead of icons. The thread sits in a 1px-bordered rounded box rather than open canvas. Sidebar items have a colored dot per conversation (category-ish) or a yellow star when liked, a light grey count pill, and the active item gets a slate highlight. Hover on a message shows speak/delete/copy mini toolbar; hover on a conversation shows a kebab with Like/Edit/Delete. Gradient waveform logo above a gradient-text wordmark."
+}

@@ -1,0 +1,81 @@
+# Codebook proposal (new-entry) — review with: node scripts/proposals.ts show gen-002 diagnostics-panel
+id: diagnostics-panel
+kind: new-entry
+status: open
+batch: gen-002
+codebookVersion: 1.0.0
+name: Diagnostics / problems panel
+level: pattern
+parent: monitor
+definition: A list of issues found by a build, linter or validator, grouped by severity
+  (error/warning/notice). Each issue points to a source location and often comes with a suggested
+  fix that can be applied in place.
+aliases:
+  - problems panel
+  - build issues
+  - lint results
+  - validation report
+relations:
+  neighbors:
+    - banner
+    - notification-center
+    - code-editor
+  uses:
+    - card
+    - badge
+dimensions:
+  - name: Fix affordance
+    family: invocation
+    question: How are issues resolved?
+    subdimensions:
+      - id: fix
+        name: Fix
+        select: many
+        values:
+          - id: jump-to-source
+            name: Jump to source
+            example: VS Code Problems
+          - id: one-click-quick-fix
+            name: One-click quick fix
+            example: Quillstack 'Use configuration-options'
+          - id: inline-input-fix
+            name: Inline input fix
+            example: Description field inside a warning card
+  - name: Grouping
+    family: composition
+    question: How are issues organized?
+    subdimensions:
+      - id: grouping
+        name: Grouping
+        select: one
+        values:
+          - id: by-severity
+            name: By severity
+          - id: by-file
+            name: By file
+          - id: flat
+            name: Flat
+rationale:
+  - rater: rater-2
+    site: hobby-project-docs-setup
+    text: Banner is a single condition message, inbox is for messages, and notification-center is for
+      collected notifications. None of them describes a severity-grouped list of source-located
+      issues that come with jump-to-source and quick-fix actions.
+sources:
+  - batch: gen-002
+    site: hobby-project-docs-setup
+    url: http://hobby-project-docs-setup.localhost:4318/
+    note: proposed by rater-2
+evidence:
+  - site: hobby-project-docs-setup
+    rater: rater-2
+    bbox:
+      x: 1113
+      y: 200
+      width: 311
+      height: 1870
+    quote: ERRORS Block publishing
+    note: Errors/Warnings/Notices issue cards with source snippet, closest-match fix, and 'Show line 32
+      in source'
+createdAt: 2026-11-17T21:59:13.162Z
+updatedAt: 2026-11-17T21:59:13.162Z

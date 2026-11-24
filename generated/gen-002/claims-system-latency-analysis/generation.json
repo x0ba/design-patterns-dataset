@@ -1,0 +1,68 @@
+{
+  "batch": "gen-002",
+  "slug": "claims-system-latency-analysis",
+  "ok": true,
+  "brief": {
+    "slug": "claims-system-latency-analysis",
+    "domain": "developer-tools",
+    "archetype": "analyze",
+    "generator": "haiku",
+    "context": "public-sector",
+    "product": "Pathspan",
+    "summary": "A request-tracing and performance analysis tool used by the in-house engineering team of a state labor department to understand how its unemployment insurance claims system behaves under load.",
+    "user": "Marcus Delgado, a site reliability engineer on the department's seven-person digital services team. He is fluent with logs and latency percentiles but works in a system where half the backend is a 1990s mainframe he can't instrument directly, so he reasons from the edges.",
+    "moment": "On Monday morning, after a plant closure announcement, claim filings jumped to four times their normal rate, and between 8:10 and 10:45 am about 9% of weekly-certification submissions failed with timeouts. The deputy commissioner wants a written explanation by Wednesday. Marcus has the last 72 hours of request traces loaded and is trying to tell whether the failures followed Sunday night's identity-verification deploy, the mainframe connector's connection-pool limit, or both. He's comparing latency against the volume of requests per endpoint, isolating the failed requests, and checking whether they cluster on one connector instance.",
+    "data": "72 hours of traces (Sat Nov 14 00:00 – Mon Nov 16 23:59), about 1.2 million requests across 14 services, including claims-web, identity-verify, wage-lookup, cert-submit, payment-schedule, and three mainframe connector instances (mf-conn-a, b, c). Per request: timestamp, endpoint, service hops with durations, status code, connector instance, and whether the user retried. Baseline p95 latency for cert-submit is 1.8 s; Monday's peak was 31 s. 14,600 failed requests, mostly 504s; 71% passed through mf-conn-b. Three deploys are marked: identity-verify v4.12 (Sun 23:05), claims-web hotfix (Mon 9:20), connector pool size changed from 40 to 80 (Mon 10:38). The mainframe batch window ran Mon 6:00–8:30. Hourly claim volume compared with the same Monday a year ago."
+  },
+  "generator": {
+    "id": "haiku",
+    "model": "claude-haiku-5-5",
+    "effort": "high"
+  },
+  "prompt": "I need the front end for Pathspan. A request-tracing and performance analysis tool used by the in-house engineering team of a state labor department to understand how its unemployment insurance claims system behaves under load.\n\nWho's using it: Marcus Delgado, a site reliability engineer on the department's seven-person digital services team. He is fluent with logs and latency percentiles but works in a system where half the backend is a 1990s mainframe he can't instrument directly, so he reasons from the edges.\n\nWhat they're doing right now: On Monday morning, after a plant closure announcement, claim filings jumped to four times their normal rate, and between 8:10 and 10:45 am about 9% of weekly-certification submissions failed with timeouts. The deputy commissioner wants a written explanation by Wednesday. Marcus has the last 72 hours of request traces loaded and is trying to tell whether the failures followed Sunday night's identity-verification deploy, the mainframe connector's connection-pool limit, or both. He's comparing latency against the volume of requests per endpoint, isolating the failed requests, and checking whether they cluster on one connector instance.\n\nWhat's in the system at this point: 72 hours of traces (Sat Nov 14 00:00 – Mon Nov 16 23:59), about 1.2 million requests across 14 services, including claims-web, identity-verify, wage-lookup, cert-submit, payment-schedule, and three mainframe connector instances (mf-conn-a, b, c). Per request: timestamp, endpoint, service hops with durations, status code, connector instance, and whether the user retried. Baseline p95 latency for cert-submit is 1.8 s; Monday's peak was 31 s. 14,600 failed requests, mostly 504s; 71% passed through mf-conn-b. Three deploys are marked: identity-verify v4.12 (Sun 23:05), claims-web hotfix (Mon 9:20), connector pool size changed from 40 to 80 (Mon 10:38). The mainframe batch window ran Mon 6:00–8:30. Hourly claim volume compared with the same Monday a year ago.\n\nBuild it as a working web app, opened in the state that person would see at that moment. No backend: use realistic mock data (no lorem ipsum, no placeholder names), and make the interactive parts actually work client-side.\n\nUse whatever framework and tooling you like. When you're done there must be a static production build in ./out with ./out/index.html as the entry point. It will be served from the root of a plain static file server (no rewrites, no server code) and viewed in a desktop browser at 1440×900.",
+  "startedAt": "2026-11-17T13:05:35.150Z",
+  "finishedAt": "2026-11-17T13:27:44.830Z",
+  "verification": {
+    "ok": true,
+    "problems": [],
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedRequests": [],
+    "textChars": 3117,
+    "visibleElements": 461,
+    "title": "Pathspan · Claims system latency analysis"
+  },
+  "repairs": 0,
+  "session": {
+    "rounds": 1,
+    "numTurns": 83,
+    "costUsd": 1.49174917,
+    "durationMs": 1329595,
+    "models": [
+      "claude-haiku-5-5"
+    ],
+    "usage": {
+      "input_tokens": 164,
+      "cache_creation_input_tokens": 312111,
+      "cache_read_input_tokens": 16299753,
+      "output_tokens": 247674
+    },
+    "timedOut": false
+  },
+  "stack": {
+    "packageJson": true,
+    "dependencies": [
+      "react",
+      "react-dom"
+    ],
+    "devDependencies": [
+      "@types/react",
+      "@types/react-dom",
+      "@vitejs/plugin-react",
+      "typescript",
+      "vite"
+    ],
+    "outFiles": 3,
+    "outBytes": 305603
+  }
+}

@@ -1,0 +1,76 @@
+# Codebook proposal (new-entry) — review with: node scripts/proposals.ts show gen-002 suggested-fixes
+id: suggested-fixes
+kind: new-entry
+status: open
+batch: gen-002
+codebookVersion: 1.0.0
+name: Suggested fixes / issue resolution queue
+level: pattern
+parent: transact
+definition: A panel listing problems the system detected in the person's plan or artifact (gaps,
+  conflicts, constraint violations). Each item explains why it is a problem and offers one or two
+  concrete one-click resolutions, usually with an 'apply all' button and a pending-count badge.
+aliases:
+  - to sort out
+  - issues panel
+  - resolve conflicts
+  - smart fixes
+  - linter suggestions
+relations:
+  neighbors:
+    - recommendations
+    - task-list
+    - inline-suggestion
+dimensions:
+  - name: Resolution offer
+    family: content
+    question: What does each issue offer?
+    subdimensions:
+      - id: resolutionOffer
+        name: Resolution offer
+        select: one
+        values:
+          - id: single-fix
+            name: Single fix
+            description: One apply button per issue
+          - id: primary-plus-alternative
+            name: Primary plus alternative
+            description: A recommended fix and an alternative or manual option
+            example: Kinloop 'Place Dec 3–8' / 'Choose dates'
+          - id: explanation-only
+            name: Explanation only
+            description: Problem flagged, no direct fix
+      - id: batchApply
+        name: Batch apply
+        select: one
+        values:
+          - id: apply-all
+            name: Apply all
+            description: One control applies every recommended fix
+          - id: per-item-only
+            name: Per item only
+rationale:
+  - rater: rater-3
+    site: family-care-visit-rotation
+    text: Recommendations covers items to consume and task-list covers person-authored to-dos with
+      completion state. Neither fits system-detected constraint problems, each paired with a
+      reasoned explanation and alternative resolution actions (primary fix / alternative / dismiss)
+      that change the underlying plan. This is common in schedulers, spreadsheet checkers,
+      accessibility linters and Grammarly-style sidebars.
+sources:
+  - batch: gen-002
+    site: family-care-visit-rotation
+    url: http://family-care-visit-rotation.localhost:4318/
+    note: proposed by rater-3
+evidence:
+  - site: family-care-visit-rotation
+    rater: rater-3
+    bbox:
+      x: 20
+      y: 157
+      width: 288
+      height: 820
+    quote: To sort out 4 Apply all
+    note: Four detected coverage problems, each with explanation and two resolution buttons
+createdAt: 2026-11-17T22:02:17.311Z
+updatedAt: 2026-11-17T22:02:17.311Z

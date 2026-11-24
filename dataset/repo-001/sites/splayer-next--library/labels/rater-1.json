@@ -1,0 +1,462 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "splayer-next--library",
+    "url": "http://splayer-next.localhost:4319/#/library",
+    "finalUrl": "http://splayer-next.localhost:4319/#/library",
+    "status": 200,
+    "title": "SPlayer Next",
+    "capturedAt": "2026-11-18T01:34:12.612Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 5400
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "media-entertainment",
+    "domainNote": "desktop local/cloud music player app (SPlayer) — music library view",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/splayer-next/explore.json",
+      "repo": {
+        "name": "SPlayer-Dev/SPlayer-Next",
+        "url": "https://github.com/SPlayer-Dev/SPlayer-Next",
+        "commit": "6b26b685f67cfac9d3233747b399255620f45b87",
+        "license": "AGPL-3.0"
+      },
+      "view": {
+        "slug": "library",
+        "name": "Music library",
+        "description": "Local music library track list with covers, quality badges, album, like, duration and file size columns."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Logo, primary destinations (首页, 音乐库, 艺术家…), personal collections, and user playlists (我的歌单) with add button",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 240,
+        "height": 5320
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "top-bar",
+      "role": "header",
+      "label": "Back/forward buttons, global search pill, waveform button, account/settings and window controls",
+      "bbox": {
+        "x": 240,
+        "y": 0,
+        "width": 1200,
+        "height": 64
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "library-header",
+      "role": "page-header",
+      "label": "音乐库 title with scanning spinner/progress, Play all, refresh, more buttons and an in-list search field",
+      "bbox": {
+        "x": 240,
+        "y": 64,
+        "width": 1200,
+        "height": 110
+      },
+      "patterns": [
+        "progress-indicator",
+        "text-field"
+      ]
+    },
+    {
+      "id": "song-table",
+      "role": "data-table",
+      "label": "Song list with columns #, 标题 (art, title, quality badge, artist), 专辑, 操作 (like), 时长, 大小; each row a white rounded card",
+      "bbox": {
+        "x": 252,
+        "y": 174,
+        "width": 1176,
+        "height": 5146
+      },
+      "patterns": [
+        "data-table",
+        "badge",
+        "sort-control"
+      ]
+    },
+    {
+      "id": "player-bar",
+      "role": "now-playing-bar",
+      "label": "Bottom transport: cover, title/artist, like/more, shuffle/prev/play/next/repeat, time, volume, lyrics, queue, more; thin progress line along top edge",
+      "bbox": {
+        "x": 0,
+        "y": 5320,
+        "width": 1440,
+        "height": 80
+      },
+      "patterns": [
+        "media-player",
+        "playlist-queue"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 240,
+            "height": 820
+          },
+          "note": "persistent left sidebar with fixed destinations and user playlists, selected item highlighted",
+          "quote": "音乐库",
+          "region": "sidebar"
+        },
+        {
+          "bbox": {
+            "x": 240,
+            "y": 0,
+            "width": 1200,
+            "height": 64
+          },
+          "note": "top bar with history nav, search, account, settings, window controls",
+          "quote": "搜索歌曲、歌手或专辑",
+          "region": "top-bar"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations",
+          "user-pinned-items"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "data-table",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 260,
+            "y": 176,
+            "width": 1160,
+            "height": 24
+          },
+          "note": "column header row",
+          "quote": "# 标题 专辑 操作 时长 大小"
+        },
+        {
+          "bbox": {
+            "x": 252,
+            "y": 208,
+            "width": 1176,
+            "height": 76
+          },
+          "note": "row rendered as white rounded card with cover art, quality badge, like button, duration and size",
+          "quote": "阿牛 Lossless 陈奕迅 U87 3:55 27.0 MB",
+          "region": "song-table"
+        }
+      ],
+      "dims": {
+        "columnSet": "fixed",
+        "cellRendering": [
+          "plain-text",
+          "chips-and-avatars"
+        ],
+        "density": "comfortable",
+        "rowExpansion": "none",
+        "opScope": [
+          "row",
+          "whole-table"
+        ],
+        "aggregation": [
+          "flat"
+        ]
+      }
+    },
+    {
+      "id": "sort-control",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 310,
+            "y": 176,
+            "width": 430,
+            "height": 24
+          },
+          "note": "clicking the 标题 header (verified live) opens a popover with radio sort keys (默认, 按标题, 按歌手, 按专辑, 按时长, 按大小…) and direction (正序/倒序)",
+          "quote": "标题",
+          "region": "song-table"
+        }
+      ],
+      "dims": {
+        "keys": "fixed-list",
+        "form": "dropdown",
+        "default": "manual",
+        "indicator": "none"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 370,
+            "y": 250,
+            "width": 48,
+            "height": 18
+          },
+          "note": "amber outlined audio-quality label on track",
+          "quote": "Lossless",
+          "region": "song-table"
+        },
+        {
+          "bbox": {
+            "x": 370,
+            "y": 338,
+            "width": 40,
+            "height": 18
+          },
+          "quote": "Hi-Res",
+          "region": "song-table"
+        },
+        {
+          "bbox": {
+            "x": 370,
+            "y": 514,
+            "width": 24,
+            "height": 18
+          },
+          "note": "grey outlined variant for HQ/SQ",
+          "quote": "HQ",
+          "region": "song-table"
+        }
+      ],
+      "dims": {
+        "meaning": "label",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "progress-indicator",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 364,
+            "y": 84,
+            "width": 134,
+            "height": 20
+          },
+          "note": "small spinner with library-scan count and percentage",
+          "quote": "正在扫描 0/0 0%",
+          "region": "library-header"
+        }
+      ],
+      "dims": {
+        "determinacy": "percentage",
+        "form": "spinner",
+        "coverage": "a-region",
+        "control": "no-control"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1260,
+            "y": 124,
+            "width": 160,
+            "height": 36
+          },
+          "note": "pill-shaped outlined filter/search input with icon and placeholder",
+          "quote": "搜索",
+          "region": "library-header"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "placeholder",
+          "prefix-or-suffix"
+        ],
+        "style": "outlined"
+      }
+    },
+    {
+      "id": "media-player",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 5320,
+            "width": 1440,
+            "height": 80
+          },
+          "note": "docked now-playing bar with cover, title, shuffle/prev/play/next/repeat, time readout, volume, lyrics, queue; thin progress line on top edge",
+          "quote": "Giorgio by Moroder",
+          "region": "player-bar"
+        }
+      ],
+      "dims": {
+        "controls": [
+          "play-pause",
+          "scrubber",
+          "skip-forward-back",
+          "volume-and-mute"
+        ],
+        "position": [
+          "time-scrubber"
+        ],
+        "mode": "standalone-window"
+      }
+    },
+    {
+      "id": "playlist-queue",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "rationale": "Only the queue trigger button is visible in the capture; live check shows it opens a 播放列表 panel (共17首) with now-playing highlighted, locate and clear buttons, but the panel is not in the captured state.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1344,
+            "y": 5341,
+            "width": 40,
+            "height": 40
+          },
+          "note": "queue button in player bar; opens floating 播放列表 panel above it",
+          "region": "player-bar"
+        }
+      ],
+      "dims": {
+        "representation": [
+          "title-and-creator",
+          "artwork"
+        ],
+        "surface": "side-panel",
+        "edits": [
+          "clear-queue"
+        ]
+      }
+    },
+    {
+      "id": "card",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 252,
+            "y": 208,
+            "width": 1176,
+            "height": 76
+          },
+          "note": "rows look like cards but are column-aligned table rows under a shared header"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "desktop app window: fixed left sidebar nav (240px) + top bar with back/forward, search and window controls; main content is a library page with title, toolbar and a long song table; persistent now-playing bar docked at the bottom",
+    "regions": [
+      "sidebar",
+      "top-bar",
+      "library-header",
+      "song-table",
+      "player-bar"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#f6f6f6",
+      "#ffffff",
+      "#18181b",
+      "#71717a",
+      "#f59e0b",
+      "#2c1513",
+      "#e7e2e1",
+      "#e4e4e7"
+    ],
+    "colorRoles": {
+      "background": "#f6f6f6",
+      "surface": "#ffffff",
+      "text": "#18181b",
+      "muted": "#71717a",
+      "accent": "#f59e0b",
+      "primary": "#2c1513",
+      "selected": "#e7e2e1",
+      "border": "#e4e4e7"
+    },
+    "typography": "System UI stack (-apple-system, rendering as Ubuntu/Noto CJK) for everything; custom 'logo' font for the SPlayer wordmark",
+    "typeScale": "Restrained: 30px/700 page title, 22px logo, 16px track titles and nav items, 14px body/table cells, 12px time readout, 10px quality badges; column headers and secondary text in muted grey",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "photography",
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "clean",
+      "calm",
+      "neutral",
+      "utilitarian",
+      "desktop-native"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T01:35:39.607Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 10,
+    "usage": {
+      "input_tokens": 20,
+      "cache_creation_input_tokens": 33165,
+      "cache_read_input_tokens": 297206,
+      "output_tokens": 9750
+    }
+  },
+  "notes": "Desktop (Electron-style) music player with in-app window controls (minimize/maximize/close) in the top bar. Distinctive: each table row is a white 12px-rounded card with a 2px light border on a #f6f6f6 canvas, so the song list reads as a stack of cards while still aligning to a column header. Audio-quality tags (Lossless / Hi-Res in amber #f59e0b, HQ / SQ in grey) sit inline before the artist name. Nearly all buttons are 9999px circles/pills in light grey; primary brand tone is a very dark brown (#2c1513) used on icons and Play all text. Selected sidebar item has a grey pill with a thin dark left indicator. Floating circular 'locate current track' button at bottom-right of the list. Hidden-but-verified: header click opens a sort popover with radio options (排列方式 / 排序方向); player queue button opens a floating 播放列表 panel. Album art is placeholder generative artwork."
+}

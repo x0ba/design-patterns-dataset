@@ -1,0 +1,80 @@
+# Codebook proposal (new-entry) — review with: node scripts/proposals.ts show gen-002 commit-readiness-checklist
+id: commit-readiness-checklist
+kind: new-entry
+status: open
+batch: gen-002
+codebookVersion: 1.0.0
+name: Commit readiness checklist
+level: component
+parent: transact
+definition: A persistent panel beside a consequential commit button that lists the blocking and
+  advisory issues still standing between the current draft and a valid commit. Each issue has a fix
+  action, and the commit button stays disabled with its reasons stated underneath until the blockers
+  clear.
+aliases:
+  - pre-flight checklist
+  - before you commit
+  - readiness summary
+  - blocking issues panel
+relations:
+  neighbors:
+    - banner
+    - confirmation
+    - status-tracker
+  uses:
+    - badge
+    - banner
+dimensions:
+  - name: Gating
+    family: feedback
+    question: How does the checklist control the commit?
+    subdimensions:
+      - id: gating
+        name: Gating
+        select: one
+        values:
+          - id: disabled-until-clear
+            name: Disabled until clear
+            description: Commit button is disabled while blocking items remain
+          - id: warn-but-allow
+            name: Warn but allow
+            description: Issues are listed but commit stays enabled
+  - name: Severity tiers
+    family: content
+    question: Which kinds of issue does it list?
+    subdimensions:
+      - id: severityTiers
+        name: Severity tiers
+        select: one
+        values:
+          - id: blocking-only
+            name: Blocking only
+          - id: blocking-and-advisory
+            name: Blocking and advisory
+            example: "Fundfloor: ✕ blockers and ! advisory review"
+rationale:
+  - rater: rater-1
+    site: student-government-budget-allocation
+    text: This is neither a banner (a single condition) nor a confirmation (a pause after the click),
+      and it is not a GOV.UK-style error summary either, because it sits permanently beside the
+      commit action and sorts issues into blocking and advisory. Each item has its own fix button,
+      and the totals and the disabled commit button are tied to it. No existing entry captures the
+      gating of a commit by live-checked preconditions.
+sources:
+  - batch: gen-002
+    site: student-government-budget-allocation
+    url: http://student-government-budget-allocation.localhost:4318/
+    note: proposed by rater-1
+evidence:
+  - site: student-government-budget-allocation
+    rater: rater-1
+    bbox:
+      x: 1036
+      y: 148
+      width: 372
+      height: 729
+    quote: Before you commit
+    note: Blocking items (✕) and an advisory item (!), each with a fix action; the summary card below
+      has a disabled commit button with red reasons underneath
+createdAt: 2026-11-18T02:40:50.878Z
+updatedAt: 2026-11-18T02:40:50.878Z

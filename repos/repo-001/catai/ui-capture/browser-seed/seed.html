@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Catai</title>
+</head>
+<body style="background:#020617">
+<script>
+    // Loads an established user's browser-side data into catai-react's own storage
+    // (IndexedDB "Catai"/"chatSessions" v1 + localStorage keys used by its hooks),
+    // then opens the app. Runs once per seed version; later visits go straight to "/".
+    (async () => {
+        try {
+            const res = await fetch('/catai-seed.json', {cache: 'no-store'});
+            const seed = await res.json();
+            // keep the data "current": shift all timestamps so the seed's anchor time = now
+            const shift = Math.max(0, Date.now() - seed.anchor);
+            for (const ses of seed.sessions) { ses.createdAt += shift; ses.updatedAt += shift; }
+            for (const h of seed.localStorage.history || []) h.timestamp += shift;
+            if (localStorage.getItem('catai_seed_version') !== seed.version) {
+                const db = await new Promise((resolve, reject) => {
+                    const req = indexedDB.open('Catai', 1);
+                    req.onupgradeneeded = () => {
+                        const d = req.result;
+                        if (!d.objectStoreNames.contains('chatSessions')) {
+                            const store = d.createObjectStore('chatSessions', {keyPath: 'id'});
+                            store.createIndex('createdAt', 'createdAt', {unique: false});
+                            store.createIndex('updatedAt', 'updatedAt', {unique: false});
+                        }
+                    };
+                    req.onsuccess = () => resolve(req.result);
+                    req.onerror = () => reject(req.error);
+                });
+                await new Promise((resolve, reject) => {
+                    const tx = db.transaction(['chatSessions'], 'readwrite');
+                    const store = tx.objectStore('chatSessions');
+                    for (const s of seed.sessions) store.put(s);
+                    tx.oncomplete = resolve;
+                    tx.onerror = () => reject(tx.error);
+                });
+                db.close();
+                for (const [k, v] of Object.entries(seed.localStorage)) {
+                    localStorage.setItem(k, typeof v === 'string' ? v : JSON.stringify(v));
+                }
+                localStorage.setItem('catai_seed_version', seed.version);
+            }
+        } catch (e) {
+            console.error('catai seed failed', e);
+        }
+        location.replace('/');
+    })();
+</script>
+</body>
+</html>

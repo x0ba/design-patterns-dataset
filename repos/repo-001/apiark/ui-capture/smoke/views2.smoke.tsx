@@ -1,0 +1,20 @@
+import "../mock/tauri-backend";
+import { render, act, fireEvent } from "@testing-library/react";
+import App from "@/App";
+import "@/lib/i18n";
+import { useHistoryStore } from "@/stores/history-store";
+import { useMonitorStore } from "@/stores/monitor-store";
+const wait = (ms: number) => act(async () => { await new Promise((r) => setTimeout(r, ms)); });
+const clean = () => document.body.textContent!.replace(/To pick up a draggable[^.]*\.[^.]*\.[^.]*\.?/g, "").replace(/\s+/g, " ");
+test("git, history, monitors", async () => {
+  (globalThis as any).ResizeObserver = class { observe() {} unobserve() {} disconnect() {} };
+  render(<App />);
+  await wait(1500);
+  const click = (l: string) => { const b = Array.from(document.querySelectorAll("button")).find((b) => (b.getAttribute("title") || "") === l); if (b) fireEvent.click(b); return !!b; };
+  console.log("GITBTN", click(process.env.GIT_LABEL || "Git")); await wait(1000);
+  console.log("GIT: " + clean().slice(0, 900));
+  click("History"); await wait(800);
+  console.log("HISTORY entries: " + useHistoryStore.getState().entries.length);
+  await act(async () => { useMonitorStore.getState().openDialog(); }); await wait(1200);
+  console.log("MONITOR: " + clean().slice(-1500));
+});

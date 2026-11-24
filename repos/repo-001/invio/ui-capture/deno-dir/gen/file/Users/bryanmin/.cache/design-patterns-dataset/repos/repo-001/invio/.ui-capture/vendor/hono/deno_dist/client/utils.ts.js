@@ -1,0 +1,38 @@
+export const mergePath = (base, path)=>{
+  base = base.replace(/\/+$/, '');
+  base = base + '/';
+  path = path.replace(/^\/+/, '');
+  return base + path;
+};
+export const replaceUrlParam = (urlString, params)=>{
+  for (const [k, v] of Object.entries(params)){
+    const reg = new RegExp('/:' + k + '(?:{[^/]+})?');
+    urlString = urlString.replace(reg, `/${v}`);
+  }
+  return urlString;
+};
+export const removeIndexString = (urlSting)=>{
+  return urlSting.replace(/\/index$/, '/');
+};
+function isObject(item) {
+  return typeof item === 'object' && item !== null && !Array.isArray(item);
+}
+export function deepMerge(target, source) {
+  if (!isObject(target) && !isObject(source)) {
+    return source;
+  }
+  const merged = {
+    ...target
+  };
+  for(const key in source){
+    const value = source[key];
+    if (isObject(merged[key]) && isObject(value)) {
+      merged[key] = deepMerge(merged[key], value);
+    } else {
+      merged[key] = value;
+    }
+  }
+  return merged;
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImZpbGU6Ly8vVXNlcnMvYnJ5YW5taW4vLmNhY2hlL2Rlc2lnbi1wYXR0ZXJucy1kYXRhc2V0L3JlcG9zL3JlcG8tMDAxL2ludmlvLy51aS1jYXB0dXJlL3ZlbmRvci9ob25vL2Rlbm9fZGlzdC9jbGllbnQvdXRpbHMudHMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHR5cGUgeyBPYmplY3RUeXBlIH0gZnJvbSAnLi90eXBlcy50cydcblxuZXhwb3J0IGNvbnN0IG1lcmdlUGF0aCA9IChiYXNlOiBzdHJpbmcsIHBhdGg6IHN0cmluZykgPT4ge1xuICBiYXNlID0gYmFzZS5yZXBsYWNlKC9cXC8rJC8sICcnKVxuICBiYXNlID0gYmFzZSArICcvJ1xuICBwYXRoID0gcGF0aC5yZXBsYWNlKC9eXFwvKy8sICcnKVxuICByZXR1cm4gYmFzZSArIHBhdGhcbn1cblxuZXhwb3J0IGNvbnN0IHJlcGxhY2VVcmxQYXJhbSA9ICh1cmxTdHJpbmc6IHN0cmluZywgcGFyYW1zOiBSZWNvcmQ8c3RyaW5nLCBzdHJpbmc+KSA9PiB7XG4gIGZvciAoY29uc3QgW2ssIHZdIG9mIE9iamVjdC5lbnRyaWVzKHBhcmFtcykpIHtcbiAgICBjb25zdCByZWcgPSBuZXcgUmVnRXhwKCcvOicgKyBrICsgJyg/OntbXi9dK30pPycpXG4gICAgdXJsU3RyaW5nID0gdXJsU3RyaW5nLnJlcGxhY2UocmVnLCBgLyR7dn1gKVxuICB9XG4gIHJldHVybiB1cmxTdHJpbmdcbn1cblxuZXhwb3J0IGNvbnN0IHJlbW92ZUluZGV4U3RyaW5nID0gKHVybFN0aW5nOiBzdHJpbmcpID0+IHtcbiAgcmV0dXJuIHVybFN0aW5nLnJlcGxhY2UoL1xcL2luZGV4JC8sICcvJylcbn1cblxuZnVuY3Rpb24gaXNPYmplY3QoaXRlbTogdW5rbm93bik6IGl0ZW0gaXMgT2JqZWN0VHlwZSB7XG4gIHJldHVybiB0eXBlb2YgaXRlbSA9PT0gJ29iamVjdCcgJiYgaXRlbSAhPT0gbnVsbCAmJiAhQXJyYXkuaXNBcnJheShpdGVtKVxufVxuXG5leHBvcnQgZnVuY3Rpb24gZGVlcE1lcmdlPFQ+KHRhcmdldDogVCwgc291cmNlOiBSZWNvcmQ8c3RyaW5nLCB1bmtub3duPik6IFQge1xuICBpZiAoIWlzT2JqZWN0KHRhcmdldCkgJiYgIWlzT2JqZWN0KHNvdXJjZSkpIHtcbiAgICByZXR1cm4gc291cmNlIGFzIFRcbiAgfVxuICBjb25zdCBtZXJnZWQgPSB7IC4uLnRhcmdldCB9IGFzIE9iamVjdFR5cGU8VD5cblxuICBmb3IgKGNvbnN0IGtleSBpbiBzb3VyY2UpIHtcbiAgICBjb25zdCB2YWx1ZSA9IHNvdXJjZVtrZXldXG4gICAgaWYgKGlzT2JqZWN0KG1lcmdlZFtrZXldKSAmJiBpc09iamVjdCh2YWx1ZSkpIHtcbiAgICAgIG1lcmdlZFtrZXldID0gZGVlcE1lcmdlKG1lcmdlZFtrZXldLCB2YWx1ZSlcbiAgICB9IGVsc2Uge1xuICAgICAgbWVyZ2VkW2tleV0gPSB2YWx1ZSBhcyBUW2tleW9mIFRdICYgVFxuICAgIH1cbiAgfVxuXG4gIHJldHVybiBtZXJnZWQgYXMgVFxufVxuIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUVBLE9BQU8sTUFBTSxZQUFZLENBQUMsTUFBYztFQUN0QyxPQUFPLEtBQUssT0FBTyxDQUFDLFFBQVE7RUFDNUIsT0FBTyxPQUFPO0VBQ2QsT0FBTyxLQUFLLE9BQU8sQ0FBQyxRQUFRO0VBQzVCLE9BQU8sT0FBTztBQUNoQixFQUFDO0FBRUQsT0FBTyxNQUFNLGtCQUFrQixDQUFDLFdBQW1CO0VBQ2pELEtBQUssTUFBTSxDQUFDLEdBQUcsRUFBRSxJQUFJLE9BQU8sT0FBTyxDQUFDLFFBQVM7SUFDM0MsTUFBTSxNQUFNLElBQUksT0FBTyxPQUFPLElBQUk7SUFDbEMsWUFBWSxVQUFVLE9BQU8sQ0FBQyxLQUFLLENBQUMsQ0FBQyxFQUFFLEdBQUc7RUFDNUM7RUFDQSxPQUFPO0FBQ1QsRUFBQztBQUVELE9BQU8sTUFBTSxvQkFBb0IsQ0FBQztFQUNoQyxPQUFPLFNBQVMsT0FBTyxDQUFDLFlBQVk7QUFDdEMsRUFBQztBQUVELFNBQVMsU0FBUyxJQUFhO0VBQzdCLE9BQU8sT0FBTyxTQUFTLFlBQVksU0FBUyxRQUFRLENBQUMsTUFBTSxPQUFPLENBQUM7QUFDckU7QUFFQSxPQUFPLFNBQVMsVUFBYSxNQUFTLEVBQUUsTUFBK0I7RUFDckUsSUFBSSxDQUFDLFNBQVMsV0FBVyxDQUFDLFNBQVMsU0FBUztJQUMxQyxPQUFPO0VBQ1Q7RUFDQSxNQUFNLFNBQVM7SUFBRSxHQUFHLE1BQU07RUFBQztFQUUzQixJQUFLLE1BQU0sT0FBTyxPQUFRO0lBQ3hCLE1BQU0sUUFBUSxNQUFNLENBQUMsSUFBSTtJQUN6QixJQUFJLFNBQVMsTUFBTSxDQUFDLElBQUksS0FBSyxTQUFTLFFBQVE7TUFDNUMsTUFBTSxDQUFDLElBQUksR0FBRyxVQUFVLE1BQU0sQ0FBQyxJQUFJLEVBQUU7SUFDdkMsT0FBTztNQUNMLE1BQU0sQ0FBQyxJQUFJLEdBQUc7SUFDaEI7RUFDRjtFQUVBLE9BQU87QUFDVCJ9
+// denoCacheMetadata=5209762748556130502,6326957338609222936

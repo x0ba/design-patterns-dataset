@@ -1,0 +1,36 @@
+{
+  "mode": "server",
+  "entry": "/index.html",
+  "login": null,
+  "stubs": [
+    {
+      "service": "Electron main process (IPC handlers: profile, settings presets, OCR templates, capture sources, extensions, dictionaries, app info)",
+      "how": "YomiNinja's renderer already talks to the main process over socket.io when not inside Electron (renderer/utils/ipc-renderer.ts <-> electron-src/common/ipc_main.ts). .ui-capture/server.js serves renderer/out and answers the same IPC channels from .ui-capture/data/db.json (in-memory, mutations not persisted)."
+    },
+    {
+      "service": "OCR engines (PaddleOCR / MangaOCR Python services, Google Lens, Google Cloud Vision, Apple Vision)",
+      "how": "Not started. get_supported_ocr_engines returns PaddleOCR, Cloud Vision, Google Lens, MangaOCR (Windows install); restart_engine emits 'ocr_engine_restarted' after ~2s; get_result returns null; MangaOCR hardware-acceleration options are canned CPU/CUDA entries and install resolves true."
+    },
+    {
+      "service": "Google sign-in window / Google cookies (for Google Lens)",
+      "how": "get_google_cookies returns two placeholder google.com cookies (signed-in state); open_google_page restores them and emits google_window_closed."
+    },
+    {
+      "service": "Google Cloud Vision credentials",
+      "how": "Placeholder service-account client_email/private_key stored in the seeded settings preset; no network calls are made."
+    },
+    {
+      "service": "GitHub release update check (app_info:get_update_check)",
+      "how": "Returns {runningVersion: 0.9.3, latestVersion: 0.9.3, isUpToDate: true}."
+    },
+    {
+      "service": "Desktop capturer / native window list, file pickers, shell.openExternal, clipboard, overlay window control",
+      "how": "Capture sources are a seeded list of screens and game/app windows; open-link, file-dialog and window-control channels are no-ops."
+    },
+    {
+      "service": "VOICEVOX TTS engine (renderer calls http://localhost:50021 directly)",
+      "how": "server.js also listens on 127.0.0.1:50021 serving /speakers (7 VOICEVOX characters), /version, /audio_query and /synthesis (short silent WAV) with CORS; skipped with a warning if the port is busy."
+    }
+  ],
+  "notes": "Electron + Next.js app. Built per README: npm ci (--ignore-scripts, native Electron deps not needed for the browser UI), npm run grpc-types, a types-only shim for grpc/rpc/lens/lens_pb.d.ts (the Lens .proto sources are not in the repo), then `next build renderer` (static export to yomininja-e/renderer/out) and `tsc -p electron-src` (compiled domain classes used by the seed). Full rebuild: .ui-capture/build.sh. start.sh runs .ui-capture/server.js which mirrors the app's own HTTP+socket.io server; '/' redirects to /index.html like the Electron main window URL. Seed (.ui-capture/seed.js) uses the app's own domain classes (SettingsPreset defaults + OCR engine default settings, Language, Profile, OcrTemplate/OcrTargetRegion, BrowserExtension, Dictionary) to model a Windows 11 Japanese learner ~7 months in: Google Lens selected, Japanese OCR language, customized hotkeys/overlay colors, Cloud Vision configured (412/1000 monthly requests), dictionary enabled; 19 capture sources (screens + game/video/browser windows, active = mpv playing Frieren); 17 OCR templates (DQXI dialogue + battle log, Persona 5 Royal, STEINS;GATE, Frieren and SPY×FAMILY subtitles, Pokemon Scarlet, Yakuza 0, Danganronpa, Monster Hunter Rise, Yotsuba and Hikaru no Go via mokuro, NHK Easy, Umineko, an Anki card, a throwaway \"test\"), created over ~7 months, with generated screenshot images, target regions, auto-OCR/TTS/preprocessing options, one with no regions and an old misaligned one (active = Frieren); 3 browser extensions (10ten, Yomitan enabled; Inkah disabled); 7 installed dictionaries; a small headword set for the dictionary popup search; VOICEVOX voices for template TTS. Main areas (tabs): Home (capture source, OCR engine, language, template selector, hotkey hints), OCR Templates (list + editor), Extensions, Dictionaries, Settings (General, Overlay visuals/hotkeys/behavior, OCR engines), About."
+}

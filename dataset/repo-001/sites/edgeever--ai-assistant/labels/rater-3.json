@@ -1,0 +1,555 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "edgeever--ai-assistant",
+    "url": "http://localhost:4501/",
+    "finalUrl": "http://localhost:4501/",
+    "status": 200,
+    "title": "EdgeEver",
+    "capturedAt": "2026-11-18T02:38:32.068Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 2120
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "productivity",
+    "domainNote": "note-taking app (Evernote-style) with an AI assistant sidebar",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/edgeever/explore.json",
+      "repo": {
+        "name": "tianma-if/edgeever",
+        "url": "https://github.com/tianma-if/edgeever",
+        "commit": "e1be9c897278c061ccc40c5a5c2c4049c471e7fa",
+        "license": "AGPL-3.0"
+      },
+      "view": {
+        "slug": "ai-assistant",
+        "name": "AI writing assistant panel",
+        "description": "AI chat side panel open beside a note, showing a summarize request and response, quick actions (Summarize, Improve writing, Translate), and a composer with note context and model picker."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "notebook-sidebar",
+      "role": "sidebar",
+      "label": "Icon row for secondary entries, New note button, All notes, collapsible notebook tree with counts, footer with clients link and profile",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 240,
+        "height": 2120
+      },
+      "patterns": [
+        "app-shell",
+        "tree-view",
+        "badge"
+      ]
+    },
+    {
+      "id": "note-list",
+      "role": "list",
+      "label": "Notebook header, search field, and list of 13 notes with title, snippet, date and hashtags",
+      "bbox": {
+        "x": 240,
+        "y": 0,
+        "width": 360,
+        "height": 2120
+      },
+      "patterns": [
+        "overview-detail",
+        "text-field",
+        "split-pane"
+      ]
+    },
+    {
+      "id": "editor",
+      "role": "editor",
+      "label": "Note title/meta toolbar, formatting toolbar, and rich-text body with headings and lists",
+      "bbox": {
+        "x": 600,
+        "y": 0,
+        "width": 460,
+        "height": 2120
+      },
+      "patterns": [
+        "document-editor"
+      ]
+    },
+    {
+      "id": "ai-assistant",
+      "role": "assistant-panel",
+      "label": "AI chat panel: history dropdown, user prompt bubble, model reply, quick-action chips and composer with model switcher",
+      "bbox": {
+        "x": 1060,
+        "y": 0,
+        "width": 380,
+        "height": 2120
+      },
+      "patterns": [
+        "ai-chat",
+        "prompt-input",
+        "suggestion-chips",
+        "ai-provenance"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "second-sidebar-column",
+        "items": [
+          "fixed-destinations",
+          "live-counts"
+        ],
+        "visibility": "toggle-button",
+        "structure": "single-app"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 240,
+            "height": 2120
+          },
+          "region": "notebook-sidebar",
+          "note": "persistent left sidebar with icon shortcuts, notebooks, profile and collapse button",
+          "quote": "Notebooks"
+        }
+      ]
+    },
+    {
+      "id": "tree-view",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "content": [
+          "label",
+          "type-icon",
+          "count-badge"
+        ],
+        "expandBy": [
+          "disclosure-triangle"
+        ],
+        "selection": "single-node",
+        "source": "containment",
+        "density": "comfortable"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 12,
+            "y": 191,
+            "width": 215,
+            "height": 755
+          },
+          "region": "notebook-sidebar",
+          "note": "notebook stacks with chevrons, icons, indented child notebooks and counts",
+          "quote": "Work Projects 68"
+        }
+      ]
+    },
+    {
+      "id": "badge",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "rationale": "Counts are plain grey numbers beside nodes rather than pill badges; they are note totals, not unread counts.",
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "aggregation": "rolled-up-to-parent"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 12,
+            "y": 191,
+            "width": 215,
+            "height": 755
+          },
+          "region": "notebook-sidebar",
+          "note": "parent stack counts equal sum of children (Personal Life 58 = 7+36+6+9)",
+          "quote": "Personal Life 58"
+        }
+      ]
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.9,
+      "dims": {
+        "attributePlacement": [
+          "in-both-views",
+          "in-overview-only"
+        ],
+        "abstraction": [
+          "summary",
+          "category",
+          "style"
+        ],
+        "truncation": "ellipsis",
+        "relationship": "one-to-one",
+        "recursion": [
+          "none"
+        ],
+        "linking": "independent",
+        "openIn": "side-by-side",
+        "overviewType": [
+          "list"
+        ],
+        "detailMultiplicity": "one-at-a-time",
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "whole-item",
+        "attributeScope": [
+          "per-item"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 258,
+            "y": 121,
+            "width": 323,
+            "height": 149
+          },
+          "region": "note-list",
+          "note": "selected note item highlighted; its content opens in the editor beside",
+          "quote": "Synthesis — discovery inte..."
+        },
+        {
+          "bbox": {
+            "x": 258,
+            "y": 274,
+            "width": 323,
+            "height": 149
+          },
+          "region": "note-list",
+          "note": "item with truncated title, snippet, date and hashtags",
+          "quote": "Interview — Jess Moreau, Cop..."
+        }
+      ]
+    },
+    {
+      "id": "card",
+      "status": "absent",
+      "confidence": 0.6,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 258,
+            "y": 274,
+            "width": 323,
+            "height": 149
+          },
+          "region": "note-list",
+          "note": "note items are list rows separated by rules, not bounded cards (only selected row is filled)"
+        }
+      ]
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "supporting": [
+          "placeholder"
+        ],
+        "style": "filled",
+        "inputType": "plain"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 257,
+            "y": 62,
+            "width": 286,
+            "height": 36
+          },
+          "region": "note-list",
+          "note": "filled search field with search icon",
+          "quote": "Search notes"
+        }
+      ]
+    },
+    {
+      "id": "split-pane",
+      "status": "present",
+      "confidence": 0.75,
+      "dims": {
+        "orientation": "side-by-side",
+        "sizing": "draggable-divider",
+        "relationship": "linked-selection"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 240,
+            "y": 0,
+            "width": 820,
+            "height": 900
+          },
+          "region": "note-list",
+          "note": "ARIA separators 'Resize notebook pane', 'Resize note list', 'Resize assistant' between columns"
+        }
+      ]
+    },
+    {
+      "id": "document-editor",
+      "status": "present",
+      "confidence": 0.9,
+      "dims": {
+        "model": "flowing-rich-text",
+        "access": [
+          "ribbon-or-toolbar",
+          "keyboard-shortcuts"
+        ],
+        "page": "fixed-reading-column",
+        "navAids": [
+          "none"
+        ],
+        "tracking": "none",
+        "assistance": [
+          "summarize-and-restructure",
+          "rewrite-suggestions"
+        ],
+        "modes": "focus-mode"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 600,
+            "y": 36,
+            "width": 460,
+            "height": 37
+          },
+          "region": "editor",
+          "note": "editor toolbar: markdown source, attach, link, formula, paragraph style, undo/redo, bold, more"
+        },
+        {
+          "bbox": {
+            "x": 638,
+            "y": 90,
+            "width": 400,
+            "height": 690
+          },
+          "region": "editor",
+          "note": "rich text body with H2 headings, ordered and bulleted lists",
+          "quote": "Themes (ranked by frequency)"
+        }
+      ]
+    },
+    {
+      "id": "ai-chat",
+      "status": "present",
+      "confidence": 0.9,
+      "dims": {
+        "turnContent": [
+          "markdown-with-code"
+        ],
+        "composition": "linear-thread",
+        "invokeBy": [
+          "text-field-submit",
+          "attach-file-or-image",
+          "suggestion-chip"
+        ],
+        "scope": "live-page-or-selection"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1073,
+            "y": 60,
+            "width": 345,
+            "height": 330
+          },
+          "region": "ai-assistant",
+          "note": "user prompt bubble followed by model reply with bold 'Bottom line' and link",
+          "quote": "Summarize what I'm looking at and reply with the summary."
+        }
+      ]
+    },
+    {
+      "id": "prompt-input",
+      "status": "present",
+      "confidence": 0.9,
+      "dims": {
+        "content": [
+          "plain-prompt",
+          "attached-images-or-docs"
+        ],
+        "layout": "sidebar-composer",
+        "submitBy": [
+          "click-send"
+        ],
+        "assistance": [
+          "placeholder-examples",
+          "suggestion-chips"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1073,
+            "y": 1976,
+            "width": 355,
+            "height": 124
+          },
+          "region": "ai-assistant",
+          "note": "rounded composer with Add files, Include current note toggle, model switcher and send",
+          "quote": "Ask AI"
+        }
+      ]
+    },
+    {
+      "id": "suggestion-chips",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "content": "tool-invocation",
+        "placement": "above-the-composer",
+        "lifecycle": "static-starters"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1073,
+            "y": 1936,
+            "width": 295,
+            "height": 32
+          },
+          "region": "ai-assistant",
+          "note": "three outlined quick-action chips above composer",
+          "quote": "Summarize"
+        }
+      ]
+    },
+    {
+      "id": "ai-provenance",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Only the model name in the composer switcher discloses the model; no per-reply badge or citations, though reply links to the source note memo.",
+      "dims": {
+        "disclosure": [
+          "model-identity"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1284,
+            "y": 2059,
+            "width": 97,
+            "height": 28
+          },
+          "region": "ai-assistant",
+          "note": "model identity shown in switcher",
+          "quote": "gpt-4.1-mini"
+        }
+      ]
+    },
+    {
+      "id": "menu",
+      "status": "absent",
+      "confidence": 0.6,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 551,
+            "y": 64,
+            "width": 32,
+            "height": 32
+          },
+          "region": "note-list",
+          "note": "'More list actions' click showed no menu on the live page"
+        }
+      ]
+    }
+  ],
+  "structure": {
+    "layout": "four-column desktop app: notebook tree sidebar, note list column, rich-text editor, and AI assistant chat panel, with resizable dividers between them",
+    "regions": [
+      "notebook-sidebar",
+      "note-list",
+      "editor",
+      "ai-assistant"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#eef1f4",
+      "#ffffff",
+      "#f8fafb",
+      "#e7ebef",
+      "#0a0a0a",
+      "#737373",
+      "#a6a6a6",
+      "#16a06e",
+      "#e5e5e5",
+      "#f5b301"
+    ],
+    "colorRoles": {
+      "background": "#eef1f4",
+      "surface": "#ffffff",
+      "text": "#0a0a0a",
+      "muted": "#737373",
+      "primary": "#16a06e",
+      "border": "#e5e5e5",
+      "accent": "#f5b301",
+      "selected": "#e7ebef",
+      "editor": "#f8fafb"
+    },
+    "typography": "System UI stack (-apple-system / rendered as DejaVu-like sans) everywhere: UI chrome, list, editor body and AI panel",
+    "typeScale": "Compact UI scale: 12px dominant for sidebar/list meta and chips, 13px AI text, 14–16px list titles (bold) and editor body (16px), 20px bold H2 in the note; weight contrast (700 titles vs 400 meta) carries hierarchy",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "clean",
+      "utilitarian",
+      "calm",
+      "productive"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T02:40:23.281Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 7,
+    "usage": {
+      "input_tokens": 14,
+      "cache_creation_input_tokens": 35637,
+      "cache_read_input_tokens": 238146,
+      "output_tokens": 5281
+    }
+  },
+  "notes": "EdgeEver: Evernote-like four-column layout in cool grey tones (#eef1f4 sidebar/list, #f8fafb editor, white AI panel). Green circular '+' New note pill button (white card with shadow) is the only strong brand color; starred note gets a yellow star. Notebook counts are muted grey numbers, child counts roll up into stacks. Selected list item uses a grey filled rounded block; other items separated by hairlines with hashtags in light grey. Editor header packs title, notebook combobox, tags, smart tags, reading-protection lock, sync status '582 chars', focus mode, GitHub link. AI panel: chat-history dropdown title, right-aligned grey user bubble, plain-text reply, quick-action chips (Summarize/Improve writing/Translate), composer with 'Include current note' context toggle and model switcher (gpt-4.1-mini). The AI reply text oddly echoes system-prompt-like instructions ('Focus DATA (not instructions)') — page content, treated only as data."
+}

@@ -1,0 +1,24 @@
+# FrankenPHP/Caddy equivalent of the repo's .nginx.conf / .htaccess rules.
+{
+	frankenphp
+	admin off
+	auto_https off
+	skip_install_trust
+	persist_config off
+}
+
+:{$PORT:4433} {
+	root * {$SELFOSS_ROOT}
+	encode gzip
+
+	@denied path /data/logs/* /data/sqlite/* /config.ini /.ui-capture/* /vendor/* /src/*
+	respond @denied 403
+
+	@icons path_regexp ^/(favicons|thumbnails)/
+	rewrite @icons /data{path}
+
+	try_files {path} /public{path} /index.php?{query}
+	@phpFiles path *.php
+	php @phpFiles
+	file_server
+}

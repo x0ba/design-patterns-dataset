@@ -1,0 +1,296 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "podgrab--player",
+    "url": "http://localhost:4429/player",
+    "finalUrl": "http://localhost:4429/player",
+    "status": 200,
+    "title": "Playing Latest Episodes - PodGrab",
+    "capturedAt": "2026-11-18T06:06:11.212Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 2014
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "media-entertainment",
+    "domainNote": "self-hosted podcast downloader/player (PodGrab) — player page",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/podgrab/explore.json",
+      "repo": {
+        "name": "akhilrex/podgrab",
+        "url": "https://github.com/akhilrex/podgrab",
+        "commit": "032248091294dbf5b6a439a5afd93788a7cc647f",
+        "license": "GPL-3.0"
+      },
+      "view": {
+        "slug": "player",
+        "name": "Player",
+        "description": "Integrated audio player with cover art, playback controls, speed and volume, and a playlist of latest episodes."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Centered H1 page title 'Playing Latest Episodes' plus uppercase letter-spaced text nav between hairline rules",
+      "bbox": {
+        "x": 150,
+        "y": 80,
+        "width": 1140,
+        "height": 147
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "now-playing",
+      "role": "media-player",
+      "label": "Large square podcast artwork, seek bar with times, repeat/shuffle/speed, prev/play/next, volume slider, episode title, podcast, date and description",
+      "bbox": {
+        "x": 270,
+        "y": 271,
+        "width": 450,
+        "height": 730
+      },
+      "patterns": [
+        "media-player",
+        "slider"
+      ]
+    },
+    {
+      "id": "queue",
+      "role": "playlist",
+      "label": "Scrolling list of latest episodes across podcasts: title (truncated), date, podcast name in bold caps, duration; current item marked with blue speaker icon",
+      "bbox": {
+        "x": 720,
+        "y": 271,
+        "width": 450,
+        "height": 1743
+      },
+      "patterns": [
+        "playlist-queue"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "media-player",
+      "status": "present",
+      "confidence": 0.95,
+      "dims": {
+        "controls": [
+          "play-pause",
+          "scrubber",
+          "skip-forward-back",
+          "playback-speed",
+          "volume-and-mute"
+        ],
+        "position": [
+          "time-scrubber"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 278,
+            "y": 735,
+            "width": 430,
+            "height": 100
+          },
+          "note": "Seek bar with elapsed/total time, repeat, shuffle, 1X speed, prev/play/next circular blue buttons, volume icon + slider",
+          "quote": "00:00:00",
+          "region": "now-playing"
+        },
+        {
+          "bbox": {
+            "x": 270,
+            "y": 271,
+            "width": 450,
+            "height": 450
+          },
+          "note": "Artwork stage for audio",
+          "region": "now-playing"
+        }
+      ]
+    },
+    {
+      "id": "playlist-queue",
+      "status": "present",
+      "confidence": 0.9,
+      "dims": {
+        "structure": "rule-built-playlist",
+        "representation": [
+          "title-and-creator",
+          "duration"
+        ],
+        "surface": "side-panel"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 720,
+            "y": 271,
+            "width": 450,
+            "height": 1743
+          },
+          "note": "Auto-built list of latest episodes from all podcasts; now-playing item marked with speaker icon; each row title, date, podcast, duration",
+          "quote": "420 - Rio Got a Parking Ticket in a Car Wash",
+          "region": "queue"
+        }
+      ]
+    },
+    {
+      "id": "slider",
+      "status": "present",
+      "confidence": 0.9,
+      "dims": {
+        "values": "single-value",
+        "labels": [
+          "current-value"
+        ],
+        "scale": "linear"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 344,
+            "y": 741,
+            "width": 300,
+            "height": 20
+          },
+          "note": "Seek slider flanked by elapsed and total time labels; second volume slider without labels",
+          "region": "now-playing"
+        },
+        {
+          "bbox": {
+            "x": 610,
+            "y": 803,
+            "width": 98,
+            "height": 20
+          },
+          "note": "Volume slider",
+          "region": "now-playing"
+        }
+      ]
+    },
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.7,
+      "dims": {
+        "primary": "top-navigation-bar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations"
+        ],
+        "structure": "single-app",
+        "visibility": "always-visible"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 150,
+            "y": 160,
+            "width": 1140,
+            "height": 67
+          },
+          "note": "Global top nav of the app's fixed destinations",
+          "quote": "HOME EPISODES ADD PODCAST PLAYER TAGS SETTINGS",
+          "region": "header"
+        }
+      ]
+    },
+    {
+      "id": "badge",
+      "status": "absent",
+      "confidence": 0.6,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 731,
+            "y": 296,
+            "width": 20,
+            "height": 20
+          },
+          "note": "Blue speaker icon marks the playing row; treated as part of the queue's now-playing indicator rather than a badge"
+        }
+      ]
+    }
+  ],
+  "structure": {
+    "layout": "centered fixed-width page: big centered title, text nav between rules, then a single shadowed 900px card split into now-playing column (left) and scrollable episode list (right)",
+    "regions": [
+      "header",
+      "now-playing",
+      "queue"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#222222",
+      "#607d8b",
+      "#00a0ff",
+      "#eeeeee",
+      "#b03a2e",
+      "#d7dee3"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "text": "#222222",
+      "muted": "#607d8b",
+      "primary": "#00a0ff",
+      "border": "#eeeeee",
+      "surface": "#ffffff",
+      "accent": "#b03a2e"
+    },
+    "typography": "Raleway throughout (50px/300 page title, 11px/600 uppercase letter-spaced nav, 16px episode titles, 14px bold uppercase podcast names, 12px dates); Open Sans for a few control labels; system sans for player times",
+    "typeScale": "Strong contrast between a light 50px title and small 11-16px body; hierarchy within rows by weight/caps (bold caps podcast name) rather than size",
+    "shape": "mixed",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "illustration",
+      "iconography"
+    ],
+    "iconStyle": "mixed",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "clean",
+      "utilitarian",
+      "minimal",
+      "calm"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T06:06:59.216Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 5,
+    "usage": {
+      "input_tokens": 10,
+      "cache_creation_input_tokens": 17779,
+      "cache_read_input_tokens": 115207,
+      "output_tokens": 3306
+    }
+  },
+  "notes": "PodGrab player page. Classic Skeleton-style blog look: huge light Raleway title, tiny uppercase tracked nav between #eee hairlines. Player is an APlayer/Amplitude-like card with drop shadow: left half square artwork (red diagonal-striped podcast cover), seek bar in slate gray with blue thumb, bright-blue (#00a0ff) round prev/play/next cluster, slate line icons for repeat/shuffle/volume, '1X' speed text in blue. Right half is an internally scrolling episode list with durations in blue-gray at right, titles ellipsized, current item marked with small blue speaker circle."
+}

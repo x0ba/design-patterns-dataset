@@ -1,0 +1,82 @@
+{
+  "batch": "repo-001",
+  "slug": "dumbbudget",
+  "ok": true,
+  "repo": {
+    "name": "DumbWareio/DumbBudget",
+    "url": "https://github.com/DumbWareio/DumbBudget",
+    "commit": "b9db5cb32d14b7b78675d8be054611d4829253ef",
+    "branch": "main",
+    "license": "GPL-3.0"
+  },
+  "domain": "finance",
+  "port": 4418,
+  "checkoutRoot": "~/.cache/design-patterns-dataset/repos",
+  "mode": "server",
+  "entry": "/",
+  "app": {
+    "mode": "server",
+    "entry": "/",
+    "login": {
+      "username": null,
+      "email": null,
+      "password": "2468"
+    },
+    "stubs": [
+      {
+        "service": "jsPDF + jspdf-autotable from cdnjs.cloudflare.com (used by Export PDF)",
+        "how": "Installed the same versions (jspdf@2.5.1, jspdf-autotable@3.5.31) from npm into .ui-capture/vendor, copied the UMD builds to public/vendor/, and pointed the two <script> tags in public/index.html at them"
+      },
+      {
+        "service": "Env secrets (DUMBBUDGET_PIN, DUMB_SECRET for the calendar API)",
+        "how": "Placeholder values set in start.sh (PIN 2468, DUMB_SECRET=local-placeholder-secret)"
+      }
+    ],
+    "notes": "DumbBudget is a single Express server (server.js) serving the static front end from public/ and storing everything in data/transactions.json. Node 20.19.5 pinned in mise.toml (the repo's Dockerfile uses node:20), deps from npm ci. start.sh runs `node server.js` with PORT, BASE_URL=http://localhost:$PORT, CURRENCY=USD, and DUMBBUDGET_PIN=2468. The app is PIN-protected, so / redirects to /login: type the 4-digit PIN 2468 (it auto-submits) to reach the main dashboard. Data: .ui-capture/seed.mjs (run through .ui-capture/reseed.sh) logs in and POSTs 595 transactions through the app's own /api/transactions endpoint. They cover Aug 2025 to 17 Nov 2026 for a Portland graphic designer: semi-monthly paychecks, freelance invoices, tax refunds, and Venmo repayments as income; groceries, dining, transport, shopping, health, pets, utilities, gifts, and travel (a Thanksgiving flight, a Mexico City trip) as expenses. 13 recurring rules (rent, which changes amount at the August lease renewal; streaming and other subscriptions; a gym membership cancelled in March; 6-month car insurance; HYSA transfers; a student loan) are expanded by the server into per-month instances. Many entries have notes. A snapshot is kept in .ui-capture/seed-data/transactions.json, and start.sh restores it if data/ is empty. The main UI is one page: a date-range picker (defaults to the current month, Nov 2026), income/expense/balance totals, a transaction list with All/Income/Expense filters and sorting by date or amount, an add/edit modal (type, category, amount, description, notes, date, recurring options), CSV and PDF export, and a light/dark theme toggle. Widen the date range (e.g. 2025-08-01 to 2026-11-30) to see all of the history. Known app quirk: the server HTML-escapes input and the client escapes it again, so & ' / would show as entities. The seed avoids those characters."
+  },
+  "tools": {
+    "node": "20.19.5"
+  },
+  "prompt": "This is a checkout of DumbWareio/DumbBudget (https://github.com/DumbWareio/DumbBudget) at commit b9db5cb32d14. A stupid simple budget app!\n\nI want to see its user interface in a desktop browser, in the state a real, established user would see it. Please get the app running locally with its main interface working and realistic data in it.\n\n# Running it\n- Follow the repo's own setup docs and tooling. Take the simplest route that shows the real app: a static production build if the front end works without a backend, otherwise the app's own server (production or dev mode).\n- If it needs a database or other services, run them locally with an embedded or file-based option (SQLite, in-memory, JSON files, an embedded Postgres such as PGlite) or the app's demo/mock mode.\n- Don't redesign or restyle anything. Change only what's needed to build and run it.\n\n# Tools: use mise\nInstall every runtime and tool you need (node, the package manager, python, bun, ...) with mise, pinned to exact versions in a mise.toml at the repo root, so the setup can be reproduced. Match what the repo asks for (engines, .nvmrc, .tool-versions, packageManager). mise is already configured for this directory: `mise install` installs into ./.ui-capture/mise, and its shims come first on PATH, so `node`, `pnpm` and the rest resolve to the pinned versions. Don't use other copies of these tools or download runtimes by hand.\n\n# Secrets, API keys and external services: fake them\nThe app must not depend on anything outside this machine, and when it runs it has no network except localhost. Wherever it expects secrets, environment variables, API keys or third-party services (hosted auth or OAuth, payment providers, email, LLM or other AI APIs, maps, storage buckets, analytics, hosted databases):\n- Give the required variables placeholder values so the app starts.\n- Where it actually calls the service, make the call succeed locally with realistic responses: use the app's own mock, test or offline mode if it has one; otherwise point the client at a small local stub server that start.sh also starts, or swap in a stub at the integration boundary (the API client or service module). Keep stubs out of UI code. Responses should look like what the real service returns for a real user, e.g. an AI reply that actually answers, a payment history with real-looking amounts.\n- Calls the browser makes directly to outside services count too; point them at the local stub.\n- For sign-in through an outside provider, create a local account or use the app's dev sign-in so you can get past it.\nList every stub in app.json.\n\n# Data: like real use\nSeed it the way an established user's data would look after months of actual use: specific, plausible names and content for this kind of app; dates spread over time; a realistic mix of states (done, in progress, overdue, archived, ...); realistic volume (dozens to hundreds of records where the app revolves around records); short and long text; some messiness real data has. Start from the app's own demo or seed data if it has realistic data, and extend it if it's thin. Load data through the app's own paths (its API, import, seed scripts, or its database schema), never by hardcoding it into UI code. If the app needs an account, create one and attach the data to it. No lorem ipsum or \"Test 1\".\n\n# Environment\nThis shell is sandboxed: you can write only inside this directory (package-manager caches already point into ./.ui-capture/cache), and the network reaches only package registries, mise's download sources and GitHub (registry.npmjs.org, registry.yarnpkg.com, repo.yarnpkg.com, github.com, codeload.github.com, objects.githubusercontent.com, raw.githubusercontent.com, nodejs.org, mise.jdx.dev, mise-versions.jdx.dev, release-assets.githubusercontent.com, pypi.org, files.pythonhosted.org, binaries.prisma.sh, cdn.jsdelivr.net, unpkg.com). Docker isn't available. A process you start in the background can't be seen or stopped from a later command, so test servers on another port than 4418 (e.g. 5418) or in the foreground under `timeout`; anything still listening on 4418 is stopped before I check.\n\n# When you're done, leave this in ./.ui-capture/\n- app.json: {\"mode\": \"static\" or \"server\", \"entry\": \"/path where the main UI opens\", \"login\": null or {\"username\": \"...\", \"email\": \"...\", \"password\": \"...\"}, \"stubs\": [{\"service\": \"what was faked\", \"how\": \"how\"}], \"notes\": \"how you set it up, what data is loaded, and the main areas of the app\"}\n- static mode: the production build in ./.ui-capture/out, with index.html as its entry. It will be served from the root of a plain static file server; unknown paths fall back to index.html.\n- server mode: ./.ui-capture/start.sh, which starts everything the app needs (stubs included) in the foreground and serves the UI at http://localhost:4418/ (it gets PORT=4418). It runs with the same PATH and restrictions as your shell, plus no network at all except localhost, so everything must already be installed, built and seeded (or seeded by start.sh itself).\n- Put any scripts you write for seeding or stubbing in ./.ui-capture/ too; they're kept with the setup record.\n\n# Order of work\nYou have 90 minutes in total, and anything unfinished when time runs out is lost. So work in this order:\n1. Get the app building and running with its stubs, and write the contract above (app.json plus out/ or start.sh), even if it has only a little data so far.\n2. Then build out the data, re-running your seed and checking the app still loads after each substantial step, so that a working state with the data loaded so far is always in place.\nWrite large data sets with a short generator script rather than as one long literal file.\n\nI'll open it at 1440×900.",
+  "model": {
+    "model": "claude-opus-5-5",
+    "effort": "high"
+  },
+  "sandbox": true,
+  "startedAt": "2026-11-17T15:50:51.137Z",
+  "finishedAt": "2026-11-17T15:54:54.085Z",
+  "verification": {
+    "ok": true,
+    "problems": [],
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedRequests": [],
+    "textChars": 20,
+    "visibleElements": 12,
+    "title": "DumbBudget - Login"
+  },
+  "repairs": 0,
+  "session": {
+    "rounds": 1,
+    "numTurns": 31,
+    "costUsd": 1.0687558000000001,
+    "durationMs": 239057,
+    "models": [
+      "claude-opus-5-5"
+    ],
+    "usage": {
+      "input_tokens": 60,
+      "cache_creation_input_tokens": 51587,
+      "cache_read_input_tokens": 1181699,
+      "output_tokens": 20974
+    },
+    "timedOut": false
+  },
+  "changes": {
+    "files": 4,
+    "insertions": 412,
+    "deletions": 2,
+    "patchBytes": 403797,
+    "patch": "setup.patch"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "mode": "server",
+  "entry": "/#/README",
+  "login": null,
+  "stubs": [
+    {
+      "service": "ACP agent registry (https://cdn.agentclientprotocol.com/registry/v1/latest/registry.json), which feeds the in-app agent picker (Claude Code, Codex, Gemini CLI, OpenCode, ...)",
+      "how": "Node preload .ui-capture/home-shim.mjs (loaded through NODE_OPTIONS=--import in start.sh) wraps globalThis.fetch in the server process and answers that exact URL with .ui-capture/stubs/acp-registry.json, a realistic registry payload with 10 agents. Every other fetch passes through untouched."
+    },
+    {
+      "service": "OS-account home directory (the server keeps its content-ownership registry in userInfo().homedir/.ok/local, and the real home is read-only here)",
+      "how": "The same preload makes os.userInfo().homedir return $HOME, which start.sh sets to .ui-capture/home. No app code was changed."
+    },
+    {
+      "service": "Telemetry / OpenTelemetry export",
+      "how": "Off by default in the app. start.sh also sets OTEL_SDK_DISABLED=true."
+    }
+  ],
+  "notes": "Setup: mise.toml pins node 24.22.3 and pnpm. The repo asks for pnpm 12.8.1, but pnpm 12 hardcodes its store lock to /tmp (read-only in this sandbox), so pnpm 11.28.13 (lockfile v9 compatible) is used, installed via mise's npm backend with npm.provenance=false because the sigstore TUF host is unreachable. Build: turbo build of core+server (--env-mode=loose so TMPDIR passes through), `vite build` of packages/app, then the packages/cli build steps (build:cli, build:app, skills, notices, license, schema; the Rust native-config addon is skipped because the CLI has a JS fallback). start.sh runs the CLI's own `ok start` (production server: UI + API + MCP + collab on one port) on $PORT against the project .ui-capture/workspace/tidewater-eng.\n\nData: .ui-capture/seed/seed.sh rebuilds that project from scratch. It runs `ok init` and `ok seed --pack software-lifecycle` (the app's own scaffolding and templates), then generate.mjs writes 122 markdown docs for a fictional freight-dispatch SaaS engineering team ('Tidewater', 10 engineers): 24 ADRs (accepted / superseded / rejected / deprecated / proposed), 14 proposals (draft / fcp / accepted / rejected / withdrawn), 6 specs each with spec + plan + tasks (shipped / in-progress / draft, partly checked task lists, mermaid diagrams), 12 postmortems (final / in-review / draft, one ongoing), 8 oncall runbooks with last_verified dates, 9 guides including a long onboarding doc, 25 weekly eng-sync notes Jun–Nov 2026, 3 architecture reviews, team pages (people, service catalog, oncall rotation, glossary) and messy scratch notes (an 'Untitled' note, a lowercase brain dump, notes with TODOs). Docs carry frontmatter properties and cross-link with root-absolute markdown links, so backlinks and the link graph are populated. commit-history.mjs then makes 104 backdated git commits (Jan–Nov 2026) by the different team members, and file mtimes match.\n\nMain areas: file tree sidebar (decisions, guides, meetings, postmortems, proposals, scratch, specs, team, README), WYSIWYG markdown editor with a frontmatter Properties panel and tabs, right panel (outline, links/backlinks, graph, history, lint issues, comments), search (top-left), agent composer ('Ask Claude Code') with the agent picker, Share/sync, Settings, Skills Studio (bottom-left). The bare root path '/' shows the empty 'Create something great' start page; '/#/README' opens the README doc."
+}

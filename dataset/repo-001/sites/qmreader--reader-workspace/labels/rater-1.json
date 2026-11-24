@@ -1,0 +1,601 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "qmreader--reader-workspace",
+    "url": "http://localhost:4436/",
+    "finalUrl": "http://localhost:4436/articles/%E7%AE%A1%E7%90%86%E6%89%8D%E6%98%AF%E6%96%B0%E7%9A%84%E6%8F%90%E7%A4%BA%E8%AF%8D--987fd6a0c260",
+    "status": 200,
+    "title": "管理才是新的提示词 · QMReader",
+    "capturedAt": "2026-11-18T06:29:43.596Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 15095
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "news-publishing",
+    "domainNote": "RSS / newsletter / podcast reader that aggregates sources, with Chinese translations and an AI side chat",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/qmreader/explore.json",
+      "repo": {
+        "name": "joeseesun/qmreader",
+        "url": "https://github.com/joeseesun/qmreader",
+        "commit": "2a71ec632ef4416c9959753a157bce24bf801907",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "reader-workspace",
+        "name": "Reader workspace",
+        "description": "Three-pane main workspace: source sidebar grouped by category, article list with latest/hot/unread tabs and unread dots, and the reader pane showing an article's original text with a highlighted passage."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Brand, theme toggle, add link; 全部/收藏 views with counts; grouped source list (文章/资讯/播客/社区/微信公众号) with unread counts; account footer with settings badge",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 232,
+        "height": 5400
+      },
+      "patterns": [
+        "app-shell",
+        "badge"
+      ]
+    },
+    {
+      "id": "article-list",
+      "role": "list-pane",
+      "label": "Search field, 最新/热门/未读 segmented tabs, count + refresh + mark-all-read, chronological list of article items with source, time, unread dot, title and subtitle",
+      "bbox": {
+        "x": 232,
+        "y": 0,
+        "width": 320,
+        "height": 13800
+      },
+      "patterns": [
+        "overview-detail",
+        "feed",
+        "tabs",
+        "text-field",
+        "split-pane",
+        "card"
+      ]
+    },
+    {
+      "id": "reader-pane",
+      "role": "detail",
+      "label": "Reading toolbar (中文/原文 toggle, favorite, open original, Aa settings, more, AI chat) and the article with highlighted passage, end marker, reading time and next-article card",
+      "bbox": {
+        "x": 556,
+        "y": 0,
+        "width": 884,
+        "height": 760
+      },
+      "patterns": [
+        "reader",
+        "choice-control",
+        "popover",
+        "menu"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 232,
+            "height": 900
+          },
+          "note": "Persistent left sidebar with brand, fixed views, user sources with unread counts, account footer",
+          "quote": "QMReader",
+          "region": "sidebar"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "second-sidebar-column",
+        "items": [
+          "fixed-destinations",
+          "user-pinned-items",
+          "live-counts"
+        ],
+        "visibility": "toggle-button",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 232,
+            "y": 130,
+            "width": 320,
+            "height": 770
+          },
+          "note": "Article list overview; selecting opens it in reading pane",
+          "quote": "DeepSeek V4 论文、苹果端侧模型更新、AI 芯片出口规则",
+          "region": "article-list"
+        },
+        {
+          "bbox": {
+            "x": 556,
+            "y": 52,
+            "width": 884,
+            "height": 700
+          },
+          "note": "Detail view of selected article shown side by side",
+          "quote": "管理才是新的提示词",
+          "region": "reader-pane"
+        }
+      ],
+      "dims": {
+        "attributePlacement": [
+          "in-both-views",
+          "in-detail-view-only"
+        ],
+        "abstraction": [
+          "style",
+          "summary"
+        ],
+        "truncation": "full-text",
+        "relationship": "one-to-one",
+        "recursion": [
+          "none"
+        ],
+        "openIn": "side-by-side",
+        "overviewType": [
+          "list"
+        ],
+        "detailMultiplicity": "one-at-a-time",
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "whole-item",
+        "attributeScope": [
+          "per-item",
+          "per-collection"
+        ]
+      }
+    },
+    {
+      "id": "feed",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 232,
+            "y": 130,
+            "width": 320,
+            "height": 770
+          },
+          "note": "Time-ordered stream of articles from followed sources (3 小时前, 5 小时前...); 热门 tab switches to ranked; ends with '到底了' marker",
+          "quote": "3 小时前",
+          "region": "article-list"
+        }
+      ],
+      "dims": {
+        "density": "card-preview",
+        "heterogeneity": [
+          "uniform-posts"
+        ],
+        "ordering": "switchable",
+        "sources": [
+          "followed-accounts"
+        ],
+        "arrangement": "single-column",
+        "loading": [
+          "infinite-scroll"
+        ],
+        "position": "caught-up-marker",
+        "nesting": [
+          "flat"
+        ]
+      }
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 256,
+            "y": 54,
+            "width": 280,
+            "height": 34
+          },
+          "note": "tablist 文章列表模式 segmented control; switching to 热门 changes list content (verified live)",
+          "quote": "最新 热门 未读",
+          "region": "article-list"
+        }
+      ],
+      "dims": {
+        "placement": "segmented-control",
+        "label": [
+          "text"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 56,
+            "width": 215,
+            "height": 34
+          },
+          "note": "Unread count beside each source/view",
+          "quote": "134",
+          "region": "sidebar"
+        },
+        {
+          "bbox": {
+            "x": 98,
+            "y": 5356,
+            "width": 36,
+            "height": 36
+          },
+          "note": "Red count badge on settings gear",
+          "quote": "4",
+          "region": "sidebar"
+        }
+      ],
+      "dims": {
+        "meaning": "count",
+        "overflow": "capped",
+        "rule": "everything-unread",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 256,
+            "y": 10,
+            "width": 252,
+            "height": 32
+          },
+          "note": "Filled search field with icon and placeholder",
+          "quote": "搜索文章…",
+          "region": "article-list"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "placeholder"
+        ],
+        "style": "filled"
+      }
+    },
+    {
+      "id": "split-pane",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 548,
+            "y": 0,
+            "width": 10,
+            "height": 900
+          },
+          "note": "separator '调整文章列表宽度' between list and reader; collapse buttons 收起左侧 hide side panes",
+          "region": "article-list"
+        }
+      ],
+      "dims": {
+        "orientation": "side-by-side",
+        "sizing": "draggable-divider",
+        "relationship": "linked-selection"
+      }
+    },
+    {
+      "id": "card",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "List items are borderless rows with rounded hover targets; could be read as list rows rather than cards. Next-article tile in reader is an outlined card.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 656,
+            "y": 670,
+            "width": 685,
+            "height": 68
+          },
+          "note": "Outlined next-article card with keyboard hint J",
+          "quote": "Superwhisper 3：本地语音转文字",
+          "region": "reader-pane"
+        },
+        {
+          "bbox": {
+            "x": 238,
+            "y": 135,
+            "width": 306,
+            "height": 130
+          },
+          "note": "Borderless article item",
+          "region": "article-list"
+        }
+      ],
+      "dims": {
+        "media": "none",
+        "actions": "none",
+        "shape": "horizontal",
+        "style": "outlined",
+        "target": "whole-card"
+      }
+    },
+    {
+      "id": "reader",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 612,
+            "y": 60,
+            "width": 772,
+            "height": 490
+          },
+          "note": "Long-form article in serif body with highlighted passage",
+          "quote": "Management is the new prompting",
+          "region": "reader-pane"
+        },
+        {
+          "bbox": {
+            "x": 1328,
+            "y": 9,
+            "width": 32,
+            "height": 34
+          },
+          "note": "Aa reading settings: light/sepia/dark theme, typeface, size, line spacing, column width",
+          "quote": "Aa",
+          "region": "reader-pane"
+        },
+        {
+          "bbox": {
+            "x": 940,
+            "y": 595,
+            "width": 120,
+            "height": 50
+          },
+          "note": "End marker and reading time",
+          "quote": "约 1 分钟读完",
+          "region": "reader-pane"
+        }
+      ],
+      "dims": {
+        "typography": [
+          "typeface-choice",
+          "size-and-spacing",
+          "light-dark-sepia",
+          "column-width"
+        ],
+        "pagination": "continuous-scroll",
+        "annotations": [
+          "highlights",
+          "bookmarks"
+        ],
+        "assistance": [
+          "translate-passage"
+        ]
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 572,
+            "y": 11,
+            "width": 112,
+            "height": 30
+          },
+          "note": "Segmented group 阅读版本 switching Chinese translation vs original",
+          "quote": "中文 原文",
+          "region": "reader-pane"
+        }
+      ],
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "segmented-control",
+        "option": [
+          "label-only"
+        ],
+        "timing": "immediately",
+        "largeSets": "show-all"
+      }
+    },
+    {
+      "id": "popover",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1328,
+            "y": 9,
+            "width": 32,
+            "height": 34
+          },
+          "note": "Aa button opens anchored 阅读设置 panel below it (verified live)",
+          "quote": "Aa",
+          "region": "reader-pane"
+        }
+      ],
+      "dims": {
+        "openBy": "click",
+        "placement": "below-the-anchor",
+        "contents": "mini-form",
+        "persistence": "until-dismissed"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1362,
+            "y": 9,
+            "width": 32,
+            "height": 34
+          },
+          "note": "更多操作 opens dropdown: 复制全文, 沉浸阅读, divider, 删除文章 (verified live)",
+          "region": "reader-pane"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click",
+        "structure": "sections",
+        "item": [
+          "label",
+          "icon"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    },
+    {
+      "id": "inbox",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 232,
+            "y": 130,
+            "width": 320,
+            "height": 770
+          },
+          "note": "Unread list resembles inbox but these are subscribed articles, not messages"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "ai-chat",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1396,
+            "y": 9,
+            "width": 32,
+            "height": 34
+          },
+          "note": "Only a closed trigger '打开 AI 对话' in capture; the chat panel is not shown"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "three-column desktop app: left source sidebar, middle article list pane (search, segmented tabs, chronological list), right reading pane with top toolbar; panes collapsible and list width resizable",
+    "regions": [
+      "sidebar",
+      "article-list",
+      "reader-pane"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#f6f6f5",
+      "#ffffff",
+      "#171717",
+      "#4c4c48",
+      "#6b6b66",
+      "#efefed",
+      "#e4e4e0",
+      "#2f6fd6",
+      "#d14b4b",
+      "#111111"
+    ],
+    "colorRoles": {
+      "background": "#f6f6f5",
+      "surface": "#ffffff",
+      "text": "#171717",
+      "muted": "#6b6b66",
+      "secondary": "#4c4c48",
+      "border": "#e4e4e0",
+      "accent": "#2f6fd6",
+      "danger": "#d14b4b",
+      "primary": "#111111"
+    },
+    "typography": "System UI sans (-apple-system / PingFang SC) for all chrome, list and headings; article body set in a serif (Times-like) at ~17px with tall line-height",
+    "typeScale": "30px/650 article title; 17px serif body; 15px list titles (bold when unread, regular when read); 14px sidebar items; 12-13px meta/time/counts; strong weight contrast between unread and read items",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "calm",
+      "utilitarian",
+      "clean",
+      "bookish",
+      "neutral"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T06:31:57.171Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 19,
+    "usage": {
+      "input_tokens": 38,
+      "cache_creation_input_tokens": 65693,
+      "cache_read_input_tokens": 977916,
+      "output_tokens": 8480
+    }
+  },
+  "notes": "Three-pane RSS-style reader (QMReader). Warm off-white sidebar (#f6f6f5) vs white list/reader panes; monogram letter tiles stand in for source favicons. Unread items marked with a small blue dot (accent hex approximate) and bold title; read items in regular weight. Reading pane uses a serif body with a highlighted (yellow underline/mark) passage, a '完' end ornament with reading time, and a next-article card with a 'J' keyboard hint. Toolbar has 中文/原文 translation toggle, Aa reading settings (light/护眼 sepia/dark, font families, size, line spacing, column width), overflow menu (copy, immersive reading, delete), and a hidden AI chat side panel with suggestion chips and model picker (seen live, not in capture, so not coded). Sidebar groups sources by type (文章/资讯/播客/社区/微信公众号) with add buttons. First viewport shows '40+' capped count while the full capture shows 134."
+}

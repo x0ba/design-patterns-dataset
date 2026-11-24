@@ -1,0 +1,392 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "ikuyo--trip-overview",
+    "url": "http://localhost:4457/login",
+    "finalUrl": "http://localhost:4457/trip/2dba9a4c-403c-4f95-80b6-995e01515b2a/home",
+    "status": 200,
+    "title": "Trip - Overview | Ikuyo!",
+    "capturedAt": "2026-11-18T20:30:50.346Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 960
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "travel-hospitality",
+    "domainNote": "trip planning app (Ikuyo!) — trip overview page, rendered in an error/empty state because the trip record was not found",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/ikuyo/explore.json",
+      "repo": {
+        "name": "kenrick95/ikuyo",
+        "url": "https://github.com/kenrick95/ikuyo",
+        "commit": "595acff0ce61f7b09208e51782ec095676ca5edf",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "trip-overview",
+        "name": "Trip overview",
+        "description": "Trip home dashboard with highlight tasks, latest comments, upcoming activities, a map, trip details/statistics and the bottom section navigation bar."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Top bar: Ikuyo! logo, trip title skeleton + 'Overview' section combobox, Actions dropdown, avatar 'P'",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 48
+      },
+      "patterns": [
+        "app-shell",
+        "menu"
+      ]
+    },
+    {
+      "id": "error-message",
+      "role": "alert",
+      "label": "Unstyled raw error text 'No query results for model [App\\Models\\Trip] …'",
+      "bbox": {
+        "x": 0,
+        "y": 48,
+        "width": 710,
+        "height": 24
+      },
+      "patterns": [
+        "banner"
+      ]
+    },
+    {
+      "id": "main-left",
+      "role": "content",
+      "label": "Edit trip button, Highlight Tasks (loading spinner), Latest Comments (No comments yet)",
+      "bbox": {
+        "x": 0,
+        "y": 84,
+        "width": 440,
+        "height": 150
+      },
+      "patterns": [
+        "progress-indicator",
+        "empty-state"
+      ]
+    },
+    {
+      "id": "details-sidebar",
+      "role": "sidebar",
+      "label": "Details and Statistics definition lists (region, currency, total expenses, days, activities, participants + Share trip)",
+      "bbox": {
+        "x": 1146,
+        "y": 120,
+        "width": 294,
+        "height": 604
+      },
+      "patterns": []
+    },
+    {
+      "id": "bottom-nav",
+      "role": "navigation",
+      "label": "Floating bottom segmented nav: Overview, Timetable, List, Expenses, Others",
+      "bbox": {
+        "x": 437,
+        "y": 835,
+        "width": 566,
+        "height": 50
+      },
+      "patterns": [
+        "app-shell",
+        "tabs"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 48
+          },
+          "region": "header",
+          "note": "Top bar with logo, title and account"
+        },
+        {
+          "bbox": {
+            "x": 437,
+            "y": 835,
+            "width": 566,
+            "height": 50
+          },
+          "region": "bottom-nav",
+          "quote": "Overview Timetable List Expenses Others",
+          "note": "Floating bottom segmented navigation between trip sections"
+        }
+      ],
+      "dims": {
+        "primary": "bottom-tab-bar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations"
+        ],
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 442,
+            "y": 840,
+            "width": 556,
+            "height": 40
+          },
+          "region": "bottom-nav",
+          "quote": "Overview",
+          "note": "Radio-group segmented control with icon+text; Overview selected (white raised segment)"
+        }
+      ],
+      "dims": {
+        "placement": "segmented-control",
+        "label": [
+          "text",
+          "icon"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1129,
+            "y": 8,
+            "width": 115,
+            "height": 32
+          },
+          "region": "header",
+          "quote": "Actions",
+          "note": "Live: opens dropdown with sections Activity / Trip / Trips separated by dividers; many items disabled"
+        },
+        {
+          "bbox": {
+            "x": 391,
+            "y": 8,
+            "width": 132,
+            "height": 32
+          },
+          "region": "header",
+          "quote": "Overview",
+          "note": "Section combobox dropdown in title"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click",
+        "structure": "sections",
+        "item": [
+          "label"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    },
+    {
+      "id": "progress-indicator",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 312,
+            "y": 141,
+            "width": 24,
+            "height": 24
+          },
+          "region": "main-left",
+          "note": "Indeterminate spinner beside Highlight Tasks"
+        }
+      ],
+      "dims": {
+        "determinacy": "indeterminate",
+        "form": "spinner",
+        "coverage": "a-region",
+        "control": "no-control"
+      }
+    },
+    {
+      "id": "empty-state",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 212,
+            "width": 130,
+            "height": 20
+          },
+          "region": "main-left",
+          "quote": "No comments yet"
+        }
+      ],
+      "dims": {
+        "cause": "first-use",
+        "content": [
+          "explanation"
+        ],
+        "starters": "none",
+        "recovery": "none"
+      }
+    },
+    {
+      "id": "banner",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "The error is plain unstyled text, not a designed banner component; it is a page-level error condition message at top of content.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 48,
+            "width": 705,
+            "height": 22
+          },
+          "region": "error-message",
+          "quote": "No query results for model [App\\Models\\Trip] 2dba9a4c-403c-4f95-80b6-995e01515b2a"
+        }
+      ],
+      "dims": {
+        "scope": "page",
+        "severity": "critical",
+        "action": "none",
+        "placement": "top-of-content"
+      }
+    },
+    {
+      "id": "property-inspector",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1146,
+            "y": 120,
+            "width": 294,
+            "height": 604
+          },
+          "note": "Read-only definition list, not an editable inspector"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "stat-tile",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1146,
+            "y": 396,
+            "width": 294,
+            "height": 320
+          },
+          "note": "Statistics are plain term/definition rows (empty), not tiles"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "app page with top bar, two-column content (left main, right details sidebar) and floating bottom segmented section nav; mostly empty due to error state",
+    "regions": [
+      "header",
+      "error-message",
+      "main-left",
+      "details-sidebar",
+      "bottom-nav"
+    ],
+    "density": "sparse"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#212020",
+      "#040000",
+      "#d91300",
+      "#de200e",
+      "#f0f0f3",
+      "#e8d6d0",
+      "#60646c"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "text": "#212020",
+      "primary": "#d91300",
+      "accent": "#de200e",
+      "surface": "#f0f0f3",
+      "muted": "#60646c",
+      "border": "#e8d6d0"
+    },
+    "typography": "System UI stack (-apple-system / rendered as DejaVu Sans) for everything: headings, labels, nav; Arial for one element",
+    "typeScale": "Modest: title 20px/700, section headings 18px/700, Statistics 16px/700, body 14px, small buttons/links 12px",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "generous",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "utilitarian",
+      "clean",
+      "minimal",
+      "broken-state"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T20:31:51.548Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 6,
+    "usage": {
+      "input_tokens": 12,
+      "cache_creation_input_tokens": 18182,
+      "cache_read_input_tokens": 142091,
+      "output_tokens": 3501
+    }
+  },
+  "notes": "Capture shows a Radix-themes style trip planner in an error state: the trip id did not resolve, so the raw Laravel error 'No query results for model…' is printed unstyled under the header, most values are empty, buttons (Edit trip, Share trip) disabled, a skeleton pill and spinner remain. Brand is red (#d91300) on logo, Actions outline button and links. Distinctive: floating, centered bottom segmented nav bar on desktop (radio group) for trip sections. Actions menu (verified live) has sectioned items Activity/Trip/Trips with mostly disabled entries."
+}

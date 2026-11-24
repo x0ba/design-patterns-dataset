@@ -7,7 +7,7 @@
 //   out/       static mode: the production build, served by src/pipeline/serve.ts
 //              at http://<slug>.localhost:<port>/ like generated apps
 //   start.sh   server mode: starts the app in the foreground on $PORT; run here
-//              under sandbox-exec (src/repos/sandbox.ts) with a minimal env,
+//              under sandbox-exec or bubblewrap (src/repos/sandbox.ts) with a minimal env,
 //              in its own process group so stopping it stops its children
 //
 // AppHost reference-counts apps, so the views of one repo share one server and
@@ -21,7 +21,8 @@ import os from 'node:os';
 import path from 'node:path';
 import type { LocalServer } from '../pipeline/serve.ts';
 import { isAppPath } from '../pipeline/steps.ts';
-import { baseEnv, findMise, miseEnv, runtimeEnv, runtimeProfile, runtimeSandboxAvailable } from './sandbox.ts';
+import { INNER_SCRIPT, PortBridge } from './netbridge.ts';
+import { BWRAP, baseEnv, bwrapArgs, findMise, miseEnv, runtimeEnv, runtimeProfile, runtimeSandboxKind } from './sandbox.ts';
 
 export interface AppJson {
   mode: 'static' | 'server';
@@ -202,7 +203,8 @@ export async function startServer(spec: AppSpec, opts: { sandbox: boolean; start
   const script = path.join(spec.checkout, CONTRACT_DIR, 'start.sh');
   if (!fs.existsSync(script)) throw new Error(`${spec.slug}: ${CONTRACT_DIR}/start.sh is missing`);
   if (await portInUse(spec.port)) throw new Error(`${spec.slug}: port ${spec.port} is already in use (another run, or a server left over from setup)`);
-  if (opts.sandbox && !runtimeSandboxAvailable()) throw new Error('server-mode apps run under macOS sandbox-exec, which is not available here (set setup.sandbox: false in config/repos.yaml only on a throwaway machine)');
+  const kind = opts.sandbox ? runtimeSandboxKind() : undefined;
+  if (opts.sandbox && !kind) throw new Error('server-mode apps run under macOS sandbox-exec or Linux bubblewrap (/usr/bin/bwrap), neither of which is available here (set setup.sandbox: false in config/repos.yaml only on a throwaway machine)');
   // The log and sandbox profile live in a fresh dir of the harness's own, never in
   // the checkout: third-party code could have made a path there a symlink to a
   // host file, which opening it for writing (unsandboxed, here) would truncate.
@@ -211,11 +213,22 @@ export async function startServer(spec: AppSpec, opts: { sandbox: boolean; start
   const log = fs.openSync(logFile, fs.constants.O_WRONLY | fs.constants.O_CREAT | fs.constants.O_EXCL | fs.constants.O_NOFOLLOW, 0o600);
   let cmd = '/bin/bash';
   let args = [script];
-  if (opts.sandbox) {
+  let bridge: PortBridge | undefined;
+  if (kind === 'sandbox-exec') {
     const profileFile = path.join(runDir, 'profile.sb');
     fs.writeFileSync(profileFile, runtimeProfile([spec.checkout]));
     cmd = '/usr/bin/sandbox-exec';
     args = ['-f', profileFile, '/bin/bash', script];
+  } else if (kind === 'bwrap') {
+    // The bridge dir holds the inner script and the per-port sockets; the app can see it, never the log.
+    const bridgeDir = path.join(runDir, 'bridge');
+    fs.mkdirSync(bridgeDir, { mode: 0o700 });
+    const inner = path.join(bridgeDir, 'bridge.mjs');
+    fs.writeFileSync(inner, INNER_SCRIPT);
+    cmd = BWRAP;
+    args = [...bwrapArgs([spec.checkout], bridgeDir), '--chdir', spec.checkout, '--',
+      '/bin/bash', '-c', '"$0" "$1" "$2" & exec /bin/bash "$3"', process.execPath, inner, bridgeDir, script];
+    bridge = new PortBridge(bridgeDir);
   }
   const env = serverEnv(spec.checkout, spec.port);
   let proc: ChildProcess;
@@ -233,6 +246,7 @@ export async function startServer(spec: AppSpec, opts: { sandbox: boolean; start
     killGroup(proc, 'SIGTERM');
     for (const until = Date.now() + 8000; groupAlive(proc) && Date.now() < until;) await new Promise((r) => setTimeout(r, 100));
     if (groupAlive(proc)) killGroup(proc, 'SIGKILL');
+    await bridge?.close();
     running.delete(proc);
     fs.rmSync(runDir, { recursive: true, force: true });
   };

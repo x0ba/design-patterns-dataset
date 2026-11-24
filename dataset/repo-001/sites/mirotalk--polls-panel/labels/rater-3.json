@@ -1,0 +1,293 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "mirotalk--polls-panel",
+    "url": "http://localhost:4438/join?room=northwind-product-weekly&name=Dana%20Okafor&audio=0&video=0&notify=0",
+    "finalUrl": "http://localhost:4438/join?room=northwind-product-weekly&name=Dana%20Okafor&audio=0&video=0&notify=0",
+    "status": 200,
+    "title": "MiroTalk WebRTC Video call, Chat Room & Screen Sharing.",
+    "capturedAt": "2026-11-18T20:24:24.416Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 900
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "productivity",
+    "domainNote": "WebRTC video conferencing room (MiroTalk P2P)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/mirotalk/explore.json",
+      "repo": {
+        "name": "miroslavpejic85/mirotalk",
+        "url": "https://github.com/miroslavpejic85/mirotalk",
+        "commit": "91dac4da68d66c8ebccabb524b904cdd8c42283e",
+        "license": "AGPL-3.0"
+      },
+      "view": {
+        "slug": "polls-panel",
+        "name": "Polls panel with live results",
+        "description": "Floating Polls window over the meeting grid listing two polls with options, percentage bars, vote counts, voter names and an anonymous flag."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "participant-grid",
+      "role": "stage",
+      "label": "4x2 gallery grid of 8 participant tiles with avatar/initials, name label and per-tile pin/video/audio/more buttons",
+      "bbox": {
+        "x": 21,
+        "y": 57,
+        "width": 1398,
+        "height": 694
+      },
+      "patterns": [
+        "video-call"
+      ]
+    },
+    {
+      "id": "toast",
+      "role": "notification",
+      "label": "Top-centre toast with info icon and close: 'Priya Raman started a poll'",
+      "bbox": {
+        "x": 550,
+        "y": 10,
+        "width": 340,
+        "height": 81
+      },
+      "patterns": [
+        "toast"
+      ]
+    },
+    {
+      "id": "control-bar",
+      "role": "toolbar",
+      "label": "Bottom-centre floating call control bar: mic, camera (disabled with warning badges), screen share, raise hand, chat, participants (badge 8), view, settings, leave",
+      "bbox": {
+        "x": 411,
+        "y": 814,
+        "width": 618,
+        "height": 70
+      },
+      "patterns": [
+        "video-call",
+        "badge",
+        "menu"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "video-call",
+      "status": "present",
+      "confidence": 0.97,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 21,
+            "y": 57,
+            "width": 1398,
+            "height": 694
+          },
+          "region": "participant-grid",
+          "note": "Gallery grid of 8 tiles with names, mute icons, raised hand on Tomás tile, pin buttons"
+        },
+        {
+          "bbox": {
+            "x": 421,
+            "y": 824,
+            "width": 598,
+            "height": 50
+          },
+          "region": "control-bar",
+          "note": "Mute, camera, share, raise hand, chat, participants, leave controls"
+        },
+        {
+          "bbox": {
+            "x": 179,
+            "y": 417,
+            "width": 172,
+            "height": 32
+          },
+          "region": "participant-grid",
+          "note": "Hand-raised indicator",
+          "quote": "Participant hand is raised"
+        }
+      ],
+      "dims": {
+        "people": "gallery-grid",
+        "subspaces": "one-room",
+        "tile": [
+          "name",
+          "mute-and-hand-raised"
+        ],
+        "attention": [
+          "pin-a-participant"
+        ]
+      }
+    },
+    {
+      "id": "toast",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 550,
+            "y": 10,
+            "width": 340,
+            "height": 81
+          },
+          "region": "toast",
+          "quote": "Priya Raman started a poll",
+          "note": "role=alert, info icon, close button, floats top centre"
+        }
+      ],
+      "dims": {
+        "content": [
+          "status-icon"
+        ],
+        "severity": "neutral"
+      },
+      "novel": [
+        {
+          "subdimension": "position",
+          "proposedValueId": "top-centre",
+          "description": "Toast anchored at top edge, centred horizontally"
+        }
+      ]
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 741,
+            "y": 825,
+            "width": 18,
+            "height": 18
+          },
+          "region": "control-bar",
+          "quote": "8",
+          "note": "Red count badge on participants button"
+        },
+        {
+          "bbox": {
+            "x": 458,
+            "y": 818,
+            "width": 18,
+            "height": 18
+          },
+          "region": "control-bar",
+          "quote": "!",
+          "note": "Yellow warning status badges on disabled mic and camera"
+        }
+      ],
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "uncertain",
+      "confidence": 0.4,
+      "rationale": "Caret buttons 'Participant actions' and 'Settings menu' imply dropdown menus but none is open in capture and live page failed to load.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 761,
+            "y": 824,
+            "width": 35,
+            "height": 50
+          },
+          "region": "control-bar",
+          "note": "Caret trigger 'Participant actions'"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "tooltip",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "full-viewport video call room: 4x2 participant tile grid with floating bottom control bar and top-centre toast",
+    "regions": [
+      "participant-grid",
+      "toast",
+      "control-bar"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#121214",
+      "#1c1c20",
+      "#ffffff",
+      "#dcdce6",
+      "#e74c3c",
+      "#ff0000",
+      "#b8860b",
+      "#2a7aa0"
+    ],
+    "colorRoles": {
+      "background": "#121214",
+      "surface": "#1c1c20",
+      "text": "#ffffff",
+      "muted": "#dcdce6",
+      "primary": "#e74c3c",
+      "accent": "#ff0000"
+    },
+    "typography": "Montserrat for name labels and toast text; Font Awesome 6 Free solid icons for controls",
+    "typeScale": "Low contrast: 12px name labels, 16px toast heading semibold, 26px icon buttons, ~40px avatar initials",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "none",
+    "imagery": [
+      "illustration",
+      "iconography"
+    ],
+    "iconStyle": "filled",
+    "whitespace": "moderate",
+    "backgroundTreatment": "gradient",
+    "mood": [
+      "dark",
+      "technical",
+      "focused",
+      "utilitarian"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T20:25:29.320Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 6,
+    "usage": {
+      "input_tokens": 12,
+      "cache_creation_input_tokens": 14405,
+      "cache_read_input_tokens": 138737,
+      "output_tokens": 3160
+    }
+  },
+  "notes": "Dark MiroTalk room; all cameras off so tiles show coloured initial circles or cartoon avatars. Tile tops have small dark rounded icon chips (pin, red video-off, red mic-off, yellow raised hand, more). Leave button is a wide red slab with crossed phone. Mic/camera buttons tinted maroon and disabled with yellow '!' badges. Hidden status 'Connection lost Reconnecting to signaling server…' in a11y tree but not visible."
+}

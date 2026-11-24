@@ -1,0 +1,388 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "jetlog--dashboard",
+    "url": "http://localhost:4456/",
+    "finalUrl": "http://localhost:4456/",
+    "status": 200,
+    "title": "Jetlog",
+    "capturedAt": "2026-11-18T19:54:32.132Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1163
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "travel-hospitality",
+    "domainNote": "self-hosted personal flight log (Jetlog) dashboard",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/jetlog/explore.json",
+      "repo": {
+        "name": "pbogre/jetlog",
+        "url": "https://github.com/pbogre/jetlog",
+        "commit": "4306c3e458c326a1407c496d666f3ded3da37fb5",
+        "license": "GPL-2.0"
+      },
+      "view": {
+        "slug": "dashboard",
+        "name": "Dashboard",
+        "description": "Home dashboard with summary stats, world map of visited airports and routes, and recent flights."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Sticky top bar: JETLOG wordmark / DASHBOARD breadcrumb-like page label, live UTC clock, hamburger menu button",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 57
+      },
+      "patterns": [
+        "app-shell",
+        "drawer"
+      ]
+    },
+    {
+      "id": "stats-strip",
+      "role": "stats-strip",
+      "label": "Five joined KPI tiles: Flights 223, Airports 40, Hours 669, Distance 456,654 km, Countries 11",
+      "bbox": {
+        "x": 104,
+        "y": 81,
+        "width": 1232,
+        "height": 99
+      },
+      "patterns": [
+        "stat-tile",
+        "dashboard"
+      ]
+    },
+    {
+      "id": "world-map",
+      "role": "map-panel",
+      "label": "World map panel with visited airports as orange dots and great-circle route arcs on a beige vector basemap",
+      "bbox": {
+        "x": 104,
+        "y": 204,
+        "width": 1232,
+        "height": 636
+      },
+      "patterns": [
+        "chart",
+        "dashboard"
+      ]
+    },
+    {
+      "id": "recent-flights",
+      "role": "list",
+      "label": "Recent flights list: date, origin→destination IATA codes, time, airline code tag; zebra rows linking to flight detail; 'All flights' link",
+      "bbox": {
+        "x": 104,
+        "y": 864,
+        "width": 1232,
+        "height": 275
+      },
+      "patterns": [
+        "dashboard"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "dashboard",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 104,
+            "y": 81,
+            "width": 1232,
+            "height": 1058
+          },
+          "note": "KPI tiles, map and recent flights list stacked on one overview page labelled Dashboard",
+          "quote": "DASHBOARD",
+          "region": "stats-strip"
+        }
+      ],
+      "dims": {
+        "widgets": [
+          "kpi-tiles",
+          "maps",
+          "tables"
+        ],
+        "purpose": "motivation-and-learning",
+        "arrangement": "single-scrolling-column",
+        "density": "a-few-glanceable-tiles",
+        "linking": "independent",
+        "refresh": "on-visit",
+        "alerting": "none",
+        "ownership": "personal"
+      }
+    },
+    {
+      "id": "stat-tile",
+      "status": "present",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 104,
+            "y": 81,
+            "width": 247,
+            "height": 99
+          },
+          "quote": "FLIGHTS 223",
+          "region": "stats-strip",
+          "note": "label + big number, no change/trend"
+        },
+        {
+          "bbox": {
+            "x": 843,
+            "y": 81,
+            "width": 247,
+            "height": 99
+          },
+          "quote": "DISTANCE 456,654 KM",
+          "region": "stats-strip"
+        }
+      ],
+      "dims": {
+        "context": [
+          "label"
+        ],
+        "encoding": "number-only",
+        "window": "fixed",
+        "drill": "none"
+      }
+    },
+    {
+      "id": "chart",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 105,
+            "y": 249,
+            "width": 1230,
+            "height": 590
+          },
+          "note": "static SVG world map encoding visited airports as points and flown routes as arcs; no hover tooltip found live",
+          "quote": "VISITED AIRPORTS & ROUTES",
+          "region": "world-map"
+        }
+      ],
+      "dims": {
+        "markType": "points",
+        "channels": [
+          "position"
+        ],
+        "faceting": "single-plot",
+        "authorship": "author-specified",
+        "annotation": [
+          "none"
+        ]
+      }
+    },
+    {
+      "id": "map-explorer",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 105,
+            "y": 249,
+            "width": 1230,
+            "height": 590
+          },
+          "note": "map is a static SVG with no zoom/pan controls or hover detail"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 57
+          },
+          "quote": "JETLOG / DASHBOARD",
+          "region": "header",
+          "note": "persistent top bar with identity and hamburger opening nav drawer (Home, Flights, New flight, Statistics, Settings)"
+        }
+      ],
+      "dims": {
+        "primary": "drawer",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations"
+        ],
+        "visibility": "toggle-button",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "drawer",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1388,
+            "y": 11,
+            "width": 34,
+            "height": 34
+          },
+          "note": "'Open menu' button opens right-side navigation drawer with scrim (verified live); drawer has signed-in user and logout at bottom",
+          "region": "header"
+        }
+      ],
+      "dims": {
+        "edge": "right",
+        "relationship": "overlay-with-scrim",
+        "holds": "navigation",
+        "openBy": [
+          "menu-button"
+        ]
+      }
+    },
+    {
+      "id": "menu",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1388,
+            "y": 11,
+            "width": 34,
+            "height": 34
+          },
+          "note": "hamburger opens a full-height drawer, not a dropdown menu"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "data-table",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 104,
+            "y": 864,
+            "width": 1232,
+            "height": 275
+          },
+          "note": "recent flights is a simple linked list of rows without column headers, sorting or selection"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "badge",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1287,
+            "y": 921,
+            "width": 32,
+            "height": 22
+          },
+          "note": "airline code chips (WN, UA) are attribute labels, not count/status indicators"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "single-column centered dashboard (1232px container) under a sticky top bar with hamburger-triggered right navigation drawer; stacked stat strip, world map panel, recent flights list",
+    "regions": [
+      "header",
+      "stats-strip",
+      "world-map",
+      "recent-flights"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#faf7f0",
+      "#f3efe3",
+      "#f0e6cc",
+      "#14130f",
+      "#76725f",
+      "#a8a48f",
+      "#d9d2bc",
+      "#c99a00",
+      "#e2703a"
+    ],
+    "colorRoles": {
+      "background": "#faf7f0",
+      "surface": "#f3efe3",
+      "text": "#14130f",
+      "muted": "#76725f",
+      "border": "#d9d2bc",
+      "primary": "#c99a00",
+      "accent": "#e2703a"
+    },
+    "typography": "JetBrains Mono for all visible text (wordmark, uppercase letter-spaced labels, large tabular KPI numbers, IATA codes, dates); Space Grotesk is the inherited body font on containers but barely shows",
+    "typeScale": "Strong contrast: ~36px medium KPI numerals vs 10–11px uppercase widely tracked labels; 14px bold IATA codes, 12px muted dates/times; 16px bold wordmark",
+    "shape": "sharp",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "data-visualization"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "texture",
+    "mood": [
+      "technical",
+      "retro",
+      "calm",
+      "utilitarian",
+      "aviation"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T19:55:35.698Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 6,
+    "usage": {
+      "input_tokens": 12,
+      "cache_creation_input_tokens": 28143,
+      "cache_read_input_tokens": 156588,
+      "output_tokens": 4156
+    }
+  },
+  "notes": "Paper/flight-board aesthetic: warm cream background with faint horizontal scanline texture, hairline #d9d2bc borders, zero radii, no shadows. Monospace everywhere, uppercase letter-spaced micro labels. Wordmark JET in black + LOG in mustard #c99a00. Live ticking UTC clock (seconds dimmed) in header. Stat tiles joined into one bordered strip with dividers. Map: beige land (#f0e6cc-ish) with thin dark outlines, orange airport dots, thin grey great-circle arcs radiating from a home hub (SAN). Recent flights rows zebra-striped with arrow glyph between airport codes and small outlined airline-code chip at right. Drawer active item highlighted in pale yellow with mustard left rule."
+}

@@ -1,0 +1,520 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "blockout--shoot-camera",
+    "url": "http://localhost:4474/",
+    "finalUrl": "http://localhost:4474/",
+    "status": 200,
+    "title": "Blockout",
+    "capturedAt": "2026-11-18T20:32:44.492Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1473
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "design-creative",
+    "domainNote": "film previsualization / camera blocking tool (3D scene, camera marks, shot timeline)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/blockout/explore.json",
+      "repo": {
+        "name": "wassermanproductions/blockout",
+        "url": "https://github.com/wassermanproductions/blockout",
+        "commit": "3f2d0564fd575f70fc28e9bfaa7e94b05e3955d9",
+        "license": "Apache-2.0"
+      },
+      "view": {
+        "slug": "shoot-camera",
+        "name": "Shoot mode with timeline and camera inspector",
+        "description": "Shoot mode showing the 3D viewport with framing/record toolbar, a mark timeline for camera and characters, and the camera inspector with sensor, lens, position/aim and tracking controls."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Top bar: BLOCKOUT wordmark + project 'Low Tide', centred STAGE/SHOOT/DELIVER mode segmented control, Save and Help",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 44
+      },
+      "patterns": [
+        "app-shell",
+        "tabs",
+        "contextual-help"
+      ]
+    },
+    {
+      "id": "scenes-sidebar",
+      "role": "sidebar",
+      "label": "Scenes & Shots hierarchy: scenes expand to show shots (1A, 1B…) and versions with durations; + Scene; credits",
+      "bbox": {
+        "x": 0,
+        "y": 44,
+        "width": 200,
+        "height": 1429
+      },
+      "patterns": [
+        "tree-view"
+      ]
+    },
+    {
+      "id": "viewport",
+      "role": "canvas",
+      "label": "3D scene viewport with floor marks, camera path, floating toolbars (play shot, record camera, auto-frame presets, move/rotate) and a shot-preview inset",
+      "bbox": {
+        "x": 200,
+        "y": 44,
+        "width": 976,
+        "height": 1189
+      },
+      "patterns": [
+        "object-viewer-3d"
+      ]
+    },
+    {
+      "id": "timeline",
+      "role": "timeline",
+      "label": "Shot timeline: transport, duration/fps controls, time ruler 0–9s and tracks for CAMERA, MAYA, DEX with numbered keyframe marks",
+      "bbox": {
+        "x": 200,
+        "y": 1233,
+        "width": 976,
+        "height": 240
+      },
+      "patterns": [
+        "timeline-editor",
+        "text-field",
+        "choice-control"
+      ]
+    },
+    {
+      "id": "inspector",
+      "role": "inspector",
+      "label": "Right inspector with Selection/Camera/Animate tabs: cameras, sensor, lens segmented picker, position & aim numeric fields, track subject, camera moves, rig, marks list",
+      "bbox": {
+        "x": 1176,
+        "y": 44,
+        "width": 264,
+        "height": 1429
+      },
+      "patterns": [
+        "property-inspector",
+        "tabs",
+        "choice-control",
+        "text-field"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 44
+          },
+          "quote": "STAGE SHOOT DELIVER",
+          "region": "header",
+          "note": "Persistent top bar with mode switch frames three-pane workspace"
+        }
+      ],
+      "dims": {
+        "primary": "top-navigation-bar",
+        "items": [
+          "fixed-destinations"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 594,
+            "y": 6,
+            "width": 283,
+            "height": 32
+          },
+          "quote": "STAGE SHOOT DELIVER",
+          "region": "header",
+          "note": "Mode segmented control, SHOOT active in amber"
+        },
+        {
+          "bbox": {
+            "x": 1189,
+            "y": 56,
+            "width": 239,
+            "height": 29
+          },
+          "quote": "Selection Camera Animate",
+          "region": "inspector",
+          "note": "Inspector tabs; verified live that Selection swaps panel content to Scene/Lighting/Shot"
+        }
+      ],
+      "dims": {
+        "placement": "segmented-control",
+        "label": [
+          "text",
+          "icon"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      }
+    },
+    {
+      "id": "tree-view",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 12,
+            "y": 86,
+            "width": 176,
+            "height": 330
+          },
+          "quote": "Scene 1 — EXT. HARBOR PARKING LOT – NIGHT",
+          "region": "scenes-sidebar",
+          "note": "Scenes contain indented shots (1A–1D) and versions (└ 1A v1); clicking another scene expands it and collapses the first (verified live); hover shows duplicate/delete icons"
+        }
+      ],
+      "dims": {
+        "content": [
+          "label",
+          "status-decoration",
+          "hover-actions"
+        ],
+        "selection": "single-node",
+        "source": "containment",
+        "density": "compact"
+      }
+    },
+    {
+      "id": "timeline-editor",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 200,
+            "y": 1233,
+            "width": 976,
+            "height": 170
+          },
+          "quote": "t=0.0s / 9.0s",
+          "region": "timeline",
+          "note": "Time ruler 0s–9s with fixed tracks CAMERA / MAYA / DEX holding numbered keyframe marks and hold bars; playhead at left; viewer is the 3D viewport"
+        }
+      ],
+      "dims": {
+        "tracks": "fixed-tracks",
+        "nesting": "flat",
+        "representation": [
+          "name",
+          "colour-labels",
+          "keyframes-on-property-rows"
+        ],
+        "navigation": [
+          "scrub-the-playhead"
+        ],
+        "automation": "manual"
+      }
+    },
+    {
+      "id": "property-inspector",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1176,
+            "y": 44,
+            "width": 264,
+            "height": 1429
+          },
+          "quote": "POSITION & AIM — MARK 1/7",
+          "region": "inspector",
+          "note": "Sectioned properties for camera/mark: X, Height, Z, Pan, Tilt, Roll, lens; contents depend on tab/selection"
+        }
+      ],
+      "dims": {
+        "set": "contextual-to-the-selection-type",
+        "placement": "right-sidebar",
+        "grouping": "tabs",
+        "apply": "live"
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1189,
+            "y": 262,
+            "width": 239,
+            "height": 52
+          },
+          "quote": "12 16 24 35 50 85 100 135",
+          "region": "inspector",
+          "note": "Lens segmented picker; also auto-frame, rig segmented groups"
+        },
+        {
+          "bbox": {
+            "x": 1189,
+            "y": 204,
+            "width": 239,
+            "height": 32
+          },
+          "quote": "Super 35",
+          "region": "inspector",
+          "note": "Sensor dropdown select; also Track subject, Camera moves, fps"
+        },
+        {
+          "bbox": {
+            "x": 1189,
+            "y": 1026,
+            "width": 239,
+            "height": 76
+          },
+          "quote": "Crane / Jib",
+          "region": "inspector",
+          "note": "Rig segmented choice"
+        }
+      ],
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "segmented-control",
+        "option": [
+          "label-only"
+        ],
+        "timing": "immediately",
+        "largeSets": "show-all"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1189,
+            "y": 422,
+            "width": 239,
+            "height": 100
+          },
+          "quote": "Pan (°)",
+          "region": "inspector",
+          "note": "Labelled numeric spinbutton fields, dark fill with thin border"
+        },
+        {
+          "bbox": {
+            "x": 377,
+            "y": 1242,
+            "width": 62,
+            "height": 24
+          },
+          "quote": "Dur",
+          "region": "timeline"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "label",
+          "hint-text"
+        ],
+        "style": "outlined",
+        "inputType": "plain"
+      }
+    },
+    {
+      "id": "contextual-help",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "rationale": "Help is a header button whose panel was not opened; inline hint paragraphs and native titles on controls provide in-place explanation",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1372,
+            "y": 11,
+            "width": 52,
+            "height": 22
+          },
+          "quote": "? Help",
+          "region": "header",
+          "note": "Accessible name: 'Help: quick start, how-do-I answers, shortcuts'"
+        },
+        {
+          "bbox": {
+            "x": 1189,
+            "y": 586,
+            "width": 239,
+            "height": 30
+          },
+          "quote": "Edits the mark at/before the playhead — scrub the timeline to reach a different mark.",
+          "region": "inspector"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "object-viewer-3d",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "The viewport is a 3D scene used for authoring (placing marks, moving/rotating objects, recording camera flights) rather than inspecting a model; codebook has no 3D scene editor entry, so coded as closest neighbour",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 200,
+            "y": 44,
+            "width": 976,
+            "height": 1189
+          },
+          "region": "viewport",
+          "note": "Low-poly 3D set with floor marks, dashed camera path, floating toolbars and SHOT PREVIEW inset"
+        }
+      ],
+      "dims": {
+        "cameraControls": [
+          "preset-cameras"
+        ],
+        "viewerChrome": "full-bleed-with-floating-tools",
+        "sceneGuidance": "free-explore"
+      }
+    },
+    {
+      "id": "canvas-editor",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 200,
+            "y": 44,
+            "width": 976,
+            "height": 1189
+          },
+          "region": "viewport",
+          "note": "Considered; workspace is 3D, not a 2D canvas"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "split-pane",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 44,
+            "width": 1440,
+            "height": 1429
+          },
+          "note": "Three fixed panes; no resize dividers seen"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "desktop app workspace: top mode bar, left scene/shot tree, central 3D viewport with floating toolbars over a bottom keyframe timeline, right tabbed inspector",
+    "regions": [
+      "header",
+      "scenes-sidebar",
+      "viewport",
+      "timeline",
+      "inspector"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#111113",
+      "#18181b",
+      "#1f1f23",
+      "#ececf1",
+      "#9b9ba6",
+      "#5f5f6b",
+      "#f5a524",
+      "#e5484d",
+      "#3b82f6",
+      "#3a3a42"
+    ],
+    "colorRoles": {
+      "background": "#111113",
+      "surface": "#18181b",
+      "raised": "#1f1f23",
+      "text": "#ececf1",
+      "muted": "#9b9ba6",
+      "subtle": "#5f5f6b",
+      "primary": "#f5a524",
+      "accent": "#e5484d",
+      "secondary-accent": "#3b82f6",
+      "border": "#3a3a42"
+    },
+    "typography": "System sans (-apple-system) for all UI labels and buttons; SF Mono for HUD readouts (LENS 24mm, AR 2.39:1), timeline time code and marks list",
+    "typeScale": "Very compact: mostly 11px semibold buttons/labels, 10–9px uppercase letter-spaced section headers, 12–13px for scene names and field values; little size contrast, hierarchy via weight, caps and amber active state",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "3d-renders",
+      "iconography"
+    ],
+    "iconStyle": "mixed",
+    "whitespace": "tight",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "technical",
+      "cinematic",
+      "professional",
+      "dark",
+      "tool-like"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T20:34:48.146Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 11,
+    "usage": {
+      "input_tokens": 22,
+      "cache_creation_input_tokens": 39992,
+      "cache_read_input_tokens": 420718,
+      "output_tokens": 7558
+    }
+  },
+  "notes": "Previs tool 'Blockout' with near-black zinc UI and a single amber (#f5a524) active/primary color (SHOOT mode, Play shot, Apply move, selected lens/rig). Uses film vocabulary as controls (WS/FS/MS/MCU/CU, 2-SHOT, OTS, DUTCH). Emoji used as icons in buttons. Floating 'SHOT PREVIEW' picture-in-picture shows the camera's framed view inside the 3D viewport. Character tracks are color-coded (MAYA red, DEX blue) matching floor marks and paths in the 3D scene. HUD chip strip in monospace at top-left of viewport. Codebook lacks a 3D scene/previs editor entry; proposed as scene-editor-3d."
+}

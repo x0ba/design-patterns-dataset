@@ -1,0 +1,396 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "ikuyo--trip-overview",
+    "url": "http://localhost:4457/login",
+    "finalUrl": "http://localhost:4457/trip/2dba9a4c-403c-4f95-80b6-995e01515b2a/home",
+    "status": 200,
+    "title": "Trip - Overview | Ikuyo!",
+    "capturedAt": "2026-11-18T20:30:50.346Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 960
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "travel-hospitality",
+    "domainNote": "collaborative trip planner (Ikuyo!) - trip overview page captured in an error/empty state because the trip record was not found",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/ikuyo/explore.json",
+      "repo": {
+        "name": "kenrick95/ikuyo",
+        "url": "https://github.com/kenrick95/ikuyo",
+        "commit": "595acff0ce61f7b09208e51782ec095676ca5edf",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "trip-overview",
+        "name": "Trip overview",
+        "description": "Trip home dashboard with highlight tasks, latest comments, upcoming activities, a map, trip details/statistics and the bottom section navigation bar."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Top bar: Ikuyo! logo, trip-title breadcrumb with >> separator and 'Overview' section-switcher dropdown, red-outlined Actions menu button, 'P' avatar button",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 48
+      },
+      "patterns": [
+        "app-shell",
+        "breadcrumbs",
+        "menu"
+      ]
+    },
+    {
+      "id": "error-message",
+      "role": "error-message",
+      "label": "Unstyled raw backend error paragraph 'No query results for model ... Trip ...'",
+      "bbox": {
+        "x": 0,
+        "y": 48,
+        "width": 710,
+        "height": 24
+      },
+      "patterns": [
+        "banner"
+      ]
+    },
+    {
+      "id": "main-content",
+      "role": "content",
+      "label": "Three-column overview: left Highlight Tasks / Latest Comments ('No comments yet'), center disabled Edit trip button and loading spinner, right Details and Statistics definition lists with empty values, Share trip button and '?' participant avatar",
+      "bbox": {
+        "x": 0,
+        "y": 80,
+        "width": 1440,
+        "height": 650
+      },
+      "patterns": [
+        "empty-state",
+        "progress-indicator"
+      ]
+    },
+    {
+      "id": "bottom-nav",
+      "role": "bottom-navigation",
+      "label": "Floating centered segmented bottom navigation: Overview (selected), Timetable, List, Expenses, Others, icon + text",
+      "bbox": {
+        "x": 437,
+        "y": 835,
+        "width": 566,
+        "height": 50
+      },
+      "patterns": [
+        "app-shell",
+        "tabs"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "primary": "bottom-tab-bar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 437,
+            "y": 835,
+            "width": 566,
+            "height": 50
+          },
+          "quote": "Overview Timetable List Expenses Others",
+          "note": "floating bottom segmented navigation between trip sections",
+          "region": "bottom-nav"
+        },
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 48
+          },
+          "note": "top bar with logo, trip path, Actions and account avatar",
+          "region": "header"
+        }
+      ]
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.65,
+      "dims": {
+        "placement": "bottom",
+        "label": [
+          "icon",
+          "text"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 442,
+            "y": 840,
+            "width": 556,
+            "height": 40
+          },
+          "quote": "Overview",
+          "note": "radio-group segmented control; Overview checked with white raised segment on gray track",
+          "region": "bottom-nav"
+        }
+      ]
+    },
+    {
+      "id": "breadcrumbs",
+      "status": "present",
+      "confidence": 0.65,
+      "dims": {
+        "type": "location",
+        "truncation": "full-path",
+        "interaction": [
+          "click-to-go-up",
+          "sibling-menu-per-step"
+        ],
+        "placement": "in-the-top-bar"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 152,
+            "y": 7,
+            "width": 375,
+            "height": 34
+          },
+          "quote": "Overview",
+          "note": "Logo (links to /trip) > trip title link > >> > 'Overview' combobox; the current step opens a menu of sibling sections (Overview, Timetable, List, Map, Expenses, Tasks, Comment) - verified live",
+          "region": "header"
+        }
+      ]
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "openBy": "button-click",
+        "structure": "sections",
+        "item": [
+          "label"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1129,
+            "y": 8,
+            "width": 115,
+            "height": 32
+          },
+          "quote": "Actions",
+          "note": "opens sectioned dropdown (Activity / Trip / Trips headers, many items disabled in this state) - verified live; the Overview combobox also opens a checkmarked single-select list",
+          "region": "header"
+        }
+      ]
+    },
+    {
+      "id": "empty-state",
+      "status": "present",
+      "confidence": 0.75,
+      "dims": {
+        "cause": "first-use",
+        "content": [
+          "explanation"
+        ],
+        "starters": "none",
+        "recovery": "none"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 212,
+            "width": 130,
+            "height": 20
+          },
+          "quote": "No comments yet",
+          "note": "plain text empty message under Latest Comments",
+          "region": "main-content"
+        }
+      ]
+    },
+    {
+      "id": "progress-indicator",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "determinacy": "indeterminate",
+        "form": "spinner",
+        "coverage": "a-region",
+        "control": "no-control"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 312,
+            "y": 140,
+            "width": 24,
+            "height": 24
+          },
+          "note": "gray petal spinner in center column",
+          "region": "main-content"
+        }
+      ]
+    },
+    {
+      "id": "banner",
+      "status": "uncertain",
+      "confidence": 0.4,
+      "rationale": "The error is an unstyled raw paragraph (likely a leaked backend exception), not a designed alert component; it does convey a page-level critical condition at top of content.",
+      "dims": {
+        "scope": "page",
+        "severity": "critical",
+        "action": "none",
+        "placement": "top-of-content"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 48,
+            "width": 705,
+            "height": 22
+          },
+          "quote": "No query results for model",
+          "region": "error-message"
+        }
+      ]
+    },
+    {
+      "id": "dashboard",
+      "status": "absent",
+      "confidence": 0.7,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1150,
+            "y": 124,
+            "width": 200,
+            "height": 600
+          },
+          "note": "Details/Statistics are plain definition lists, no tiles or charts"
+        }
+      ]
+    },
+    {
+      "id": "property-inspector",
+      "status": "absent",
+      "confidence": 0.75,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1150,
+            "y": 124,
+            "width": 200,
+            "height": 600
+          },
+          "note": "key-value list is read-only, not editable"
+        }
+      ]
+    }
+  ],
+  "structure": {
+    "layout": "web app trip overview: top bar with breadcrumb/section switcher and Actions menu, three-column content (left tasks/comments, wide empty center, right details/statistics sidebar), floating centered bottom segmented navigation",
+    "regions": [
+      "header",
+      "error-message",
+      "main-content",
+      "bottom-nav"
+    ],
+    "density": "sparse"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#212020",
+      "#040000",
+      "#d91300",
+      "#de200e",
+      "#f0f0f3",
+      "#6b6b6b"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "text": "#212020",
+      "primary": "#d91300",
+      "accent": "#de200e",
+      "surface": "#f0f0f3",
+      "muted": "#6b6b6b"
+    },
+    "typography": "System UI stack (-apple-system, rendered as DejaVu Sans on Linux) for everything; bold rounded custom wordmark logo",
+    "typeScale": "Compact: 20px/700 section title, 18px/700 h3 section headings (16px Statistics), 14px body/labels, 12px small buttons and links; weight contrast between bold headings and regular gray labels",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "generous",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "utilitarian",
+      "sparse",
+      "broken-state",
+      "clean"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T20:32:31.728Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 10,
+    "usage": {
+      "input_tokens": 20,
+      "cache_creation_input_tokens": 33360,
+      "cache_read_input_tokens": 317056,
+      "output_tokens": 7514
+    }
+  },
+  "notes": "Captured in a failure state: the trip UUID was not found so a raw Laravel-style exception string renders unstyled under the header, values are empty, Edit trip and Share trip are disabled, a spinner persists. Design is Radix-like: red (#d91300) brand for Actions outline button and 'View all' link, thin light red-tinted header divider, floating pill-like bottom segmented nav with gray track and white selected segment. Header 'Overview' combobox doubles as section switcher matching bottom nav (adds Map, Tasks, Comment). Small empty light-blue pill near Edit trip, probably an empty badge."
+}

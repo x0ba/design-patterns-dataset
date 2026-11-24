@@ -1,0 +1,41 @@
+{
+  "mode": "server",
+  "entry": "/",
+  "login": {
+    "username": "kenjimatsuda",
+    "email": "kenji.matsuda@fastmail.com",
+    "password": "",
+    "how": "No password exists: DevTerms only supports 'Sign in with GitHub'. Go to /login and click 'Sign in with GitHub'; the local GitHub OAuth stub approves instantly and redirects back signed in as kenjimatsuda (a moderator, so the mod-only Pending/Reported dashboards are visible)."
+  },
+  "stubs": [
+    {
+      "service": "Turso (hosted libSQL database)",
+      "how": "Node stub (.ui-capture/stubs/server.mjs, port 4488) speaking the libSQL Hrana-over-HTTP v2 JSON pipeline protocol, backed by a SQLite file (.ui-capture/data/devterms.db) via node:sqlite. The app's unmodified @libsql/client/web connects to it through TURSO_DATABASE_URL. (The real sqld binary was tried but panics inside the sandbox.)"
+    },
+    {
+      "service": "Meilisearch (search bar, /api/v1/search, random definition / I'm feeling lucky)",
+      "how": "Node stub on port 4487 implementing the Meilisearch REST subset the app uses (/multi-search, /indexes/:uid/search, stats, documents, settings, tasks) with typo-tolerant prefix ranking and CORS. Documents are pushed by the app's own /api/cron/meilisearch endpoint, which start.sh calls once the app is up; persisted to .ui-capture/data/search-index.json."
+    },
+    {
+      "service": "Upstash Redis REST (vote rate limiting via @upstash/ratelimit)",
+      "how": "Same misc stub on port 4486 at /upstash: answers EVAL/EVALSHA with a per-key sliding-window counter so votes succeed (and the 10-per-10s limit still applies)."
+    },
+    {
+      "service": "GitHub OAuth + GitHub REST API (sign in)",
+      "how": "Browser-facing authorize URL is overridden via GITHUB_OAUTH_AUTHORIZE_URL (small env-gated change in src/app/login/_actions.ts) to the stub at :4486/github/login/oauth/authorize, which redirects straight back to /api/callback/github. Server-side calls to github.com/login/oauth/access_token and api.github.com/user(/emails) are redirected to the stub by a Node preload (.ui-capture/stubs/fetch-redirect.cjs, NODE_OPTIONS=--require) and return a token and the kenjimatsuda profile."
+    },
+    {
+      "service": "GitHub avatars (avatars.githubusercontent.com)",
+      "how": "User avatar URLs in the seed point at :4486/avatars/u/<githubId>?v=4, which serves deterministic GitHub-style identicon SVGs."
+    },
+    {
+      "service": "Plausible Analytics script (browser)",
+      "how": "PlausibleProvider src made overridable with NEXT_PUBLIC_PLAUSIBLE_SRC (falls back to the original URL); set to :4486/plausible/js/script.js which serves a no-op plausible() queue; /api/event accepted with 202."
+    },
+    {
+      "service": "Twitter/X and Bluesky posting, cron secrets, OG HMAC secret",
+      "how": "Optional Twitter/Bluesky credentials are left unset so the word-of-the-day cron skips posting; CRON_SECRET, OG_HMAC_SECRET, GitHub client id/secret, Upstash token and Meilisearch keys are placeholder values in .ui-capture/env.sh."
+    }
+  ],
+  "notes": "DevTerms (Next.js 15 App Router + Hono API + Drizzle ORM). Tools pinned in mise.toml (node 22.21.1, pnpm 10.25.0 from packageManager). Setup: .ui-capture/build.sh = mise install, pnpm install, start stubs, drizzle-kit migrate (the repo's migrations), run .ui-capture/seed/seed.ts (inserts through the app's Drizzle schema), next build. One build-only workaround: the sandbox forbids writing files named .gitmodules, which the hogan.js tarball contains, so pnpm-workspace.yaml overrides hogan.js with a vendored copy minus that file (.ui-capture/vendor/hogan.js). start.sh starts the stubs, clears Next's data cache, runs `next start` on $PORT (4475) with the GitHub fetch-redirect preload, then rebuilds the search index via the app's cron endpoint. Data (dated as of 2026-11-17): 171 GitHub-style users (1 bot 'devterms' that seeded the original batch in Aug 2024, 2 moderators incl. the login user, 40 active contributors, ~128 sign-in-only users); 179 definitions: 136 distinct terms with 158 approved definitions (serious ones plus 22 alternate/jokey takes on popular terms like Kubernetes, Docker, DNS, YAML), 14 pending in the mod queue, 7 rejected (spam, low effort); vote counts scale with age, with some controversial ones; 627 days of word-of-the-day history since 2025-03-01 (today's: 'Yak shaving' by kenjimatsuda); 18 reports (6 unread in the mod reports view). kenjimatsuda's dashboard has 11 approved, 3 pending and 1 rejected definition. Main areas: Home feed (word of the day + history, paginated, stats sidebar, I'm feeling lucky, browse A–Z), search bar autocomplete (top of every page), /define/<term> (all definitions for a term, voting, share, report), /browse and /browse/<letter|new>, /submit (definition form), /u/<name> profiles, dashboard /definitions/me, mod-only /definitions/queue and /definitions/reports, /about, /api/docs (Scalar API reference; it loads its UI script from cdn.jsdelivr.net, so it will be blank offline). Stub ports 4486-4488 must be free."
+}

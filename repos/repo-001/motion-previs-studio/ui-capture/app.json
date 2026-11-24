@@ -1,0 +1,36 @@
+{
+  "mode": "static",
+  "entry": "/",
+  "login": null,
+  "stubs": [
+    {
+      "service": "Electron main process / preload bridge (window.motionPrevis IPC: media dialogs, ffprobe, file system, session.json, shell open/reveal)",
+      "how": "out/mps-bridge-stub.js is loaded by index.html before the app bundle and defines window.motionPrevis with the same API as electron/preload.cjs. Import/open-file calls return clips from out/media/library.json; project sessions persist to localStorage (seeded with the user's last saved session); shell open/reveal/openExternal are no-ops. Media files are downloaded once in full by the stub and handed to the renderer as in-memory blob: URLs (the browser equivalent of Electron's in-process mps:// protocol), so the renderer's frequent <video> source swaps never abort an HTTP request."
+    },
+    {
+      "service": "ffmpeg analysis prep (analysis:prepare -> reference/depth/edges/lineart/motion_mask/normals/animatic/contact sheet/preview)",
+      "how": "Pre-rendered at build time by .ui-capture/build-media.mjs using the exact ffmpeg filter graphs from electron/main.cjs prepareAnalysis (ffmpeg 6.0.0 pinned exactly in mise.toml via the http: backend). The stub's prepareAnalysis returns a manifest pointing at those files under out/media/<clip>/analyses/<analysisId>/."
+    },
+    {
+      "service": "yt-dlp web video import (media:import-url)",
+      "how": "Stub waits ~2.6 s and returns a previously downloaded web clip ('Hallway Entrance Oner - Blocking Ref (1080p).mp4') from the local library."
+    },
+    {
+      "service": "Deterministic frame encoder (ffmpeg image2pipe) + export bundle writer/zipper (analysis:encode-frames:*, analysis:save-pose-artifacts)",
+      "how": "Renderer still renders every pose/OpenPose frame; the stub counts frames and returns an mp4-sized buffer, then returns an ExportResult with the real bundle file layout (pose_high_contrast.mp4, openpose_keypoints.json, camera_motion.json, blender_import_*.py, seedance_prompt.md, ... and <analysisId>.zip) under the user's workspace path."
+    },
+    {
+      "service": "Blockout sibling app (control.json discovery + set_reference handoff)",
+      "how": "blockoutStatus() reports Blockout as running; sendToBlockout() returns {ok:true, mode:'ghost', handoffVersion:1}."
+    },
+    {
+      "service": "MCP agent-control server (control:invoke / control:result)",
+      "how": "The stub replays an agent session over the same channel the localhost control server uses: import_file(last project clip) -> set_range -> run_analysis -> poll get_state -> export_pack. The app's own handler.ts executes these, so real MediaPipe pose tracking and the optical-flow camera solve run in the browser on the real clip. Add ?noagent to skip (shows the 'Restore your last project' banner instead), ?noexport to stop after analysis, ?fresh for the first-launch empty state."
+    },
+    {
+      "service": "MediaPipe pose model download (storage.googleapis.com) normally done by postinstall",
+      "how": "pose_landmarker_lite.task taken from the npm package ptmaker-vision-models@1.0.0 and verified against the SHA-256 in ASSET_MANIFEST.json (59929e1d...); wasm copied from node_modules/@mediapipe/tasks-vision as the postinstall script does. Served locally from out/models and out/mediapipe/wasm."
+    }
+  ],
+  "notes": "Motion Previs Studio is an Electron app; this is its React renderer built with the repo's own `npm run build` (tsc + vite, Node 22.23.5 via mise) and served statically from .ui-capture/out with a preload-replacement bridge stub. Rebuild with .ui-capture/build.sh (npm ci --ignore-scripts first; the model file must be in public/models). Data: the user 'Dana Reyes' (workspace /Users/danareyes/Library/Application Support/Motion Previs Studio v4/projects) is working on the short film 'Dead Reckoning — Short', Sc 14 · Hangar Bay, shot '14C Crew Cross A014C006' (actor-motion mode, 2-person tracking, 720p Seedance export, Seedance/ComfyUI/Blender presets, custom intent + style text). Source footage is real camera footage (Intel IoT sample-videos, 1080p warehouse with two people in hi-vis crossing frame, trimmed 33.4–39.8 s); three more clips are in the library (loft three-actor cross, lobby approach take 3, a yt-dlp web import) and come back from Import / Open source / Web video, each with its own pre-rendered analysis dated Sep–Nov 2026. On load (~1 s) the replayed agent session imports the clip, then the app runs real MediaPipe Lite pose tracking (CPU delegate) + camera solve (~10–30 s depending on machine) and exports the production pack, ending in the fully populated studio: reference/camera path/2D pose overlay/depth/edges/masks/3D stick-figure panes, timeline with pose ticks, pose diagnostics, camera move metrics, quality score ring, 'Bundle ready' with Send to Blockout. Main areas: top chrome with workflow stepper (Shot/Analyze/Plan/Export); left sidebar (Source import, Shot Plan, Project Info, Shot Range, Analyze stage rail); center workspace (7 preview panes, transport, timeline, analysis dock); right sidebar (Reference Mode, Analysis Settings, Control Layers, Pose Diagnostics, Camera Move, Quality Score, Export Presets, System); Help (Quick Start) overlay from the ? button. Depth Anything AI depth would download weights from Hugging Face on first use, which is offline here, so the session uses the 'Fast temporal proxy' depth model (the app falls back to proxy depth if switched). Could not screenshot-verify in this sandbox (Chromium cannot start under the macOS sandbox); the stub was exercised in a Node VM harness and all manifest media URLs resolve to files in out/."
+}

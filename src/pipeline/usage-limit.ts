@@ -43,15 +43,47 @@ export function usageLimitFromText(text: string, now = new Date()): UsageLimitEr
   return new UsageLimitError(message, parsed.resetsAt);
 }
 
+/**
+ * Self-imposed ceilings on account utilization (0–1) per Claude Code window, so a
+ * batch leaves headroom for the account's owner. Keys are the CLI's window names.
+ */
+export interface UsageCaps { five_hour?: number; seven_day?: number }
+
+const CAP_ENV: Record<keyof UsageCaps, string> = { seven_day: 'USAGE_CAP_WEEKLY', five_hour: 'USAGE_CAP_FIVE_HOUR' };
+const WINDOW_NAME: Record<keyof UsageCaps, string> = { seven_day: 'weekly', five_hour: '5-hour' };
+
+/** USAGE_CAP_WEEKLY / USAGE_CAP_FIVE_HOUR, as a fraction ("0.5") or a percent ("50"). Unset means no cap. */
+export function capsFromEnv(env: NodeJS.ProcessEnv = process.env): UsageCaps {
+  const caps: UsageCaps = {};
+  for (const [win, name] of Object.entries(CAP_ENV) as [keyof UsageCaps, string][]) {
+    const raw = env[name]?.trim();
+    if (!raw) continue;
+    let v = Number(raw.replace(/%$/, ''));
+    if (!Number.isFinite(v) || v <= 0) throw new Error(`${name}=${raw}: expected a fraction (0.5) or a percent (50)`);
+    if (v > 1) v /= 100;
+    caps[win] = Math.min(v, 1);
+  }
+  return caps;
+}
+
+/** How often utilization must have been seen before starting work under a cap; older readings are re-probed. */
+const READING_MAX_AGE_MS = 15 * 60_000;
+
 export interface UsageGateOptions {
   now?: () => number;
   sleep?: (ms: number) => Promise<void>;
   log?: (line: string) => void;
+  caps?: UsageCaps;
 }
 
 /**
  * Process-wide pause. `hold` is idempotent for the same deadline: concurrent
  * raters that hit the limit together log once and wake together.
+ *
+ * With caps, every Claude Code session's `rate_limit_event` is passed to
+ * `observe`. Once a window's utilization reaches its cap, `wait()` (called before
+ * each unit of work) blocks until that window resets. Unlike a real limit this
+ * does not stop sessions already running; `pending()` stays clear, so they finish.
  */
 export class UsageGate {
   private until = 0;
@@ -59,6 +91,12 @@ export class UsageGate {
   private resetsAt: Date | undefined;
   private generation = 0;
   private loggedResume = 0;
+  private capUntil = 0;
+  private lastReading = 0;
+  private probing: Promise<void> | undefined;
+  private probeFn: (() => Promise<void>) | undefined;
+  private readonly announced = new Set<string>();
+  caps: UsageCaps;
   private readonly now: () => number;
   private readonly sleep: (ms: number) => Promise<void>;
   private readonly log: (line: string) => void;
@@ -67,6 +105,54 @@ export class UsageGate {
     this.now = opts.now ?? Date.now;
     this.sleep = opts.sleep ?? ((ms) => new Promise((resolve) => setTimeout(resolve, ms)));
     this.log = opts.log ?? ((line) => console.log(line));
+    this.caps = opts.caps ?? {};
+  }
+
+  /** How to get a fresh reading when none is recent (a tiny CLI call; see usage-probe.ts). */
+  setProbe(fn: () => Promise<void>): void {
+    this.probeFn = fn;
+  }
+
+  private capped(): boolean {
+    return Object.keys(this.caps).length > 0;
+  }
+
+  /** Feed a `rate_limit_event.rate_limit_info` from the CLI's stream-json output. */
+  observe(info: unknown): void {
+    const windows = (info as { unifiedWindows?: Record<string, { utilization?: unknown; resetsAt?: unknown }> } | undefined)?.unifiedWindows;
+    if (!windows || typeof windows !== 'object') return;
+    this.lastReading = this.now();
+    let seen = 0, under = 0;
+    for (const [win, cap] of Object.entries(this.caps) as [keyof UsageCaps, number][]) {
+      const w = windows[win];
+      if (!w || typeof w.utilization !== 'number' || typeof w.resetsAt !== 'number') continue;
+      seen++;
+      if (w.utilization < cap) under++;
+      if (!this.announced.has(win)) {
+        this.announced.add(win);
+        this.log(`Usage cap: ${WINDOW_NAME[win]} ${Math.round(cap * 100)}%; the account is at ${Math.round(w.utilization * 100)}% now (window resets ${new Date(w.resetsAt * 1000).toISOString()}).`);
+      }
+      if (w.utilization < cap) continue;
+      const deadline = w.resetsAt * 1000 + BUFFER_MS;
+      if (deadline <= this.now() || deadline <= this.capUntil) continue;
+      this.capUntil = deadline;
+      this.generation++;
+      this.log(`Usage cap: ${WINDOW_NAME[win]} usage is at ${Math.round(w.utilization * 100)}% (cap ${Math.round(cap * 100)}%). Work already running finishes; nothing new starts until the window resets at ${new Date(deadline).toISOString()} (${formatDuration(deadline - this.now())}).`);
+    }
+    // Usage can drop before the window ends (e.g. the account's usage was reset): lift the cap pause.
+    if (seen > 0 && under === seen && this.capUntil > this.now()) {
+      this.capUntil = 0;
+      this.log('Usage cap: the account is back under every cap; resuming.');
+    }
+  }
+
+  /** Under a cap, make sure utilization was seen recently before work starts. */
+  private async refresh(): Promise<void> {
+    if (!this.capped() || !this.probeFn || this.now() - this.lastReading < READING_MAX_AGE_MS) return;
+    this.probing ??= this.probeFn()
+      .catch((e) => this.log(`Usage probe failed (${e instanceof Error ? e.message : e}); continuing on the last reading.`))
+      .finally(() => { this.probing = undefined; this.lastReading = Math.max(this.lastReading, this.now()); });
+    await this.probing;
   }
 
   /** True while labeling must not start. The error carries the notice that opened the pause. */
@@ -88,19 +174,33 @@ export class UsageGate {
   }
 
   async wait(): Promise<void> {
-    if (this.now() >= this.until) return;
+    await this.refresh();
+    const blockedUntil = () => Math.max(this.until, this.capUntil);
+    if (this.now() >= blockedUntil()) return;
     const gen = this.generation;
-    let nextNote = this.now() + HEARTBEAT_MS;
-    while (this.now() < this.until) {
-      const remaining = this.until - this.now();
-      const untilNote = Math.max(0, nextNote - this.now());
-      const slice = Math.min(remaining, MAX_SLEEP_MS, untilNote > 0 ? untilNote : HEARTBEAT_MS);
-      await this.sleep(slice);
-      if (this.now() >= this.until) break;
-      if (this.now() >= nextNote) {
-        this.log(`Still paused for Claude usage. Labeling resumes at ${new Date(this.until).toISOString()} (${formatDuration(this.until - this.now())} left). No further sites will be labeled until then.`);
-        nextNote = this.now() + HEARTBEAT_MS;
+    // A reading taken after waking (the window may not have reset as expected) can extend the pause.
+    while (this.now() < blockedUntil()) {
+      let nextNote = this.now() + HEARTBEAT_MS;
+      while (this.now() < blockedUntil()) {
+        const remaining = blockedUntil() - this.now();
+        const untilNote = Math.max(0, nextNote - this.now());
+        const slice = Math.min(remaining, MAX_SLEEP_MS, untilNote > 0 ? untilNote : HEARTBEAT_MS);
+        await this.sleep(slice);
+        if (this.now() >= blockedUntil()) break;
+        if (this.now() >= nextNote && this.capUntil > this.until) {
+          // Paused only by a self-imposed cap: re-read utilization, which may have dropped early.
+          this.lastReading = 0;
+          await this.refresh();
+          if (this.now() >= blockedUntil()) break;
+        }
+        if (this.now() >= nextNote) {
+          const why = this.capUntil > this.until ? 'at the usage cap' : 'for Claude usage';
+          this.log(`Still paused ${why}. Work resumes at ${new Date(blockedUntil()).toISOString()} (${formatDuration(blockedUntil() - this.now())} left). No further sites will be labeled until then.`);
+          nextNote = this.now() + HEARTBEAT_MS;
+        }
       }
+      this.lastReading = 0; // the window reset (or should have): read it again before starting
+      await this.refresh();
     }
     if (this.loggedResume < gen) {
       this.loggedResume = this.generation;
@@ -115,7 +215,12 @@ export class UsageGate {
   }
 }
 
-export const usageGate = new UsageGate();
+export const usageGate = new UsageGate({ caps: capsFromEnv() });
+
+/** Pass every parsed stream-json event from a claude CLI session through here. */
+export function observeStreamEvent(ev: { type?: unknown; rate_limit_info?: unknown } | undefined): void {
+  if (ev?.type === 'rate_limit_event') usageGate.observe(ev.rate_limit_info);
+}
 
 function parseResetClause(line: string, now: Date): Date | undefined {
   const m = line.replace(/\u202f/g, ' ').match(RESET_CLOCK);

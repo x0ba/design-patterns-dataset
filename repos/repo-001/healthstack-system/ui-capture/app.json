@@ -1,0 +1,32 @@
+{
+  "mode": "server",
+  "entry": "/login/",
+  "login": {
+    "username": "fayaz",
+    "email": "fayaz@gmail.com",
+    "password": "Healthstack@2026"
+  },
+  "stubs": [
+    {
+      "service": "SSLCommerz payment gateway (sandbox.sslcommerz.com session, hosted checkout page, validation API)",
+      "how": ".ui-capture/sslcommerz_stub.py, a small local HTTP server started by start.sh on port 4453. ui_settings.py points sslcommerz_lib's SSLCOMMERZ URLs at it. It returns real-looking session JSON and a GatewayPageURL to a local checkout page, which POSTs a VALID payload with a correct verify_sign back to the app's success_url (bKash card details, BDT amounts)."
+    },
+    {
+      "service": "Mailtrap SMTP (appointment/payment confirmation emails)",
+      "how": "EMAIL_BACKEND overridden to Django's file-based backend; emails are written to .ui-capture/mail/. SMTP_* env vars in .env are placeholders."
+    },
+    {
+      "service": "Browser-side CDNs (jsDelivr bootstrap 4/5, code.jquery.com, datatables CDN, use.fontawesome.com, Google Fonts)",
+      "how": "Exact versions vendored from the npm registry into static/vendor/. A middleware (.ui-capture/ui_cdn_rewrite.py) rewrites those URLs in HTML responses to the local copies and drops their SRI attributes. The three theme CSS files' Google Fonts @import lines now point to static/vendor/fonts/*.css (Poppins/Mada woff2 from @fontsource)."
+    },
+    {
+      "service": "Google Maps JS and Google Tag Manager (pharmacy templates)",
+      "how": "Rewritten by the same middleware to /static/vendor/noop.js, an empty script."
+    },
+    {
+      "service": "Django SECRET_KEY / SSLCommerz STORE_ID, STORE_PASSWORD",
+      "how": "Placeholder values in the repo-root .env (gitignored), as the README tells you to set up."
+    }
+  ],
+  "notes": "HealthStack is a Django 4.1 app (server-rendered templates) on SQLite, run with `manage.py runserver` on PORT (4452). Python 3.11.14 is pinned in mise.toml; the venv is .ui-capture/venv. Install uses .ui-capture/requirements.txt, which is the repo's requirements.txt with djangorestframework 3.14.0 instead of 3.15.2 (3.15.2 needs Django>=4.2 and conflicts with the pinned Django 4.1.13) plus djangorestframework-simplejwt 5.2.2 (README step 5). The settings overlay .ui-capture/ui_settings.py imports healthstack.settings and changes only these things: ALLOWED_HOSTS, debug-toolbar hidden, file email backend, the CDN-rewrite middleware, the SSLCommerz stub URLs, and a working DB path (.ui-capture/data/db.sqlite3). Two broken asset references in the repo's templates were fixed so every page loads with no failed requests. templates/patient-login.html loaded js/Normal/Checkbox.js, a file that was never committed. Its show-password function, myFunction11, is already defined inline in the same page, so the dead <script> tag was removed. search.html, search-hospitals.html, hospital-doctor-list.html and hospital-doctor-register.html had a missing slash in the datetimepicker stylesheet path (css/Normalbootstrap-... instead of css/Normal/bootstrap-...). On every start, start.sh runs reset_and_seed.sh: it copies the repo's bundled db.sqlite3 (the original team demo data), runs migrate, then runs seed.py (Django ORM, fixed RNG). The seed replaces lorem-ipsum text and extends the data, with dates relative to the current day. Result: 8 hospitals (Square, Labaid, United, Evercare, DMCH, ...) with departments, specializations and services; 20 doctors (accepted, pending and rejected) with education and experience; 44 patients; about 215 appointments over the last 8 months plus upcoming ones (pending, confirmed, cancelled, paid and unpaid); 65 prescriptions with medicines and tests; 69 lab reports with specimen and test results; about 235 SSLCommerz payments (appointment, test, pharmacy, and a few failed); 36 pharmacy medicines (one out of stock); pharmacy orders and an open cart; doctor reviews; patient-doctor chat threads. Main login is patient 'fayaz' (Fayaz Rayhan) at /login/, which lands on /patient-dashboard/ (appointments, prescriptions, medical records, billing tabs). Other patient areas: Hospitals (/multiple-hospital/ -> hospital profile -> departments -> doctors -> booking), Search Doctors (/search/), Chat with Doctor (navbar), Pharmacy shop and cart (/pharmacy/shop/), prescription and report views and PDFs, test cart and payment. Every account uses the password Healthstack@2026. Doctor: jawwad at /doctor/ (doctor dashboard, appointments, my patients, prescriptions). Hospital admin: fida at /hospital_admin/login/ (admin dashboard, hospitals, doctor registrations, lab workers, pharmacists, transactions). Lab worker: mamoni, and pharmacist: nafisa, use the same /hospital_admin/login/ page. Django superuser: admin at /admin/."
+}

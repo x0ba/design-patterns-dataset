@@ -1,0 +1,518 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "feishin--home",
+    "url": "http://localhost:4427/",
+    "finalUrl": "http://localhost:4427/",
+    "status": 200,
+    "title": "Feishin",
+    "capturedAt": "2026-11-18T06:19:37.427Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 2608
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "media-entertainment",
+    "domainNote": "Feishin — self-hosted music library client (Navidrome/Jellyfin) home screen",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/feishin/explore.json",
+      "repo": {
+        "name": "jeffvli/feishin",
+        "url": "https://github.com/jeffvli/feishin",
+        "commit": "e36c5a9589162b9f9f2eb277cff97882e448540d",
+        "license": "GPL-3.0"
+      },
+      "view": {
+        "slug": "home",
+        "name": "Home",
+        "description": "Home dashboard with featured album hero, genre tiles, carousels of library albums, sidebar with library nav and playlists, and player bar."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Left sidebar: search field, menu/back/forward buttons, collapsible 'My Library' nav and collapsible 'Playlists' list with artwork, track counts and durations",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 400,
+        "height": 2518
+      },
+      "patterns": [
+        "app-shell",
+        "text-field",
+        "accordion"
+      ]
+    },
+    {
+      "id": "hero",
+      "role": "hero",
+      "label": "Featured album hero carousel with large cover, title, artist, genre/year; arrows on hover",
+      "bbox": {
+        "x": 444,
+        "y": 80,
+        "width": 952,
+        "height": 248
+      },
+      "patterns": [
+        "carousel"
+      ]
+    },
+    {
+      "id": "genres",
+      "role": "tile-grid",
+      "label": "Genres: 4x3 grid of colored-edge genre tiles with 'View more'",
+      "bbox": {
+        "x": 432,
+        "y": 372,
+        "width": 976,
+        "height": 216
+      },
+      "patterns": [
+        "card"
+      ]
+    },
+    {
+      "id": "album-shelves",
+      "role": "content-shelves",
+      "label": "Stacked horizontal shelves of album/playlist cards: Explore from your library, Newly added releases, Recently released, Recently played, Most Played, Playlists — each with refresh icon and prev/next arrows",
+      "bbox": {
+        "x": 432,
+        "y": 624,
+        "width": 976,
+        "height": 1894
+      },
+      "patterns": [
+        "carousel",
+        "card",
+        "badge",
+        "rating",
+        "recommendations"
+      ]
+    },
+    {
+      "id": "player-bar",
+      "role": "player-bar",
+      "label": "Persistent bottom now-playing bar: artwork, stop/shuffle/prev/play/next/repeat/queue, seek bar with times, Auto DJ, lyrics/EQ/favorite/volume slider",
+      "bbox": {
+        "x": 0,
+        "y": 2518,
+        "width": 1440,
+        "height": 90
+      },
+      "patterns": [
+        "media-player",
+        "slider"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 400,
+            "height": 2518
+          },
+          "region": "sidebar",
+          "quote": "My Library",
+          "note": "Persistent left sidebar with fixed destinations and user playlists; bottom player bar frames content"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations",
+          "user-pinned-items"
+        ],
+        "visibility": "toggle-button",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 12,
+            "y": 15,
+            "width": 215,
+            "height": 36
+          },
+          "region": "sidebar",
+          "quote": "Search",
+          "note": "Filled search input with icon and placeholder"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "placeholder",
+          "prefix-or-suffix"
+        ],
+        "style": "filled"
+      }
+    },
+    {
+      "id": "accordion",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 12,
+            "y": 72,
+            "width": 375,
+            "height": 34
+          },
+          "region": "sidebar",
+          "quote": "My Library",
+          "note": "Expanded collapsible section header with chevron"
+        },
+        {
+          "bbox": {
+            "x": 12,
+            "y": 460,
+            "width": 375,
+            "height": 34
+          },
+          "region": "sidebar",
+          "quote": "Playlists",
+          "note": "Second collapsible section with chevron plus refresh/add/list actions"
+        }
+      ],
+      "dims": {
+        "policy": "many-at-a-time",
+        "header": [
+          "title-only"
+        ],
+        "toggle": [
+          "header-click"
+        ]
+      }
+    },
+    {
+      "id": "carousel",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 432,
+            "y": 624,
+            "width": 976,
+            "height": 300
+          },
+          "region": "album-shelves",
+          "quote": "Explore from your library",
+          "note": "Five album cards visible per row with prev/next arrows top-right (prev disabled at start)"
+        },
+        {
+          "bbox": {
+            "x": 444,
+            "y": 80,
+            "width": 952,
+            "height": 248
+          },
+          "region": "hero",
+          "quote": "Master of Puppets",
+          "note": "Hero featured-album carousel; arrow buttons appear on hover (verified live), one album at a time"
+        }
+      ],
+      "dims": {
+        "visible": "multi-item-strip",
+        "advance": [
+          "arrow-buttons"
+        ],
+        "autoplay": "off",
+        "indicator": "none"
+      }
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 432,
+            "y": 668,
+            "width": 186,
+            "height": 240
+          },
+          "region": "album-shelves",
+          "quote": "Mezzanine",
+          "note": "Square cover art with title, artist, year below; hover reveals favorite, star rating, play/play-next/add actions over the art"
+        },
+        {
+          "bbox": {
+            "x": 432,
+            "y": 420,
+            "width": 235,
+            "height": 48
+          },
+          "region": "genres",
+          "quote": "New Wave",
+          "note": "Genre tiles: filled compact tiles with colored left edge"
+        }
+      ],
+      "dims": {
+        "media": "top-image",
+        "actions": "action-row",
+        "shape": "vertical",
+        "style": "borderless",
+        "target": "separate-targets-per-attribute"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 782,
+            "y": 678,
+            "width": 26,
+            "height": 24
+          },
+          "region": "album-shelves",
+          "quote": "2",
+          "note": "Blue square number badge on cover = user's star rating (hover shows matching 2 stars); blue corner triangle marks favorites"
+        }
+      ],
+      "dims": {
+        "meaning": "label",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "rating",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1222,
+            "y": 668,
+            "width": 186,
+            "height": 40
+          },
+          "region": "album-shelves",
+          "note": "Five-star rating control revealed on card hover (verified live); rating value shown as number badge when not hovering"
+        }
+      ],
+      "dims": {
+        "scale": "five-stars",
+        "context": [
+          "rating-only"
+        ],
+        "moment": "on-demand",
+        "visibility": "private-preference"
+      }
+    },
+    {
+      "id": "recommendations",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 432,
+            "y": 624,
+            "width": 282,
+            "height": 32
+          },
+          "region": "album-shelves",
+          "quote": "Explore from your library"
+        },
+        {
+          "bbox": {
+            "x": 432,
+            "y": 1934,
+            "width": 142,
+            "height": 32
+          },
+          "region": "album-shelves",
+          "quote": "Most Played"
+        }
+      ],
+      "dims": {
+        "basis": [
+          "viewing-or-purchase-history"
+        ],
+        "rationale": "short-label",
+        "placement": "home-shelves",
+        "nesting": "many-themed-shelves"
+      },
+      "rationale": "Shelves are drawn from the user's own library (random, recent, most-played) rather than true recommendation of new items; refreshable shelves."
+    },
+    {
+      "id": "media-player",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 2518,
+            "width": 1440,
+            "height": 90
+          },
+          "region": "player-bar",
+          "quote": "AUTO DJ",
+          "note": "Persistent bottom transport bar: stop, shuffle, previous, play, next, repeat, queue; seek with 0:00 times; volume slider"
+        }
+      ],
+      "dims": {
+        "controls": [
+          "play-pause",
+          "scrubber",
+          "skip-forward-back",
+          "volume-and-mute"
+        ],
+        "position": [
+          "time-scrubber"
+        ],
+        "mode": "mini-or-pip"
+      }
+    },
+    {
+      "id": "slider",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 580,
+            "y": 2578,
+            "width": 280,
+            "height": 14
+          },
+          "region": "player-bar",
+          "note": "Seek slider"
+        },
+        {
+          "bbox": {
+            "x": 1354,
+            "y": 2560,
+            "width": 70,
+            "height": 14
+          },
+          "region": "player-bar",
+          "note": "Volume slider"
+        }
+      ],
+      "dims": {
+        "values": "single-value",
+        "labels": [
+          "none"
+        ]
+      }
+    },
+    {
+      "id": "playlist-queue",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 834,
+            "y": 2532,
+            "width": 36,
+            "height": 36
+          },
+          "note": "Only a queue toggle button; no queue list visible"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "desktop music-app shell: fixed left sidebar (library nav + playlists), scrolling main home with featured hero, genre tile grid and stacked horizontal album shelves, persistent bottom player bar",
+    "regions": [
+      "sidebar",
+      "hero",
+      "genres",
+      "album-shelves",
+      "player-bar"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#000000",
+      "#0c0c0c",
+      "#080808",
+      "#141414",
+      "#e1e1e1",
+      "#969696",
+      "#ffffff",
+      "#0558fd",
+      "#1b62fc",
+      "#5a2941"
+    ],
+    "colorRoles": {
+      "background": "#000000",
+      "surface": "#0c0c0c",
+      "text": "#e1e1e1",
+      "muted": "#969696",
+      "primary": "#0558fd",
+      "accent": "#1b62fc",
+      "border": "#141414"
+    },
+    "typography": "Inter throughout: 900 weight for hero title, 700 for section headings, 500 for card titles/nav, 400 for metadata",
+    "typeScale": "Hero 43px/900, section headings 24px/700, artist 16px/700, body/nav 14px/500, metadata 13px, player times 11px/600 — strong hero contrast, otherwise compact",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "none",
+    "imagery": [
+      "illustration",
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "dark",
+      "media-rich",
+      "technical",
+      "calm"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T06:21:01.157Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 10,
+    "usage": {
+      "input_tokens": 20,
+      "cache_creation_input_tokens": 34988,
+      "cache_read_input_tokens": 320799,
+      "output_tokens": 5358
+    }
+  },
+  "notes": "Near-black Spotify-like dark theme with a single saturated blue accent (active nav item, rating badges, favorite corner triangles). Hero banner takes a blurred tint gradient from the album art (#5a2941 for Master of Puppets) and randomizes per load. Album cards: 5px radius generative cover art with title overlay band; hover reveals heart, 5 stars, and play/play-next/add-to-queue circles. Each shelf has a small refresh (re-roll) icon next to its title. Genre tiles are dark filled rectangles with a colored left stripe per genre. Player bar has Auto DJ toggle and lyrics/EQ/sidebar toggles."
+}

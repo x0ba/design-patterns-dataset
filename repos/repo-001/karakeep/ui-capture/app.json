@@ -1,0 +1,28 @@
+{
+  "mode": "server",
+  "entry": "/dashboard/bookmarks",
+  "login": {
+    "username": "Alex Moreno",
+    "email": "alex.moreno@example.com",
+    "password": "keepitall-2026"
+  },
+  "stubs": [
+    {
+      "service": "OpenAI API (AI summaries, auto-tagging, embeddings for semantic search)",
+      "how": "OPENAI_BASE_URL points at .ui-capture/stubs/server.mjs, a local OpenAI-compatible server (/v1/chat/completions, /v1/embeddings, /v1/models). Summaries are extractive (built from the bookmark's own description/content), tagging returns {\"tags\": [...]} from keyword rules, and embeddings are deterministic hashed bag-of-words vectors. OPENAI_API_KEY is a placeholder."
+    },
+    {
+      "service": "Meilisearch (full-text search index + vector store)",
+      "how": "MEILI_ADDR points at the same stub process, which implements the Meilisearch HTTP endpoints the app's search-meilisearch and vectorstore-meilisearch plugins use (indexes, settings, tasks, documents, search, similar). Search results are computed from Karakeep's own SQLite db (read-only), with prefix matching for full-text and cosine similarity over the hashed embeddings for semantic/hybrid mode. MEILI_MASTER_KEY is a placeholder."
+    },
+    {
+      "service": "Web crawler (headless Chrome + internet fetches)",
+      "how": "Not run (no network). The crawler's results for the seeded links (title, description, author, publisher, reader-view HTML, banner images) were written straight into the app's bookmarkLinks/assets tables and its filesystem asset store by the seed script. 23 links reuse real crawls (banner, screenshot, HTML) from the repo's own snapshots/seed-data-v0.34.1; the other banners are generated Open Graph-style images. Three links are seeded as failed crawls (403/404). The background workers aren't started, so a link added during review stays in the 'crawling' state."
+    },
+    {
+      "service": "Google Fonts (Inter, fetched by next/font at build time)",
+      "how": "apps/web/app/layout.tsx uses next/font/local with the same Inter variable font (from @fontsource-variable/inter, copied to apps/web/app/fonts/), since the build has no route to fonts.googleapis.com."
+    }
+  ],
+  "notes": "Karakeep (self-hosted bookmark-everything app). Server mode: start.sh runs the production Next.js standalone build (apps/web/.next/standalone, built with `next build --experimental-build-mode compile`), the local stub process (OpenAI + Meilisearch, on free ports from 4411), and applies db + queue migrations (no-ops). Data lives in .ui-capture/data (SQLite db.db + queue.db + assets/). Env vars are in .ui-capture/env.sh. Tools are pinned in mise.toml (node 24.22.3, pnpm 11.28.9). Deps were installed in a scratch copy and synced back because the sandbox blocks writes inside .vscode/.idea/.git* folders in node_modules. The mobile app's deps aren't installed. Seed: .ui-capture/seed/run-seed.sh rebuilds data from scratch: it signs up the user through better-auth, then uses the tRPC API (createBookmark with backdated createdAt, updateTags, lists, highlights, summarizeBookmark through the AI stub, reading progress, feeds, rules, prompts, webhook) and fills in crawler output in SQLite. Seeded account (first user, so also admin): ~147 bookmarks over ~14 months (Sept 2025 to Nov 2026). There are ~125 links (engineering, AI, homelab, design, cooking, a Japan trip, fitness, finance, books), 16 markdown notes and 4 uploaded images; a mix of favourited, archived and failed crawls; personal notes; ~110 tags, some attached by AI and some by hand; 8 manual lists (one nested) and 3 smart lists; 8 highlights; ~24 AI summaries; 3 RSS feeds, 3 rules, 2 custom AI prompts and 1 webhook. Main areas: /dashboard/bookmarks (home grid), /dashboard/search, /dashboard/favourites, /dashboard/archive, /dashboard/tags, /dashboard/lists and /dashboard/lists/<id>, /dashboard/highlights, the bookmark preview with reader view, AI summary and highlights, /settings/* (AI, feeds, rules, import, API keys, stats) and /admin/*."
+}

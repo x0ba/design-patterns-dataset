@@ -1,0 +1,857 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "gen-002",
+  "site": {
+    "slug": "nonprofit-codebase-map",
+    "url": "http://nonprofit-codebase-map.localhost:4318/",
+    "finalUrl": "http://nonprofit-codebase-map.localhost:4318/",
+    "status": 200,
+    "title": "Codecairn · second-helping",
+    "capturedAt": "2026-11-18T02:10:04.490Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1890
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "developer-tools",
+    "domainNote": "codebase map / onboarding explorer for volunteer developers at a food-rescue nonprofit (module dependency graph, test coverage, ownership)",
+    "provenance": {
+      "source": "generated",
+      "generation": "generated/gen-002/nonprofit-codebase-map/generation.json",
+      "generator": {
+        "id": "sonnet",
+        "model": "claude-sonnet-5-5",
+        "effort": "high"
+      },
+      "brief": {
+        "domain": "developer-tools",
+        "archetype": "explore-space",
+        "context": "community-nonprofit",
+        "product": "Codecairn"
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Top bar: Codecairn logo, repo switcher 'second-helping 214 modules · 612 links', search field with '/' shortcut, user identity",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 56
+      },
+      "patterns": [
+        "app-shell",
+        "text-field",
+        "popover"
+      ]
+    },
+    {
+      "id": "left-panel",
+      "role": "sidebar",
+      "label": "Tabbed panel (Trail / Issues 9 / People 6): from/to pickers, '4 hops' trail as numbered module cards with edge labels, Fit trail / Clear trail",
+      "bbox": {
+        "x": 12,
+        "y": 68,
+        "width": 344,
+        "height": 1810
+      },
+      "patterns": [
+        "tabs",
+        "badge",
+        "card",
+        "contextual-help",
+        "coordinated-views"
+      ]
+    },
+    {
+      "id": "map-canvas",
+      "role": "canvas",
+      "label": "Spatial map of 214 modules: nodes sized by lines and coloured by coverage, clustered in folder blobs within three service regions, call edges, numbered trail, issue tag markers, blast-radius rings",
+      "bbox": {
+        "x": 356,
+        "y": 56,
+        "width": 696,
+        "height": 1700
+      },
+      "patterns": [
+        "zoomable-canvas",
+        "chart",
+        "overview-detail",
+        "tooltip",
+        "badge"
+      ]
+    },
+    {
+      "id": "map-controls",
+      "role": "toolbar",
+      "label": "Floating legend (coverage buckets with counts, click to highlight) and toolbar: colour-by segmented control, Blast radius switch, hops 1/2/3, zoom in/out/fit",
+      "bbox": {
+        "x": 368,
+        "y": 1760,
+        "width": 680,
+        "height": 120
+      },
+      "patterns": [
+        "choice-control",
+        "coordinated-views",
+        "contextual-help"
+      ]
+    },
+    {
+      "id": "detail-panel",
+      "role": "detail-panel",
+      "label": "Selected module windows.py: trace buttons, Lines/Tested/Last changed stat tiles, Last touched by, If you change this (reach segmented control, ranked callers), open issues, who's been in this area, dependencies",
+      "bbox": {
+        "x": 1052,
+        "y": 68,
+        "width": 376,
+        "height": 1810
+      },
+      "patterns": [
+        "overview-detail",
+        "stat-tile",
+        "choice-control",
+        "badge",
+        "accordion",
+        "activity-log",
+        "contextual-help"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "zoomable-canvas",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 356,
+            "y": 230,
+            "width": 696,
+            "height": 530
+          },
+          "note": "Pannable/zoomable 2D map of module nodes with edges, grouped into named service regions",
+          "quote": "Dispatch API",
+          "region": "map-canvas"
+        },
+        {
+          "bbox": {
+            "x": 949,
+            "y": 1838,
+            "width": 90,
+            "height": 30
+          },
+          "note": "Zoom in / Zoom out / Show the whole codebase controls",
+          "region": "map-controls"
+        }
+      ],
+      "dims": {
+        "objectTypes": [
+          "shapes-and-connectors"
+        ],
+        "canvasStructure": "graph-with-edges",
+        "canvasNav": [
+          "zoom-to-selection-fit"
+        ],
+        "canvasChrome": [
+          "floating-toolbars",
+          "side-property-inspector"
+        ],
+        "canvasMode": "read-only-explore"
+      }
+    },
+    {
+      "id": "chart",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 356,
+            "y": 230,
+            "width": 696,
+            "height": 530
+          },
+          "note": "Node-link visualization: dot size = lines, colour = coverage bucket, position = call proximity",
+          "region": "map-canvas"
+        },
+        {
+          "bbox": {
+            "x": 372,
+            "y": 1762,
+            "width": 672,
+            "height": 58
+          },
+          "note": "Legend decoding colour channel with counts",
+          "quote": "Bigger dot = more lines · closer = call each other more",
+          "region": "map-controls"
+        }
+      ],
+      "dims": {
+        "markType": "points",
+        "channels": [
+          "position",
+          "colour-hue-or-value",
+          "size"
+        ],
+        "faceting": "single-plot",
+        "inspectBy": [
+          "hover-tooltip",
+          "click-to-select"
+        ],
+        "authorship": "author-specified",
+        "annotation": [
+          "callout-labels"
+        ]
+      }
+    },
+    {
+      "id": "coordinated-views",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 27,
+            "y": 379,
+            "width": 314,
+            "height": 433
+          },
+          "note": "Trail list mirrors numbered path 1-5 drawn on map",
+          "quote": "4 hops",
+          "region": "left-panel"
+        },
+        {
+          "bbox": {
+            "x": 501,
+            "y": 1770,
+            "width": 532,
+            "height": 24
+          },
+          "note": "Legend buttons highlight the category on the map (live: others greyed, 'Highlighting Under 20% · 16 modules' chip)",
+          "quote": "Under 20%",
+          "region": "map-controls"
+        },
+        {
+          "bbox": {
+            "x": 1293,
+            "y": 560,
+            "width": 120,
+            "height": 22
+          },
+          "note": "Blast radius list in detail panel drawn on map",
+          "quote": "Show on map",
+          "region": "detail-panel"
+        }
+      ],
+      "dims": {
+        "linkChannel": [
+          "selection-highlight",
+          "parameters"
+        ],
+        "arrangement": "overview-detail-split",
+        "trigger": [
+          "click-a-mark",
+          "change-a-control"
+        ],
+        "scope": "one-mark",
+        "feedback": [
+          "highlight-in-place",
+          "grey-out-non-matches",
+          "action-breadcrumb"
+        ],
+        "authorship": "fixed-published-dashboard"
+      }
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 356,
+            "y": 230,
+            "width": 696,
+            "height": 530
+          },
+          "note": "Map overview of all modules; selected node windows.py ringed",
+          "region": "map-canvas"
+        },
+        {
+          "bbox": {
+            "x": 1052,
+            "y": 68,
+            "width": 376,
+            "height": 1810
+          },
+          "note": "Side-by-side detail panel for selected module with deselect button",
+          "quote": "windows.py",
+          "region": "detail-panel"
+        }
+      ],
+      "dims": {
+        "attributePlacement": [
+          "in-both-views",
+          "in-detail-view-only"
+        ],
+        "abstraction": [
+          "graphic"
+        ],
+        "relationship": "many-overviews-to-one-detail-view",
+        "recursion": [
+          "overview-inside-detail-view"
+        ],
+        "linking": "synchronized-navigation",
+        "openIn": "side-by-side",
+        "overviewType": [
+          "map",
+          "list"
+        ],
+        "detailMultiplicity": "one-at-a-time",
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "whole-item",
+        "attributeScope": [
+          "per-item",
+          "per-collection"
+        ]
+      }
+    },
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 56
+          },
+          "note": "Persistent top bar with logo, repo/workspace switcher, search, identity",
+          "quote": "Codecairn",
+          "region": "header"
+        },
+        {
+          "bbox": {
+            "x": 160,
+            "y": 10,
+            "width": 311,
+            "height": 36
+          },
+          "note": "Repo switcher",
+          "quote": "second-helping",
+          "region": "header"
+        }
+      ],
+      "dims": {
+        "primary": "top-navigation-bar",
+        "secondary": "contextual-panel",
+        "items": [
+          "workspace-switcher",
+          "live-counts"
+        ],
+        "visibility": "toggle-button",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 13,
+            "y": 69,
+            "width": 342,
+            "height": 46
+          },
+          "note": "Tablist; verified live that Issues tab swaps panel content",
+          "quote": "Trail Issues 9 People 6",
+          "region": "left-panel"
+        }
+      ],
+      "dims": {
+        "placement": "top",
+        "label": [
+          "text",
+          "badge-count"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 79,
+            "y": 82,
+            "width": 56,
+            "height": 20
+          },
+          "note": "Count on tab",
+          "quote": "Issues 9",
+          "region": "left-panel"
+        },
+        {
+          "bbox": {
+            "x": 1180,
+            "y": 1549,
+            "width": 32,
+            "height": 20
+          },
+          "note": "Count pill on section heading",
+          "quote": "10",
+          "region": "detail-panel"
+        },
+        {
+          "bbox": {
+            "x": 855,
+            "y": 329,
+            "width": 42,
+            "height": 17
+          },
+          "note": "Issue-number tag markers pinned to map nodes",
+          "quote": "#212",
+          "region": "map-canvas"
+        }
+      ],
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "stat-tile",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1053,
+            "y": 230,
+            "width": 374,
+            "height": 135
+          },
+          "note": "Three tiles: Lines 1,140 (5th largest of 214), Tested 31% with bar vs Dispatch API avg 50%, Last changed",
+          "quote": "1,140",
+          "region": "detail-panel"
+        }
+      ],
+      "dims": {
+        "context": [
+          "label",
+          "benchmark"
+        ],
+        "encoding": "number-only",
+        "drill": "none"
+      }
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 27,
+            "y": 379,
+            "width": 314,
+            "height": 68
+          },
+          "note": "Outlined trail step card: number, filename, path, owner/date, coverage bar, lines; last card selected with heavy outline",
+          "quote": "compose.js",
+          "region": "left-panel"
+        }
+      ],
+      "dims": {
+        "media": "none",
+        "actions": "none",
+        "shape": "horizontal",
+        "style": "outlined",
+        "target": "whole-card"
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 379,
+            "y": 1839,
+            "width": 326,
+            "height": 28
+          },
+          "note": "Colour modules by segmented control",
+          "quote": "Coverage",
+          "region": "map-controls"
+        },
+        {
+          "bbox": {
+            "x": 1113,
+            "y": 651,
+            "width": 183,
+            "height": 28
+          },
+          "note": "Reach segmented control",
+          "quote": "2 hops",
+          "region": "detail-panel"
+        },
+        {
+          "bbox": {
+            "x": 726,
+            "y": 1835,
+            "width": 100,
+            "height": 36
+          },
+          "note": "Blast radius switch",
+          "quote": "Blast radius",
+          "region": "map-controls"
+        }
+      ],
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "segmented-control",
+        "option": [
+          "label-only"
+        ],
+        "timing": "immediately",
+        "largeSets": "show-all"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 714,
+            "y": 10,
+            "width": 520,
+            "height": 36
+          },
+          "note": "Search with icon prefix, placeholder and '/' shortcut key hint",
+          "quote": "Find a module, issue (#212) or volunteer",
+          "region": "header"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "placeholder",
+          "prefix-or-suffix"
+        ],
+        "style": "outlined"
+      }
+    },
+    {
+      "id": "tooltip",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 832,
+            "y": 465,
+            "width": 22,
+            "height": 22
+          },
+          "note": "Hovering a node (live) shows a dark rich tooltip: path, lines, % tested, owner, date",
+          "quote": "outbound.py",
+          "region": "map-canvas"
+        }
+      ],
+      "dims": {
+        "trigger": [
+          "hover"
+        ],
+        "timing": "until-the-pointer-leaves",
+        "content": "rich-content",
+        "placement": "below"
+      }
+    },
+    {
+      "id": "popover",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 160,
+            "y": 10,
+            "width": 311,
+            "height": 36
+          },
+          "note": "Repo button opens (live) an anchored panel describing the three services, issue/volunteer counts, total size, hosting",
+          "quote": "second-helping",
+          "region": "header"
+        }
+      ],
+      "dims": {
+        "openBy": "click",
+        "placement": "below-the-anchor",
+        "contents": "read-only-preview",
+        "persistence": "until-dismissed"
+      }
+    },
+    {
+      "id": "contextual-help",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 27,
+            "y": 128,
+            "width": 320,
+            "height": 36
+          },
+          "note": "Inline instructions at top of Trail tab",
+          "quote": "Follow calls from one module to another.",
+          "region": "left-panel"
+        },
+        {
+          "bbox": {
+            "x": 1069,
+            "y": 1020,
+            "width": 340,
+            "height": 38
+          },
+          "note": "Explains ordering and what a hop is",
+          "quote": "A hop is one call or import.",
+          "region": "detail-panel"
+        }
+      ],
+      "dims": {
+        "access": [
+          "the-control-itself"
+        ],
+        "content": [
+          "definitions",
+          "step-instructions"
+        ],
+        "placement": "inline-static-text",
+        "proactivity": "always-visible-hints",
+        "relevance": "page"
+      }
+    },
+    {
+      "id": "accordion",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "rationale": "Only a single disclosure ('Preview the message'), not a stack of sections",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1067,
+            "y": 515,
+            "width": 145,
+            "height": 20
+          },
+          "note": "Collapsed disclosure with triangle indicator",
+          "quote": "Preview the message",
+          "region": "detail-panel"
+        }
+      ],
+      "dims": {
+        "header": [
+          "title-only"
+        ],
+        "toggle": [
+          "header-click"
+        ]
+      }
+    },
+    {
+      "id": "activity-log",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Short list of latest changes by person and date in the neighbouring folder; reads as a record of who changed what but is a small summary, not a full log",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1053,
+            "y": 1323,
+            "width": 374,
+            "height": 208
+          },
+          "note": "File, volunteer and date rows, newest first",
+          "quote": "Who’s been in this area",
+          "region": "detail-panel"
+        }
+      ],
+      "dims": {
+        "detail": "one-line-summary",
+        "subject": "a-workspace",
+        "presentation": "sidebar-in-a-detail-view",
+        "actions": "read-only"
+      }
+    },
+    {
+      "id": "property-inspector",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1052,
+            "y": 68,
+            "width": 376,
+            "height": 300
+          },
+          "note": "Detail panel shows read-only facts, not editable properties"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "map-explorer",
+      "status": "absent",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 356,
+            "y": 230,
+            "width": 696,
+            "height": 530
+          },
+          "note": "'Map' is a metaphorical code map, not geographic"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "filter-controls",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 501,
+            "y": 1770,
+            "width": 532,
+            "height": 24
+          },
+          "note": "Legend buttons highlight rather than filter the set"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "view-switcher",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 379,
+            "y": 1839,
+            "width": 326,
+            "height": 28
+          },
+          "note": "Colour-by control changes the encoding, not the representation"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "full-viewport app: top bar over a three-column workspace: left tabbed panel (Trail / Issues / People), central zoomable node-link map of code modules clustered into service regions with floating legend and toolbar, right selected-module detail panel; side panels scroll internally",
+    "regions": [
+      "header",
+      "left-panel",
+      "map-canvas",
+      "map-controls",
+      "detail-panel"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#f3eee4",
+      "#fcfaf5",
+      "#ffffff",
+      "#2a241d",
+      "#6b6255",
+      "#4a4338",
+      "#ddd4c3",
+      "#d55e00",
+      "#1e6a86",
+      "#e4dccb"
+    ],
+    "colorRoles": {
+      "background": "#f3eee4",
+      "surface": "#fcfaf5",
+      "text": "#2a241d",
+      "muted": "#6b6255",
+      "secondaryText": "#4a4338",
+      "border": "#ddd4c3",
+      "primary": "#2a241d",
+      "accent": "#d55e00",
+      "link": "#1e6a86",
+      "chip": "#e4dccb"
+    },
+    "typography": "Fraunces Variable (serif) for brand, region titles on the map, section headings and stat values; IBM Plex Sans for UI text and controls; IBM Plex Mono for file names and paths",
+    "typeScale": "Compact app scale: stat values 26px serif, h2 21px mono filename, section headings 17px serif, body 13-14px, captions/eyebrow labels 12px uppercase tracked; weight contrast mostly 400/500 with serif display numbers",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "data-visualization",
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "texture",
+    "mood": [
+      "warm",
+      "scholarly",
+      "calm",
+      "technical",
+      "friendly"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T02:13:15.433Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 14,
+    "usage": {
+      "input_tokens": 28,
+      "cache_creation_input_tokens": 71767,
+      "cache_read_input_tokens": 813595,
+      "output_tokens": 16476
+    }
+  },
+  "notes": "Warm paper/cream palette with editorial serif (Fraunces) headings over mono file names gives a cartographic, atlas-like character to a codebase explorer. Map regions are soft tinted blobs (green Node.js SMS worker, peach TypeScript donor app, grey Python Dispatch API) with dashed borders; folders are smaller blob islands; dots sized by lines and coloured by coverage bucket (red to teal). The selected path is drawn in thick black with numbered black circle markers; blast-radius dependents use amber rings and amber edges; dependencies use dashed lines. Issue numbers are dark-outlined tags with pointer tails pinned to nodes. Copy is unusually humane ('Untouched for a long while', 'Copy a question for Marco'). Map background appears to have a faint dot-grid texture. Legend click shows a dark dismissible chip 'Highlighting Under 20% · 16 modules'."
+}

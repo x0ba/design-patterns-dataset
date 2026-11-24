@@ -1,0 +1,12 @@
+{
+  "mode": "static",
+  "entry": "/",
+  "login": null,
+  "stubs": [
+    {
+      "service": "Google Fonts (JetBrains Mono stylesheet + font files from fonts.googleapis.com / fonts.gstatic.com)",
+      "how": "In the build output only, the stylesheet <link> is rewritten to /fonts/jetbrains-mono.css, which declares the same family/weights (400/600/700) from woff2/woff files vendored from the npm package @fontsource/jetbrains-mono@5.3.0; the two preconnect hints to Google are dropped. web/index.html itself is untouched."
+    }
+  ],
+  "notes": "Datadex's user interface is web/index.html: a single, self-contained static landing page (no framework, no build step, no JS beyond a dark/light theme toggle persisted in localStorage). The repo deploys web/ as-is to Cloudflare Pages and serves it locally with `make web` (python -m http.server). Build: `python .ui-capture/build.py` copies web/ to .ui-capture/out and vendors the font (font package fetched with `npm pack @fontsource/jetbrains-mono@5.3.0` into .ui-capture/vendor/fontsource). Tools pinned in mise.toml: python 3.14.10 (repo's .python-version), node 24.22.3 (only for npm pack). uv was not pinned: mise's uv install needs sigstore attestation, which the sandbox blocks, and the static UI doesn't need it. Data: the page shows no records; it has no data views, API calls, or account. The platform's 'data' is Parquet datasets (OWID indicators, World Development Indicators) built by Python scripts and published to Hugging Face, and the UI never displays them, so nothing could be seeded into it. Main areas (one page): hero with logo and tagline; three link buttons (Get the Data -> huggingface.co/datonic, Contribute, Request Dataset -> GitHub); intro paragraph; 'Principles' definition list (Open, Modular and Interoperable, Permissionless, Simple, Data as Code, Glue); footer; theme toggle top-right (follows prefers-color-scheme by default)."
+}

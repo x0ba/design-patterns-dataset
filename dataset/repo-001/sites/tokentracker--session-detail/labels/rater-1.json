@@ -1,0 +1,668 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "tokentracker--session-detail",
+    "url": "http://localhost:4407/sessions",
+    "finalUrl": "http://localhost:4407/sessions",
+    "status": 200,
+    "title": "Token Tracker — AI Token Usage & Cost Tracker for Coding CLIs",
+    "capturedAt": "2026-11-18T02:50:29.343Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 5400
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "developer-tools",
+    "domainNote": "local AI coding-CLI token usage & cost tracker (Claude Code / Codex sessions)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/tokentracker/explore.json",
+      "repo": {
+        "name": "xiufengsun/TokenTracker",
+        "url": "https://github.com/xiufengsun/TokenTracker",
+        "commit": "e2ff7493c600ec78ba1551490a053e5eedc4ae7a",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "session-detail",
+        "name": "Sessions list with session detail",
+        "description": "Sessions list grouped by date with filters and totals, with a side drawer showing one session's tokens, cost, token composition and models."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Left nav: Sign in, collapse toggle, grouped links (General / Tools / Account), theme toggle and GitHub Star",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 220,
+        "height": 900
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "page-header",
+      "role": "header",
+      "label": "H1 'Sessions', subtitle, refresh button",
+      "bbox": {
+        "x": 272,
+        "y": 49,
+        "width": 1104,
+        "height": 80
+      },
+      "patterns": []
+    },
+    {
+      "id": "filter-toolbar",
+      "role": "toolbar",
+      "label": "Search box plus four dropdown filters (tools, date range, projects, models)",
+      "bbox": {
+        "x": 272,
+        "y": 157,
+        "width": 1104,
+        "height": 36
+      },
+      "patterns": [
+        "filter-controls",
+        "text-field",
+        "choice-control",
+        "menu"
+      ]
+    },
+    {
+      "id": "summary-strip",
+      "role": "stats-strip",
+      "label": "Bordered strip of four aggregate stats: Matching sessions, Tokens, Cost, Estimated speed",
+      "bbox": {
+        "x": 272,
+        "y": 217,
+        "width": 1104,
+        "height": 74
+      },
+      "patterns": [
+        "stat-tile",
+        "tooltip"
+      ]
+    },
+    {
+      "id": "session-list",
+      "role": "list",
+      "label": "Result count, group/sort dropdowns, column headers and date-grouped session rows with title, meta line and Tokens/Cost/Speed columns",
+      "bbox": {
+        "x": 272,
+        "y": 315,
+        "width": 1104,
+        "height": 5070
+      },
+      "patterns": [
+        "overview-detail",
+        "data-table",
+        "sort-control",
+        "tooltip",
+        "badge"
+      ]
+    },
+    {
+      "id": "detail-sheet",
+      "role": "drawer",
+      "label": "Right side sheet 'Session statistics': title, meta, 2x2 stat grid, token composition key-values, models and cost table, collapsible Observed activity / Session identifiers, footnotes",
+      "bbox": {
+        "x": 864,
+        "y": 0,
+        "width": 576,
+        "height": 900
+      },
+      "patterns": [
+        "drawer",
+        "modal-dialog",
+        "stat-tile",
+        "accordion"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 220,
+            "height": 900
+          },
+          "note": "Persistent left sidebar with grouped fixed destinations, collapse button",
+          "quote": "Sessions",
+          "region": "sidebar"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations"
+        ],
+        "visibility": "toggle-button",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "drawer",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 864,
+            "y": 0,
+            "width": 576,
+            "height": 900
+          },
+          "note": "Right-edge panel over a grey scrim, opened by clicking a session row; role=dialog",
+          "quote": "Add OpenTelemetry spans to payout worker",
+          "region": "detail-sheet"
+        }
+      ],
+      "dims": {
+        "edge": "right",
+        "relationship": "overlay-with-scrim",
+        "holds": "item-detail",
+        "openBy": [
+          "selecting-an-item"
+        ]
+      }
+    },
+    {
+      "id": "modal-dialog",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 864,
+            "y": 0,
+            "width": 576,
+            "height": 900
+          },
+          "note": "dialog 'Session statistics' with close button, Escape closes (verified live), backdrop dims page",
+          "quote": "Session statistics",
+          "region": "detail-sheet"
+        }
+      ],
+      "dims": {
+        "form": "sheet-from-an-edge",
+        "openBy": [
+          "user-action"
+        ],
+        "dismissBy": [
+          "close-button",
+          "escape"
+        ],
+        "modality": "blocking",
+        "purpose": "detail-view"
+      }
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 272,
+            "y": 672,
+            "width": 592,
+            "height": 50
+          },
+          "note": "Row 'View statistics for…' opens the detail sheet; overview shows title, project, model, time, duration, tokens/cost/speed",
+          "quote": "Add OpenTelemetry spans to payout worker",
+          "region": "session-list"
+        },
+        {
+          "bbox": {
+            "x": 885,
+            "y": 95,
+            "width": 535,
+            "height": 510
+          },
+          "note": "Detail adds token composition, models, observed activity, identifiers",
+          "region": "detail-sheet"
+        }
+      ],
+      "dims": {
+        "attributePlacement": [
+          "in-both-views",
+          "in-detail-view-only"
+        ],
+        "abstraction": [
+          "sum-or-average"
+        ],
+        "truncation": "full-text",
+        "relationship": "one-to-one",
+        "recursion": [
+          "none"
+        ],
+        "openIn": "pop-up",
+        "overviewType": [
+          "list"
+        ],
+        "detailMultiplicity": "one-at-a-time",
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "specific-attribute",
+        "attributeScope": [
+          "per-item",
+          "per-collection"
+        ]
+      }
+    },
+    {
+      "id": "data-table",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "rationale": "Session list is a ul of rows with column headers (Session/project, Tokens, Cost, Speed) and right-aligned numeric columns, grouped by date; table-like but semantically a list with no column interactions.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 272,
+            "y": 362,
+            "width": 1104,
+            "height": 500
+          },
+          "note": "Column header row and rows with aligned metric columns (columns hidden behind the sheet in the capture)",
+          "quote": "Session / project",
+          "region": "session-list"
+        }
+      ],
+      "dims": {
+        "columnSet": "fixed",
+        "cellRendering": [
+          "plain-text"
+        ],
+        "density": "comfortable",
+        "rowExpansion": "grouped-rows",
+        "selection": "none",
+        "aggregation": [
+          "group-by-column"
+        ],
+        "openIn": "modal"
+      }
+    },
+    {
+      "id": "filter-controls",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 272,
+            "y": 157,
+            "width": 1104,
+            "height": 36
+          },
+          "note": "Search plus dropdowns: All tools, Any time (7d/30d/90d/Custom), All projects (searchable list), All models; result count '566 of 566'",
+          "quote": "All projects",
+          "region": "filter-toolbar"
+        }
+      ],
+      "dims": {
+        "placement": "toolbar-popover",
+        "types": [
+          "checkbox-values",
+          "text-match",
+          "date-range"
+        ],
+        "preview": "live-results",
+        "origin": "developer-defined"
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 680,
+            "y": 157,
+            "width": 168,
+            "height": 36
+          },
+          "note": "combobox selects for source/date; project dropdown is a searchable list with checkmark",
+          "quote": "All tools",
+          "region": "filter-toolbar"
+        }
+      ],
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "dropdown-select",
+        "option": [
+          "label-only"
+        ],
+        "timing": "immediately",
+        "largeSets": "searchable-select"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Dropdown option lists open from buttons with checkmark state; they are select listboxes rather than command menus.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 856,
+            "y": 157,
+            "width": 168,
+            "height": 36
+          },
+          "note": "Opens vertical list Any time/7d/30d/90d/Custom with check",
+          "quote": "Any time",
+          "region": "filter-toolbar"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click",
+        "structure": "flat",
+        "item": [
+          "label",
+          "checkmark-state"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 272,
+            "y": 157,
+            "width": 400,
+            "height": 36
+          },
+          "note": "Outlined search input with search icon and placeholder",
+          "quote": "Search title, project, model, or ID…",
+          "region": "filter-toolbar"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "placeholder"
+        ],
+        "style": "outlined",
+        "inputType": "plain"
+      }
+    },
+    {
+      "id": "sort-control",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1294,
+            "y": 315,
+            "width": 82,
+            "height": 32
+          },
+          "note": "Sort sessions dropdown 'Recent'; group dropdown 'By date' beside it",
+          "quote": "Recent",
+          "region": "session-list"
+        }
+      ],
+      "dims": {
+        "keys": "fixed-list",
+        "form": "dropdown",
+        "default": "recency",
+        "indicator": "label"
+      }
+    },
+    {
+      "id": "stat-tile",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 272,
+            "y": 217,
+            "width": 1104,
+            "height": 74
+          },
+          "note": "Four label+value stats separated by vertical rules",
+          "quote": "Matching sessions",
+          "region": "summary-strip"
+        },
+        {
+          "bbox": {
+            "x": 885,
+            "y": 95,
+            "width": 535,
+            "height": 127
+          },
+          "note": "2x2 stat grid in the detail sheet",
+          "quote": "12.3M",
+          "region": "detail-sheet"
+        }
+      ],
+      "dims": {
+        "context": [
+          "label"
+        ],
+        "encoding": "number-only",
+        "window": "follows-the-dashboard-filter",
+        "drill": "none"
+      }
+    },
+    {
+      "id": "accordion",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 885,
+            "y": 507,
+            "width": 535,
+            "height": 98
+          },
+          "note": "'Observed activity' and 'Session identifiers' headers expand in place (verified live), no chevron",
+          "quote": "Observed activity",
+          "region": "detail-sheet"
+        }
+      ],
+      "dims": {
+        "policy": "many-at-a-time",
+        "header": [
+          "title-only"
+        ],
+        "toggle": [
+          "header-click"
+        ]
+      }
+    },
+    {
+      "id": "tooltip",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 302,
+            "y": 466,
+            "width": 70,
+            "height": 16
+          },
+          "note": "Project name carries tooltip '/Users/dmin/code/cs-thesis-sim Click to copy this path' (ARIA tree)",
+          "quote": "cs-thesis-sim",
+          "region": "session-list"
+        },
+        {
+          "bbox": {
+            "x": 1204,
+            "y": 230,
+            "width": 16,
+            "height": 16
+          },
+          "note": "'About these totals' info icon",
+          "region": "summary-strip"
+        }
+      ],
+      "dims": {
+        "trigger": [
+          "hover"
+        ],
+        "content": "label"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "uncertain",
+      "confidence": 0.45,
+      "rationale": "'First-pass' is a green inline text tag in the meta line, a status label rather than a pill; unclear if it counts as a badge.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 694,
+            "y": 1169,
+            "width": 56,
+            "height": 16
+          },
+          "note": "Green status label on some rows",
+          "quote": "First-pass",
+          "region": "session-list"
+        }
+      ],
+      "dims": {
+        "meaning": "label",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "dashboard",
+      "status": "absent",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 272,
+            "y": 217,
+            "width": 1104,
+            "height": 74
+          },
+          "note": "Only one summary strip above a list; not a multi-widget dashboard"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "pagination",
+      "status": "absent",
+      "confidence": 0.5,
+      "rationale": "A 'Show more sessions' button exists in the ARIA tree beyond the captured screenshot; not visible in capture.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 272,
+            "y": 5300,
+            "width": 1104,
+            "height": 80
+          },
+          "note": "End of captured list; load-more button below capture"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "Desktop app shell: fixed left sidebar nav (220px) + rounded inset main content card holding page header, filter toolbar, summary stat strip and a date-grouped session list with right-aligned metric columns; a right-edge modal side sheet (576px) with item detail overlays the list behind a grey scrim",
+    "regions": [
+      "sidebar",
+      "page-header",
+      "filter-toolbar",
+      "summary-strip",
+      "session-list",
+      "detail-sheet"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#fafafa",
+      "#f5f5f5",
+      "#ffffff",
+      "#0a0a0a",
+      "#737373",
+      "#525252",
+      "#e5e5e5",
+      "#d97757",
+      "#047857"
+    ],
+    "colorRoles": {
+      "background": "#f5f5f5",
+      "surface": "#fafafa",
+      "text": "#0a0a0a",
+      "muted": "#737373",
+      "secondary": "#525252",
+      "border": "#e5e5e5",
+      "accent": "#d97757",
+      "success": "#047857",
+      "sheet": "#ffffff"
+    },
+    "typography": "OpenAI Sans throughout (headings, nav, rows, numbers); ui-sans-serif fallback; SF Mono for identifiers",
+    "typeScale": "36px/600 H1; 16px/600 sheet title; 14px body/rows and section heads at 14px/500; 12px meta lines, labels and group headers (12px/500); strong size contrast only at the H1, otherwise compact 12–14px hierarchy",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "clean",
+      "technical",
+      "calm",
+      "minimal",
+      "neutral"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T02:52:49.395Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 13,
+    "usage": {
+      "input_tokens": 26,
+      "cache_creation_input_tokens": 49217,
+      "cache_read_input_tokens": 528490,
+      "output_tokens": 6682
+    }
+  },
+  "notes": "Neutral greyscale Vercel/shadcn-like look with a single brand accent: the orange Claude asterisk glyph prefixing every session row. Main content is an inset rounded (16px) card with 1px #e5e5e5 border floating on a #f5f5f5 app background beside the sidebar. Rows are hairline-separated, two-line (title + dot-separated meta: project · model · time · duration · transcript size) with right-aligned numeric Tokens/Cost/Speed columns and a hover copy-resume-command button. Date subheads group rows. Detail side sheet uses a bordered 2x2 stats grid, two-column key/value lists, and chevron-less disclosure sections, plus privacy footnote 'Processed locally…'. Approximate values marked with ≈. In the capture the sheet is open over a grey scrim, hiding the list's metric columns. A 'Show more sessions' load-more button exists in the ARIA tree below the captured area."
+}

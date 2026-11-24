@@ -1,0 +1,605 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "mini-macau--transit-map",
+    "url": "http://localhost:4461/",
+    "finalUrl": "http://localhost:4461/",
+    "status": 200,
+    "title": "Mini Map Macau · 澳門公共交通 3D 即時模擬地圖",
+    "capturedAt": "2026-11-18T19:55:46.536Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1494
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "travel-hospitality",
+    "domainNote": "public transit live simulation map of Macau (LRT, bus, air, sea)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/mini-macau/explore.json",
+      "repo": {
+        "name": "asdfghj1237890/mini-macau",
+        "url": "https://github.com/asdfghj1237890/mini-macau",
+        "commit": "ceb24e79b7d046f6f010d2cb1694319f4ce0e422",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "transit-map",
+        "name": "Live transit map",
+        "description": "Main 3D map of Macau with simulated LRT, bus, flight and ferry vehicles, a clock card, the transport layer panel and the 24h timeline/playback bar."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "map-canvas",
+      "role": "map",
+      "label": "Full-bleed dark 3D map of Macau with colored LRT/bus routes, station dots, vehicle triangle markers",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 1494
+      },
+      "patterns": [
+        "map-explorer"
+      ]
+    },
+    {
+      "id": "map-controls",
+      "role": "toolbar",
+      "label": "Hamburger menu + zoom readout, zoom in/out and compass rotate buttons",
+      "bbox": {
+        "x": 17,
+        "y": 17,
+        "width": 143,
+        "height": 190
+      },
+      "patterns": [
+        "drawer",
+        "settings"
+      ]
+    },
+    {
+      "id": "clock-widget",
+      "role": "status-widget",
+      "label": "Macau UTC+8 clock card with seconds, date, schedule type, vehicle count; opens set-time popover",
+      "bbox": {
+        "x": 585,
+        "y": 16,
+        "width": 270,
+        "height": 168
+      },
+      "patterns": [
+        "popover",
+        "date-picker",
+        "badge"
+      ]
+    },
+    {
+      "id": "layer-panel",
+      "role": "side-panel",
+      "label": "Map layers panel: 交通/城市 tabs, LRT line toggles, bus groups with counts and expandable route lists, air+sea toggles",
+      "bbox": {
+        "x": 1081,
+        "y": 17,
+        "width": 342,
+        "height": 862
+      },
+      "patterns": [
+        "tabs",
+        "choice-control",
+        "filter-controls",
+        "accordion",
+        "badge"
+      ]
+    },
+    {
+      "id": "timeline-dock",
+      "role": "playback-dock",
+      "label": "城市節奏 timeline: play/pause, speed multipliers, now button, 24h scrubber over trip-density bar histogram",
+      "bbox": {
+        "x": 310,
+        "y": 1268,
+        "width": 820,
+        "height": 202
+      },
+      "patterns": [
+        "slider",
+        "chart",
+        "choice-control",
+        "badge"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "map-explorer",
+      "status": "present",
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 1494
+          },
+          "region": "map-canvas",
+          "note": "Pannable/zoomable/rotatable map canvas with transit routes, stations and moving vehicles"
+        },
+        {
+          "bbox": {
+            "x": 17,
+            "y": 75,
+            "width": 44,
+            "height": 132
+          },
+          "region": "map-controls",
+          "note": "Zoom in/out and rotate controls"
+        }
+      ],
+      "dims": {
+        "basemap": "minimal-light",
+        "overlays": [
+          "poi-pins",
+          "routes-and-polylines",
+          "live-traffic-or-vehicles"
+        ],
+        "mapNav": [
+          "drag-pan",
+          "pinch-scroll-zoom",
+          "rotate-and-tilt"
+        ],
+        "coupling": "map-only",
+        "markDesign": [
+          "category-icon",
+          "colour-of-a-metric"
+        ],
+        "mapNarrowing": [
+          "category-chips",
+          "time-of-day-live"
+        ],
+        "mapAdapt": [
+          "desktop-side-panel",
+          "dark-night-style"
+        ]
+      }
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1095,
+            "y": 140,
+            "width": 314,
+            "height": 46
+          },
+          "region": "layer-panel",
+          "quote": "交通 01 城市 02",
+          "note": "role=tablist with two tabs, icon+label+index, inside pill container"
+        }
+      ],
+      "dims": {
+        "placement": "segmented-control",
+        "label": [
+          "text",
+          "icon"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1093,
+            "y": 275,
+            "width": 318,
+            "height": 115
+          },
+          "region": "layer-panel",
+          "quote": "氹仔線 ON",
+          "note": "Per-line ON/OFF toggle buttons (aria-pressed)"
+        },
+        {
+          "bbox": {
+            "x": 456,
+            "y": 1285,
+            "width": 213,
+            "height": 34
+          },
+          "region": "timeline-dock",
+          "quote": "1× 2× 5× 10× 30× 60×",
+          "note": "Playback speed segmented control (single choice)"
+        }
+      ],
+      "dims": {
+        "cardinality": "on-or-off",
+        "form": "switch",
+        "option": [
+          "label-only"
+        ],
+        "timing": "immediately",
+        "largeSets": "show-all"
+      }
+    },
+    {
+      "id": "filter-controls",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1093,
+            "y": 405,
+            "width": 318,
+            "height": 235
+          },
+          "region": "layer-panel",
+          "quote": "BUS · 巴士 8/91",
+          "note": "Layer toggles narrow what is drawn on the map; group counts n/total, show all/hide all, 按營運時間 by operating hours"
+        }
+      ],
+      "dims": {
+        "placement": "sidebar-facets",
+        "types": [
+          "toggle-chips"
+        ],
+        "preview": "counts-per-value",
+        "origin": "developer-defined"
+      }
+    },
+    {
+      "id": "accordion",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1093,
+            "y": 475,
+            "width": 318,
+            "height": 167
+          },
+          "region": "layer-panel",
+          "quote": "半島線 0/32 ▸",
+          "note": "Bus group rows with ▸ chevron expand in place to list routes (verified live)"
+        }
+      ],
+      "dims": {
+        "header": [
+          "title-plus-summary-value",
+          "status-indicator"
+        ],
+        "toggle": [
+          "header-click"
+        ]
+      }
+    },
+    {
+      "id": "drawer",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 17,
+            "y": 17,
+            "width": 44,
+            "height": 42
+          },
+          "region": "map-controls",
+          "note": "Hamburger opens a left settings drawer (2D/3D, buildings, dark mode, font size, language, sources) over the map without scrim; closed in capture, verified live"
+        }
+      ],
+      "dims": {
+        "edge": "left",
+        "relationship": "overlay-no-scrim",
+        "holds": "settings",
+        "openBy": [
+          "menu-button"
+        ]
+      }
+    },
+    {
+      "id": "settings",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 17,
+            "y": 17,
+            "width": 44,
+            "height": 42
+          },
+          "region": "map-controls",
+          "quote": "地圖設定",
+          "note": "Drawer content (in a11y tree): toggles 2D/3D/BLD/DRK/TIM, font size segmented + slider with 恢復預設 reset, language ZH/PT/EN"
+        }
+      ],
+      "dims": {
+        "ia": "sectioned-page",
+        "controls": [
+          "boolean-toggles",
+          "single-and-multi-select",
+          "numeric-and-ranges"
+        ],
+        "discovery": [
+          "browse-hierarchy"
+        ],
+        "timing": "instant",
+        "safety": [
+          "no-confirm",
+          "reset-to-default"
+        ]
+      }
+    },
+    {
+      "id": "slider",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 329,
+            "y": 1360,
+            "width": 782,
+            "height": 72
+          },
+          "region": "timeline-dock",
+          "quote": "探索一天的不同時刻",
+          "note": "24h time scrubber with yellow thumb, 00/06/12/18/24 ticks over density bars"
+        }
+      ],
+      "dims": {
+        "values": "single-value",
+        "labels": [
+          "tick-marks",
+          "distribution-behind-the-track",
+          "minimum-and-maximum"
+        ],
+        "scale": "linear"
+      }
+    },
+    {
+      "id": "chart",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 329,
+            "y": 1360,
+            "width": 782,
+            "height": 72
+          },
+          "region": "timeline-dock",
+          "quote": "班次密度",
+          "note": "Bar histogram of service frequency per time slot, peak callouts 早尖峰/晚尖峰, first/last bus markers"
+        }
+      ],
+      "dims": {
+        "markType": "bars",
+        "channels": [
+          "position",
+          "length",
+          "colour-hue-or-value"
+        ],
+        "scale": "time",
+        "faceting": "single-plot",
+        "authorship": "author-specified",
+        "annotation": [
+          "callout-labels",
+          "reference-lines"
+        ],
+        "adaptation": "fixed-desktop-chart"
+      }
+    },
+    {
+      "id": "popover",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 585,
+            "y": 16,
+            "width": 270,
+            "height": 168
+          },
+          "region": "clock-widget",
+          "quote": "點擊設定時間",
+          "note": "Clicking clock opens a SET TIME panel below it (schedule cards, date ±1D/±7D, time scrubber, presets, 取消/套用); verified live"
+        }
+      ],
+      "dims": {
+        "openBy": "click",
+        "dismissBy": [
+          "close-button"
+        ],
+        "placement": "below-the-anchor",
+        "contents": "mini-form",
+        "persistence": "until-dismissed"
+      }
+    },
+    {
+      "id": "date-picker",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "rationale": "Set-time popover chooses date via ±1D/±7D stepping and time via scrubber and preset chips; no calendar grid, so presentation values do not fit; hidden in capture.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 585,
+            "y": 16,
+            "width": 270,
+            "height": 168
+          },
+          "region": "clock-widget",
+          "quote": "2026.11.19 週四",
+          "note": "Clock opens date+time setter"
+        }
+      ],
+      "dims": {
+        "selection": "date-and-time"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1363,
+            "y": 82,
+            "width": 40,
+            "height": 18
+          },
+          "region": "layer-panel",
+          "quote": "即時",
+          "note": "Green-dot live status pill"
+        },
+        {
+          "bbox": {
+            "x": 800,
+            "y": 33,
+            "width": 36,
+            "height": 16
+          },
+          "region": "clock-widget",
+          "quote": "即時",
+          "note": "Live status indicator"
+        }
+      ],
+      "dims": {
+        "meaning": "status"
+      }
+    },
+    {
+      "id": "media-player",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 310,
+            "y": 1268,
+            "width": 820,
+            "height": 202
+          },
+          "region": "timeline-dock",
+          "note": "Play/pause, speed and scrubber drive a transit simulation, not audio/video media; proposed simulation-time-control"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "app-shell",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 17,
+            "y": 17,
+            "width": 143,
+            "height": 42
+          },
+          "note": "No persistent global navigation; single map app with floating overlays"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "full-bleed interactive dark map canvas with floating overlay panels: top-left menu/zoom controls, top-center clock widget, right layer panel with tabs, bottom-center timeline/playback dock; hidden left settings drawer behind hamburger",
+    "regions": [
+      "map-canvas",
+      "map-controls",
+      "clock-widget",
+      "layer-panel",
+      "timeline-dock"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#0a0a0a",
+      "#0b0b0c",
+      "#050506",
+      "#131314",
+      "#ffffff",
+      "#fcd34d",
+      "#fde68a",
+      "#6ee7b7",
+      "#84c44a",
+      "#e11d48"
+    ],
+    "colorRoles": {
+      "background": "#0a0a0a",
+      "surface": "#0b0b0c",
+      "text": "#ffffff",
+      "primary": "#fcd34d",
+      "accent": "#fde68a",
+      "success": "#6ee7b7",
+      "muted": "#131314"
+    },
+    "typography": "JetBrains Mono for numerals, clock, technical micro-labels (ZOOM, LRT, BUS, counts, ON/OFF) with wide letterspacing; system -apple-system sans for UI text; Noto Sans HK for Traditional Chinese headings like 地圖圖層",
+    "typeScale": "Extreme contrast: 47px bold monospace clock digits and 20px bold panel heading vs. a sea of 8–11px tracked monospace labels; 13–14px for line names",
+    "shape": "mixed",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "data-visualization",
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "technical",
+      "nocturnal",
+      "HUD-like",
+      "precise",
+      "atmospheric"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T19:58:15.056Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 14,
+    "usage": {
+      "input_tokens": 28,
+      "cache_creation_input_tokens": 48775,
+      "cache_read_input_tokens": 599512,
+      "output_tokens": 9092
+    }
+  },
+  "notes": "Near-black HUD aesthetic: floating rounded (18px) dark cards over a dark 3D map, amber/yellow (#fcd34d) as the single action/highlight color (play button, active speed, active tab underline, scrubber thumb, 套用 button), mint green for live/ON states. Bilingual labels throughout (EN monospace tracked caps + Traditional Chinese, e.g. 'BUS · 巴士', 'AIR + SEA · 海空'). Colored route lines (green/purple/red LRT, multicolor buses) and yellow warning triangles for roadworks. Clock card is itself a button opening a set-time popover with schedule cards (週一至四/週五/週末), date stepping and a heat-strip timeline. Hidden left drawer holds map settings, accessibility font-size control with live preview, language switch ZH/PT/EN and a long data-sources list. Proposed new entry simulation-time-control for the 城市節奏 playback dock."
+}

@@ -1,0 +1,94 @@
+{
+  "batch": "repo-001",
+  "slug": "otelbin",
+  "ok": true,
+  "repo": {
+    "name": "dash0hq/otelbin",
+    "url": "https://github.com/dash0hq/otelbin",
+    "commit": "2e147b7c2f97f01ed99372e9bdbbbde86c482277",
+    "branch": "main",
+    "license": "Apache-2.0"
+  },
+  "domain": "developer-tools",
+  "port": 4409,
+  "checkoutRoot": "~/.cache/design-patterns-dataset/repos",
+  "mode": "server",
+  "entry": "/s/6befbdd713299ed89cc7c89c0012020a0b9efb9c",
+  "app": {
+    "mode": "server",
+    "entry": "/s/6befbdd713299ed89cc7c89c0012020a0b9efb9c",
+    "login": null,
+    "stubs": [
+      {
+        "service": "Clerk authentication (@clerk/nextjs client + @clerk/nextjs/server middleware)",
+        "how": "Webpack alias in packages/otelbin/next.config.mjs, active only when OTELBIN_STUB_CLERK=1 (set in .ui-capture/env.sh), swaps the SDK module for .ui-capture/stubs/clerk-nextjs.js and clerk-nextjs-server.js. These report a loaded Clerk with a signed-in GitHub user, Priya Raman (praman-sre, priya.raman@northwind-freight.io). The header shows her avatar UserButton with a small account menu, and the Share popover goes straight to short-URL creation. No password is needed: every visitor is that user."
+      },
+      {
+        "service": "Upstash Redis REST API (short links + @upstash/ratelimit)",
+        "how": ".ui-capture/stubs/stub-server.js serves the Upstash REST protocol (single commands, /pipeline, base64 response encoding) at http://localhost:4411/redis. Storage is a JSON file (.ui-capture/data/redis.json) that start.sh copies from seed/redis.seed.json on each start. Rate-limit EVAL calls always allow the request."
+      },
+      {
+        "service": "OTelBin collector validation API (AWS API Gateway + Lambda running real collector binaries)",
+        "how": "The same stub server at http://localhost:4411/validation. GET /validation/supported-distributions returns the repo's own packages/otelbin-validation/src/assets/supported-distributions.json (otelcol core/contrib, ADOT, Splunk with real release lists). POST /validation/{distro}/{version} applies env-var substitution and rule-based checks that mimic `otelcol validate`: unknown component types per distro, pipelines referencing unconfigured components, a missing otlp endpoint, prometheus without scrape_configs, and memory_limiter limits. It returns the Lambda's {message, error, path} payload after about 0.7s of latency."
+      },
+      {
+        "service": "Google Fonts (next/font/google Inter + Fira Code, fetched at build time)",
+        "how": "Uses Next's own NEXT_FONT_GOOGLE_MOCKED_RESPONSES hook, pointing at .ui-capture/fonts/google-fonts-mock.js. That file serves the same fonts from the @fontsource-variable npm packages, so no app code changed."
+      },
+      {
+        "service": "Vercel Web Analytics (/_vercel/insights/script.js + /view, /event beacons, normally served by Vercel edge)",
+        "how": "Env-gated rewrite in packages/otelbin/next.config.mjs (OTELBIN_STUB_VERCEL_INSIGHTS_URL, set in env.sh, baked in at build time) proxies /_vercel/insights/* to the stub server on :4411, which serves .ui-capture/stubs/vercel-insights-script.js (drains the window.vaq queue, posts pageview/event beacons like the real script) and answers the beacons with 200 OK."
+      },
+      {
+        "service": "Dash0 web SDK (self-monitoring)",
+        "how": "Not configured: NEXT_PUBLIC_DASH0_* env vars are unset, so the SDK is not initialised and makes no requests."
+      }
+    ],
+    "notes": "OTelBin is a Next.js 16 app in packages/otelbin. Node 22.23.5 is pinned in the repo-root mise.toml, and dependencies are installed with `npm ci` as CONTRIBUTING.md says. Build: .ui-capture/build.sh (npm run build with env.sh). Run: .ui-capture/start.sh starts the stub server on :4411, then `next start` on $PORT (4409). All secrets in env.sh are placeholders.\n\nData: OTelBin has no database. A user's configs live in the URL hash (#config=...&distro=...&distroVersion=...&env=...), and signed-in users share them as short links stored in Redis. .ui-capture/seed/run-seed.sh starts the app on :5409 and creates 33 short links through the app's own POST /s/new endpoint, using the app's jsurl2 serializer. The links are the configs a platform/SRE team at a logistics company (Northwind Freight) would have shared over months: prod and staging Kubernetes gateways with tail sampling, spanmetrics/servicegraph connectors and Dash0/Mimir/S3 exporters; DaemonSet node agents; ADOT ECS sidecars; Splunk warehouse edge collectors; a Kafka buffer; tenant routing; a legacy Jaeger/Zipkin bridge; GitHub CI receivers; a minimal debug config; plus a WIP logs draft with a real error and a core-distro config that uses a contrib-only receiver. The short-link-to-config map is in .ui-capture/seed/links.json, and the configs are in seed/configs.js.\n\nThe entry /s/6bef… is the 'prod-gateway-eu' short link. It redirects to http://localhost:4409/?#config=… with the full production gateway config, otelcol-contrib v0.160.0 selected for server-side validation (result: valid), and DASH0_AUTH_TOKEN bound in the env-var panel.\n\nMain areas: header with OTelBin logo, distribution/version validation picker, Share popover (short URL, badge, image, YAML/PNG download) and the user avatar; left Monaco YAML editor with JSON-schema validation and an error console; env-var panel when the config uses ${env:...}; right ReactFlow pipeline visualization (traces/metrics/logs swimlanes, connectors, view-mode toggles); footer. Other routes: /s/{id}/img (rendered PNG of the pipeline), /badges/collector-config.\n\nCaveat: in a fresh browser profile the app shows its 4-step Welcome modal once, as it does for any first visit. Dismissing it (Skip, Esc or Next through it) stores localStorage welcomeModal=0, and it doesn't appear again. Headless Chromium couldn't launch inside the build sandbox, so the UI was checked over HTTP (pages, assets, short-link redirects, validation, and the server-rendered /s/{id}/img pipeline image), not in a real browser."
+  },
+  "tools": {
+    "node": "22.23.5"
+  },
+  "prompt": "This is a checkout of dash0hq/otelbin (https://github.com/dash0hq/otelbin) at commit 2e147b7c2f97. Web-based tool to facilitate OpenTelemetry collector configuration editing and verification\n\nI want to see its user interface in a desktop browser, in the state a real, established user would see it. Please get the app running locally with its main interface working and realistic data in it.\n\n# Running it\n- Follow the repo's own setup docs and tooling. Take the simplest route that shows the real app: a static production build if the front end works without a backend, otherwise the app's own server (production or dev mode).\n- If it needs a database or other services, run them locally with an embedded or file-based option (SQLite, in-memory, JSON files, an embedded Postgres such as PGlite) or the app's demo/mock mode.\n- Don't redesign or restyle anything. Change only what's needed to build and run it.\n\n# Tools: use mise\nInstall every runtime and tool you need (node, the package manager, python, bun, ...) with mise, pinned to exact versions in a mise.toml at the repo root, so the setup can be reproduced. Match what the repo asks for (engines, .nvmrc, .tool-versions, packageManager). mise is already configured for this directory: `mise install` installs into ./.ui-capture/mise, and its shims come first on PATH, so `node`, `pnpm` and the rest resolve to the pinned versions. Don't use other copies of these tools or download runtimes by hand.\n\n# Secrets, API keys and external services: fake them\nThe app must not depend on anything outside this machine, and when it runs it has no network except localhost. Wherever it expects secrets, environment variables, API keys or third-party services (hosted auth or OAuth, payment providers, email, LLM or other AI APIs, maps, storage buckets, analytics, hosted databases):\n- Give the required variables placeholder values so the app starts.\n- Where it actually calls the service, make the call succeed locally with realistic responses: use the app's own mock, test or offline mode if it has one; otherwise point the client at a small local stub server that start.sh also starts, or swap in a stub at the integration boundary (the API client or service module). Keep stubs out of UI code. Responses should look like what the real service returns for a real user, e.g. an AI reply that actually answers, a payment history with real-looking amounts.\n- Calls the browser makes directly to outside services count too; point them at the local stub.\n- For sign-in through an outside provider, create a local account or use the app's dev sign-in so you can get past it.\nList every stub in app.json.\n\n# Data: like real use\nSeed it the way an established user's data would look after months of actual use: specific, plausible names and content for this kind of app; dates spread over time; a realistic mix of states (done, in progress, overdue, archived, ...); realistic volume (dozens to hundreds of records where the app revolves around records); short and long text; some messiness real data has. Start from the app's own demo or seed data if it has realistic data, and extend it if it's thin. Load data through the app's own paths (its API, import, seed scripts, or its database schema), never by hardcoding it into UI code. If the app needs an account, create one and attach the data to it. No lorem ipsum or \"Test 1\".\n\n# Environment\nThis shell is sandboxed: you can write only inside this directory (package-manager caches already point into ./.ui-capture/cache), and the network reaches only package registries, mise's download sources and GitHub (registry.npmjs.org, registry.yarnpkg.com, repo.yarnpkg.com, github.com, codeload.github.com, objects.githubusercontent.com, raw.githubusercontent.com, nodejs.org, mise.jdx.dev, mise-versions.jdx.dev, release-assets.githubusercontent.com, pypi.org, files.pythonhosted.org, binaries.prisma.sh, cdn.jsdelivr.net, unpkg.com). Docker isn't available. A process you start in the background can't be seen or stopped from a later command, so test servers on another port than 4409 (e.g. 5409) or in the foreground under `timeout`; anything still listening on 4409 is stopped before I check.\n\n# When you're done, leave this in ./.ui-capture/\n- app.json: {\"mode\": \"static\" or \"server\", \"entry\": \"/path where the main UI opens\", \"login\": null or {\"username\": \"...\", \"email\": \"...\", \"password\": \"...\"}, \"stubs\": [{\"service\": \"what was faked\", \"how\": \"how\"}], \"notes\": \"how you set it up, what data is loaded, and the main areas of the app\"}\n- static mode: the production build in ./.ui-capture/out, with index.html as its entry. It will be served from the root of a plain static file server; unknown paths fall back to index.html.\n- server mode: ./.ui-capture/start.sh, which starts everything the app needs (stubs included) in the foreground and serves the UI at http://localhost:4409/ (it gets PORT=4409). It runs with the same PATH and restrictions as your shell, plus no network at all except localhost, so everything must already be installed, built and seeded (or seeded by start.sh itself).\n- Put any scripts you write for seeding or stubbing in ./.ui-capture/ too; they're kept with the setup record.\n\n# Order of work\nYou have 90 minutes in total, and anything unfinished when time runs out is lost. So work in this order:\n1. Get the app building and running with its stubs, and write the contract above (app.json plus out/ or start.sh), even if it has only a little data so far.\n2. Then build out the data, re-running your seed and checking the app still loads after each substantial step, so that a working state with the data loaded so far is always in place.\nWrite large data sets with a short generator script rather than as one long literal file.\n\nI'll open it at 1440×900.",
+  "model": {
+    "model": "claude-opus-5-5",
+    "effort": "high"
+  },
+  "sandbox": true,
+  "startedAt": "2026-11-17T03:08:01.232Z",
+  "finishedAt": "2026-11-17T03:22:27.664Z",
+  "verification": {
+    "ok": true,
+    "problems": [],
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedRequests": [],
+    "textChars": 2118,
+    "visibleElements": 1029,
+    "title": "OTelBin – by Dash0"
+  },
+  "repairs": 1,
+  "session": {
+    "rounds": 2,
+    "numTurns": 67,
+    "costUsd": 5.493282599999999,
+    "durationMs": 864190,
+    "models": [
+      "claude-opus-5-5"
+    ],
+    "usage": {
+      "input_tokens": 124,
+      "cache_creation_input_tokens": 117486,
+      "cache_read_input_tokens": 4712662,
+      "output_tokens": 54843
+    },
+    "timedOut": false
+  },
+  "changes": {
+    "files": 4,
+    "insertions": 27,
+    "deletions": 1,
+    "patchBytes": 2257,
+    "patch": "setup.patch"
+  }
+}

@@ -1,0 +1,64 @@
+# Codebook proposal (new-entry) — review with: node scripts/proposals.ts show gen-002 turn-by-turn-directions
+id: turn-by-turn-directions
+kind: new-entry
+status: open
+batch: gen-002
+codebookVersion: 1.0.0
+name: Turn-by-turn directions
+level: pattern
+parent: explore-space
+definition: An ordered list of route maneuvers from origin to destination, each with time/distance,
+  linked to a route drawn on a map, with inline hazard/closure notes and handoff actions (send to
+  phone, print).
+dimensions:
+  - name: Handoff
+    family: lifecycle
+    question: How can the route leave the screen?
+    subdimensions:
+      - id: handoff
+        name: Handoff
+        select: many
+        values:
+          - id: text-to-phone
+            name: Text to phone
+          - id: print
+            name: Print
+          - id: qr-code
+            name: QR code
+          - id: none
+            name: None
+  - name: Step-map linking
+    family: composition
+    question: Does selecting a step show it on the map?
+    subdimensions:
+      - id: stepLink
+        name: Step linking
+        select: one
+        values:
+          - id: highlight-segment
+            name: Highlight segment
+          - id: independent
+            name: Independent
+rationale:
+  - rater: rater-3
+    site: hospital-lobby-wayfinding-kiosk
+    text: Stepper and status-tracker describe flow/process progress, and map-explorer covers the map
+      itself, but none of them covers the list of route steps as a pattern of its own
+      (step-to-segment linking, per-step ETA, closure notes, step-free/pace options).
+sources:
+  - batch: gen-002
+    site: hospital-lobby-wayfinding-kiosk
+    url: http://hospital-lobby-wayfinding-kiosk.localhost:4318/
+    note: proposed by rater-3
+evidence:
+  - site: hospital-lobby-wayfinding-kiosk
+    rater: rater-3
+    bbox:
+      x: 896
+      y: 82
+      width: 520
+      height: 726
+    quote: Turn left and walk to elevator bank A.
+    note: Directions panel in hospital kiosk
+createdAt: 2026-11-18T02:52:40.106Z
+updatedAt: 2026-11-18T02:52:40.106Z

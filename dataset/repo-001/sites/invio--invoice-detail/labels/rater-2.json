@@ -1,0 +1,253 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "invio--invoice-detail",
+    "url": "http://localhost:4416/dashboard",
+    "finalUrl": "http://localhost:4416/invoices/88370606-1bfa-4113-a0b2-acc663391db6",
+    "status": 200,
+    "title": "Invio",
+    "capturedAt": "2026-11-18T03:34:03.772Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 900
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "finance",
+    "domainNote": "invoicing app (Invio) — invoice detail route showing a 404 error",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/invio/explore.json",
+      "repo": {
+        "name": "kittendevv/Invio",
+        "url": "https://github.com/kittendevv/Invio",
+        "commit": "c1d6b7a950e1f693b869fb7abad355004b93b576",
+        "license": "Unlicense"
+      },
+      "view": {
+        "slug": "invoice-detail",
+        "name": "Invoice detail",
+        "description": "Single invoice with customer and totals, action buttons (Mark as Paid, Send via Email, PDF), line items table and status history."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Top bar with Invio logo, Dashboard/Invoices/Customers links and a 'More' dropdown",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 66
+      },
+      "patterns": [
+        "app-shell",
+        "menu"
+      ]
+    },
+    {
+      "id": "main",
+      "role": "content",
+      "label": "Breadcrumb trail Invoices > invoice id, then a plain '404 / Invoice not found' message",
+      "bbox": {
+        "x": 80,
+        "y": 66,
+        "width": 1280,
+        "height": 148
+      },
+      "patterns": [
+        "breadcrumbs",
+        "empty-state"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 66
+          },
+          "quote": "Dashboard Invoices Customers More",
+          "region": "header",
+          "note": "Persistent top navigation bar with logo and fixed destinations"
+        }
+      ],
+      "dims": {
+        "primary": "top-navigation-bar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations"
+        ],
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1259,
+            "y": 16,
+            "width": 97,
+            "height": 33
+          },
+          "quote": "More",
+          "region": "header",
+          "note": "<details>/<summary> 'More' trigger; when clicked live, opens a vertical list: Products, Settings, Users, Logout, each with an icon"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click",
+        "structure": "flat",
+        "item": [
+          "label",
+          "icon"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    },
+    {
+      "id": "breadcrumbs",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 96,
+            "y": 98,
+            "width": 384,
+            "height": 20
+          },
+          "quote": "Invoices 88370606 1bfa 4113 A0b2 Acc663391db6",
+          "region": "main",
+          "note": "Two-step location trail with chevron separator; ancestor is a link"
+        }
+      ],
+      "dims": {
+        "type": "location",
+        "truncation": "full-path",
+        "interaction": [
+          "click-to-go-up"
+        ],
+        "placement": "above-the-title"
+      }
+    },
+    {
+      "id": "empty-state",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 96,
+            "y": 142,
+            "width": 250,
+            "height": 48
+          },
+          "quote": "404 Invoice not found",
+          "region": "main",
+          "note": "Bare error state for a missing record; text only, no action or illustration"
+        }
+      ],
+      "dims": {
+        "cause": "no-access-or-error",
+        "content": [
+          "explanation"
+        ],
+        "starters": "none",
+        "recovery": "none"
+      }
+    },
+    {
+      "id": "banner",
+      "status": "absent",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 96,
+            "y": 142,
+            "width": 250,
+            "height": 48
+          },
+          "note": "Error is the page content itself, not a banner across a region"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "web app with top navigation bar and single content column; content area shows breadcrumb and a 404 error message",
+    "regions": [
+      "header",
+      "main"
+    ],
+    "density": "sparse"
+  },
+  "aesthetics": {
+    "palette": [
+      "#eef1f9",
+      "#f7f8fc",
+      "#202269"
+    ],
+    "colorRoles": {
+      "background": "#eef1f9",
+      "surface": "#f7f8fc",
+      "text": "#202269",
+      "primary": "#202269"
+    },
+    "typography": "Inter throughout (rendered with a system sans fallback look): logo 20px/600, nav and breadcrumb 14px/400, body/heading 16px/400",
+    "typeScale": "Very flat: 20px semibold logo, 16px regular h1 '404' (no emphasis), 14px nav/breadcrumb text",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "generous",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "minimal",
+      "plain",
+      "calm",
+      "utilitarian"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T03:34:49.574Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 5,
+    "usage": {
+      "input_tokens": 10,
+      "cache_creation_input_tokens": 13494,
+      "cache_read_input_tokens": 105039,
+      "output_tokens": 1977
+    }
+  },
+  "notes": "Captured an error route: the dashboard URL redirected to a non-existent invoice, so main content is just '404 / Invoice not found' with an unstyled h1 the same size as body text. Monochrome navy (#202269) on pale lavender-blue (#eef1f9); header slightly lighter (#f7f8fc) separated by a hairline bottom border. Line icons (lucide-like) beside each nav item; 'More' is a native <details> dropdown with Products, Settings, Users, Logout. 8px radii on nav hover states."
+}

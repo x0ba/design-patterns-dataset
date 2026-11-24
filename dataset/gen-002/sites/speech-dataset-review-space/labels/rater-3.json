@@ -1,0 +1,849 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "gen-002",
+  "site": {
+    "slug": "speech-dataset-review-space",
+    "url": "http://speech-dataset-review-space.localhost:4318/",
+    "finalUrl": "http://speech-dataset-review-space.localhost:4318/",
+    "status": 200,
+    "title": "Driftfield — Weekly data review",
+    "capturedAt": "2026-11-18T03:17:54.628Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 2542
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "ai-tools",
+    "domainNote": "ML dataset review tool for speech recognition: embedding map of eval clips, regression triage, A/B region comparison and clip listening for a timed weekly team review",
+    "provenance": {
+      "source": "generated",
+      "generation": "generated/gen-002/speech-dataset-review-space/generation.json",
+      "generator": {
+        "id": "opus",
+        "model": "claude-opus-5-5",
+        "effort": "high"
+      },
+      "brief": {
+        "domain": "ai-tools",
+        "archetype": "explore-space",
+        "context": "shared-screen",
+        "product": "Driftfield"
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Top bar: Driftfield logo, review title and meta, 4-step review stepper, countdown timer, participant avatar stack",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 62
+      },
+      "patterns": [
+        "app-shell",
+        "stepper",
+        "co-editing-presence"
+      ]
+    },
+    {
+      "id": "left-sidebar",
+      "role": "sidebar",
+      "label": "Regions/Clusters tabs, flagged RF-0042 card with stats, 'No region drawn yet' outcome card with Draw region CTA, saved regions list with A/B assign buttons",
+      "bbox": {
+        "x": 0,
+        "y": 62,
+        "width": 276,
+        "height": 2480
+      },
+      "patterns": [
+        "tabs",
+        "card",
+        "badge",
+        "stat-tile",
+        "empty-state"
+      ]
+    },
+    {
+      "id": "map-view",
+      "role": "main-visualization",
+      "label": "2D/3D embedding scatter of eval clips coloured by WER change, cluster callout labels, A/B region outlines, floating toolbar, colour legend with encoding dropdown, minimap inset",
+      "bbox": {
+        "x": 276,
+        "y": 62,
+        "width": 728,
+        "height": 2268
+      },
+      "patterns": [
+        "chart",
+        "focus-context",
+        "coordinated-views",
+        "choice-control",
+        "filter-controls",
+        "tooltip"
+      ]
+    },
+    {
+      "id": "clip-player",
+      "role": "media-player",
+      "label": "Clip audio player: play, prev/next clip, waveform scrubber, metadata chips, reference vs v41 vs v42 transcript diff",
+      "bbox": {
+        "x": 276,
+        "y": 2330,
+        "width": 728,
+        "height": 212
+      },
+      "patterns": [
+        "media-player"
+      ]
+    },
+    {
+      "id": "compare-panel",
+      "role": "comparison",
+      "label": "Compare A vs B: item pickers, attribute rows with A/B/All data columns, WER-by-SNR diverging bar chart, environment/accent stacked bars",
+      "bbox": {
+        "x": 1005,
+        "y": 62,
+        "width": 435,
+        "height": 585
+      },
+      "patterns": [
+        "comparison-table",
+        "chart"
+      ]
+    },
+    {
+      "id": "listen-panel",
+      "role": "list",
+      "label": "Listen: A/B clip toggle, Worst regressions/Noisiest/Random sample segmented control, 40 clip rows with play buttons, SNR and WER change pills",
+      "bbox": {
+        "x": 1005,
+        "y": 647,
+        "width": 435,
+        "height": 1895
+      },
+      "patterns": [
+        "playlist-queue",
+        "sort-control",
+        "choice-control",
+        "badge"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "chart",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 276,
+            "y": 62,
+            "width": 728,
+            "height": 2268
+          },
+          "note": "Dense 2D scatter (UMAP-like) of eval clips, colour = per-clip WER change; cluster callout labels and drawn ellipse outlines; hover shows a rich tooltip, click loads clip into player",
+          "region": "map-view",
+          "quote": "RF-0042 · flagged"
+        },
+        {
+          "bbox": {
+            "x": 286,
+            "y": 2202,
+            "width": 330,
+            "height": 118
+          },
+          "note": "Legend with diverging teal→orange→coral scale and encoding dropdown",
+          "region": "map-view",
+          "quote": "WER change v41 → v42"
+        },
+        {
+          "bbox": {
+            "x": 1019,
+            "y": 450,
+            "width": 407,
+            "height": 115
+          },
+          "note": "Secondary bar chart: diverging bars of WER change per SNR band with counts",
+          "region": "compare-panel",
+          "quote": "WER change by SNR band"
+        }
+      ],
+      "dims": {
+        "markType": "points",
+        "channels": [
+          "position",
+          "colour-hue-or-value"
+        ],
+        "scale": "linear",
+        "faceting": "single-plot",
+        "inspectBy": [
+          "hover-tooltip",
+          "click-to-select",
+          "brush-a-region"
+        ],
+        "authorship": "builder-ui",
+        "annotation": [
+          "callout-labels"
+        ]
+      }
+    },
+    {
+      "id": "focus-context",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 860,
+            "y": 2186,
+            "width": 134,
+            "height": 134
+          },
+          "note": "Minimap inset of whole embedding with a viewport rectangle and zoom level '4.3×'",
+          "region": "map-view",
+          "quote": "4.3×"
+        },
+        {
+          "bbox": {
+            "x": 787,
+            "y": 75,
+            "width": 206,
+            "height": 29
+          },
+          "note": "Fly to flagged area, show all, zoom in/out",
+          "region": "map-view",
+          "quote": "⚑ RF-0042"
+        }
+      ],
+      "dims": {
+        "relation": "inset-mini-map-with-live-focus",
+        "arrangement": "overview-inset",
+        "moveBy": [
+          "pan-and-zoom-the-space",
+          "search-then-frame",
+          "follow-a-selection"
+        ],
+        "interest": "uniform-zoom",
+        "orientation": [
+          "locator-inset",
+          "breadcrumb-of-scale"
+        ]
+      }
+    },
+    {
+      "id": "coordinated-views",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 276,
+            "y": 62,
+            "width": 728,
+            "height": 2268
+          },
+          "note": "Live: clicking a clip in Listen list plays it in the player and moves the ring marker on the map; clicking a map point loads it into the player",
+          "region": "map-view"
+        },
+        {
+          "bbox": {
+            "x": 1005,
+            "y": 647,
+            "width": 435,
+            "height": 1895
+          },
+          "note": "Listen list linked to player and map selection",
+          "region": "listen-panel",
+          "quote": "40 of 3,425"
+        }
+      ],
+      "dims": {
+        "linkChannel": [
+          "selection-highlight"
+        ],
+        "arrangement": "split-panes",
+        "trigger": [
+          "click-a-mark"
+        ],
+        "scope": "one-mark",
+        "feedback": [
+          "highlight-in-place"
+        ],
+        "authorship": "fixed-published-dashboard"
+      }
+    },
+    {
+      "id": "comparison-table",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1019,
+            "y": 170,
+            "width": 407,
+            "height": 250
+          },
+          "note": "A vs B vs All data columns over fixed attribute rows; A's bad values in orange/red, change pills red/green",
+          "region": "compare-panel",
+          "quote": "Regressed ≥ 10 pts"
+        },
+        {
+          "bbox": {
+            "x": 1019,
+            "y": 108,
+            "width": 408,
+            "height": 49
+          },
+          "note": "A and B item slots with clear ×, Swap button; items assigned via A/B buttons in sidebar lists",
+          "region": "compare-panel",
+          "quote": "C-088 en-KE · street"
+        }
+      ],
+      "dims": {
+        "criteria": "fixed-spec-rows",
+        "valueForm": [
+          "raw-values",
+          "bars"
+        ],
+        "origin": "added-from-the-overview",
+        "orientation": "items-as-columns",
+        "emphasis": "highlight-differences",
+        "decision": [
+          "none"
+        ]
+      }
+    },
+    {
+      "id": "stepper",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 720,
+            "y": 15,
+            "width": 430,
+            "height": 32
+          },
+          "note": "Horizontal step trail of the review agenda; step 1 checked, step 2 current",
+          "region": "header",
+          "quote": "Locate 2 Compare 3 Bound 4 Name & send"
+        }
+      ],
+      "dims": {
+        "form": "horizontal",
+        "states": [
+          "current",
+          "completed"
+        ],
+        "labels": "titles"
+      }
+    },
+    {
+      "id": "co-editing-presence",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1268,
+            "y": 18,
+            "width": 162,
+            "height": 26
+          },
+          "note": "Avatar stack of initials for review participants; PO highlighted in orange (likely presenter)",
+          "region": "header",
+          "quote": "PO AO DS MZ RM SL JW"
+        }
+      ],
+      "dims": {
+        "cues": [
+          "avatar-and-colour"
+        ],
+        "placement": [
+          "top-avatar-stack"
+        ],
+        "density": "show-everyone"
+      }
+    },
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 62
+          },
+          "note": "Persistent top bar with brand and session title over a fixed three-column workspace (left sidebar, map, right compare/listen panel)",
+          "region": "header",
+          "quote": "Driftfield"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "contextual-panel",
+        "visibility": "always-visible",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 62,
+            "width": 276,
+            "height": 42
+          },
+          "note": "Underlined tabs; live check: Clusters swaps to filterable cluster list",
+          "region": "left-sidebar",
+          "quote": "Regions Clusters 212"
+        }
+      ],
+      "dims": {
+        "placement": "top",
+        "label": [
+          "text",
+          "badge-count"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      }
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 12,
+            "y": 145,
+            "width": 251,
+            "height": 179
+          },
+          "note": "Flagged region card, brown-outlined, with A/B assign buttons and three stats",
+          "region": "left-sidebar",
+          "quote": "RF-0042 · v42 regression"
+        },
+        {
+          "bbox": {
+            "x": 12,
+            "y": 585,
+            "width": 251,
+            "height": 67
+          },
+          "note": "Saved region compact outlined rows with status dot, owner, ticket id and A/B buttons",
+          "region": "left-sidebar",
+          "quote": "Overlapping speakers"
+        }
+      ],
+      "dims": {
+        "media": "none",
+        "actions": "action-row",
+        "shape": "vertical",
+        "style": "outlined"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 150,
+            "y": 74,
+            "width": 38,
+            "height": 20
+          },
+          "note": "Count pill on Clusters tab",
+          "region": "left-sidebar",
+          "quote": "212"
+        },
+        {
+          "bbox": {
+            "x": 1366,
+            "y": 752,
+            "width": 56,
+            "height": 20
+          },
+          "note": "Red WER-change status pills per clip row",
+          "region": "listen-panel",
+          "quote": "+25 pts"
+        }
+      ],
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "stat-tile",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Numbers with labels appear inside the flagged card rather than as standalone tiles",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 24,
+            "y": 240,
+            "width": 230,
+            "height": 36
+          },
+          "note": "Three key numbers with small labels",
+          "region": "left-sidebar",
+          "quote": "3,425 eval 8,990 train 14%→23% WER"
+        }
+      ],
+      "dims": {
+        "context": [
+          "label"
+        ],
+        "encoding": "number-only",
+        "drill": "none"
+      }
+    },
+    {
+      "id": "empty-state",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 12,
+            "y": 361,
+            "width": 251,
+            "height": 186
+          },
+          "note": "Dashed outcome card explaining nothing drawn yet with primary yellow CTA and a start-from-template option",
+          "region": "left-sidebar",
+          "quote": "No region drawn yet"
+        }
+      ],
+      "dims": {
+        "cause": "first-use",
+        "content": [
+          "explanation",
+          "create-action",
+          "templates-or-samples"
+        ],
+        "starters": "templates",
+        "recovery": "create-the-first-item"
+      }
+    },
+    {
+      "id": "media-player",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 276,
+            "y": 2330,
+            "width": 728,
+            "height": 212
+          },
+          "note": "Round play button, prev/next clip, waveform scrubber with time readout, metadata chips, transcript diff (reference/v41/v42) whose words highlight in sync while playing (verified live)",
+          "region": "clip-player",
+          "quote": "ev-964647 0:00.0 / 0:04.4"
+        }
+      ],
+      "dims": {
+        "controls": [
+          "play-pause",
+          "scrubber",
+          "skip-forward-back"
+        ],
+        "position": [
+          "time-scrubber",
+          "lyrics-synced-to-time"
+        ],
+        "mode": "inline-embed",
+        "resume": "always-from-start"
+      }
+    },
+    {
+      "id": "playlist-queue",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "rationale": "Clip list feeds the player and prev/next steps through it, but it is a ranked sample list, not an editable queue",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1019,
+            "y": 735,
+            "width": 407,
+            "height": 1800
+          },
+          "note": "Clip rows with play buttons, id, accent·env·duration, SNR, WER change",
+          "region": "listen-panel",
+          "quote": "ev-144626 en-NG · street · 3.1 s"
+        }
+      ],
+      "dims": {
+        "structure": "flat-up-next-list",
+        "representation": [
+          "title-and-creator",
+          "duration"
+        ],
+        "surface": "side-panel",
+        "persistence": "session-only"
+      }
+    },
+    {
+      "id": "sort-control",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1022,
+            "y": 700,
+            "width": 290,
+            "height": 23
+          },
+          "note": "Segmented control choosing order/sampling of clip list",
+          "region": "listen-panel",
+          "quote": "Worst regressions Noisiest Random sample"
+        }
+      ],
+      "dims": {
+        "keys": "fixed-list",
+        "form": "segmented-tabs"
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 289,
+            "y": 76,
+            "width": 276,
+            "height": 27
+          },
+          "note": "Segmented tool (Select / Draw region) and projection (2D / 3D) toggles",
+          "region": "map-view",
+          "quote": "2D 3D"
+        },
+        {
+          "bbox": {
+            "x": 350,
+            "y": 2216,
+            "width": 256,
+            "height": 28
+          },
+          "note": "Native select choosing colour encoding (8 options)",
+          "region": "map-view",
+          "quote": "WER change v41 → v42"
+        },
+        {
+          "bbox": {
+            "x": 1297,
+            "y": 662,
+            "width": 126,
+            "height": 23
+          },
+          "note": "A clips / B clips segmented toggle",
+          "region": "listen-panel",
+          "quote": "A clips B clips"
+        }
+      ],
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "segmented-control",
+        "option": [
+          "label-only"
+        ],
+        "timing": "immediately",
+        "largeSets": "show-all"
+      }
+    },
+    {
+      "id": "filter-controls",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Only the collapsed 'Filters & layers ▾' trigger is in the capture; live it expands environment chips and layer toggles inside the legend",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 498,
+            "y": 2236,
+            "width": 106,
+            "height": 20
+          },
+          "note": "Disclosure button for environment filter chips and layers",
+          "region": "map-view",
+          "quote": "Filters & layers ▾"
+        }
+      ],
+      "dims": {
+        "placement": "toolbar-popover",
+        "types": [
+          "toggle-chips"
+        ],
+        "origin": "developer-defined"
+      }
+    },
+    {
+      "id": "tooltip",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 276,
+            "y": 62,
+            "width": 728,
+            "height": 2268
+          },
+          "note": "Live: hovering a point shows rich tooltip (clip id, accent, SNR, WER change, 'Click to load into the player'); buttons carry title tooltips with shortcuts e.g. 'Zoom in (+)'",
+          "region": "map-view"
+        }
+      ],
+      "dims": {
+        "trigger": [
+          "hover"
+        ],
+        "content": "rich-content",
+        "timing": "until-the-pointer-leaves"
+      }
+    },
+    {
+      "id": "zoomable-canvas",
+      "status": "absent",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 276,
+            "y": 62,
+            "width": 728,
+            "height": 2268
+          },
+          "note": "Pan/zoom with minimap, but contents are data points of a projection, not free-placed objects; coded as chart + focus-context"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "data-table",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1019,
+            "y": 735,
+            "width": 407,
+            "height": 300
+          },
+          "note": "Listen list is rows without column headers or sort/filter by column"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "three-column analytic workspace under a slim top bar: left sidebar (regions/clusters), centre embedding map with floating toolbars and docked clip player, right panel stacked Compare and Listen; inner panels scroll independently",
+    "regions": [
+      "header",
+      "left-sidebar",
+      "map-view",
+      "clip-player",
+      "compare-panel",
+      "listen-panel"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#0a0f12",
+      "#10171b",
+      "#0d1215",
+      "#e8eef1",
+      "#b0bdc4",
+      "#75858e",
+      "#ff8f7c",
+      "#ffe08a",
+      "#ffb547",
+      "#5bc0f0",
+      "#b48cf2",
+      "#2b3c45"
+    ],
+    "colorRoles": {
+      "background": "#0a0f12",
+      "surface": "#10171b",
+      "text": "#e8eef1",
+      "muted": "#75858e",
+      "secondary-text": "#b0bdc4",
+      "primary": "#ffe08a",
+      "accent": "#ffb547",
+      "regression": "#ff8f7c",
+      "compare-b": "#5bc0f0",
+      "status-relabeling": "#b48cf2",
+      "border": "#2b3c45"
+    },
+    "typography": "IBM Plex Sans for UI text, headings and labels; IBM Plex Mono for clip ids, dB/WER figures, transcript-row labels, axis/legend numbers and cluster codes; small uppercase letter-spaced section labels (FLAGGED THIS WEEK, SAVED REGIONS)",
+    "typeScale": "Compact and flat: 18px session title and 17px brand, 15px panel headings/key numbers (semibold), body 13–14px, most data 12px, meta 11px; hierarchy via weight and colour (#e8eef1 vs #b0bdc4 vs #75858e) rather than size",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "data-visualization"
+    ],
+    "iconStyle": "line",
+    "whitespace": "tight",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "technical",
+      "dark",
+      "dense",
+      "analytical",
+      "focused"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T03:23:16.271Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 16,
+    "usage": {
+      "input_tokens": 32,
+      "cache_creation_input_tokens": 67056,
+      "cache_read_input_tokens": 818274,
+      "output_tokens": 12252
+    }
+  },
+  "notes": "Dark control-room aesthetic for a timed (60-min countdown '35:49 left of 60 min') weekly ML data review meeting. Two-item A/B colour coding (amber A = flagged regression, sky-blue B = comparison cluster) runs through every view: map ellipses, compare columns, bar charts, sidebar A/B buttons, Listen toggle. Diverging teal→amber→coral scale encodes WER change; regressions get coral pill badges. Clip player shows word-level transcript diff (reference vs v41 vs v42) with substitutions/insertions/deletions highlighted. 3D mode adds a hint popover. The countdown timer + agenda stepper + avatars suggest a facilitated meeting mode; no codebook entry for a meeting timer. Full screenshot stretches the map and lists to 2542px; at 900px the map fills the centre with the player docked under it."
+}

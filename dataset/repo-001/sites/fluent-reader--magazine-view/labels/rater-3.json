@@ -1,0 +1,457 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "fluent-reader--magazine-view",
+    "url": "http://localhost:4432/",
+    "finalUrl": "http://localhost:4432/",
+    "status": 200,
+    "title": "Fluent Reader",
+    "capturedAt": "2026-11-18T06:24:09.629Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 5400
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "news-publishing",
+    "domainNote": "desktop RSS feed reader app (Fluent Reader, Windows Fluent UI styling)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/fluent-reader/explore.json",
+      "repo": {
+        "name": "yang991178/fluent-reader",
+        "url": "https://github.com/yang991178/fluent-reader",
+        "commit": "5912070309759eff37204a5046caba3c780fa4c0",
+        "license": "BSD-3-Clause"
+      },
+      "view": {
+        "slug": "magazine-view",
+        "name": "All articles (Magazine view)",
+        "description": "Article feed in Magazine layout: single-column list of articles with thumbnails, titles, snippets, source/author and time, read items dimmed."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "title-bar",
+      "role": "header",
+      "label": "Custom window title bar: hamburger, 'All articles' title, Refresh / Mark all read / Notifications / View / Settings icons, window controls",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 32
+      },
+      "patterns": [
+        "app-shell",
+        "menu",
+        "view-switcher",
+        "filter-controls"
+      ]
+    },
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Grey nav pane: Search, All articles (93), Subscriptions tree of groups and feeds with favicons and unread counts",
+      "bbox": {
+        "x": 0,
+        "y": 32,
+        "width": 280,
+        "height": 5368
+      },
+      "patterns": [
+        "app-shell",
+        "tree-view",
+        "badge"
+      ]
+    },
+    {
+      "id": "article-list",
+      "role": "feed",
+      "label": "Chronological magazine-view list of articles: title, snippet, optional 200x160 thumbnail, source favicon/author, unread dot and relative time; read items greyed",
+      "bbox": {
+        "x": 486,
+        "y": 60,
+        "width": 748,
+        "height": 5340
+      },
+      "patterns": [
+        "feed",
+        "card",
+        "badge",
+        "overview-detail"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 280,
+            "height": 900
+          },
+          "note": "persistent left nav pane with hamburger toggle ('Close menu'), Search, All articles, subscription tree",
+          "quote": "All articles",
+          "region": "sidebar"
+        },
+        {
+          "bbox": {
+            "x": 280,
+            "y": 0,
+            "width": 1160,
+            "height": 32
+          },
+          "note": "top bar with view title and global action icons",
+          "quote": "All articles",
+          "region": "title-bar"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations",
+          "user-pinned-items",
+          "live-counts"
+        ],
+        "visibility": "toggle-button",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "tree-view",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 150,
+            "width": 280,
+            "height": 740
+          },
+          "note": "role=tree; groups Tech News / Development expanded with chevrons, Science/World News collapsed; feeds indented at level 2 with favicons and counts",
+          "quote": "Tech News",
+          "region": "sidebar"
+        }
+      ],
+      "dims": {
+        "content": [
+          "label",
+          "type-icon",
+          "count-badge"
+        ],
+        "expandBy": [
+          "disclosure-triangle"
+        ],
+        "selection": "single-node",
+        "source": "containment",
+        "density": "comfortable"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 240,
+            "y": 70,
+            "width": 35,
+            "height": 24
+          },
+          "note": "unread count per tree node",
+          "quote": "93",
+          "region": "sidebar"
+        },
+        {
+          "bbox": {
+            "x": 1170,
+            "y": 175,
+            "width": 45,
+            "height": 20
+          },
+          "note": "orange unread dot next to timestamp on unread articles",
+          "quote": "58m",
+          "region": "article-list"
+        }
+      ],
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "rule": "everything-unread",
+        "aggregation": "rolled-up-to-parent"
+      }
+    },
+    {
+      "id": "feed",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 486,
+            "y": 60,
+            "width": 748,
+            "height": 840
+          },
+          "note": "stream of articles from subscribed sources, newest first (58m, 1h, 2h, 4h...)",
+          "quote": "Show HN: I built a SQLite extension for vector search in 400 lines of C",
+          "region": "article-list"
+        }
+      ],
+      "dims": {
+        "density": "card-preview",
+        "heterogeneity": [
+          "mixed-media-types"
+        ],
+        "ordering": "chronological",
+        "sources": [
+          "followed-accounts"
+        ],
+        "arrangement": "single-column",
+        "nesting": [
+          "flat"
+        ]
+      }
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 486,
+            "y": 397,
+            "width": 748,
+            "height": 209
+          },
+          "note": "article item: side thumbnail 200x160, title, 3-line snippet, source row; no container fill/border, separated by hairline dividers; text-only items lack the thumbnail",
+          "quote": "COP31 talks run into overtime as nations clash over finance",
+          "region": "article-list"
+        }
+      ],
+      "dims": {
+        "media": "side-thumbnail",
+        "actions": "none",
+        "shape": "horizontal",
+        "style": "borderless",
+        "target": "whole-card"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1168,
+            "y": 0,
+            "width": 48,
+            "height": 32
+          },
+          "note": "'View' icon button; live check opens a sectioned dropdown (View / Filtering / Search) with icons and checkmarks — not open in capture",
+          "region": "title-bar"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click",
+        "structure": "sections",
+        "item": [
+          "label",
+          "icon",
+          "checkmark-state"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    },
+    {
+      "id": "view-switcher",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1168,
+            "y": 0,
+            "width": 48,
+            "height": 32
+          },
+          "note": "View menu offers Card view, List view, Magazine view (checked), Compact view — verified live, hidden in capture",
+          "region": "title-bar"
+        }
+      ],
+      "dims": {
+        "views": [
+          "grid",
+          "list"
+        ],
+        "form": "dropdown"
+      }
+    },
+    {
+      "id": "filter-controls",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "rationale": "Filtering options (All articles / Unread only / Starred only) live inside the View menu, only visible after clicking; not visible in capture.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1168,
+            "y": 0,
+            "width": 48,
+            "height": 32
+          },
+          "note": "View menu 'Filtering' section with radio-like checkmarks",
+          "region": "title-bar"
+        }
+      ],
+      "dims": {
+        "placement": "toolbar-popover",
+        "types": [
+          "toggle-chips"
+        ],
+        "origin": "developer-defined"
+      }
+    },
+    {
+      "id": "overview-detail",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "rationale": "Only the overview list is captured; live check shows clicking an article opens a modal reader overlay with prev/next arrows.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 486,
+            "y": 60,
+            "width": 748,
+            "height": 840
+          },
+          "note": "list overview; read items rendered grey (style abstraction)",
+          "region": "article-list"
+        }
+      ],
+      "dims": {
+        "attributePlacement": [
+          "in-both-views"
+        ],
+        "abstraction": [
+          "style",
+          "summary"
+        ],
+        "truncation": "ellipsis",
+        "relationship": "one-to-one",
+        "openIn": "pop-up",
+        "overviewType": [
+          "list"
+        ],
+        "detailMultiplicity": "one-at-a-time",
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "whole-item"
+      }
+    },
+    {
+      "id": "search-results",
+      "status": "absent",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 32,
+            "width": 280,
+            "height": 32
+          },
+          "note": "Search is only a nav entry; no query/results shown",
+          "quote": "Search"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "desktop app shell: left sidebar subscription tree (280px, grey) + custom title bar with icon toolbar and window controls + centered single-column article list (~748px) in magazine view",
+    "regions": [
+      "title-bar",
+      "sidebar",
+      "article-list"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#faf9f8",
+      "#edebe9",
+      "#161514",
+      "#8a8886",
+      "#242424",
+      "#0078d4",
+      "#f7a134",
+      "#e1dfdd"
+    ],
+    "colorRoles": {
+      "background": "#faf9f8",
+      "surface": "#edebe9",
+      "text": "#161514",
+      "muted": "#8a8886",
+      "primary": "#0078d4",
+      "accent": "#f7a134",
+      "border": "#e1dfdd"
+    },
+    "typography": "Segoe UI throughout (system Fluent UI font): 18px/600 article titles, 14px body snippets and sidebar labels, 12px meta (source, author, time, counts)",
+    "typeScale": "compact, low-contrast scale: 18px semibold titles vs 14px regular body vs 12px meta; hierarchy mainly via weight and grey (#8a8886) for read/muted text",
+    "shape": "sharp",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "photography",
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "clean",
+      "calm",
+      "native-desktop",
+      "utilitarian",
+      "fluent"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T06:25:42.368Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 10,
+    "usage": {
+      "input_tokens": 20,
+      "cache_creation_input_tokens": 34376,
+      "cache_read_input_tokens": 319272,
+      "output_tokens": 4909
+    }
+  },
+  "notes": "Fluent Reader, an Electron RSS reader mimicking Windows 11 / Fluent Design: custom title bar with window controls (minimize/maximize/close) in-page, grey #edebe9 nav pane with blue left selection bar on 'All articles', favicon squares for each feed. Article list in 'Magazine view': centered ~748px column, hairline dividers, 200x160 thumbnails on left when available. Read articles fade to grey (#8a8886) title and body; unread show a small orange dot before relative timestamp. View menu (eye icon) holds view modes (Card/List/Magazine/Compact), filtering (All/Unread/Starred) and search options. Clicking an article opens a modal reader overlay with serif typography and prev/next arrows (not in capture). Sidebar has a filter icon button beside 'Subscriptions'."
+}
