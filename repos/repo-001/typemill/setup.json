@@ -1,0 +1,87 @@
+{
+  "batch": "repo-001",
+  "slug": "typemill",
+  "ok": true,
+  "repo": {
+    "name": "typemill/typemill",
+    "url": "https://github.com/typemill/typemill",
+    "commit": "632673616874ba0f7fe513cc5c61cd4a7f4efa1e",
+    "branch": "v2.x",
+    "license": "MIT"
+  },
+  "domain": "reference-docs",
+  "port": 4491,
+  "checkoutRoot": "~/.cache/design-patterns-dataset/repos",
+  "mode": "server",
+  "entry": "/tm/content/visual",
+  "app": {
+    "mode": "server",
+    "entry": "/tm/content/visual",
+    "login": {
+      "username": "dkowalski",
+      "email": "dana.kowalski@ledgerline.io",
+      "password": "Ledgerline-2026"
+    },
+    "stubs": [
+      {
+        "service": "typemill.net version checks (system / plugins.typemill.net / themes.typemill.net), used by the System, Plugins and Themes screens",
+        "how": "Models/ApiCalls.php (the app's only outbound HTTP client) rewrites https://<host>/<path> to $TYPEMILL_SERVICE_STUB_URL/<host>/<path> when that env var is set. start.sh sets it to http://127.0.0.1:4492, where a second frankenphp php-server serves .ui-capture/stubs/index.php and returns the current versions (2.28.2, cyanine 2.5.1, demo 1.0.0)"
+      },
+      {
+        "service": "service.typemill.net license service",
+        "how": "same local stub; answers 'no license' (free edition, which is the normal state)"
+      },
+      {
+        "service": "OpenAI / Anthropic APIs behind the Kixote AI assistant (off by default; no keys configured)",
+        "how": "same local stub; returns well-formed chat/completions, responses, messages and models payloads whose text is a shortened revision of the submitted content"
+      }
+    ],
+    "notes": "Typemill 2.28.2 (flat-file PHP CMS, Slim + Vue admin). Runtime: static FrankenPHP 1.13.5 binary (PHP 8.5.12 with gd/mbstring/fileinfo/session/iconv) and Composer 2.11.2, both pinned via mise http: backends in mise.toml. Composer deps were installed into system/vendor from composer.lock (dist URLs pointed to codeload.github.com because api.github.com is blocked; lock file left unchanged). start.sh runs `frankenphp php-server` (front-controller fallback to index.php) on PORT plus the service stub on 4492. The admin account was created through the real /tm/setup form; then .ui-capture/seed/seed.sh -> seed.php writes Typemill's own storage format (content/*.md published, *.txt draft blocks, *.yaml meta; settings/users/*.yaml; settings/settings.yaml; media/original|live|thumbs). Re-run `.ui-capture/seed/seed.sh` to regenerate (it wipes content/). Data: 'Ledgerline Help Center', the help center of a fictional invoicing and bookkeeping SaaS, maintained since Feb 2025. 96 content items in 10 sections (Getting Started, Invoicing, Expenses, Banking with a nested Bank feeds folder, Taxes, Payroll (beta), Reports, Integrations, Account & billing, and Release Notes as a posts folder with 21 releases from 2025-03 to 2026-10 plus an unpublished 4.13 draft) and a hidden, editor-restricted Internal folder. Status mix: 86 published, 5 modified (published with pending draft edits, orange in the navigation), 4 unpublished drafts (red), 1 hidden page, 1 member-restricted page (REST API), and 1 301 redirect (Billing FAQ). Created/modified dates are spread from 2025-02 to 2026-11 across 7 authors. 9 users across all roles (administrator dkowalski, manager skimura, editor jmensah, authors priyanair/tbrzezinski/aberg, contributors lfernandez/mokafor, member rholloway) with last-login times. Media: 9 generated screenshot-style PNGs (embedded in pages, plus hero images on release posts), one CSV in media/files, and the stock demo webp. Main areas: frontend site at /, editor at /tm/content/visual/<page> (visual) and /tm/content/raw/<page> (raw), with the page tree on the left, the publish bar and the meta tab; /tm/system (settings), /tm/themes, /tm/plugins, /tm/users (user list, filter by role), /tm/account."
+  },
+  "tools": {
+    "http:composer": "2.11.2",
+    "http:frankenphp": "1.13.5"
+  },
+  "prompt": "This is a checkout of typemill/typemill (https://github.com/typemill/typemill) at commit 632673616874. Typemill is a flat-file CMS based on Markdown and designed for informational websites like documentation, manuals, and handbooks.\n\nI want to see its user interface in a desktop browser, in the state a real, established user would see it. Please get the app running locally with its main interface working and realistic data in it.\n\n# Running it\n- Follow the repo's own setup docs and tooling. Take the simplest route that shows the real app: a static production build if the front end works without a backend, otherwise the app's own server (production or dev mode).\n- If it needs a database or other services, run them locally with an embedded or file-based option (SQLite, in-memory, JSON files, an embedded Postgres such as PGlite) or the app's demo/mock mode.\n- Don't redesign or restyle anything. Change only what's needed to build and run it.\n\n# Tools: use mise\nInstall every runtime and tool you need (node, the package manager, python, bun, ...) with mise, pinned to exact versions in a mise.toml at the repo root, so the setup can be reproduced. Match what the repo asks for (engines, .nvmrc, .tool-versions, packageManager). mise is already configured for this directory: `mise install` installs into ./.ui-capture/mise, and its shims come first on PATH, so `node`, `pnpm` and the rest resolve to the pinned versions. Don't use other copies of these tools or download runtimes by hand.\n\n# Secrets, API keys and external services: fake them\nThe app must not depend on anything outside this machine, and when it runs it has no network except localhost. Wherever it expects secrets, environment variables, API keys or third-party services (hosted auth or OAuth, payment providers, email, LLM or other AI APIs, maps, storage buckets, analytics, hosted databases):\n- Give the required variables placeholder values so the app starts.\n- Where it actually calls the service, make the call succeed locally with realistic responses: use the app's own mock, test or offline mode if it has one; otherwise point the client at a small local stub server that start.sh also starts, or swap in a stub at the integration boundary (the API client or service module). Keep stubs out of UI code. Responses should look like what the real service returns for a real user, e.g. an AI reply that actually answers, a payment history with real-looking amounts.\n- Calls the browser makes directly to outside services count too; point them at the local stub.\n- For sign-in through an outside provider, create a local account or use the app's dev sign-in so you can get past it.\nList every stub in app.json.\n\n# Data: like real use\nSeed it the way an established user's data would look after months of actual use: specific, plausible names and content for this kind of app; dates spread over time; a realistic mix of states (done, in progress, overdue, archived, ...); realistic volume (dozens to hundreds of records where the app revolves around records); short and long text; some messiness real data has. Start from the app's own demo or seed data if it has realistic data, and extend it if it's thin. Load data through the app's own paths (its API, import, seed scripts, or its database schema), never by hardcoding it into UI code. If the app needs an account, create one and attach the data to it. No lorem ipsum or \"Test 1\".\n\n# Environment\nThis shell is sandboxed: you can write only inside this directory (package-manager caches already point into ./.ui-capture/cache), and the network reaches only package registries, mise's download sources and GitHub (registry.npmjs.org, registry.yarnpkg.com, repo.yarnpkg.com, github.com, codeload.github.com, objects.githubusercontent.com, raw.githubusercontent.com, nodejs.org, mise.jdx.dev, mise-versions.jdx.dev, release-assets.githubusercontent.com, pypi.org, files.pythonhosted.org, binaries.prisma.sh, cdn.jsdelivr.net, unpkg.com). Docker isn't available. A process you start in the background can't be seen or stopped from a later command, so test servers on another port than 4491 (e.g. 5491) or in the foreground under `timeout`; anything still listening on 4491 is stopped before I check.\n\n# When you're done, leave this in ./.ui-capture/\n- app.json: {\"mode\": \"static\" or \"server\", \"entry\": \"/path where the main UI opens\", \"login\": null or {\"username\": \"...\", \"email\": \"...\", \"password\": \"...\"}, \"stubs\": [{\"service\": \"what was faked\", \"how\": \"how\"}], \"notes\": \"how you set it up, what data is loaded, and the main areas of the app\"}\n- static mode: the production build in ./.ui-capture/out, with index.html as its entry. It will be served from the root of a plain static file server; unknown paths fall back to index.html.\n- server mode: ./.ui-capture/start.sh, which starts everything the app needs (stubs included) in the foreground and serves the UI at http://localhost:4491/ (it gets PORT=4491). It runs with the same PATH and restrictions as your shell, plus no network at all except localhost, so everything must already be installed, built and seeded (or seeded by start.sh itself).\n- Put any scripts you write for seeding or stubbing in ./.ui-capture/ too; they're kept with the setup record.\n\n# Order of work\nYou have 90 minutes in total, and anything unfinished when time runs out is lost. So work in this order:\n1. Get the app building and running with its stubs, and write the contract above (app.json plus out/ or start.sh), even if it has only a little data so far.\n2. Then build out the data, re-running your seed and checking the app still loads after each substantial step, so that a working state with the data loaded so far is always in place.\nWrite large data sets with a short generator script rather than as one long literal file.\n\nI'll open it at 1440×900.",
+  "model": {
+    "model": "claude-opus-5-5",
+    "effort": "high"
+  },
+  "sandbox": true,
+  "startedAt": "2026-11-18T20:35:17.073Z",
+  "finishedAt": "2026-11-18T20:59:55.964Z",
+  "verification": {
+    "ok": true,
+    "problems": [],
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedRequests": [],
+    "textChars": 81,
+    "visibleElements": 20,
+    "title": "Login"
+  },
+  "repairs": 0,
+  "session": {
+    "rounds": 1,
+    "numTurns": 52,
+    "costUsd": 2.6534471999999996,
+    "durationMs": 1476558,
+    "models": [
+      "claude-opus-5-5"
+    ],
+    "usage": {
+      "input_tokens": 98,
+      "cache_creation_input_tokens": 110018,
+      "cache_read_input_tokens": 2791856,
+      "output_tokens": 60727
+    },
+    "timedOut": false
+  },
+  "changes": {
+    "files": 267,
+    "insertions": 2465,
+    "deletions": 469,
+    "patchBytes": 469047,
+    "patch": "setup.patch"
+  }
+}

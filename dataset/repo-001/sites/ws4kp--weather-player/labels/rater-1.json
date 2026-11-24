@@ -1,0 +1,417 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "ws4kp--weather-player",
+    "url": "http://localhost:4476/",
+    "finalUrl": "http://localhost:4476/",
+    "status": 200,
+    "title": "WeatherStar 4000+",
+    "capturedAt": "2026-11-18T20:35:15.405Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 900
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "utilities",
+    "domainNote": "Retro WeatherStar 4000 weather-channel emulator (local forecast slideshow)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/ws4kp/explore.json",
+      "repo": {
+        "name": "vbguyny/ws4kp",
+        "url": "https://github.com/vbguyny/ws4kp",
+        "commit": "bb6a9aee9485b114cec0b7b834f84803151782ad",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "weather-player",
+        "name": "WeatherStar player with settings",
+        "description": "Main screen: location search bar, retro WeatherStar TV canvas showing the Current Conditions segment with playback controls, GitHub buttons, and the station info, units, theme, scroll-text and auto-refresh settings below."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "location-bar",
+      "role": "search-bar",
+      "label": "Location text input with GPS button, GO and Reset buttons",
+      "bbox": {
+        "x": 8,
+        "y": 8,
+        "width": 640,
+        "height": 29
+      },
+      "patterns": [
+        "text-field",
+        "form"
+      ]
+    },
+    {
+      "id": "player",
+      "role": "media-stage",
+      "label": "Black player frame: iframe of WeatherStar slides with side and bottom icon controls",
+      "bbox": {
+        "x": 8,
+        "y": 55,
+        "width": 640,
+        "height": 236
+      },
+      "patterns": [
+        "media-player"
+      ]
+    },
+    {
+      "id": "github-buttons",
+      "role": "social-strip",
+      "label": "GitHub buttons: GitHub, Star 412, Fork 121, Issue, Follow",
+      "bbox": {
+        "x": 11,
+        "y": 309,
+        "width": 630,
+        "height": 30
+      },
+      "patterns": [
+        "badge"
+      ]
+    },
+    {
+      "id": "status-info",
+      "role": "info",
+      "label": "Location, station, radar, zone ids, last update, auto-refresh checkbox with countdown",
+      "bbox": {
+        "x": 8,
+        "y": 362,
+        "width": 640,
+        "height": 72
+      },
+      "patterns": [
+        "settings",
+        "choice-control"
+      ]
+    },
+    {
+      "id": "settings-options",
+      "role": "settings",
+      "label": "Units, Themes, Scroll Options radios, custom text and RSS fields with Set buttons, Hazardous Weather checkbox",
+      "bbox": {
+        "x": 8,
+        "y": 450,
+        "width": 640,
+        "height": 178
+      },
+      "patterns": [
+        "settings",
+        "choice-control",
+        "text-field",
+        "form"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "media-player",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "controls": [
+          "play-pause",
+          "skip-forward-back",
+          "volume-and-mute",
+          "fullscreen"
+        ],
+        "mode": "inline-embed"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 55,
+            "width": 640,
+            "height": 236
+          },
+          "region": "player",
+          "note": "Iframe stage with Previous, Next, Pause, Mute, Narration, Refresh, Fullscreen controls; no scrubber"
+        },
+        {
+          "bbox": {
+            "x": 8,
+            "y": 265,
+            "width": 640,
+            "height": 26
+          },
+          "region": "player",
+          "note": "Compact bottom toolbar duplicating the transport icons"
+        }
+      ]
+    },
+    {
+      "id": "settings",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "ia": "single-long-page",
+        "controls": [
+          "boolean-toggles",
+          "single-and-multi-select",
+          "text-and-credentials"
+        ],
+        "discovery": [
+          "browse-hierarchy"
+        ],
+        "safety": [
+          "no-confirm"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 450,
+            "width": 640,
+            "height": 178
+          },
+          "region": "settings-options",
+          "quote": "Themes: Classic Dark Sea Foam Cosmic",
+          "note": "Plain list of preferences: units, theme, scroll options, hazardous weather"
+        },
+        {
+          "bbox": {
+            "x": 480,
+            "y": 417,
+            "width": 168,
+            "height": 17
+          },
+          "region": "status-info",
+          "quote": "Auto Refresh: 09:57"
+        }
+      ]
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.9,
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "radio-list",
+        "option": [
+          "label-only"
+        ],
+        "largeSets": "show-all"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 450,
+            "width": 370,
+            "height": 60
+          },
+          "region": "settings-options",
+          "quote": "Units: English Metric",
+          "note": "Inline native radio groups; also checkboxes for Auto Refresh and Hazardous Weather"
+        },
+        {
+          "bbox": {
+            "x": 12,
+            "y": 609,
+            "width": 152,
+            "height": 17
+          },
+          "region": "settings-options",
+          "quote": "Hazardous Weather",
+          "note": "Checkbox (on-off)"
+        }
+      ]
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "supporting": [
+          "label"
+        ],
+        "style": "outlined",
+        "inputType": "plain"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 8,
+            "width": 498,
+            "height": 29
+          },
+          "region": "location-bar",
+          "quote": "San Diego, California, USA",
+          "note": "Location input with thin black outline, aria name Zip or City, State"
+        },
+        {
+          "bbox": {
+            "x": 137,
+            "y": 567,
+            "width": 508,
+            "height": 40
+          },
+          "region": "settings-options",
+          "note": "Custom text and RSS URL inputs each with a Set button"
+        }
+      ]
+    },
+    {
+      "id": "form",
+      "status": "present",
+      "confidence": 0.65,
+      "dims": {
+        "labels": "left-aligned",
+        "columns": "single-column",
+        "grouping": "flat",
+        "commit": "submit-button",
+        "prefill": "smart-defaults"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 8,
+            "width": 640,
+            "height": 29
+          },
+          "region": "location-bar",
+          "note": "Form element: location input submitted by GO button"
+        },
+        {
+          "bbox": {
+            "x": 137,
+            "y": 567,
+            "width": 508,
+            "height": 38
+          },
+          "region": "settings-options",
+          "note": "Two mini forms with Set submit buttons"
+        }
+      ]
+    },
+    {
+      "id": "badge",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "rationale": "412 and 121 are GitHub social count bubbles attached to Star and Fork buttons; could be seen as counters rather than badges",
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "aggregation": "per-item"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 194,
+            "y": 309,
+            "width": 45,
+            "height": 30
+          },
+          "region": "github-buttons",
+          "quote": "412"
+        },
+        {
+          "bbox": {
+            "x": 330,
+            "y": 309,
+            "width": 45,
+            "height": 30
+          },
+          "region": "github-buttons",
+          "quote": "121"
+        }
+      ]
+    },
+    {
+      "id": "autocomplete",
+      "status": "absent",
+      "confidence": 0.5,
+      "rationale": "Location field likely offers geocoder suggestions in the real app but none are visible in capture and live typing could not be tested",
+      "dims": {},
+      "evidence": []
+    },
+    {
+      "id": "menu",
+      "status": "absent",
+      "confidence": 0.5,
+      "rationale": "Player has a Menu icon but no open menu in capture; behavior unverified",
+      "dims": {},
+      "evidence": []
+    }
+  ],
+  "structure": {
+    "layout": "Small single-column app pinned top-left (~640px wide) on a mostly empty white page: location bar, black player frame with icon controls around an iframe, GitHub buttons, then a plain settings list",
+    "regions": [
+      "location-bar",
+      "player",
+      "github-buttons",
+      "status-info",
+      "settings-options"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#000000",
+      "#e0e0e0",
+      "#24292f",
+      "#d0d7de",
+      "#0000ee"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "text": "#000000",
+      "surface": "#000000",
+      "muted": "#e0e0e0",
+      "border": "#d0d7de",
+      "accent": "#24292f"
+    },
+    "typography": "Star4000 pixel/bitmap font (retro Weather Channel) for nearly all UI: inputs, labels, buttons; -apple-system 14px/600 only inside the embedded GitHub buttons",
+    "typeScale": "Flat: 16px body labels, 21px in the location bar and buttons, 13px in small fields; all weight 400 except GitHub buttons 600",
+    "shape": "mixed",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "iconography",
+      "illustration"
+    ],
+    "iconStyle": "filled",
+    "whitespace": "tight",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "retro",
+      "utilitarian",
+      "nostalgic",
+      "unstyled"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T20:36:42.440Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 8,
+    "usage": {
+      "input_tokens": 16,
+      "cache_creation_input_tokens": 26020,
+      "cache_read_input_tokens": 223029,
+      "output_tokens": 6668
+    }
+  },
+  "notes": "WeatherStar 4000+ emulator. Page is mostly empty white; the app occupies a 640px column top-left. Native unstyled HTML controls (grey #e0e0e0 buttons with 1px black borders, browser radios/checkboxes) in the Star4000 bitmap font give a 1990s look. The player iframe shows an orange-to-purple gradient slide (Weather Star 4000+ / Latest Observations) with large white filled icons on black side rails; the controls are duplicated in a smaller bottom toolbar. The only modern element is the GitHub buttons strip with rounded 6px corners. Live copy rendered with black background and hidden text, so behavior checks were limited."
+}

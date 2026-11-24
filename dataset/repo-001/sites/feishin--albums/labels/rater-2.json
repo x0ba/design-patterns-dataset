@@ -1,0 +1,667 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "feishin--albums",
+    "url": "http://localhost:4427/#/library/albums",
+    "finalUrl": "http://localhost:4427/#/library/albums",
+    "status": 200,
+    "title": "Feishin",
+    "capturedAt": "2026-11-18T06:20:50.007Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 5400
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "media-entertainment",
+    "domainNote": "Feishin — self-hosted music library player (Navidrome/Jellyfin client), Albums library view",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/feishin/explore.json",
+      "repo": {
+        "name": "jeffvli/feishin",
+        "url": "https://github.com/jeffvli/feishin",
+        "commit": "e36c5a9589162b9f9f2eb277cff97882e448540d",
+        "license": "GPL-3.0"
+      },
+      "view": {
+        "slug": "albums",
+        "name": "Albums library",
+        "description": "Album library grid of cover cards with a filter sidebar (favorited toggle, artist and genre filters) and sort/view toolbar."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Left sidebar: search field, menu/back/forward buttons, collapsible My Library nav (Home, Favorites, Albums...), collapsible Playlists list with cover thumbnails, track counts and durations",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 400,
+        "height": 5310
+      },
+      "patterns": [
+        "app-shell",
+        "text-field"
+      ]
+    },
+    {
+      "id": "page-header",
+      "role": "toolbar",
+      "label": "Albums title with blue play-all button and count badge 48; toolbar with sort-key dropdown 'Name', sort direction, filter toggle, refresh, view-mode toggle and display settings; search icon",
+      "bbox": {
+        "x": 400,
+        "y": 0,
+        "width": 1040,
+        "height": 110
+      },
+      "patterns": [
+        "sort-control",
+        "view-switcher",
+        "badge",
+        "menu",
+        "tooltip"
+      ]
+    },
+    {
+      "id": "filter-panel",
+      "role": "filter-sidebar",
+      "label": "Filters side panel: Reset, Is favorited switch, Artists facet list with Single/Multi segmented toggle and search, Genre facet list with counts, From/To year number inputs, Save as collection button",
+      "bbox": {
+        "x": 400,
+        "y": 110,
+        "width": 300,
+        "height": 5200
+      },
+      "patterns": [
+        "filter-controls",
+        "choice-control",
+        "text-field"
+      ]
+    },
+    {
+      "id": "album-grid",
+      "role": "collection-grid",
+      "label": "3-column grid of 48 album cards: square cover art with title/artist overlay, number badges and favorite corner flag; title, artist, year below",
+      "bbox": {
+        "x": 700,
+        "y": 110,
+        "width": 740,
+        "height": 5200
+      },
+      "patterns": [
+        "card",
+        "badge",
+        "rating",
+        "tooltip"
+      ]
+    },
+    {
+      "id": "player-bar",
+      "role": "player-bar",
+      "label": "Persistent bottom now-playing bar: artwork placeholder, title/artist, stop/shuffle/prev/play/next/repeat/queue transport, scrubber with times, Auto DJ, utility icons, volume slider",
+      "bbox": {
+        "x": 0,
+        "y": 5311,
+        "width": 1440,
+        "height": 89
+      },
+      "patterns": [
+        "media-player",
+        "slider",
+        "playlist-queue"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 400,
+            "height": 5310
+          },
+          "note": "Persistent left sidebar with library destinations and user playlists",
+          "quote": "My Library",
+          "region": "sidebar"
+        },
+        {
+          "bbox": {
+            "x": 0,
+            "y": 5311,
+            "width": 1440,
+            "height": 89
+          },
+          "note": "Persistent bottom player bar is part of the shell",
+          "region": "player-bar"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations",
+          "user-pinned-items"
+        ],
+        "visibility": "toggle-button",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "media-player",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 5311,
+            "width": 1440,
+            "height": 89
+          },
+          "note": "Bottom transport bar: stop, shuffle, prev, play, next, repeat, queue, scrubber 0:00/0:00, volume slider",
+          "quote": "AUTO DJ",
+          "region": "player-bar"
+        }
+      ],
+      "dims": {
+        "controls": [
+          "play-pause",
+          "scrubber",
+          "skip-forward-back",
+          "volume-and-mute"
+        ],
+        "position": [
+          "time-scrubber"
+        ],
+        "mode": "mini-or-pip"
+      }
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 708,
+            "y": 122,
+            "width": 227,
+            "height": 295
+          },
+          "note": "Album card: cover art, title, artist, year; hover reveals play/shuffle/next buttons, favorite heart, 5-star rating and overflow '...'",
+          "quote": "A Love Supreme",
+          "region": "album-grid"
+        },
+        {
+          "bbox": {
+            "x": 951,
+            "y": 447,
+            "width": 227,
+            "height": 295
+          },
+          "note": "Another card with title/artist overlay on art",
+          "quote": "Be the Cowboy",
+          "region": "album-grid"
+        }
+      ],
+      "dims": {
+        "media": "top-image",
+        "actions": "action-row",
+        "shape": "vertical",
+        "style": "borderless",
+        "target": "separate-targets-per-attribute"
+      }
+    },
+    {
+      "id": "filter-controls",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 400,
+            "y": 110,
+            "width": 300,
+            "height": 700
+          },
+          "note": "Side filter panel with favorited switch, artist and genre value lists with per-value counts; selecting an artist filters the grid live and updates the URL (?artistIds=)",
+          "quote": "Filters",
+          "region": "filter-panel"
+        },
+        {
+          "bbox": {
+            "x": 412,
+            "y": 321,
+            "width": 275,
+            "height": 300
+          },
+          "note": "Artist values with counts",
+          "quote": "A Tribe Called Quest 1 Album",
+          "region": "filter-panel"
+        },
+        {
+          "bbox": {
+            "x": 408,
+            "y": 5266,
+            "width": 283,
+            "height": 36
+          },
+          "note": "Filters can be saved",
+          "quote": "Save as collection",
+          "region": "filter-panel"
+        }
+      ],
+      "dims": {
+        "placement": "sidebar-facets",
+        "types": [
+          "checkbox-values",
+          "toggle-chips",
+          "range"
+        ],
+        "preview": "live-results",
+        "origin": "developer-defined",
+        "logic": "and-across-or-within",
+        "persistence": "in-the-url"
+      }
+    },
+    {
+      "id": "sort-control",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 404,
+            "y": 69,
+            "width": 75,
+            "height": 36
+          },
+          "note": "Button labelled with current sort key opens a menu: Album Artist, ID, Most played, Name, Random, Recently added, Recently played, Favorited, Release year; adjacent direction toggle",
+          "quote": "Name",
+          "region": "page-header"
+        }
+      ],
+      "dims": {
+        "keys": "fixed-list",
+        "form": "dropdown",
+        "default": "alphabetical",
+        "indicator": "label"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 404,
+            "y": 69,
+            "width": 75,
+            "height": 36
+          },
+          "note": "Sort key dropdown menu (verified live) with a left accent bar marking the current item",
+          "quote": "Name",
+          "region": "page-header"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click",
+        "structure": "flat",
+        "item": [
+          "label",
+          "checkmark-state"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    },
+    {
+      "id": "view-switcher",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1356,
+            "y": 69,
+            "width": 36,
+            "height": 36
+          },
+          "note": "Grid icon button; clicking switched the grid to a 'Detail' view (album art beside track list)",
+          "region": "page-header"
+        }
+      ],
+      "dims": {
+        "views": [
+          "grid",
+          "list"
+        ],
+        "form": "dropdown",
+        "independence": "shared-across-views"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 621,
+            "y": 23,
+            "width": 34,
+            "height": 20
+          },
+          "note": "Item count next to page title",
+          "quote": "48",
+          "region": "page-header"
+        },
+        {
+          "bbox": {
+            "x": 1387,
+            "y": 131,
+            "width": 25,
+            "height": 25
+          },
+          "note": "Blue numeric badge on album cover",
+          "quote": "5",
+          "region": "album-grid"
+        }
+      ],
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 649,
+            "y": 174,
+            "width": 38,
+            "height": 20
+          },
+          "note": "Is favorited switch",
+          "quote": "Is favorited",
+          "region": "filter-panel"
+        },
+        {
+          "bbox": {
+            "x": 594,
+            "y": 245,
+            "width": 91,
+            "height": 26
+          },
+          "note": "Single/Multi segmented radiogroup for artist selection mode",
+          "quote": "Single Multi",
+          "region": "filter-panel"
+        }
+      ],
+      "dims": {
+        "cardinality": "on-or-off",
+        "form": "switch",
+        "option": [
+          "label-only"
+        ],
+        "timing": "immediately"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 12,
+            "y": 15,
+            "width": 215,
+            "height": 36
+          },
+          "note": "Sidebar search with icon and placeholder",
+          "quote": "Search",
+          "region": "sidebar"
+        },
+        {
+          "bbox": {
+            "x": 412,
+            "y": 277,
+            "width": 275,
+            "height": 36
+          },
+          "note": "Filled facet search input with search icon",
+          "region": "filter-panel"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "placeholder",
+          "prefix-or-suffix"
+        ],
+        "style": "filled",
+        "inputType": "plain"
+      }
+    },
+    {
+      "id": "slider",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1354,
+            "y": 5353,
+            "width": 70,
+            "height": 10
+          },
+          "note": "Volume slider",
+          "region": "player-bar"
+        },
+        {
+          "bbox": {
+            "x": 581,
+            "y": 5373,
+            "width": 278,
+            "height": 8
+          },
+          "note": "Seek scrubber",
+          "region": "player-bar"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "rating",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 860,
+            "y": 130,
+            "width": 70,
+            "height": 20
+          },
+          "note": "Five-star rating revealed on card hover (live check); not visible in static capture",
+          "region": "album-grid"
+        }
+      ],
+      "dims": {
+        "scale": "five-stars",
+        "context": [
+          "rating-only"
+        ],
+        "moment": "on-demand",
+        "visibility": "private-preference"
+      }
+    },
+    {
+      "id": "tooltip",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1356,
+            "y": 69,
+            "width": 36,
+            "height": 36
+          },
+          "note": "Hovering icon buttons shows labels ('Detail'; card play button shows 'Play / Hold to shuffle')",
+          "region": "page-header"
+        }
+      ],
+      "dims": {
+        "trigger": [
+          "hover"
+        ],
+        "content": "label",
+        "placement": "above"
+      }
+    },
+    {
+      "id": "playlist-queue",
+      "status": "uncertain",
+      "confidence": 0.45,
+      "rationale": "Only a queue icon button in the player bar; queue panel not opened/visible in capture",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 834,
+            "y": 5324,
+            "width": 36,
+            "height": 36
+          },
+          "note": "Queue icon in transport",
+          "region": "player-bar"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "faceted-search",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 400,
+            "y": 110,
+            "width": 300,
+            "height": 700
+          },
+          "note": "Facets narrow a library browse, not a query result set; coded as filter-controls"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "split-pane",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 400,
+            "y": 110,
+            "width": 300,
+            "height": 700
+          },
+          "note": "Filter panel beside grid is fixed-width; no resize handle seen"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "desktop app shell: fixed left sidebar nav + playlists, main area with title/toolbar, docked filter panel beside a 3-column album cover grid, persistent bottom player bar",
+    "regions": [
+      "sidebar",
+      "page-header",
+      "filter-panel",
+      "album-grid",
+      "player-bar"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#000000",
+      "#080808",
+      "#0c0c0c",
+      "#141414",
+      "#e1e1e1",
+      "#969696",
+      "#1b62fc",
+      "#0558fd",
+      "#ffffff"
+    ],
+    "colorRoles": {
+      "background": "#000000",
+      "surface": "#0c0c0c",
+      "sidebar": "#080808",
+      "input": "#141414",
+      "text": "#e1e1e1",
+      "muted": "#969696",
+      "primary": "#1b62fc",
+      "accent": "#0558fd"
+    },
+    "typography": "Inter throughout: 36px/700 page title, 16px nav and playlist names, 14px card titles and metadata, 13px toolbar/controls, 11px timestamps and caps 'AUTO DJ'",
+    "typeScale": "Steep jump from 36px bold H1 to a compact 13–16px body; hierarchy mostly via color (#e1e1e1 vs #969696) and weight 500–700",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "none",
+    "imagery": [
+      "illustration",
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "dark",
+      "technical",
+      "dense",
+      "media-rich",
+      "utilitarian"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T06:22:41.298Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 13,
+    "usage": {
+      "input_tokens": 26,
+      "cache_creation_input_tokens": 46060,
+      "cache_read_input_tokens": 503866,
+      "output_tokens": 6771
+    }
+  },
+  "notes": "Near-black monochrome UI (#000/#080808/#0c0c0c layering, no borders, separation by tone) with a single saturated blue accent (#1b62fc) used for active nav, play-all button, count badges on covers and a blue triangular corner flag marking favorited albums. Album art is generated geometric artwork (circles, stripes, squares) with title/artist text over a translucent lower band, so the colorful covers carry all the hue. Card hover reveals a dark scrim with large white circular play button flanked by add/next buttons, a heart, five small outline stars and an overflow '...'. Sort-key dropdown marks the current option with a blue left bar. Filter panel offers 'Save as collection' to persist a filter set. Player bar has 'AUTO DJ' text toggle above the volume slider."
+}

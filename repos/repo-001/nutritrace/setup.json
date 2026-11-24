@@ -1,0 +1,90 @@
+{
+  "batch": "repo-001",
+  "slug": "nutritrace",
+  "ok": true,
+  "repo": {
+    "name": "TraceApps/nutritrace",
+    "url": "https://github.com/TraceApps/nutritrace",
+    "commit": "888c9664cd3a0222a9449cff506264097a2ae9b2",
+    "branch": "main",
+    "license": "AGPL-3.0"
+  },
+  "domain": "health",
+  "port": 4449,
+  "checkoutRoot": "~/.cache/design-patterns-dataset/repos",
+  "mode": "server",
+  "entry": "/",
+  "app": {
+    "mode": "server",
+    "entry": "/",
+    "login": {
+      "username": "maya",
+      "email": "maya.okafor@fastmail.com",
+      "password": "Lentil-Harbor-2026!"
+    },
+    "stubs": [
+      {
+        "service": "AI provider for the Trace assistant (Claude/OpenAI/Gemini/Ollama)",
+        "how": "start.sh env-locks Trace to AI_PROVIDER=oai-compat with AI_BASE_URL=http://127.0.0.1:4450 and a placeholder AI_API_KEY. The NutriTrace server proxies /api/ai/chat to .ui-capture/stubs/ai-stub.mjs, a local OpenAI-compatible /v1/chat/completions server. It asks the app to run its own get_diary_averages + get_goals tools, then answers with the user's real seeded averages, goals and weight trend."
+      },
+      {
+        "service": "GitHub release update checks",
+        "how": "Turned off with UPDATE_CHECK=off, so the server never contacts GitHub."
+      },
+      {
+        "service": "Secrets (JWT signing key, token encryption key)",
+        "how": "Local placeholder values for JWT_SECRET and TOKEN_ENC_KEY in start.sh. INSECURE_COOKIES=1 lets the auth cookie work over plain-HTTP localhost."
+      },
+      {
+        "service": "Open Food Facts / USDA / Mealie / Fitbit / Withings / Garmin / OIDC / SMTP",
+        "how": "Not configured (all optional in the app). OFF/USDA online search will show the app's normal offline/error state; local catalog search works fully. Fitbit/Withings/Garmin OAuth stay disconnected. The Wellness page instead shows Health Connect data, which the Android app normally pushes to the server; it was written straight into the server's wellness_data/workouts tables by seed.mjs, so no wearable API is called."
+      }
+    ],
+    "notes": "NutriTrace v1.4.0, a Svelte 5 PWA built with Vite (npm run build -> dist/). It is served by its own Express + better-sqlite3 server (server/index.js, NODE_ENV=production) on PORT. server/dist is a symlink to ../dist, standing in for the Dockerfile's COPY of the build. Node 20.20.2 is pinned in mise.toml (the Dockerfile uses node:20). better-sqlite3's prebuilt binary was fetched into the npm cache during install. Runtime data lives in .ui-capture/data (SQLite DB + uploads). start.sh starts the AI stub (port 4450) and the server. If the DB is missing or was seeded on a different day, start.sh first re-runs .ui-capture/seed.mjs (about 6 s, offline), so 'today' always has a partly logged day with months of history behind it. SIGN IN: opening / shows the app's own sign-in form when signed out. Use username 'maya' and the password in login. SEED (seed.mjs + seed-data.mjs): boots the real server on a side port with a fresh DB and loads everything through the app's REST API. That covers register/login (first user = admin Maya Okafor) and bulk settings: finished setup, per-weekday calorie goals (1900 weekdays / 2150 weekends), protein/carb/fat/fiber/sodium goals, lb/mi/°F, a 2.5 L water goal shown in fl oz, fasting tracker and activity section on, 3 goal templates. It also loads 77 foods (real brands, categories, barcodes, notes), 8 saved meals and 8 recipes (servings, method notes), and about 165 diary days over the past 175 days with 2,100+ items. Those include expanded saved meals, recipe servings, restaurant meals, quick-calorie entries, alcohol, long-run fuel, missed days and a patchy vacation week. Days also carry water logs, near-daily weigh-ins trending 172 -> 163 lb, Sunday body-fat readings, monthly waist/hip measurements and free-text day notes. Activity data is about 118 manual entries (runs, long runs, strength, yoga, hikes) plus 3 templates. There are 20 16:8 fasts, some broken early with notes; mornings after a fast have only black coffee. Usage counters and a prior Trace chat are set too. Wellness: 120 days of Health Connect data, as the Android app's sync stores it (steps, distance, floors, active minutes, calories out, sleep stages/efficiency, resting HR, HRV, SpO2, respiratory rate, VO2 max), plus 80 watch workouts, written into the wellness_data/workouts tables. TODAY holds whatever would have been eaten by the time the seed ran: oats breakfast, turkey-wrap lunch, string cheese, and chili dinner after 7pm. Plus a 5 mi tempo run, water and a weigh-in. MAIN AREAS (hash routes): Diary #/ (day view: meals, macro rings and goals, water, body stats, activity, fasting, notes; desktop side rail), Foods #/foods (Foods / Meals / Recipes catalog with categories), Statistics #/statistics (charts over time), Goals #/goals, Wellness #/wellness (activity, sleep and heart tabs from Health Connect), Settings #/settings, and the floating Trace AI assistant (answers from the seeded data via the stub). Food photos: none (no network to fetch them), so the catalog shows the app's own placeholder icons."
+  },
+  "tools": {
+    "node": "20.20.2"
+  },
+  "prompt": "This is a checkout of TraceApps/nutritrace (https://github.com/TraceApps/nutritrace) at commit 888c9664cd3a. Self-hosted personal nutrition tracker — single Docker container, AGPL-3.0, no telemetry, no cloud sync.\n\nI want to see its user interface in a desktop browser, in the state a real, established user would see it. Please get the app running locally with its main interface working and realistic data in it.\n\n# Running it\n- Follow the repo's own setup docs and tooling. Take the simplest route that shows the real app: a static production build if the front end works without a backend, otherwise the app's own server (production or dev mode).\n- If it needs a database or other services, run them locally with an embedded or file-based option (SQLite, in-memory, JSON files, an embedded Postgres such as PGlite) or the app's demo/mock mode.\n- Don't redesign or restyle anything. Change only what's needed to build and run it.\n\n# Tools: use mise\nInstall every runtime and tool you need (node, the package manager, python, bun, ...) with mise, pinned to exact versions in a mise.toml at the repo root, so the setup can be reproduced. Match what the repo asks for (engines, .nvmrc, .tool-versions, packageManager). mise is already configured for this directory: `mise install` installs into ./.ui-capture/mise, and its shims come first on PATH, so `node`, `pnpm` and the rest resolve to the pinned versions. Don't use other copies of these tools or download runtimes by hand.\n\n# Secrets, API keys and external services: fake them\nThe app must not depend on anything outside this machine, and when it runs it has no network except localhost. Wherever it expects secrets, environment variables, API keys or third-party services (hosted auth or OAuth, payment providers, email, LLM or other AI APIs, maps, storage buckets, analytics, hosted databases):\n- Give the required variables placeholder values so the app starts.\n- Where it actually calls the service, make the call succeed locally with realistic responses: use the app's own mock, test or offline mode if it has one; otherwise point the client at a small local stub server that start.sh also starts, or swap in a stub at the integration boundary (the API client or service module). Keep stubs out of UI code. Responses should look like what the real service returns for a real user, e.g. an AI reply that actually answers, a payment history with real-looking amounts.\n- Calls the browser makes directly to outside services count too; point them at the local stub.\n- For sign-in through an outside provider, create a local account or use the app's dev sign-in so you can get past it.\nList every stub in app.json.\n\n# Data: like real use\nSeed it the way an established user's data would look after months of actual use: specific, plausible names and content for this kind of app; dates spread over time; a realistic mix of states (done, in progress, overdue, archived, ...); realistic volume (dozens to hundreds of records where the app revolves around records); short and long text; some messiness real data has. Start from the app's own demo or seed data if it has realistic data, and extend it if it's thin. Load data through the app's own paths (its API, import, seed scripts, or its database schema), never by hardcoding it into UI code. If the app needs an account, create one and attach the data to it. No lorem ipsum or \"Test 1\".\n\n# Environment\nThis shell is sandboxed: you can write only inside this directory (package-manager caches already point into ./.ui-capture/cache), and the network reaches only package registries, mise's download sources and GitHub (registry.npmjs.org, registry.yarnpkg.com, repo.yarnpkg.com, github.com, codeload.github.com, objects.githubusercontent.com, raw.githubusercontent.com, nodejs.org, mise.jdx.dev, mise-versions.jdx.dev, release-assets.githubusercontent.com, pypi.org, files.pythonhosted.org, binaries.prisma.sh, cdn.jsdelivr.net, unpkg.com). Docker isn't available. A process you start in the background can't be seen or stopped from a later command, so test servers on another port than 4449 (e.g. 5449) or in the foreground under `timeout`; anything still listening on 4449 is stopped before I check.\n\n# When you're done, leave this in ./.ui-capture/\n- app.json: {\"mode\": \"static\" or \"server\", \"entry\": \"/path where the main UI opens\", \"login\": null or {\"username\": \"...\", \"email\": \"...\", \"password\": \"...\"}, \"stubs\": [{\"service\": \"what was faked\", \"how\": \"how\"}], \"notes\": \"how you set it up, what data is loaded, and the main areas of the app\"}\n- static mode: the production build in ./.ui-capture/out, with index.html as its entry. It will be served from the root of a plain static file server; unknown paths fall back to index.html.\n- server mode: ./.ui-capture/start.sh, which starts everything the app needs (stubs included) in the foreground and serves the UI at http://localhost:4449/ (it gets PORT=4449). It runs with the same PATH and restrictions as your shell, plus no network at all except localhost, so everything must already be installed, built and seeded (or seeded by start.sh itself).\n- Put any scripts you write for seeding or stubbing in ./.ui-capture/ too; they're kept with the setup record.\n\n# Order of work\nYou have 90 minutes in total, and anything unfinished when time runs out is lost. So work in this order:\n1. Get the app building and running with its stubs, and write the contract above (app.json plus out/ or start.sh), even if it has only a little data so far.\n2. Then build out the data, re-running your seed and checking the app still loads after each substantial step, so that a working state with the data loaded so far is always in place.\nWrite large data sets with a short generator script rather than as one long literal file.\n\nI'll open it at 1440×900.",
+  "model": {
+    "model": "claude-opus-5-5",
+    "effort": "high"
+  },
+  "sandbox": true,
+  "startedAt": "2026-11-17T06:36:06.997Z",
+  "finishedAt": "2026-11-17T06:51:25.435Z",
+  "verification": {
+    "ok": true,
+    "problems": [],
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedRequests": [],
+    "textChars": 89,
+    "visibleElements": 17,
+    "title": "NutriTrace"
+  },
+  "repairs": 0,
+  "session": {
+    "rounds": 1,
+    "numTurns": 93,
+    "costUsd": 4.698798199999999,
+    "durationMs": 916103,
+    "models": [
+      "claude-opus-5-5"
+    ],
+    "usage": {
+      "input_tokens": 176,
+      "cache_creation_input_tokens": 187193,
+      "cache_read_input_tokens": 9784851,
+      "output_tokens": 62179
+    },
+    "timedOut": false
+  },
+  "changes": {
+    "files": 2,
+    "insertions": 3,
+    "deletions": 0,
+    "patchBytes": 318,
+    "patch": "setup.patch"
+  }
+}

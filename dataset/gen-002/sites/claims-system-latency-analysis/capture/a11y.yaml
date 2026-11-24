@@ -1,0 +1,115 @@
+- banner: Pathspan Request tracing and performance analysis Traces Sat 14 Nov 00:00 – Mon 16 Nov 23:59 1,200,439 requests 14 services MD Marcus Delgado Site reliability engineer
+- note: "Demo dataset: synthetic traces built to match the incident brief. Replace the generator with the production trace export before using any figure."
+- text: Open investigation
+- heading "Cert-submit timeouts after Monday's claim surge" [level=1]
+- text: "Deputy commissioner's written explanation due Wed 18 Nov. Question: identity-verify v4.12, the mf-conn pool limit, or both?"
+- group "Quick ranges":
+  - button "Incident 08:10–10:45"
+  - button "Surge 07:35–14:00"
+  - button "Batch and peak 06–12"
+  - button "Deploy to Mon 06:00"
+  - button "All 72 h"
+- tablist:
+  - tab "Overview" [selected]
+  - tab "Connectors"
+  - tab "Changes & checks"
+  - tab "Failed requests"
+  - tab "Volume vs last year"
+  - tab "Briefing draft"
+- main:
+  - text: Requests in range 191,401 1,235 per minute on average · peak 1,416/min Failed requests 14,230 7.43% of requests · 94% were 504 gateway timeouts Cert-submit failure rate 9.2% 5,996 of 65,313 weekly certifications Cert-submit p95 30.6 s baseline 1.80 s · 17.0× baseline mf-conn-b, implied peak 83 sessions 2.1× of the pool limit in force at that minute · 72% of failures Failed requests retried 33% user pressed Try again or resubmitted
+  - heading "Seventy-two hours of traffic" [level=2]
+  - paragraph: Sat 14 – Mon 16 Nov, 14 services, every request. The shaded band is the range under investigation.
+  - text: Mon 16 Nov, 08:10–10:45 2 h 35 min
+  - img "72-hour request volume and failures. Drag to select a range.": Requests per minute, all endpoints cert-submit claims other 0 500 1,000 identity-verify v4.12 Failed requests per 10 min 1,308 0 Sat 00:00 12:00 Sun 00:00 12:00 Mon 00:00 12:00 00:00
+  - text: "Dashed lines: identity-verify v4.12 (Sun 23:05), plant closure announced (about 07:35 Mon), claims-web hotfix (09:20 Mon), pool 40 → 80 (10:38 Mon). Drag across the chart to set the range; click a day to select it."
+  - heading "Selected range, minute by minute" [level=2]
+  - paragraph: Hover to read a minute. Dashed lines mark deploys, the pool change and the batch window.
+  - img "Minute-level request volume, failures and cert-submit p95 for the selected range": mainframe batch 06:00–08:30 0 1,000 Requests per minute cert-submit claims other 0 200 Failed requests per minute 1 s 2 s 5 s 10 s 30 s baseline p95 1.8 s gateway timeout 30 s Cert-submit p95 latency (log scale) plant closure announced claims-web hotfix pool 40 → 80 08:00 09:00 10:00 11:00
+  - heading "By endpoint, selected range" [level=2]
+  - paragraph: Baseline is Sat 00:00 to Sun 23:04, before identity-verify v4.12 was deployed. Latency here is measured at the claims-web edge.
+  - table:
+    - rowgroup:
+      - row "Endpoint Requests Failed Fail rate p50 p95 p99 Baseline p95 p95 vs baseline":
+        - columnheader "Endpoint"
+        - columnheader "Requests"
+        - columnheader "Failed"
+        - columnheader "Fail rate"
+        - columnheader "p50"
+        - columnheader "p95"
+        - columnheader "p99"
+        - columnheader "Baseline p95"
+        - columnheader "p95 vs baseline"
+    - rowgroup:
+      - row "Initial claim filing POST /api/claims/initial 38,425 2,898 7.54% 6.90 s 30.4 s 31.3 s 1.49 s 20.4×":
+        - cell "Initial claim filing POST /api/claims/initial"
+        - cell "38,425"
+        - cell "2,898"
+        - cell "7.54%"
+        - cell "6.90 s"
+        - cell "30.4 s"
+        - cell "31.3 s"
+        - cell "1.49 s"
+        - cell "20.4×"
+      - row "Weekly certification POST /api/certifications/weekly 65,313 5,996 9.18% 12.2 s 30.6 s 31.3 s 1.80 s 17.0×":
+        - cell "Weekly certification POST /api/certifications/weekly"
+        - cell "65,313"
+        - cell "5,996"
+        - cell "9.18%"
+        - cell "12.2 s"
+        - cell "30.6 s"
+        - cell "31.3 s"
+        - cell "1.80 s"
+        - cell "17.0×"
+      - row "Identity verification POST /api/identity/verify 38,405 2,857 7.44% 6.80 s 30.4 s 31.3 s 442 ms 68.9×":
+        - cell "Identity verification POST /api/identity/verify"
+        - cell "38,405"
+        - cell "2,857"
+        - cell "7.44%"
+        - cell "6.80 s"
+        - cell "30.4 s"
+        - cell "31.3 s"
+        - cell "442 ms"
+        - cell "68.9×"
+      - row "Wage lookup GET /api/wages/lookup 24,186 1,541 6.37% 3.55 s 30.2 s 31.2 s 696 ms 43.4×":
+        - cell "Wage lookup GET /api/wages/lookup"
+        - cell "24,186"
+        - cell "1,541"
+        - cell "6.37%"
+        - cell "3.55 s"
+        - cell "30.2 s"
+        - cell "31.2 s"
+        - cell "696 ms"
+        - cell "43.4×"
+      - row "Payment schedule GET /api/payments/schedule 12,737 937 7.36% 3.65 s 30.4 s 31.3 s 859 ms 35.4×":
+        - cell "Payment schedule GET /api/payments/schedule"
+        - cell "12,737"
+        - cell "937"
+        - cell "7.36%"
+        - cell "3.65 s"
+        - cell "30.4 s"
+        - cell "31.3 s"
+        - cell "859 ms"
+        - cell "35.4×"
+      - row "Document upload POST /api/documents 12,335 1 0.01% 408 ms 647 ms 695 ms 627 ms 1.0×":
+        - cell "Document upload POST /api/documents"
+        - cell "12,335"
+        - cell "1"
+        - cell "0.01%"
+        - cell "408 ms"
+        - cell "647 ms"
+        - cell "695 ms"
+        - cell "627 ms"
+        - cell "1.0×"
+    - rowgroup:
+      - row "All endpoints 191,401 14,230 7.43% 7.61 s 30.4 s 31.3 s – –":
+        - cell "All endpoints"
+        - cell "191,401"
+        - cell "14,230"
+        - cell "7.43%"
+        - cell "7.61 s"
+        - cell "30.4 s"
+        - cell "31.3 s"
+        - cell "–"
+        - cell "–"
+- contentinfo: Times are local. Latency is measured at the claims-web edge. Connector use is estimated from traces, not read from the mainframe. Batch window 06:00–08:30 Monday.

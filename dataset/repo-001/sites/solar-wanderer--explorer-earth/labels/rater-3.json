@@ -1,0 +1,525 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "solar-wanderer--explorer-earth",
+    "url": "http://solar-wanderer.localhost:4319/en/",
+    "finalUrl": "http://solar-wanderer.localhost:4319/en/",
+    "status": 200,
+    "title": "Solar Wanderer · 遨游太阳系 — A 1:1 Real-Time Solar System Explorer in Your Browser",
+    "capturedAt": "2026-11-18T01:36:08.899Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 900
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "science-research",
+    "domainNote": "educational real-time 1:1 3D solar system explorer / planetarium web app (bilingual EN/中文)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/solar-wanderer/explore.json",
+      "repo": {
+        "name": "hyqzz/Solar-Wanderer",
+        "url": "https://github.com/hyqzz/Solar-Wanderer",
+        "commit": "96a1bf2b89891d8db227bca3c14f4db2f4fb1b78",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "explorer-earth",
+        "name": "3D explorer main view",
+        "description": "Main 3D solar system view orbiting Earth with the time panel, celestial directory with search and categories, target info card, navigation HUD and compass."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "space-canvas",
+      "role": "canvas",
+      "label": "Full-bleed 3D scene: Earth globe, orbit lines, starfield, labelled bodies and stars",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 900
+      },
+      "patterns": [
+        "object-viewer-3d",
+        "map-explorer"
+      ]
+    },
+    {
+      "id": "time-hud",
+      "role": "toolbar",
+      "label": "Simulation clock with time-warp shortcuts ([ slower, ] faster, P pause, N now)",
+      "bbox": {
+        "x": 14,
+        "y": 14,
+        "width": 260,
+        "height": 93
+      },
+      "patterns": [
+        "contextual-help"
+      ]
+    },
+    {
+      "id": "directory",
+      "role": "sidebar",
+      "label": "Directory 'click to fly': search field and category tree of bodies with counts",
+      "bbox": {
+        "x": 14,
+        "y": 110,
+        "width": 260,
+        "height": 612
+      },
+      "patterns": [
+        "tree-view",
+        "accordion",
+        "text-field",
+        "overview-detail"
+      ]
+    },
+    {
+      "id": "explore-hud",
+      "role": "status-panel",
+      "label": "Explore mode hint, audio status, orbiting/nearest body, F/T shortcuts, texture-loading progress",
+      "bbox": {
+        "x": 14,
+        "y": 751,
+        "width": 430,
+        "height": 135
+      },
+      "patterns": [
+        "contextual-help",
+        "progress-indicator"
+      ]
+    },
+    {
+      "id": "body-detail",
+      "role": "detail-panel",
+      "label": "Selected body facts (distance, radius, gravity, periods), description, 'Did you know' fact, Fly there",
+      "bbox": {
+        "x": 1126,
+        "y": 14,
+        "width": 300,
+        "height": 436
+      },
+      "patterns": [
+        "overview-detail"
+      ]
+    },
+    {
+      "id": "compass",
+      "role": "widget",
+      "label": "Circular compass showing N/S/E/W, Sun and Earth direction",
+      "bbox": {
+        "x": 1306,
+        "y": 762,
+        "width": 120,
+        "height": 120
+      },
+      "patterns": []
+    }
+  ],
+  "patterns": [
+    {
+      "id": "object-viewer-3d",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 508,
+            "y": 238,
+            "width": 424,
+            "height": 424
+          },
+          "note": "Realistic textured 3D Earth in full-bleed WebGL canvas with anchored label",
+          "quote": "Earth 25,484 km",
+          "region": "space-canvas"
+        },
+        {
+          "bbox": {
+            "x": 14,
+            "y": 751,
+            "width": 430,
+            "height": 40
+          },
+          "note": "Camera control instructions",
+          "quote": "Explore (drag · scroll · double-click to fly)",
+          "region": "explore-hud"
+        }
+      ],
+      "dims": {
+        "modelContent": [
+          "hotspot-callouts",
+          "scientific-overlays"
+        ],
+        "appearanceModes": [
+          "realistic-materials"
+        ],
+        "cameraControls": [
+          "orbit-drag",
+          "zoom-to-cursor-pinch",
+          "pan",
+          "walkthrough-first-person"
+        ],
+        "partSelection": "click-part-for-properties",
+        "viewerChrome": "full-bleed-with-floating-tools",
+        "modelLoading": "progressive-lod",
+        "sceneGuidance": "free-explore"
+      }
+    },
+    {
+      "id": "map-explorer",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Behaves like a 'Google Earth for the solar system' (labelled places, orbit polylines, search and fly-to, detail card over the scene, compass) but it is not a geographic map; could be read as either a 3D viewer or a spatial map.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 900
+          },
+          "note": "Labelled bodies/stars, orbit polylines, compass, fly-to navigation",
+          "quote": "Farout",
+          "region": "space-canvas"
+        }
+      ],
+      "dims": {
+        "overlays": [
+          "poi-pins",
+          "routes-and-polylines"
+        ],
+        "mapNav": [
+          "drag-pan",
+          "pinch-scroll-zoom",
+          "rotate-and-tilt",
+          "search-and-fly-to"
+        ],
+        "coupling": "detail-card-over-map",
+        "mapAdapt": [
+          "desktop-side-panel",
+          "dark-night-style"
+        ]
+      }
+    },
+    {
+      "id": "tree-view",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 23,
+            "y": 197,
+            "width": 242,
+            "height": 514
+          },
+          "note": "Category nodes with emoji icons, counts and ▶/▼ disclosure; Planets expanded showing 8 child bodies",
+          "quote": "Planets (8)",
+          "region": "directory"
+        }
+      ],
+      "dims": {
+        "content": [
+          "label",
+          "type-icon",
+          "count-badge"
+        ],
+        "expandBy": [
+          "disclosure-triangle"
+        ],
+        "selection": "single-node",
+        "source": "grouped-by-attribute",
+        "density": "compact"
+      }
+    },
+    {
+      "id": "accordion",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Directory groups are native details/summary disclosure sections; better described as a two-level tree, but could equally be coded as an accordion.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 23,
+            "y": 228,
+            "width": 242,
+            "height": 235
+          },
+          "note": "Expanded <details> section 'Planets (8)' with siblings collapsed",
+          "quote": "Planets (8)",
+          "region": "directory"
+        }
+      ],
+      "dims": {
+        "policy": "many-at-a-time",
+        "header": [
+          "title-plus-summary-value"
+        ],
+        "toggle": [
+          "header-click"
+        ]
+      }
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 14,
+            "y": 110,
+            "width": 260,
+            "height": 612
+          },
+          "note": "Directory list of bodies; clicking one flies to it and swaps the detail panel (verified live with Mars)",
+          "quote": "Directory click to fly",
+          "region": "directory"
+        },
+        {
+          "bbox": {
+            "x": 1126,
+            "y": 14,
+            "width": 300,
+            "height": 436
+          },
+          "note": "Detail view of selected body with all attributes",
+          "quote": "Surface gravity 9.82 m/s²",
+          "region": "body-detail"
+        }
+      ],
+      "dims": {
+        "attributePlacement": [
+          "in-both-views",
+          "in-detail-view-only"
+        ],
+        "abstraction": [
+          "category"
+        ],
+        "truncation": "full-text",
+        "relationship": "many-overviews-to-one-detail-view",
+        "linking": "synchronized-navigation",
+        "openIn": "side-by-side",
+        "overviewType": [
+          "hierarchy",
+          "canvas"
+        ],
+        "detailMultiplicity": "one-at-a-time",
+        "openBy": [
+          "click",
+          "custom-event"
+        ],
+        "openFrom": "whole-item",
+        "attributeScope": [
+          "per-item"
+        ]
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 23,
+            "y": 154,
+            "width": 242,
+            "height": 31
+          },
+          "note": "Search input with emoji magnifier placeholder",
+          "quote": "🔍 Search bodies…",
+          "region": "directory"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "placeholder"
+        ],
+        "inputType": "plain"
+      }
+    },
+    {
+      "id": "contextual-help",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 14,
+            "y": 14,
+            "width": 260,
+            "height": 93
+          },
+          "note": "Always-visible keycap hints for time controls",
+          "quote": "faster",
+          "region": "time-hud"
+        },
+        {
+          "bbox": {
+            "x": 14,
+            "y": 851,
+            "width": 430,
+            "height": 24
+          },
+          "note": "Keycap hints F / T",
+          "quote": "Free flight",
+          "region": "explore-hud"
+        }
+      ],
+      "dims": {
+        "access": [
+          "shortcut-sheet"
+        ],
+        "content": [
+          "shortcut-reference",
+          "step-instructions"
+        ],
+        "placement": "inline-static-text",
+        "proactivity": "always-visible-hints",
+        "relevance": "the-person-s-current-state"
+      }
+    },
+    {
+      "id": "progress-indicator",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 14,
+            "y": 874,
+            "width": 150,
+            "height": 14
+          },
+          "note": "Textual percent for background texture streaming",
+          "quote": "Loading HD textures 8%",
+          "region": "explore-hud"
+        }
+      ],
+      "dims": {
+        "determinacy": "percentage",
+        "form": "text-status",
+        "delay": "moves-to-background",
+        "control": "no-control"
+      }
+    },
+    {
+      "id": "property-inspector",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1126,
+            "y": 14,
+            "width": 300,
+            "height": 180
+          },
+          "note": "Key-value facts are read-only, not editable"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "media-player",
+      "status": "absent",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 14,
+            "y": 14,
+            "width": 260,
+            "height": 93
+          },
+          "note": "Pause/faster/slower control a simulation clock, not media playback"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "full-viewport WebGL 3D canvas with floating translucent HUD panels: time-warp HUD top-left, collapsible body directory below it, explore/status HUD bottom-left, selected-body detail panel top-right, compass bottom-right; no scrolling",
+    "regions": [
+      "space-canvas",
+      "time-hud",
+      "directory",
+      "explore-hud",
+      "body-detail",
+      "compass"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#000000",
+      "#08101c",
+      "#142034",
+      "#cfe3f5",
+      "#9fc6ea",
+      "#e8f4ff",
+      "#96a5c3",
+      "#d4ecd4",
+      "#7fd4ff"
+    ],
+    "colorRoles": {
+      "background": "#000000",
+      "surface": "#08101c",
+      "text": "#cfe3f5",
+      "heading": "#e8f4ff",
+      "muted": "#96a5c3",
+      "primary": "#9fc6ea",
+      "accent": "#7fd4ff",
+      "border": "#142034",
+      "callout": "#d4ecd4"
+    },
+    "typography": "Microsoft YaHei stack (renders as a system sans) for all HUD text, mixing English names with Chinese glyph secondary names; Arial in the search input",
+    "typeScale": "Compact HUD scale: 16–17px bold titles (clock, 'Earth', 'Explore'), 13px body and list items, 11–12px secondary labels/hints, 10px canvas labels; contrast mainly via weight and colour",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "3d-renders",
+      "iconography"
+    ],
+    "iconStyle": "filled",
+    "whitespace": "moderate",
+    "backgroundTreatment": "image",
+    "mood": [
+      "immersive",
+      "technical",
+      "educational",
+      "dark",
+      "calm"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T02:12:12.034Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 11,
+    "usage": {
+      "input_tokens": 22,
+      "cache_creation_input_tokens": 47208,
+      "cache_read_input_tokens": 451798,
+      "output_tokens": 7018
+    }
+  },
+  "notes": "Space-sim HUD aesthetic: near-black translucent navy panels (#08101c, 1px border, 8–10px radius) float over a live WebGL universe; no shadows. Emoji used as category icons (☀️🪐🌙☄️🛰🎬). Keycap-styled shortcut chips ([ ] P N F T) inline with labels. Bilingual body names (Earth 地球). Detail panel includes light-time, JPL ephemeris provenance and a green-bordered 'Did you know' trivia callout with 'Another ↻' refresh. Pressing H opens a large two-column keyboard shortcut overlay (not in capture). Compass widget bottom-right; 'Tours' group offers guided camera tours. Real-time clock with time-warp."
+}

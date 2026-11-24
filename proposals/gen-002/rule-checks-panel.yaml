@@ -1,0 +1,75 @@
+# Codebook proposal (new-entry) — review with: node scripts/proposals.ts show gen-002 rule-checks-panel
+id: rule-checks-panel
+kind: new-entry
+status: open
+batch: gen-002
+codebookVersion: 1.0.0
+name: Rule checks panel
+level: component
+parent: monitor
+definition: A live list of rules the current artifact is checked against. Each item shows pass,
+  warning or error with an explanation, and failing items offer one-click fixes or let you select
+  the offending object. A summary count is often echoed in a status bar.
+aliases:
+  - preflight checks
+  - design rule check
+  - lint panel
+  - layout checks
+relations:
+  neighbors:
+    - banner
+    - activity-log
+    - status-tracker
+dimensions:
+  - name: Check results shown
+    family: content
+    question: Which results are listed?
+    subdimensions:
+      - id: shown
+        name: Results shown
+        select: one
+        values:
+          - id: failures-only
+            name: Failures only
+          - id: passes-and-failures
+            name: Passes and failures
+            example: Gildmark layout checks
+  - name: Fix
+    family: invocation
+    question: How are problems resolved?
+    subdimensions:
+      - id: fix
+        name: Fix
+        select: many
+        values:
+          - id: auto-fix-button
+            name: Auto-fix button
+          - id: select-offending-object
+            name: Select offending object
+          - id: explanation-only
+            name: Explanation only
+rationale:
+  - rater: rater-3
+    site: storefront-lettering-layout
+    text: Banner covers single conditions. Activity log and notification center cover time-ordered
+      events. Neither describes a continuously evaluated checklist that mixes passing and failing
+      rules and carries fix actions tied to objects on a canvas, like Figma's accessibility linting,
+      PCB DRC or print preflight.
+sources:
+  - batch: gen-002
+    site: storefront-lettering-layout
+    url: http://storefront-lettering-layout.localhost:4318/
+    note: proposed by rater-3
+evidence:
+  - site: storefront-lettering-layout
+    rater: rater-3
+    bbox:
+      x: 12
+      y: 557
+      width: 267
+      height: 335
+    quote: Phone line sits behind the push bar
+    note: Error with 'Move clear of bar' / 'Select' fix actions, two passing checks, one warning; footer
+      shows '1 error · 1 warning'
+createdAt: 2026-11-17T21:57:22.721Z
+updatedAt: 2026-11-17T21:57:22.721Z

@@ -1,0 +1,489 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "fusion--manage-feeds",
+    "url": "http://localhost:4434/feeds",
+    "finalUrl": "http://localhost:4434/feeds",
+    "status": 200,
+    "title": "Fusion",
+    "capturedAt": "2026-11-18T20:22:08.899Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 2604
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "news-publishing",
+    "domainNote": "self-hosted RSS/feed reader (Fusion), feed management page",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/fusion/explore.json",
+      "repo": {
+        "name": "0x2E/fusion",
+        "url": "https://github.com/0x2E/fusion",
+        "commit": "c31ade09b481fa877633899e8cf5d4c86a72c4f9",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "manage-feeds",
+        "name": "Manage feeds",
+        "description": "Feed management page listing feeds grouped by folder with article counts, last refresh, error/suspended status, edit buttons, search, status filter and add/refresh/import/export actions."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "App sidebar: logo, Search Cmd+K button, Unread/Starred/All with counts, a collapsible feed tree by group with unread counts, and Manage Feeds/Settings/Sign out at the bottom",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 300,
+        "height": 2604
+      },
+      "patterns": [
+        "app-shell",
+        "tree-view",
+        "badge",
+        "command-palette"
+      ]
+    },
+    {
+      "id": "page-header",
+      "role": "header",
+      "label": "Title bar with the 'Manage Feeds' h1 and a 'Feeds: 34' total",
+      "bbox": {
+        "x": 300,
+        "y": 0,
+        "width": 1140,
+        "height": 56
+      },
+      "patterns": []
+    },
+    {
+      "id": "toolbar",
+      "role": "toolbar",
+      "label": "Search feeds field, All Status filter dropdown, Add split dropdown (primary blue), and Refresh All, Import, Export buttons",
+      "bbox": {
+        "x": 324,
+        "y": 68,
+        "width": 1092,
+        "height": 36
+      },
+      "patterns": [
+        "text-field",
+        "filter-controls",
+        "menu"
+      ]
+    },
+    {
+      "id": "feed-groups",
+      "role": "collection",
+      "label": "Stacked collapsible group panels, each with a folder icon, name and count chip; rows show a favicon letter tile, name, domain, article count and last-fetch time, any error in red, and an edit pencil",
+      "bbox": {
+        "x": 324,
+        "y": 140,
+        "width": 1092,
+        "height": 2436
+      },
+      "patterns": [
+        "accordion",
+        "badge"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 300,
+            "height": 2604
+          },
+          "region": "sidebar",
+          "note": "Persistent left sidebar with brand, search, smart views with counts, feed tree and bottom nav",
+          "quote": "Unread 131"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations",
+          "live-counts"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "tree-view",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 237,
+            "width": 283,
+            "height": 540
+          },
+          "region": "sidebar",
+          "note": "Group nodes with chevron disclosure; indented child feeds with favicon tiles and unread counts",
+          "quote": "Tech News"
+        }
+      ],
+      "dims": {
+        "content": [
+          "label",
+          "type-icon",
+          "count-badge"
+        ],
+        "expandBy": [
+          "disclosure-triangle"
+        ],
+        "selection": "single-node",
+        "source": "containment",
+        "density": "compact"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 260,
+            "y": 113,
+            "width": 30,
+            "height": 28
+          },
+          "region": "sidebar",
+          "note": "Plain right-aligned unread counts beside sidebar items",
+          "quote": "131"
+        },
+        {
+          "bbox": {
+            "x": 444,
+            "y": 152,
+            "width": 24,
+            "height": 20
+          },
+          "region": "feed-groups",
+          "note": "Small gray chip giving the feed count next to the group name",
+          "quote": "2"
+        }
+      ],
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "rule": "everything-unread",
+        "aggregation": "rolled-up-to-parent"
+      }
+    },
+    {
+      "id": "command-palette",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 68,
+            "width": 283,
+            "height": 37
+          },
+          "region": "sidebar",
+          "note": "Search button with Cmd+K hint. On the live page it opens a centered blurred overlay that searches feeds and articles and lists Quick Actions (Keyboard Shortcuts ?)",
+          "quote": "Search Cmd+K / ?"
+        }
+      ],
+      "dims": {
+        "types": [
+          "objects-and-files",
+          "commands"
+        ],
+        "summon": [
+          "in-app-shortcut",
+          "visible-search-button"
+        ],
+        "placement": "centered-overlay",
+        "scope": "current-app",
+        "detail": "name-and-shortcut"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 324,
+            "y": 68,
+            "width": 280,
+            "height": 36
+          },
+          "region": "toolbar",
+          "note": "Outlined search input with a magnifier icon and placeholder",
+          "quote": "Search feeds..."
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "placeholder"
+        ],
+        "style": "outlined"
+      }
+    },
+    {
+      "id": "filter-controls",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 612,
+            "y": 70,
+            "width": 131,
+            "height": 32
+          },
+          "region": "toolbar",
+          "note": "Status dropdown with All Status, Error and Paused. On the live page, picking Error filtered the groups at once",
+          "quote": "All Status"
+        },
+        {
+          "bbox": {
+            "x": 324,
+            "y": 68,
+            "width": 280,
+            "height": 36
+          },
+          "region": "toolbar",
+          "note": "Text search that narrows the feeds",
+          "quote": "Search feeds..."
+        }
+      ],
+      "dims": {
+        "placement": "toolbar-popover",
+        "types": [
+          "text-match",
+          "checkbox-values"
+        ],
+        "preview": "live-results",
+        "origin": "developer-defined"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 989,
+            "y": 70,
+            "width": 100,
+            "height": 32
+          },
+          "region": "toolbar",
+          "note": "Add button with a chevron. On the live page it opens a menu with Add Feed and Add Group, each with an icon",
+          "quote": "Add"
+        },
+        {
+          "bbox": {
+            "x": 612,
+            "y": 70,
+            "width": 131,
+            "height": 32
+          },
+          "region": "toolbar",
+          "note": "Status dropdown menu",
+          "quote": "All Status"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click",
+        "structure": "flat",
+        "item": [
+          "label",
+          "icon"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    },
+    {
+      "id": "accordion",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 324,
+            "y": 140,
+            "width": 1092,
+            "height": 157
+          },
+          "region": "feed-groups",
+          "note": "Group header is a toggle (aria-expanded) with chevron, folder icon, name and count; panel lists feeds",
+          "quote": "Default"
+        },
+        {
+          "bbox": {
+            "x": 324,
+            "y": 305,
+            "width": 1092,
+            "height": 271
+          },
+          "region": "feed-groups",
+          "note": "Tech News group; its header also has Add Feed, Rename group and Delete Group icon buttons",
+          "quote": "Tech News"
+        }
+      ],
+      "dims": {
+        "policy": "all-open-by-default",
+        "header": [
+          "title-plus-summary-value"
+        ],
+        "toggle": [
+          "header-click"
+        ]
+      }
+    },
+    {
+      "id": "data-table",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 324,
+            "y": 183,
+            "width": 1092,
+            "height": 57
+          },
+          "region": "feed-groups",
+          "note": "Feed rows are list items with no column headers, sorting or selection"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "modal-dialog",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1379,
+            "y": 200,
+            "width": 22,
+            "height": 22
+          },
+          "region": "feed-groups",
+          "note": "The Edit Feed pencil opens a modal on the live page, but no dialog is open in the capture"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "tooltip",
+      "status": "absent",
+      "confidence": 0.5,
+      "rationale": "Not tested whether the row icons (for example the Hackaday pause icon) show tooltips on hover",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1225,
+            "y": 260,
+            "width": 16,
+            "height": 16
+          },
+          "region": "feed-groups",
+          "note": "Icon-only paused indicator; may have a hover tooltip"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "app layout: a fixed left sidebar (brand, Cmd+K search, smart views, a feed tree grouped into folders, bottom nav) next to a main panel with a title bar, a toolbar and a stack of collapsible bordered group sections listing feeds as rows",
+    "regions": [
+      "sidebar",
+      "page-header",
+      "toolbar",
+      "feed-groups"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#f7f7f5",
+      "#1f1f1f",
+      "#5f5e5b",
+      "#8a8a86",
+      "#1570d8",
+      "#d92d20",
+      "#e6e6e3"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "surface": "#f7f7f5",
+      "text": "#1f1f1f",
+      "muted": "#5f5e5b",
+      "primary": "#1570d8",
+      "accent": "#d92d20",
+      "border": "#e6e6e3"
+    },
+    "typography": "Inter Variable in the main panel (h1, group names, feed rows, toolbar buttons); system ui-sans-serif in the sidebar; ui-monospace for the Cmd+K hint",
+    "typeScale": "Compact and low-contrast: 18px/600 page title, 14-16px/600 group names, 14px/500 buttons, 13px feed names, 11-12px gray domains, counts and timestamps",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "clean",
+      "utilitarian",
+      "calm",
+      "technical"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T20:24:06.555Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 14,
+    "usage": {
+      "input_tokens": 28,
+      "cache_creation_input_tokens": 42579,
+      "cache_read_input_tokens": 511496,
+      "output_tokens": 8711
+    }
+  },
+  "notes": "Shadcn/Notion-like neutral UI. The off-white sidebar sits against a white main panel. Each feed has a small colored rounded square with a white initial letter as its favicon, and these give the page most of its color. Each group is a thin-bordered rounded panel (7px radius) with a light gray header strip. Row metadata is right-aligned ('5 articles · 9 minutes ago') next to a pencil edit icon. Fetch errors appear inline in red with an alert-circle icon, truncated with an ellipsis. Group action icons (add, rename, delete) appear in the header. The only saturated UI color is the blue primary Add split button. On the live page, the Edit Feed pencil opens a modal with Feed URL, Name, Group select, a Suspend toggle, Advanced Settings and an Unsubscribe action."
+}

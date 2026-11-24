@@ -1,0 +1,627 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "type-pal--actor-editor",
+    "url": "http://localhost:4467/?module=actor&page=workspace",
+    "finalUrl": "http://localhost:4467/?module=actor&page=workspace",
+    "status": 200,
+    "title": "仙剑奇侠传·复刻 · type-pal 编辑器",
+    "capturedAt": "2026-11-18T20:00:44.050Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1765
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "games",
+    "domainNote": "Desktop-style game content editor (RPG-Maker-like) for a Chinese Paladin (仙剑奇侠传) remake — actor/character workspace",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/type-pal/explore.json",
+      "repo": {
+        "name": "IllegalCreed/type-pal",
+        "url": "https://github.com/IllegalCreed/type-pal",
+        "commit": "8fce7b6a485904d2b7e2adb076989fcb94ccb027",
+        "license": "GPL-3.0"
+      },
+      "view": {
+        "slug": "actor-editor",
+        "name": "Character editor",
+        "description": "Character (actor) editor with the roster of 8 characters on the left, the 李逍遥 detail page with tabs and form sections in the center, and a summary inspector on the right."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Top app bar: project logo/name, PAL baseline chip, menubar of editor modules (文件…项目设置), toolbar with panel toggles, undo/redo, save",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 41
+      },
+      "patterns": [
+        "app-shell",
+        "menu",
+        "undo",
+        "tooltip"
+      ]
+    },
+    {
+      "id": "actor-list",
+      "role": "sidebar",
+      "label": "Left object list: 角色 heading with 8 位 count, new/duplicate buttons, list of 8 actors with pixel-art avatar, name, id and 可入队/NPC badge; selected row highlighted",
+      "bbox": {
+        "x": 0,
+        "y": 41,
+        "width": 194,
+        "height": 1698
+      },
+      "patterns": [
+        "overview-detail",
+        "badge",
+        "split-pane"
+      ]
+    },
+    {
+      "id": "main-editor",
+      "role": "main",
+      "label": "Actor detail: header with portrait, name, id, badges, delete button; section tabs (总览/战斗与成长/关系与脚本/外观资源); stacked section panels with key–value rows, name input, and 2x4 stat tiles",
+      "bbox": {
+        "x": 194,
+        "y": 41,
+        "width": 956,
+        "height": 1698
+      },
+      "patterns": [
+        "overview-detail",
+        "tabs",
+        "card",
+        "stat-tile",
+        "text-field",
+        "badge"
+      ]
+    },
+    {
+      "id": "inspector",
+      "role": "sidebar",
+      "label": "Right inspector: selection header (角色 李逍遥 li-xiaoyao), 摘要/引用 segmented tabs, 身份与资源 and 当前摘要 key–value sections",
+      "bbox": {
+        "x": 1150,
+        "y": 41,
+        "width": 290,
+        "height": 1698
+      },
+      "patterns": [
+        "property-inspector",
+        "tabs",
+        "split-pane"
+      ]
+    },
+    {
+      "id": "status-bar",
+      "role": "status-bar",
+      "label": "Bottom status bar: ⟳ 检查中 diagnostics progress text on left, save state 'PAL 开发基线 · 已保存' on right",
+      "bbox": {
+        "x": 0,
+        "y": 1739,
+        "width": 1440,
+        "height": 26
+      },
+      "patterns": [
+        "progress-indicator"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 41
+          },
+          "quote": "文件 编辑 视图 场景 地图 剧情 角色 物品 战斗 战斗模拟器 资源 项目设置",
+          "region": "header",
+          "note": "Persistent top bar with module menubar, identity and toolbar; three-pane workspace beneath plus status bar"
+        }
+      ],
+      "dims": {
+        "primary": "top-navigation-bar",
+        "secondary": "second-sidebar-column",
+        "items": [
+          "fixed-destinations"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 216,
+            "y": 0,
+            "width": 918,
+            "height": 40
+          },
+          "quote": "编辑器主菜单",
+          "region": "header",
+          "note": "role=menubar; live click on 文件 opens dropdown list (新建项目, 打开项目, 保存 PAL 开发基线 ⌘S, 另存为, 导出 ZIP)"
+        }
+      ],
+      "dims": {
+        "openBy": "menu-bar",
+        "item": [
+          "label",
+          "shortcut-hint"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list",
+        "structure": "flat"
+      }
+    },
+    {
+      "id": "undo",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1214,
+            "y": 6,
+            "width": 60,
+            "height": 28
+          },
+          "region": "header",
+          "note": "Undo/redo icon buttons (disabled), tooltips '撤销 · ⌘Z', '重做 · ⇧⌘Z'"
+        }
+      ],
+      "dims": {
+        "access": [
+          "toolbar-button",
+          "keyboard-shortcut"
+        ],
+        "unit": "many-levels"
+      }
+    },
+    {
+      "id": "tooltip",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1140,
+            "y": 4,
+            "width": 240,
+            "height": 32
+          },
+          "quote": "撤销 · ⌘Z",
+          "region": "header",
+          "note": "Live hover on undo shows dark bubble below the button with label and shortcut; toolbar and icon buttons all have tooltips in the a11y tree"
+        }
+      ],
+      "dims": {
+        "trigger": [
+          "hover"
+        ],
+        "content": "label-and-shortcut",
+        "placement": "below",
+        "timing": "until-the-pointer-leaves"
+      }
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 81,
+            "width": 193,
+            "height": 544
+          },
+          "quote": "李逍遥 li-xiaoyao 可入队",
+          "region": "actor-list",
+          "note": "List of actors with avatar, name, id, category badge; selected row (pressed) drives the detail editor"
+        },
+        {
+          "bbox": {
+            "x": 194,
+            "y": 41,
+            "width": 956,
+            "height": 1698
+          },
+          "quote": "李逍遥",
+          "region": "main-editor",
+          "note": "Detail editor shows all attributes of selected actor"
+        }
+      ],
+      "dims": {
+        "attributePlacement": [
+          "in-both-views",
+          "in-detail-view-only"
+        ],
+        "abstraction": [
+          "category"
+        ],
+        "truncation": "full-text",
+        "relationship": "one-to-one",
+        "openIn": "side-by-side",
+        "overviewType": [
+          "list"
+        ],
+        "detailMultiplicity": "one-at-a-time",
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "whole-item",
+        "attributeScope": [
+          "per-item"
+        ],
+        "recursion": [
+          "none"
+        ]
+      }
+    },
+    {
+      "id": "split-pane",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 190,
+            "y": 41,
+            "width": 8,
+            "height": 1698
+          },
+          "region": "actor-list",
+          "note": "separator '调整左侧面板宽度' between list and main"
+        },
+        {
+          "bbox": {
+            "x": 1146,
+            "y": 41,
+            "width": 8,
+            "height": 1698
+          },
+          "region": "inspector",
+          "note": "separator '调整右侧面板宽度'; toolbar toggles 对象列表/Inspector collapse panes"
+        }
+      ],
+      "dims": {
+        "orientation": "side-by-side",
+        "sizing": "draggable-divider",
+        "relationship": "linked-selection"
+      }
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 194,
+            "y": 190,
+            "width": 956,
+            "height": 41
+          },
+          "quote": "总览 战斗与成长 关系与脚本 外观资源",
+          "region": "main-editor",
+          "note": "Underline tabs; live click switched panel to editable stat steppers"
+        },
+        {
+          "bbox": {
+            "x": 1151,
+            "y": 134,
+            "width": 289,
+            "height": 49
+          },
+          "quote": "摘要 引用",
+          "region": "inspector",
+          "note": "Segmented-style inspector tabs; 引用 shows count 315 badge once loaded"
+        }
+      ],
+      "dims": {
+        "placement": "top",
+        "label": [
+          "text",
+          "badge-count"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      }
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 212,
+            "y": 249,
+            "width": 920,
+            "height": 295
+          },
+          "quote": "角色定义",
+          "region": "main-editor",
+          "note": "Bordered filled section panel: eyebrow, title, description, header action button, key–value body"
+        },
+        {
+          "bbox": {
+            "x": 212,
+            "y": 558,
+            "width": 920,
+            "height": 280
+          },
+          "quote": "视觉资产",
+          "region": "main-editor",
+          "note": "Same panel with '编辑外观' action"
+        }
+      ],
+      "dims": {
+        "media": "none",
+        "actions": "one-primary-action",
+        "shape": "horizontal",
+        "style": "outlined"
+      }
+    },
+    {
+      "id": "stat-tile",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 233,
+            "y": 984,
+            "width": 878,
+            "height": 128
+          },
+          "quote": "当前 / 最大体力 150 / 150",
+          "region": "main-editor",
+          "note": "2x4 grid of small bordered tiles: tiny label above large monospace number"
+        }
+      ],
+      "dims": {
+        "context": [
+          "label"
+        ],
+        "encoding": "number-only",
+        "drill": "none"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 139,
+            "y": 106,
+            "width": 42,
+            "height": 17
+          },
+          "quote": "可入队",
+          "region": "actor-list",
+          "note": "Outlined pill status labels per actor (可入队 blue, NPC grey)"
+        },
+        {
+          "bbox": {
+            "x": 51,
+            "y": 51,
+            "width": 36,
+            "height": 20
+          },
+          "quote": "8 位",
+          "region": "actor-list",
+          "note": "Count pill beside list heading"
+        },
+        {
+          "bbox": {
+            "x": 1004,
+            "y": 65,
+            "width": 42,
+            "height": 17
+          },
+          "quote": "可参战",
+          "region": "main-editor"
+        }
+      ],
+      "dims": {
+        "meaning": "label",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 831,
+            "y": 389,
+            "width": 280,
+            "height": 30
+          },
+          "quote": "李逍遥",
+          "region": "main-editor",
+          "note": "Outlined input for 显示名称 in key–value row"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "label"
+        ],
+        "style": "outlined",
+        "inputType": "plain"
+      }
+    },
+    {
+      "id": "property-inspector",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1150,
+            "y": 41,
+            "width": 290,
+            "height": 592
+          },
+          "quote": "身份与资源",
+          "region": "inspector",
+          "note": "Right panel with selection header and grouped key–value properties of the selected actor; mostly read-only summary with a jump-to-asset button"
+        }
+      ],
+      "dims": {
+        "placement": "right-sidebar",
+        "set": "contextual-to-the-selection-type",
+        "grouping": "tabs",
+        "multi": "single-object-only"
+      }
+    },
+    {
+      "id": "progress-indicator",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 1739,
+            "width": 300,
+            "height": 26
+          },
+          "quote": "⟳ 检查中 正在建立当前项目诊断快照…",
+          "region": "status-bar",
+          "note": "Status-bar text with small spinner glyph while diagnostics run; later turned into '⚠ 181 项待处理' count"
+        }
+      ],
+      "dims": {
+        "determinacy": "indeterminate",
+        "form": "text-status",
+        "coverage": "background-task-tray",
+        "control": "no-control"
+      }
+    },
+    {
+      "id": "form",
+      "status": "absent",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 212,
+            "y": 249,
+            "width": 920,
+            "height": 295
+          },
+          "note": "Overview tab is a key–value summary with one inline field, no submit; not a form"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "Desktop IDE-style three-pane editor: top menubar/toolbar, left object list, center tabbed detail editor of stacked section panels, right inspector with tabs, bottom status bar",
+    "regions": [
+      "header",
+      "actor-list",
+      "main-editor",
+      "inspector",
+      "status-bar"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#1b1d23",
+      "#232732",
+      "#2b303c",
+      "#2d3852",
+      "#3b4251",
+      "#66728a",
+      "#edf1f7",
+      "#aeb7c7",
+      "#96a1b3",
+      "#5aa2ff",
+      "#f27d84"
+    ],
+    "colorRoles": {
+      "background": "#1b1d23",
+      "surface": "#232732",
+      "surface-raised": "#2b303c",
+      "selected": "#2d3852",
+      "border": "#3b4251",
+      "control-border": "#66728a",
+      "text": "#edf1f7",
+      "muted": "#aeb7c7",
+      "subtle": "#96a1b3",
+      "primary": "#5aa2ff",
+      "danger": "#f27d84"
+    },
+    "typography": "system-ui for UI text, headings, labels; ui-monospace for ids (li-xiaoyao, name.li-xiaoyao) and stat numbers; Arial in actor list buttons",
+    "typeScale": "Compact: h1 20px bold, section titles 16-17px semibold, body 14px, labels/rows 12px, eyebrows/badges 10-11px; weight contrast 400 vs 650",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "illustration",
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "technical",
+      "dark",
+      "utilitarian",
+      "professional"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T20:02:34.236Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 10,
+    "usage": {
+      "input_tokens": 20,
+      "cache_creation_input_tokens": 40967,
+      "cache_read_input_tokens": 361006,
+      "output_tokens": 6120
+    }
+  },
+  "notes": "Dark-mode desktop-style game data editor. Section panels follow a consistent template: small blue eyebrow (身份/外观/战斗/成长/关系), bold title, grey description, divider, then right-aligned key–value rows separated by hairlines; header action buttons are small outlined. Pixel-art character portraits (retro game sprites) are the only imagery; NPCs without art fall back to emoji 👤. Selected list row uses #2d3852 fill with a blue left accent. Inspector tabs are segmented with blue outline on active. Status bar at bottom reports diagnostics and save state. Tooltips include keyboard shortcuts (⌘⌥L, ⌘Z). Editing tab uses numeric stepper inputs (−/+)."
+}

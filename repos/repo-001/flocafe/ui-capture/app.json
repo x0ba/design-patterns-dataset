@@ -1,0 +1,28 @@
+{
+  "mode": "server",
+  "entry": "/",
+  "login": {
+    "username": "Priya Natarajan",
+    "email": "priya@juniperrye.cafe",
+    "password": "Juniper#Rye2026"
+  },
+  "stubs": [
+    {
+      "service": "Electron runtime (app/BrowserWindow/ipc)",
+      "how": "Not stubbed by me: the repo's own dev-server.js mocks the Electron module and runs the Express + SQLite backend in plain Node; the same server serves the static Next.js export (frontend/out)."
+    },
+    {
+      "service": "Google Fonts (next/font/google: Geist, Geist Mono, Inter) at build time",
+      "how": "Build used Next's NEXT_FONT_GOOGLE_MOCKED_RESPONSES hook pointing at .ui-capture/fonts/mock-google-fonts.cjs, which serves the same font families from woff2 files taken from the npm 'geist' and '@fontsource-variable/inter' packages. No source changes."
+    },
+    {
+      "service": "FloAdmin cloud sync / registration, PostHog analytics, WhatsApp (Baileys), Google Drive backups",
+      "how": "Disabled with the app's own settings/env, no stub server needed: cloud_sync_enabled=0 and cloud_services_disabled_by_user=true in settings, product analytics 'off' at setup (PostHog also never connects outside Electron), FLO_WHATSAPP_SOCKET_DISABLED=1, and no Google Drive client ID configured, so the app shows them as not connected."
+    },
+    {
+      "service": "Thermal receipt / kitchen printers",
+      "how": "Two network printers are configured on LAN addresses (192.168.1.60/.61) for realism. Nothing listens there, so only an actual print attempt would report the printer as unreachable."
+    }
+  ],
+  "notes": "FloCafe is an Electron POS; here it runs without Electron through the repo's dev-server.js (Express API + static Next.js export on one port; KDS server on PORT+1, waiter Server App on PORT+2). Built with Node 22.23.5 (mise.toml) and npm ci --ignore-scripts (no Electron download). better-sqlite3 uses its bundled N-API prebuild. Backend built with `npm run build`, frontend with `npm run build:frontend` (NEXT_BUILD_MODE=desktop static export). start.sh copies the seeded DB snapshot (.ui-capture/data/flo.db) into .ui-capture/runtime and then runs dev-server.js. Seed: `node .ui-capture/seed/seed.cjs` (about 10s). It boots the real backend, runs first-run setup through POST /api/auth/setup/initialize (US/USD, America/Los_Angeles, quick-service), inserts the catalog the way the repo's own scripts/demo/seed-harbor-bean.cjs does, then creates about 1,000 orders through POST /api/orders, /api/bills/generate and /api/bills/:id/payment so the backend computes totals, then backdates each order across 150 days (Jun 20 to Nov 17 2026, Pacific store hours, weekend peaks, volume growing over time) and renumbers ORD-/INV- numbers per local day. Store: 'Juniper & Rye Coffee House', 2217 SE Division St, Portland OR (no sales tax in Oregon, so taxes are off). Data: 7 categories, 47 products (one retired, one tote out of stock, low-stock retail, 6 with photos from the repo's demo assets), 5 add-on groups (milk required on milk drinks, shots, syrups, size, breakfast add-ons), 11 tables over Main Room and Patio with floor-plan positions, 55 customers (notes, allergies, a duplicate entry, some without email), 9 staff (owner, manager, cashiers, servers, chefs, one deactivated), 13 supplies with recipes and stock movements, 106 expenses in 8 categories (rent, payroll, roaster, bakery, repairs), 2 printers. Orders: about 975 completed (card and cash), 25 cancelled with reasons, and today's open orders (ready, preparing, pending) for the POS, Orders and KDS screens. Today's cash shift was opened at 6:48am with a $200 float. Login: owner priya@juniperrye.cafe / Juniper#Rye2026 (approval PIN 4826). Staff PIN logins: Dana Whitfield (manager) 2604, Marco Delgado (cashier) 1357, Sam Abernathy (chef) 9021; staff password Juniper#Staff26. Main areas: POS (/pos), Dashboard/reports (/dashboard), Orders (/orders), KDS (reach it through in-app navigation: a direct GET of /kds/ on the main port returns 404 because the backend reserves /kds for its WebSocket), Tables floor plan (/tables), Products, Add-on groups, Inventory (supplies/recipes), Customers, Staff, Expenses, Settings. The data was seeded on 2026-11-17. If the app is started on a later day, start.sh runs .ui-capture/seed/shift-dates.cjs, which moves every stored date (and ORD-/INV- numbers) forward by whole days so the latest day becomes today."
+}

@@ -1,0 +1,111 @@
+# Codebook proposal (new-entry) — review with: node scripts/proposals.ts show gen-002 resolution-suggestions
+id: resolution-suggestions
+kind: new-entry
+status: open
+batch: gen-002
+codebookVersion: 1.0.0
+name: Resolution suggestions (issues to sort out)
+level: pattern
+parent: transact
+definition: A system-generated queue of detected problems in a plan or artifact (gaps, conflicts,
+  constraint violations), each explained in prose and paired with one-click proposed fixes plus an
+  alternative, often with an 'apply all'.
+aliases:
+  - to sort out
+  - issues panel
+  - suggested fixes
+  - conflict resolver
+relations:
+  neighbors:
+    - recommendations
+    - task-list
+    - banner
+  uses:
+    - card
+    - badge
+dimensions:
+  - name: Resolution actions
+    family: invocation
+    question: How can each issue be resolved?
+    subdimensions:
+      - id: resolutionActions
+        name: Resolution actions
+        select: many
+        values:
+          - id: one-click-fix
+            name: One-click proposed fix
+          - id: alternative-fix
+            name: Alternative fix
+          - id: dismiss-accept-as-is
+            name: Dismiss / accept as is
+          - id: apply-all
+            name: Apply all
+  - name: Fix actions
+    family: invocation
+    question: How are proposed fixes applied?
+    subdimensions:
+      - id: fixActions
+        name: Fix actions
+        select: many
+        values:
+          - id: one-click-primary-fix
+            name: One-click primary fix
+          - id: alternative-fix
+            name: Alternative fix
+          - id: apply-all
+            name: Apply all
+          - id: dismiss-or-accept-as-is
+            name: Dismiss / accept as is
+  - name: Explanation
+    family: content
+    question: Does each issue say why?
+    subdimensions:
+      - id: explanation
+        name: Explanation
+        select: one
+        values:
+          - id: none
+            name: None
+          - id: short-label
+            name: Short label
+          - id: reasoned-paragraph
+            name: Reasoned paragraph
+rationale:
+  - rater: rater-2
+    site: family-care-visit-rotation
+    text: recommendations covers items proposed from taste/behaviour; task-list covers user-created
+      to-dos. Neither describes system-detected constraint conflicts with reasoned, one-click
+      resolutions that rewrite the plan (like a linter quick-fix list for a schedule).
+  - rater: rater-1
+    site: family-care-visit-rotation
+    text: Recommendations assume catalogue items proposed from behaviour, and banner is a single
+      condition message. Neither fits a sidebar of reasoned schedule fixes, each with alternative
+      resolution actions and a bulk 'Apply all'. Rostering, timetabling and linting UIs commonly use
+      this.
+sources:
+  - batch: gen-002
+    site: family-care-visit-rotation
+    url: http://family-care-visit-rotation.localhost:4318/
+    note: proposed by rater-2, rater-1
+evidence:
+  - site: family-care-visit-rotation
+    rater: rater-2
+    bbox:
+      x: 20
+      y: 157
+      width: 288
+      height: 820
+    quote: To sort out 4 Apply all
+    note: Four conflict cards each with rationale and two resolution buttons
+  - site: family-care-visit-rotation
+    rater: rater-1
+    bbox:
+      x: 20
+      y: 157
+      width: 288
+      height: 820
+    quote: To sort out 4 Apply all
+    note: Four issue cards, each with an explanation and two fix buttons (e.g. 'Place Dec 3–8' / 'Choose
+      dates')
+createdAt: 2026-11-17T22:02:00.548Z
+updatedAt: 2026-11-17T22:02:15.213Z

@@ -1,0 +1,532 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "fusion--article-list",
+    "url": "http://localhost:4434/",
+    "finalUrl": "http://localhost:4434/unread",
+    "status": 200,
+    "title": "Fusion",
+    "capturedAt": "2026-11-18T06:27:39.177Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1741
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "news-publishing",
+    "domainNote": "self-hosted RSS/feed reader (Fusion) — personal news aggregation",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/fusion/explore.json",
+      "repo": {
+        "name": "0x2E/fusion",
+        "url": "https://github.com/0x2E/fusion",
+        "commit": "c31ade09b481fa877633899e8cf5d4c86a72c4f9",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "article-list",
+        "name": "Unread article list",
+        "description": "Main reader workspace: sidebar with Unread/Starred/All and grouped feeds with unread counts, and the article list with All/Unread/Starred filter tabs."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Left navigation: Fusion logo, Cmd+K search button, Unread/Starred/All views with counts, Feeds tree grouped by category with per-feed unread counts, Manage Feeds/Settings/Sign out",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 300,
+        "height": 1741
+      },
+      "patterns": [
+        "app-shell",
+        "tree-view",
+        "badge",
+        "command-palette"
+      ]
+    },
+    {
+      "id": "main-header",
+      "role": "header",
+      "label": "Main title bar 'All Articles' with Mark all as read button",
+      "bbox": {
+        "x": 300,
+        "y": 0,
+        "width": 1140,
+        "height": 56
+      },
+      "patterns": [
+        "inbox"
+      ]
+    },
+    {
+      "id": "view-tabs",
+      "role": "toolbar",
+      "label": "Segmented All / Unread / Starred tabs",
+      "bbox": {
+        "x": 324,
+        "y": 72,
+        "width": 175,
+        "height": 36
+      },
+      "patterns": [
+        "tabs",
+        "filter-controls"
+      ]
+    },
+    {
+      "id": "article-list",
+      "role": "list",
+      "label": "Chronological list of unread articles: title, truncated snippet, feed favicon + name, relative time; Load more button",
+      "bbox": {
+        "x": 324,
+        "y": 124,
+        "width": 1092,
+        "height": 1090
+      },
+      "patterns": [
+        "feed",
+        "inbox",
+        "overview-detail",
+        "pagination"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 300,
+            "height": 1741
+          },
+          "region": "sidebar",
+          "note": "Persistent left sidebar with views, feed tree and account actions; main content to the right",
+          "quote": "Fusion"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations",
+          "live-counts"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "tree-view",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 215,
+            "width": 283,
+            "height": 1405
+          },
+          "region": "sidebar",
+          "note": "Feed categories with chevron disclosure buttons, nested feeds indented with favicon letter tiles and unread counts",
+          "quote": "Tech News 33"
+        }
+      ],
+      "dims": {
+        "content": [
+          "label",
+          "type-icon",
+          "count-badge"
+        ],
+        "expandBy": [
+          "disclosure-triangle"
+        ],
+        "selection": "single-node",
+        "source": "containment",
+        "density": "compact"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 260,
+            "y": 118,
+            "width": 28,
+            "height": 18
+          },
+          "region": "sidebar",
+          "note": "Plain small numeric unread count right-aligned on nav items",
+          "quote": "131"
+        },
+        {
+          "bbox": {
+            "x": 265,
+            "y": 333,
+            "width": 20,
+            "height": 20
+          },
+          "region": "sidebar",
+          "note": "Group total rolled up from child feeds",
+          "quote": "33"
+        }
+      ],
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "rule": "everything-unread",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "command-palette",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 68,
+            "width": 283,
+            "height": 37
+          },
+          "region": "sidebar",
+          "note": "Search button with Cmd+K hint; live check opens a centered overlay 'Search feeds and articles…' with Quick Actions (Keyboard Shortcuts)",
+          "quote": "Search Cmd+K / ?"
+        }
+      ],
+      "dims": {
+        "types": [
+          "objects-and-files",
+          "commands"
+        ],
+        "detail": "name-and-shortcut",
+        "summon": [
+          "in-app-shortcut",
+          "visible-search-button"
+        ],
+        "scope": "current-app",
+        "placement": "centered-overlay"
+      }
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 324,
+            "y": 72,
+            "width": 175,
+            "height": 36
+          },
+          "region": "view-tabs",
+          "note": "role=tablist segmented control, Unread selected with white raised pill",
+          "quote": "All Unread Starred"
+        }
+      ],
+      "dims": {
+        "placement": "segmented-control",
+        "label": [
+          "text"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      }
+    },
+    {
+      "id": "filter-controls",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "The All/Unread/Starred tabs act as a read-state filter on the same article list; coded primarily as tabs, filter reading is a judgment call.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 324,
+            "y": 72,
+            "width": 175,
+            "height": 36
+          },
+          "region": "view-tabs",
+          "note": "Tabs narrow list by read/starred state; URL changes to /unread",
+          "quote": "Unread"
+        }
+      ],
+      "dims": {
+        "placement": "filter-bar-with-chips",
+        "types": [
+          "toggle-chips"
+        ],
+        "preview": "live-results",
+        "origin": "developer-defined",
+        "persistence": "in-the-url"
+      }
+    },
+    {
+      "id": "feed",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 324,
+            "y": 124,
+            "width": 1092,
+            "height": 1037
+          },
+          "region": "article-list",
+          "note": "Reverse-chronological stream of articles from subscribed feeds, uniform items, title+snippet+source+time",
+          "quote": "Hacker News: Front Page · 2 hours ago"
+        },
+        {
+          "bbox": {
+            "x": 824,
+            "y": 1176,
+            "width": 92,
+            "height": 32
+          },
+          "region": "article-list",
+          "note": "Explicit Load more at end",
+          "quote": "Load more"
+        }
+      ],
+      "dims": {
+        "density": "card-preview",
+        "heterogeneity": [
+          "uniform-posts"
+        ],
+        "ordering": "chronological",
+        "sources": [
+          "followed-accounts"
+        ],
+        "arrangement": "single-column",
+        "loading": [
+          "paged"
+        ],
+        "nesting": [
+          "flat"
+        ]
+      }
+    },
+    {
+      "id": "inbox",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1281,
+            "y": 12,
+            "width": 135,
+            "height": 32
+          },
+          "region": "main-header",
+          "note": "Triage action clearing the unread queue",
+          "quote": "Mark all as read"
+        },
+        {
+          "bbox": {
+            "x": 324,
+            "y": 226,
+            "width": 1092,
+            "height": 102
+          },
+          "region": "article-list",
+          "note": "Rows show subject, snippet, sender (feed); opening an item marks it read (unread count dropped 131→130 live); hover shows mark-read/star/open-original actions",
+          "quote": "The case of the disappearing cron job"
+        }
+      ],
+      "dims": {
+        "organization": "folders",
+        "grouping": "individual-messages",
+        "openIn": "side-by-side",
+        "density": "comfortable",
+        "triage": "mark-as-read",
+        "rowAttributes": [
+          "sender",
+          "subject",
+          "snippet"
+        ],
+        "priority": "chronological",
+        "deferral": [
+          "none"
+        ]
+      }
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 324,
+            "y": 124,
+            "width": 1092,
+            "height": 102
+          },
+          "region": "article-list",
+          "note": "Whole row is a button; live click opens article in a right-hand overlay panel (blurred backdrop) with Mark as read/Star/Original and Previous/Next",
+          "quote": "Show HN: I built a SQLite extension for vector search in 400 lines of C"
+        }
+      ],
+      "dims": {
+        "attributePlacement": [
+          "in-both-views",
+          "in-detail-view-only"
+        ],
+        "abstraction": [
+          "style"
+        ],
+        "truncation": "ellipsis",
+        "relationship": "one-to-one",
+        "recursion": [
+          "none"
+        ],
+        "openIn": "pop-up",
+        "overviewType": [
+          "list"
+        ],
+        "detailMultiplicity": "one-at-a-time",
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "whole-item",
+        "attributeScope": [
+          "per-item"
+        ]
+      }
+    },
+    {
+      "id": "pagination",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 824,
+            "y": 1176,
+            "width": 92,
+            "height": 32
+          },
+          "region": "article-list",
+          "note": "Load more button below 10 articles",
+          "quote": "Load more"
+        }
+      ],
+      "dims": {
+        "mechanism": "load-more",
+        "position": "scroll-position-only",
+        "pageSize": "fixed"
+      }
+    },
+    {
+      "id": "reader",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 324,
+            "y": 124,
+            "width": 1092,
+            "height": 1037
+          },
+          "note": "Article reading view only appears after click (overlay), not in capture; no typography controls observed"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "two-column app shell: fixed left sidebar (search, smart views, collapsible feed-group tree, footer actions) and main pane with title bar, segmented All/Unread/Starred tabs and a single-column article list with Load more; article opens in a right-side overlay panel",
+    "regions": [
+      "sidebar",
+      "main-header",
+      "view-tabs",
+      "article-list"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#fbfbfa",
+      "#37352f",
+      "#5f5e5b",
+      "#ebebea",
+      "#f1f1ef",
+      "#2383e2",
+      "#f26522"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "surface": "#fbfbfa",
+      "text": "#37352f",
+      "muted": "#5f5e5b",
+      "border": "#ebebea",
+      "selected": "#f1f1ef",
+      "primary": "#2383e2",
+      "accent": "#f26522"
+    },
+    "typography": "Inter Variable for main pane (title 18px/600, article titles 15px/500, snippets/meta, buttons); system ui-sans-serif for sidebar nav 14px/500; ui-monospace for the Cmd+K hint",
+    "typeScale": "Compact, low-contrast scale: 18px semibold page title, 15px medium article titles, 14px body/nav, 12px meta and buttons, 11px counts and section label 'Feeds'; hierarchy carried by weight and gray tone rather than size",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "clean",
+      "minimal",
+      "calm",
+      "utilitarian",
+      "notion-like"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T06:28:56.708Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 9,
+    "usage": {
+      "input_tokens": 18,
+      "cache_creation_input_tokens": 43780,
+      "cache_read_input_tokens": 332267,
+      "output_tokens": 5298
+    }
+  },
+  "notes": "Notion-inspired warm-gray RSS reader. Sidebar uses tiny colored square letter-tiles (favicon placeholders, brand-colored per feed) and right-aligned 11px gray unread counts; category headers have chevron disclosure. Main list rows are borderless with hairline dividers; read rows turn gray in place; hovering a row reveals mark-read, star and open-original icon buttons with a blue focus outline. Clicking a row opens a right-side detail panel over a blurred backdrop (Mark as read / Star / Original, Previous/Next at bottom) — a drawer-like overlay not visible in the capture. Cmd+K opens a centered command palette ('Search feeds and articles…', Quick Actions, Keyboard Shortcuts ?). Sidebar and list scroll independently."
+}

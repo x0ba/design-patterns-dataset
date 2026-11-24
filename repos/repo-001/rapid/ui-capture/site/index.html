@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <title>Rapid</title>
+    <link rel='stylesheet' href='dist/rapid.css'>
+    <link rel='icon' type='image/svg' href='dist/img/rapid_favicon.svg'>
+
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no'/>
+    <meta name='mobile-web-app-capable' content='yes'/>
+    <meta name='apple-mobile-web-app-status-bar-style' content='black-translucent'/>
+    <style type='text/css'>
+      html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        /* disable elastic page bounce upon scroll */
+        overflow: hidden;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script>var $buoop={required:{i:15,e:-4,f:-3,o:-3,s:-1,c:-3},reminder:0,noclose:true,no_permanent_hide:true,insecure:true,api:2021.06};</script>
+    <script src='/stub/browser-update.js'></script>
+    <script src='/offline-shim.js'></script>
+    <script src='/seed-prefs.js'></script>
+    <div id='rapid-container'></div>
+
+    <script>
+      var container = document.getElementById('rapid-container');
+      var newScript = document.createElement('script');
+      newScript.type = 'text/javascript';
+      newScript.onload = checkScript;
+      newScript.onerror = checkScript;
+      newScript.src = 'dist/rapid.min.js';
+
+      document.getElementsByTagName('head')[0].appendChild(newScript);
+
+      function checkScript() {
+        if (typeof Rapid === 'undefined' || !Rapid.utilDetect().support) {
+          container.innerHTML = 'Sorry, your browser is not currently supported.';
+          container.style.padding = '20px';
+
+        } else {
+          const context = new Rapid.Context();
+          context.containerNode = container;
+          context.assetPath = 'dist/';
+          context.assetOrigin = 'local';   // offline: all assets from dist/data/modules
+          context.buildID = '';
+          context.buildSHA = '';
+          context.buildDate = '';
+          context.apiConnections = [
+            {
+              url: window.location.origin,
+              apiUrl: window.location.origin,
+              client_id: 'local-stub-client-id',
+              client_secret: 'local-stub-client-secret'
+            }
+          ];
+          // Signed in to the local OSM API stub with a placeholder OAuth2 token
+          context.preauth = Object.assign({ access_token: 'local-stub-oauth2-token' }, context.apiConnections[0]);
+
+          window.context = context;  // for debugging
+          window.rapidContext = context;
+          context.initAsync();
+        }
+      }
+    </script>
+  </body>
+</html>

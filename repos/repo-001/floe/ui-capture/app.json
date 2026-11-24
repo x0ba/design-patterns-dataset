@@ -1,0 +1,12 @@
+{
+  "mode": "server",
+  "entry": "/",
+  "login": null,
+  "stubs": [
+    {"service": "Upstash Redis REST (global 'transferred globally' byte counter)", "how": "stubs/upstash-stub.js: a local HTTP server on PORT+2 speaking Upstash's REST protocol (POST JSON command array, Bearer token, {result}); state in data/upstash.json, seeded by seed.js. The signaling server is pointed at it via UPSTASH_REDIS_REST_URL/TOKEN."},
+    {"service": "Google Fonts (next/font/google, Geist and Geist Mono) at build time", "how": "build-client.sh sets Next's NEXT_FONT_GOOGLE_MOCKED_RESPONSES hook to fonts/google-fonts-mock.js and serves the real Geist variable woff2 files (from the geist npm package) on a throwaway localhost port during the build; the fonts are self-hosted in the built output."},
+    {"service": "Cloudflare TURN / coturn relay", "how": "Left unconfigured, which is the server's own supported mode: /api/turn-credentials returns its built-in STUN list and no relay; peers on this machine connect over host candidates."},
+    {"service": "Sentry error tracking and Umami analytics", "how": "DSN and website id left empty, which disables both (the app's documented off switch)."}
+  ],
+  "notes": "Floe: encrypted P2P file transfer, no accounts. Built from client/ (Next.js 16, standalone output) and server/ (Express + Socket.IO signaling server). start.sh runs three processes: the Upstash stub (PORT+2), the signaling server (PORT+1, request links enabled through policy.json), and the Next standalone client on PORT; the browser learns the signaling address at runtime from /api/config. Data: there are no user records in Floe; the persistent state is the global byte counter shown under the transfer card ('... transferred globally'). seed.js generates five months of receiver stats reports (about 54k transfers, 2026-06-14 v1.0.0 launch through 2026-11-16, launch spike then weekday-shaped growth, sizes from small PDFs to 30 GB footage drops) and stores their total, about 62.4 TB, under floe:bytes_total. Main areas: home page / (send card: drop files or a folder, get a share link + QR + short code; receive by code), its landing sections (how it works, privacy, CLI, desktop, capabilities, FAQ), /how-it-works, /download, /privacy, /terms, and /r/<linkId> request-link pages. Setup: mise.toml pins node 24.11.1 and pnpm 11.1.2; install-client-deps.sh installs client deps (copy step skips a .vscode/settings.json the sandbox refuses to write); server deps via npm ci in server/; build-client.sh builds the client."
+}

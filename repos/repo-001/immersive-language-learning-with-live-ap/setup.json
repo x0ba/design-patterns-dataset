@@ -1,0 +1,95 @@
+{
+  "batch": "repo-001",
+  "slug": "immersive-language-learning-with-live-ap",
+  "ok": true,
+  "repo": {
+    "name": "ZackAkil/immersive-language-learning-with-live-api",
+    "url": "https://github.com/ZackAkil/immersive-language-learning-with-live-api",
+    "commit": "0affcef69b8c327aa3ba7ab6a15d254936bd5134",
+    "branch": "main",
+    "license": "Apache-2.0"
+  },
+  "domain": "education",
+  "port": 4446,
+  "checkoutRoot": "~/.cache/design-patterns-dataset/repos",
+  "mode": "server",
+  "entry": "/",
+  "app": {
+    "mode": "server",
+    "entry": "/",
+    "login": null,
+    "stubs": [
+      {
+        "service": "Google Gemini Live API (Vertex AI, gemini-live-2.5-flash-native-audio) - real-time voice roleplay",
+        "how": "The launcher .ui-capture/run.py swaps the app's integration module server.gemini_live for .ui-capture/stubs/gemini_live_stub.py before importing server/main.py. The stub keeps the GeminiLive.start_session interface and event shapes. It reads the mission, target language and Teacher/Immersive mode out of the client's system prompt and plays a scripted roleplay from stubs/dialogues.py (+ dialogues_extra.py). It sends speech-like synthesized PCM16 24 kHz audio (drives the visualizer and playback), input/output transcription chunks (only when the client enables transcription, i.e. Teacher mode), turnComplete events, and finally a complete_mission tool call with a score and 3 feedback points, so the app moves on to the summary screen."
+      },
+      {
+        "service": "reCAPTCHA Enterprise - server-side assessment (google-cloud-recaptcha-enterprise)",
+        "how": "server.recaptcha_validator is swapped for .ui-capture/stubs/recaptcha_validator_stub.py (no Google credentials needed). With DEV_MODE=true the server skips validation anyway."
+      },
+      {
+        "service": "reCAPTCHA Enterprise - browser script (www.google.com/recaptcha/enterprise.js)",
+        "how": "build.sh rewrites the script URL in dist/index.html to /__stub/recaptcha/enterprise.js. That file defines grecaptcha.enterprise.ready/execute and returns opaque tokens."
+      },
+      {
+        "service": "Google Fonts (Libre Baskerville, Nunito)",
+        "how": "build.sh points the stylesheet link at /__stub/fonts/fonts.css, which serves the same font files from the @fontsource npm packages (installed in .ui-capture/fonts)."
+      },
+      {
+        "service": "gstatic Google Cloud logo image and buttons.github.io script",
+        "how": "build.sh rewrites those URLs in the built JS to /__stub/img/google_cloud_48dp.svg (a local cloud logo SVG) and /__stub/github-buttons.js (a no-op script)."
+      },
+      {
+        "service": "Redis (rate-limit storage) and BigQuery (usage tracking)",
+        "how": "env.local sets DEV_MODE=true, the repo's own dev mode: in-memory rate limiting, no Redis ping, BigQuery logging skipped. REDIS_URL and RECAPTCHA_SITE_KEY are placeholders, so /api/status reports production mode and the 'Simple Mode' dev banner doesn't show. PROJECT_ID is a placeholder, so google.auth is never called."
+      }
+    ],
+    "notes": "Immergo = Vite vanilla-JS front end + FastAPI backend (server/main.py) that proxies a WebSocket to Gemini Live. Setup: mise.toml pins node 22.12.0 and python 3.10.16 (matching the Dockerfile). npm ci, then a python venv at ./venv with requirements.txt (as in scripts/install.sh). .ui-capture/build.sh runs `npm run build` and rewrites the external browser URLs in dist/ to /__stub/* assets. start.sh loads .ui-capture/env.local and runs .ui-capture/run.py, which is the app's own FastAPI app with the stub modules swapped in and a /__stub static mount, on PORT (4446). No database and no accounts: the app's only persistent state is the bundled mission catalog (src/data/missions.json, used as-is) and browser localStorage preferences. /__stub/seed-prefs.js (added to dist/index.html) seeds the prefs a returning learner would have: native language English, practising Spanish, Teacher mode. It only fills keys that are missing, so changes made in the app persist. Main areas: (1) splash/landing at / with the 'Start' call to action, (2) mission selector: from/to language pickers, Teacher vs Immersive mode, 9 mission cards Easy to Expert, a 'Deploy your own' panel, (3) chat/roleplay view: click a mission, then 'Start Mission'. The stub persona starts after ~2 s. In Teacher mode a live transcript shows the learner's lines and the persona's replies with English coaching notes. The session lasts about 40-70 s and ends with a complete_mission call. (4) summary view: score scale Tiro/Proficiens/Peritus and 3 feedback points; Teacher mode sends score 0 per the app's prompt. 'End Mission' early shows the incomplete-session summary. Scripted dialogues (with teacher-mode English coaching notes and mission-specific feedback): Spanish and French for all 9 missions, German and Japanese for Say Hello / Order a Coffee / Buy a bus ticket, Italian for Say Hello / Order a Coffee. Other language/mission combinations (all 24 languages in the picker, including 'Science Jargon') use a short generic in-language exchange. Immersive-mode scores vary (Tiro/Proficiens/Peritus) per session. The microphone needs browser permission (getUserMedia); the stub doesn't depend on mic audio. Helper: .ui-capture/ws_smoke.py PORT [teacher|immersive] [language] exercises /api/status, the stub assets, /api/auth and a full WebSocket session."
+  },
+  "tools": {
+    "node": "22.12.0",
+    "python": "3.10.16"
+  },
+  "prompt": "This is a checkout of ZackAkil/immersive-language-learning-with-live-api (https://github.com/ZackAkil/immersive-language-learning-with-live-api) at commit 0affcef69b8c. Immergo is an immersive language learning application powered by the Google Gemini Live SDK. It simulates real-world roleplay scenarios (e.g., buying a bus ticket, ordering coffee) to help users practice speaking in various languages with an AI that acts as a native speaker.\n\nI want to see its user interface in a desktop browser, in the state a real, established user would see it. Please get the app running locally with its main interface working and realistic data in it.\n\n# Running it\n- Follow the repo's own setup docs and tooling. Take the simplest route that shows the real app: a static production build if the front end works without a backend, otherwise the app's own server (production or dev mode).\n- If it needs a database or other services, run them locally with an embedded or file-based option (SQLite, in-memory, JSON files, an embedded Postgres such as PGlite) or the app's demo/mock mode.\n- Don't redesign or restyle anything. Change only what's needed to build and run it.\n\n# Tools: use mise\nInstall every runtime and tool you need (node, the package manager, python, bun, ...) with mise, pinned to exact versions in a mise.toml at the repo root, so the setup can be reproduced. Match what the repo asks for (engines, .nvmrc, .tool-versions, packageManager). mise is already configured for this directory: `mise install` installs into ./.ui-capture/mise, and its shims come first on PATH, so `node`, `pnpm` and the rest resolve to the pinned versions. Don't use other copies of these tools or download runtimes by hand.\n\n# Secrets, API keys and external services: fake them\nThe app must not depend on anything outside this machine, and when it runs it has no network except localhost. Wherever it expects secrets, environment variables, API keys or third-party services (hosted auth or OAuth, payment providers, email, LLM or other AI APIs, maps, storage buckets, analytics, hosted databases):\n- Give the required variables placeholder values so the app starts.\n- Where it actually calls the service, make the call succeed locally with realistic responses: use the app's own mock, test or offline mode if it has one; otherwise point the client at a small local stub server that start.sh also starts, or swap in a stub at the integration boundary (the API client or service module). Keep stubs out of UI code. Responses should look like what the real service returns for a real user, e.g. an AI reply that actually answers, a payment history with real-looking amounts.\n- Calls the browser makes directly to outside services count too; point them at the local stub.\n- For sign-in through an outside provider, create a local account or use the app's dev sign-in so you can get past it.\nList every stub in app.json.\n\n# Data: like real use\nSeed it the way an established user's data would look after months of actual use: specific, plausible names and content for this kind of app; dates spread over time; a realistic mix of states (done, in progress, overdue, archived, ...); realistic volume (dozens to hundreds of records where the app revolves around records); short and long text; some messiness real data has. Start from the app's own demo or seed data if it has realistic data, and extend it if it's thin. Load data through the app's own paths (its API, import, seed scripts, or its database schema), never by hardcoding it into UI code. If the app needs an account, create one and attach the data to it. No lorem ipsum or \"Test 1\".\n\n# Environment\nThis shell is sandboxed: you can write only inside this directory (package-manager caches already point into ./.ui-capture/cache), and the network reaches only package registries, mise's download sources and GitHub (registry.npmjs.org, registry.yarnpkg.com, repo.yarnpkg.com, github.com, codeload.github.com, objects.githubusercontent.com, raw.githubusercontent.com, nodejs.org, mise.jdx.dev, mise-versions.jdx.dev, release-assets.githubusercontent.com, pypi.org, files.pythonhosted.org, binaries.prisma.sh, cdn.jsdelivr.net, unpkg.com). Docker isn't available. A process you start in the background can't be seen or stopped from a later command, so test servers on another port than 4446 (e.g. 5446) or in the foreground under `timeout`; anything still listening on 4446 is stopped before I check.\n\n# When you're done, leave this in ./.ui-capture/\n- app.json: {\"mode\": \"static\" or \"server\", \"entry\": \"/path where the main UI opens\", \"login\": null or {\"username\": \"...\", \"email\": \"...\", \"password\": \"...\"}, \"stubs\": [{\"service\": \"what was faked\", \"how\": \"how\"}], \"notes\": \"how you set it up, what data is loaded, and the main areas of the app\"}\n- static mode: the production build in ./.ui-capture/out, with index.html as its entry. It will be served from the root of a plain static file server; unknown paths fall back to index.html.\n- server mode: ./.ui-capture/start.sh, which starts everything the app needs (stubs included) in the foreground and serves the UI at http://localhost:4446/ (it gets PORT=4446). It runs with the same PATH and restrictions as your shell, plus no network at all except localhost, so everything must already be installed, built and seeded (or seeded by start.sh itself).\n- Put any scripts you write for seeding or stubbing in ./.ui-capture/ too; they're kept with the setup record.\n\n# Order of work\nYou have 90 minutes in total, and anything unfinished when time runs out is lost. So work in this order:\n1. Get the app building and running with its stubs, and write the contract above (app.json plus out/ or start.sh), even if it has only a little data so far.\n2. Then build out the data, re-running your seed and checking the app still loads after each substantial step, so that a working state with the data loaded so far is always in place.\nWrite large data sets with a short generator script rather than as one long literal file.\n\nI'll open it at 1440×900.",
+  "model": {
+    "model": "claude-opus-5-5",
+    "effort": "high"
+  },
+  "sandbox": true,
+  "startedAt": "2026-11-17T05:50:29.109Z",
+  "finishedAt": "2026-11-17T06:04:48.417Z",
+  "verification": {
+    "ok": true,
+    "problems": [],
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedRequests": [],
+    "textChars": 377,
+    "visibleElements": 54,
+    "title": "Immersive Language Learning"
+  },
+  "repairs": 0,
+  "session": {
+    "rounds": 1,
+    "numTurns": 40,
+    "costUsd": 2.5462388000000002,
+    "durationMs": 857346,
+    "models": [
+      "claude-opus-5-5"
+    ],
+    "usage": {
+      "input_tokens": 74,
+      "cache_creation_input_tokens": 118880,
+      "cache_read_input_tokens": 2677014,
+      "output_tokens": 52975
+    },
+    "timedOut": false
+  },
+  "changes": {
+    "files": 1,
+    "insertions": 6,
+    "deletions": 0,
+    "patchBytes": 222,
+    "patch": "setup.patch"
+  }
+}

@@ -1,0 +1,38 @@
+// Smoke test of the stub with the same client library Phanpy uses (masto.js)
+import { createRestAPIClient } from 'masto';
+const port = process.argv[2] || '5440';
+const masto = createRestAPIClient({ url: `http://localhost:${port}`, accessToken: 'x' });
+const ok = (label, v) => console.log(label.padEnd(28), Array.isArray(v) ? `${v.length} items` : typeof v === 'object' ? Object.keys(v).slice(0, 6).join(',') : v);
+ok('instance v2', await masto.v2.instance.fetch());
+const me = await masto.v1.accounts.verifyCredentials();
+ok('me', me.displayName + ' ' + me.acct);
+let total = 0, pages = 0;
+for await (const page of masto.v1.timelines.home.list({ limit: 20 })) { total += page.length; if (++pages > 20) break; }
+ok('home (all pages)', `${total} statuses / ${pages} pages`);
+ok('notifications', await masto.v1.notifications.list({ limit: 30 }));
+ok('account statuses', await masto.v1.accounts.$select(me.id).statuses.list({ limit: 20 }));
+ok('pinned', await masto.v1.accounts.$select(me.id).statuses.list({ pinned: true }));
+ok('relationships', await masto.v1.accounts.relationships.fetch({ id: [me.id] }));
+const home = await masto.v1.timelines.home.list({ limit: 40 });
+const thread = home.find((s) => s.repliesCount > 0) || home[0];
+ok('context', await masto.v1.statuses.$select(thread.id).context.fetch());
+ok('lists', await masto.v1.lists.list());
+ok('list timeline', await masto.v1.timelines.list.$select('52').list());
+ok('tag timeline', await masto.v1.timelines.tag.$select('a11y').list());
+ok('followed tags', await masto.v1.followedTags.list());
+ok('bookmarks', await masto.v1.bookmarks.list());
+ok('favourites', await masto.v1.favourites.list());
+ok('trends tags', await masto.v1.trends.tags.list());
+ok('trends statuses', await masto.v1.trends.statuses.list());
+ok('trends links', await masto.v1.trends.links.list());
+ok('search', await masto.v2.search.list({ q: 'bike' }));
+ok('filters', await masto.v2.filters.list());
+ok('conversations', await masto.v1.conversations.list());
+ok('scheduled', await masto.v1.scheduledStatuses.list());
+ok('markers', await masto.v1.markers.fetch({ timeline: ['home', 'notifications'] }));
+ok('announcements', await masto.v1.announcements.list());
+const fav = await masto.v1.statuses.$select(home[3].id).favourite();
+ok('favourite', String(fav.favourited));
+const created = await masto.v1.statuses.create({ status: 'Smoke test post #test' });
+ok('create', created.id);
+await masto.v1.statuses.$select(created.id).remove();

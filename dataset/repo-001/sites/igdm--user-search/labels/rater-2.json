@@ -1,0 +1,428 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "igdm--user-search",
+    "url": "http://localhost:4439/browser/index.html",
+    "finalUrl": "http://localhost:4439/browser/index.html",
+    "status": 200,
+    "title": "IGdm - Instagram Desktop Messenger",
+    "capturedAt": "2026-11-18T19:47:16.728Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 2511
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "social-community",
+    "domainNote": "Instagram direct-message desktop client (IGdm) — people search with chat pane",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/igdm/explore.json",
+      "repo": {
+        "name": "igdmapps/igdm",
+        "url": "https://github.com/igdmapps/igdm",
+        "commit": "644fd213e2d7a9eaf6660729217021c2ba30fef4",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "user-search",
+        "name": "User search results",
+        "description": "Search field in the top bar with query \"studio\", replacing the chat list with matching Instagram users to start a message with."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "top-bar",
+      "role": "header",
+      "label": "Gradient top bar with account avatar button (opens settings menu) and 'Search Instagram users' field containing 'studio'",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 80
+      },
+      "patterns": [
+        "text-field",
+        "menu",
+        "app-shell"
+      ]
+    },
+    {
+      "id": "results-list",
+      "role": "sidebar",
+      "label": "Scrolling list of 30 user search results, each a row with circular avatar, bold username and 'Send a message'",
+      "bbox": {
+        "x": 0,
+        "y": 80,
+        "width": 480,
+        "height": 2431
+      },
+      "patterns": [
+        "search-results",
+        "overview-detail",
+        "split-pane"
+      ]
+    },
+    {
+      "id": "chat-pane",
+      "role": "main",
+      "label": "Conversation pane: empty state with large grey Instagram logo and 'Search and select a chat to start.', composer at bottom with attach and emoji buttons",
+      "bbox": {
+        "x": 480,
+        "y": 80,
+        "width": 960,
+        "height": 2431
+      },
+      "patterns": [
+        "chat-thread",
+        "empty-state",
+        "text-field",
+        "file-upload"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "search-results",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 79,
+            "y": 21,
+            "width": 322,
+            "height": 38
+          },
+          "quote": "studio",
+          "note": "query in search field",
+          "region": "top-bar"
+        },
+        {
+          "bbox": {
+            "x": 0,
+            "y": 81,
+            "width": 480,
+            "height": 810
+          },
+          "quote": "studioatlas Send a message",
+          "note": "ranked list of matching users",
+          "region": "results-list"
+        }
+      ],
+      "dims": {
+        "grouping": "single-ranked-list",
+        "ranking": "opaque-relevance",
+        "openIn": "side-by-side",
+        "snippet": "static-description",
+        "cues": [
+          "source-identity"
+        ]
+      }
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 81,
+            "width": 480,
+            "height": 810
+          },
+          "note": "user list overview; clicking a row opens conversation in right pane (verified live)",
+          "region": "results-list"
+        }
+      ],
+      "dims": {
+        "openIn": "side-by-side",
+        "overviewType": [
+          "list"
+        ],
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "whole-item",
+        "detailMultiplicity": "one-at-a-time",
+        "relationship": "one-to-one",
+        "recursion": [
+          "none"
+        ],
+        "attributePlacement": [
+          "in-both-views"
+        ]
+      }
+    },
+    {
+      "id": "split-pane",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 80,
+            "width": 1440,
+            "height": 820
+          },
+          "note": "fixed two-pane layout: list left, chat right, no visible divider handle",
+          "region": "results-list"
+        }
+      ],
+      "dims": {
+        "orientation": "side-by-side",
+        "sizing": "fixed",
+        "relationship": "linked-selection"
+      }
+    },
+    {
+      "id": "chat-thread",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 480,
+            "y": 2429,
+            "width": 960,
+            "height": 82
+          },
+          "quote": "Start a message",
+          "note": "composer at bottom edge of conversation pane; message list empty since no chat selected",
+          "region": "chat-pane"
+        }
+      ],
+      "dims": {
+        "composer": [
+          "attachments"
+        ]
+      }
+    },
+    {
+      "id": "empty-state",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 810,
+            "y": 212,
+            "width": 300,
+            "height": 380
+          },
+          "quote": "Search and select a chat to start.",
+          "note": "logo illustration plus instruction",
+          "region": "chat-pane"
+        }
+      ],
+      "dims": {
+        "content": [
+          "illustration",
+          "explanation"
+        ],
+        "starters": "none",
+        "recovery": "none"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 79,
+            "y": 21,
+            "width": 322,
+            "height": 38
+          },
+          "quote": "studio",
+          "note": "outlined search input with focus ring",
+          "region": "top-bar"
+        },
+        {
+          "bbox": {
+            "x": 496,
+            "y": 2446,
+            "width": 928,
+            "height": 42
+          },
+          "quote": "Start a message",
+          "note": "borderless message textarea with placeholder",
+          "region": "chat-pane"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "placeholder"
+        ],
+        "style": "outlined",
+        "inputType": "plain"
+      }
+    },
+    {
+      "id": "file-upload",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1328,
+            "y": 2447,
+            "width": 48,
+            "height": 48
+          },
+          "note": "paperclip attach button in composer",
+          "region": "chat-pane"
+        }
+      ],
+      "dims": {
+        "entry": [
+          "browse-button"
+        ]
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 16,
+            "y": 16,
+            "width": 48,
+            "height": 48
+          },
+          "note": "avatar button opens a dropdown (verified live): Don't send 'Seen' receipts, Disable Notifications, Users not following back, Log out",
+          "region": "top-bar"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click",
+        "structure": "flat",
+        "item": [
+          "label"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    },
+    {
+      "id": "app-shell",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "There is a persistent frame (top bar with identity + search, list + content region) but no global navigation destinations, so it is only a minimal shell.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 80
+          },
+          "note": "persistent top bar with account avatar and search",
+          "region": "top-bar"
+        }
+      ],
+      "dims": {
+        "visibility": "always-visible",
+        "structure": "single-app",
+        "secondary": "none"
+      }
+    },
+    {
+      "id": "inbox",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 81,
+            "width": 480,
+            "height": 810
+          },
+          "note": "list shows user search results, not a conversation inbox with snippets/unread state"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "Desktop messenger app: thin top bar (account avatar + user search field), left fixed 480px list of search results (users), right conversation pane with empty-state placeholder and bottom composer",
+    "regions": [
+      "top-bar",
+      "results-list",
+      "chat-pane"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#fcfcfc",
+      "#efefef",
+      "#212529",
+      "#7a7a7a",
+      "#80bdff",
+      "#dadada",
+      "#b5304a"
+    ],
+    "colorRoles": {
+      "background": "#efefef",
+      "surface": "#fcfcfc",
+      "text": "#212529",
+      "muted": "#7a7a7a",
+      "border": "#dadada",
+      "primary": "#80bdff",
+      "accent": "#b5304a"
+    },
+    "typography": "System font stack (-apple-system / Helvetica/Arial fallback) throughout: bold 14px usernames, regular 14px secondary lines, 16px inputs, italic 16px empty-state text",
+    "typeScale": "Flat: 14px list text (bold names vs regular subline), 16px inputs and empty-state text, 18px chat header name; contrast mostly by weight",
+    "shape": "mixed",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "illustration",
+      "iconography",
+      "user-generated"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "gradient",
+    "mood": [
+      "utilitarian",
+      "plain",
+      "neutral",
+      "bootstrap-like"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T19:48:33.799Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 8,
+    "usage": {
+      "input_tokens": 16,
+      "cache_creation_input_tokens": 32316,
+      "cache_read_input_tokens": 224080,
+      "output_tokens": 4365
+    }
+  },
+  "notes": "IGdm Electron/browser client using Bootstrap defaults (#212529 text, #80bdff focus ring, 4px input radius). Top bar and chat background use very soft white-to-grey vertical gradients. All avatars are 48px circles (cartoon illustrated faces or monogram seals). Rows are 81px tall separated by hairline dividers. Empty chat pane shows a large flat grey Instagram glyph. Avatar button opens a plain dropdown menu with privacy toggles and log out (not visible in capture)."
+}

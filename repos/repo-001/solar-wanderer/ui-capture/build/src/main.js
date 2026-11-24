@@ -1,0 +1,1991 @@
+// 主程序：Google Earth 范式 × 整个日球层。
+// 三种模式：
+//   orbit(探索, 默认) — GE 式环绕相机：拖拽旋转/滚轮缩放/搜索/双击前往，焦点恒居中
+//   fly(自由飞行)     — 指针锁定 6DOF 飞船（F 切换）
+//   walk(地表行走)    — 近地表按 G 登陆，真实重力
+// 仿真时钟（系统时间起步，可加速/倒退）驱动星历层 → 浮动原点世界 → HDR 渲染。
+
+import * as THREE from 'three';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
+import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+
+import { SimClock } from './astro/time.js';
+import { surfaceGravity } from './astro/bodies.js';
+import { World } from './engine/floating.js';
+import { Ship, Input } from './engine/ship.js';
+import { OrbitCamera } from './engine/orbitCamera.js';
+import { buildSolarSystem, texturesOfBody } from './scene/builder.js';
+import { createStarfield, SKY_R } from './scene/starfield.js';
+import { loadStarCatalog } from './astro/starCatalog.js';
+import { NAMED_STARS } from './astro/stars.generated.js';
+import { photoSkyVisibility } from './scene/photoExposure.js';
+import { SURFACE_ALBEDO } from './scene/planetMaterial.js';
+import { createMetering } from './engine/metering.js';
+import { atmosphereFog } from './scene/atmosphere.js';
+import { createBelts, createOortCloud } from './scene/belts.js';
+import { createSmallBodies } from './scene/smallBodies.js';
+import { createTNOScene } from './scene/tnoScene.js';
+import { createComets } from './scene/comets.js';
+import { createHeliosphere, VOYAGERS, voyagerPosition } from './scene/heliosphere.js';
+import { TerrainManager } from './scene/terrain.js';
+import { Labels } from './ui/labels.js';
+import { HUD, targetInfo } from './ui/hud.js';
+import { SearchUI } from './ui/search.js';
+import { eclToWorldArr, KM_PER_AU, raDecToWorld } from './config.js';
+import { initQuality, makeFpsGuard, QUALITY, IS_MOBILE } from './engine/quality.js';
+import { TouchControls } from './ui/touchControls.js';
+import { t, bodyName, LANG, applyDomI18n } from './ui/i18n.js';
+import { AudioEngine } from './engine/audio.js';
+import { Compass } from './ui/compass.js';
+import { ScaleReference } from './ui/scaleRef.js';
+import { Bookmarks } from './ui/bookmarks.js';
+import { TourSystem } from './ui/tours.js';
+import { Narrator } from './ui/tts.js';
+import { buildTourUI } from './ui/tourUI.js';
+import { TeacherToolkit } from './ui/teacher.js';
+import { EclipseSystem } from './scene/eclipses.js';
+import { WebXRManager } from './engine/webxr.js';
+import { createCockpit, createShipModel, createHelmet, createEvaSuit } from './scene/cockpit.js';
+import { createSpacecraftModel, makeSpacecraftGlow, SPACECRAFT_TIMELINES,
+         NEW_HORIZONS, newHorizonsPosition } from './scene/spacecraft.js';
+import { createApolloLandmarks, createRoverSites } from './scene/landmarks.js';
+import { createEphemerisLoader } from './engine/ephemerisLoader.js';
+import { createCameraFeel } from './engine/cameraFeel.js';
+import { bootstrapRenderer } from './engine/rendererBootstrap.js';
+
+const renderBoot = await bootstrapRenderer({
+  canvas: document.getElementById('app'), create: options => new THREE.WebGLRenderer(options),
+  status({ state }) {
+    const text = document.getElementById('start-btn-text');
+    if (text) { text.removeAttribute('data-i18n'); text.textContent = t(state === 'failed' ? 'start.retryGpu' : 'start.retryingGpu'); }
+    if (state === 'failed') {
+      const message = document.createElement('p');message.id = 'startup-error';message.setAttribute('role', 'alert');message.textContent = t('start.gpuUnavailable');
+      const button = document.getElementById('start-btn');button.before(message);button.disabled = false;button.onclick = () => location.reload();
+    }
+  },
+});
+// Failure leaves an interactive retry screen; skip graphics-dependent setup.
+if (renderBoot) {
+const { renderer, canvas } = renderBoot;
+initQuality(renderer); // 必须在 buildSolarSystem 之前（着色器步进/网格密度构建期固化）
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, QUALITY.pixelRatio));
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.0;
+// 近场太阳阴影（行走/超低空时由 builder 的 DirectionalLight 装置投射；
+// 平时无 castShadow 光源，阴影贴图零开销）
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.shadowMap.autoUpdate = true;
+
+const STAR_DEG = Math.PI / 180; // 星表赤经/赤纬（度）→ 弧度
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x000000, 0); // 地形气溶胶透视（仅 fog:true 材质受影响）
+
+// 环境贴图（IBL）。此前全仓库没有 envMap，却有 metalness 0.6–0.8 的材质——
+// 旅行者号的"金色铝箔"、登月舱金箔、月球车底盘、火星车车体全部渲染成暗褐剪影：
+// MeshStandardMaterial 的金属在没有环境反射时，漫反射被 (1−metalness) 砍到 20%，
+// 间接镜面为 0，只剩点光源一个高光斑。这是"登陆看地标"这条线上最直接的出戏点。
+//
+// 用一张程序化的等距柱状图：上半球是暗蓝的星空底，太阳方向一块暖白高亮，
+// 下半球是地表反照率的灰。它不追求准确，只给金属一个"有东西可反射"的环境。
+{
+  const W = 256, H = 128;
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  const g = cv.getContext('2d');
+  const grd = g.createLinearGradient(0, 0, 0, H);
+  grd.addColorStop(0.0, '#1a2233');   // 天顶：暗蓝
+  grd.addColorStop(0.5, '#2a2a30');   // 地平线
+  grd.addColorStop(1.0, '#3a332c');   // 地面：暖灰
+  g.fillStyle = grd; g.fillRect(0, 0, W, H);
+  // 太阳：一块暖白高亮（金属上因此有方向性的高光带，而不是均匀灰）
+  const sunGrd = g.createRadialGradient(W * 0.5, H * 0.28, 0, W * 0.5, H * 0.28, W * 0.16);
+  sunGrd.addColorStop(0, 'rgba(255,244,230,1)');
+  sunGrd.addColorStop(0.25, 'rgba(255,230,200,0.55)');
+  sunGrd.addColorStop(1, 'rgba(255,230,200,0)');
+  g.fillStyle = sunGrd; g.fillRect(0, 0, W, H);
+  const envTex = new THREE.CanvasTexture(cv);
+  envTex.mapping = THREE.EquirectangularReflectionMapping;
+  envTex.colorSpace = THREE.SRGBColorSpace;
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  pmrem.compileEquirectangularShader();
+  scene.environment = pmrem.fromEquirectangular(envTex).texture;
+  // 强度压得很低：地形/岩石是粗糙介质，主要照明仍来自直射阳光与天空光；
+  // 环境贴图在这里主要是给金属一个可反射的底，避免把地表整体洗亮。
+  scene.environmentIntensity = 0.35;
+  envTex.dispose(); pmrem.dispose();
+}
+// R11：far 扩展到 ~106 ly 以支持亮星真实 3D 位置（视差）+ 奥尔特云粒子（100000 AU=1.58 ly）
+const camera = new THREE.PerspectiveCamera(58, window.innerWidth / window.innerHeight, 5e-7, 1e15);
+scene.add(camera);
+// 座舱与飞船外形（见 scene/cockpit.js）。
+//
+// **必须用独立的叠加场景 + 独立相机**：主相机的近平面会随最近天体动态调整
+// （飞到 2.2R 时实测 near=5849 km），座舱在 0.6m、飞船在 16m 处会被整块裁掉——
+// 第一版直接挂到 camera 上，结果画面里什么都没有。
+// 叠加层用米制，近平面 1cm，与主场景完全解耦。
+const overlayScene = new THREE.Scene();
+const overlayCam = new THREE.PerspectiveCamera(58, window.innerWidth / window.innerHeight, 0.01, 200);
+// 叠加层的光照：座舱与飞船都是金属材质，没有光/环境就是一团黑（第一版正是这样，
+// 座舱框在黑色星空里完全看不见）。主光从前上方来，模拟舷窗透进来的阳光；
+// 环境贴图与主场景共用，让金属有可反射的底。
+{
+  // 主光放在**相机后方**（+z）：平行光从光源位置照向原点，所以 +z 处的光
+  // 照亮的是朝向相机的那一面。第一版把光放在 -z（画面前方），照亮的是背面，
+  // 座舱/头盔在屏幕上几乎是黑的。
+  const key = new THREE.DirectionalLight(0xfff4e8, 2.4);
+  key.position.set(0.35, 0.55, 1.0);
+  overlayScene.add(key);
+  const fill = new THREE.DirectionalLight(0x8fa8c8, 0.9);
+  fill.position.set(-0.6, -0.4, 0.8);
+  overlayScene.add(fill);
+  overlayScene.add(new THREE.AmbientLight(0x5a6472, 0.35));
+}
+const cockpit = createCockpit();
+overlayScene.add(cockpit);
+const shipModel = createShipModel();
+overlayScene.add(shipModel);
+const helmet = createHelmet();
+// 行走时的第一人称身体（EVA 服手臂/手套），见 cockpit.js 的说明
+const evaSuit = createEvaSuit();
+evaSuit.visible = false;
+// **必须挂在相机下**，不能挂在场景下：叠加相机带 ship.quat 的旋转，挂在场景里
+// 的物体会被反向旋转甩出画面（头一转手臂就没了）。挂在相机下时局部坐标就是
+// 相机坐标——手臂相对"我的眼睛"固定，这正是第一人称身体该有的行为。
+// 代价是相机必须进场景图，否则它的子树不会被遍历到。
+overlayScene.add(overlayCam);
+overlayCam.add(evaSuit);
+overlayScene.add(helmet);
+let thirdPerson = false;   // V 键在飞行模式切换第一/第三人称
+
+const ambient = new THREE.AmbientLight(0x404858, 0.02);
+scene.add(ambient);
+
+// HDR 管线：HalfFloat 渲染目标——高光（太阳 ×14 HDR、日冕、冰巨亮带）在
+// ACES 色调映射前不再被 8-bit 缓冲截断为 1.0，亮部渐变连续不断层
+const composer = new EffectComposer(renderer, new THREE.WebGLRenderTarget(
+  window.innerWidth, window.innerHeight,
+  { type: THREE.HalfFloatType, colorSpace: THREE.LinearSRGBColorSpace,
+    samples: QUALITY.tier === 'high' ? Math.min(4, renderer.capabilities.maxSamples) : 0 }
+));
+composer.addPass(new RenderPass(scene, camera));
+// === 物理泛光 ===
+// 此前以"非物理后期"为由完全禁用泛光——但泛光本身是物理的（眼内/镜头内的光散射），
+// 问题只在于阈值：全屏低阈值泛光会把整个画面糊成一团（那才是非物理）。
+// 这里把阈值设在 HDR 线性亮度上：场景中只有太阳（×14）、日冕、镜面高光与
+// 亮冰巨的掠过边缘能越过它，其余天体（线性亮度 ~1–5）不受影响。
+// 人眼/相机的光晕是紧贴高光的一小圈，所以 radius 取小值。
+const bloomPass = (QUALITY.tier === 'high' || QUALITY.tier === 'low')
+  ? new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight),
+      QUALITY.tier === 'high' ? 0.22 : 0.16,   // strength：再强就会洗掉日面细节与临边昏暗
+      QUALITY.tier === 'high' ? 0.14 : 0.12,   // radius：紧贴高光的小圈
+      1.05)                                     // threshold（HDR 线性亮度）
+  : null;
+if (bloomPass) composer.addPass(bloomPass);
+composer.addPass(new OutputPass());
+const fxaaPass = QUALITY.tier === 'low' ? new ShaderPass(FXAAShader) : null;
+if (fxaaPass) composer.addPass(fxaaPass);
+composer.setPixelRatio(renderer.getPixelRatio());
+function syncRenderResolution() {
+  composer.setPixelRatio(renderer.getPixelRatio());
+  if (bloomPass) bloomPass.setSize(window.innerWidth, window.innerHeight);
+  if (fxaaPass) fxaaPass.uniforms.resolution.value.set(
+    1 / (window.innerWidth * renderer.getPixelRatio()),
+    1 / (window.innerHeight * renderer.getPixelRatio()));
+}
+syncRenderResolution();
+
+// 运行时帧率自适应：持续低帧降档、持续高帧恢复（双向）
+const fpsGuard = makeFpsGuard(renderer, () => {
+  for (const [, e] of builder.bodies) {
+    if (e.mat?.userData.uniforms?.uDetailMode) e.mat.userData.uniforms.uDetailMode.value =
+      QUALITY.detail ? ((e.phys.type === 'gas' || e.phys.type === 'ice') ? 2 : (e.phys.landable ? 1 : 0)) : 0;
+  }
+  hud.tip(t('tip.quality'));
+}, () => {
+  // 恢复：按天体类型重建 detailMode（与 builder.detailModeOf 同规则）
+  for (const [, e] of builder.bodies) {
+    if (e.mat?.userData.uniforms?.uDetailMode) {
+      e.mat.userData.uniforms.uDetailMode.value =
+        QUALITY.detail ? ((e.phys.type === 'gas' || e.phys.type === 'ice') ? 2 : (e.phys.landable ? 1 : 0)) : 0;
+    }
+  }
+}, syncRenderResolution);
+
+const hud = new HUD();
+const world = new World();
+const input = new Input(window, canvas);
+const ship = new Ship();
+const orbitCam = new OrbitCamera(camera);
+const simClock = new SimClock();
+const clock = new THREE.Clock();
+
+let builder, comets, labels, searchUI, touchControls, sky, belts, oortCloud, tnoScene, smallBodies;
+let appMode = 'orbit'; // orbit | fly | walk
+const registry = new Map();
+let selectedId = null;
+const ephemerisLoader = createEphemerisLoader();
+// 相机语言：步态起伏 / 冲击抖动 / FOV 语言（见 engine/cameraFeel.js）
+const cameraFeel = createCameraFeel();
+let cameraFovBase = 58;   // 用户可调的基础 FOV，相机语言只在其上叠加偏移
+const voyagerEntries = [];
+const boundaryEntries = [];
+const IDENTITY_Q = new THREE.Quaternion();
+let lastLabelClickFocus = 'earth';
+let lastLabelClickId = null;
+let labelClickTimer = null;
+const LABEL_CLICK_WINDOW = 250;
+
+// 新功能模块实例（#3-#55 集成）
+let audioEngine, compass, scaleRef, bookmarks, tourSystem, narrator, teacherToolkit, eclipseSystem, webxr;
+let apolloLandmarks, roverSites;
+
+init();
+
+async function init() {
+  applyDomI18n();
+  builder = await buildSolarSystem(scene, world, (d, total) => hud.setLoading(d, total), (d, total) => hud.setBgLoading(d, total));
+
+  sky = createStarfield(builder.cache.get('milkyway.jpg'));
+  scene.add(sky.group); // 银河贴图球（以相机为心）
+
+  // 真实星表恒星：以真实 3D 位置注册浮动原点（有视差的近星会产生可辨视差，R11）。
+  // 星表是可选的增强——加载失败时星空只剩银河贴图，应用照常可用。
+  scene.add(sky.brightGroup);
+  world.register(new Float64Array(3), sky.brightGroup);
+  loadStarCatalog().then((cat) => {
+    if (cat) { sky.setCatalog(cat); return; }
+    // 星表是**全链路唯一会静默降级的东西**（星历回退都有 HUD 逐时刻标注）。
+    // 失败后天空只剩银河贴图、一颗可辨认恒星都没有、星座全无——用户完全无从
+    // 判断是"这颗星球的天上就这样"还是"资源没加载"。这里显式告知。
+    hud.tip(t('tip.starsUnavailable'));
+  });
+
+  // 带/尘光/日球层壳为日心结构：必须注册浮动原点，否则会错误地以相机为中心
+  belts = createBelts();
+  scene.add(belts);
+  world.register(new Float64Array(3), belts);
+
+  // 真实小天体层（JPL SBDB 真实轨道根数，后台按需加载，见 scene/smallBodies.js）
+  smallBodies = createSmallBodies();
+  scene.add(smallBodies.group);
+  world.register(new Float64Array(3), smallBodies.group);
+
+  // R11：奥尔特云统计粒子层（2000–100000 AU）
+  oortCloud = createOortCloud(); // { group, update(dSunAU) }
+  scene.add(oortCloud.group);
+  world.register(new Float64Array(3), oortCloud.group);
+  const helio = createHeliosphere();
+  scene.add(helio);
+  world.register(new Float64Array(3), helio);
+  comets = createComets(world);
+  for (const e of comets.entries) scene.add(e.group);
+
+  // 旅行者号（#30, #31：3D 模型 + 远距辉光精灵）
+  for (const vg of VOYAGERS) {
+    const group = new THREE.Group();
+    const posKm = new Float64Array(3);
+    world.register(posKm, group);
+    scene.add(group);
+    // 添加 1:1 真实尺度 3D 模型（近距离可见）
+    try {
+      const model = createSpacecraftModel(vg.id);
+      group.add(model);
+      // 远距离辉光精灵（AU 级距离上保持屏幕可见性）
+      const glow = makeSpacecraftGlow(0x88ccff);
+      group.add(glow);
+    } catch { /* 模型创建失败时退化为空 Group，不影响位置注册 */ }
+    voyagerEntries.push({ vg, posKm, group, posFn: (jd) => voyagerPosition(vg, jd) });
+  }
+
+  // 新视野号：数据与模型早就写好了（NEW_HORIZONS / newHorizonsPosition /
+  // createSpacecraftModel('newhorizons')），但从来没有被实例化——死资源。
+  {
+    const group = new THREE.Group();
+    const posKm = new Float64Array(3);
+    world.register(posKm, group);
+    scene.add(group);
+    try {
+      group.add(createSpacecraftModel('newhorizons'));
+      group.add(makeSpacecraftGlow(0x88ffcc));
+    } catch { /* 模型失败则退化为空 Group */ }
+    voyagerEntries.push({ vg: NEW_HORIZONS, posKm, group, posFn: (jd) => newHorizonsPosition(jd) });
+  }
+
+  // 日球层边界地标（可前往的"边界鼻尖"）
+  const DEG = Math.PI / 180;
+  const noseLon = 255.4 * DEG, noseLat = 5.1 * DEG;
+  const noseEcl = {
+    x: Math.cos(noseLat) * Math.cos(noseLon),
+    y: Math.cos(noseLat) * Math.sin(noseLon),
+    z: Math.sin(noseLat),
+  };
+  for (const [id, nameZh, nameEn, rAU, desc] of [
+    ['termshock', '终止激波（鼻尖）', 'Termination Shock', 90,
+      '太阳风从超音速骤降为亚音速的边界（约 90 AU）。旅行者 1 号于 2004 年穿越此处。'],
+    ['heliopause', '日球层顶（鼻尖）', 'Heliopause', 121,
+      '太阳风与星际介质压力平衡的边界——太阳系"势力范围"的尽头（约 121 AU）。穿过这里就是星际空间。'],
+  ]) {
+    const posKm = new Float64Array([0, 0, 0]);
+    const w = eclToWorldArr({ x: noseEcl.x * rAU * KM_PER_AU, y: noseEcl.y * rAU * KM_PER_AU, z: noseEcl.z * rAU * KM_PER_AU });
+    posKm[0] = w[0]; posKm[1] = w[1]; posKm[2] = w[2];
+    const group = new THREE.Group();
+    group.position.set(0, 0, 0);
+    world.register(posKm, group);
+    scene.add(group);
+    boundaryEntries.push({ id, nameZh, nameEn, desc, posKm, group, rAU });
+  }
+
+  // R11：28 颗海外天体（TNO）— 柯伊伯带、散射盘、延伸散射盘
+  // 轨道线挂在 sun.group（日心，随浮动原点平移）
+  tnoScene = createTNOScene(scene, world, builder.sunEntry.group);
+  for (const [id, e] of tnoScene.entries) {
+    registry.set(id, {
+      nameZh: e.phys.nameZh, nameEn: e.phys.nameEn,
+      desc: e.phys.desc, kind: 'tno',
+      phys: { radiusKm: e.phys.radiusKm, type: 'dwarf' },
+      posKm: e.posKm, relObj: e.group, quatRef: null,
+      groundRadius: null,
+      minDistKm: e.phys.radiusKm * 1.5, // 防止穿进天体内部
+      viewDist: Math.max(e.phys.radiusKm * 12, 3e5),
+    });
+  }
+
+  buildRegistry();
+  setupLabels();
+  searchUI = new SearchUI(registry, (id) => flyTo(id), {
+    getOrbits: () => orbitLinesOn,
+    toggleOrbits: () => { orbitLinesOn = !orbitLinesOn; },
+    onSelect: () => { touchControls?.closeDirectory(); },
+  });
+
+  // Mobile on-screen controls — only created on touch devices (IS_MOBILE)
+  if (IS_MOBILE) {
+    touchControls = new TouchControls(input, {
+      switchToFly:    switchToFly,
+      switchToOrbit:  switchToOrbit,
+      toggleOrbits:   () => { orbitLinesOn = !orbitLinesOn; },
+      toggleAudio:    () => { audioEngine?.toggle(); },
+      warpUp:         () => hud.warpUp(),
+      warpDown:       () => hud.warpDown(),
+    });
+  }
+
+  setupTerrainMgr();
+
+  // 初始：GE 式俯瞰地球（无需指针锁定）
+  builder.update(simClock.jdTT, ship.posKm);
+  orbitCam.init(orbitEnv, 'earth', 4);
+  syncShipToOrbit();
+  select('earth');
+
+  // ---- URL hash 书签（#1）：加载时解析；Ctrl+L 复制当前位置链接 ----
+  applyLocationHash();
+  window.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.code === 'KeyL' && !e.shiftKey) {
+      e.preventDefault(); // 阻止浏览器原生地址栏聚焦
+      copyShareUrl();
+    }
+  });
+
+  document.getElementById('start-btn').addEventListener('click', () => hud.hideStart());
+  let downX = 0, downY = 0;
+  canvas.addEventListener('mousedown', (e) => { downX = e.clientX; downY = e.clientY; });
+  canvas.addEventListener('click', (e) => {
+    // fly/walk 需要指针锁定（桌面）；移动端不请求锁定
+    if ((appMode === 'fly' || appMode === 'walk') && !input.locked && !IS_MOBILE) canvas.requestPointerLock();
+    else if (input.locked && labels.aimedId) select(labels.aimedId);
+    else if (appMode === 'orbit' && !input.locked && !orbitCam.flight &&
+      Math.hypot(e.clientX - downX, e.clientY - downY) < 6) {
+      // 点击天体 = 选择延迟焦点（R10-fix-3：镜头先不动，滚动再平滑切换并居中目标）
+      const hit = pickBody(e.clientX, e.clientY);
+      if (hit && hit.id !== orbitCam.focusId) {
+        orbitCam.setPendingFocus(hit.id, hit.localDir, hit.localDist);
+        select(hit.id);
+        focusTipUntil = performance.now() + 2600;
+      }
+    }
+  });
+  input.onLockChange = (locked) => {
+    // Esc 解锁 → 回探索模式（桌面专用；移动端无指针锁定）
+    if (!locked && appMode === 'fly' && !IS_MOBILE) switchToOrbit();
+  };
+  window.addEventListener('resize', onResize);
+  hud.loadingDone();
+
+  // ── 新功能模块初始化（#3-#55 集成）──────────────────────────────
+  // 环境音效（#4, #32）：默认静音，用户可开启
+  audioEngine = new AudioEngine();
+
+  // 3D 指南针（#37）：右下角空间定向辅助
+  compass = new Compass(document.body);
+
+  // 比例参照物（#38）：人体剪影 + 天体比较
+  scaleRef = new ScaleReference(scene, camera);
+
+  // 书签系统（#52）：localStorage 持久化
+  bookmarks = new Bookmarks();
+
+  // 语音旁白（#41）：Web Speech API
+  narrator = new Narrator();
+
+  // 导览系统（#39, #40）：需要 flyTo/select 接口
+  tourSystem = new TourSystem({
+    flyTo: (id) => flyTo(id),
+    select: (id) => select(id),
+    getMode: () => appMode,
+    setMode: (m) => { if (m === 'orbit' && appMode !== 'orbit') switchToOrbit(); },
+    hud: hud,
+  });
+  // 导览 UI 接通（目录入口 + 播放控制条）；onNarration 由 TTS 开关状态门控
+  const tourUIState = buildTourUI(tourSystem, narrator);
+  tourSystem.onNarration = (text) => {
+    if (narrator.supported && tourUIState.ttsOn) narrator.speak(text, LANG);
+  };
+
+  // 教师工具包（#42）：传 TourSystem 实例本身（isActive/_activeTourId 定义在实例上）
+  teacherToolkit = new TeacherToolkit({
+    tours: tourSystem,
+    select: (id) => select(id),
+    flyTo: (id) => flyTo(id),
+    hud: hud,
+    nameOf: (id) => bodyName(registry.get(id) ?? { nameZh: id, nameEn: id }),
+  });
+
+  // 日食阴影系统（#25）
+  eclipseSystem = new EclipseSystem();
+
+  // WebXR/VR 支持（#33）：支持时添加入口按钮并接通控制器回调
+  webxr = new WebXRManager(renderer, camera, scene);
+  webxr.init().then((supported) => {
+    if (!supported) return;
+    const btn = webxr.createButton();
+    if (btn) document.body.appendChild(btn);
+    webxr.setControllerCallback(handleXREvent);
+  });
+
+  // Apollo 着陆点地标（#34）和火星车路径（#35）—— try-catch 保护，失败不应阻止渲染循环启动
+  try { apolloLandmarks = createApolloLandmarks(scene, terrainMgr); } catch (e) { console.error('[Apollo landmarks]', e); }
+  try { roverSites = createRoverSites(scene, terrainMgr); } catch (e) { console.error('[Rover sites]', e); }
+
+  // 键盘快捷键：C 指南针、M 音效、Ctrl+B 保存书签、Ctrl+Shift+B 回到最近书签、Y 人体比例剪影（行走模式）
+  window.addEventListener('keydown', (e) => {
+    if (e.code === 'KeyC' && !e.repeat) { e.preventDefault(); compass?.toggle(); }
+    if (e.code === 'KeyM' && !e.repeat) {
+      e.preventDefault();
+      const on = audioEngine?.toggle();
+      hud.tip(t(on ? 'tip.audioOn' : 'tip.audioOff'));
+    }
+    // I-14：地月真实比例对比（ScaleReference.toggleCompare）此前零调用——
+    // 功能写好了却没有任何入口，只能靠控制台。U 键接上。
+    if (e.code === 'KeyU' && !e.repeat) {
+      e.preventDefault();
+      const on = scaleRef?.toggleCompare();
+      if (on !== undefined) showActionTip(t(on ? 'tip.compareOn' : 'tip.compareOff'));
+    }
+    if (e.code === 'KeyY' && !e.repeat && appMode === 'walk') {
+      e.preventDefault();
+      const on = scaleRef?.toggleHuman();
+      showActionTip(t(on ? 'tip.humanOn' : 'tip.humanOff'));
+    }
+    if (e.code === 'KeyB' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      if (e.shiftKey) restoreLatestBookmark();
+      else saveBookmark();
+    }
+  });
+
+  // I-15：教师分享的 ?tour= 之前是死功能——写进了 URL，全仓库没有一处读取。
+  // 现在启动时读一次，自动进入同一导览（教师工具那侧的链接才真的可用）。
+  try {
+    const wantTour = new URLSearchParams(window.location.search).get('tour');
+    if (wantTour && tourSystem?.start) {
+      // 等启动画面收起后再开始，否则旁白会被开场动画盖住
+      setTimeout(() => { try { tourSystem.start(wantTour); } catch { /* 未知导览 id */ } }, 1500);
+    }
+  } catch { /* 无 location 环境 */ }
+
+  window.__game = { get __nearest() { return nearestCache; }, ship, simClock, overlayScene, overlayCam, cockpit, shipModel, select, flyTo, orbitCam, orbitEnv, builder, registry, input, terrainMgr, camera, getMode: () => appMode, setOrbitLinesVisible: (v) => { orbitLinesOn = v; }, audioEngine, compass, scaleRef, bookmarks, tourSystem, narrator, teacherToolkit, eclipseSystem, webxr, smallBodies, quality: QUALITY, ephemerisLoader, renderer, composer, apolloLandmarks, roverSites, sky, labels, tnoScene, comets, oortCloud };
+  renderer.setAnimationLoop(loop);
+
+  // ── 生命周期：后台/标签切换/睡眠恢复后强制同步仿真时钟 ──
+  // requestAnimationFrame 在隐藏标签或系统睡眠时会暂停，导致 simClock 落后。
+  // 这些事件触发时立即用完整挂钟经过时间追赶，确保左上角时间与真实流逝严格一致。
+  function syncClockAfterWake() {
+    if (simClock.paused) return;
+    const jdBefore = simClock.jdTT;
+    simClock.tick(0);
+    const jdAfter = simClock.jdTT;
+    // 若时间确实跳跃，立即驱动星历/场景更新一帧，避免画面滞后
+    if (Math.abs(jdAfter - jdBefore) > 1e-12) {
+      builder.update(jdAfter, ship.posKm);
+      comets.update(jdAfter, ship.posKm);
+      tnoScene.update(jdAfter, ship.posKm);
+      for (const v of voyagerEntries) {
+        const p = v.posFn(jdAfter);
+        const w = eclToWorldArr(p);
+        v.posKm[0] = w[0]; v.posKm[1] = w[1]; v.posKm[2] = w[2];
+      }
+    }
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') syncClockAfterWake();
+  });
+  window.addEventListener('pageshow', syncClockAfterWake);
+  window.addEventListener('focus', syncClockAfterWake);
+}
+
+function buildRegistry() {
+  for (const [id, e] of builder.bodies) {
+    registry.set(id, {
+      nameZh: e.phys.nameZh, nameEn: e.phys.nameEn, phys: e.phys,
+      desc: e.phys.desc, parentId: e.parentId,
+      kind: id === 'sun' ? 'star' : e.isMoon ? 'moon' : 'planet',
+      posKm: e.posKm, relObj: e.group, quatRef: e.mesh.quaternion,
+      // 地形感知相机下限（与行走碰撞同源）；气巨允许下潜入大气（R7 #1/#5）
+      groundRadius: e.phys.landable ? (dir) => terrainMgr.heightAt(id, dir) : null,
+      minDistKm: !e.phys.landable && e.phys.atmosphere && id !== 'sun'
+        ? e.phys.radiusKm * 1.0012 : null,
+    });
+  }
+  for (const e of comets.entries) {
+    registry.set(e.c.id, {
+      nameZh: e.c.nameZh, nameEn: e.c.nameEn, desc: e.c.desc, kind: 'comet',
+      phys: { radiusKm: 10 }, posKm: e.posKm, relObj: e.group, viewDist: 2.5e6,
+    });
+  }
+  for (const v of voyagerEntries) {
+    registry.set(v.vg.id, {
+      nameZh: v.vg.nameZh, nameEn: v.vg.nameEn, desc: v.vg.desc, kind: 'probe',
+      phys: { radiusKm: 0.01 }, posKm: v.posKm, relObj: v.group, viewDist: 8e5,
+    });
+  }
+  for (const b of boundaryEntries) {
+    registry.set(b.id, {
+      nameZh: b.nameZh, nameEn: b.nameEn, desc: b.desc, kind: 'boundary',
+      phys: { radiusKm: 1 }, posKm: b.posKm, relObj: b.group, viewDist: 2.5 * KM_PER_AU,
+    });
+  }
+  // 星带与全景区域条目（目录分组 + 远距标签，#7）。kind:'region' 在 pickBody/centerHit 中
+  // 被排除（无固体表面、不可点击拾取/缩放收敛），仅用于目录前往与远距科教标注。
+  // radiusKm 决定标签隐藏阈值（dist < radiusKm×1.6 时隐藏）：取各结构的代表尺度，
+  // 使标签仅在足够远、整个结构入画时才出现，避免贴近行星时挡在太阳前方。
+  registry.set('asteroidbelt', {
+    nameZh: '小行星带', nameEn: 'Asteroid Belt', kind: 'region',
+    desc: '主小行星带（2.1–3.4 AU）：火星与木星之间数十万颗小天体的盘状结构。',
+    phys: { radiusKm: 2 * KM_PER_AU }, posKm: new Float64Array(3), relObj: belts, viewDist: 5.5 * KM_PER_AU,
+  });
+  registry.set('kuiperbelt', {
+    nameZh: '柯伊伯带', nameEn: 'Kuiper Belt', kind: 'region',
+    desc: '柯伊伯带（30–50 AU）：海王星轨道外的冰质天体盘，冥王星、妊神星等均位于其中。',
+    phys: { radiusKm: 40 * KM_PER_AU }, posKm: new Float64Array(3), relObj: belts, viewDist: 75 * KM_PER_AU,
+  });
+  registry.set('oortcloud', {
+    nameZh: '奥尔特云', nameEn: 'Oort Cloud', kind: 'region',
+    desc: '太阳系最外层的球状彗星云团，距太阳约 2 000–100 000 AU，是长周期彗星的家园。',
+    phys: { radiusKm: 200 * KM_PER_AU }, posKm: new Float64Array(3), relObj: oortCloud.group, viewDist: 6000 * KM_PER_AU,
+  });
+}
+
+/** OrbitCamera 环境访问器 */
+const orbitEnv = {
+  get(id) {
+    const t = registry.get(id);
+    return {
+      posKm: t.posKm,
+      radiusKm: t.phys?.radiusKm ?? 1,
+      ringsOuterKm: t.phys?.rings?.outerKm ?? null,
+      quat: t.quatRef ?? IDENTITY_Q,
+      viewDist: t.viewDist,
+      groundRadius: t.groundRadius ?? null,
+      minDistKm: t.minDistKm ?? null,
+    };
+  },
+  /** 屏幕中心视线命中的最近天体（id+深度 km）——缩放收敛目标与焦点交接依据
+   * （R8 #2 / R9-1b/1d）。无命中返回 null。 */
+  centerHit(posKm, dir) {
+    let best = null;
+    for (const [id, t] of registry) {
+      if (t.kind === 'region') continue; // 区域条目（星带/奥尔特云）不作为缩放收敛目标
+      const R = t.phys?.radiusKm ?? 0;
+      if (R < 1) continue; // 探测器/边界点不作为缩放收敛目标
+      const margin = R * 1.004 + 1; // 收敛下限留在表面略上方
+      const ox = t.posKm[0] - posKm[0];
+      const oy = t.posKm[1] - posKm[1];
+      const oz = t.posKm[2] - posKm[2];
+      const b = ox * dir.x + oy * dir.y + oz * dir.z;
+      if (b <= 0) continue;
+      const det = b * b - (ox * ox + oy * oy + oz * oz - margin * margin);
+      if (det < 0) continue;
+      const tHit = b - Math.sqrt(det);
+      if (tHit > 1e-6 && (best === null || tHit < best.depth)) best = { id, depth: tHit };
+    }
+    return best;
+  },
+  centerDepth(posKm, dir) { return this.centerHit(posKm, dir)?.depth ?? null; },
+};
+
+function setupLabels() {
+  labels = new Labels(document.getElementById('labels'), camera);
+  // 标签点击：探索模式下设为延迟焦点（镜头先不动，滚动/PageUpDown 再平滑切换焦点）；
+  // 双击仍从原始焦点起飞。用短时窗口记录同一标签双击前的焦点，避免第一次点击切焦点
+  // 后第二次点击把 fromId 覆盖成新焦点。
+  labels.onSelect = (id) => {
+    // 恒星与区域条目（星带/奥尔特云）无固体表面，不作延迟焦点目标——仅选中显示信息。
+    if (appMode === 'orbit' && !orbitCam.flight && !id.startsWith('star_') &&
+        registry.get(id)?.kind !== 'region') {
+      if (!labelClickTimer || lastLabelClickId !== id) {
+        lastLabelClickFocus = orbitCam.focusId;
+      }
+      lastLabelClickId = id;
+      clearTimeout(labelClickTimer);
+      labelClickTimer = setTimeout(() => { labelClickTimer = null; lastLabelClickId = null; }, LABEL_CLICK_WINDOW);
+      if (id !== orbitCam.focusId) {
+        orbitCam.setPendingFocus(id);
+        focusTipUntil = performance.now() + 2600;
+      }
+    }
+    select(id);
+  };
+  labels.onFlyTo = (id) => {
+    clearTimeout(labelClickTimer);
+    labelClickTimer = null;
+    lastLabelClickId = null;
+    const fromId = appMode === 'orbit' ? (lastLabelClickFocus ?? orbitCam.focusId) : null;
+    flyTo(id, fromId);
+  };
+  for (const [id, t] of registry) {
+    labels.add({
+      id, name: bodyName(t),
+      kind: t.kind === 'moon' ? 'moon' : t.kind === 'planet' || t.kind === 'star' ? 'planet'
+        : ['region', 'tno', 'comet', 'probe', 'boundary'].includes(t.kind) ? t.kind : 'poi',
+      radiusKm: t.phys?.radiusKm ?? 1,
+      getRelPos: (v) => v.copy(t.relObj.position),
+    });
+  }
+  // 真实亮星标签（恒星视为无穷远，方向固定；显示真实光年距离——科教）。
+  // 只标到 2.5 等：BSC5 里 436 颗有专名，全标会糊成一片；2.5 等以上约百颗，
+  // 与"抬头能认出名字的星"相当。中文名只在该星确有通行译名时才用——
+  // stars.generated.js 里 zh 为空表示没有，这时回落到英文专名，不要编一个错的。
+  for (const s of NAMED_STARS) {
+    if (s.mag > 2.5) continue;
+    // 方向必须**每颗星各自持有**：若共用一个临时向量，闭包会在循环结束后
+    // 全部指向最后一颗星（这个坑很隐蔽——标签数量对、名字对，位置全错）。
+    const dirWorld = raDecToWorld(s.ra * 15 * STAR_DEG, s.dec * STAR_DEG, new THREE.Vector3());
+    const name = (LANG === 'zh' && s.zh) ? s.zh : s.en;
+    labels.add({
+      id: 'star_' + s.en, name, kind: 'fixstar', radiusKm: 0.001,
+      distText: s.ly > 0 ? s.ly + ' ' + t('u.ly') : '',
+      getRelPos: (v) => v.copy(dirWorld).multiplyScalar(SKY_R * 0.97),
+    });
+  }
+}
+
+function select(id) {
+  ephemerisLoader.prefetch(id, simClock.jdTT);
+  selectedId = id;
+}
+
+/** 屏幕坐标拾取天体（点击设焦点用，~0.7° 容差，R10）。返回 { id, t, localDir, localDist } 或 null */
+const _pickDir = new THREE.Vector3();
+const _pickP = new THREE.Vector3();
+const _pickHit = new THREE.Vector3();
+const _pickQ = new THREE.Quaternion();
+let focusTipUntil = 0;
+let actionTipUntil = 0; // 动作提示（书签/链接复制等）的展示截止时刻
+
+/** 动作提示：显示 2.5 秒，期间 updateTip 不覆盖 */
+function showActionTip(text, ms = 2500) {
+  actionTipUntil = performance.now() + ms;
+  hud.tip(text);
+}
+function pickBody(cx, cy) {
+  _pickDir.set(
+    (cx / window.innerWidth) * 2 - 1, -((cy / window.innerHeight) * 2 - 1), 0.5
+  ).unproject(camera).normalize(); // 浮动原点：相机恒在原点，未归一向量即射线方向
+  let best = null;
+  for (const [id, t] of registry) {
+    if (t.kind === 'region') continue; // 区域条目不可点击拾取
+    const R = t.phys?.radiusKm ?? 0;
+    if (R < 1) continue;
+    _pickP.copy(t.relObj.position); // 相机相对位置
+    const b = _pickP.dot(_pickDir);
+    if (b <= 0) continue;
+    const margin = Math.max(R, b * 0.012); // 远小天体按 ~0.7° 角容差扩大可点面积
+    const det = b * b - (_pickP.lengthSq() - margin * margin);
+    if (det < 0) continue;
+    const tHit = b - Math.sqrt(det);
+    if (best === null || tHit < best.t) best = { id, t: Math.max(tHit, 0), entry: t, p: _pickP.clone() };
+  }
+  if (!best) return null;
+  const R = best.entry.phys?.radiusKm ?? 1;
+  // 命中点相对天体中心（相机空间）
+  _pickHit.copy(_pickDir).multiplyScalar(best.t).sub(best.p);
+  // 转到体固系
+  _pickQ.copy(best.entry.quatRef ?? IDENTITY_Q).invert();
+  const localDist = Math.max(_pickHit.length(), R * 0.1);
+  const localDir = _pickHit.clone().applyQuaternion(_pickQ).normalize();
+  return { id: best.id, t: best.t, localDir, localDist };
+}
+
+/** GE 式前往：任意模式 → 飞行动画 → 探索模式锚定目标（fromId 仅用于 orbit 模式标签双击） */
+function flyTo(id, fromId = null) {
+  if (!registry.has(id)) return;
+  select(id);
+  if (appMode !== 'orbit') {
+    // 从飞船/行走就地接管为探索模式（带 quat：视向连续）
+    const focus = nearestCache?.id ?? 'sun';
+    document.exitPointerLock?.();
+    orbitCam.adoptPosition(orbitEnv, focus, ship.posKm, ship.quat);
+    appMode = 'orbit';
+    ship.mode = 'fly';
+  }
+  orbitCam.flyTo(orbitEnv, id, fromId);
+}
+
+function syncShipToOrbit() {
+  ship.posKm[0] = orbitCam.posKm[0];
+  ship.posKm[1] = orbitCam.posKm[1];
+  ship.posKm[2] = orbitCam.posKm[2];
+  ship.quat.copy(orbitCam.quat);
+  ship.vel.set(0, 0, 0);
+}
+
+function switchToOrbit() {
+  appMode = 'orbit';
+  ship.mode = 'fly';
+  document.exitPointerLock?.();
+  const focus = nearestCache?.id ?? selectedId ?? 'sun';
+  orbitCam.adoptPosition(orbitEnv, focus, ship.posKm, ship.quat); // 视向连续（R7 #7）
+  // 从行走/飞行切回探索时把相机抬升一段，避免贴地时 GE 键盘平移速率过低、
+  // 滚轮已到下限，让用户感觉"操控失效"（R10 后用户反馈）。
+  // 同时把用户倾斜复位：adoptPosition 为保留原视向会把 this.tilt 设为 -autoTilt，
+  // 抬升后 auto-tilt 消失，负 tilt 会让视线指向地平线下方，导致径向缩放条件失效、
+  // 滚轮进入 dolly。复位后由 auto-tilt 在抬升过程中自然接管。
+  orbitCam.tilt = 0;
+  orbitCam.panOffset.set(0, 0, 0); // 重置平移偏置以确保下次滚轮缩放走径向而非 dolly
+  orbitCam.distTarget = orbitCam.dist + Math.max(orbitCam.dist * 0.002, 0.05);
+  // 从 walk/fly 切回探索时同样给予 0.8s 自动登陆冷却，避免用户刚切回就
+  // 因近地表被重新吸回 walk，导致“单指/双指操控不生效”。
+  lastTakeoff = performance.now();
+  input.cancelGestures(); // 清理旧手势状态，防止平移/捏合泄漏到新模式
+}
+
+function switchToFly() {
+  if (orbitCam.flight) orbitCam.cancelFlight(orbitEnv);
+  appMode = 'fly';
+  ship.mode = 'fly';
+  syncShipToOrbit();
+  if (!IS_MOBILE) canvas.requestPointerLock();
+}
+
+// ---------- 地形 ----------
+const terrainMgr = new TerrainManager();
+function setupTerrainMgr() {
+  terrainMgr.physOf = (id) => builder.bodies.get(id).phys;
+  terrainMgr.meshOf = (id) => builder.bodies.get(id).mesh;
+  terrainMgr.getMapData = (id) => builder.mapDataOf(id);
+}
+
+// ---------- 主循环 ----------
+const _rel = new THREE.Vector3();
+const _fogView = new THREE.Vector3();
+const _fogUp = new THREE.Vector3();
+const _fogSun = new THREE.Vector3();
+const _q = new THREE.Quaternion();
+const _sunLocal = new THREE.Vector3();
+let exposureTarget = 1;
+let meter = null;
+let lastMeterAt = 0;
+let meteredLog2 = null;
+let nearestCache = null;
+let lastTakeoff = -1e9; // 滚轮起飞时间戳（自动登陆 0.8s 冷却，防滞回）
+let prevOrbitDist = 0;   // 上一帧的相机径向距离（km），用来求接近率
+let approachMS = 0;      // 相机径向接近率（m/s，正=靠近），驱动着陆冲击强度
+
+function loop() {
+  const frameDelta = clock.getDelta();
+  const dtReal = Math.min(frameDelta, 0.1);
+
+  // 时间系统
+  handleTimeKeys();
+  input.pollGamepad(appMode); // 手柄（无事件流，须每帧轮询）
+  simClock.rateTarget = hud.warpRate(simClock.paused); // rate 在 tick 内指数趋近（平滑换档）
+  const jdTT = simClock.tick(dtReal);
+
+  // 星历驱动（try-catch 保护：builder.update 改动较多，任何异常不应卡死渲染循环）
+  try {
+    builder.update(jdTT, ship.posKm);
+  } catch (e) {
+    if (!loop._builderErr) {
+      loop._builderErr = true;
+      console.error('[builder.update]', e);
+      hud.tip('星历更新错误: ' + e.message);
+    }
+  }
+  try { comets.update(jdTT, ship.posKm); } catch (e) { loopErr('comets', e); }
+  try { tnoScene.update(jdTT, ship.posKm); } catch (e) { loopErr('tnoScene', e); }
+  try { smallBodies.update(jdTT, ship.posKm); } catch (e) { loopErr('smallBodies', e); }
+  try {
+    for (const v of voyagerEntries) {
+      const p = v.posFn(jdTT);
+      const w = eclToWorldArr(p);
+      v.posKm[0] = w[0]; v.posKm[1] = w[1]; v.posKm[2] = w[2];
+    }
+  } catch (e) { loopErr('voyagers', e); }
+
+  const nearest = findNearest();
+  nearestCache = nearest;
+  const env = makeEnv(nearest);
+
+  // 视点驱动高清贴图插队（每秒）：用户正在环绕/靠近/选中的天体优先升级到全分辨率，
+  // 并按当前仿真时刻预取星历分片。
+  //
+  // 注意 _lastTexBoost 必须初始化：未初始化时 performance.now() - undefined 是 NaN，
+  // 而 NaN > 1000 恒为 false，这个块会一次都不执行——贴图升级与星历分片预取
+  // 会整条链路静默失效（跨年跳转后再也不会补载那一片）。
+  if (builder?.boostTextures && performance.now() - (loop._lastTexBoost ?? 0) > 1000) {
+    loop._lastTexBoost = performance.now();
+    const files = [];
+    for (const id of [orbitCam.focusId, nearest?.id, selectedId]) {
+      ephemerisLoader.prefetch(id, simClock.jdTT);
+      if (id) for (const f of texturesOfBody(id)) if (!files.includes(f)) files.push(f);
+    }
+    if (files.length) builder.boostTextures(files);
+  }
+
+  // ---------- 模式更新 ----------
+  try {
+  if (appMode === 'orbit') {
+    // 拖拽打断飞行动画（GE 行为）
+    if (orbitCam.flight && input.drag.active) orbitCam.cancelFlight(orbitEnv);
+    orbitCam.update(dtReal, input, orbitEnv);
+    syncShipToOrbit();
+    // 接近率（m/s）：着陆冲击强度必须取自这里，不能取 ship.vel——
+    // syncShipToOrbit() 就在上面把 ship.vel 清零了，原来那两处取 ship.vel.length()
+    // 恒为 0，于是注释宣称的"0.004–0.03 rad 由接近速度决定"从未生效，
+    // 软着陆与硬着陆的顿挫感和音效永远是同一个最小值。
+    // 轨道模式下真正在动的是相机的径向距离 dist。
+    {
+      const dDist = prevOrbitDist - orbitCam.dist;
+      // 换焦点时 adoptPosition 会让 dist 跳变，超过 1km/帧 的一律当作跳变不计
+      approachMS = Math.abs(dDist) < 1 ? dDist / Math.max(dtReal, 1e-4) * 1000 : 0;
+      prevOrbitDist = orbitCam.dist;
+    }
+    // 登陆：按 G，或滚轮一路拉近贴地自动转行走（NMS 式无缝衔接，R7 #1）
+    // 登陆距离阈值必须与 ship.js 的 20km 一致。此前这里取 max(20, R*0.05)：
+    // 地球是 318km——按 G 会从 300km 高度**硬切瞬移**到地面 +1.7m，
+    // 没有下降动画、没有过渡。两处阈值不一致说明是遗漏而不是设计。
+    const landRange = 20;
+    let autoLand = false;
+    // 手势活跃时不自动登陆：双指捏合/平移时的中点偏移可能短暂把相机推近地表，
+    // 此时应让用户完成手势后再判断是否真正靠近，避免"刚切回探索就吸回行走"。
+    const inputIdle = !input.drag.active && !input.pan.active && input.wheel === 0;
+    if (nearest?.landable && !orbitCam.flight && nearest.distSurface < 30 &&
+      performance.now() - lastTakeoff > 800 && inputIdle &&
+      terrainMgr.baseReady(nearest.id)) { // DEM 基础层未就绪前不登陆（地表还在噪声→真实高程切换中）
+      _rel.set(
+        ship.posKm[0] - nearest.posKm[0], ship.posKm[1] - nearest.posKm[1], ship.posKm[2] - nearest.posKm[2]
+      );
+      const relLen = _rel.length();
+      _q.copy(builder.bodies.get(nearest.id).mesh.quaternion).invert();
+      _rel.applyQuaternion(_q).normalize();
+      const altGround = relLen - terrainMgr.heightAt(nearest.id, _rel);
+      // 移动端阈值放宽至 5m：捏合缩放步长比鼠标滚轮大，需更宽触发窗口才能触发着陆
+      autoLand = altGround < (IS_MOBILE ? 0.005 : 0.0022);
+    }
+    // DEM 未就绪时按 G 要给出反馈：此前条件里带了 baseReady，不满足就什么都不做，
+    // 用户在低空反复按 G 却毫无反应，以为按键坏了。
+    if (input.tapped('KeyG') && nearest?.landable && nearest.distSurface < landRange &&
+        !terrainMgr.baseReady(nearest.id)) {
+      hud.tip(t('tip.terrainLoading'));
+    }
+    if ((autoLand || (input.tapped('KeyG') && nearest?.landable && nearest.distSurface < landRange &&
+        terrainMgr.baseReady(nearest.id)))
+      && !orbitCam.flight) {
+      // 落地冲击：由接近率决定强度（0.004–0.03 rad，约 0.23°–1.7°）
+      const impactMS = Math.max(0, approachMS);
+      const landStrength = Math.min(1, impactMS / 50);              // 50 m/s 记满
+      cameraFeel.impulse(Math.min(0.03, 0.004 + impactMS * 0.0005), 24);
+      audioEngine?.playLandingImpact?.(landStrength);
+      ship.enterWalk(env); // 视向严格连续（yaw+pitch 自当前相机反解）
+      appMode = 'walk';
+      // 移动端：无指针锁定，行走使用单指拖拽环视
+      if (!IS_MOBILE) try { canvas.requestPointerLock(); } catch { /* 非手势上下文 */ }
+    }
+    if (input.tapped('KeyF') && !orbitCam.flight) switchToFly();
+  } else {
+    // 行走中滚轮后退/PageUp → 无缝起飞回探索模式（视向连续，R7 #1；
+    // 阈值 0.5 防触控板轻扫误触发；下潜中滚轮上 = 向上游，不触发起飞，R10）
+    if (appMode === 'walk' && !ship.walk.diving &&
+      (input.wheel >= 0.5 || input.down('PageUp'))) {
+      lastTakeoff = performance.now();
+      document.exitPointerLock?.();
+      orbitCam.adoptPosition(orbitEnv, ship.walk.bodyId, ship.posKm, ship.quat);
+      // 滚轮起飞后复位 tilt 并抬升相机，避免 adoptPosition 留下的 -autoTilt 在 auto-tilt
+      // 消失后导致视线指向地平线下方，进而使径向缩放条件失效、滚轮进入 dolly。
+      orbitCam.tilt = 0;
+      orbitCam.panOffset.set(0, 0, 0); // 重置平移偏置：起飞后应能径向缩放重新着陆
+      orbitCam.distTarget = orbitCam.dist + Math.max(orbitCam.dist * 0.002, 0.05);
+      appMode = 'orbit';
+      ship.mode = 'fly';
+      ship.vel.set(0, 0, 0);
+      input.cancelGestures(); // 清理起飞手势，防止捏合/平移状态泄漏
+    } else {
+      // D-6：时间加速也作用于飞船。此前只用 dtReal，想"加速看自己的轨道"
+      // 得真等 90 分钟。这里按时间倍率**多次子步**积分（上限 16×：
+      // 再高实时操控已无意义，且单步过大会让积分不稳定）。
+      // 子步之间清掉 tapped，否则按一次键会被执行 n 次。
+      {
+        const warp = Math.min(16, Math.max(1, Math.round(simClock._rate ?? 1)));
+        for (let i = 0; i < warp; i++) {
+          if (i > 0) input.justPressed?.clear?.();
+          ship.update(dtReal, input, env);
+        }
+      }
+      if (appMode === 'walk' && ship.mode === 'fly') {
+        switchToOrbit(); // 行走中按 G 返回 → 探索模式
+      } else {
+        appMode = ship.mode === 'walk' ? 'walk' : 'fly';
+      }
+      if (appMode === 'fly' && input.tapped('KeyF')) switchToOrbit();
+    }
+  }
+  if (input.tapped('KeyT') && selectedId) flyTo(selectedId);
+  } catch (e) { loopErr('modeUpdate', e); }
+
+  // 浮动原点（相机=飞船位姿）
+  try { world.update(ship.posKm); } catch (e) { loopErr('world', e); }
+  try {
+    builder.postWorldUpdate(ship.posKm, performance.now() / 1000);
+  } catch (e) {
+    if (!loop._postWorldErr) {
+      loop._postWorldErr = true;
+      console.error('[postWorldUpdate]', e);
+    }
+  }
+  // ── 座舱 / 第三人称 ──────────────────────────────────────────────────────
+  // 飞行与行走都有"我在其中"的实体：飞行=座舱框，行走=无（身体留给后续）。
+  // 第三人称把相机沿机体 +Z 后移并看向原点（浮动原点下飞船恒在原点）。
+  {
+    if (appMode === 'fly' && input.tapped('KeyV')) thirdPerson = !thirdPerson;
+    const showCockpit = appMode === 'fly' && !thirdPerson;
+    cockpit.visible = showCockpit;
+    shipModel.visible = appMode === 'fly' && thirdPerson;
+    // 行走时的"我在其中"边界：用视口级的 CSS 晕影，而不是 3D 头盔框。
+    // 3D 框在这个环境里反复受近平面/视锥影响（主相机近平面随最近天体动态调整），
+    // 而在行走模式下叠加层又要独立相机——很容易让框落到视锥外。
+    // 晕影与分辨率、FOV、相机姿态全都无关，是最稳的表达。
+    document.body.classList.toggle('walk-mode', appMode === 'walk');
+    helmet.visible = false;
+    // 行走：画面里要有"自己"（EVA 服前臂/手套 + 步态摆动）
+    evaSuit.visible = appMode === 'walk';
+    if (evaSuit.visible) {
+      const a = ship.audioState ?? {};
+      evaSuit.userData.update?.(dtReal, a.speed ?? 0, !!a.walking, !!a.submerged);
+    }
+    if (shipModel.visible) {
+      shipModel.position.set(0, 0, 0);
+      shipModel.quaternion.copy(ship.quat);
+      const fl = shipModel.userData.flame;
+      if (fl) {
+        // 尾焰强度由"当前速度 / 速度档"给出：松手滑行时也会留一点余焰
+        const thr = Math.min(1, ship.vel.length() / Math.max(ship.speedSetting, 1e-9) * 0.9);
+        fl.material.opacity = 0.25 + 0.6 * thr;
+        fl.scale.set(0.8 + 0.5 * thr, 0.6 + 1.4 * thr, 0.8 + 0.5 * thr);
+      }
+    }
+    // 叠加相机：第一人称在原点、随飞船姿态；第三人称后上方 16m、看向飞船。
+    // 座舱框按**当前** FOV/宽高比重新布局，否则窗口变形或机体滚转时框会跑出画面
+    overlayCam.fov = camera.fov;
+    overlayCam.aspect = camera.aspect;
+    overlayCam.updateProjectionMatrix();
+    cockpit.userData.layout?.(overlayCam.fov, overlayCam.aspect);
+    helmet.userData.layout?.(overlayCam.fov, overlayCam.aspect);
+    evaSuit.userData.layout?.(overlayCam.fov, overlayCam.aspect);
+    if (thirdPerson && shipModel.visible) {
+      overlayCam.position.set(0, 2.6, 16).applyQuaternion(ship.quat);
+      overlayCam.quaternion.copy(ship.quat);
+      overlayCam.lookAt(0, 0, 0);
+    } else {
+      overlayCam.position.set(0, 0, 0);
+      overlayCam.quaternion.copy(ship.quat);
+    }
+  }
+
+  camera.quaternion.copy(ship.quat);
+  // 相机语言：在基础姿态上叠加步态/冲击/高速微抖。
+  // 只改姿态与 FOV，绝不改视点位置——否则会破坏浮动原点精度与着陆判定。
+  try {
+    const feel = cameraFeel.update(dtReal, {
+      mode: appMode,
+      walking: ship.audioState?.walking,
+      walkSpeedMS: (ship.audioState?.speed ?? 0) * 1000,   // km/s → m/s
+      submerged: ship.audioState?.submerged,
+      speedKmS: ship.vel.length(),
+      boosting: input.keys?.has?.('ShiftLeft') || input.keys?.has?.('ShiftRight'),
+    });
+    camera.quaternion.multiply(feel.quaternion);   // 模块只在返回值里给四元数，不是属性
+    // 再入过载抖动：动压 q = ½ρv² 驱动。与"相机语言"的冲击抖动分开——
+    // 那是离散事件的衰减脉冲，这里是**持续**的湍流抖动，只有在大气里高速穿行时才有。
+    {
+      const q = ship.aero?.q ?? 0;
+      if (q > 150) {
+        const amp = Math.min(0.022, q * 2.2e-5);
+        const t = performance.now() * 0.001;
+        _shakeE.set(Math.sin(t * 37.0) * amp, Math.sin(t * 29.0 + 1.7) * amp, Math.sin(t * 43.0 + 3.1) * amp * 0.6);
+        _shakeQ.setFromEuler(_shakeE);
+        camera.quaternion.multiply(_shakeQ);
+      }
+    }
+    // 等离子鞘 / 气动加热的屏幕辉光：Sutton–Graves 律 q̇ ∝ √ρ·v³。
+    // 归一化到 2e10（60km/7.8km/s 量级为 1），从 ~85km 开始可见。
+    {
+      const heat = ship.aero?.heat ?? 0;
+      const plasma = Math.min(1, Math.max(0, heat / 2e10));
+      if (Math.abs(plasma - _plasmaShown) > 0.004) {
+        _plasmaShown = plasma;
+        reentryGlow.style.opacity = plasma.toFixed(3);
+      }
+    }
+    camera.fov = THREE.MathUtils.clamp(cameraFovBase + feel.fovBiasDeg, 10, 100);
+    camera.updateProjectionMatrix();
+  } catch (e) { loopErr('cameraFeel', e); }
+
+  // 地形（try-catch 保护：DEM 集成改动较多）
+  try {
+    if (nearest && nearest.landable) {
+      const e = builder.bodies.get(nearest.id);
+      _rel.set(
+        ship.posKm[0] - e.posKm[0], ship.posKm[1] - e.posKm[1], ship.posKm[2] - e.posKm[2]
+      );
+      _q.copy(e.mesh.quaternion).invert();
+      _rel.applyQuaternion(_q).normalize();
+      // 水面环境反射需要体固系的太阳方向：_q 已经是该天体四元数的逆
+      _sunLocal.copy(e.mat.userData.uniforms.uSunDir.value).applyQuaternion(_q);
+      terrainMgr.update(nearest, _rel, performance.now() / 1000, _sunLocal);
+    } else {
+      terrainMgr.update(null, null);
+    }
+  } catch (e) {
+    if (!loop._terrainErr) {
+      loop._terrainErr = true;
+      console.error('[terrain]', e);
+    }
+  }
+
+  try { updateAtmosphereFogAndExposure(nearest, dtReal); } catch (e) { loopErr('atmoFog', e); }
+  try { handleUIKeys(); } catch (e) { loopErr('uiKeys', e); }
+
+  // HUD
+  try {
+  hud.updateTime(simClock);
+  const flight = orbitCam.flight;
+  hud.updateNav({ audioOn: audioEngine?.enabled,
+    mode: appMode,
+    flight: flight ? { toName: bodyName(registry.get(flight.toId)), t: flight.t } : null,
+    speed: ship.vel.length(),
+    speedSetting: ship.speedSetting,
+    focusName: appMode === 'orbit' ? bodyName(registry.get(orbitCam.focusId)) : null,
+    nearest: nearest ? { name: bodyName(registry.get(nearest.id)), distSurface: nearest.distSurface } : null,
+    gravity: appMode === 'walk' ? surfaceGravity(builder.bodies.get(ship.walk.bodyId).phys) : null,
+    // 真实引力模式下显示剩余 Δv 预算（燃料耗尽后无法再加速）
+    dv: (appMode === 'fly' && ship.gravityMode) ? ship.dvBudget : null,
+  });
+  updateTip(nearest);
+  if (selectedId) {
+    const t = registry.get(selectedId);
+    const dist = Math.hypot(
+      t.posKm[0] - ship.posKm[0], t.posKm[1] - ship.posKm[1], t.posKm[2] - ship.posKm[2]
+    );
+    const dSun = Math.hypot(t.posKm[0], t.posKm[1], t.posKm[2]);
+    hud.updateTarget(targetInfo(selectedId, registry, dist, dSun, jdTT));
+  } else {
+    hud.updateTarget(null);
+  }
+  // 标签遮挡：所有投影角半径足够大的天体都参与（视线相交且目标在后 → 隐藏）。
+  // 阈值 0.002 rad ≈ 0.11°：只留盘面上值得遮挡的天体，成本每帧仅几十次射线-球测试。
+  const occluders = [];
+  for (const [bid, be] of builder.bodies) {
+    const gp = be.group.position; // 浮动原点后即为相机相对坐标
+    const d = gp.length();
+    const r = be.phys.radiusKm;
+    if (d > r && r / d > 0.002) occluders.push({ id: bid, pos: gp, r: r * 0.999 });
+  }
+  labels.update(selectedId, occluders);
+  // 错误角标：主循环各区段由 try-catch 兜底，屏幕不会冻结，但用户也就无从知道
+  // 出了事（本轮就踩过一次：每帧抛异常被吞，表现为"60 FPS 但画面静止"）。
+  // 这里把累计错误数常驻显示，只在变化时改 DOM。
+  try {
+    const errN = window.__errLog?.length ?? 0;
+    if (errN !== loop._errShown) {
+      loop._errShown = errN;
+      hud.setErrorCount(errN, errN ? window.__errLog[errN - 1].tag : null);
+    }
+  } catch { /* 角标失败不影响主循环 */ }
+  document.getElementById('crosshair').style.display =
+    appMode === 'orbit' ? 'none' : '';
+
+  // 自适应近平面：保证近平面始终略小于最近天体表面，最大化深度精度。
+  // 修复（#8）：5e-7 km 的极小近平面 + 1e15 km far 使深度缓冲精度不足，远处天体会
+  // "穿透"近处天体（如土卫一未遮挡土星）。行走时保持极小近平面（贴地无裁切），在
+  // 空间中按最近表面距离放大近平面（始终 < 最近表面，绝不裁切）。
+  {
+    let dNear = nearest ? nearest.distSurface : Infinity;
+    for (const [, e] of tnoScene.entries) {
+      const d = Math.hypot(
+        e.posKm[0] - ship.posKm[0], e.posKm[1] - ship.posKm[1], e.posKm[2] - ship.posKm[2]
+      ) - e.phys.radiusKm;
+      if (d < dNear) dNear = d;
+    }
+    // 彗星/探测器不在上面的扫描里：焦点在彗星时近平面会按"最近行星"（可达 1e8 km）
+    // 算出 5e7 km，把 2.5e6 km 处的彗发整个裁掉——选中彗星只剩一个标签，天空空白。
+    // 彗发是 Sprite，有可观半尺寸（活跃时可达 ~2.8e6 km），一并扣除免裁。
+    for (const [, t] of registry) {
+      if (t.kind !== 'comet' && t.kind !== 'probe') continue;
+      // 彗发是 Sprite，半尺寸可达 ~2.8e6 km（活跃期），按它扣减才不会被裁
+      const half = t.kind === 'comet'
+        ? Math.max(t.phys?.radiusKm ?? 1, t.relObj?.children?.[0]?.scale?.x ?? 0)
+        : (t.phys?.radiusKm ?? 1);
+      const d = Math.hypot(
+        t.posKm[0] - ship.posKm[0], t.posKm[1] - ship.posKm[1], t.posKm[2] - ship.posKm[2]
+      ) - half;
+      if (d < dNear) dNear = d;
+    }
+    const want = appMode === 'walk'
+      ? 5e-7
+      : THREE.MathUtils.clamp(Math.max(dNear, 0) * 0.3, 5e-7, 1e10);
+    if (Math.abs(want - camera.near) > camera.near * 0.02) {
+      camera.near = want;
+      camera.updateProjectionMatrix();
+    }
+  }
+
+  // 移动端屏显控制：累加 held-zoom、刷新按钮状态
+  touchControls?.update(appMode, nearestCache, orbitCam);
+  } catch (e) { loopErr('hud', e); }
+
+  // ── 新功能模块每帧更新（#3-#55 集成）──────────────────────────────
+  // 每个模块独立 try-catch：任何新模块出错都不应卡死核心渲染循环
+  try {
+    // 环境音效（#4, #32）：根据模式/环境/飞船状态驱动
+    if (audioEngine) {
+      // 机体滚转 → 引擎轰鸣的左右偏置（座舱里的方位感）。
+      // 完整的 HRTF/多普勒需要 3D 声源，这里先补最直接的那一个维度。
+      {
+        const rollIn = (input.down('KeyQ') ? 1 : 0) - (input.down('KeyE') ? 1 : 0);
+        _audioPan += (rollIn * 0.55 - _audioPan) * Math.min(dtReal * 3, 1);
+        audioEngine.setPan?.(_audioPan);
+      }
+      const nearestBody = nearest ? builder.bodies.get(nearest.id) : null;
+      const atm = nearestBody?.phys?.atmosphere;
+      const inAtmo = !!(atm && nearest.distSurface < atm.heightKm);
+      audioEngine.setMode(appMode, {
+        nearest: nearest ? { id: nearest.id, radiusKm: nearest.radiusKm, distSurface: nearest.distSurface } : null,
+        inAtmosphere: inAtmo,
+        underwater: !!ship.walk?.submerged,
+        surface: ship.audioState?.surfaceType || 'rock',
+      });
+      audioEngine.update(dtReal, ship.audioState);
+    }
+  } catch (e) { console.error('[audioEngine]', e); }
+
+  try {
+    // 3D 指南针（#37）：仅在行走模式显示空间方位
+    if (compass && compass.visible) {
+      const nearestBody = nearest ? builder.bodies.get(nearest.id) : null;
+      let sunDir = null, zenithDir = null, northDir = null, nearestBodyDir = null;
+      if (nearestBody) {
+        // 天顶 = 远离天体中心方向（世界系）
+        _rel.set(
+          ship.posKm[0] - nearestBody.posKm[0],
+          ship.posKm[1] - nearestBody.posKm[1],
+          ship.posKm[2] - nearestBody.posKm[2]
+        );
+        const relLen = _rel.length() || 1;
+        zenithDir = { x: _rel.x / relLen, y: _rel.y / relLen, z: _rel.z / relLen };
+        // 北方向 = 自转轴在**当地水平面**上的投影（不是极轴本身）。
+        // 原来直接取极轴的三维方向：纬度 45° 处"北"标记会偏离真实北方 45°，
+        // 只有赤道处才是对的。投影后高纬也正确；极点处投影退化，回退到极轴。
+        const bodyQuat = nearestBody.mesh.quaternion;
+        const nq = _q.copy(bodyQuat);
+        const axis = {
+          x: 2 * (nq.x * nq.y - nq.w * nq.z),
+          y: 1 - 2 * (nq.x * nq.x + nq.z * nq.z),
+          z: 2 * (nq.y * nq.z + nq.w * nq.x),
+        };
+        const dotAz = axis.x * zenithDir.x + axis.y * zenithDir.y + axis.z * zenithDir.z;
+        let nx = axis.x - dotAz * zenithDir.x;
+        let ny = axis.y - dotAz * zenithDir.y;
+        let nz = axis.z - dotAz * zenithDir.z;
+        const nl = Math.hypot(nx, ny, nz);
+        if (nl < 1e-4) { nx = axis.x; ny = axis.y; nz = axis.z; }
+        else { nx /= nl; ny /= nl; nz /= nl; }
+        northDir = { x: nx, y: ny, z: nz };
+        // 太阳方向（世界系，从相机指向太阳）
+        const sunPos = builder.bodies.get('sun').posKm;
+        sunDir = {
+          x: sunPos[0] - ship.posKm[0],
+          y: sunPos[1] - ship.posKm[1],
+          z: sunPos[2] - ship.posKm[2],
+        };
+        const sunLen = Math.hypot(sunDir.x, sunDir.y, sunDir.z) || 1;
+        sunDir.x /= sunLen; sunDir.y /= sunLen; sunDir.z /= sunLen;
+        // 最近天体方向（仅在 fly/orbit 模式下指向最近天体）
+        if (appMode !== 'walk') {
+          nearestBodyDir = { x: -zenithDir.x, y: -zenithDir.y, z: -zenithDir.z };
+        }
+      }
+      compass.update({
+        cameraQuat: camera.quaternion,
+        sunDir,
+        zenithDir,
+        northDir,
+        nearestBodyDir,
+        nearestBodyName: nearest ? bodyName(registry.get(nearest.id)) : null,
+      });
+    }
+  } catch (e) { console.error('[compass]', e); }
+
+  try {
+    // 比例参照物（#38）：跟随相机位置
+    scaleRef?.update({ mode: appMode, cinematic });
+  } catch (e) { console.error('[scaleRef]', e); }
+  try {
+    for (const [id, landmarks] of [['moon', apolloLandmarks], ['mars', roverSites]]) {
+      const entry = builder.bodies.get(id);
+      if (!landmarks || !entry) continue;
+      const local = _rel.set(ship.posKm[0] - entry.posKm[0], ship.posKm[1] - entry.posKm[1], ship.posKm[2] - entry.posKm[2]);
+      local.applyQuaternion(_q.copy(entry.mesh.quaternion).invert());
+      landmarks.update(local);
+    }
+  } catch (e) { loopErr('landmarks', e); }
+
+  try {
+    // 日食阴影系统（#25）：检查所有掩星三元组
+    eclipseSystem?.update(jdTT, builder.bodies, ship.posKm);
+  } catch (e) { console.error('[eclipseSystem]', e); }
+
+  try {
+    // WebXR/VR（#33）：每帧同步控制器位姿
+    webxr?.update(dtReal);
+  } catch (e) { console.error('[webxr]', e); }
+
+  try { fpsGuard(frameDelta); } catch (e) { loopErr('fpsGuard', e); }
+  // Shift+滚轮：FOV 变焦（10°–100°，等效全画幅焦距提示）
+  try {
+    if (input.fovWheel !== 0) {
+      cameraFovBase = THREE.MathUtils.clamp(cameraFovBase * Math.pow(1.12, input.fovWheel), 10, 100);
+      camera.fov = cameraFovBase;
+      camera.updateProjectionMatrix();
+      const mm = 43.27 / (2 * Math.tan(camera.fov * Math.PI / 360));
+      showActionTip(t('tip.fov', { deg: camera.fov.toFixed(0), mm: mm.toFixed(0) }), 1200);
+    }
+  } catch (e) { loopErr('fov', e); }
+  try { input.endFrame(); } catch (e) { loopErr('input', e); }
+  try {
+    if (renderer.xr.isPresenting) renderer.render(scene, camera);
+    else composer.render();
+    // ── 实时测光（?meter=1，默认关）────────────────────────────────────
+    // 每 150ms 从 HDR 缓冲取一次对数平均亮度，驱动"对着画面曝光"。
+    // 默认关的理由：它会把整条曝光律换成测光律，需要逐场景标定；先把代码
+    // 与验证通路备好，标定完再决定是否默认启用。
+    if (DEBUG_FLAGS.meter) {
+      if (!meter) meter = createMetering(renderer);
+      if (meter && performance.now() - lastMeterAt > 150) {
+        lastMeterAt = performance.now();
+        const src = composer.readBuffer?.texture ?? null;
+        const lg = meter.sample(src);
+        if (lg !== null) meteredLog2 = lg;
+      }
+    }
+    // 座舱/飞船叠加层：清深度后单独渲染，用米制近平面（见上面的说明）
+    if ((appMode === 'fly' && (cockpit.visible || shipModel.visible))
+        || (appMode === 'walk' && evaSuit.visible)) {
+      if (!overlayScene.environment) overlayScene.environment = scene.environment;
+      renderer.autoClear = false;
+      renderer.clearDepth();
+      renderer.render(overlayScene, overlayCam);
+      renderer.autoClear = true;
+    }
+  } catch (e) {
+    // 渲染本身异常：记录一次，避免每帧刷屏
+    if (!loop._renderErr) {
+      loop._renderErr = true;
+      console.error('[composer.render]', e);
+    }
+  }
+}
+
+// 每帧错误兜底：每个区段独立捕获，仅首次报告（避免控制台刷屏），绝不阻止后续区段。
+// 设计目标：任何单帧异常都不能让 composer.render() 被跳过 → 屏幕永不冻结。
+// 错误同时进入 window.__errLog（探针/回归工具可断言"零错误"），不再静默。
+function loopErr(tag, e) {
+  const k = '_e_' + tag;
+  (window.__errLog = window.__errLog || []).push({ tag, msg: String(e?.message || e), t: Date.now() });
+  if (!loop[k]) {
+    loop[k] = true;
+    console.error('[' + tag + ']', e);
+    try { hud.tip(tag + ' 错误: ' + (e?.message || e)); } catch { /* hud 可能未就绪 */ }
+  }
+}
+
+function findNearest() {
+  let best = null;
+  for (const [id, e] of builder.bodies) {
+    const d = Math.hypot(
+      e.posKm[0] - ship.posKm[0], e.posKm[1] - ship.posKm[1], e.posKm[2] - ship.posKm[2]
+    );
+    const ds = d - e.phys.radiusKm;
+    if (!best || ds < best.distSurface) {
+      best = {
+        id, posKm: e.posKm, radiusKm: e.phys.radiusKm,
+        landable: !!e.phys.landable, distSurface: ds,
+        // 带上 phys：飞船的大气阻力/气动加热要用 nearest.phys.atmosphere。
+        // 此前只有 id，各处只能绕道 builder.bodies.get(id).phys。
+        phys: e.phys,
+      };
+    }
+  }
+  return best;
+}
+
+function makeEnv(nearest) {
+  return {
+    nearest,
+    getBodyQuat: (id) => builder.bodies.get(id).mesh.quaternion,
+    getBodyPos: (id) => builder.bodies.get(id).posKm,
+    heightFn: (id, dir) => terrainMgr.heightAt(id, dir),
+    heightSolidFn: (id, dir) => terrainMgr.heightSolidAt(id, dir),
+    isWater: (id, dir) => terrainMgr.isWater(id, dir),
+    phys: (id) => builder.bodies.get(id).phys,
+    baseReady: (id) => terrainMgr.baseReady(id),
+  };
+}
+
+function handleTimeKeys() {
+  if (input.tapped('BracketRight')) hud.warpUp();
+  if (input.tapped('BracketLeft')) hud.warpDown();
+  if (input.tapped('KeyP')) simClock.paused = !simClock.paused;
+  if (input.tapped('KeyN')) { simClock.setNow(); hud.warpReset(); simClock.paused = false; }
+}
+
+const PLANET_KEYS = {
+  Digit1: 'mercury', Digit2: 'venus', Digit3: 'earth', Digit4: 'mars', Digit5: 'jupiter',
+  Digit6: 'saturn', Digit7: 'uranus', Digit8: 'neptune', Digit9: 'pluto', Digit0: 'sun',
+};
+
+// 轨道线默认**关闭**：它是示意图层，不是天体本身。默认开启时任何一张太空视角的
+// 画面里都横着 6–8 条彩色线（实测 earth-space），与"任何角度都逼真"直接冲突。
+// 需要时按 O 打开。TNO 轨道线同样默认关闭（数量多且远）。
+let orbitLinesOn = true;   // 与线上一致：首屏就能看到太阳系的结构
+let tnoOrbitsOn = false;
+let directoryTabKeyBound = false;
+
+function handleUIKeys() {
+  if (!directoryTabKeyBound) {
+    directoryTabKeyBound = true;
+    window.addEventListener('keydown', (e) => {
+      if (e.code !== 'Tab' || e.repeat) return;
+      const t = e.target;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
+      e.preventDefault();
+      document.querySelector('#directory')?.classList.toggle('open');
+    });
+  }
+  for (const [key, id] of Object.entries(PLANET_KEYS)) {
+    if (input.tapped(key)) flyTo(id); // GE 风格：快捷键直接前往
+  }
+  if (input.tapped('KeyO')) orbitLinesOn = !orbitLinesOn;
+  if (input.tapped('KeyK')) { // K：海外天体轨道线独立开关（#4）
+    tnoOrbitsOn = !tnoOrbitsOn;
+    hud.tip(tnoOrbitsOn ? t('tip.tnoOrbitsOn') : t('tip.tnoOrbitsOff'));
+  }
+  // V：惯性观察模式（相机不随天体自转——配合时间加速观赏卫星/行星绕转，R9-1e）
+  if (input.tapped('KeyV') && appMode === 'orbit' && !orbitCam.flight) {
+    orbitCam.setInertial(!orbitCam.inertial, orbitEnv);
+  }
+  // 行走模式与纯净/电影模式都隐藏轨道辅助线（沉浸真实星空）。
+  // 纯净模式此前只加 body.cinematic 这个 CSS 类，而轨道线是 WebGL 对象、CSS 管不到——
+  // 于是"没有任何界面"的录屏/截图里仍然横着彩色轨道线。3D 叠加物必须在这里一起收。
+  const showOrbits = orbitLinesOn && appMode !== 'walk' && !cinematic;
+  // 近距淡出：轨道线是示意辅助而非法线实体，抵达/环绕某天体时其轨道线
+  // 仍横贯视野会破坏临场感（冥王星系统内"轨道比星球还醒目"的投诉）。
+  // 6R→300R 平滑淡入：月距 38 万 km 处看地球轨道线仍接近全显，登陆前完全隐去。
+  for (const [id, line] of Object.entries(builder.orbitLines.userData)) {
+    const e = builder.bodies.get(id);
+    let f = 1;
+    if (e) {
+      const R = e.phys.radiusKm;
+      const d = Math.hypot(
+        e.posKm[0] - ship.posKm[0], e.posKm[1] - ship.posKm[1], e.posKm[2] - ship.posKm[2]
+      ) - R;
+      f = THREE.MathUtils.smoothstep(d, R * 6, R * 300);
+    }
+    line.visible = showOrbits && f > 0.01;
+    if (line.visible) line.material.opacity = (line.userData.baseOpacity ?? 0.3) * f;
+  }
+  // 海外天体（TNO）轨道线：独立开关（K），默认关闭（#4）
+  const showTnoOrbits = tnoOrbitsOn && appMode !== 'walk' && !cinematic;
+  for (const [, e] of tnoScene.entries) {
+    if (!e.orbitLine) continue;
+    const R = e.phys.radiusKm ?? 500;
+    const d = Math.hypot(
+      e.posKm[0] - ship.posKm[0], e.posKm[1] - ship.posKm[1], e.posKm[2] - ship.posKm[2]
+    ) - R;
+    const f = THREE.MathUtils.smoothstep(d, R * 6, R * 300);
+    e.orbitLine.visible = showTnoOrbits && f > 0.01;
+    if (e.orbitLine.visible) e.orbitLine.material.opacity = (e.orbitLine.userData.baseOpacity ?? 0.18) * f;
+  }
+  // J：真实引力模式（默认关闭）。开启后推力只给加速度，可自由落体与入轨。
+  if (input.tapped('KeyJ') && appMode === 'fly') {
+    ship.gravityMode = !ship.gravityMode;
+    hud.tip(t(ship.gravityMode ? 'tip.gravityOn' : 'tip.gravityOff'));
+  }
+  if (input.tapped('KeyL')) labels.setVisible(!labels.visible);
+  if (input.tapped('KeyH')) hud.toggleHelp();
+  // Z：纯净/电影模式——一次性收掉全部叠加层（HUD/目录/准星/提示/罗盘/参照物），
+  // 只留宇宙本身。逐元素开关（L 标签、O 轨道、C 罗盘）做不到这件事，
+  // 而截图、录屏、演示、VR 都需要一个"没有任何界面"的画面。
+  if (input.tapped('KeyZ')) setCinematic(!cinematic);
+}
+
+let cinematic = false;
+let cinematicTimer = 0;
+function setCinematic(on) {
+  cinematic = on;
+  clearTimeout(cinematicTimer);
+  if (on) {
+    // 先让提示可读再收界面——否则用户不知道刚才发生了什么
+    hud.tip(t('tip.cinematicOn'));
+    cinematicTimer = setTimeout(() => document.body.classList.add('cinematic'), 1200);
+  } else {
+    document.body.classList.remove('cinematic');
+    hud.tip(t('tip.cinematicOff'));
+  }
+}
+
+// 诊断开关（自动化排查用）：
+//   ?noatmo=1  不建大气壳（隔离"壳层 vs 地形"的贡献）
+//   ?nofog=1   关闭气溶胶透视雾
+const DEBUG_FLAGS = (() => {
+  const q = new URLSearchParams(window.location.search);
+  const f = { noatmo: q.get('noatmo') === '1', nofog: q.get('nofog') === '1', meter: q.get('meter') === '1' };
+  globalThis.__noAtmo = f.noatmo;   // builder 在构建期读取
+  return f;
+})();
+
+// 直接以纯净模式启动（自动化截图/录屏用）：?clean=1
+if (typeof document !== 'undefined' && document.body
+    && new URLSearchParams(window.location.search).get('clean') === '1') {
+  cinematic = true;
+  document.body.classList.add('cinematic');
+}
+
+function updateTip(nearest) {
+  // 动作类提示（书签/复制链接等）有 2.5s 展示窗口，期间不被状态提示覆盖
+  if (performance.now() < actionTipUntil) return;
+  const atm = nearest ? builder.bodies.get(nearest.id)?.phys.atmosphere : null;
+  if (performance.now() < focusTipUntil && appMode === 'orbit') {
+    const tipId = orbitCam.pendingFocusId ?? selectedId ?? orbitCam.focusId;
+    const tipName = bodyName(registry.get(tipId)) || t('word.target');
+    if (orbitCam.pendingFocusId && orbitCam.pendingFocusId !== orbitCam.focusId) {
+      hud.tip(t('tip.pendingFocus', { name: tipName }));
+    } else {
+      hud.tip(t('tip.lockedFocus', { name: tipName }));
+    }
+  } else if (orbitCam.flight) {
+    hud.tip(t('tip.flyingTo', { name: bodyName(registry.get(orbitCam.flight.toId)) }));
+  } else if (appMode === 'walk') {
+    hud.tip(IS_MOBILE ? t('tip.walkTouch') : (input.locked ? t('tip.walkLocked') : t('tip.walkUnlocked')));
+  } else if (nearest && nearest.landable &&
+    nearest.distSurface < Math.max(20, nearest.radiusKm * 0.05)) {
+    hud.tip(t('tip.landNear', { name: bodyName(registry.get(nearest.id)) }));
+  } else if (appMode === 'orbit' && nearest && nearest.landable &&
+    nearest.distSurface < nearest.radiusKm * 0.6) {
+    hud.tip(t('tip.landAny'));
+  } else if (nearest && !nearest.landable && nearest.id !== 'sun' && atm &&
+    nearest.distSurface < atm.heightKm) {
+    hud.tip(t('tip.enterAtmo', { name: bodyName(registry.get(nearest.id)) }));
+  } else if (nearest && !nearest.landable && nearest.id !== 'sun' && nearest.distSurface < nearest.radiusKm * 0.5) {
+    hud.tip(t('tip.gasGiant'));
+  } else if (nearest && nearest.id === 'sun' && nearest.distSurface < nearest.radiusKm * 2) {
+    hud.tip(t('tip.sun'));
+  } else if (appMode === 'orbit' && orbitCam.inertial) {
+    hud.tip(t('tip.inertial', { name: bodyName(registry.get(orbitCam.focusId)) }));
+  } else {
+    hud.tip(null);
+  }
+}
+
+const immersionEl = document.getElementById('immersion');
+let lastBoosted = null; // 上一个被密度增幅的大气网格（离开时必须复位为 1）
+
+function updateAtmosphereFogAndExposure(nearest, dt) {
+  const dSunAU = Math.hypot(ship.posKm[0], ship.posKm[1], ship.posKm[2]) / KM_PER_AU;
+  // 近日处压低曝光以保留米粒组织细节；行星处≈1；外太阳系适度提亮
+  // 曝光 = 相机到太阳距离的平方（纯测光）。与各天体的 uSunI = 1/d² 相乘后恒为 1，
+  // 于是"表面亮度只由反照率决定"——这才是相机的行为，也是"身临其境"的前提：
+  // 飞到冥王星，相机自己会开大光圈，冥王星看起来仍是一颗正常亮度的星球；
+  // 而在同一视野里比较远近两个天体时，远处那个正确地更暗。
+  //
+  // 原来是 pow(dAU, 0.85) 且钳在 [0.25, 12]：13 AU 以上不再补偿，而 uSunI 仍在
+  // 按 (1/d²)^0.55 下降 → 外太阳系盘面持续变暗（冥王星渲染近黑）。
+  //
+  // 系数 0.75 是**色调映射的标定**：反照率 1（纯白面）在相机所在距离处应当落在
+  // ACES 压缩拐点（约 0.8 线性）之下，这样比平均更亮的地貌（冥王星"心形"亮区
+  // 反照率 ~0.86）才不会被削成白斑。取 1.0 时冥王星盘面 10.6% 过曝、亮心糊成一片白。
+  // ── 目标反照率曝光适应 ─────────────────────────────────────────────────
+  // 只按日心距曝光（0.75·d²）补偿了**距离**，没补偿**反照率**：水星（0.106）
+  // 因此被压成一块黑饼、月球（0.136）发灰，而冰卫星顶到高光。真实相机和眼睛
+  // 都是对着目标曝光的——没有哪张水星照片是把水星拍成黑球的。
+  // 这里按当前聚焦天体的实测几何反照率做**部分**适应（指数 0.75）：每个天体
+  // 在被凝视时有正常可辨的亮度，同时保留"同一画面里暗的确实更暗"的排序。
+  // 只在相机确实靠近该天体（40R 内全量、100R 外归零）时生效，看太阳系全景时
+  // 退回纯距离曝光。
+  let exposureAdapt = 1;
+  {
+    const fid = orbitCam.focusId ?? nearest?.id;
+    const a = fid ? SURFACE_ALBEDO[fid] : null;
+    const e = fid ? builder.bodies.get(fid) : null;
+    if (a > 0 && e && fid !== 'sun') {
+      const rr = Math.hypot(
+        ship.posKm[0] - e.posKm[0], ship.posKm[1] - e.posKm[1], ship.posKm[2] - e.posKm[2]
+      ) / Math.max(e.phys.radiusKm, 1e-6);
+      const w = 1 - THREE.MathUtils.smoothstep(rr, 40, 100);
+      if (w > 0) {
+        exposureAdapt = 1 + (Math.pow(0.62 / Math.max(a, 0.03), 1.0) - 1) * w;
+      }
+    }
+  }
+  exposureTarget = THREE.MathUtils.clamp(
+    0.75 * Math.max(dSunAU, 0.004) ** 2 * exposureAdapt, 0.02, 6000);
+  // 测光优先：把"画面平均亮度"映射到 0.22 的显示锚点。
+  // 这是真正的相机行为——对着什么就按什么曝光；上面的距离律退化为
+  // 测光尚未就绪（前几帧 / 读回失败）时的兜底。
+  if (DEBUG_FLAGS.meter && meteredLog2 !== null) {
+    const L = Math.pow(2, meteredLog2);
+    if (L > 1e-9) exposureTarget = THREE.MathUtils.clamp(0.30 / L, 0.02, 6000);
+  }
+
+  let fogDensity = 0;
+  let skyFade = 1; // 白昼大气内星空淡出（日光散射淹没星光，物理正确）
+  let immersion = 0; // 气巨大气浸没（全屏云雾层，R7 #5）
+  let immTint = null;
+  let waterFx = null; // 水下环境（R9-2b）
+  let _groundTintW = 0;        // 地表穿霾色滤权重（金星/土卫六，0=自然阳光）
+  let _groundTintCol = null;   // 滤镜色 [r,g,b]
+  const fogColor = new THREE.Color(0x000000);
+  if (nearest) {
+    const e = builder.bodies.get(nearest.id);
+    const atm = e.phys.atmosphere;
+    for (const id of new Set([nearest.id, orbitCam.focusId])) {
+      const body = builder.bodies.get(id); if (!body) continue;
+      const radial = new THREE.Vector3(ship.posKm[0] - body.posKm[0], ship.posKm[1] - body.posKm[1], ship.posKm[2] - body.posKm[2]);
+      const distanceKm = radial.length();
+      radial.normalize();
+      const towardSun = new THREE.Vector3(...body.posKm).normalize().negate();
+      const view = camera.getWorldDirection(new THREE.Vector3());
+      skyFade = Math.min(skyFade, photoSkyVisibility({ radiusKm: body.phys.radiusKm, distanceKm,
+        sunElevation: id === 'sun' ? 1 : radial.dot(towardSun), phaseCosine: id === 'sun' ? 1 : radial.dot(towardSun),
+        viewCosine: -view.dot(radial), dSunAU,
+        airless: !body.phys.atmosphere }));
+    }
+    const inAtmo = atm && nearest.distSurface < atm.heightKm;
+    // 入气密度增幅：气巨/冰巨内部放大；岩石行星用 interiorBoost 分离"地表天空亮"与"太空薄气雾"
+    if (e.atmoMesh) {
+      const gasGiant = e.phys.type === 'gas' || e.phys.type === 'ice';
+      const depth = inAtmo ? 1 - Math.max(nearest.distSurface, 0) / atm.heightKm : 0;
+      let boostVal = 1, boostMVal = 1;
+      // depth 可能为 NaN（落地过渡帧 distSurface 未就绪）——它经 interiorBoost
+      // 一路传到 uBoost，再污染大气壳与地形雾的整条散射积分（雾色变 NaN，
+      // three 的雾会把整个地形刷黑）。就地兜住。
+      if (!Number.isFinite(depth)) {
+        // 保持 1 / 1
+      } else if (gasGiant && inAtmo) {
+        boostVal = boostMVal = 1 + depth * depth * 24;
+      } else if (inAtmo && atm.interiorBoost) {
+        const t = THREE.MathUtils.smoothstep(depth, 0.05, 0.35);
+        boostVal  = 1 + (atm.interiorBoost          - 1) * t;
+        boostMVal = 1 + ((atm.interiorBoostM ?? 1)  - 1) * t;
+      }
+      const u = e.atmoMesh.material.userData.uniforms;
+      u.uBoost.value  = boostVal;
+      u.uBoostM.value = boostMVal;
+      if (lastBoosted && lastBoosted !== e.atmoMesh) {
+        const lu = lastBoosted.material.userData.uniforms;
+        lu.uBoost.value = 1; lu.uBoostM.value = 1;
+      }
+      lastBoosted = e.atmoMesh;
+      if (gasGiant && inAtmo) {
+        // 浸没层：深入云层逐渐被云雾吞没（色调取自该行星散射系数）
+        immersion = THREE.MathUtils.smoothstep(depth, 0.45, 0.85);
+        const b = atm.rayleigh;
+        const m = Math.max(b[0], b[1], b[2]);
+        immTint = [b[0] / m, b[1] / m, b[2] / m];
+      }
+    }
+    // 水下环境（R9-2b）：海面之下 → 深海雾 + 光照随深度指数衰减 + 星空遮蔽
+    if (e.phys.landable && e.phys.surface?.ocean) {
+      _rel.set(
+        ship.posKm[0] - e.posKm[0], ship.posKm[1] - e.posKm[1], ship.posKm[2] - e.posKm[2]
+      );
+      const relLen = _rel.length();
+      _q.copy(e.mesh.quaternion).invert();
+      _rel.applyQuaternion(_q).normalize();
+      const surfR = e.phys.radiusKm + 0.001;
+      if (relLen < surfR - 0.00003 && terrainMgr.isWater(nearest.id, _rel)) {
+        const depth = surfR - relLen; // km
+        const dim = Math.exp(-depth * 1.6); // 海水对日光的指数衰减
+        waterFx = { depth, dim };
+      }
+    }
+    if (inAtmo) {
+      const alt = Math.max(nearest.distSurface, 0);
+      if (atm.groundTint) {
+        _groundTintCol = atm.groundTint;
+        _groundTintW = Math.exp(-alt / (atm.rayleighScaleKm * 3));
+      }
+      _rel.set(
+        ship.posKm[0] - e.posKm[0], ship.posKm[1] - e.posKm[1], ship.posKm[2] - e.posKm[2]
+      ).normalize();
+      const sunDir = new THREE.Vector3(-e.posKm[0], -e.posKm[1], -e.posKm[2]).normalize();
+      const sunElev = _rel.dot(sunDir);
+      const day = THREE.MathUtils.clamp(sunElev * 4 + 0.1, 0, 1);
+      // ── 大气透视：与大气壳**同一套单次散射模型**（审计 C-4）──────────────
+      // 壳层是 depthTest 的透明体，只填充前方没有实体的像素；地面像素全被地形
+      // 挡住，壳层在那里贡献为零。所以地形侧必须自己再做一次大气透视——但必须
+      // 用同一个模型，否则地平线的霾色和它上方的天空对不上。
+      // 这里取相机视向，于是"朝着太阳看"与"背着太阳看"的霾色自然不同
+      // （前向 Mie 散射 + 整条路径的受照比例），不再是一个全天固定的常数。
+      // **坐标系必须统一**：atmosphereFog 内部要做 up·view、up·sun 的点积，
+      // 而相机视向是 Three 世界系（黄道系经 (x,y,z)→(x,z,−y) 映射而来）。
+      // 直接把黄道系的 up/sunDir 传进去会让受照占比恒为 0 → 霾色纯黑。
+      _fogUp.set(_rel.x, _rel.z, -_rel.y);
+      _fogSun.set(-e.posKm[0], -e.posKm[2], e.posKm[1]).normalize();
+      const fogRes = atmosphereFog(e.phys, {
+        altKm: alt,
+        up: _fogUp,
+        viewDir: camera.getWorldDirection(_fogView),
+        sunDir: _fogSun,
+        sunI: 5 * (atm.multiplier ?? 1) / Math.max(dSunAU * dSunAU, 1e-6),
+        boost: e.atmoMesh?.material.userData.uniforms.uBoost.value ?? 1,
+        boostM: e.atmoMesh?.material.userData.uniforms.uBoostM.value ?? 1,
+        dustStorm: e.atmoMesh?.material.userData.uniforms.uDustStorm.value ?? 0,
+      });
+      renderer.__fogDbg = {
+        color: fogRes ? [...fogRes.color] : null, alpha: fogRes?.alpha, density: fogRes?.density,
+        alt, up: [_fogUp.x, _fogUp.y, _fogUp.z], view: [_fogView.x, _fogView.y, _fogView.z],
+        sun: [_fogSun.x, _fogSun.y, _fogSun.z], sunI: 5 * (atm.multiplier ?? 1) / Math.max(dSunAU * dSunAU, 1e-6),
+        boost: e.atmoMesh?.material.userData.uniforms.uBoost.value,
+        boostM: e.atmoMesh?.material.userData.uniforms.uBoostM.value,
+        dust: e.atmoMesh?.material.userData.uniforms.uDustStorm.value,
+        distSurface: nearest.distSurface,
+      };
+      // 有限性守卫：任一输入出现 NaN（历史上见过 distSurface 在落地过渡帧为
+      // NaN，经 depth→interiorBoost→uBoost 一路污染到散射积分）都会让雾色变成
+      // NaN，three 的雾会把整个地形刷成黑。宁可退回上一帧的雾色也不要 NaN。
+      if (fogRes && fogRes.color.every(Number.isFinite) && Number.isFinite(fogRes.density)) {
+        // 源函数 = L/α：FogExp2 混向它等价于 mix(地形, 霾) = 地形·(1−α) + L，
+        // 与壳层在地平线处的合成完全一致。fogDensityMult 仍是"美术修正"（金星
+        // 用 Venera 实测能见度标定），但现在它乘的是**物理消光系数**而不是经验常数。
+        fogColor.setRGB(fogRes.color[0], fogRes.color[1], fogRes.color[2]);
+        fogDensity = Math.min(fogRes.density * (atm.fogDensityMult ?? 1), 2.5);
+      }
+      // 星空淡出：白昼且身处稠密层内
+      const density = Math.exp(-alt / (atm.rayleighScaleKm * 2.2));
+      // 白昼星消：散射天空亮度取决于视线路径上的整层气柱，而非局地密度——
+      // 即使站在 21km 的奥林帕斯山顶，火星正午天空依旧亮得看不见星。
+      // 系数 3.0：地表/低海拔白昼 → skyFade=0 星光全灭（物理正确）；
+      // 30km 平流层白昼 density≈0.2 → skyFade≈0.4 亮星依稀可见（与真实高空气球观测一致）。
+      skyFade = Math.min(skyFade, THREE.MathUtils.clamp(1 - day * density * 3.0, 0, 1));
+      // 穿越云层薄纱（R9-2b）：掠过云甲板高度时短暂白雾，入气更有层次
+      if (e.cloudMesh && !waterFx) {
+        const hc = e.phys.radiusKm * 0.0035;
+        const veil = Math.exp(-(((alt - hc) / 1.8) ** 2)) * 0.4 * (0.3 + 0.7 * day);
+        if (veil > immersion) {
+          immersion = veil;
+          immTint = [0.9, 0.94, 1.0];
+        }
+      }
+    }
+  }
+  if (waterFx) {
+    // 水下（R9-2b）：深海蓝绿雾 + 全屏浸没层随深度变暗 + 曝光衰减 + 星空遮蔽
+    const { depth, dim } = waterFx;
+    // 分光吸收：水对红光的吸收远强于蓝绿（纯水的吸收系数在 650nm 约是
+    // 450nm 的 30 倍），所以远处只剩青蓝。雾色向青蓝偏，且越深越暗。
+    fogColor.setRGB(0.004 + 0.030 * dim, 0.030 + 0.115 * dim, 0.060 + 0.150 * dim);
+    // 可见度：真实海水的水平能见度约 20–50m（澄清水）；浑浊水域更短。
+    // FogExp2 的 1−exp(−(ρd)²) 在 d=1/ρ 处给 63%，所以 ρ 应取 1/L。
+    // 原来取 16（L≈62m）且只随深度缓慢增加——水下远处几乎不衰减，像在空气中。
+    fogDensity = 35 + depth * 60;
+    skyFade = Math.min(skyFade, 0.04);
+    exposureTarget = Math.max(exposureTarget * Math.max(dim, 0.045), 0.05);
+    const wr = Math.round((0.04 + 0.16 * dim) * 255);
+    const wg = Math.round((0.12 + 0.34 * dim) * 255);
+    const wb = Math.round((0.2 + 0.42 * dim) * 255);
+    immersionEl.style.background =
+      `radial-gradient(ellipse at center, rgba(${wr},${wg},${wb},0.45) 0%, rgba(${Math.round(wr * 0.4)},${Math.round(wg * 0.4)},${Math.round(wb * 0.4)},0.9) 85%)`;
+    immersionEl.style.opacity = THREE.MathUtils.clamp(0.3 + depth * 0.5, 0, 0.9).toFixed(3);
+  } else {
+    // 气巨浸没层/穿云薄纱：全屏云雾渐显（深处白化吞没，离开时归零）
+    if (immersion > 0 && immTint) {
+      skyFade = Math.min(skyFade, 1 - immersion); // 云中看不见星空
+      const cr = Math.round((immTint[0] * 0.45 + 0.55) * 255);
+      const cg = Math.round((immTint[1] * 0.45 + 0.55) * 255);
+      const cb = Math.round((immTint[2] * 0.45 + 0.55) * 255);
+      immersionEl.style.background =
+        `radial-gradient(ellipse at center, rgba(${cr},${cg},${cb},0.75) 0%, rgb(${cr},${cg},${cb}) 78%)`;
+    }
+    immersionEl.style.opacity = immersion.toFixed(3);
+  }
+
+  scene.fog.color.copy(fogColor);
+  scene.fog.density = DEBUG_FLAGS.nofog ? 0 : fogDensity;
+  renderer.__fogRef = scene.fog;   // 诊断用（tools/probe-titanfog.mjs）
+  sky.setFade(skyFade / Math.max(1, renderer.toneMappingExposure));
+  // 黄道光的亮度分布依赖太阳方向（时变量），每帧喂一次
+  try {
+    const sp = builder.bodies.get('sun')?.posKm;
+    if (sp) sky.setSunDir?.(-sp[0], -sp[1], -sp[2]);   // 世界系：相机在原点，指向太阳
+  } catch { /* 太阳未就绪 */ }
+  // 统计性点云/暗弱标记的可见性：白昼大气内被日光淹没（skyFade），
+  // 且行走地表时肉眼本就不可见——主带/柯伊伯带点云、真实小天体、奥尔特云、
+  // TNO 辉光（≥17 等）、探测器辉光在任何天体的地表夜晚也看不见
+  // （冥王星地表审查：柯伊伯带点云糊成横贯天空的白带伪影）。
+  // 行星/卫星/彗星夜晚保留（真实夜空可见行星与大彗星）。
+  const surfVis = skyFade > 0.4 && appMode !== 'walk';
+  belts.visible = surfVis;
+  oortCloud.group.visible = surfVis;
+  smallBodies.group.visible = surfVis;
+  comets.setSkyFade(skyFade);
+  tnoScene.setSkyFade(surfVis ? 1 : 0);
+  builder.setSkyFade(skyFade);
+  for (const v of voyagerEntries) v.group.visible = surfVis;
+  oortCloud.update(dSunAU);            // 进入云内部按距离淡出（#5）
+  // 恒星名标签只在**真正身处白昼大气内**时隐藏。此前用 skyFade<0.5 判定，
+  // 而 skyFade 会被"附近有受照天体"的辉光拉到很低——于是从轨道上看地球时，
+  // 满天恒星的名字全被藏起来了（线上是有的）。
+  document.getElementById('labels').classList.toggle('daysky', skyFade < 0.5 && appMode === 'walk');
+  // 行走地表：暗弱目标标签（TNO/彗星/探测器/边界/区域）肉眼不可见，夜晚亦然
+  document.getElementById('labels').classList.toggle('walksky', appMode === 'walk');
+
+  // 行走在夜面时的微环境光（地照/星光下的暗适应，保证夜间探索可见性）
+  ambient.intensity += ((appMode === 'walk' ? 0.14 : 0.02) - ambient.intensity) * Math.min(dt * 3, 1);
+  // 环境光穿霾色滤：厚霾天体的"天光"本身即橙色漫射（与直射光同步，见 builder 地表光照）
+  {
+    const gt = _groundTintW > 0 ? _groundTintCol : null;
+    if (gt) {
+      ambient.color.setRGB(
+        0x40 / 255 + (gt[0] * 0.6 - 0x40 / 255) * _groundTintW,
+        0x48 / 255 + (gt[1] * 0.6 - 0x48 / 255) * _groundTintW,
+        0x58 / 255 + (gt[2] * 0.6 - 0x58 / 255) * _groundTintW);
+    } else {
+      ambient.color.setHex(0x404858);
+    }
+  }
+
+  // 方向性眼睛适应（#21）：进入强光快（瞳孔收缩 ~0.4s），进入暗处慢（视杆适应 ~1.4s）
+  const adaptSpeed = exposureTarget < renderer.toneMappingExposure ? 2.5 : 0.7;
+  renderer.toneMappingExposure +=
+    (exposureTarget - renderer.toneMappingExposure) * Math.min(dt * adaptSpeed, 1);
+  // 太阳光球不随场景曝光变化（见 sun.js 的 uInvExposure 说明）
+  {
+    const su = builder.bodies.get('sun')?.uniforms;
+    if (su?.uInvExposure) su.uInvExposure.value = 1 / Math.max(renderer.toneMappingExposure, 1e-4);
+    // 日冕同样不随场景曝光变化（见 sun.js 的说明）
+    const cu = builder.bodies.get('sun')?.coronaUniforms;
+    if (cu?.uInvExposure) cu.uInvExposure.value = 1 / Math.max(renderer.toneMappingExposure, 1e-4);
+    // 大气壳的抖动同样按曝光归一化（否则高曝光天体整片天空是雪花）。
+    // 这里遍历所有天体：大气壳是常驻场景的，不只最近的那一个会被看到
+    // （远处行星的临边大气同样在画面里），而写入 uniform 的成本可忽略。
+    const invExp = 1 / Math.max(renderer.toneMappingExposure, 1e-4);
+    for (const bd of builder.bodies.values()) {
+      const au = bd.atmoMesh?.material.userData.uniforms;
+      if (au?.uInvExposure) au.uInvExposure.value = invExp;
+    }
+  }
+}
+
+function onResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  composer.setSize(window.innerWidth, window.innerHeight);
+  syncRenderResolution();
+}
+
+// ---- 可分享 URL（issue #1）----
+// 格式：#<focusId>,<lat_deg>,<lon_deg>,<dist_km>,<jdTT>
+// 仅编码探索模式相机状态；fly/walk 模式下只记录最近探索快照。
+
+function applyLocationHash() {
+  const hash = location.hash.slice(1);
+  if (!hash) return;
+  const parts = hash.split(',');
+  if (parts.length < 4) return;
+  const [focusId, latDeg, lonDeg, distKm, jdStr] = parts;
+  if (!registry.has(focusId)) return;
+  const DEG = Math.PI / 180;
+  const lat = parseFloat(latDeg), lon = parseFloat(lonDeg), dist = parseFloat(distKm);
+  if (!isFinite(lat) || !isFinite(lon) || !isFinite(dist) || dist <= 0) return;
+  orbitCam.focusId = focusId;
+  orbitCam.lat = lat * DEG;
+  orbitCam.lon = lon * DEG;
+  orbitCam.dist = dist;
+  orbitCam.distTarget = dist;
+  orbitCam.tilt = 0;
+  orbitCam.heading = 0;
+  orbitCam.panOffset.set(0, 0, 0);
+  if (jdStr) {
+    const jd = parseFloat(jdStr);
+    if (isFinite(jd) && jd > 2000000) simClock.jdTT = jd;
+  }
+  syncShipToOrbit();
+  select(focusId);
+}
+
+// ── VR 控制器事件（WebXRManager 回调）─────────────────────────────────
+let _audioPan = 0;   // 立体声偏置的平滑值
+const _shakeE = new THREE.Euler();
+const _shakeQ = new THREE.Quaternion();
+let _plasmaShown = -1;
+// 再入等离子鞘的屏幕辉光（DOM 覆盖层：比后期通道便宜，且不影响 HDR 管线）
+const reentryGlow = (() => {
+  const d = document.createElement('div');
+  d.id = 'reentry-glow';
+  d.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(d);
+  return d;
+})();
+const _xrOrigin = new THREE.Vector3();
+const _xrDir = new THREE.Vector3();
+const _xrV = new THREE.Vector3();
+
+function handleXREvent(ev) {
+  if (ev.type === 'sessionend') { syncRenderResolution(); return; }
+  if (ev.type === 'grab' && appMode === 'orbit') {
+    orbitCam.panOffset.sub(_xrV.set(ev.delta.x, ev.delta.y, ev.delta.z));
+    return;
+  }
+  if (ev.type === 'teleport' || ev.type === 'zoom') {
+    // 摇杆前后 / 双手捏合 → 探索模式下按焦点缩放（方向统一：前推/捏合=靠近）
+    if (appMode !== 'orbit') return;
+    const factor = ev.type === 'teleport' ? (1 - ev.forward * 0.4) : (1 + ev.delta * 4);
+    const next = orbitCam.distTarget * Math.min(1.5, Math.max(0.67, factor));
+    const minD = registry.get(orbitCam.focusId)?.minDistKm ?? 0.01;
+    orbitCam.distTarget = Math.max(next, minD);
+  } else if (ev.type === 'raycast') {
+    // 控制器射线拾取：按天体张角打分（近似 pickBody 的 VR 版）
+    _xrOrigin.set(ev.origin.x, ev.origin.y, ev.origin.z);
+    _xrDir.set(ev.direction.x, ev.direction.y, ev.direction.z).normalize();
+    const hit = pickBodyByRay(_xrOrigin, _xrDir);
+    if (hit) {
+      select(hit);
+      showActionTip(`${bodyName(registry.get(hit))}`, 1800);
+    }
+  }
+  // grab（单手抓取平移）暂未映射：避免与浮动原点重定心冲突，待 VR 实机调优
+}
+
+/** VR 射线拾取：命中角 = min(天体半径张角 + 0.3° 容差)，取相对命中角最小者 */
+function pickBodyByRay(origin, dir) {
+  let best = null, bestScore = 1;
+  for (const [id, e] of registry) {
+    if (!e.relObj || !e.phys?.radiusKm) continue;
+    e.relObj.getWorldPosition(_xrV);
+    _xrV.sub(origin);
+    const dist = _xrV.length();
+    if (dist < 1e-6) continue;
+    _xrV.divideScalar(dist);
+    const ang = Math.acos(Math.min(1, Math.max(-1, _xrV.dot(dir))));
+    const hitAng = Math.atan(e.phys.radiusKm / dist) + 0.005;
+    const score = ang / hitAng;
+    if (score < bestScore) { bestScore = score; best = id; }
+  }
+  return best;
+}
+
+/** 保存当前视点为命名书签（Ctrl+B）；orbit 模式记录精确视角，fly/walk 记录焦点与时间 */function saveBookmark() {
+  if (!bookmarks) return;
+  const focusId = appMode === 'orbit' ? orbitCam.focusId : (selectedId ?? orbitCam.focusId);
+  const entry = registry.get(focusId);
+  const name = bodyName(entry ?? { nameZh: focusId, nameEn: focusId });
+  bookmarks.save(name, {
+    focusId,
+    lat: orbitCam.lat, lon: orbitCam.lon, dist: orbitCam.dist,
+    jdTT: simClock.jdTT, mode: appMode,
+  });
+  showActionTip(t('tip.bookmarkSaved', { name }));
+}
+
+/** 回到最近一条书签（Ctrl+Shift+B）：orbit 状态精确还原；其他模式跳回焦点 */
+function restoreLatestBookmark() {
+  const items = bookmarks?.list?.() ?? [];
+  // list() 按 created **降序**返回（最新的在前），所以最近一条是 items[0]。
+  // 原来取 items[length-1] = 最旧的一条——"回到最近的书签"跑到了最老的位置。
+  const latest = items[0];
+  if (!latest) { showActionTip(t('tip.bookmarkNone')); return; }
+  const s = latest.state ?? {};
+  if (s.jdTT) simClock.set(s.jdTT);
+  if (s.focusId && registry.has(s.focusId)) {
+    if (appMode !== 'orbit') switchToOrbit();
+    if (s.lat != null) orbitCam.lat = s.lat;
+    if (s.lon != null) orbitCam.lon = s.lon;
+    if (s.dist != null) { orbitCam.dist = s.dist; orbitCam.distTarget = s.dist; }
+    select(s.focusId);
+  }
+}
+
+function copyShareUrl() {
+  if (appMode !== 'orbit') return; // 仅在探索模式下共享（fly/walk 位置无法直接还原）
+  const DEG = Math.PI / 180;
+  const lat = (orbitCam.lat / DEG).toFixed(5);
+  const lon = (orbitCam.lon / DEG).toFixed(5);
+  const dist = orbitCam.dist.toFixed(3);
+  const jd = simClock.jdTT.toFixed(3);
+  const hash = `#${orbitCam.focusId},${lat},${lon},${dist},${jd}`;
+  const url = location.href.replace(/#.*$/, '') + hash;
+  if (navigator.clipboard?.writeText) {
+    navigator.clipboard.writeText(url)
+      .then(() => showActionTip(t('tip.urlCopied')))
+      .catch(() => { history.replaceState(null, '', hash); showActionTip(t('tip.urlUpdated')); });
+  } else {
+    history.replaceState(null, '', hash);
+    showActionTip(t('tip.urlUpdated'));
+  }
+}
+
+} // Graphics-dependent application setup.
+
+// ── Service Worker：离线与重复访问加速（见 public/sw.js）───────────────
+// 只在 https 或 localhost、且同源部署时注册；file:// 打开（教师工具包建议的
+// "拷到 U 盘双击 index.html"）没有 serviceWorker，会自然跳过。
+// 注册失败不抛错——它只是加速手段，不能影响应用本身。
+//
+// 开发服务器上必须完全不注册：sw.js 对同源 GET 是"缓存优先"，它会连 /src/*.js
+// 一起缓存，于是改了源码、刷新页面拿到的还是旧模块——本轮核验扁率时就因此读到
+// 改动前的半径，白跑一次。而且上一次会话留下的 worker 仍会继续接管页面，所以
+// 除了不注册，还要主动注销。
+const DEV = import.meta.env?.DEV === true;
+if (DEV && typeof navigator !== 'undefined' && navigator.serviceWorker) {
+  navigator.serviceWorker.getRegistrations?.()
+    .then((rs) => rs.forEach((r) => r.unregister()))
+    .catch(() => {});
+}
+if (!DEV && typeof navigator !== 'undefined' && 'serviceWorker' in navigator
+    && (location.protocol === 'https:' || location.hostname === 'localhost'
+        || location.hostname === '127.0.0.1')) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch((e) => {
+      console.info('[sw] 注册失败（不影响使用）', e?.message ?? e);
+    });
+  });
+}

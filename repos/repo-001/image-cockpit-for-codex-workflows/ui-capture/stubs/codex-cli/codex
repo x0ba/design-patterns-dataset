@@ -1,0 +1,77 @@
+#!/usr/bin/env node
+// Local stand-in for the Codex CLI (`codex exec`). Image Cockpit launches this
+// instead of the real Codex + imagegen. It reads the handoff job JSON and returns
+// a real pixel-art PNG into the job outbox, choosing the closest match from the
+// repo's bundled prompt-example art (or the selected source for image edits).
+import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const here = dirname(fileURLToPath(import.meta.url));
+const repoRoot = resolve(here, "../../..");
+const poolDir = join(repoRoot, "public/prompt-examples");
+const args = process.argv.slice(2);
+
+if (args.includes("--help") || args.length === 0) {
+  console.log("Codex CLI (local stub)\n\nUsage: codex exec [OPTIONS] [PROMPT]\n\nCommands:\n  exec   Run Codex non-interactively");
+  process.exit(0);
+}
+if (args[0] !== "exec") {
+  console.error(`codex: unsupported subcommand ${args[0]}`);
+  process.exit(2);
+}
+
+const stdin = readFileSync(0, "utf8");
+const jobPath = process.env.IMAGE_COCKPIT_JOB_PATH || /Read this local JSON job file: (.+)/.exec(stdin)?.[1]?.trim();
+const outboxDir = process.env.IMAGE_COCKPIT_OUTBOX_DIR || /outbox directory: (.+)/.exec(stdin)?.[1]?.trim();
+const prefix = process.env.IMAGE_COCKPIT_JOB_ID || /filename prefix for returned assets: (.+)/.exec(stdin)?.[1]?.trim();
+const delayMs = Number(process.env.UI_CAPTURE_CODEX_STUB_DELAY_MS ?? 7000);
+
+const log = (line) => console.log(`[${new Date().toISOString()}] ${line}`);
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+const job = JSON.parse(readFileSync(jobPath, "utf8"));
+mkdirSync(outboxDir, { recursive: true });
+log(`codex exec: reading ${jobPath}`);
+log(`workflowMode=${job.workflowMode} intent=${job.intent ?? ""}`);
+await sleep(delayMs / 3);
+log("imagegen: invoking built-in image_gen");
+await sleep((delayMs * 2) / 3);
+
+function bestPoolMatch(text) {
+  const words = new Set(String(text).toLowerCase().match(/[a-z]+/g) ?? []);
+  const files = readdirSync(poolDir).filter((f) => f.endsWith(".png"));
+  let best = files[0];
+  let bestScore = -1;
+  for (const file of files) {
+    const parts = file.replace(/\.png$/, "").split("-");
+    const score = parts.reduce((s, p) => s + (words.has(p) ? (p.length > 3 ? 2 : 1) : 0), 0);
+    if (score > bestScore) {
+      best = file;
+      bestScore = score;
+    }
+  }
+  return join(poolDir, best);
+}
+
+if (job.workflowMode === "image-edit" && job.selectedImage?.assetPath && existsSync(job.selectedImage.assetPath)) {
+  const target = join(outboxDir, `${prefix}.png`);
+  copyFileSync(job.selectedImage.assetPath, target);
+  log(`image_gen edit complete -> ${target}`);
+} else if (job.workflowMode === "image-generate" || job.workflowMode === "image-edit") {
+  const source = bestPoolMatch(`${job.prompt} ${job.jobNotes ?? ""}`);
+  const target = join(outboxDir, `${prefix}.png`);
+  copyFileSync(source, target);
+  log(`image_gen returned 1 image -> ${target}`);
+} else {
+  const blocker = {
+    status: "blocked",
+    reasonKind: "imagegen_unavailable",
+    userMessage: "Sprite and effect sheets are not available from the local Codex stub on this machine.",
+    suggestion: "Use Local Inbox to import a prepared sheet, or retry on a machine with Codex imagegen."
+  };
+  writeFileSync(join(outboxDir, `${prefix}-blocked.json`), JSON.stringify(blocker, null, 2));
+  log("imagegen unavailable for this workflow; wrote blocker sidecar");
+}
+log("tokens used: 18,442");
+process.exit(0);

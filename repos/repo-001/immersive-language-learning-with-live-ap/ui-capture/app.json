@@ -1,0 +1,32 @@
+{
+  "mode": "server",
+  "entry": "/",
+  "login": null,
+  "stubs": [
+    {
+      "service": "Google Gemini Live API (Vertex AI, gemini-live-2.5-flash-native-audio) - real-time voice roleplay",
+      "how": "The launcher .ui-capture/run.py swaps the app's integration module server.gemini_live for .ui-capture/stubs/gemini_live_stub.py before importing server/main.py. The stub keeps the GeminiLive.start_session interface and event shapes. It reads the mission, target language and Teacher/Immersive mode out of the client's system prompt and plays a scripted roleplay from stubs/dialogues.py (+ dialogues_extra.py). It sends speech-like synthesized PCM16 24 kHz audio (drives the visualizer and playback), input/output transcription chunks (only when the client enables transcription, i.e. Teacher mode), turnComplete events, and finally a complete_mission tool call with a score and 3 feedback points, so the app moves on to the summary screen."
+    },
+    {
+      "service": "reCAPTCHA Enterprise - server-side assessment (google-cloud-recaptcha-enterprise)",
+      "how": "server.recaptcha_validator is swapped for .ui-capture/stubs/recaptcha_validator_stub.py (no Google credentials needed). With DEV_MODE=true the server skips validation anyway."
+    },
+    {
+      "service": "reCAPTCHA Enterprise - browser script (www.google.com/recaptcha/enterprise.js)",
+      "how": "build.sh rewrites the script URL in dist/index.html to /__stub/recaptcha/enterprise.js. That file defines grecaptcha.enterprise.ready/execute and returns opaque tokens."
+    },
+    {
+      "service": "Google Fonts (Libre Baskerville, Nunito)",
+      "how": "build.sh points the stylesheet link at /__stub/fonts/fonts.css, which serves the same font files from the @fontsource npm packages (installed in .ui-capture/fonts)."
+    },
+    {
+      "service": "gstatic Google Cloud logo image and buttons.github.io script",
+      "how": "build.sh rewrites those URLs in the built JS to /__stub/img/google_cloud_48dp.svg (a local cloud logo SVG) and /__stub/github-buttons.js (a no-op script)."
+    },
+    {
+      "service": "Redis (rate-limit storage) and BigQuery (usage tracking)",
+      "how": "env.local sets DEV_MODE=true, the repo's own dev mode: in-memory rate limiting, no Redis ping, BigQuery logging skipped. REDIS_URL and RECAPTCHA_SITE_KEY are placeholders, so /api/status reports production mode and the 'Simple Mode' dev banner doesn't show. PROJECT_ID is a placeholder, so google.auth is never called."
+    }
+  ],
+  "notes": "Immergo = Vite vanilla-JS front end + FastAPI backend (server/main.py) that proxies a WebSocket to Gemini Live. Setup: mise.toml pins node 22.12.0 and python 3.10.16 (matching the Dockerfile). npm ci, then a python venv at ./venv with requirements.txt (as in scripts/install.sh). .ui-capture/build.sh runs `npm run build` and rewrites the external browser URLs in dist/ to /__stub/* assets. start.sh loads .ui-capture/env.local and runs .ui-capture/run.py, which is the app's own FastAPI app with the stub modules swapped in and a /__stub static mount, on PORT (4446). No database and no accounts: the app's only persistent state is the bundled mission catalog (src/data/missions.json, used as-is) and browser localStorage preferences. /__stub/seed-prefs.js (added to dist/index.html) seeds the prefs a returning learner would have: native language English, practising Spanish, Teacher mode. It only fills keys that are missing, so changes made in the app persist. Main areas: (1) splash/landing at / with the 'Start' call to action, (2) mission selector: from/to language pickers, Teacher vs Immersive mode, 9 mission cards Easy to Expert, a 'Deploy your own' panel, (3) chat/roleplay view: click a mission, then 'Start Mission'. The stub persona starts after ~2 s. In Teacher mode a live transcript shows the learner's lines and the persona's replies with English coaching notes. The session lasts about 40-70 s and ends with a complete_mission call. (4) summary view: score scale Tiro/Proficiens/Peritus and 3 feedback points; Teacher mode sends score 0 per the app's prompt. 'End Mission' early shows the incomplete-session summary. Scripted dialogues (with teacher-mode English coaching notes and mission-specific feedback): Spanish and French for all 9 missions, German and Japanese for Say Hello / Order a Coffee / Buy a bus ticket, Italian for Say Hello / Order a Coffee. Other language/mission combinations (all 24 languages in the picker, including 'Science Jargon') use a short generic in-language exchange. Immersive-mode scores vary (Tiro/Proficiens/Peritus) per session. The microphone needs browser permission (getUserMedia); the stub doesn't depend on mic audio. Helper: .ui-capture/ws_smoke.py PORT [teacher|immersive] [language] exercises /api/status, the stub assets, /api/auth and a full WebSocket session."
+}

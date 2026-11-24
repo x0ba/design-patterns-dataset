@@ -1,0 +1,427 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "allsky--live-view",
+    "url": "http://localhost:4481/index.php?page=live_view",
+    "finalUrl": "http://localhost:4481/index.php?page=live_view",
+    "status": 200,
+    "title": "Live View - WebUI",
+    "capturedAt": "2026-11-18T20:36:28.738Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 900
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "utilities",
+    "domainNote": "Allsky camera WebUI — self-hosted admin console for an all-sky astronomy camera (live view page)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/allsky/explore.json",
+      "repo": {
+        "name": "AllskyTeam/allsky",
+        "url": "https://github.com/AllskyTeam/allsky",
+        "commit": "e9309b091ca60380ccb858c72149c647c5d326cc",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "live-view",
+        "name": "Live View",
+        "description": "Main dashboard with status header, sidebar navigation, system messages and the current all-sky camera image."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Top status bar: Allsky logo (toggles menu bar), STATUS/LOCAL/REMOTE card with green status pills and dropdown, CAPTURE MODE card with Day pill and transition countdown",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 78
+      },
+      "patterns": [
+        "app-shell",
+        "badge",
+        "popover"
+      ]
+    },
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Left navigation list with icons, expandable submenus (Settings, Networking, System, Helper Tools), Light/Dark mode, Logout, and a collapse tab",
+      "bbox": {
+        "x": 0,
+        "y": 78,
+        "width": 228,
+        "height": 822
+      },
+      "patterns": [
+        "app-shell",
+        "menu"
+      ]
+    },
+    {
+      "id": "system-messages",
+      "role": "alert-panel",
+      "label": "System Messages panel with warning (upload failure) and info (dew heater) alerts and a Clear messages button",
+      "bbox": {
+        "x": 235,
+        "y": 85,
+        "width": 1190,
+        "height": 285
+      },
+      "patterns": [
+        "banner"
+      ]
+    },
+    {
+      "id": "live-view",
+      "role": "content",
+      "label": "Live View panel: blue header with Live View / View Mini-Timelapse links, Mode dropdown (Fit Image), fullscreen and Help; info alert about refresh interval; current sky image",
+      "bbox": {
+        "x": 235,
+        "y": 390,
+        "width": 1190,
+        "height": 488
+      },
+      "patterns": [
+        "menu",
+        "banner"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 78,
+            "width": 210,
+            "height": 822
+          },
+          "note": "Persistent sidebar with fixed destinations and submenus",
+          "quote": "Live View",
+          "region": "sidebar"
+        },
+        {
+          "bbox": {
+            "x": 210,
+            "y": 457,
+            "width": 18,
+            "height": 64
+          },
+          "note": "Collapse/expand toggle; live check shows sidebar collapses to an icon rail",
+          "region": "sidebar"
+        },
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 78
+          },
+          "note": "Top bar with identity and system status",
+          "region": "header"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations"
+        ],
+        "visibility": "toggle-button",
+        "narrowing": "collapse-to-icons",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "banner",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 250,
+            "y": 141,
+            "width": 1160,
+            "height": 72
+          },
+          "note": "Warning alert (amber) about failed upload, with occurrence count",
+          "quote": "Unable to upload startrails-20261114.jpg to the Remote Website",
+          "region": "system-messages"
+        },
+        {
+          "bbox": {
+            "x": 250,
+            "y": 233,
+            "width": 1160,
+            "height": 72
+          },
+          "note": "Informational alert (light blue)",
+          "quote": "Dew heater module reported the dome 1.8°C above dew point",
+          "region": "system-messages"
+        },
+        {
+          "bbox": {
+            "x": 250,
+            "y": 325,
+            "width": 109,
+            "height": 30
+          },
+          "note": "Messages cleared collectively via button",
+          "quote": "Clear messages",
+          "region": "system-messages"
+        },
+        {
+          "bbox": {
+            "x": 250,
+            "y": 448,
+            "width": 1160,
+            "height": 52
+          },
+          "note": "Info notice within live-view section",
+          "quote": "Daytime images updated every 120 seconds, nighttime every 60 seconds",
+          "region": "live-view"
+        }
+      ],
+      "dims": {
+        "scope": "whole-app",
+        "severity": "warning",
+        "dismissal": "dismissible",
+        "action": "link-to-fix",
+        "placement": "top-of-content"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 168,
+            "y": 3,
+            "width": 57,
+            "height": 17
+          },
+          "note": "Green status pill",
+          "quote": "Running",
+          "region": "header"
+        },
+        {
+          "bbox": {
+            "x": 201,
+            "y": 27,
+            "width": 68,
+            "height": 17
+          },
+          "note": "Status pill for local website",
+          "quote": "Enabled",
+          "region": "header"
+        },
+        {
+          "bbox": {
+            "x": 1327,
+            "y": 27,
+            "width": 68,
+            "height": 18
+          },
+          "note": "Capture mode pill",
+          "quote": "Day",
+          "region": "header"
+        }
+      ],
+      "dims": {
+        "meaning": "status"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1245,
+            "y": 400,
+            "width": 73,
+            "height": 22
+          },
+          "note": "Mode dropdown button opens list (Full width / Fit Image) with current item highlighted",
+          "quote": "Fit Image",
+          "region": "live-view"
+        },
+        {
+          "bbox": {
+            "x": 0,
+            "y": 336,
+            "width": 210,
+            "height": 40
+          },
+          "note": "Sidebar items with caret open flyout submenu (LAN Dashboard, WLAN Dashboard, Configure Wi-Fi) with icons",
+          "quote": "Networking",
+          "region": "sidebar"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click",
+        "structure": "flat",
+        "item": [
+          "label",
+          "icon",
+          "checkmark-state"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    },
+    {
+      "id": "popover",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 316,
+            "y": 5,
+            "width": 24,
+            "height": 16
+          },
+          "note": "Chevron next to status opens an anchored panel with uptime, last restart and Stop/Restart buttons (verified live)",
+          "region": "header"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "dashboard",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 117,
+            "y": 2,
+            "width": 222,
+            "height": 68
+          },
+          "note": "Only a small status strip; page is a single live image view, not a metric dashboard"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "media-player",
+      "status": "absent",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 659,
+            "y": 520,
+            "width": 343,
+            "height": 343
+          },
+          "note": "Still auto-refreshing image, no transport controls; mini-timelapse opens on another page"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "admin app shell: fixed top status bar, left sidebar nav, main column of stacked white panels (system messages, live view image)",
+    "regions": [
+      "header",
+      "sidebar",
+      "system-messages",
+      "live-view"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#f5f9fc",
+      "#ffffff",
+      "#2e3c4d",
+      "#a4d9f3",
+      "#e8f4fb",
+      "#fff6e2",
+      "#f2dede",
+      "#5cb85c",
+      "#337ab7",
+      "#2232e4",
+      "#7a5a20",
+      "#24556b",
+      "#a94442",
+      "#92b5bd",
+      "#6b7b8c"
+    ],
+    "colorRoles": {
+      "background": "#f5f9fc",
+      "surface": "#ffffff",
+      "text": "#2e3c4d",
+      "primary": "#337ab7",
+      "accent": "#a4d9f3",
+      "link": "#2232e4",
+      "success": "#5cb85c",
+      "warning-bg": "#fff6e2",
+      "warning-text": "#7a5a20",
+      "info-bg": "#e8f4fb",
+      "info-text": "#24556b",
+      "danger-text": "#a94442",
+      "danger-bg": "#f2dede",
+      "border": "#92b5bd",
+      "muted": "#6b7b8c"
+    },
+    "typography": "Helvetica Neue throughout: 14px regular for nav and body, 14px bold for panel header links, 11px uppercase letter-spaced labels in the status bar, 10-11px in pills",
+    "typeScale": "Very flat: almost everything 14px; small 10-12px for status labels, pills and buttons; no large headings",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "photography",
+      "iconography"
+    ],
+    "iconStyle": "filled",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "utilitarian",
+      "technical",
+      "bootstrap-admin",
+      "calm"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T20:37:40.389Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 7,
+    "usage": {
+      "input_tokens": 14,
+      "cache_creation_input_tokens": 27000,
+      "cache_read_input_tokens": 193788,
+      "output_tokens": 3920
+    }
+  },
+  "notes": "Bootstrap 3-style admin (SB Admin-like) for Allsky camera. Alerts use Bootstrap alert colors (warning amber, info light blue, danger pink panel header). Panel header for Live View is a saturated light blue (#a4d9f3) bar. Sidebar items are separated by thin rules with carets for flyout submenus; a half-round tab on the sidebar edge collapses it to an icon rail. Status cards in the header are tiny with uppercase grey labels and green Bootstrap label pills. The central fisheye sky image auto-refreshes."
+}

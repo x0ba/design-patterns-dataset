@@ -1,0 +1,563 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "catai--settings-model",
+    "url": "http://localhost:4414/seed.html",
+    "finalUrl": "http://localhost:4414/",
+    "status": 200,
+    "title": "Catai - Chat with AI",
+    "capturedAt": "2026-11-18T02:59:25.575Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1363
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "ai-tools",
+    "domainNote": "self-hosted local LLM chat client (node-llama-cpp) with settings for model JSON and system prompt",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/catai/explore.json",
+      "repo": {
+        "name": "withcatai/catai",
+        "url": "https://github.com/withcatai/catai",
+        "commit": "003f29ecf55fda01f4278581ab4c3ec676f9c76c",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "settings-model",
+        "name": "Settings – Model Settings",
+        "description": "Settings modal over the chat app with tabs (Model Settings, System Prompt, Built-in APIs), showing the JSON model settings editor with Save and Save & Restart buttons."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Top bar with cat mascot logo, 'Catai / Chat with AI', theme toggle",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 65
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Connection status, New Chat and Settings buttons, Search chats field, Recent chats list with timestamps, Load more, Powered by footer",
+      "bbox": {
+        "x": 0,
+        "y": 65,
+        "width": 256,
+        "height": 1298
+      },
+      "patterns": [
+        "app-shell",
+        "badge",
+        "text-field"
+      ]
+    },
+    {
+      "id": "chat-empty",
+      "role": "main-content",
+      "label": "Empty conversation view with mascot, 'Start a Conversation' and explanation",
+      "bbox": {
+        "x": 256,
+        "y": 65,
+        "width": 1184,
+        "height": 1135
+      },
+      "patterns": [
+        "ai-chat",
+        "empty-state"
+      ]
+    },
+    {
+      "id": "composer",
+      "role": "composer",
+      "label": "Bottom message composer with disabled send button and keyboard-shortcut hint row",
+      "bbox": {
+        "x": 256,
+        "y": 1200,
+        "width": 1184,
+        "height": 163
+      },
+      "patterns": [
+        "prompt-input",
+        "ai-chat",
+        "contextual-help"
+      ]
+    },
+    {
+      "id": "settings-modal",
+      "role": "modal",
+      "label": "Settings dialog with tabs (Model Settings, System Prompt, Built-in APIs), monospace JSON textarea, Save / Save & Restart buttons, helper text",
+      "bbox": {
+        "x": 384,
+        "y": 402,
+        "width": 672,
+        "height": 560
+      },
+      "patterns": [
+        "modal-dialog",
+        "tabs",
+        "settings",
+        "text-field",
+        "form"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "modal-dialog",
+      "status": "present",
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 384,
+            "y": 402,
+            "width": 672,
+            "height": 560
+          },
+          "quote": "Settings",
+          "region": "settings-modal",
+          "note": "Centered dialog over blurred, dimmed app; live check: closes via X, Escape and backdrop click"
+        }
+      ],
+      "dims": {
+        "form": "centered-large",
+        "openBy": [
+          "user-action"
+        ],
+        "dismissBy": [
+          "close-button",
+          "escape",
+          "click-the-backdrop"
+        ],
+        "modality": "blocking",
+        "purpose": "form"
+      }
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 408,
+            "y": 503,
+            "width": 624,
+            "height": 43
+          },
+          "quote": "Model Settings System Prompt Built-in APIs",
+          "region": "settings-modal",
+          "note": "Underline-indicator tabs; live click on System Prompt swapped panel content"
+        }
+      ],
+      "dims": {
+        "placement": "top",
+        "label": [
+          "text"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      }
+    },
+    {
+      "id": "settings",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 384,
+            "y": 402,
+            "width": 672,
+            "height": 560
+          },
+          "quote": "JSON Settings",
+          "region": "settings-modal",
+          "note": "Tabbed settings categories; raw JSON object editing of model params; system prompt text in another tab"
+        },
+        {
+          "bbox": {
+            "x": 408,
+            "y": 866,
+            "width": 624,
+            "height": 40
+          },
+          "quote": "Save & Restart",
+          "region": "settings-modal",
+          "note": "Explicit save, and save with server restart"
+        }
+      ],
+      "dims": {
+        "ia": "tabbed-categories",
+        "controls": [
+          "complex-nested-objects",
+          "text-and-credentials"
+        ],
+        "timing": "save-button"
+      }
+    },
+    {
+      "id": "form",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "The modal panel is a labelled field with Save buttons, but it is better described as settings; coded as uncertain form.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 408,
+            "y": 562,
+            "width": 624,
+            "height": 376
+          },
+          "quote": "Edit the JSON settings above. Changes will be saved to the server.",
+          "region": "settings-modal"
+        }
+      ],
+      "dims": {
+        "labels": "top-aligned",
+        "columns": "single-column",
+        "grouping": "flat",
+        "help": [
+          "hint-text"
+        ],
+        "commit": "submit-button",
+        "prefill": "smart-defaults"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 408,
+            "y": 590,
+            "width": 624,
+            "height": 254
+          },
+          "region": "settings-modal",
+          "note": "Labelled multi-line monospace textarea for JSON, outlined, with helper text below"
+        },
+        {
+          "bbox": {
+            "x": 12,
+            "y": 251,
+            "width": 231,
+            "height": 38
+          },
+          "quote": "Search chats...",
+          "region": "sidebar",
+          "note": "Placeholder search field"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "label",
+          "placeholder",
+          "hint-text"
+        ],
+        "style": "outlined",
+        "inputType": "plain"
+      }
+    },
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.88,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 65
+          },
+          "quote": "Catai",
+          "region": "header"
+        },
+        {
+          "bbox": {
+            "x": 0,
+            "y": 65,
+            "width": 256,
+            "height": 1298
+          },
+          "quote": "RECENT CHATS",
+          "region": "sidebar",
+          "note": "Persistent sidebar with fixed actions and recent conversations"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations",
+          "recents"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 12,
+            "y": 78,
+            "width": 100,
+            "height": 18
+          },
+          "quote": "Connected",
+          "region": "sidebar",
+          "note": "Green dot status indicator for server connection"
+        }
+      ],
+      "dims": {
+        "meaning": "status"
+      }
+    },
+    {
+      "id": "ai-chat",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 400,
+            "y": 1231,
+            "width": 896,
+            "height": 58
+          },
+          "quote": "Type your message here...",
+          "region": "composer"
+        },
+        {
+          "bbox": {
+            "x": 8,
+            "y": 342,
+            "width": 239,
+            "height": 712
+          },
+          "quote": "why does my useEffect run twice in dev?",
+          "region": "sidebar",
+          "note": "History of prior AI chats"
+        }
+      ],
+      "dims": {
+        "invokeBy": [
+          "text-field-submit"
+        ]
+      }
+    },
+    {
+      "id": "prompt-input",
+      "status": "present",
+      "confidence": 0.88,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 400,
+            "y": 1231,
+            "width": 896,
+            "height": 58
+          },
+          "quote": "Type your message here...",
+          "region": "composer",
+          "note": "Bottom composer with send button; hints show Enter to send, Tab complete, arrow history"
+        }
+      ],
+      "dims": {
+        "content": [
+          "plain-prompt"
+        ],
+        "layout": "bottom-sticky-composer",
+        "submitBy": [
+          "enter-key",
+          "click-send"
+        ]
+      }
+    },
+    {
+      "id": "empty-state",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 660,
+            "y": 89,
+            "width": 376,
+            "height": 180
+          },
+          "quote": "Start a Conversation",
+          "region": "chat-empty",
+          "note": "Mascot illustration plus explanation, no starter prompts"
+        }
+      ],
+      "dims": {
+        "cause": "first-use",
+        "content": [
+          "illustration",
+          "explanation"
+        ],
+        "starters": "none"
+      }
+    },
+    {
+      "id": "contextual-help",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 400,
+            "y": 1311,
+            "width": 420,
+            "height": 24
+          },
+          "quote": "send Shift new line Tab complete history",
+          "region": "composer",
+          "note": "Always-visible keyboard shortcut hints under composer"
+        }
+      ],
+      "dims": {
+        "content": [
+          "shortcut-reference"
+        ],
+        "placement": "inline-static-text",
+        "proactivity": "always-visible-hints",
+        "relevance": "field"
+      }
+    },
+    {
+      "id": "suggestion-chips",
+      "status": "absent",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 660,
+            "y": 89,
+            "width": 376,
+            "height": 180
+          },
+          "note": "Empty state has no starter prompts"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "code-editor",
+      "status": "absent",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 408,
+            "y": 590,
+            "width": 624,
+            "height": 254
+          },
+          "note": "JSON is a plain monospace textarea without syntax colouring or gutter"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "desktop app shell: top header bar, fixed left sidebar (status, New Chat, Settings, chat search, recent chats), main chat area with empty state and bottom composer; captured with a centered Settings modal open over a blurred backdrop",
+    "regions": [
+      "header",
+      "sidebar",
+      "chat-empty",
+      "composer",
+      "settings-modal"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#020617",
+      "#0f172a",
+      "#1e293b",
+      "#334155",
+      "#0ea5e9",
+      "#38bdf8",
+      "#94a3b8",
+      "#ffffff",
+      "#22c55e"
+    ],
+    "colorRoles": {
+      "background": "#020617",
+      "surface": "#0f172a",
+      "text": "#ffffff",
+      "muted": "#94a3b8",
+      "primary": "#0ea5e9",
+      "accent": "#38bdf8",
+      "border": "#334155",
+      "input": "#1e293b",
+      "success": "#22c55e"
+    },
+    "typography": "Inter for all UI (headings, labels, buttons, chat list); ui-monospace for the JSON settings textarea and keyboard key caps",
+    "typeScale": "Compact: modal title 20px/600, app title 18px/700, empty-state heading 18px/600, tabs and buttons 16px/500, body/inputs 14px, timestamps/helper/section labels 12px (uppercase 'RECENT CHATS')",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "illustration",
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "dark",
+      "technical",
+      "calm",
+      "minimal",
+      "developer"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T03:00:56.738Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 9,
+    "usage": {
+      "input_tokens": 18,
+      "cache_creation_input_tokens": 39939,
+      "cache_read_input_tokens": 289017,
+      "output_tokens": 9485
+    }
+  },
+  "notes": "Tailwind slate dark theme (slate-950 page, slate-900 header/sidebar/modal, slate-800 inputs) with sky-500 primary and sky-400 active tab text/underline. Backdrop is blurred and darkened rather than just dimmed. Cartoon cat mascot with goggles is the only illustration (logo + empty state). Save buttons are disabled until edits. Keyboard hints use small key-cap chips (↵, Shift ↵, Tab, ↑ ↓). Theme toggle sun icon in header. Sidebar recent chats are truncated single-line titles with time stamps and a 'Load more chats' link."
+}

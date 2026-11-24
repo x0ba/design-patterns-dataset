@@ -1,0 +1,561 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "devterms--home-feed",
+    "url": "http://localhost:4475/login",
+    "finalUrl": "http://localhost:4475/",
+    "status": 200,
+    "title": "The Developer Dictionary | DevTerms",
+    "capturedAt": "2026-11-18T20:04:28.377Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1724
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "reference-docs",
+    "domainNote": "crowdsourced developer-jargon dictionary (Urban-Dictionary style for programming terms)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/devterms/explore.json",
+      "repo": {
+        "name": "aelew/devterms",
+        "url": "https://github.com/aelew/devterms",
+        "commit": "60a285a308a36baba4b77b582898ca7226ba633a",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "home-feed",
+        "name": "Home feed",
+        "description": "Home page with Word of the day card, feed of past words of the day with voting/share/report, and stats sidebar with actions and browse accordion."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Logo, text nav (Home/Browse/Submit/API), GitHub/theme/avatar buttons, and full-width search combobox",
+      "bbox": {
+        "x": 220,
+        "y": 0,
+        "width": 1000,
+        "height": 102
+      },
+      "patterns": [
+        "app-shell",
+        "menu",
+        "text-field",
+        "autocomplete"
+      ]
+    },
+    {
+      "id": "definitions-feed",
+      "role": "feed",
+      "label": "Stack of five definition cards (Word of the day first) with votes, share and report, followed by pagination",
+      "bbox": {
+        "x": 236,
+        "y": 118,
+        "width": 629,
+        "height": 1574
+      },
+      "patterns": [
+        "feed",
+        "card",
+        "reactions",
+        "badge",
+        "popover",
+        "modal-dialog",
+        "pagination"
+      ]
+    },
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "DevTerms intro card with Definitions/Contributors counts and action buttons, collapsible 'Browse definitions' letter grid, footer links",
+      "bbox": {
+        "x": 881,
+        "y": 118,
+        "width": 323,
+        "height": 512
+      },
+      "patterns": [
+        "stat-tile",
+        "accordion"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 220,
+            "y": 0,
+            "width": 1000,
+            "height": 56
+          },
+          "quote": "DevTerms Home Browse Submit API",
+          "region": "header",
+          "note": "persistent top bar with logo, global destinations and account avatar"
+        }
+      ],
+      "dims": {
+        "primary": "top-navigation-bar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations"
+        ],
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 236,
+            "y": 56,
+            "width": 968,
+            "height": 46
+          },
+          "quote": "Search...",
+          "region": "header",
+          "note": "outlined full-width search input with magnifier icon and placeholder"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "placeholder"
+        ],
+        "style": "outlined",
+        "assistance": [
+          "suggestions"
+        ],
+        "inputType": "plain"
+      }
+    },
+    {
+      "id": "autocomplete",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "rationale": "Input is role=combobox with an attached listbox 'Suggestions' in the a11y tree, but typing could not be tested so the suggestion contents were not observed.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 236,
+            "y": 56,
+            "width": 968,
+            "height": 46
+          },
+          "quote": "Search...",
+          "region": "header",
+          "note": "combobox [expanded] + listbox \"Suggestions\" in ARIA tree"
+        }
+      ],
+      "dims": {
+        "presentation": "dropdown-list",
+        "freedom": "free-text-allowed"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1168,
+            "y": 10,
+            "width": 36,
+            "height": 36
+          },
+          "region": "header",
+          "note": "'User menu' avatar button; live click opens dropdown with username/email header and View profile, Dashboard, Sign out items with icons"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click",
+        "structure": "sections",
+        "item": [
+          "label",
+          "icon"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    },
+    {
+      "id": "feed",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 236,
+            "y": 118,
+            "width": 629,
+            "height": 1522
+          },
+          "quote": "Yak shaving",
+          "region": "definitions-feed",
+          "note": "home page stream of uniform definition posts (term, meaning, example, author, date, votes) in one column, paged"
+        }
+      ],
+      "dims": {
+        "density": "full-post",
+        "heterogeneity": [
+          "uniform-posts"
+        ],
+        "sources": [
+          "global-pool"
+        ],
+        "arrangement": "single-column",
+        "loading": [
+          "paged"
+        ],
+        "nesting": [
+          "flat"
+        ]
+      }
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 236,
+            "y": 118,
+            "width": 629,
+            "height": 334
+          },
+          "quote": "Yak shaving",
+          "region": "definitions-feed",
+          "note": "Word-of-the-day card, darker #71717a border to stand out"
+        },
+        {
+          "bbox": {
+            "x": 236,
+            "y": 468,
+            "width": 629,
+            "height": 262
+          },
+          "quote": "Footgun",
+          "region": "definitions-feed",
+          "note": "typical card: 1px #e4e4e7 border, 8px radius, faint shadow; title link opens definition page; action row of votes/share/report"
+        }
+      ],
+      "dims": {
+        "media": "none",
+        "actions": "action-row",
+        "shape": "vertical",
+        "style": "outlined",
+        "target": "title-only"
+      }
+    },
+    {
+      "id": "reactions",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 261,
+            "y": 391,
+            "width": 133,
+            "height": 36
+          },
+          "quote": "9 3",
+          "region": "definitions-feed",
+          "note": "pill-shaped segmented upvote/downvote buttons with counts"
+        },
+        {
+          "bbox": {
+            "x": 261,
+            "y": 669,
+            "width": 145,
+            "height": 36
+          },
+          "quote": "91 13",
+          "region": "definitions-feed"
+        }
+      ],
+      "dims": {
+        "vocabulary": "fixed-small-set",
+        "aggregate": "count-per-reaction",
+        "add": [
+          "single-tap"
+        ],
+        "visibility": "anonymous-aggregate"
+      }
+    },
+    {
+      "id": "rating",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 261,
+            "y": 391,
+            "width": 133,
+            "height": 36
+          },
+          "region": "definitions-feed",
+          "note": "thumbs up/down are public vote counts on content, coded as reactions rather than a rating input"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 261,
+            "y": 143,
+            "width": 113,
+            "height": 22
+          },
+          "quote": "Word of the day",
+          "region": "definitions-feed",
+          "note": "small dark #18181b pill label on the first card"
+        }
+      ],
+      "dims": {
+        "meaning": "label",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "popover",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 697,
+            "y": 399,
+            "width": 60,
+            "height": 20
+          },
+          "quote": "Share",
+          "region": "definitions-feed",
+          "note": "live click opens a small anchored row of share targets (X, Reddit, LinkedIn, Facebook, email, QR, copy) below the button"
+        }
+      ],
+      "dims": {
+        "openBy": "click",
+        "dismissBy": [
+          "escape"
+        ],
+        "placement": "below-the-anchor",
+        "contents": "quick-actions",
+        "persistence": "until-dismissed"
+      }
+    },
+    {
+      "id": "modal-dialog",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 773,
+            "y": 399,
+            "width": 67,
+            "height": 20
+          },
+          "quote": "Report",
+          "region": "definitions-feed",
+          "note": "live click opens centered 'Report definition' dialog with textarea, 'Submit report' button, close X and dimmed backdrop"
+        }
+      ],
+      "dims": {
+        "form": "centered-small",
+        "openBy": [
+          "user-action"
+        ],
+        "dismissBy": [
+          "close-button"
+        ],
+        "modality": "blocking",
+        "purpose": "form"
+      }
+    },
+    {
+      "id": "pagination",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 411,
+            "y": 1656,
+            "width": 279,
+            "height": 36
+          },
+          "quote": "1 2 3 4 … Next",
+          "region": "definitions-feed",
+          "note": "numbered page links with ellipsis and Next, links to /?page=N"
+        }
+      ],
+      "dims": {
+        "mechanism": "numbered-pages",
+        "pageSize": "fixed",
+        "memory": "in-the-url"
+      }
+    },
+    {
+      "id": "stat-tile",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 906,
+            "y": 252,
+            "width": 273,
+            "height": 52
+          },
+          "quote": "DEFINITIONS 179 CONTRIBUTORS 171",
+          "region": "sidebar",
+          "note": "two big numbers with small uppercase labels, separated by a vertical rule"
+        }
+      ],
+      "dims": {
+        "context": [
+          "label"
+        ],
+        "encoding": "number-only",
+        "drill": "none"
+      }
+    },
+    {
+      "id": "accordion",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 881,
+            "y": 485,
+            "width": 323,
+            "height": 70
+          },
+          "quote": "Browse definitions",
+          "region": "sidebar",
+          "note": "collapsed card with chevron; live click expands an A–Z + 'new' letter-button grid in place"
+        }
+      ],
+      "dims": {
+        "header": [
+          "title-only"
+        ],
+        "toggle": [
+          "header-click"
+        ]
+      }
+    },
+    {
+      "id": "search-results",
+      "status": "absent",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 236,
+            "y": 118,
+            "width": 629,
+            "height": 1522
+          },
+          "region": "definitions-feed",
+          "note": "list is the home stream, not results for a query"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "centered 1000px two-column layout: top nav + full-width search bar, left column of stacked definition cards with numbered pagination, right sidebar with intro/stats/actions card and collapsible A–Z browse panel plus footer links",
+    "regions": [
+      "header",
+      "definitions-feed",
+      "sidebar"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#09090b",
+      "#71717a",
+      "#e4e4e7",
+      "#18181b",
+      "#ef4444",
+      "#fafafa",
+      "#f4f4f5"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "surface": "#ffffff",
+      "text": "#09090b",
+      "muted": "#71717a",
+      "border": "#e4e4e7",
+      "primary": "#18181b",
+      "danger": "#ef4444",
+      "onPrimary": "#fafafa"
+    },
+    "typography": "GeistSans for everything (nav, headings, body, buttons); the Browse letter grid and some small labels appear in a monospace (Geist Mono-like) face",
+    "typeScale": "Term headings 30px semibold/bold dominate; sidebar h1/h2 18px semibold; definitions 16px regular; quotes, meta, nav and buttons 14px (muted gray for quotes/nav); 12px for badge, stat labels (uppercase, tracked) and footer credits. Stat numbers ~30px bold.",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "texture",
+    "mood": [
+      "clean",
+      "minimal",
+      "monochrome",
+      "technical",
+      "friendly"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T20:06:22.812Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 12,
+    "usage": {
+      "input_tokens": 24,
+      "cache_creation_input_tokens": 50791,
+      "cache_read_input_tokens": 492462,
+      "output_tokens": 6647
+    }
+  },
+  "notes": "shadcn/ui zinc styling: white cards with 1px #e4e4e7 borders, 8px radius and very faint shadow-sm on a white page overlaid with a faint square grid texture and a soft diagonal blue-gray light streak at top-left. Word-of-the-day card is distinguished only by a darker gray border plus a black 'Word of the day' pill. Vote controls are a joined pill (rounded-full) split into thumbs-up/thumbs-down segments with counts; Share is muted gray text+icon, Report is red text+flag icon. Example sentences are in quotes and muted. Author line '— @handle · date' with bold handle. Sidebar has 'I'm feeling lucky' (shuffle icon) random-definition button. Avatar is a pixel/identicon-style purple image. Share popover holds colored circular brand icons. The capture was redirected from /login to / while signed in."
+}

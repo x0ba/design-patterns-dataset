@@ -1,0 +1,622 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "openhands--home",
+    "url": "http://openhands.localhost:4319/",
+    "finalUrl": "http://openhands.localhost:4319/",
+    "status": 200,
+    "title": "OpenHands",
+    "capturedAt": "2026-11-18T01:32:03.303Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1366
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "ai-tools",
+    "domainNote": "OpenHands coding-agent web app: home/launcher screen with conversation history sidebar, prompt composer, automation templates and running automations",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/openhands/explore.json",
+      "repo": {
+        "name": "OpenHands/OpenHands",
+        "url": "https://github.com/OpenHands/OpenHands",
+        "commit": "5ed4ffa5ac2509e479acc12b83247fbb4c3612c8",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "home",
+        "name": "Home launcher",
+        "description": "Home launcher with conversation history sidebar, prompt composer, and recommended automations."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Collapsible left sidebar: logo, Search commands (Ctrl+K), New Chat/Customize/Automate links, Conversations list with status icons, relative times and project tags, Load more, Local backend combobox + settings",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 300,
+        "height": 1366
+      },
+      "patterns": [
+        "app-shell",
+        "command-palette",
+        "badge",
+        "pagination"
+      ]
+    },
+    {
+      "id": "launcher",
+      "role": "hero",
+      "label": "Centered 'What do you want to work on?' heading, subtitle, Code/Automate segmented control, prompt composer with +, agent profile and model dropdowns, mic and send, plus Open Workspace / Plugins pills",
+      "bbox": {
+        "x": 486,
+        "y": 390,
+        "width": 768,
+        "height": 316
+      },
+      "patterns": [
+        "prompt-input",
+        "choice-control",
+        "menu"
+      ]
+    },
+    {
+      "id": "recommended-automations",
+      "role": "card-strip",
+      "label": "Recommended automations: horizontally overflowing strip of template cards (icon, title, two-line description), fourth card clipped at the edge",
+      "bbox": {
+        "x": 486,
+        "y": 754,
+        "width": 768,
+        "height": 223
+      },
+      "patterns": [
+        "carousel",
+        "card",
+        "recommendations"
+      ]
+    },
+    {
+      "id": "automations-list",
+      "role": "list",
+      "label": "Automations: bordered list of 5 automation rows with status dot, name, schedule/trigger, last-run time, status pill, run-history bar strip and kebab actions; '+ Add' link",
+      "bbox": {
+        "x": 486,
+        "y": 1009,
+        "width": 768,
+        "height": 324
+      },
+      "patterns": [
+        "badge",
+        "chart",
+        "menu",
+        "agent-run"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 300,
+            "height": 1366
+          },
+          "region": "sidebar",
+          "note": "Persistent left sidebar with fixed destinations, recents (conversation history) and a collapse button",
+          "quote": "Conversations"
+        },
+        {
+          "bbox": {
+            "x": 261,
+            "y": 6,
+            "width": 28,
+            "height": 28
+          },
+          "region": "sidebar",
+          "note": "Collapse sidebar toggle"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations",
+          "recents"
+        ],
+        "visibility": "toggle-button",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "command-palette",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 10,
+            "y": 40,
+            "width": 279,
+            "height": 36
+          },
+          "region": "sidebar",
+          "quote": "Search commands CTRL+K",
+          "note": "Visible trigger with shortcut hint; live click opens a centered overlay 'Search actions, pages, and settings…' with sections Navigation/Settings, items with description and GO hint"
+        }
+      ],
+      "dims": {
+        "types": [
+          "places",
+          "settings-toggles"
+        ],
+        "detail": "name-and-description",
+        "summon": [
+          "in-app-shortcut",
+          "visible-search-button"
+        ],
+        "scope": "current-app",
+        "placement": "centered-overlay"
+      }
+    },
+    {
+      "id": "prompt-input",
+      "status": "present",
+      "confidence": 0.93,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 486,
+            "y": 554,
+            "width": 768,
+            "height": 106
+          },
+          "region": "launcher",
+          "quote": "What do you want to build?",
+          "note": "Large centred composer with + attachments/actions, agent profile 'default' and model 'sonnet-4.5' dropdowns, dictation mic and circular send button"
+        }
+      ],
+      "dims": {
+        "layout": "centred-hero-box",
+        "content": [
+          "plain-prompt"
+        ],
+        "submitBy": [
+          "click-send"
+        ],
+        "assistance": [
+          "placeholder-examples"
+        ]
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 753,
+            "y": 494,
+            "width": 233,
+            "height": 44
+          },
+          "region": "launcher",
+          "quote": "Code Automate",
+          "note": "radiogroup 'Choose launcher mode' styled as pill segmented control; switching to Automate changes composer placeholder to 'What work do you want to automate?' and disables Open Workspace/Plugins"
+        }
+      ],
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "segmented-control",
+        "option": [
+          "label-only",
+          "icon-or-image"
+        ],
+        "timing": "immediately",
+        "largeSets": "show-all"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 646,
+            "y": 618,
+            "width": 98,
+            "height": 22
+          },
+          "region": "launcher",
+          "quote": "sonnet-4.5",
+          "note": "Opens dropdown 'AVAILABLE PROFILES' with model name + provider id, checkmark on current, and 'LLM Profiles' footer item"
+        },
+        {
+          "bbox": {
+            "x": 1223,
+            "y": 1055,
+            "width": 24,
+            "height": 24
+          },
+          "region": "automations-list",
+          "note": "Kebab 'Actions for Nightly Security Pass' overflow trigger on each automation row"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click",
+        "structure": "sections",
+        "item": [
+          "label",
+          "description",
+          "checkmark-state"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.88,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 486,
+            "y": 790,
+            "width": 220,
+            "height": 139
+          },
+          "region": "recommended-automations",
+          "quote": "GitHub CVE Remediation Factory",
+          "note": "Filled #202020 card, 12px radius, small icon tile, bold title, 2-line truncated description; whole card is a button that opens a setup dialog"
+        },
+        {
+          "bbox": {
+            "x": 718,
+            "y": 790,
+            "width": 220,
+            "height": 139
+          },
+          "region": "recommended-automations",
+          "quote": "GitHub code review"
+        }
+      ],
+      "dims": {
+        "media": "none",
+        "actions": "none",
+        "shape": "vertical",
+        "style": "filled",
+        "target": "whole-card"
+      }
+    },
+    {
+      "id": "carousel",
+      "status": "present",
+      "confidence": 0.72,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 486,
+            "y": 790,
+            "width": 768,
+            "height": 139
+          },
+          "region": "recommended-automations",
+          "note": "16 template cards in a horizontal overflow strip; 3 full cards visible with the 4th clipped at the right edge; no arrows or dots (hover only reveals a dismiss X)"
+        }
+      ],
+      "dims": {
+        "visible": "peek-next",
+        "advance": [
+          "swipe"
+        ],
+        "autoplay": "off",
+        "indicator": "none"
+      }
+    },
+    {
+      "id": "recommendations",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Labelled 'Recommended automations' but appears to be a curated template catalog rather than behaviour-based; basis cannot be verified.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 486,
+            "y": 754,
+            "width": 768,
+            "height": 223
+          },
+          "region": "recommended-automations",
+          "quote": "Recommended automations"
+        }
+      ],
+      "dims": {
+        "basis": [
+          "editorial-curation"
+        ],
+        "rationale": "none",
+        "placement": "home-shelves",
+        "nesting": "single-shelf"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 716,
+            "y": 1247,
+            "width": 74,
+            "height": 16
+          },
+          "region": "automations-list",
+          "quote": "Successful",
+          "note": "Green-tinted status pill; also Pending/Running pills with icons"
+        },
+        {
+          "bbox": {
+            "x": 44,
+            "y": 267,
+            "width": 95,
+            "height": 17
+          },
+          "region": "sidebar",
+          "quote": "Project: security",
+          "note": "Small label chip under conversation title"
+        },
+        {
+          "bbox": {
+            "x": 18,
+            "y": 240,
+            "width": 20,
+            "height": 20
+          },
+          "region": "sidebar",
+          "note": "Per-conversation status glyph: green dot (active) / green check (done) / grey dot"
+        }
+      ],
+      "dims": {
+        "meaning": "status",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "pagination",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 118,
+            "y": 995,
+            "width": 62,
+            "height": 17
+          },
+          "region": "sidebar",
+          "quote": "Load more",
+          "note": "Load more button at the end of the conversation history"
+        }
+      ],
+      "dims": {
+        "mechanism": "load-more",
+        "position": "scroll-position-only"
+      }
+    },
+    {
+      "id": "chart",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "rationale": "Run-history strips are tiny sparkline-like sequences of coloured bars (one per run, each a link); a micro status visualization rather than a full chart.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1137,
+            "y": 1235,
+            "width": 80,
+            "height": 18
+          },
+          "region": "automations-list",
+          "note": "11 thin vertical bars coloured green (successful) / red (failed) per run of PR Triage Digest"
+        },
+        {
+          "bbox": {
+            "x": 1169,
+            "y": 1058,
+            "width": 48,
+            "height": 18
+          },
+          "region": "automations-list",
+          "note": "Nightly Security Pass run strip ending in a hatched pending bar"
+        }
+      ],
+      "dims": {
+        "markType": "bars",
+        "channels": [
+          "colour-hue-or-value"
+        ],
+        "scale": "ordinal-or-band",
+        "faceting": "small-multiples",
+        "inspectBy": [
+          "click-to-select"
+        ],
+        "authorship": "author-specified",
+        "annotation": [
+          "none"
+        ]
+      }
+    },
+    {
+      "id": "agent-run",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "The page launches agent conversations and lists scheduled/webhook agent automations with Running/Pending status, but no run trace or approvals are shown on this screen.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 486,
+            "y": 1037,
+            "width": 768,
+            "height": 296
+          },
+          "region": "automations-list",
+          "quote": "Docs Sync on Push Every 5 minutes · 52m ago · Running",
+          "note": "Background agent automations with schedule/trigger and live status"
+        }
+      ],
+      "dims": {
+        "brief": [
+          "natural-language-goal",
+          "repo-or-workspace-context"
+        ],
+        "control": [
+          "start-from-a-prompt",
+          "schedule-or-retry"
+        ],
+        "lifecycle": "long-running-background-job"
+      }
+    },
+    {
+      "id": "status-tracker",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 486,
+            "y": 1037,
+            "width": 768,
+            "height": 296
+          },
+          "note": "Statuses are single pills per automation, no staged sequence"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "tabs",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 753,
+            "y": 494,
+            "width": 233,
+            "height": 44
+          },
+          "note": "Code/Automate is a radiogroup that changes composer mode, not panels"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "suggestion-chips",
+      "status": "absent",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 486,
+            "y": 676,
+            "width": 253,
+            "height": 30
+          },
+          "note": "Open Workspace / Plugins pills are actions, not prompt suggestions"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "Desktop app shell: fixed 300px left sidebar (search/command trigger, primary nav links, scrolling conversation history, connection/backend footer) beside a scrolling main pane with a centered ~768px column: headline, Code/Automate segmented toggle, centred prompt box, quick-action pills, horizontal 'Recommended automations' card strip, and an 'Automations' list of running/recent jobs with run-history strips.",
+    "regions": [
+      "sidebar",
+      "launcher",
+      "recommended-automations",
+      "automations-list"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#181818",
+      "#202020",
+      "#282828",
+      "#313131",
+      "#404040",
+      "#ececec",
+      "#ffffff",
+      "#bebebe",
+      "#979797",
+      "#a5e75e"
+    ],
+    "colorRoles": {
+      "background": "#181818",
+      "surface": "#202020",
+      "text": "#ececec",
+      "heading": "#ffffff",
+      "secondary": "#bebebe",
+      "muted": "#979797",
+      "border": "#313131",
+      "selected": "#404040",
+      "success": "#a5e75e"
+    },
+    "typography": "Single system sans stack (-apple-system; renders as the OS UI sans in capture) for everything; ui-monospace only for the CTRL+K key hint.",
+    "typeScale": "Restrained: one 32px/500 H1, 16px subtitle, 14-15px nav and section headings (500) and card titles (14px/600), 12-13px meta and sidebar titles, 10-11px pills and project tags. Hierarchy comes from white vs grey text more than size.",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "dark",
+      "technical",
+      "minimal",
+      "calm",
+      "developer"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T01:34:08.023Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 16,
+    "usage": {
+      "input_tokens": 32,
+      "cache_creation_input_tokens": 67969,
+      "cache_read_input_tokens": 825578,
+      "output_tokens": 8140
+    }
+  },
+  "notes": "Neutral near-black dark theme (#181818 page, #202020 surfaces) with almost no brand colour; the only colour is semantic green/red in status dots, checks, success pills and per-run history bars. Sidebar conversation rows are bold white truncated titles with right-aligned relative timestamps (3m, 12m, 1h, 1d) and optional tiny 'Project: x' tags. Composer is a 15px-radius filled box with pill-shaped modifier buttons; mode toggle is a full-pill segmented control. Automation rows encode run history as a strip of 8px-wide colored bars, each a link to that run. Recommended cards open a modal with a flowchart preview of the automation (not in capture). The capture used a 1366px window, so the main column appears vertically centered lower than at 900px."
+}

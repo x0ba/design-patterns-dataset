@@ -1,0 +1,516 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "flocafe--orders",
+    "url": "http://localhost:4425/",
+    "finalUrl": "http://localhost:4425/orders/",
+    "status": 200,
+    "title": "Flo",
+    "capturedAt": "2026-11-18T06:04:12.273Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 900
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "commerce",
+    "domainNote": "restaurant/coffee-shop point-of-sale back office — order management",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/flocafe/explore.json",
+      "repo": {
+        "name": "FreeOpenSourcePOS/FloCafe",
+        "url": "https://github.com/FreeOpenSourcePOS/FloCafe",
+        "commit": "2bac03d52f470ab2897ebe0750167c48e4691ce3",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "orders",
+        "name": "Orders list and detail",
+        "description": "Orders master-detail screen with status tabs, a list of active orders, and the selected order's line items, modifiers, totals and checkout actions."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Workspace identity, primary nav (POS…Settings), theme and user buttons at bottom",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 200,
+        "height": 900
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "page-header",
+      "role": "toolbar",
+      "label": "Orders title, status segmented control (Active/Unpaid/Completed/Held/Cancelled/All), search field and type select",
+      "bbox": {
+        "x": 200,
+        "y": 0,
+        "width": 1240,
+        "height": 130
+      },
+      "patterns": [
+        "filter-controls",
+        "choice-control",
+        "text-field",
+        "tabs"
+      ]
+    },
+    {
+      "id": "order-list",
+      "role": "list",
+      "label": "Orders list rows with order number, status pill, type, elapsed time, item count, total; selected row highlighted",
+      "bbox": {
+        "x": 216,
+        "y": 138,
+        "width": 440,
+        "height": 714
+      },
+      "patterns": [
+        "overview-detail",
+        "badge"
+      ]
+    },
+    {
+      "id": "order-detail",
+      "role": "detail-pane",
+      "label": "Selected order detail: status badges, customer row, line items with edit/override/void, totals, Checkout and Add Item actions",
+      "bbox": {
+        "x": 672,
+        "y": 138,
+        "width": 752,
+        "height": 716
+      },
+      "patterns": [
+        "overview-detail",
+        "badge",
+        "menu"
+      ]
+    },
+    {
+      "id": "status-bar",
+      "role": "footer",
+      "label": "Status bar: staff and role, receipt printer, shift opened pill, Diagnostics & Logs",
+      "bbox": {
+        "x": 200,
+        "y": 868,
+        "width": 1240,
+        "height": 32
+      },
+      "patterns": [
+        "badge"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 72,
+            "width": 183,
+            "height": 356
+          },
+          "quote": "POS Dashboard Orders Products Inventory",
+          "region": "sidebar",
+          "note": "Sidebar primary nav with Orders highlighted; toggle/resize sidebar button at x191"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations"
+        ],
+        "visibility": "toggle-button",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 217,
+            "y": 310,
+            "width": 438,
+            "height": 89
+          },
+          "quote": "#ORD-20261117-0012 Preparing Dine In Couch 5h 22m ago 1 item $12.00",
+          "region": "order-list",
+          "note": "Selected row (blue fill/border)"
+        },
+        {
+          "bbox": {
+            "x": 672,
+            "y": 138,
+            "width": 752,
+            "height": 716
+          },
+          "quote": "#ORD-20261117-0012",
+          "region": "order-detail",
+          "note": "Detail pane for the selected order"
+        }
+      ],
+      "dims": {
+        "attributePlacement": [
+          "in-both-views",
+          "in-detail-view-only"
+        ],
+        "abstraction": [
+          "category",
+          "sum-or-average"
+        ],
+        "truncation": "full-text",
+        "relationship": "one-to-one",
+        "recursion": [
+          "none"
+        ],
+        "openIn": "side-by-side",
+        "overviewType": [
+          "list"
+        ],
+        "detailMultiplicity": "one-at-a-time",
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "whole-item",
+        "attributeScope": [
+          "per-item"
+        ]
+      }
+    },
+    {
+      "id": "filter-controls",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 945,
+            "y": 17,
+            "width": 478,
+            "height": 48
+          },
+          "quote": "Active Unpaid Completed Held Cancelled All",
+          "region": "page-header",
+          "note": "Status filter as segmented toggle buttons"
+        },
+        {
+          "bbox": {
+            "x": 216,
+            "y": 82,
+            "width": 443,
+            "height": 40
+          },
+          "quote": "All Types",
+          "region": "page-header",
+          "note": "Text search + order-type select"
+        }
+      ],
+      "dims": {
+        "placement": "filter-bar-with-chips",
+        "types": [
+          "text-match",
+          "toggle-chips"
+        ],
+        "origin": "developer-defined"
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 548,
+            "y": 82,
+            "width": 111,
+            "height": 40
+          },
+          "quote": "All Types",
+          "region": "page-header",
+          "note": "Native select: All Types/Dine In/Takeaway/Delivery/Online"
+        },
+        {
+          "bbox": {
+            "x": 945,
+            "y": 17,
+            "width": 478,
+            "height": 48
+          },
+          "quote": "Active",
+          "region": "page-header",
+          "note": "Segmented single-choice status control"
+        }
+      ],
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "dropdown-select",
+        "option": [
+          "label-only"
+        ],
+        "timing": "immediately",
+        "largeSets": "show-all"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 216,
+            "y": 83,
+            "width": 320,
+            "height": 38
+          },
+          "quote": "Search by order number, name, or phone…",
+          "region": "page-header"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "placeholder"
+        ],
+        "style": "outlined"
+      }
+    },
+    {
+      "id": "tabs",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Active/Unpaid/... is a pressed-button segmented control that switches the list subset; could equally be read as a status filter rather than tabs. Live page unavailable.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 945,
+            "y": 17,
+            "width": 478,
+            "height": 48
+          },
+          "quote": "Active Unpaid Completed Held Cancelled All",
+          "region": "page-header"
+        }
+      ],
+      "dims": {
+        "placement": "segmented-control",
+        "label": [
+          "text"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 583,
+            "y": 150,
+            "width": 60,
+            "height": 18
+          },
+          "quote": "Pending",
+          "region": "order-list",
+          "note": "Order status pills (Pending yellow, Preparing blue, Ready green)"
+        },
+        {
+          "bbox": {
+            "x": 877,
+            "y": 158,
+            "width": 143,
+            "height": 20
+          },
+          "quote": "Preparing Unpaid",
+          "region": "order-detail"
+        },
+        {
+          "bbox": {
+            "x": 1172,
+            "y": 876,
+            "width": 92,
+            "height": 18
+          },
+          "quote": "Shift opened",
+          "region": "status-bar"
+        }
+      ],
+      "dims": {
+        "meaning": "status",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Unlabeled '…' overflow button in detail header likely opens a menu, but could not open it (live page failed).",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1372,
+            "y": 150,
+            "width": 36,
+            "height": 36
+          },
+          "region": "order-detail",
+          "note": "Overflow ellipsis button"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click"
+      }
+    },
+    {
+      "id": "card",
+      "status": "absent",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 216,
+            "y": 138,
+            "width": 440,
+            "height": 714
+          },
+          "note": "Order items are divider-separated rows inside one outlined list panel, not individual cards"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "status-tracker",
+      "status": "absent",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 877,
+            "y": 158,
+            "width": 80,
+            "height": 20
+          },
+          "note": "Only a status pill, no stage sequence"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "search-results",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 216,
+            "y": 83,
+            "width": 320,
+            "height": 38
+          },
+          "note": "Search only filters an order list; no query results page"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "app shell with fixed left sidebar nav; main area with title + status segmented filter, search/type filters, then a list–detail split (order list left, selected order detail right); thin status bar footer",
+    "regions": [
+      "sidebar",
+      "page-header",
+      "order-list",
+      "order-detail",
+      "status-bar"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#f7f7f8",
+      "#0a0a0a",
+      "#3248ff",
+      "#e8ebff",
+      "#6b7280",
+      "#e5e7eb",
+      "#16a34a",
+      "#dc2626",
+      "#f59e0b"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "surface": "#f7f7f8",
+      "text": "#0a0a0a",
+      "primary": "#3248ff",
+      "accent": "#e8ebff",
+      "muted": "#6b7280",
+      "border": "#e5e7eb",
+      "success": "#16a34a",
+      "danger": "#dc2626",
+      "warning": "#f59e0b"
+    },
+    "typography": "Geist throughout: bold for title and order numbers/totals, regular for nav and body, small 11–12px for meta and status bar",
+    "typeScale": "Compact: H1 24px/700, totals 18px bold, body/nav 14px, meta 12px, pills/status bar 11px; hierarchy via weight more than size",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "clean",
+      "utilitarian",
+      "calm",
+      "modern"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T06:05:51.486Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 8,
+    "usage": {
+      "input_tokens": 16,
+      "cache_creation_input_tokens": 26789,
+      "cache_read_input_tokens": 222823,
+      "output_tokens": 4769
+    }
+  },
+  "notes": "POS back-office 'Orders' screen (Flo). Saturated blue #3248ff used sparingly: active segmented button, active nav item text on pale lavender #e8ebff, selected list row with blue outline and lavender fill. Status pills are soft-tinted rounded-full chips color-coded by state (Pending amber, Preparing blue, Ready green, Unpaid red, Couch table orange). Detail pane footer pairs a solid black Checkout button with a green-outlined Add Item button. Bottom status bar shows staff role, receipt printer connection and 'Shift opened' pill — a POS-specific device/shift status strip. A hidden 'Store diagnostics (for support)' panel is present in the DOM below the fold (likely a drawer opened from Diagnostics & Logs). Live page could not be opened."
+}

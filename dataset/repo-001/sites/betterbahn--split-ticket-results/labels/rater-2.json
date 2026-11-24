@@ -1,0 +1,358 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "betterbahn--split-ticket-results",
+    "url": "http://localhost:4454/discount?vbid=a3c1f0e2-5b7d-4e8a-9c21-1f0b6d2e7a44&hasDeutschlandTicket=false&passengerAge=34&travelClass=2&bahnCard=25",
+    "finalUrl": "http://localhost:4454/discount?vbid=a3c1f0e2-5b7d-4e8a-9c21-1f0b6d2e7a44&hasDeutschlandTicket=false&passengerAge=34&travelClass=2&bahnCard=25",
+    "status": 200,
+    "title": "Better Bahn - Split-Ticketing",
+    "capturedAt": "2026-11-18T19:53:22.215Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1041
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "travel-hospitality",
+    "domainNote": "German rail (Deutsche Bahn) split-ticketing price comparison tool",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/betterbahn/explore.json",
+      "repo": {
+        "name": "BetterBahn/betterbahn",
+        "url": "https://github.com/BetterBahn/betterbahn",
+        "commit": "bdfb30e2bbffd17420392190ed92e4c1d4e89616",
+        "license": "AGPL-3.0"
+      },
+      "view": {
+        "slug": "split-ticket-results",
+        "name": "Split-ticket results",
+        "description": "Journey analysis page showing the selected Hamburg→München connection card, the original journey and the best split-ticket option with savings and expanded ticket segments with booking buttons."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Outlined pill logo 'BETTER BAHN' as home link, no other nav",
+      "bbox": {
+        "x": 88,
+        "y": 17,
+        "width": 163,
+        "height": 42
+      },
+      "patterns": []
+    },
+    {
+      "id": "connection-select",
+      "role": "selection-panel",
+      "label": "'Wähle deine Verbindung' panel with the single selected connection card (blue selection outline) and a blue confirmation notice",
+      "bbox": {
+        "x": 88,
+        "y": 116,
+        "width": 1264,
+        "height": 379
+      },
+      "patterns": [
+        "card",
+        "badge",
+        "banner"
+      ]
+    },
+    {
+      "id": "original-connection",
+      "role": "comparison-column",
+      "label": "'Deine Verbindung' — original ticket itinerary card with red 'Original' price 74,99€ and class/BahnCard details",
+      "bbox": {
+        "x": 88,
+        "y": 519,
+        "width": 620,
+        "height": 498
+      },
+      "patterns": [
+        "card",
+        "badge"
+      ]
+    },
+    {
+      "id": "split-options",
+      "role": "comparison-column",
+      "label": "'Split-Ticket Optionen' — collapsible option card showing savings 'Spare 36,01 €', total 38,98 €, and per-leg ticket cards with green 'Zur Buchung' buttons",
+      "bbox": {
+        "x": 732,
+        "y": 519,
+        "width": 620,
+        "height": 498
+      },
+      "patterns": [
+        "card",
+        "accordion",
+        "badge"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 120,
+            "y": 192,
+            "width": 1200,
+            "height": 215
+          },
+          "quote": "Verbindung: 23:01 → 04:37",
+          "note": "Connection summary card, bordered with subtle shadow",
+          "region": "connection-select"
+        },
+        {
+          "bbox": {
+            "x": 112,
+            "y": 595,
+            "width": 572,
+            "height": 230
+          },
+          "quote": "Original 74,99€",
+          "note": "Original ticket itinerary card, dark 1px outline",
+          "region": "original-connection"
+        },
+        {
+          "bbox": {
+            "x": 773,
+            "y": 832,
+            "width": 538,
+            "height": 70
+          },
+          "quote": "ICE 589 Hamburg Hbf (23:01) → Kassel-Wilhelmshöhe (01:13) 16,49 €",
+          "note": "Leg ticket card with one primary 'Zur Buchung' action",
+          "region": "split-options"
+        },
+        {
+          "bbox": {
+            "x": 773,
+            "y": 910,
+            "width": 538,
+            "height": 70
+          },
+          "quote": "22,49 €",
+          "note": "Second leg card",
+          "region": "split-options"
+        }
+      ],
+      "dims": {
+        "media": "none",
+        "shape": "horizontal",
+        "style": "outlined",
+        "actions": "one-primary-action"
+      }
+    },
+    {
+      "id": "accordion",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 756,
+            "y": 595,
+            "width": 572,
+            "height": 398
+          },
+          "quote": "Spare 36,01 € 38,98 €",
+          "note": "Split-ticket option with chevron; clicking header or chevron collapses/expands 'Die Teile deiner Reise' panel (verified live). Single section, open in capture.",
+          "region": "split-options"
+        }
+      ],
+      "dims": {
+        "header": [
+          "title-plus-summary-value"
+        ],
+        "toggle": [
+          "header-click"
+        ]
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 180,
+            "y": 285,
+            "width": 104,
+            "height": 24
+          },
+          "quote": "ICE 589",
+          "note": "Blue train-number label pill and gray 'train' type pill",
+          "region": "connection-select"
+        },
+        {
+          "bbox": {
+            "x": 344,
+            "y": 676,
+            "width": 32,
+            "height": 22
+          },
+          "quote": "DB",
+          "note": "Red outlined operator label",
+          "region": "original-connection"
+        },
+        {
+          "bbox": {
+            "x": 997,
+            "y": 676,
+            "width": 32,
+            "height": 22
+          },
+          "quote": "DB",
+          "region": "split-options"
+        }
+      ],
+      "dims": {
+        "meaning": "label",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "banner",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 120,
+            "y": 419,
+            "width": 1200,
+            "height": 44
+          },
+          "quote": "✅ Diese Verbindung ausgewählt - Scroll nach unten für Split-Ticket Analyse",
+          "note": "Light-blue inline notice with left accent bar confirming selection, inside the selection panel",
+          "region": "connection-select"
+        }
+      ],
+      "dims": {
+        "scope": "section",
+        "severity": "success",
+        "action": "none",
+        "placement": "beside-the-problem"
+      }
+    },
+    {
+      "id": "comparison-table",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 88,
+            "y": 519,
+            "width": 1264,
+            "height": 498
+          },
+          "note": "Original vs split options shown as two side-by-side columns of cards, not an attribute-row comparison table"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "booking-flow",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1209,
+            "y": 869,
+            "width": 93,
+            "height": 24
+          },
+          "quote": "Zur Buchung",
+          "note": "Only hands off to external booking; no availability/slot selection or reservation on this page"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "single-column centered container: logo-only header, a full-width 'choose connection' panel with the selected connection card, then a two-column split comparing the original ticket with split-ticket options",
+    "regions": [
+      "header",
+      "connection-select",
+      "original-connection",
+      "split-options"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#171717",
+      "#4b6058",
+      "#2563eb",
+      "#dbeafe",
+      "#16a34a",
+      "#dc2626",
+      "#6b7280",
+      "#e5e7eb"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "surface": "#ffffff",
+      "text": "#171717",
+      "muted": "#6b7280",
+      "primary": "#2563eb",
+      "accent": "#16a34a",
+      "brand": "#4b6058",
+      "danger": "#dc2626",
+      "border": "#e5e7eb",
+      "info-surface": "#dbeafe"
+    },
+    "typography": "Arial throughout (headings, body, prices, buttons)",
+    "typeScale": "Flat scale: section titles 18-20px/600, times and prices 18-20px bold, body 14-16px/400, metadata and buttons 12px; hierarchy carried mostly by colour (blue times, green savings, red 'Original') and weight",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "utilitarian",
+      "clean",
+      "informational",
+      "plain"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T19:54:54.749Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 7,
+    "usage": {
+      "input_tokens": 14,
+      "cache_creation_input_tokens": 21746,
+      "cache_read_input_tokens": 181095,
+      "output_tokens": 3856
+    }
+  },
+  "notes": "Minimal utility-style tool page in German. Logo is a thick dark-green (#4b6058) outlined rounded pill with uppercase bold text. Selected connection indicated by a 2px blue outline around the card plus a light-blue notice with a blue left border and ✅ emoji. Itineraries drawn as a vertical timeline with a train/bell icon at departure and a gray dot at arrival connected by a thin line. Price contrast is the core message: red 'Original 74,99€' vs green 'Spare 36,01 €' with 38,98 € total; split legs listed as small outlined cards with compact green 'Zur Buchung' buttons. Outer panels are white with very faint shadows; black 1px horizontal rules divide card bodies from footers. An empty ARIA alert region exists (likely for errors/toasts)."
+}

@@ -1,0 +1,37 @@
+import { recording } from './build'
+
+export const oct22 = recording(
+  { id: 'oct22', kind: 'lab', title: 'Lab meeting', short: 'Lab meeting · Oct 22', date: '2026-10-22', length: '52:00' },
+  [
+    ['0:00', 'Announcements', 'skip', '', 'Chemical audit sticker reminder and the hood-cleaning rota.'],
+    ['3:30', 'Cytometer booking rules', 'listen', 'cytometer', 'Jun’s proposal and Prof. Halvorsen’s decisions: who counts as time-sensitive, how the backlog is ordered, and the trial period. Your cruise samples fall under the field-campaign rule.'],
+    ['17:30', 'Grad student updates', 'skip', '', 'Priya, Sam and Hana report on their own projects. No decisions and nothing assigned to you.'],
+    ['37:30', 'Lab retreat planning', 'skip', '', 'Venue options and dates for the December retreat.'],
+    ['46:30', 'Wrap-up and action items', 'skip', '', 'Recap of the booking-rule rollout.'],
+  ],
+  [
+    ['0:00', 'jun', 'A few quick things. Everyone should have a green sticker on their chemical shelf by Friday, or the audit counts it as unlabeled. And the fume hood cleaning rota is up on the door. Hood three is Tomás and Sam this week.'],
+    ['1:40', 'halv', 'Thank you, Jun. And a reminder that today’s meeting is short on the science and long on the cytometer. Jun, go ahead with the proposal.'],
+    ['3:30', 'jun', 'I went through the sign-up sheet and the instrument log for last quarter. There were thirty-one booking collisions, and about forty percent of the hours people booked were never used, because of late cancellations or runs that finished early. The instrument isn’t the bottleneck. The process is.'],
+    ['4:30', 'jun', 'So the proposal has four parts. One: a shared online calendar replaces the paper sheet. Two: bookings are in blocks of at most four hours, with a limit of two blocks per person per week. Three: you cancel at least twenty-four hours ahead, or you lose your next booking. Four: a priority hold for time-sensitive samples. Two blocks a week that can only be booked within seventy-two hours of use, so fresh material doesn’t wait three weeks behind someone’s pilot run.'],
+    ['6:10', 'maren', 'I like the calendar. I’m worried about the two-block limit. A sort for the kelp bacteria takes a full day and I can’t split it without recalibrating.'],
+    ['6:50', 'jun', 'Sorts are the exception. You can book a double block, but you ask me first so I can check it against the priority holds.'],
+    ['7:30', 'tomas', 'Who decides what counts as time-sensitive? Everybody’s sample feels time-sensitive to them.'],
+    ['8:00', 'halv', 'That’s the right question, and I’ll decide it now so it doesn’t become an argument every week. Time-sensitive means one of three things. Live cultures. Samples fixed less than fourteen days ago that have to be run before the fixative degrades them. And anything from a field campaign that cannot be repeated. Jun applies that list. If you disagree with Jun, you come to me, not to each other.', 'D'],
+    ['9:30', 'ama', 'What about the people who’ve been waiting the longest? The backlog is real.'],
+    ['9:55', 'halv', 'The backlog goes in date order. I’ll be explicit that I’m not going to rank it by whose project I find more interesting. First come, first served on the backlog, and from Monday the twenty-sixth the new rules apply to everyone, including me and Jun.', 'D'],
+    ['11:20', 'hana', 'Do we lose the weekend?'],
+    ['11:40', 'jun', 'Friday mornings, eight to ten, are reserved for cleaning and the QC beads. That’s me. Weekends are bookable, but only if a second person is in the building, for safety.'],
+    ['12:50', 'halv', 'We’ll run this as a trial through the end of term. If the numbers don’t improve, meaning collisions and unused hours, we revisit it at the first meeting in December. Any objections? No? Then it’s decided.', 'D'],
+    ['14:10', 'sam', 'And undergraduates? Chloe has her thesis samples to run.'],
+    ['14:35', 'jun', 'Undergrads book through their supervisor’s account, so the supervisor is responsible for the booking. I’ll note that on the rules page.'],
+    ['15:30', 'jun', 'I’ll publish the calendar and a one-page rules sheet by Friday, so it’s live Monday the twenty-sixth.'],
+    ['16:20', 'halv', 'Good. That’s a lot of careful work, Jun. Thank you.'],
+    ['17:30', 'priya', 'My update is short. The mesocosm run finished, and I’m now cleaning the nutrient data. The preliminary result is that the high-temperature tanks drifted earlier than I expected, but I want to check the sensor logs before I say anything firm.'],
+    ['23:10', 'sam', 'I’ve finished the second round of sediment cores. Grain-size results are back and they look consistent across the three sites, which is a relief. Next I’ll start the organic carbon analysis, which needs the furnace booked.'],
+    ['30:00', 'hana', 'I have the journal club paper for Saturday, on picoplankton through a marine heatwave. I’ll circulate a one-page summary tomorrow. If you read only one section, read the methods, because that’s where my questions are.'],
+    ['37:30', 'priya', 'For the retreat, there are two venues. The field station is cheaper but has only one big room. The conference center is nicer but would take most of the budget.'],
+    ['41:20', 'halv', 'I lean toward the field station. The retreat is for talking, not for good coffee. Please put your date preferences in the poll by Friday.'],
+    ['46:30', 'halv', 'Wrapping up. The cytometer calendar goes live on the twenty-sixth, the retreat poll closes Friday, and the journal club is on Saturday. See you next week.'],
+  ],
+)

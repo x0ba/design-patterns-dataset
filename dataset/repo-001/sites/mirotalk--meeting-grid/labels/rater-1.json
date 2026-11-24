@@ -1,0 +1,481 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "mirotalk--meeting-grid",
+    "url": "http://localhost:4438/join?room=northwind-product-weekly&name=Dana%20Okafor&audio=0&video=0&notify=0",
+    "finalUrl": "http://localhost:4438/join?room=northwind-product-weekly&name=Dana%20Okafor&audio=0&video=0&notify=0",
+    "status": 200,
+    "title": "MiroTalk WebRTC Video call, Chat Room & Screen Sharing.",
+    "capturedAt": "2026-11-18T06:54:10.583Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 900
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "productivity",
+    "domainNote": "WebRTC video conferencing room (MiroTalk) with an in-call polls panel",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/mirotalk/explore.json",
+      "repo": {
+        "name": "miroslavpejic85/mirotalk",
+        "url": "https://github.com/miroslavpejic85/mirotalk",
+        "commit": "91dac4da68d66c8ebccabb524b904cdd8c42283e",
+        "license": "AGPL-3.0"
+      },
+      "view": {
+        "slug": "meeting-grid",
+        "name": "Meeting room video grid",
+        "description": "Main meeting room with the grid of attendee tiles (avatars/initials, pin, video, audio and raised-hand indicators, names, presenter badge) and the bottom control toolbar."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "toast",
+      "role": "notification",
+      "label": "Top-centre toast 'Priya Raman started a poll' with info icon and close ×",
+      "bbox": {
+        "x": 550,
+        "y": 10,
+        "width": 340,
+        "height": 81
+      },
+      "patterns": [
+        "toast"
+      ]
+    },
+    {
+      "id": "video-grid",
+      "role": "stage",
+      "label": "Gallery grid of 8 participant tiles with avatar, name chip and pin/video/audio/hand/more icon row",
+      "bbox": {
+        "x": 21,
+        "y": 57,
+        "width": 1398,
+        "height": 694
+      },
+      "patterns": [
+        "video-call",
+        "badge"
+      ]
+    },
+    {
+      "id": "polls-dialog",
+      "role": "floating-panel",
+      "label": "Resizable modeless 'Polls' dialog with count badge, new/close buttons, two poll cards with radio options and result bars",
+      "bbox": {
+        "x": 490,
+        "y": 140,
+        "width": 460,
+        "height": 620
+      },
+      "patterns": [
+        "modal-dialog",
+        "card",
+        "choice-control",
+        "chart",
+        "badge"
+      ]
+    },
+    {
+      "id": "control-bar",
+      "role": "toolbar",
+      "label": "Bottom-centre dock: mic, camera, screen share, raise hand, chat, participants (8), view, settings, red Leave button",
+      "bbox": {
+        "x": 411,
+        "y": 814,
+        "width": 618,
+        "height": 70
+      },
+      "patterns": [
+        "video-call",
+        "badge",
+        "tooltip"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "video-call",
+      "status": "present",
+      "confidence": 0.95,
+      "dims": {
+        "people": "gallery-grid",
+        "subspaces": "one-room",
+        "tile": [
+          "name",
+          "mute-and-hand-raised"
+        ],
+        "attention": [
+          "pin-a-participant"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 21,
+            "y": 57,
+            "width": 1398,
+            "height": 694
+          },
+          "region": "video-grid",
+          "note": "Gallery grid of avatar tiles with name chips and mute/video/hand status icons",
+          "quote": "Dana O. (me)"
+        },
+        {
+          "bbox": {
+            "x": 179,
+            "y": 417,
+            "width": 172,
+            "height": 32
+          },
+          "region": "video-grid",
+          "note": "Tile icon row incl. 'Toggle Pin video' and 'Participant hand is raised'"
+        },
+        {
+          "bbox": {
+            "x": 411,
+            "y": 814,
+            "width": 618,
+            "height": 70
+          },
+          "region": "control-bar",
+          "note": "Call controls: mic, camera, share, hand, chat, participants, view, settings, leave"
+        }
+      ]
+    },
+    {
+      "id": "toast",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "duration": "auto-dismiss",
+        "content": [
+          "message-only",
+          "status-icon"
+        ],
+        "severity": "neutral"
+      },
+      "novel": [
+        {
+          "subdimension": "position",
+          "description": "Toast slides in at the top centre of the viewport",
+          "proposedValueId": "top-centre"
+        }
+      ],
+      "evidence": [
+        {
+          "bbox": {
+            "x": 550,
+            "y": 10,
+            "width": 340,
+            "height": 81
+          },
+          "region": "toast",
+          "note": "Info icon + message + close ×; on live page a similar toast auto-dismissed",
+          "quote": "Priya Raman started a poll"
+        }
+      ]
+    },
+    {
+      "id": "modal-dialog",
+      "status": "present",
+      "confidence": 0.7,
+      "dims": {
+        "form": "centered-large",
+        "openBy": [
+          "system-initiated"
+        ],
+        "dismissBy": [
+          "close-button"
+        ],
+        "modality": "modeless"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 490,
+            "y": 140,
+            "width": 460,
+            "height": 620
+          },
+          "region": "polls-dialog",
+          "note": "role=dialog 'Polls' floating over tiles, no backdrop, close × and resize grip",
+          "quote": "Polls"
+        }
+      ]
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.65,
+      "dims": {
+        "media": "none",
+        "actions": "none",
+        "shape": "vertical",
+        "style": "outlined"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 512,
+            "y": 224,
+            "width": 416,
+            "height": 217
+          },
+          "region": "polls-dialog",
+          "note": "Outlined article card per poll with title, meta and options",
+          "quote": "Ship onboarding checklist v2 behind a flag on Nov 24?"
+        },
+        {
+          "bbox": {
+            "x": 512,
+            "y": 451,
+            "width": 416,
+            "height": 307
+          },
+          "region": "polls-dialog",
+          "quote": "Which date works for the Q1 roadmap offsite?"
+        }
+      ]
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.75,
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "radio-list",
+        "option": [
+          "label-only"
+        ],
+        "timing": "immediately",
+        "largeSets": "show-all"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 525,
+            "y": 308,
+            "width": 390,
+            "height": 120
+          },
+          "region": "polls-dialog",
+          "note": "Option buttons with radio circles; vote cast on click",
+          "quote": "Yes, ship it"
+        }
+      ]
+    },
+    {
+      "id": "chart",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "rationale": "Poll result bars fill behind each option proportionally to vote share; minimal inline bar visualization rather than a full chart",
+      "dims": {
+        "markType": "bars",
+        "channels": [
+          "length"
+        ],
+        "scale": "linear",
+        "faceting": "single-plot",
+        "authorship": "author-specified",
+        "annotation": [
+          "callout-labels"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 525,
+            "y": 515,
+            "width": 390,
+            "height": 213
+          },
+          "region": "polls-dialog",
+          "note": "Grey fill bars sized by percent with labels",
+          "quote": "50% (3)"
+        }
+      ]
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "aggregation": "per-item"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 740,
+            "y": 825,
+            "width": 20,
+            "height": 18
+          },
+          "region": "control-bar",
+          "note": "Red count badge on participants button",
+          "quote": "8"
+        },
+        {
+          "bbox": {
+            "x": 578,
+            "y": 169,
+            "width": 20,
+            "height": 18
+          },
+          "region": "polls-dialog",
+          "note": "Count of polls next to title",
+          "quote": "2"
+        },
+        {
+          "bbox": {
+            "x": 457,
+            "y": 817,
+            "width": 80,
+            "height": 18
+          },
+          "region": "control-bar",
+          "note": "Yellow '!' status badges on disabled mic/camera buttons",
+          "quote": "!"
+        }
+      ]
+    },
+    {
+      "id": "tooltip",
+      "status": "present",
+      "confidence": 0.75,
+      "dims": {
+        "trigger": [
+          "hover"
+        ],
+        "content": "label-and-shortcut",
+        "placement": "above",
+        "timing": "until-the-pointer-leaves"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 653,
+            "y": 824,
+            "width": 50,
+            "height": 50
+          },
+          "region": "control-bar",
+          "note": "Live hover shows 'Open the chat (C)' tooltip above dock buttons (not visible in capture)"
+        }
+      ]
+    },
+    {
+      "id": "menu",
+      "status": "absent",
+      "confidence": 0.6,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 761,
+            "y": 824,
+            "width": 35,
+            "height": 50
+          },
+          "note": "Chevron/⋮ menu triggers exist but no menu open in capture"
+        }
+      ]
+    },
+    {
+      "id": "banner",
+      "status": "absent",
+      "confidence": 0.7,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 50
+          },
+          "note": "'Connection lost' status exists only in a11y tree, not visible"
+        }
+      ]
+    }
+  ],
+  "structure": {
+    "layout": "full-viewport video-call app: 4x2 gallery grid of participant tiles, floating bottom-centre control dock, floating modeless Polls dialog centred over the grid, top-centre toast",
+    "regions": [
+      "toast",
+      "video-grid",
+      "polls-dialog",
+      "control-bar"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#121215",
+      "#121214",
+      "#ffffff",
+      "#dcdce6",
+      "#e74c3c",
+      "#ff0000",
+      "#ffd700",
+      "#1f6f8b",
+      "#8b4513"
+    ],
+    "colorRoles": {
+      "background": "#121215",
+      "surface": "#121214",
+      "text": "#ffffff",
+      "muted": "#dcdce6",
+      "primary": "#e74c3c",
+      "accent": "#ffd700",
+      "danger": "#ff0000"
+    },
+    "typography": "Montserrat throughout (labels, poll titles 15px/600, options 14px, meta 12–13px, toast heading 16px/600); Font Awesome 6 Free solid icons on all buttons",
+    "typeScale": "Compact and flat: 12–16px text with weight contrast (600 for headings vs 400 body); oversized 40px+ initials in avatar circles; 26px dock icons",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "illustration",
+      "iconography"
+    ],
+    "iconStyle": "filled",
+    "whitespace": "moderate",
+    "backgroundTreatment": "gradient",
+    "mood": [
+      "dark",
+      "technical",
+      "utilitarian",
+      "calm"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T06:55:38.172Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 6,
+    "usage": {
+      "input_tokens": 12,
+      "cache_creation_input_tokens": 30454,
+      "cache_read_input_tokens": 178371,
+      "output_tokens": 4937
+    }
+  },
+  "notes": "Domain is communication (video conferencing); 'productivity' chosen as nearest allowed enum. Near-black UI with subtle radial gradients inside each tile. Avatars are coloured initials circles or cartoon illustrations. Tile toolbars are small 32px dark rounded squares with red icons for off mic/camera, gold for raised hand. Bottom dock of 50px rounded squares with split chevrons for sub-menus and a wide red Leave button. Polls panel is a resizable floating dialog; option rows double as vote buttons and result bars with percent+count right-aligned and voter names under options in non-anonymous polls. Live page state differed from capture (3x3 grid, different toast)."
+}

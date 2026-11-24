@@ -1,0 +1,32 @@
+{
+  "mode": "server",
+  "entry": "/",
+  "login": null,
+  "stubs": [
+    {
+      "service": "Anthropic Messages API (article summaries, translation, AI chat with tool use, chat title generation)",
+      "how": ".ui-capture/stub/stub.mjs listens on 127.0.0.1:4536 (PORT+101) and implements POST /v1/messages (JSON and SSE streaming, incl. tool_use blocks). The server's @anthropic-ai/sdk client is pointed at it with ANTHROPIC_BASE_URL; settings hold a placeholder api_key.anthropic. Summaries are built from the article's own sentences/headings; home-screen chat first calls the app's real search_articles tool, then answers with links to the returned articles; article chat answers from the article text in the system prompt."
+    },
+    {
+      "service": "Meilisearch (full-text search engine)",
+      "how": ".ui-capture/stub/stub.mjs also starts an in-memory Meilisearch-compatible HTTP API (.ui-capture/stub/meili-stub.mjs) on 127.0.0.1:4537 (PORT+102, MEILI_URL). It covers index create/delete/swap/stats, settings, document add/update/delete, tasks and search with filters/sort. The server rebuilds the index into it on every startup. The real meilisearch binary can't run in this sandbox: its LMDB memory-map sizing fails with EPERM."
+    },
+    {
+      "service": "Google favicon service (https://www.google.com/s2/favicons, loaded directly by the browser)",
+      "how": "After `vite build`, .ui-capture/build.sh rewrites that URL in dist/assets/*.js to /__stub/favicons. The gateway in stub.mjs (the process listening on PORT 4435, which proxies everything else to the Fastify server on 4535) answers it with a colored letter-icon SVG for each domain."
+    },
+    {
+      "service": "Article og:image CDNs (cover thumbnails)",
+      "how": "Seeded og_image values point to /__stub/og/<slug>.svg, which the gateway renders as gradient cover images, so no remote image CDN is contacted."
+    },
+    {
+      "service": "RSS feed fetching (outbound HTTP to feed sites)",
+      "how": "Not called: CRON_SCHEDULE is set to once a year so the 5-minute fetch cron never runs offline. Feeds/articles come from the seed instead."
+    },
+    {
+      "service": "Sign-in (password / passkey / GitHub OAuth)",
+      "how": "Bypassed with the app's own local sign-in bypass: start.sh runs the server with AUTH_DISABLED=1 (which the server only accepts together with NODE_ENV=development) and NO_SEED=1, so /api/me answers {\"email\":\"local\"} and the UI opens signed in. The seeded password account (maya.lindqvist@fastmail.com / fjellstue-2026) still exists in the DB but isn't needed."
+    }
+  ],
+  "notes": "Oksskolten runs through its own Fastify server (NODE_ENV=development + AUTH_DISABLED=1, the app's built-in local sign-in bypass, so the UI opens already signed in; NO_SEED=1 skips the repo demo seed) (server/index.ts via tsx), serving the Vite build in ./dist, with SQLite (libsql) at .ui-capture/data/rss.db. Setup: mise.toml pins node 22.23.5 + npm 11.12.1 (+ conftest from the repo). .ui-capture/build.sh runs npm ci, vite build and the favicon rewrite. .ui-capture/start.sh re-seeds the DB on every start (so relative dates stay fresh), then starts stub.mjs (gateway :4435, Anthropic :4536, Meilisearch :4537) and the server (:4535). Seed (.ui-capture/seed/seed.ts, using the app's migrations and schema) creates the user's account, settings (English, Anthropic provider, thumbnails on) and the dataset: the repo's own demo feeds/articles/chat conversations (src/lib/demo/seed) plus a generated extension (.ui-capture/seed/extra.ts, feeds-extra.ts, text-pools.ts). Result: 10 categories (Languages, Infrastructure, Platform, Databases, Web & Frontend, AI & ML, Security, Engineering Culture, News [collapsed], 日本語) plus uncategorized feeds; 38 feeds (Clips included), among them an RSS-Bridge feed, a JS-challenge feed, LWN failing with HTTP 403 (6 errors) and a disabled dead feed (ENOTFOUND); ~250 articles published over ~7 months, most in the last 2 months: ~80 unread, ~120 read, ~25 bookmarked, ~18 liked, ~90 with AI summaries, cover images on ~2/3, 7 failed extractions with no full text, Japanese articles (read ones carry English translations), 5 hand-clipped pages; 8 chat conversations (3 from the repo demo); similar-article links. Main areas: Inbox/Home article list (list/card/magazine layouts), feed sidebar grouped by category with unread counts and feed error states, article reader with AI summary and chat, Bookmarks, Likes, History, Chat page with past conversations, search (Cmd+K), Settings (appearance themes, reading, AI providers, feeds/OPML, security, retention). The entry page / opens straight into the signed-in Home/Inbox view."
+}

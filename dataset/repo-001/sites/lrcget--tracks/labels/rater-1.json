@@ -1,0 +1,521 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "lrcget--tracks",
+    "url": "http://lrcget.localhost:4319/",
+    "finalUrl": "http://lrcget.localhost:4319/",
+    "status": 200,
+    "title": "LRCGET",
+    "capturedAt": "2026-11-18T01:33:02.677Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 5400
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "utilities",
+    "domainNote": "desktop app (Tauri) for downloading synced lyrics (LRC) for a local music library via LRCLIB",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/lrcget/explore.json",
+      "repo": {
+        "name": "tranxuanthang/lrcget",
+        "url": "https://github.com/tranxuanthang/lrcget",
+        "commit": "6e79ef68ec0a524d71e8330e9f37daa86baa6524",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "tracks",
+        "name": "Tracks library",
+        "description": "Main library list of tracks with album/artist, duration, lyrics-status badges, per-row play/search/edit actions and the bottom player bar."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "top-bar",
+      "role": "header",
+      "label": "Search field with filter toggle, Tracks/Albums/Artists/LRCLIB tabs, Download all lyrics, Export and overflow menu",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 50
+      },
+      "patterns": [
+        "app-shell",
+        "tabs",
+        "text-field",
+        "filter-controls",
+        "menu"
+      ]
+    },
+    {
+      "id": "track-table",
+      "role": "data-table",
+      "label": "Scrolling track list: title/album·artist, duration, lyrics status badge, row actions (play, search lyrics, edit lyrics)",
+      "bbox": {
+        "x": 0,
+        "y": 56,
+        "width": 1440,
+        "height": 5250
+      },
+      "patterns": [
+        "data-table",
+        "badge"
+      ]
+    },
+    {
+      "id": "player-bar",
+      "role": "player",
+      "label": "Bottom-docked audio player: time scrubber, skip back/forward 10s, play, speed dropdown, volume slider",
+      "bbox": {
+        "x": 0,
+        "y": 5306,
+        "width": 1440,
+        "height": 94
+      },
+      "patterns": [
+        "media-player",
+        "slider",
+        "choice-control"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 50
+          },
+          "region": "top-bar",
+          "note": "Persistent top bar with search, view tabs and global actions; bottom player bar also persistent",
+          "quote": "Tracks Albums Artists LRCLIB"
+        }
+      ],
+      "dims": {
+        "primary": "top-navigation-bar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 583,
+            "y": 9,
+            "width": 282,
+            "height": 30
+          },
+          "region": "top-bar",
+          "quote": "Tracks",
+          "note": "Underlined active tab; clicking Albums swaps the list to albums (verified live); LRCLIB separated by a divider"
+        }
+      ],
+      "dims": {
+        "placement": "top",
+        "label": [
+          "text"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 24,
+            "y": 8,
+            "width": 256,
+            "height": 32
+          },
+          "region": "top-bar",
+          "quote": "Search for tracks...",
+          "note": "Pill search input with pink outline, magnifier prefix and filter icon suffix"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "placeholder",
+          "prefix-or-suffix"
+        ],
+        "style": "outlined",
+        "inputType": "plain"
+      }
+    },
+    {
+      "id": "filter-controls",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 252,
+            "y": 12,
+            "width": 24,
+            "height": 24
+          },
+          "region": "top-bar",
+          "note": "Filter icon opens a popover of checkboxes (verified live): Synced / Plain / Instrumental / No lyrics tracks"
+        }
+      ],
+      "dims": {
+        "placement": "toolbar-popover",
+        "types": [
+          "checkbox-values",
+          "text-match"
+        ],
+        "origin": "developer-defined"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1392,
+            "y": 8,
+            "width": 32,
+            "height": 32
+          },
+          "region": "top-bar",
+          "note": "Kebab button opens a dropdown (verified live): Refresh library, Manage directories, Settings, About — each with icon"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click",
+        "structure": "flat",
+        "item": [
+          "label",
+          "icon"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    },
+    {
+      "id": "data-table",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 56,
+            "width": 1440,
+            "height": 5250
+          },
+          "region": "track-table",
+          "quote": "Track Duration Lyrics",
+          "note": "Rows = tracks; columns Track (title + album·artist), Duration, Lyrics status chip, unlabeled action column with 3 icon buttons"
+        }
+      ],
+      "dims": {
+        "columnSet": "fixed",
+        "cellRendering": [
+          "plain-text",
+          "chips-and-avatars"
+        ],
+        "density": "standard",
+        "rowExpansion": "none",
+        "selection": "none",
+        "opScope": [
+          "row",
+          "whole-table"
+        ],
+        "aggregation": [
+          "flat"
+        ]
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1115,
+            "y": 271,
+            "width": 54,
+            "height": 18
+          },
+          "region": "track-table",
+          "quote": "Synced",
+          "note": "Dark green status pill"
+        },
+        {
+          "bbox": {
+            "x": 1098,
+            "y": 219,
+            "width": 88,
+            "height": 18
+          },
+          "region": "track-table",
+          "quote": "Word Synced",
+          "note": "Orange-to-purple gradient pill"
+        },
+        {
+          "bbox": {
+            "x": 1098,
+            "y": 167,
+            "width": 88,
+            "height": 18
+          },
+          "region": "track-table",
+          "quote": "Instrumental",
+          "note": "Gray pill; 'Plain' variant is near-black"
+        }
+      ],
+      "dims": {
+        "meaning": "status",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "media-player",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 5306,
+            "width": 1440,
+            "height": 94
+          },
+          "region": "player-bar",
+          "quote": "00:00 00:00 1x",
+          "note": "Docked bottom transport: full-width pink scrubber with elapsed/total, rewind/forward 10, pink play button, speed dropdown, volume icon + slider"
+        }
+      ],
+      "dims": {
+        "controls": [
+          "play-pause",
+          "scrubber",
+          "skip-forward-back",
+          "playback-speed",
+          "volume-and-mute"
+        ],
+        "position": [
+          "time-scrubber"
+        ]
+      },
+      "novel": [
+        {
+          "subdimension": "mode",
+          "description": "Full-width transport bar docked to the bottom of the app window, persisting while browsing the library (no stage).",
+          "proposedValueId": "docked-persistent-bar"
+        }
+      ]
+    },
+    {
+      "id": "slider",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1300,
+            "y": 5355,
+            "width": 124,
+            "height": 24
+          },
+          "region": "player-bar",
+          "note": "Volume slider, pink fill and thumb, role=slider"
+        },
+        {
+          "bbox": {
+            "x": 56,
+            "y": 5315,
+            "width": 1320,
+            "height": 24
+          },
+          "region": "player-bar",
+          "note": "Playback position scrubber with times on each side"
+        }
+      ],
+      "dims": {
+        "values": "single-value",
+        "labels": [
+          "none"
+        ],
+        "scale": "linear"
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1184,
+            "y": 5354,
+            "width": 72,
+            "height": 28
+          },
+          "region": "player-bar",
+          "quote": "1x",
+          "note": "Playback speed pill dropdown with chevron"
+        }
+      ],
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "dropdown-select",
+        "option": [
+          "label-only"
+        ]
+      }
+    },
+    {
+      "id": "sort-control",
+      "status": "absent",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1008,
+            "y": 66,
+            "width": 62,
+            "height": 20
+          },
+          "note": "Clicking the Duration header did nothing live; list is alphabetical with no sort UI"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "tooltip",
+      "status": "absent",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1345,
+            "y": 157,
+            "width": 35,
+            "height": 35
+          },
+          "note": "Hovering icon-only row button showed a pink hover fill but no tooltip"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "modal-dialog",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1392,
+            "y": 8,
+            "width": 32,
+            "height": 32
+          },
+          "note": "An About modal exists behind the overflow menu (live) but none is shown in the capture"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "Desktop app window: slim top toolbar (search + view tabs + actions), full-width scrolling track table, fixed bottom audio player bar",
+    "regions": [
+      "top-bar",
+      "track-table",
+      "player-bar"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#262626",
+      "#737373",
+      "#f35697",
+      "#fafafa",
+      "#f5f5f5",
+      "#166534",
+      "#6b7280",
+      "#1f2937",
+      "#ffd9e2",
+      "#d4d4d4"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "text": "#262626",
+      "muted": "#737373",
+      "primary": "#f35697",
+      "surface": "#fafafa",
+      "accent": "#166534",
+      "border": "#d4d4d4"
+    },
+    "typography": "Single system stack ui-sans-serif (DejaVu Sans rendered) everywhere: bold titles, regular gray subtitles, uppercase bold button labels",
+    "typeScale": "Compact and flat: 14px for rows/tabs (titles 700, subtitles 400 gray), 12px bold uppercase buttons and column headers, 11px bold badges; tabs 14px/800; no large headings",
+    "shape": "mixed",
+    "elevation": "flat",
+    "borders": "none",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "filled",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "utilitarian",
+      "clean",
+      "technical",
+      "playful-accent"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T01:34:39.903Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 13,
+    "usage": {
+      "input_tokens": 26,
+      "cache_creation_input_tokens": 40940,
+      "cache_read_input_tokens": 473592,
+      "output_tokens": 6658
+    }
+  },
+  "notes": "LRCGET: a lyrics-downloader desktop app. White canvas with no row dividers; rows are separated only by 52px rhythm. Hot pink #f35697 is the only brand color: primary pill CTA, search outline, player scrubber/volume, play button, and the row-button hover fill. Lyrics status chips are color-coded: Synced dark green with mint text, Word Synced an orange→pink→purple gradient, Instrumental gray, Plain near-black. Each row has three icon-only actions (play, search lyrics, edit lyrics) with no tooltips. Buttons are full pills (9999px radius), row icon buttons 4px radius, so corners are mixed. Tabs use an underline. LRCLIB is set apart by a vertical divider. The overflow menu holds Refresh library / Manage directories / Settings / About; About opens a modal (not in capture). The Albums tab replaces the table with album rows plus a download icon."
+}

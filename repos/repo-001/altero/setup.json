@@ -1,0 +1,88 @@
+{
+  "batch": "repo-001",
+  "slug": "altero",
+  "ok": true,
+  "repo": {
+    "name": "eseifert/altero",
+    "url": "https://github.com/eseifert/altero",
+    "commit": "53b7d9f7cee9f7ccd3d458ee14e37d5895c2bd7f",
+    "branch": "master",
+    "license": "AGPL-3.0"
+  },
+  "domain": "productivity",
+  "port": 4404,
+  "checkoutRoot": "~/.cache/design-patterns-dataset/repos",
+  "mode": "server",
+  "entry": "/app/",
+  "app": {
+    "mode": "server",
+    "entry": "/app/",
+    "login": {
+      "username": "hlindqvist",
+      "email": "hannah.lindqvist@uni-kiel.example",
+      "password": "Lindqvist-Coast-2026"
+    },
+    "stubs": [
+      {
+        "service": "Outgoing email (SMTP relay for confirmations, invitations, digests)",
+        "how": "SMTP_URL left empty in .ui-capture/config.py; this is altero's built-in no-relay mode, which writes messages to the server log instead of sending them"
+      },
+      {
+        "service": "zotero.org import, OIDC/SAML single sign-on",
+        "how": "Not configured (optional features); nothing in the UI calls them unless an admin sets them up, and all sign-in is via local password accounts"
+      },
+      {
+        "service": "Browser sign-in (so the entry opens as the established user, not the sign-in form)",
+        "how": ".ui-capture/autologin_proxy.py listens on PORT and forwards to altero on PORT+10000. When a browser request to /app/ or /web/ has no altero_session cookie, it signs in through altero's own POST /web/auth/login as hlindqvist and hands the browser the session and CSRF cookies altero issued. Other traffic (Zotero Web API, files) passes through untouched. No app code changed."
+      }
+    ],
+    "notes": "altero 1.0.0-rc1 (self-hosted Zotero sync server) run from source. Tools pinned in mise.toml (python 3.14.10, uv 0.13.8, node 24.22.3); Python deps via `uv sync --locked --no-dev` (PyICU built against Homebrew icu4c 77), web UI built with `npm --prefix web ci && npm --prefix web run build` into src/altero/web/static. start.sh runs `altero serve` (FastAPI/uvicorn) on PORT+10000 behind autologin_proxy.py on PORT, so a fresh browser opening /app/ lands signed in on /app/library (without it, altero answers the 401 'nobody signed in' probe on /web/auth/session and shows the sign-in form). Signing out ends the session, but the next request signs the browser back in with SQLite at .ui-capture/data/altero.sqlite and attachment files in .ui-capture/data/storage; UI at /app/ (sign in, then lands on /app/library). Data is rebuilt by .ui-capture/rebuild_data.sh: alembic migrate -> bootstrap.py (6 accounts with passwords/emails, API keys, 3 group libraries with roles, via altero's service layer) -> seed.py (everything through the Zotero Web API v3 the desktop client uses: hierarchical collections, ~180 references in Hannah Lindqvist's personal library — journal articles, books, chapters, reports, theses, datasets, software, webpages, preprints — with dates added spread over ~3.5 years, child notes, standalone notes, ~70 uploaded PDFs (realistic sizes, deduplicated across libraries), PDF annotations, linked URLs, items in trash, duplicate items, related items, saved searches, colored tags; group libraries 'Coastal Ecology Lab' (~57 items, SOPs, monitoring reports, student theses, items added by different members), 'Seagrass Restoration Consortium' (public), 'STS Reading Group'; smaller personal libraries for colleagues) -> extras.py (pending group invitation, group-activity notifications with read/unread, collection share links, notification preferences). Main areas: Library (collection tree, item list, item pane with editable fields/creators/notes/attachments/tags, Recently Read, My Publications, Duplicate Items, Unfiled, Trash, tag selector), Groups, Notifications, Settings (profile, sign-in & security, language/time zone, API keys, connected apps, import/export, move from zotero.org), Administration (overview, storage, accounts, sign-in providers, retention — the login is the instance administrator)."
+  },
+  "tools": {
+    "node": "24.22.3",
+    "python": "3.14.10",
+    "uv": "0.13.8"
+  },
+  "prompt": "This is a checkout of eseifert/altero (https://github.com/eseifert/altero) at commit 53b7d9f7cee9. Self-hosted sync server for Zotero — keep libraries, groups, notes and attachments on your own infrastructure using the unmodified desktop client\n\nI want to see its user interface in a desktop browser, in the state a real, established user would see it. Please get the app running locally with its main interface working and realistic data in it.\n\n# Running it\n- Follow the repo's own setup docs and tooling. Take the simplest route that shows the real app: a static production build if the front end works without a backend, otherwise the app's own server (production or dev mode).\n- If it needs a database or other services, run them locally with an embedded or file-based option (SQLite, in-memory, JSON files, an embedded Postgres such as PGlite) or the app's demo/mock mode.\n- Don't redesign or restyle anything. Change only what's needed to build and run it.\n\n# Tools: use mise\nInstall every runtime and tool you need (node, the package manager, python, bun, ...) with mise, pinned to exact versions in a mise.toml at the repo root, so the setup can be reproduced. Match what the repo asks for (engines, .nvmrc, .tool-versions, packageManager). mise is already configured for this directory: `mise install` installs into ./.ui-capture/mise, and its shims come first on PATH, so `node`, `pnpm` and the rest resolve to the pinned versions. Don't use other copies of these tools or download runtimes by hand.\n\n# Secrets, API keys and external services: fake them\nThe app must not depend on anything outside this machine, and when it runs it has no network except localhost. Wherever it expects secrets, environment variables, API keys or third-party services (hosted auth or OAuth, payment providers, email, LLM or other AI APIs, maps, storage buckets, analytics, hosted databases):\n- Give the required variables placeholder values so the app starts.\n- Where it actually calls the service, make the call succeed locally with realistic responses: use the app's own mock, test or offline mode if it has one; otherwise point the client at a small local stub server that start.sh also starts, or swap in a stub at the integration boundary (the API client or service module). Keep stubs out of UI code. Responses should look like what the real service returns for a real user, e.g. an AI reply that actually answers, a payment history with real-looking amounts.\n- Calls the browser makes directly to outside services count too; point them at the local stub.\n- For sign-in through an outside provider, create a local account or use the app's dev sign-in so you can get past it.\nList every stub in app.json.\n\n# Data: like real use\nSeed it the way an established user's data would look after months of actual use: specific, plausible names and content for this kind of app; dates spread over time; a realistic mix of states (done, in progress, overdue, archived, ...); realistic volume (dozens to hundreds of records where the app revolves around records); short and long text; some messiness real data has. Start from the app's own demo or seed data if it has realistic data, and extend it if it's thin. Load data through the app's own paths (its API, import, seed scripts, or its database schema), never by hardcoding it into UI code. If the app needs an account, create one and attach the data to it. No lorem ipsum or \"Test 1\".\n\n# Environment\nThis shell is sandboxed: you can write only inside this directory (package-manager caches already point into ./.ui-capture/cache), and the network reaches only package registries, mise's download sources and GitHub (registry.npmjs.org, registry.yarnpkg.com, repo.yarnpkg.com, github.com, codeload.github.com, objects.githubusercontent.com, raw.githubusercontent.com, nodejs.org, mise.jdx.dev, mise-versions.jdx.dev, release-assets.githubusercontent.com, pypi.org, files.pythonhosted.org, binaries.prisma.sh, cdn.jsdelivr.net, unpkg.com). Docker isn't available. A process you start in the background can't be seen or stopped from a later command, so test servers on another port than 4404 (e.g. 5404) or in the foreground under `timeout`; anything still listening on 4404 is stopped before I check.\n\n# When you're done, leave this in ./.ui-capture/\n- app.json: {\"mode\": \"static\" or \"server\", \"entry\": \"/path where the main UI opens\", \"login\": null or {\"username\": \"...\", \"email\": \"...\", \"password\": \"...\"}, \"stubs\": [{\"service\": \"what was faked\", \"how\": \"how\"}], \"notes\": \"how you set it up, what data is loaded, and the main areas of the app\"}\n- static mode: the production build in ./.ui-capture/out, with index.html as its entry. It will be served from the root of a plain static file server; unknown paths fall back to index.html.\n- server mode: ./.ui-capture/start.sh, which starts everything the app needs (stubs included) in the foreground and serves the UI at http://localhost:4404/ (it gets PORT=4404). It runs with the same PATH and restrictions as your shell, plus no network at all except localhost, so everything must already be installed, built and seeded (or seeded by start.sh itself).\n- Put any scripts you write for seeding or stubbing in ./.ui-capture/ too; they're kept with the setup record.\n\n# Order of work\nYou have 90 minutes in total, and anything unfinished when time runs out is lost. So work in this order:\n1. Get the app building and running with its stubs, and write the contract above (app.json plus out/ or start.sh), even if it has only a little data so far.\n2. Then build out the data, re-running your seed and checking the app still loads after each substantial step, so that a working state with the data loaded so far is always in place.\nWrite large data sets with a short generator script rather than as one long literal file.\n\nI'll open it at 1440×900.",
+  "model": {
+    "model": "claude-opus-5-5",
+    "effort": "high"
+  },
+  "sandbox": true,
+  "startedAt": "2026-11-17T02:29:35.024Z",
+  "finishedAt": "2026-11-17T02:47:54.967Z",
+  "verification": {
+    "ok": true,
+    "problems": [],
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedRequests": [],
+    "textChars": 6469,
+    "visibleElements": 1440,
+    "title": "altero"
+  },
+  "repairs": 1,
+  "session": {
+    "rounds": 2,
+    "numTurns": 88,
+    "costUsd": 6.6351174,
+    "durationMs": 1094604,
+    "models": [
+      "claude-opus-5-5"
+    ],
+    "usage": {
+      "input_tokens": 160,
+      "cache_creation_input_tokens": 142950,
+      "cache_read_input_tokens": 6393633,
+      "output_tokens": 68115
+    },
+    "timedOut": false
+  },
+  "changes": {
+    "files": 1,
+    "insertions": 9,
+    "deletions": 0,
+    "patchBytes": 322,
+    "patch": "setup.patch"
+  }
+}

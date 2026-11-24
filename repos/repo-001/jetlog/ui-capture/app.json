@@ -1,0 +1,24 @@
+{
+  "mode": "server",
+  "entry": "/",
+  "login": {
+    "username": "dana",
+    "email": "",
+    "password": "skyline-2019"
+  },
+  "stubs": [
+    {
+      "service": "adsbdb (api.adsbdb.com) callsign -> route lookup, used by the browser on the New Flight page ('fetch' by flight number) and by the server's 'Fetch airlines from callsigns' job in Settings",
+      "how": ".ui-capture/adsbdb_stub.py, a stdlib HTTP server on localhost:4457 that start.sh launches. It returns adsbdb-shaped JSON for every callsign in routes.json (airport/airline details come from data/airports.db and data/airlines.db) and adsbdb's 404 {\"response\":\"unknown callsign\"} for anything else. IATA-style input like UA1520 also works. The base URL was made configurable with minimal edits: env ADSBDB_URL in server/routers/flights.py and build-time VITE_ADSBDB_URL in client/pages/New.tsx. Both default to the real URL."
+    },
+    {
+      "service": "Forward-auth reverse proxy (jetlog's AUTH_HEADER feature, normally Authelia/Authentik in front of jetlog)",
+      "how": ".ui-capture/local_auth_proxy.py is an ASGI wrapper around server.main:app that start.sh runs under uvicorn with AUTH_HEADER=Remote-User. Requests with no Authorization header get 'Remote-User: dana', so a fresh browser opening / goes straight into dana's signed-in UI and doesn't bounce to /login. Requests with a Bearer token from the normal /login form are untouched, so signing in as marco/marco-flies or priya/priya-ux-42 still works. Invalid tokens still get a 401."
+    },
+    {
+      "service": "SECRET_KEY / env config",
+      "how": "start.sh sets a placeholder SECRET_KEY, DATA_PATH=.ui-capture/data, TOKEN_DURATION=30 and ENABLE_EXTERNAL_APIS=true (pointed at the stub)"
+    }
+  ],
+  "notes": "Jetlog = FastAPI + SQLite back end serving a Vite/React build from ./dist. Tools are pinned in mise.toml (node 22.23.5, python 3.11.18). Python deps are pinned from Pipfile.lock into .ui-capture/requirements.txt and installed in .ui-capture/venv. The front end was built with `VITE_ADSBDB_URL=http://localhost:4457 npm run build`. start.sh starts the adsbdb stub on 4457 (or reuses one already listening there), then uvicorn on $PORT running local_auth_proxy:app, which wraps the unmodified jetlog app and uses its header auth to sign token-less requests in as dana. The login page and normal token login still work. Data: .ui-capture/seed.sh regenerates everything. gen_data.py deterministically writes flights.json and routes.json, then seed.py boots the app on a temp port and loads it through the app's own API: it renames the default admin to 'dana' (admin), creates users 'marco' (partner) and 'priya' (colleague), posts flights via /api/flights and /api/flights/many (shared trips), and runs the app's 'compute connections' job. Dana is a San Diego UX consultant with 223 flights from Jan 2019 to Nov 2026: frequent West Coast and client-office work trips (SFO, SEA, DEN, ORD, NYC, AUS...), a 2020 pandemic gap, Thanksgiving in Boston each year, Christmas in Austin, and trips abroad (Japan 2019, Portugal/Spain 2022, UK/Amsterdam 2023, Iceland/Copenhagen 2024, Oaxaca 2025, Seoul/Taipei 2025, Honolulu 2026). There's also a private Cessna hop to Catalina and an upcoming Dec 2026 Austin trip. The data is deliberately mixed: economy/economy+/first/business/private classes, seats and sides, tail numbers on some flights, short and long notes, some flights without times or airline. 40 airports, 11 countries. 301 flights in total across the 3 users. Main areas: Home (world map of routes plus summary stats), Flights (sortable table with flight detail/edit; /flights?id=N), Statistics (charts), New flight (manual entry plus fetch by flight number, served by the stub, e.g. ASA509, UAL1520, BAW272), Settings (import/export CSV/iCal, users, maintenance jobs)."
+}

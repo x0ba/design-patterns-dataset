@@ -1,0 +1,74 @@
+# Codebook proposal (new-entry) — review with: node scripts/proposals.ts show gen-002 requirements-checklist
+id: requirements-checklist
+kind: new-entry
+status: open
+batch: gen-002
+codebookVersion: 1.0.0
+name: Requirements / compliance checklist
+level: pattern
+parent: monitor
+definition: A list of rules or requirements that one record is checked against by the system. Each
+  item shows pass/fail/curable status, the rule, what was found and how to fix it, often with an
+  inline fix control. Unlike a task list, the person does not tick items off; items clear once the
+  underlying data satisfies the rule.
+relations:
+  neighbors:
+    - task-list
+    - banner
+    - status-tracker
+  uses:
+    - badge
+    - form
+    - card
+dimensions:
+  - name: Item content
+    family: content
+    question: What does each requirement item show?
+    subdimensions:
+      - id: itemContent
+        name: Item content
+        select: many
+        values:
+          - id: status-only
+            name: Status only
+          - id: rule-text
+            name: Rule text
+          - id: finding
+            name: Finding
+          - id: resolution-steps
+            name: Resolution steps
+          - id: inline-fix-control
+            name: Inline fix control
+      - id: severityLevels
+        name: Severity levels
+        select: one
+        values:
+          - id: pass-fail
+            name: Pass / fail
+          - id: graded
+            name: Graded (pass / fixable / blocking)
+rationale:
+  - rater: rater-3
+    site: candidate-filing-intake
+    text: "task-list assumes the person checks items off; banner covers one condition, not a set. This
+      page's 'Statutory checks' (4 of 7 met) lists rule items with Met / Curable by deadline / Would
+      disqualify status, the rule text, the finding, a 'To resolve' instruction and an embedded fix
+      form. Similar patterns: compliance checks in KYC/admin consoles, CI status checks on pull
+      requests, SEO audit lists."
+sources:
+  - batch: gen-002
+    site: candidate-filing-intake
+    url: http://candidate-filing-intake.localhost:4318/
+    note: proposed by rater-3
+evidence:
+  - site: candidate-filing-intake
+    rater: rater-3
+    bbox:
+      x: 920
+      y: 610
+      width: 500
+      height: 1501
+    quote: Statutory checks 4 of 7 met
+    note: rule items with Met / Curable / Would disqualify status and inline fixes
+createdAt: 2026-11-18T03:04:20.333Z
+updatedAt: 2026-11-18T03:04:20.333Z

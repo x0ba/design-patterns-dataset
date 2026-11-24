@@ -1,0 +1,352 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "karakeep--bookmark-reader",
+    "url": "http://localhost:4400/dashboard/bookmarks",
+    "finalUrl": "http://localhost:4400/dashboard/preview/g5akyxgt6uzrz3w32q67tous",
+    "status": 200,
+    "title": "Karakeep",
+    "capturedAt": "2026-11-18T02:00:50.068Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 900
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "productivity",
+    "domainNote": "self-hosted bookmark manager / read-it-later (Karakeep) – 404 page inside app shell",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/karakeep/explore.json",
+      "repo": {
+        "name": "karakeep-app/karakeep",
+        "url": "https://github.com/karakeep-app/karakeep",
+        "commit": "bcc4b90a2ae89f4b96ec23ce395ee9d3d1df6a72",
+        "license": "AGPL-3.0"
+      },
+      "view": {
+        "slug": "bookmark-reader",
+        "name": "Bookmark reader view",
+        "description": "Bookmark detail page with reader view of the article including a highlight, and a side panel with AI summary, tags, lists, note, highlights and attachments."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Logo, search input with Keyword search-mode dropdown, avatar button",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 64
+      },
+      "patterns": [
+        "app-shell",
+        "text-field",
+        "menu"
+      ]
+    },
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Primary nav (Home, Search, Tags, Highlights, Archive), LISTS tree with emoji icons, counts and expandable nested list, version footer link",
+      "bbox": {
+        "x": 0,
+        "y": 64,
+        "width": 288,
+        "height": 836
+      },
+      "patterns": [
+        "app-shell",
+        "tree-view",
+        "badge",
+        "menu"
+      ]
+    },
+    {
+      "id": "main",
+      "role": "content",
+      "label": "Inset rounded panel with centered 'Page not found' icon, heading, explanation and Go back / Go home buttons",
+      "bbox": {
+        "x": 288,
+        "y": 64,
+        "width": 1144,
+        "height": 828
+      },
+      "patterns": [
+        "empty-state"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 64,
+            "width": 288,
+            "height": 836
+          },
+          "region": "sidebar",
+          "note": "Persistent left sidebar with fixed destinations and user lists",
+          "quote": "Home"
+        },
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 64
+          },
+          "region": "header",
+          "note": "Top bar with logo, search and account avatar"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations",
+          "user-pinned-items",
+          "live-counts"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "tree-view",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 16,
+            "y": 361,
+            "width": 256,
+            "height": 384
+          },
+          "region": "sidebar",
+          "note": "Lists with emoji icons and counts; Platform Team has disclosure chevron that expands nested 'Incident Postmortems' child (verified live); count swaps to ⋯ on hover",
+          "quote": "Platform Team"
+        }
+      ],
+      "dims": {
+        "content": [
+          "label",
+          "type-icon",
+          "count-badge",
+          "hover-actions"
+        ],
+        "expandBy": [
+          "disclosure-triangle"
+        ],
+        "selection": "single-node",
+        "source": "containment",
+        "density": "compact"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 240,
+            "y": 425,
+            "width": 32,
+            "height": 32
+          },
+          "region": "sidebar",
+          "note": "Plain numeric item count beside each list",
+          "quote": "10"
+        },
+        {
+          "bbox": {
+            "x": 238,
+            "y": 457,
+            "width": 34,
+            "height": 32
+          },
+          "region": "sidebar",
+          "quote": "30"
+        }
+      ],
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 288,
+            "y": 12,
+            "width": 1088,
+            "height": 40
+          },
+          "region": "header",
+          "note": "Filled gray search input with search icon and placeholder",
+          "quote": "Search titles, text, URLs, and tags…"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "placeholder",
+          "prefix-or-suffix"
+        ],
+        "style": "filled"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1263,
+            "y": 18,
+            "width": 107,
+            "height": 28
+          },
+          "region": "header",
+          "note": "Search mode button opens a dropdown (verified live) with Keyword/Hybrid/Semantic options, each with icon, description, radio dot and 'Experimental' labels",
+          "quote": "Keyword"
+        },
+        {
+          "bbox": {
+            "x": 240,
+            "y": 585,
+            "width": 32,
+            "height": 32
+          },
+          "region": "sidebar",
+          "note": "'More options' button on each list (⋯ on hover)"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click",
+        "structure": "flat",
+        "item": [
+          "label",
+          "icon",
+          "description",
+          "checkmark-state"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    },
+    {
+      "id": "empty-state",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 636,
+            "y": 130,
+            "width": 448,
+            "height": 320
+          },
+          "region": "main",
+          "note": "404 not found state with icon, heading, explanation and navigation buttons",
+          "quote": "Page not found"
+        }
+      ],
+      "dims": {
+        "cause": "no-access-or-error",
+        "content": [
+          "illustration",
+          "explanation"
+        ],
+        "starters": "none",
+        "recovery": "none"
+      }
+    }
+  ],
+  "structure": {
+    "layout": "app shell: top bar with logo, full-width search and avatar; left sidebar with fixed destinations and nested user lists; rounded inset main panel showing a centered 404 empty state",
+    "regions": [
+      "header",
+      "sidebar",
+      "main"
+    ],
+    "density": "sparse"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#f1f5f9",
+      "#020817",
+      "#4c5b70",
+      "#0f172a",
+      "#f8fafc",
+      "#e2e8f0",
+      "#000000"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "surface": "#f1f5f9",
+      "text": "#020817",
+      "muted": "#4c5b70",
+      "primary": "#0f172a",
+      "border": "#e2e8f0",
+      "onPrimary": "#f8fafc"
+    },
+    "typography": "Inter throughout: logo SVG wordmark; 24px/600 heading; 14px/400 nav and list labels; 12px/500 search-mode button and counts; uppercase tracked 12px 'LISTS' label",
+    "typeScale": "Restrained: one 24px semibold H1, 16px body explanation, 14px UI text, 12px meta; low weight contrast (400-600)",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "generous",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "clean",
+      "minimal",
+      "calm",
+      "utilitarian"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T02:01:47.262Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 7,
+    "usage": {
+      "input_tokens": 14,
+      "cache_creation_input_tokens": 21249,
+      "cache_read_input_tokens": 182961,
+      "output_tokens": 3171
+    }
+  },
+  "notes": "shadcn/ui slate styling. Main content sits in an inset slate-100 panel with 12px radius and 1px border, a nested lighter card inside. List items use colorful emoji as icons, the only color on the page. Counts become ⋯ 'More options' on hover. Primary button is near-black navy full width; secondary is white outlined. The requested bookmarks URL redirected to a preview route returning a 404 inside the shell."
+}

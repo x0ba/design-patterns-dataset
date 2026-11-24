@@ -1,0 +1,94 @@
+{
+  "batch": "repo-001",
+  "slug": "hevy2garmin",
+  "ok": true,
+  "repo": {
+    "name": "drkostas/hevy2garmin",
+    "url": "https://github.com/drkostas/hevy2garmin",
+    "commit": "f5e86ae0c409c5817bdac6179c7d03eacc3459cb",
+    "branch": "main",
+    "license": "MIT"
+  },
+  "domain": "health",
+  "port": 4451,
+  "checkoutRoot": "~/.cache/design-patterns-dataset/repos",
+  "mode": "server",
+  "entry": "/dashboard",
+  "app": {
+    "mode": "server",
+    "entry": "/dashboard",
+    "login": {
+      "username": null,
+      "email": null,
+      "password": "liftheavy2026"
+    },
+    "stubs": [
+      {
+        "service": "Postgres (Neon in production)",
+        "how": "In-memory PGlite served over the Postgres wire protocol by @electric-sql/pglite-socket (.ui-capture/pg/pg-server.mjs). Tables come from the app's own web/lib/schema.ts statements; seeded on every start from .ui-capture/data.mjs. The app connects with ?max=1 in DATABASE_URL (a postgres.js URL option) so it uses one pipelined connection; the PGlite socket multiplexer mixes up unnamed prepared statements across parallel connections."
+      },
+      {
+        "service": "Hevy public API (api.hevyapp.com/v1)",
+        "how": "Local HTTP stub .ui-capture/hevy-stub.mjs on 127.0.0.1:54330. The app's HevyClient reads HEVY_API_KEY_URL, which start.sh points at the stub. It serves /workouts, /workouts/count, /workouts/{id} (GET/PUT), /workouts/events, /routines, /routines/{id}, /routine_folders and /user/info in Hevy's v1 shapes, from the same generator as the DB seed so IDs line up. Lists come back as a single page."
+      },
+      {
+        "service": "Garmin Connect OAuth tokens",
+        "how": "platform_credentials row 'garmin_tokens' with placeholder DI token values, so the dashboard shows Garmin as connected. Garmin API calls happen only on user actions (Sync now, Resync, pull profile) and fail offline; no page load depends on them."
+      },
+      {
+        "service": "GitHub (auto-sync via Actions, update-check banner)",
+        "how": "Placeholder PAT stored in platform_credentials 'github'; GITHUB_REPO set to a placeholder fork. H2G_UPDATE_CHECK=off disables the GitHub update banner request."
+      },
+      {
+        "service": "Dashboard auth secrets",
+        "how": "H2G_PASSWORD, HEVY2GARMIN_SECRET and CRON_SECRET set to local placeholder values in start.sh."
+      }
+    ],
+    "notes": "The Next.js 16 dashboard in web/ (the app's current UI), built with `next build` and run with `next start` in normal (non-demo) mode, so it reads real DB rows and calls the (stubbed) Hevy API. Node 22.23.5 pinned in mise.toml; PGlite deps installed in .ui-capture/pg. Sign in at /login with the password above; / redirects to /dashboard. Data (regenerated relative to the current date on each start by .ui-capture/data.mjs): a lifter on hevy2garmin for ~4 months with ~10 months of Hevy history (187 workouts: push/pull/legs rotation, deload weeks, hotel-gym trips, Saturday conditioning, gaps for travel and illness, occasional freeform titles and notes). Ledger: 185 synced_workouts (about 170 uploaded or merged into watch activities, 9 marked as synced, 6 skipped, a few resynced, plus an install-day backfill batch), 1 pending upload in needs_review with an overlap error, 1 workout from this morning waiting to sync (a candidate in To sync), 2 workouts edited in Hevy after syncing (Edited in Hevy badge), 56 per-minute HR traces (expand HR on a workout row), 93 sync_log runs (cron, manual and webhook triggers, incl. failed runs), 8 custom exercise mappings and 6 unmapped custom exercises, 9 Hevy routines in folders with 7 synced to Garmin and upcoming calendar schedules, and profile, timing, merge and auto-sync settings. Main areas: /dashboard (connections, stats, sync controls, auto-sync, pipeline, recent workouts, sync log), /workouts (To sync candidates, all workouts with HR charts and Resolve/Resync/Unsync actions), /routines, /mappings, /history, /settings, /setup. Garmin write actions (Sync now, Resync, routine push) need Garmin Connect and fail offline."
+  },
+  "tools": {
+    "node": "22.23.5"
+  },
+  "prompt": "This is a checkout of drkostas/hevy2garmin (https://github.com/drkostas/hevy2garmin) at commit f5e86ae0c409. Sync Hevy gym workouts to Garmin Connect with exercise names, sets, reps, weights, HR overlay, and calorie estimation\n\nI want to see its user interface in a desktop browser, in the state a real, established user would see it. Please get the app running locally with its main interface working and realistic data in it.\n\n# Running it\n- Follow the repo's own setup docs and tooling. Take the simplest route that shows the real app: a static production build if the front end works without a backend, otherwise the app's own server (production or dev mode).\n- If it needs a database or other services, run them locally with an embedded or file-based option (SQLite, in-memory, JSON files, an embedded Postgres such as PGlite) or the app's demo/mock mode.\n- Don't redesign or restyle anything. Change only what's needed to build and run it.\n\n# Tools: use mise\nInstall every runtime and tool you need (node, the package manager, python, bun, ...) with mise, pinned to exact versions in a mise.toml at the repo root, so the setup can be reproduced. Match what the repo asks for (engines, .nvmrc, .tool-versions, packageManager). mise is already configured for this directory: `mise install` installs into ./.ui-capture/mise, and its shims come first on PATH, so `node`, `pnpm` and the rest resolve to the pinned versions. Don't use other copies of these tools or download runtimes by hand.\n\n# Secrets, API keys and external services: fake them\nThe app must not depend on anything outside this machine, and when it runs it has no network except localhost. Wherever it expects secrets, environment variables, API keys or third-party services (hosted auth or OAuth, payment providers, email, LLM or other AI APIs, maps, storage buckets, analytics, hosted databases):\n- Give the required variables placeholder values so the app starts.\n- Where it actually calls the service, make the call succeed locally with realistic responses: use the app's own mock, test or offline mode if it has one; otherwise point the client at a small local stub server that start.sh also starts, or swap in a stub at the integration boundary (the API client or service module). Keep stubs out of UI code. Responses should look like what the real service returns for a real user, e.g. an AI reply that actually answers, a payment history with real-looking amounts.\n- Calls the browser makes directly to outside services count too; point them at the local stub.\n- For sign-in through an outside provider, create a local account or use the app's dev sign-in so you can get past it.\nList every stub in app.json.\n\n# Data: like real use\nSeed it the way an established user's data would look after months of actual use: specific, plausible names and content for this kind of app; dates spread over time; a realistic mix of states (done, in progress, overdue, archived, ...); realistic volume (dozens to hundreds of records where the app revolves around records); short and long text; some messiness real data has. Start from the app's own demo or seed data if it has realistic data, and extend it if it's thin. Load data through the app's own paths (its API, import, seed scripts, or its database schema), never by hardcoding it into UI code. If the app needs an account, create one and attach the data to it. No lorem ipsum or \"Test 1\".\n\n# Environment\nThis shell is sandboxed: you can write only inside this directory (package-manager caches already point into ./.ui-capture/cache), and the network reaches only package registries, mise's download sources and GitHub (registry.npmjs.org, registry.yarnpkg.com, repo.yarnpkg.com, github.com, codeload.github.com, objects.githubusercontent.com, raw.githubusercontent.com, nodejs.org, mise.jdx.dev, mise-versions.jdx.dev, release-assets.githubusercontent.com, pypi.org, files.pythonhosted.org, binaries.prisma.sh, cdn.jsdelivr.net, unpkg.com). Docker isn't available. A process you start in the background can't be seen or stopped from a later command, so test servers on another port than 4451 (e.g. 5451) or in the foreground under `timeout`; anything still listening on 4451 is stopped before I check.\n\n# When you're done, leave this in ./.ui-capture/\n- app.json: {\"mode\": \"static\" or \"server\", \"entry\": \"/path where the main UI opens\", \"login\": null or {\"username\": \"...\", \"email\": \"...\", \"password\": \"...\"}, \"stubs\": [{\"service\": \"what was faked\", \"how\": \"how\"}], \"notes\": \"how you set it up, what data is loaded, and the main areas of the app\"}\n- static mode: the production build in ./.ui-capture/out, with index.html as its entry. It will be served from the root of a plain static file server; unknown paths fall back to index.html.\n- server mode: ./.ui-capture/start.sh, which starts everything the app needs (stubs included) in the foreground and serves the UI at http://localhost:4451/ (it gets PORT=4451). It runs with the same PATH and restrictions as your shell, plus no network at all except localhost, so everything must already be installed, built and seeded (or seeded by start.sh itself).\n- Put any scripts you write for seeding or stubbing in ./.ui-capture/ too; they're kept with the setup record.\n\n# Order of work\nYou have 90 minutes in total, and anything unfinished when time runs out is lost. So work in this order:\n1. Get the app building and running with its stubs, and write the contract above (app.json plus out/ or start.sh), even if it has only a little data so far.\n2. Then build out the data, re-running your seed and checking the app still loads after each substantial step, so that a working state with the data loaded so far is always in place.\nWrite large data sets with a short generator script rather than as one long literal file.\n\nI'll open it at 1440×900.",
+  "model": {
+    "model": "claude-opus-5-5",
+    "effort": "high"
+  },
+  "sandbox": true,
+  "startedAt": "2026-11-17T06:47:26.176Z",
+  "finishedAt": "2026-11-17T07:00:15.800Z",
+  "verification": {
+    "ok": true,
+    "problems": [],
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedRequests": [],
+    "textChars": 50,
+    "visibleElements": 7,
+    "title": "hevy2garmin"
+  },
+  "repairs": 0,
+  "session": {
+    "rounds": 1,
+    "numTurns": 75,
+    "costUsd": 3.1888834,
+    "durationMs": 765366,
+    "models": [
+      "claude-opus-5-5"
+    ],
+    "usage": {
+      "input_tokens": 142,
+      "cache_creation_input_tokens": 140916,
+      "cache_read_input_tokens": 6063037,
+      "output_tokens": 42419
+    },
+    "timedOut": false
+  },
+  "changes": {
+    "files": 1,
+    "insertions": 2,
+    "deletions": 0,
+    "patchBytes": 152,
+    "patch": "setup.patch"
+  }
+}

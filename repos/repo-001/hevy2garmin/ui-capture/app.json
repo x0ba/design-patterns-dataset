@@ -1,0 +1,32 @@
+{
+  "mode": "server",
+  "entry": "/dashboard",
+  "login": {
+    "username": null,
+    "email": null,
+    "password": "liftheavy2026"
+  },
+  "stubs": [
+    {
+      "service": "Postgres (Neon in production)",
+      "how": "In-memory PGlite served over the Postgres wire protocol by @electric-sql/pglite-socket (.ui-capture/pg/pg-server.mjs). Tables come from the app's own web/lib/schema.ts statements; seeded on every start from .ui-capture/data.mjs. The app connects with ?max=1 in DATABASE_URL (a postgres.js URL option) so it uses one pipelined connection; the PGlite socket multiplexer mixes up unnamed prepared statements across parallel connections."
+    },
+    {
+      "service": "Hevy public API (api.hevyapp.com/v1)",
+      "how": "Local HTTP stub .ui-capture/hevy-stub.mjs on 127.0.0.1:54330. The app's HevyClient reads HEVY_API_KEY_URL, which start.sh points at the stub. It serves /workouts, /workouts/count, /workouts/{id} (GET/PUT), /workouts/events, /routines, /routines/{id}, /routine_folders and /user/info in Hevy's v1 shapes, from the same generator as the DB seed so IDs line up. Lists come back as a single page."
+    },
+    {
+      "service": "Garmin Connect OAuth tokens",
+      "how": "platform_credentials row 'garmin_tokens' with placeholder DI token values, so the dashboard shows Garmin as connected. Garmin API calls happen only on user actions (Sync now, Resync, pull profile) and fail offline; no page load depends on them."
+    },
+    {
+      "service": "GitHub (auto-sync via Actions, update-check banner)",
+      "how": "Placeholder PAT stored in platform_credentials 'github'; GITHUB_REPO set to a placeholder fork. H2G_UPDATE_CHECK=off disables the GitHub update banner request."
+    },
+    {
+      "service": "Dashboard auth secrets",
+      "how": "H2G_PASSWORD, HEVY2GARMIN_SECRET and CRON_SECRET set to local placeholder values in start.sh."
+    }
+  ],
+  "notes": "The Next.js 16 dashboard in web/ (the app's current UI), built with `next build` and run with `next start` in normal (non-demo) mode, so it reads real DB rows and calls the (stubbed) Hevy API. Node 22.23.5 pinned in mise.toml; PGlite deps installed in .ui-capture/pg. Sign in at /login with the password above; / redirects to /dashboard. Data (regenerated relative to the current date on each start by .ui-capture/data.mjs): a lifter on hevy2garmin for ~4 months with ~10 months of Hevy history (187 workouts: push/pull/legs rotation, deload weeks, hotel-gym trips, Saturday conditioning, gaps for travel and illness, occasional freeform titles and notes). Ledger: 185 synced_workouts (about 170 uploaded or merged into watch activities, 9 marked as synced, 6 skipped, a few resynced, plus an install-day backfill batch), 1 pending upload in needs_review with an overlap error, 1 workout from this morning waiting to sync (a candidate in To sync), 2 workouts edited in Hevy after syncing (Edited in Hevy badge), 56 per-minute HR traces (expand HR on a workout row), 93 sync_log runs (cron, manual and webhook triggers, incl. failed runs), 8 custom exercise mappings and 6 unmapped custom exercises, 9 Hevy routines in folders with 7 synced to Garmin and upcoming calendar schedules, and profile, timing, merge and auto-sync settings. Main areas: /dashboard (connections, stats, sync controls, auto-sync, pipeline, recent workouts, sync log), /workouts (To sync candidates, all workouts with HR charts and Resolve/Resync/Unsync actions), /routines, /mappings, /history, /settings, /setup. Garmin write actions (Sync now, Resync, routine push) need Garmin Connect and fail offline."
+}

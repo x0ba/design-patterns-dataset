@@ -1,0 +1,504 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "fluent-reader--all-articles-cards",
+    "url": "http://localhost:4432/",
+    "finalUrl": "http://localhost:4432/",
+    "status": 200,
+    "title": "Fluent Reader",
+    "capturedAt": "2026-11-18T06:23:59.595Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 5400
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "news-publishing",
+    "domainNote": "Desktop RSS/feed reader app (Fluent Reader) — aggregated subscriptions",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/fluent-reader/explore.json",
+      "repo": {
+        "name": "yang991178/fluent-reader",
+        "url": "https://github.com/yang991178/fluent-reader",
+        "commit": "5912070309759eff37204a5046caba3c780fa4c0",
+        "license": "BSD-3-Clause"
+      },
+      "view": {
+        "slug": "all-articles-cards",
+        "name": "All articles (Cards)",
+        "description": "Main workspace: left navigation with groups and subscriptions with unread counts, and the article feed in Cards layout with thumbnails."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Hamburger, Search, All articles (93), Subscriptions header with filter icon, grouped subscription tree with favicons and unread counts",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 280,
+        "height": 5400
+      },
+      "patterns": [
+        "app-shell",
+        "tree-view",
+        "badge"
+      ]
+    },
+    {
+      "id": "title-bar",
+      "role": "header",
+      "label": "'All articles' title, icon toolbar (Refresh, Mark all as read, Notifications, View, Settings) and window controls",
+      "bbox": {
+        "x": 280,
+        "y": 0,
+        "width": 1160,
+        "height": 32
+      },
+      "patterns": [
+        "app-shell",
+        "view-switcher",
+        "menu",
+        "filter-controls"
+      ]
+    },
+    {
+      "id": "article-grid",
+      "role": "feed",
+      "label": "Chronological grid of article cards from all subscriptions, image cards and text-only cards, source favicon + relative time + unread dot",
+      "bbox": {
+        "x": 292,
+        "y": 44,
+        "width": 1136,
+        "height": 5356
+      },
+      "patterns": [
+        "feed",
+        "card",
+        "overview-detail",
+        "badge",
+        "modal-dialog"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 280,
+            "height": 900
+          },
+          "region": "sidebar",
+          "note": "Persistent sidebar navigation of feeds with unread counts, toggled by hamburger 'Close menu'",
+          "quote": "All articles"
+        },
+        {
+          "bbox": {
+            "x": 280,
+            "y": 0,
+            "width": 1160,
+            "height": 32
+          },
+          "region": "title-bar",
+          "note": "Top bar with view title and global actions"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations",
+          "live-counts"
+        ],
+        "visibility": "toggle-button",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "tree-view",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 150,
+            "width": 280,
+            "height": 400
+          },
+          "region": "sidebar",
+          "note": "role=tree; groups Tech News / Development expanded with chevrons, children indented with favicons and counts",
+          "quote": "Tech News"
+        }
+      ],
+      "dims": {
+        "content": [
+          "label",
+          "type-icon",
+          "count-badge"
+        ],
+        "expandBy": [
+          "disclosure-triangle"
+        ],
+        "selection": "single-node",
+        "source": "containment",
+        "density": "comfortable"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 248,
+            "y": 72,
+            "width": 28,
+            "height": 20
+          },
+          "region": "sidebar",
+          "quote": "93",
+          "note": "Unread count on All articles; group counts roll up child counts (Tech News 27)"
+        },
+        {
+          "bbox": {
+            "x": 510,
+            "y": 72,
+            "width": 42,
+            "height": 16
+          },
+          "region": "article-grid",
+          "quote": "58m",
+          "note": "Orange unread dot beside time on unread cards"
+        }
+      ],
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "rule": "everything-unread",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "feed",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 292,
+            "y": 44,
+            "width": 1136,
+            "height": 900
+          },
+          "region": "article-grid",
+          "note": "Unbounded reverse-chronological stream of articles from followed RSS sources (58m, 1h, 2h ... 32d)",
+          "quote": "Hacker News: Front Page"
+        }
+      ],
+      "dims": {
+        "density": "card-preview",
+        "heterogeneity": [
+          "uniform-posts"
+        ],
+        "ordering": "chronological",
+        "sources": [
+          "followed-accounts"
+        ],
+        "nesting": [
+          "flat"
+        ]
+      },
+      "novel": [
+        {
+          "subdimension": "arrangement",
+          "description": "Fixed-size equal-height cards in a uniform 4-column grid (not masonry)",
+          "proposedValueId": "uniform-grid"
+        }
+      ]
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 874,
+            "y": 62,
+            "width": 256,
+            "height": 264
+          },
+          "region": "article-grid",
+          "quote": "COP31 talks run into overtime as nations clash over finance",
+          "note": "Image card: 144px top image, source/time row and bold title over blurred tinted image backdrop"
+        },
+        {
+          "bbox": {
+            "x": 306,
+            "y": 62,
+            "width": 256,
+            "height": 264
+          },
+          "region": "article-grid",
+          "quote": "Show HN: I built a SQLite extension for vector search in 400 lines of C",
+          "note": "Text-only variant: source, title, snippet on white"
+        }
+      ],
+      "dims": {
+        "media": "top-image",
+        "actions": "none",
+        "shape": "vertical",
+        "style": "elevated",
+        "target": "whole-card"
+      }
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 306,
+            "y": 62,
+            "width": 256,
+            "height": 264
+          },
+          "region": "article-grid",
+          "note": "Clicking a card (verified live) opens the full article in a large overlay with prev/next arrows"
+        }
+      ],
+      "dims": {
+        "attributePlacement": [
+          "in-both-views",
+          "in-detail-view-only"
+        ],
+        "abstraction": [
+          "style"
+        ],
+        "truncation": "ellipsis",
+        "relationship": "one-to-one",
+        "openIn": "pop-up",
+        "overviewType": [
+          "grid"
+        ],
+        "detailMultiplicity": "one-at-a-time",
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "whole-item"
+      }
+    },
+    {
+      "id": "modal-dialog",
+      "status": "uncertain",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 306,
+            "y": 62,
+            "width": 256,
+            "height": 264
+          },
+          "region": "article-grid",
+          "note": "Not in capture; live click opened a centered large article dialog over a dimmed backdrop with read/star/view/more actions and a minimize button"
+        }
+      ],
+      "dims": {
+        "form": "centered-large",
+        "openBy": [
+          "user-action"
+        ],
+        "modality": "blocking",
+        "purpose": "detail-view"
+      },
+      "rationale": "Only observed in live exploration, not in the captured state."
+    },
+    {
+      "id": "view-switcher",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1168,
+            "y": 0,
+            "width": 48,
+            "height": 32
+          },
+          "region": "title-bar",
+          "note": "'View' button opens menu: Card view / List view / Magazine view / Compact view (verified live)"
+        }
+      ],
+      "dims": {
+        "views": [
+          "grid",
+          "list",
+          "gallery"
+        ],
+        "form": "dropdown",
+        "persistence": "global-preference"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1168,
+            "y": 0,
+            "width": 48,
+            "height": 32
+          },
+          "region": "title-bar",
+          "note": "View button opens a sectioned dropdown (View / Filtering / Search) with icons and checkmarks — seen live"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click",
+        "structure": "sections",
+        "item": [
+          "label",
+          "icon",
+          "checkmark-state"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    },
+    {
+      "id": "filter-controls",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1168,
+            "y": 0,
+            "width": 48,
+            "height": 32
+          },
+          "region": "title-bar",
+          "note": "View menu Filtering section: All articles / Unread only / Starred only (live)"
+        },
+        {
+          "bbox": {
+            "x": 248,
+            "y": 116,
+            "width": 24,
+            "height": 24
+          },
+          "region": "sidebar",
+          "note": "Subscriptions filter icon button"
+        }
+      ],
+      "dims": {
+        "placement": "toolbar-popover",
+        "origin": "developer-defined"
+      }
+    },
+    {
+      "id": "reader",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 306,
+            "y": 62,
+            "width": 256,
+            "height": 264
+          }
+        }
+      ],
+      "dims": {},
+      "rationale": "Article view only appears in a dialog after clicking; not part of the captured state."
+    }
+  ],
+  "structure": {
+    "layout": "desktop app shell: left sidebar subscription tree (280px, grey) + thin title bar with icon toolbar and window controls + main pane with 4-column grid of article cards",
+    "regions": [
+      "sidebar",
+      "title-bar",
+      "article-grid"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#faf9f8",
+      "#ffffff",
+      "#edebe9",
+      "#161514",
+      "#424242",
+      "#707070",
+      "#0078d4",
+      "#f7a73b"
+    ],
+    "colorRoles": {
+      "background": "#faf9f8",
+      "surface": "#ffffff",
+      "sidebar": "#edebe9",
+      "text": "#161514",
+      "muted": "#707070",
+      "primary": "#0078d4",
+      "accent": "#f7a73b"
+    },
+    "typography": "Segoe UI throughout (Windows Fluent UI): 16px/600 card titles, 14px body snippets and sidebar items, 12px source/time meta and counts",
+    "typeScale": "Compact, low-contrast scale: 16px semibold titles, 14px regular snippets/nav, 12px metadata; hierarchy via weight rather than size",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "none",
+    "imagery": [
+      "illustration",
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "clean",
+      "utilitarian",
+      "native-desktop",
+      "calm"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T06:25:36.022Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 10,
+    "usage": {
+      "input_tokens": 20,
+      "cache_creation_input_tokens": 41929,
+      "cache_read_input_tokens": 359512,
+      "output_tokens": 6032
+    }
+  },
+  "notes": "Fluent Reader (Electron, Microsoft Fluent UI look). Captured in Card view: fixed 256x264 cards in 4 columns with 28px gutters; image cards place a 144px image on top and repeat the same image blurred/tinted behind the lower text area, giving a frosted gradient caption. Text cards show the RSS snippet. Each card header: 16px favicon square, source name, orange unread dot + relative time. Sidebar is grey #edebe9 with a blue left bar marking the selected 'All articles'. Title bar doubles as window chrome (minimize/maximize/close). Live copy was in Magazine view (persisted setting), confirming view switching. Feed arrangement is a uniform equal-size grid; proposed new value feed.arrangement=uniform-grid."
+}

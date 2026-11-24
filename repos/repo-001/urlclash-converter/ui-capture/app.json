@@ -1,0 +1,16 @@
+{
+  "mode": "static",
+  "entry": "/",
+  "login": null,
+  "stubs": [
+    {
+      "service": "Pyodide runtime + PyYAML/micropip wheels (cdn.jsdelivr.net) used by the optional PyYAML parser engine",
+      "how": "src/pyyaml.ts now reads indexURL from VITE_PYODIDE_INDEX_URL (defaults to the original jsDelivr URL). The build sets it to /pyodide/ and build.sh copies the runtime from node_modules/pyodide plus the micropip, packaging and pyyaml wheels (checked against pyodide-lock.json sha256, stored in .ui-capture/pyodide-wheels) into out/pyodide/. micropip installs PyYAML from the lockfile, so neither pypi-mirror.siiway.top nor PyPI is contacted."
+    },
+    {
+      "service": "Remote subscription URLs for the 'Load URL' buttons (the browser fetches them directly)",
+      "how": "Static subscription files under out/sub/: nebula-clash.yaml (airport proxies), selfhosted-clash.yaml, nebula-links.txt (plain share links) and nebula-base64.txt (base64 subscription, which the app auto-decodes). Enter e.g. http://localhost:4477/sub/nebula-base64.txt in the Load URL bar."
+    }
+  ],
+  "notes": "Pure client-side React + Fluent UI app (Clash/mihomo or sing-box config <-> proxy share links), with no backend, accounts or persistence. Built with bun 1.3.10 (pinned in mise.toml along with node 22.21.1) using .ui-capture/build.sh, which writes the Vite production build to .ui-capture/out. Data: .ui-capture/seed/generate.mjs makes a deterministic mihomo config for one long-term user: 12 self-hosted nodes (VLESS Reality tcp/grpc, Hysteria2, TUIC, AnyTLS, VMess/Trojan over a Cloudflare WS CDN, a home WireGuard tunnel, SS2022, a stale SSR, company HTTP/SOCKS5), 44 nodes from an airport subscription across 10 regions (CJK names with emoji flags, rate tags, traffic/expiry info nodes), plus DNS, 12 proxy groups and 21 rules, with comments. Because the app keeps nothing between visits, out/index.html includes seed/seed-loader.js, a capture-only script outside the app source. On load it pastes that config into the left 'Clash Config' textarea and clicks the app's own 'To Node Link' button, so the right Node Links column is filled by the real converter (55 links; the app has no Clash->link support for SSR, so it skips the stale SSR node). .ui-capture/verify/verify.tsx (bun + happy-dom) renders the real App, runs the seed loader and checks both columns. Add ?noseed to see the empty first-run state. Main areas: header (title, language/theme toggle), left column (config type Clash/sing-box, paste/copy, load file/URL, download, config editor, convert to links), right column (paste/copy, load file/URL, download, js-yaml/PyYAML engine switch, links editor, output format proxies:/payload:/no prefix, convert to Clash or sing-box), footer. UI language follows the browser (en or zh)."
+}

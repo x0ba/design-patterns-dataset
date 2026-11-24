@@ -1,0 +1,20 @@
+{
+  "mode": "server",
+  "entry": "/",
+  "login": null,
+  "stubs": [
+    {
+      "service": "OpenAI Chat Completions API (api.openai.com/v1/chat/completions)",
+      "how": "Local stub in .ui-capture/server.ts + openai-stub.ts, served on the same origin at /v1/chat/completions. Returns OpenAI-format chat.completion JSON with a short, topic-relevant reply (Spanish/French/interview/pronunciation/travel/code/cooking rules, generic fallback) after a ~1s delay. The seeded user settings put a placeholder sk-proj key in Settings > Chat and set the OpenAI host to location.origin. src/apis/openai.ts was minimally changed to accept a host with an explicit http(s):// scheme (it previously always prefixed https://)."
+    },
+    {
+      "service": "Vercel Web Analytics (@vercel/analytics, /_vercel/insights/*)",
+      "how": "server.ts returns an empty no-op script for /_vercel/insights/script.js and 204 for event POSTs."
+    },
+    {
+      "service": "Speech synthesis / recognition (Amazon Polly, Azure Speech)",
+      "how": "Not called: the seeded settings use the 'System' (browser built-in) speech services; Polly/Azure keys are left empty, as for a user who never configured them. Browser speech recognition (mic button) depends on the browser's own engine."
+    }
+  ],
+  "notes": "SpeechGPT is a client-only React/Vite app; all user data lives in the browser (localStorage 'globalState'/'sessionState' via Redux, and the Dexie IndexedDB 'chatDB' table 'chat'). Setup: mise.toml pins bun 1.2.18 (repo packageManager) and node 22.12.0; .ui-capture/build.sh runs `bun install` + `bun run build` (tsc && vite build), copies dist to .ui-capture/out, generates out/seed-data.json with seed/gen.mjs, and rewrites out/index.html so seed-loader.js runs first: on the first visit in a browser profile it writes the seed into the app's own localStorage keys and IndexedDB schema (Dexie v3 => IDB v30, '++id, sessionId'), then loads the real app bundle. start.sh runs server.ts (bun) which serves out/ with SPA fallback plus the stubs on $PORT (4443). Data: one established user's conversation history — 48 conversations / 257 messages from 2 Mar to 15 Nov 2026 (seed/conversations-early.mjs, conversations.mjs, conversations-extra.mjs; newest 'Last week in CDMX – plans' is the open conversation) — Spanish practice for a move to Mexico City, Japanese phrases for a Tokyo trip, mock interviews, presentation pronunciation drills, coding questions, recipes, emails, a wedding toast, etc.; voice-transcribed messages are lowercase/unpunctuated as real speech input is; some sessions starred (Favorites group), varied colour icons, a couple left as 'New Conversation'. Main areas: left sidebar of conversations (search, favourites, per-item menu for rename/icon/star/delete), central chat panel with markdown-rendered replies and per-message copy/delete/speak, input panel with mic/send, header buttons, Settings dialog (Chat / Synthesis / Recognition / Appearance / Language sections) and About dialog. Rebuild with .ui-capture/build.sh (re-runs the seed generator); bump the data and the seed version hash changes, so the loader re-seeds on next visit. .ui-capture/tools/ holds verification helpers only (fake-indexeddb + Dexie check of the seeded DB)."
+}

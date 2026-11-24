@@ -1,0 +1,28 @@
+{
+  "mode": "server",
+  "entry": "/",
+  "login": {
+    "username": "向阳乔木",
+    "email": "qiaomu@qmreader.local",
+    "password": "qiaomu-reader-2026"
+  },
+  "stubs": [
+    {
+      "service": "DeepSeek API (server-side AI: title translation, paragraph translation, Qiaomu-style rewrite, article chat incl. streaming, model list)",
+      "how": ".ui-capture/stubs/ai-stub.cjs is a local OpenAI-compatible server (127.0.0.1:4437) started by start.sh. The app hard-codes https://api.deepseek.com, so .ui-capture/stubs/offline-preload.cjs (loaded via NODE_OPTIONS=--require in the web process and forked workers) rewrites global fetch calls for that host to the stub. Replies are Chinese, use the seeded translations from seed/ai-lookup.json when the article is known. DEEPSEEK_API_KEY is a placeholder."
+    },
+    {
+      "service": "RSS/RSSHub/sitemap/Podscribe feed fetching (refresh, per-source refresh hints)",
+      "how": "offline-preload.cjs replaces fetcher.fetchSource with an offline replay of the entries already stored in SQLite, so manual refreshes and source-click refresh hints succeed without network. Scheduled startup/freshness/rewrite-catch-up sweeps are disabled via env (-1)."
+    },
+    {
+      "service": "Other outbound HTTP (favicon proxy, Jina reader, Podscribe transcripts, Umami analytics)",
+      "how": "offline-preload.cjs makes DNS resolution (dns.lookup and dns.promises.lookup) fail immediately with ENOTFOUND for every non-localhost host, and makes global fetch to non-localhost hosts fail fast. This matters: the favicon proxy and original-article fetch resolve DNS themselves and then connect via undici, and when DNS answers but connections are refused (EPERM), the unhandled TLS socket error crashed the server. With resolution failing first, every caller takes its normal fallback path: /favicons returns the app's 1x1 fallback, which the UI turns into letter icons, and the original-article fetch returns a handled 422. Umami is disabled (UMAMI_WEBSITE_ID empty). stubs/test-offline-dns-sim.cjs is a test-only helper that simulates 'DNS works, connections refused' to verify this; start.sh does not load it."
+    },
+    {
+      "service": "Admin account / sign-in",
+      "how": "Local email+password admin seeded from ADMIN_EMAIL/ADMIN_PASSWORD (app's own mechanism). AI OAuth (ChatGPT/Codex) left disabled."
+    }
+  ],
+  "notes": "Node 22.22.0 via mise (mise.toml). Dependencies: package-lock.json resolves to registry.npmmirror.com, so they were installed with `npm ci --replace-registry-host=always --registry=https://registry.npmjs.org/`. start.sh sources .ui-capture/env.sh (placeholder secrets, data dir .ui-capture/data), starts the AI stub, and runs `node server.js` on PORT (4436). It re-seeds .ui-capture/data on every start (`node .ui-capture/seed/seed.cjs`, ~1s) so the timeline is relative to the current time. RSS_APP_DIR points the isolated fetch children (.rss-reliability) at this checkout; FETCH_SOURCE_CONCURRENCY=1 avoids cache-lock contention during the offline replay. The seed goes through the app's own modules (fetcher.normalizeItem/finalizeFetchedSource, store.* API, fetcher.submitLink clipper path) with a fake clock: ~45 sources populated (Simon Willison, Paul Graham, One Useful Thing, Interconnects, antirez, Import AI, 乔木博客, 科学空间, TLDR AI, Ben's Bites, Hugging Face Papers, Product Hunt, GitHub Trending, BestBlogs, X News, podcasts…), ~140 entries spread over months with Chinese title translations; featured long articles have full bilingual translations and Qiaomu rewrites; 8 users with comments, highlights (annotations) with replies, AI article chats, helpful votes, likes, view counts, follows, notifications (some unread), 6 reader-submitted links + 3 pending moderation requests; the Gwern source is in a 'stale' fetch-error state. Log in as the admin (向阳乔木) to see read/unread, starred, history, notifications and the admin moderation tools. Main areas: left sidebar (views: 最新/热门/未读/收藏/历史/资产/贡献榜 + sources by category), centre article list, reader pane (原文/中文翻译/乔木改写 tabs, comments, highlights), right Article Agent chat; /assets, /contributors, /me, /admin pages."
+}

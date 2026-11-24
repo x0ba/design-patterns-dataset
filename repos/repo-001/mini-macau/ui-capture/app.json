@@ -1,0 +1,40 @@
+{
+  "mode": "server",
+  "entry": "/",
+  "login": null,
+  "stubs": [
+    {
+      "service": "CARTO basemap styles (basemaps.cartocdn.com Positron / Dark Matter) incl. vector tiles",
+      "how": "Built bundle's style URLs rewritten (rewrite-urls.mjs) to /_stub/basemap/{positron,dark-matter}.json served by stub-server.mjs. The styles are local Positron/Dark-Matter look-alikes built by build-basemap.mjs from the repo's own OSM-derived data: land = union of OSM parish boundaries (public/data/parishes.json) over Natural Earth 10m land for Zhuhai, plus an approximate hand-traced outline for the reclaimed Hengqin island; roads = OSM road network carried in public/data/water-distribution.json; park tint = buffered IAM walking trails; a few bilingual place/water labels."
+    },
+    {
+      "service": "CARTO / MapLibre glyph PBFs (fonts for map labels)",
+      "how": "/_stub/glyphs/{fontstack}/{range}.pbf serves Open Sans Regular/Semibold/Bold/Italic glyph ranges downloaded from openmaptiles/fonts; Montserrat/Noto stacks fall back to the nearest Open Sans weight. CJK is drawn by MapLibre's local ideograph font."
+    },
+    {
+      "service": "OpenFreeMap building tiles (tiles.openfreemap.org/planet) for 3D buildings",
+      "how": "/_stub/openfreemap/planet returns a valid TileJSON whose tiles are empty, so the 3D-buildings layer loads without errors but draws no generic buildings (the app's own school/housing/facility footprints still render)."
+    },
+    {
+      "service": "DSAT live car-park vacancy API (dsat.apigateway.data.gov.mo/car_park_maintance)",
+      "how": "/_stub/dsat/car_park_maintance returns XML in DSAT's exact format (same as src/__fixtures__/car-park-maintance.xml) for all 95 car parks in public/data/car-parks.json, with vacancy that follows the Macau time of day and changes every 30 s; a few parks report maintenance, heavy-vehicle bays have blank counts."
+    },
+    {
+      "service": "LRT state API (/api/lrt/state, a Cloudflare Pages Function backed by a private timetable repo)",
+      "how": "stub-server.mjs runs the repo's own server/lrt-api.ts + server/lrt-window.ts (bundled to lrt-bundle/lrt.mjs). The private trips-*.json timetable is replaced by gen-lrt-trips.mjs output: Taipa, Seac Pai Van and Hengqin lines, 06:30 to 23:15 Mon–Thu / 23:59 Fri and weekends, 4–12 min headways with commuter peaks, run times from real track distances (~2,500 trips in total)."
+    },
+    {
+      "service": "Google Fonts (Orbitron, JetBrains Mono, Noto Sans HK)",
+      "how": "index.html link rewritten to /_stub/fonts/google.css, built from @fontsource packages installed in .ui-capture/stub-deps."
+    },
+    {
+      "service": "Google Analytics gtag.js",
+      "how": "Script URL rewritten to /_stub/gtag/js, which returns an empty no-op script."
+    },
+    {
+      "service": "DSEG7 clock font (cdn.jsdelivr.net) and OSM raster tiles (no-WebGL2 fallback only)",
+      "how": "Not stubbed. The DSEG URL also 404s in production, so the app's CSS falls back to JetBrains Mono, the same as live. The raster tiles are only used when the browser lacks WebGL2."
+    }
+  ],
+  "notes": "Mini Map Macau is a static Vite/React + MapLibre app. Its data ships as JSON in public/data and is refreshed by the repo's own sync jobs: real MFM flights for 2026-11-17 onward, TurboJET/CotaiJet ferry schedules, 91 bus routes with stops, DSAT road works, schools, public housing, parishes, toilets, religion sites, trails, car parks, waste, water, power grid, Grand Prix circuit and historical map plates. The only data not in the repo is the private LRT timetable; gen-lrt-trips.mjs generates one. Setup: mise.toml pins node 26.12.1 (the CI version). .ui-capture/build.sh runs npm ci, npm run build, copies dist to .ui-capture/out, rewrites third-party URLs to /_stub/*, builds the basemap GeoJSON, generates the LRT trips and bundles the LRT server code. start.sh runs stub-server.mjs, which serves out/ with SPA fallback, /api/lrt/*, and the stubs on $PORT. Main UI at /: a 3D map of Macau with simulated LRT trains, buses, MFM aircraft and ferries moving on the real-time clock. It has a sidebar/layer panel (TRANSPORT: bus route groups, LRT lines, air & sea; CITY: road works, schools, housing, parishes, toilets, religion, trails, car parks, waste; utilities: water, electricity; Grand Prix; historical maps), time controls (play/pause, 1–60x, date/time picker), click-to-follow vehicles with ETA/info panels, a light/dark theme, and EN/繁中/PT languages. No account or sign-in exists."
+}

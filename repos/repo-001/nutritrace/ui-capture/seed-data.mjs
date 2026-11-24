@@ -1,0 +1,116 @@
+// Catalog data for the seed: the foods, saved meals and recipes an
+// established NutriTrace user (Maya, mid-30s, recomp + running) has built up.
+
+// [name, brand, category, portion, unit, kcal, fat, satFat, carbs, fiber, sugars, protein, sodium_mg, barcode, notes]
+export const FOODS = [
+  ['Total 0% Greek Yogurt, Plain', 'Fage', 'Dairy', 170, 'g', 90, 0, 0, 5, 0, 5, 18, 65, '0689544001041', null],
+  ['Old Fashioned Rolled Oats', "Bob's Red Mill", 'Grains', 40, 'g', 150, 2.5, 0.5, 27, 4, 1, 5, 0, '0039978003027', null],
+  ['Blueberries, fresh', null, 'Fruit', 148, 'g', 84, 0.5, 0, 21, 3.6, 15, 1.1, 1, null, '1 cup'],
+  ['Banana, medium', null, 'Fruit', 118, 'g', 105, 0.4, 0.1, 27, 3.1, 14, 1.3, 1, null, null],
+  ['Gold Standard 100% Whey, Double Rich Chocolate', 'Optimum Nutrition', 'Supplements', 31, 'g', 120, 1.5, 1, 3, 1, 1, 24, 130, '0748927028669', '1 scoop'],
+  ['Large Eggs', 'Vital Farms', 'Eggs', 50, 'g', 70, 5, 1.5, 0, 0, 0, 6, 70, '0086600000299', 'Pasture-raised'],
+  ['Liquid Egg Whites', 'Kirkland Signature', 'Eggs', 46, 'g', 25, 0, 0, 0, 0, 0, 5, 75, null, '3 tbsp'],
+  ['Dave\'s Killer Bread, 21 Whole Grains', "Dave's Killer Bread", 'Bakery', 45, 'g', 110, 1.5, 0, 22, 5, 5, 5, 170, '0013764027022', '1 slice'],
+  ['Avocado, Hass', null, 'Produce', 50, 'g', 80, 7.5, 1, 4.3, 3.4, 0.3, 1, 4, null, '1/3 medium'],
+  ['Creamy Peanut Butter', 'Smucker\'s Natural', 'Nuts & Seeds', 32, 'g', 190, 16, 2.5, 7, 2, 2, 8, 110, '0051500255162', '2 tbsp'],
+  ['Unsweetened Almond Milk', 'Califia Farms', 'Dairy Alternatives', 240, 'ml', 35, 2.5, 0, 1, 1, 0, 1, 160, '0813636020102', null],
+  ['Cold Brew Coffee, black', 'Stumptown', 'Beverages', 300, 'ml', 5, 0, 0, 0, 0, 0, 0.5, 15, null, null],
+  ['Oat Milk Latte, Grande', 'Starbucks', 'Beverages', 473, 'ml', 190, 7, 0.5, 29, 2, 17, 2, 120, null, null],
+  ['Chicken Breast, boneless skinless (raw)', 'Foster Farms', 'Meat & Poultry', 112, 'g', 120, 1.5, 0.5, 0, 0, 0, 26, 60, null, '4 oz raw'],
+  ['Ground Turkey 93/7', 'Jennie-O', 'Meat & Poultry', 112, 'g', 170, 9, 2.5, 0, 0, 0, 21, 80, '0042222107500', null],
+  ['Atlantic Salmon Fillet', 'Kirkland Signature', 'Seafood', 113, 'g', 230, 15, 3, 0, 0, 0, 23, 75, null, null],
+  ['Shrimp, cooked', 'Trader Joe\'s', 'Seafood', 85, 'g', 80, 1, 0, 0, 0, 0, 18, 380, null, null],
+  ['Extra Firm Tofu', 'Wildwood', 'Plant Protein', 85, 'g', 90, 5, 0.5, 2, 1, 0, 10, 10, null, null],
+  ['Jasmine Rice, cooked', null, 'Grains', 158, 'g', 205, 0.4, 0.1, 45, 0.6, 0, 4.2, 2, null, '1 cup cooked'],
+  ['Quinoa, cooked', null, 'Grains', 185, 'g', 222, 3.6, 0.4, 39, 5.2, 1.6, 8.1, 13, null, null],
+  ['Sweet Potato, baked', null, 'Produce', 150, 'g', 135, 0.2, 0, 31, 5, 9.7, 3, 54, null, null],
+  ['Broccoli Florets', null, 'Produce', 91, 'g', 31, 0.3, 0, 6, 2.4, 1.5, 2.5, 30, null, null],
+  ['Baby Spinach', 'Organic Girl', 'Produce', 85, 'g', 20, 0, 0, 3, 2, 0, 2, 65, null, '3 cups'],
+  ['Spring Mix Salad', 'Taylor Farms', 'Produce', 85, 'g', 20, 0, 0, 3, 2, 1, 1, 45, null, null],
+  ['Cherry Tomatoes', null, 'Produce', 149, 'g', 27, 0.3, 0, 5.8, 1.8, 3.9, 1.3, 7, null, null],
+  ['Cucumber', null, 'Produce', 104, 'g', 16, 0.1, 0, 3.8, 0.5, 1.7, 0.7, 2, null, null],
+  ['Extra Virgin Olive Oil', 'California Olive Ranch', 'Oils & Fats', 14, 'g', 120, 14, 2, 0, 0, 0, 0, 0, '0857016001014', '1 tbsp'],
+  ['Feta Crumbles', 'Athenos', 'Dairy', 28, 'g', 70, 6, 4, 1, 0, 0, 4, 320, null, null],
+  ['Hummus, Classic', 'Sabra', 'Dips & Spreads', 28, 'g', 70, 5, 1, 4, 1, 0, 2, 130, '0040822011518', '2 tbsp'],
+  ['Mission Carb Balance Tortilla', 'Mission', 'Bakery', 43, 'g', 70, 3, 0.5, 19, 15, 0, 5, 410, '0073731071146', null],
+  ['Black Beans, canned (rinsed)', 'Goya', 'Legumes', 130, 'g', 110, 0.5, 0, 20, 7, 0, 7, 140, null, '1/2 cup'],
+  ['Shredded Mexican Cheese', 'Tillamook', 'Dairy', 28, 'g', 110, 9, 5, 1, 0, 0, 7, 180, null, null],
+  ['Medium Salsa', 'Frontera', 'Condiments', 32, 'g', 10, 0, 0, 2, 0, 1, 0, 230, null, null],
+  ['Pink Lady Apple', null, 'Fruit', 182, 'g', 95, 0.3, 0, 25, 4.4, 19, 0.5, 2, null, null],
+  ['Raw Almonds', 'Blue Diamond', 'Nuts & Seeds', 28, 'g', 170, 15, 1, 6, 3, 1, 6, 0, null, '~23 almonds'],
+  ['String Cheese, Low Moisture Part-Skim', 'Frigo', 'Dairy', 28, 'g', 80, 6, 3.5, 1, 0, 0, 7, 200, null, null],
+  ['Turkey Breast, Oven Roasted', 'Boar\'s Head', 'Deli', 56, 'g', 60, 1, 0, 1, 0, 1, 12, 360, null, null],
+  ['Protein Bar, Chocolate Chip Cookie Dough', 'Quest', 'Snacks', 60, 'g', 190, 9, 3, 21, 14, 1, 21, 230, '0888849000433', null],
+  ['RXBAR Chocolate Sea Salt', 'RXBAR', 'Snacks', 52, 'g', 210, 9, 2, 23, 5, 13, 12, 260, '0855939006067', null],
+  ['Dark Chocolate 85%', 'Lindt Excellence', 'Snacks', 30, 'g', 170, 15, 9, 10, 4, 4, 3, 5, null, '3 squares'],
+  ['Kettle Brand Sea Salt Chips', 'Kettle Brand', 'Snacks', 28, 'g', 150, 9, 1, 15, 1, 0, 2, 110, null, null],
+  ['Air-Popped Popcorn', 'SkinnyPop', 'Snacks', 28, 'g', 150, 10, 1, 15, 3, 0, 2, 75, null, null],
+  ['Pad Thai with Chicken', 'Thai Basil (takeout)', 'Restaurant', 1, 'serving', 820, 28, 5, 108, 4, 30, 36, 2100, null, 'Estimated from their menu'],
+  ['Chicken Burrito Bowl', 'Chipotle', 'Restaurant', 1, 'bowl', 655, 23, 8, 62, 15, 4, 52, 1820, null, 'Chicken, white rice, black beans, fajita veg, mild salsa, cheese, lettuce'],
+  ['Margherita Pizza, slice', 'Pizzeria Delfina', 'Restaurant', 1, 'slice', 290, 11, 5, 35, 2, 3, 12, 640, null, null],
+  ['Poke Bowl, Salmon', 'Pokeworks', 'Restaurant', 1, 'bowl', 610, 18, 3, 78, 6, 12, 33, 1450, null, null],
+  ['Spicy Tuna Roll', 'Sushirrito', 'Restaurant', 1, 'roll', 290, 11, 2, 38, 2, 7, 11, 560, null, '8 pieces'],
+  ['IPA, 12 oz', 'Lagunitas', 'Alcohol', 355, 'ml', 210, 0, 0, 19, 0, 0, 2, 15, null, null],
+  ['Red Wine, Pinot Noir', null, 'Alcohol', 150, 'ml', 125, 0, 0, 3.4, 0, 0.9, 0.1, 6, null, '5 oz glass'],
+  ['Sparkling Water, Lime', 'LaCroix', 'Beverages', 355, 'ml', 0, 0, 0, 0, 0, 0, 0, 0, '0073360614172', null],
+  ['Kombucha, Ginger', 'GT\'s Synergy', 'Beverages', 480, 'ml', 60, 0, 0, 14, 0, 12, 0, 20, null, null],
+  ['Cottage Cheese 2%', 'Good Culture', 'Dairy', 150, 'g', 140, 4, 2.5, 4, 0, 4, 19, 450, null, null],
+  ['Frozen Berry Medley', 'Wyman\'s', 'Fruit', 140, 'g', 70, 0.5, 0, 17, 4, 11, 1, 0, null, null],
+  ['Chia Seeds', 'Navitas', 'Nuts & Seeds', 15, 'g', 70, 4.5, 0.5, 6, 5, 0, 3, 0, null, '1 tbsp'],
+  ['Honey', 'Nature Nate\'s', 'Condiments', 21, 'g', 60, 0, 0, 17, 0, 17, 0, 0, null, '1 tbsp'],
+  ['Granola, Vanilla Almond', 'Purely Elizabeth', 'Grains', 30, 'g', 140, 6, 1.5, 19, 2, 7, 3, 70, null, null],
+  ['Sourdough Bread', 'Acme Bread', 'Bakery', 56, 'g', 150, 1, 0, 30, 1, 1, 5, 330, null, 'thick slice'],
+  ['Butter, Salted', 'Kerrygold', 'Oils & Fats', 14, 'g', 100, 11, 8, 0, 0, 0, 0, 90, null, null],
+  ['Whole Wheat Spaghetti', 'Barilla', 'Grains', 56, 'g', 180, 1.5, 0, 39, 7, 2, 7, 0, null, 'dry'],
+  ['Marinara Sauce', 'Rao\'s Homemade', 'Condiments', 125, 'g', 100, 7, 1, 7, 2, 4, 2, 470, '0747479000010', '1/2 cup'],
+  ['Parmigiano Reggiano', null, 'Dairy', 10, 'g', 39, 2.6, 1.6, 0.3, 0, 0, 3.6, 160, null, null],
+  ['Chicken Thighs, boneless (raw)', 'Mary\'s', 'Meat & Poultry', 112, 'g', 160, 9, 2.5, 0, 0, 0, 20, 85, null, null],
+  ['Lean Ground Beef 90/10', 'Kirkland Signature', 'Meat & Poultry', 112, 'g', 200, 11, 4.5, 0, 0, 0, 23, 75, null, null],
+  ['Red Lentils, dry', 'Bob\'s Red Mill', 'Legumes', 45, 'g', 160, 0.5, 0, 28, 5, 1, 11, 5, null, null],
+  ['Coconut Milk, light', 'Thai Kitchen', 'Canned Goods', 80, 'ml', 60, 6, 5, 1, 0, 0, 0, 20, null, null],
+  ['Yellow Onion', null, 'Produce', 110, 'g', 44, 0.1, 0, 10, 1.9, 4.7, 1.2, 4, null, null],
+  ['Bell Pepper, red', null, 'Produce', 119, 'g', 37, 0.4, 0, 7, 2.5, 5, 1.2, 5, null, null],
+  ['Low Sodium Soy Sauce', 'Kikkoman', 'Condiments', 15, 'ml', 10, 0, 0, 1, 0, 0, 1, 575, null, '1 tbsp'],
+  ['Sriracha', 'Huy Fong', 'Condiments', 5, 'g', 5, 0, 0, 1, 0, 1, 0, 100, null, '1 tsp'],
+  ['Trail Mix, Simply Nuts & Fruit', 'Trader Joe\'s', 'Snacks', 30, 'g', 150, 9, 1, 14, 2, 9, 4, 0, null, null],
+  ['Halo Top, Sea Salt Caramel', 'Halo Top', 'Desserts', 88, 'g', 100, 3, 1.5, 19, 5, 7, 5, 160, null, '2/3 cup'],
+  ['Chocolate Chip Cookie', 'Tartine (bakery)', 'Desserts', 1, 'cookie', 380, 19, 11, 50, 2, 30, 4, 260, null, 'the big one'],
+  ['Clif Bar, Crunchy Peanut Butter', 'Clif Bar', 'Snacks', 68, 'g', 260, 7, 1.5, 41, 4, 18, 11, 240, null, 'long run fuel'],
+  ['Maurten Gel 100', 'Maurten', 'Supplements', 40, 'g', 100, 0, 0, 25, 0, 0, 0, 0, null, null],
+  ['Electrolyte Mix, Lemon Lime', 'LMNT', 'Supplements', 6, 'g', 10, 0, 0, 2, 0, 0, 0, 1000, null, null],
+  ['Kimchi', 'Mother-in-Law\'s', 'Condiments', 30, 'g', 10, 0, 0, 2, 1, 1, 0, 290, null, null],
+  ['Edamame, shelled', 'Seapoint Farms', 'Plant Protein', 85, 'g', 110, 4, 0, 8, 4, 2, 11, 5, null, null],
+];
+
+const N = (kcal, fat, sat, carbs, fiber, sugars, protein, sodium) => ({
+  calories: kcal, fat, 'saturated-fat': sat, carbohydrates: carbs, fiber, sugars, proteins: protein, sodium,
+});
+
+export function foodNutrition(row) {
+  const [, , , , , kcal, fat, sat, carbs, fiber, sugars, protein, sodium] = row;
+  return N(kcal, fat, sat, carbs, fiber, sugars, protein, sodium);
+}
+
+// Saved meals: [name, notes, [[foodName, quantity], ...]]
+export const MEALS = [
+  ['Weekday Yogurt Bowl', 'My default breakfast. Berries can be frozen in winter.', [['Total 0% Greek Yogurt, Plain', 1], ['Blueberries, fresh', 0.5], ['Granola, Vanilla Almond', 1], ['Chia Seeds', 1]]],
+  ['Protein Oats', 'Cook oats in almond milk, stir in whey after cooking so it doesn\'t clump.', [['Old Fashioned Rolled Oats', 1], ['Unsweetened Almond Milk', 1], ['Gold Standard 100% Whey, Double Rich Chocolate', 1], ['Banana, medium', 0.5]]],
+  ['Eggs & Toast', null, [['Large Eggs', 2], ['Dave\'s Killer Bread, 21 Whole Grains', 1], ['Avocado, Hass', 1]]],
+  ['Post-Run Shake', 'Blend with ice', [['Gold Standard 100% Whey, Double Rich Chocolate', 1], ['Unsweetened Almond Milk', 1], ['Banana, medium', 1], ['Creamy Peanut Butter', 0.5]]],
+  ['Desk Lunch Salad', null, [['Spring Mix Salad', 1], ['Chicken Breast, boneless skinless (raw)', 1], ['Cherry Tomatoes', 0.5], ['Cucumber', 0.5], ['Feta Crumbles', 1], ['Extra Virgin Olive Oil', 0.5]]],
+  ['Turkey Wrap', null, [['Mission Carb Balance Tortilla', 1], ['Turkey Breast, Oven Roasted', 1.5], ['Hummus, Classic', 1], ['Baby Spinach', 0.5]]],
+  ['Afternoon Snack Plate', 'Cheese stick + apple + almonds', [['String Cheese, Low Moisture Part-Skim', 1], ['Pink Lady Apple', 1], ['Raw Almonds', 0.5]]],
+  ['Salmon, Rice & Broccoli', 'Sheet pan, 425°F for 14 min', [['Atlantic Salmon Fillet', 1], ['Jasmine Rice, cooked', 0.75], ['Broccoli Florets', 1.5]]],
+];
+
+// Recipes: [name, notes, servings, perServingPortion(g), [[foodName, quantity], ...]]
+export const RECIPES = [
+  ['Turkey Chili', 'Big Sunday batch, freezes well. Makes 6 bowls.\n\n1. Brown turkey with onion and peppers.\n2. Add beans, salsa, cumin, chili powder, smoked paprika.\n3. Simmer 45 min.', 6, 380, [['Ground Turkey 93/7', 4.5], ['Black Beans, canned (rinsed)', 6], ['Yellow Onion', 2], ['Bell Pepper, red', 2], ['Medium Salsa', 8]]],
+  ['Red Lentil Coconut Dal', 'From the NYT recipe, halved the coconut milk. Serve with rice.', 4, 300, [['Red Lentils, dry', 4], ['Coconut Milk, light', 2], ['Yellow Onion', 1], ['Baby Spinach', 1]]],
+  ['Chicken Stir-Fry', null, 3, 320, [['Chicken Thighs, boneless (raw)', 3], ['Broccoli Florets', 2], ['Bell Pepper, red', 2], ['Low Sodium Soy Sauce', 3], ['Sriracha', 2], ['Extra Virgin Olive Oil', 1]]],
+  ['Spaghetti Bolognese', 'Rao\'s does all the work. Weigh pasta dry.', 4, 360, [['Whole Wheat Spaghetti', 4], ['Lean Ground Beef 90/10', 4], ['Marinara Sauce', 4], ['Parmigiano Reggiano', 4]]],
+  ['Overnight Oats (meal prep)', 'Mason jars x4. Add berries in the morning.', 4, 260, [['Old Fashioned Rolled Oats', 4], ['Unsweetened Almond Milk', 4], ['Chia Seeds', 4], ['Honey', 2], ['Total 0% Greek Yogurt, Plain', 2]]],
+  ['Tofu Fried Rice', 'Day-old rice is the trick', 3, 340, [['Extra Firm Tofu', 4], ['Jasmine Rice, cooked', 3], ['Large Eggs', 2], ['Edamame, shelled', 1], ['Low Sodium Soy Sauce', 2], ['Kimchi', 2]]],
+  ['Shrimp Tacos', null, 2, 280, [['Shrimp, cooked', 2.5], ['Mission Carb Balance Tortilla', 4], ['Avocado, Hass', 2], ['Medium Salsa', 2]]],
+  ['Breakfast Egg Muffins', '12 muffins = 6 servings of 2. Reheat 45 sec.', 6, 150, [['Large Eggs', 8], ['Liquid Egg Whites', 4], ['Baby Spinach', 1], ['Bell Pepper, red', 1], ['Feta Crumbles', 2]]],
+];

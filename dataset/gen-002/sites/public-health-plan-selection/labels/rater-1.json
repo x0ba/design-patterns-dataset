@@ -1,0 +1,471 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "gen-002",
+  "site": {
+    "slug": "public-health-plan-selection",
+    "url": "http://public-health-plan-selection.localhost:4318/",
+    "finalUrl": "http://public-health-plan-selection.localhost:4318/",
+    "status": 200,
+    "title": "Choose your health plan · CoverWell State Enrollment",
+    "capturedAt": "2026-11-17T22:03:31.169Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1378
+    },
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "government-civic",
+    "domainNote": "State Medicaid managed-care plan enrollment / health plan selection",
+    "provenance": {
+      "source": "generated",
+      "generation": "generated/gen-002/public-health-plan-selection/generation.json",
+      "generator": {
+        "id": "sonnet",
+        "model": "claude-sonnet-5-5",
+        "effort": "high"
+      },
+      "brief": {
+        "domain": "health",
+        "archetype": "transact",
+        "context": "public-sector",
+        "product": "CoverWell State Enrollment"
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "utility-bar",
+      "role": "utility-bar",
+      "label": "Dark strip: 'Official state Medicaid enrollment portal' and help line phone number",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 34
+      },
+      "patterns": []
+    },
+    {
+      "id": "header",
+      "role": "header",
+      "label": "CoverWell State Enrollment logo and 'Signed in as Angela Reyes'",
+      "bbox": {
+        "x": 0,
+        "y": 34,
+        "width": 1440,
+        "height": 68
+      },
+      "patterns": []
+    },
+    {
+      "id": "page-intro",
+      "role": "page-intro",
+      "label": "3-step stepper, H1 'Choose your health plan', case facts strip (case number, members, start date, deadline), warning callout about auto-assignment",
+      "bbox": {
+        "x": 120,
+        "y": 118,
+        "width": 1200,
+        "height": 250
+      },
+      "patterns": [
+        "stepper",
+        "wizard",
+        "banner"
+      ]
+    },
+    {
+      "id": "comparison",
+      "role": "comparison-table",
+      "label": "'Is it covered?' table: 4 plans as columns with coverage-count pills and 'Choose this plan' radios; rows are the household's doctors, inhaler, pharmacy; member services row; legend",
+      "bbox": {
+        "x": 120,
+        "y": 383,
+        "width": 1200,
+        "height": 808
+      },
+      "patterns": [
+        "comparison-table",
+        "plan-picker",
+        "choice-control",
+        "badge"
+      ]
+    },
+    {
+      "id": "selection-bar",
+      "role": "sticky-action-bar",
+      "label": "Sticky bottom 'Your selection' bar: 'No plan chosen yet' + disabled 'Review and submit' button; updates to running summary after choosing",
+      "bbox": {
+        "x": 120,
+        "y": 820,
+        "width": 1200,
+        "height": 80
+      },
+      "patterns": [
+        "wizard"
+      ]
+    },
+    {
+      "id": "footer",
+      "role": "footer",
+      "label": "Footer: site name and privacy reassurance",
+      "bbox": {
+        "x": 0,
+        "y": 1329,
+        "width": 1440,
+        "height": 49
+      },
+      "patterns": []
+    }
+  ],
+  "patterns": [
+    {
+      "id": "plan-picker",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 384,
+            "y": 435,
+            "width": 935,
+            "height": 215
+          },
+          "quote": "Choose this plan",
+          "note": "Four Medicaid plans as columns, each with name, coverage summary pills and a choose control",
+          "region": "comparison"
+        },
+        {
+          "bbox": {
+            "x": 1100,
+            "y": 445,
+            "width": 198,
+            "height": 22
+          },
+          "quote": "Assigned if you don’t choose",
+          "note": "Default plan flagged",
+          "region": "comparison"
+        }
+      ],
+      "dims": {
+        "presentation": "comparison-table",
+        "disclosure": "full-matrix-below",
+        "recommendation": "personalized"
+      }
+    },
+    {
+      "id": "comparison-table",
+      "status": "present",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 121,
+            "y": 384,
+            "width": 1198,
+            "height": 763
+          },
+          "quote": "Is it covered? Your doctors, Mateo’s inhaler and your pharmacy, checked against each plan in your county.",
+          "note": "Plans as columns, household needs as rows, check/warning/x cells with red and amber tinted cells for problems",
+          "region": "comparison"
+        },
+        {
+          "bbox": {
+            "x": 121,
+            "y": 1150,
+            "width": 420,
+            "height": 38
+          },
+          "quote": "Covered, with a catch",
+          "note": "Legend for three-state icon encoding",
+          "region": "comparison"
+        }
+      ],
+      "dims": {
+        "criteria": "fixed-spec-rows",
+        "valueForm": [
+          "checkmarks",
+          "raw-values"
+        ],
+        "origin": "curated-by-the-vendor",
+        "orientation": "items-as-columns",
+        "emphasis": "highlight-differences",
+        "decision": [
+          "pick-a-winner"
+        ]
+      },
+      "novel": [
+        {
+          "subdimension": "criteria",
+          "description": "Rows are the person's own needs pulled from their case record (their doctors, medication, pharmacy) rather than vendor spec rows or user-built criteria.",
+          "proposedValueId": "personal-needs-from-record"
+        }
+      ]
+    },
+    {
+      "id": "stepper",
+      "status": "present",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 120,
+            "y": 122,
+            "width": 515,
+            "height": 28
+          },
+          "quote": "1 Choose a plan 2 Review and submit 3 Confirmation",
+          "note": "Horizontal numbered steps with connector lines; step 1 filled as current",
+          "region": "page-intro"
+        }
+      ],
+      "dims": {
+        "form": "horizontal",
+        "states": [
+          "current"
+        ],
+        "labels": "titles"
+      }
+    },
+    {
+      "id": "wizard",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 120,
+            "y": 122,
+            "width": 515,
+            "height": 28
+          },
+          "quote": "Choose a plan",
+          "note": "Step 1 of a 3-step enrollment flow shown full page",
+          "region": "page-intro"
+        },
+        {
+          "bbox": {
+            "x": 120,
+            "y": 820,
+            "width": 1200,
+            "height": 80
+          },
+          "quote": "No plan chosen yet",
+          "note": "Sticky bar shows the current choice and gates 'Review and submit'",
+          "region": "selection-bar"
+        }
+      ],
+      "dims": {
+        "sequence": "fixed-linear",
+        "progress": "stepper-with-titles",
+        "density": "one-thing-per-page",
+        "presentation": "full-page",
+        "review": "running-summary",
+        "assistance": "recommended-answers"
+      }
+    },
+    {
+      "id": "banner",
+      "status": "present",
+      "confidence": 0.88,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 120,
+            "y": 317,
+            "width": 1200,
+            "height": 50
+          },
+          "quote": "No choice by Dec 1, 2026? The state assigns TriCounty Health Partners,",
+          "note": "Amber warning callout with triangle icon above the comparison; no action or dismiss; persists after a choice",
+          "region": "page-intro"
+        }
+      ],
+      "dims": {
+        "scope": "page",
+        "severity": "warning",
+        "action": "none",
+        "placement": "top-of-content"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 398,
+            "y": 528,
+            "width": 123,
+            "height": 24
+          },
+          "quote": "1 not covered",
+          "note": "Count pills rolled up per plan column; also status pills 'Covers all 5 on your list', 'Inhaler needs approval' and person tags 'Mateo'/'Angela'",
+          "region": "comparison"
+        },
+        {
+          "bbox": {
+            "x": 632,
+            "y": 528,
+            "width": 188,
+            "height": 24
+          },
+          "quote": "Covers all 5 on your list",
+          "region": "comparison"
+        }
+      ],
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "aggregation": "rolled-up-to-parent"
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 398,
+            "y": 590,
+            "width": 908,
+            "height": 44
+          },
+          "quote": "Choose this plan",
+          "note": "Single radio group; each radio styled as an outlined button in a plan column header; selected state fills dark teal and highlights the column",
+          "region": "comparison"
+        }
+      ],
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "option-cards",
+        "option": [
+          "label-only"
+        ],
+        "timing": "on-submit",
+        "largeSets": "show-all"
+      }
+    },
+    {
+      "id": "data-table",
+      "status": "absent",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 121,
+            "y": 384,
+            "width": 1198,
+            "height": 763
+          },
+          "note": "Table is a side-by-side comparison, not a sortable/filterable item grid"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "stat-tile",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 120,
+            "y": 215,
+            "width": 1200,
+            "height": 89
+          },
+          "note": "Case facts strip is a description list of case info, not metric tiles"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "single-column government transaction page: utility strip, branded header, horizontal stepper, H1, case summary strip, warning callout, wide plan-vs-needs comparison table with radio choices in column headers, sticky bottom selection bar, slim footer",
+    "regions": [
+      "utility-bar",
+      "header",
+      "page-intro",
+      "comparison",
+      "selection-bar",
+      "footer"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#f4f2ec",
+      "#ffffff",
+      "#18222d",
+      "#4b5866",
+      "#0b5a73",
+      "#16303b",
+      "#fff1cf",
+      "#7d4a00",
+      "#1b6a3d",
+      "#a1252b",
+      "#fbe8e6",
+      "#d6d9dd",
+      "#ebe8e0"
+    ],
+    "colorRoles": {
+      "background": "#f4f2ec",
+      "surface": "#ffffff",
+      "text": "#18222d",
+      "muted": "#4b5866",
+      "primary": "#0b5a73",
+      "header-strip": "#16303b",
+      "warning-surface": "#fff1cf",
+      "warning-text": "#7d4a00",
+      "success": "#1b6a3d",
+      "danger": "#a1252b",
+      "danger-surface": "#fbe8e6",
+      "border": "#d6d9dd",
+      "footer": "#ebe8e0"
+    },
+    "typography": "System UI stack (-apple-system / SF) throughout: bold for headings, plan names, status words and buttons; regular for descriptions; small uppercase letter-spaced labels in the case facts strip",
+    "typeScale": "Restrained: H1 34px bold, plan names 19px bold, body 16-17px, secondary 14-15px, pills/labels 12-13px bold uppercase; hierarchy carried by weight and color more than size",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "filled",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "trustworthy",
+      "clear",
+      "calm",
+      "accessible",
+      "civic",
+      "plainspoken"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-17T22:04:51.708Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 7,
+    "usage": {
+      "input_tokens": 14,
+      "cache_creation_input_tokens": 24532,
+      "cache_read_input_tokens": 204589,
+      "output_tokens": 5878
+    }
+  },
+  "notes": "Accessible government-style plan chooser personalized to a household: every row is a specific need from the case file (named doctors tagged with the family member, a medication, the pharmacy). Three-state semantic encoding (green check / amber triangle / red x) with tinted cell backgrounds for problems plus a legend. Each column header summarizes 'N not covered' pills. The default auto-assigned plan is called out both in a warning callout and an amber 'Assigned if you don't choose' tag. Choosing a radio highlights the entire column in pale teal with a dark teal border and the sticky bottom 'Your selection' bar switches from 'No plan chosen yet' + disabled button to the plan name + one-line consequence + enabled 'Review and submit'. Deadline cell in the case strip is tinted amber with '15 days left'. No prices (Medicaid)."
+}

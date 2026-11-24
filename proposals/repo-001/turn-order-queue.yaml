@@ -1,0 +1,146 @@
+# Codebook proposal (new-entry) — review with: node scripts/proposals.ts show repo-001 turn-order-queue
+id: turn-order-queue
+kind: new-entry
+status: open
+batch: repo-001
+codebookVersion: 1.0.0
+name: Turn order queue
+level: component
+parent: monitor
+definition: A horizontal strip of portraits showing which actor acts now and who acts next. Round
+  markers separate the slots, and each slot carries a status label.
+dimensions:
+  - name: Slot content
+    family: content
+    question: What does each slot show?
+    subdimensions:
+      - id: slot-content
+        name: Slot content
+        select: many
+        values:
+          - id: portrait
+            name: Portrait
+          - id: status-label
+            name: Status label
+          - id: hp-fraction
+            name: HP fraction
+          - id: round-divider
+            name: Round divider
+  - name: Active emphasis
+    family: layout
+    question: How is the current actor shown?
+    subdimensions:
+      - id: active
+        name: Active emphasis
+        select: one
+        values:
+          - id: larger-first-slot
+            name: Larger first slot
+            example: Ancient Beast
+          - id: highlight-in-place
+            name: Highlight in place
+      - id: active-emphasis
+        name: Active emphasis
+        select: one
+        values:
+          - id: enlarged-first
+            name: Enlarged first slot
+            example: Ancient Beast
+          - id: highlight-in-place
+            name: Highlight in place
+            example: Baldur's Gate 3 initiative bar
+  - name: Round boundary
+    family: content
+    question: Are rounds marked?
+    subdimensions:
+      - id: round-marker
+        name: Round marker
+        select: one
+        values:
+          - id: divider-tile
+            name: Divider tile
+            example: Ancient Beast Round 2 tile
+          - id: none
+            name: None
+  - name: Per-actor caption
+    family: content
+    question: What is shown under each portrait?
+    subdimensions:
+      - id: caption
+        name: Caption
+        select: many
+        values:
+          - id: status-effect
+            name: Status effect
+          - id: health
+            name: Health
+          - id: none
+            name: None
+rationale:
+  - rater: rater-2
+    site: ancientbeast--battlefield
+    text: Status-tracker covers the stages of one process. Here the strip orders the agents who take
+      turns, which is a different thing.
+  - rater: rater-2
+    site: ancientbeast--music-player
+    text: Turn-based games (and some meeting/speaker tools) show an initiative queue; playlist-queue is
+      media-only and status-tracker tracks one process's stages, not an ordering of participants.
+  - rater: rater-1
+    site: ancientbeast--music-player
+    text: No codebook entry covers an ordered initiative/turn queue. status-tracker models a single
+      process's stages, not a sequence of actors; carousel and playlist-queue do not fit (not media,
+      not scrolling subset).
+  - rater: rater-3
+    site: ancientbeast--music-player
+    text: status-tracker covers the stages of one process, and playlist-queue covers media. Neither fits
+      an ordered list of agents taking turns, where the active one is enlarged and a round marker
+      separates rounds.
+sources:
+  - batch: repo-001
+    site: ancientbeast--battlefield
+    url: http://ancientbeast.localhost:4319/
+    note: proposed by rater-2
+  - batch: repo-001
+    site: ancientbeast--music-player
+    url: http://ancientbeast.localhost:4319/
+    note: proposed by rater-2, rater-1, rater-3
+evidence:
+  - site: ancientbeast--battlefield
+    rater: rater-2
+    bbox:
+      x: 0
+      y: 800
+      width: 820
+      height: 100
+    quote: Round 4
+    note: Active unit portrait followed by queued unit portraits with Sickened/Protected/HP labels
+  - site: ancientbeast--music-player
+    rater: rater-2
+    bbox:
+      x: 0
+      y: 800
+      width: 740
+      height: 100
+    note: Portrait queue with Protected/Sickened/Round 2/Queued labels
+    quote: Round 2
+  - site: ancientbeast--music-player
+    rater: rater-1
+    bbox:
+      x: 0
+      y: 800
+      width: 740
+      height: 100
+    quote: Protected Protected Sickened Round 2 Queued Queued Queued Queued
+    note: Portrait queue with active unit enlarged at left and Round 2 divider tile
+  - site: ancientbeast--music-player
+    rater: rater-3
+    bbox:
+      x: 0
+      y: 800
+      width: 740
+      height: 100
+    quote: Protected Protected Sickened Round 2 Queued
+    note: "Ancient Beast turn queue: the active unit portrait is enlarged, a 'Round 2' divider tile
+      follows, and the queued units come after it"
+createdAt: 2026-11-18T01:43:16.054Z
+updatedAt: 2026-11-18T02:22:02.590Z

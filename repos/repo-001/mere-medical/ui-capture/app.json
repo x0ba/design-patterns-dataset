@@ -1,0 +1,20 @@
+{
+  "mode": "static",
+  "entry": "/timeline",
+  "login": null,
+  "stubs": [
+    {
+      "service": "Patient-portal FHIR sync (Epic, Cerner, OnPatient, etc.) and OAuth sign-in to those portals",
+      "how": "Built with IS_DEMO=enabled, the app's own demo mode: sync jobs and adding new connections are disabled, and the 5 existing connections plus all clinical records come from /assets/demo.json, imported into an in-memory RxDB through the app's handleJSONDataImport on every page load. No portal or OAuth calls are made."
+    },
+    {
+      "service": "Mere API instance config (/api/v1/instance-config)",
+      "how": "No backend in static mode. The request falls back to index.html, the JSON parse fails, and AppConfigProvider handles that by keeping the cached instance_config document that ships in the demo dump (empty client IDs)."
+    },
+    {
+      "service": "Health-system search in the Add Connection modal (/api/v1/*/tenants)",
+      "how": "Not stubbed. Adding connections is disabled in demo mode, so this backend search is out of scope; if opened, the modal shows the app's own 'Unable to search for health systems' notice."
+    }
+  ],
+  "notes": "Mere Medical web PWA (apps/web), a production webpack build via nx with IS_DEMO=enabled. Rebuild with .ui-capture/build.sh (node 26.7.0 pinned in mise.toml per .nvmrc, npm ci from package-lock). The UI runs fully in the browser. Its records live in an in-memory RxDB that is seeded on every load from out/assets/demo.json, through the app's JSON-import path. There is no account or login; demo mode skips the onboarding tutorial and shows a 'Welcome to the Mere Medical demo!' toast on load. Data: the repo's own demo dump (patient John Smith, 260 records from 2001 to 2023 across 5 connections) extended by .ui-capture/seed/generate-demo.mjs with 399 more records covering Jul 2023 to Nov 2026, 659 clinical documents in all. It tells a realistic primary-care story: 14 PCP visits at Lowland Community Hospital (Epic) with vitals (BP, pulse, weight, BMI); A1c, BMP/CMP, lipid, CBC, TSH, vitamin D, urine microalbumin and PSA panels, with H/L flags and lab trends; diagnoses of prediabetes, then type 2 diabetes, hyperlipidemia and hypertension; a metformin dose history plus atorvastatin and lisinopril; an urgent-care visit for an ankle sprain with an X-ray at Oak Valley (Cerner); an ED visit for a ureteral stone with a CT report, labs and discharge meds at Highlands; diabetic eye exams and a dermatology cryotherapy at Hopedale; a sinusitis visit, a penicillin allergy, and flu/COVID/PCV20/HepB vaccines at Blessings Clinic. Active, resolved and completed states are mixed. Connections show a sync on 2026-11-15, and Hopedale's last sync errored. The latest A1c and lipid panel are pinned on Summary. The user's birthday was changed from the demo's 2012 to 1984 to fit an adult record. Main areas: /timeline (searchable, date-grouped record feed with expandable lab reports and trends), /summary (medications, conditions, immunizations, allergies, care plans, pinned labs), /connections (5 connected portals with sync status), /settings (user profile, theme, data export/import, developer and experimental AI settings)."
+}

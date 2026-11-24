@@ -1,0 +1,493 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "gen-002",
+  "site": {
+    "slug": "lunar-surface-explorer",
+    "url": "http://lunar-surface-explorer.localhost:4318/",
+    "finalUrl": "http://lunar-surface-explorer.localhost:4318/#p=f%3Ahaworth",
+    "status": 200,
+    "title": "Haworth · Lunaview",
+    "capturedAt": "2026-11-18T03:34:39.698Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1326
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "science-research",
+    "domainNote": "Consumer-friendly lunar surface explorer: 3D Moon map with place detail panel (crater Haworth, fictional 2026 lander finding)",
+    "provenance": {
+      "source": "generated",
+      "generation": "generated/gen-002/lunar-surface-explorer/generation.json",
+      "generator": {
+        "id": "sonnet",
+        "model": "claude-sonnet-5-5",
+        "effort": "high"
+      },
+      "brief": {
+        "domain": "science-research",
+        "archetype": "explore-space",
+        "context": "mass-consumer",
+        "product": "Lunaview"
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Top bar: moon logo + Lunaview wordmark, place search combobox with '/' shortcut hint, Saved places button with count badge",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 56
+      },
+      "patterns": [
+        "app-shell",
+        "text-field",
+        "autocomplete",
+        "badge"
+      ]
+    },
+    {
+      "id": "place-panel",
+      "role": "sidebar",
+      "label": "Left place-detail panel: type eyebrow, Share / Save actions, serif h1 Haworth with coordinates, About/Why it's dark/Compare tabs, stacked outlined cards (latest finding w/ ice proportion bar, landing distance diagram, key facts, link cards)",
+      "bbox": {
+        "x": 0,
+        "y": 56,
+        "width": 420,
+        "height": 1270
+      },
+      "patterns": [
+        "tabs",
+        "card",
+        "chart",
+        "overview-detail"
+      ]
+    },
+    {
+      "id": "moon-map",
+      "role": "map",
+      "label": "3D Moon map region (canvas with mission markers, layers button, mini locator, zoom/tilt controls, date & sunlight scrubber) covered in the capture by a loading overlay: moon sphere, 'Charting the Moon's surface…' and thin progress bar",
+      "bbox": {
+        "x": 420,
+        "y": 56,
+        "width": 1020,
+        "height": 1270
+      },
+      "patterns": [
+        "map-explorer",
+        "progress-indicator",
+        "slider"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 56
+          },
+          "quote": "Lunaview",
+          "note": "Persistent top bar with identity, global search and saved places; content area below split into panel + map",
+          "region": "header"
+        }
+      ],
+      "dims": {
+        "primary": "top-navigation-bar",
+        "secondary": "contextual-panel",
+        "items": [
+          "live-counts"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "map-explorer",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 420,
+            "y": 56,
+            "width": 1020,
+            "height": 1270
+          },
+          "note": "Region '3D Moon' with canvas, 30 mission marker buttons, Map layers, Zoom in/out, 3D tilt, Show whole Moon, Go to south pole; visually hidden under loading overlay in the capture",
+          "region": "moon-map"
+        },
+        {
+          "bbox": {
+            "x": 0,
+            "y": 56,
+            "width": 420,
+            "height": 1270
+          },
+          "quote": "Haworth",
+          "note": "Selected place detail shown in desktop side panel",
+          "region": "place-panel"
+        }
+      ],
+      "dims": {
+        "overlays": [
+          "poi-pins"
+        ],
+        "mapNav": [
+          "rotate-and-tilt",
+          "search-and-fly-to"
+        ],
+        "coupling": "detail-card-over-map",
+        "mapAdapt": [
+          "desktop-side-panel",
+          "dark-night-style"
+        ]
+      },
+      "rationale": "Map canvas never rendered (stuck loading in capture and live); controls and markers known only from DOM/ARIA."
+    },
+    {
+      "id": "progress-indicator",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 815,
+            "y": 622,
+            "width": 230,
+            "height": 140
+          },
+          "quote": "Charting the Moon’s surface…",
+          "note": "Moon sphere, status text and thin blue linear bar over the map region",
+          "region": "moon-map"
+        }
+      ],
+      "dims": {
+        "form": "linear-bar",
+        "coverage": "a-region",
+        "control": "no-control"
+      }
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 190,
+            "width": 419,
+            "height": 46
+          },
+          "quote": "About",
+          "note": "role=tablist About / Why it's dark / Compare with blue underline indicator; verified live that Compare switches panel content and URL",
+          "region": "place-panel"
+        }
+      ],
+      "dims": {
+        "placement": "top",
+        "label": [
+          "text"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      }
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 20,
+            "y": 252,
+            "width": 379,
+            "height": 362
+          },
+          "quote": "Water ice, right next to Haworth",
+          "note": "Highlighted finding card with blue border and gradient tint",
+          "region": "place-panel"
+        },
+        {
+          "bbox": {
+            "x": 20,
+            "y": 628,
+            "width": 379,
+            "height": 273
+          },
+          "quote": "How close did it land?",
+          "note": "Outlined card with one primary action 'Zoom to the landing spot'",
+          "region": "place-panel"
+        },
+        {
+          "bbox": {
+            "x": 20,
+            "y": 915,
+            "width": 379,
+            "height": 209
+          },
+          "quote": "About Haworth",
+          "note": "Key-facts card",
+          "region": "place-panel"
+        },
+        {
+          "bbox": {
+            "x": 20,
+            "y": 1138,
+            "width": 379,
+            "height": 127
+          },
+          "quote": "Why is it always dark?",
+          "note": "Horizontal link cards with icon tile and chevron; whole card is a button",
+          "region": "place-panel"
+        }
+      ],
+      "dims": {
+        "media": "none",
+        "actions": "one-primary-action",
+        "shape": "vertical",
+        "style": "outlined"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1384,
+            "y": 17,
+            "width": 26,
+            "height": 22
+          },
+          "quote": "2",
+          "note": "Blue count pill on Saved places button",
+          "region": "header"
+        }
+      ],
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 208,
+            "y": 9,
+            "width": 560,
+            "height": 38
+          },
+          "quote": "Search craters, seas, landing sites, missions…",
+          "note": "Outlined search field with leading icon, placeholder and '/' key hint",
+          "region": "header"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "placeholder"
+        ],
+        "style": "outlined"
+      }
+    },
+    {
+      "id": "autocomplete",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 208,
+            "y": 9,
+            "width": 560,
+            "height": 38
+          },
+          "note": "Search is role=combobox, implying a suggestion list; not opened in capture",
+          "region": "header"
+        }
+      ],
+      "dims": {
+        "presentation": "dropdown-list",
+        "types": [
+          "places-and-addresses"
+        ]
+      },
+      "rationale": "Suggestion list not visible; inferred from combobox role only."
+    },
+    {
+      "id": "chart",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 36,
+            "y": 456,
+            "width": 347,
+            "height": 50
+          },
+          "quote": "3–5% ice by weight",
+          "note": "Small proportion bar (img: 3 to 5 percent of the soil by weight is water ice) with labels at both ends",
+          "region": "place-panel"
+        }
+      ],
+      "dims": {
+        "markType": "bars",
+        "channels": [
+          "length"
+        ],
+        "faceting": "single-plot",
+        "authorship": "author-specified",
+        "annotation": [
+          "callout-labels"
+        ]
+      },
+      "rationale": "Single explanatory part-to-whole bar; borderline between chart and decorative infographic."
+    },
+    {
+      "id": "slider",
+      "status": "uncertain",
+      "confidence": 0.45,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 434,
+            "y": 1246,
+            "width": 992,
+            "height": 66
+          },
+          "quote": "−45 days 15:00 UTC +45 days",
+          "note": "'Move through time' range slider with play, prev/next day, date field, Today button in DOM; hidden beneath loading overlay in capture",
+          "region": "moon-map"
+        }
+      ],
+      "dims": {
+        "values": "single-value",
+        "labels": [
+          "minimum-and-maximum",
+          "current-value"
+        ]
+      },
+      "rationale": "Control exists in DOM/ARIA but is not visible in the screenshot due to the loading overlay."
+    },
+    {
+      "id": "overview-detail",
+      "status": "uncertain",
+      "confidence": 0.4,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 56,
+            "width": 1440,
+            "height": 1270
+          },
+          "note": "Map of places (overview) beside a detail panel for the selected crater",
+          "region": "place-panel"
+        }
+      ],
+      "dims": {
+        "openIn": "side-by-side",
+        "overviewType": [
+          "map"
+        ]
+      },
+      "rationale": "Overview (map) did not render; relationship inferred from structure; largely captured by map-explorer."
+    }
+  ],
+  "structure": {
+    "layout": "full-height app: top bar, fixed 420px left detail sidebar (own scroll) beside a full-bleed 3D map stage",
+    "regions": [
+      "header",
+      "place-panel",
+      "moon-map"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#080b11",
+      "#04060a",
+      "#0e121a",
+      "#141925",
+      "#eaedf4",
+      "#9aa3b6",
+      "#6f788c",
+      "#7cc7ff",
+      "#ffc86b"
+    ],
+    "colorRoles": {
+      "background": "#080b11",
+      "text": "#eaedf4",
+      "surface": "#0e121a",
+      "muted": "#9aa3b6",
+      "primary": "#7cc7ff",
+      "accent": "#ffc86b",
+      "border": "#141925"
+    },
+    "typography": "Fraunces Variable (serif) for the place title h1 (33px) and card headline h2; Inter Variable for all UI, body, labels, uppercase tracked eyebrows",
+    "typeScale": "Serif display h1 33px and h2 23px vs Inter body 15px, h3 16px semibold, small labels 11–13px uppercase letterspaced, tiny 9px chart labels",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "data-visualization",
+      "iconography",
+      "3d-renders"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "gradient",
+    "mood": [
+      "dark",
+      "calm",
+      "scientific",
+      "friendly",
+      "night-sky"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T03:36:17.973Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 8,
+    "usage": {
+      "input_tokens": 16,
+      "cache_creation_input_tokens": 35316,
+      "cache_read_input_tokens": 223516,
+      "output_tokens": 5965
+    }
+  },
+  "notes": "Space-themed dark UI: near-black blue backgrounds with a radial vignette on the map stage, ice-blue (#7cc7ff) primary for save button, links, tabs indicator and highlighted finding card; warm amber (#ffc86b) used sparingly for distance callouts and the play button. Plain-language science copy with metric+imperial units and everyday comparisons ('35-minute walk', '2–3 tablespoons'). The 3D Moon WebGL canvas never finished loading in the capture, so the right 70% shows only a loading moon sphere + progress bar; map controls, mission markers and a date/sunlight scrubber exist in the DOM only. URL hash encodes selected place, tab and comparison target."
+}

@@ -1,0 +1,361 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "karakeep--bookmark-reader",
+    "url": "http://localhost:4400/dashboard/bookmarks",
+    "finalUrl": "http://localhost:4400/dashboard/preview/g5akyxgt6uzrz3w32q67tous",
+    "status": 200,
+    "title": "Karakeep",
+    "capturedAt": "2026-11-18T02:00:50.068Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 900
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "productivity",
+    "domainNote": "self-hosted bookmark manager / read-it-later (Karakeep), 404 route inside the dashboard shell",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/karakeep/explore.json",
+      "repo": {
+        "name": "karakeep-app/karakeep",
+        "url": "https://github.com/karakeep-app/karakeep",
+        "commit": "bcc4b90a2ae89f4b96ec23ce395ee9d3d1df6a72",
+        "license": "AGPL-3.0"
+      },
+      "view": {
+        "slug": "bookmark-reader",
+        "name": "Bookmark reader view",
+        "description": "Bookmark detail page with reader view of the article including a highlight, and a side panel with AI summary, tags, lists, note, highlights and attachments."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Top bar: logo, search combobox with Keyword search-mode dropdown, avatar account menu trigger",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 64
+      },
+      "patterns": [
+        "app-shell",
+        "text-field",
+        "menu"
+      ]
+    },
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Primary nav (Home, Search, Tags, Highlights, Archive), LISTS tree with emoji icons and bookmark counts, version footer link",
+      "bbox": {
+        "x": 0,
+        "y": 64,
+        "width": 288,
+        "height": 836
+      },
+      "patterns": [
+        "app-shell",
+        "tree-view",
+        "badge"
+      ]
+    },
+    {
+      "id": "main",
+      "role": "content",
+      "label": "Rounded gray content panel with centered 'Page not found' empty state, icon, explanation, Go back / Go home buttons",
+      "bbox": {
+        "x": 288,
+        "y": 64,
+        "width": 1144,
+        "height": 828
+      },
+      "patterns": [
+        "empty-state"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 64,
+            "width": 288,
+            "height": 836
+          },
+          "region": "sidebar",
+          "quote": "Home Search Tags Highlights Archive",
+          "note": "left sidebar primary nav with user lists below"
+        },
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 64
+          },
+          "region": "header",
+          "note": "top bar with logo, global search and avatar"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations",
+          "user-pinned-items",
+          "live-counts"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "empty-state",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 636,
+            "y": 130,
+            "width": 448,
+            "height": 320
+          },
+          "region": "main",
+          "quote": "Page not found",
+          "note": "file-question icon, explanation, Go back primary and Go home secondary buttons"
+        }
+      ],
+      "dims": {
+        "cause": "no-access-or-error",
+        "content": [
+          "illustration",
+          "explanation"
+        ],
+        "starters": "none",
+        "recovery": "none"
+      }
+    },
+    {
+      "id": "tree-view",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 16,
+            "y": 361,
+            "width": 256,
+            "height": 384
+          },
+          "region": "sidebar",
+          "quote": "Platform Team",
+          "note": "Expand chevron on Platform Team reveals nested 'Incident Postmortems' child (verified live); hover replaces count with ··· more-options button"
+        }
+      ],
+      "dims": {
+        "content": [
+          "label",
+          "type-icon",
+          "count-badge",
+          "hover-actions"
+        ],
+        "expandBy": [
+          "disclosure-triangle"
+        ],
+        "selection": "single-node",
+        "source": "containment",
+        "density": "compact"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 240,
+            "y": 425,
+            "width": 32,
+            "height": 32
+          },
+          "region": "sidebar",
+          "quote": "10",
+          "note": "plain muted numeric bookmark count per list; doubles as More options trigger on hover"
+        }
+      ],
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1263,
+            "y": 18,
+            "width": 107,
+            "height": 28
+          },
+          "region": "header",
+          "quote": "Keyword",
+          "note": "Search mode dropdown: header + radio items Keyword/Hybrid/Semantic with icons, descriptions and 'Experimental' label (verified live)"
+        },
+        {
+          "bbox": {
+            "x": 1384,
+            "y": 12,
+            "width": 40,
+            "height": 40
+          },
+          "region": "header",
+          "quote": "A",
+          "note": "avatar opens sectioned account menu: Settings, Admin settings, Cleanups, Theme toggle, Apps, Documentation, Sign out"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click",
+        "structure": "sections",
+        "item": [
+          "label",
+          "icon",
+          "description",
+          "checkmark-state"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 288,
+            "y": 12,
+            "width": 1088,
+            "height": 40
+          },
+          "region": "header",
+          "quote": "Search titles, text, URLs, and tags…",
+          "note": "filled gray search input with leading search icon and placeholder"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "placeholder"
+        ],
+        "style": "filled",
+        "inputType": "plain"
+      }
+    },
+    {
+      "id": "autocomplete",
+      "status": "absent",
+      "confidence": 0.55,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 324,
+            "y": 12,
+            "width": 1040,
+            "height": 40
+          },
+          "region": "header",
+          "note": "input has role=combobox but no suggestion list visible in capture"
+        }
+      ],
+      "dims": {},
+      "rationale": "combobox role suggests suggestions may appear while typing, not verified"
+    }
+  ],
+  "structure": {
+    "layout": "app shell: fixed left sidebar (288px) + top search bar, main content in a rounded bordered gray panel; 404 empty state centered in an inner card",
+    "regions": [
+      "header",
+      "sidebar",
+      "main"
+    ],
+    "density": "sparse"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#f1f5f9",
+      "#020817",
+      "#4c5b70",
+      "#0f172a",
+      "#e2e8f0",
+      "#f8fafc",
+      "#000000"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "surface": "#f1f5f9",
+      "text": "#020817",
+      "muted": "#4c5b70",
+      "primary": "#0f172a",
+      "border": "#e2e8f0",
+      "onPrimary": "#f8fafc"
+    },
+    "typography": "Inter throughout: nav and list items 14px regular, headline 24px semibold, buttons 14px medium, section label 12px uppercase tracked, counts 12px",
+    "typeScale": "compact, low-contrast scale: 24px/600 h1, 16px body, 14px nav/buttons, 12px meta; hierarchy from weight and color (near-black vs slate gray) more than size",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "clean",
+      "minimal",
+      "utilitarian",
+      "calm"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T02:01:49.554Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 7,
+    "usage": {
+      "input_tokens": 14,
+      "cache_creation_input_tokens": 25240,
+      "cache_read_input_tokens": 192728,
+      "output_tokens": 3472
+    }
+  },
+  "notes": "shadcn/ui-style (slate palette, Inter, Lucide line icons). Content area is a rounded 12px bordered slate-50/100 panel inset from the white chrome, with the 404 inside a further faint inner card. List entries use emoji as icons; counts sit right-aligned in muted gray and swap for a ··· menu on hover. Full-width stacked buttons: dark navy 'Go back' primary and white outlined 'Go home'. Search mode dropdown offers Keyword/Hybrid/Semantic (AI) with 'Experimental' pills. Avatar is a black circle with a thick light ring."
+}

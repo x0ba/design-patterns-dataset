@@ -1,0 +1,87 @@
+{
+  "batch": "repo-001",
+  "slug": "jetlog",
+  "ok": true,
+  "repo": {
+    "name": "pbogre/jetlog",
+    "url": "https://github.com/pbogre/jetlog",
+    "commit": "4306c3e458c326a1407c496d666f3ded3da37fb5",
+    "branch": "main",
+    "license": "GPL-2.0"
+  },
+  "domain": "travel-hospitality",
+  "port": 4456,
+  "checkoutRoot": "~/.cache/design-patterns-dataset/repos",
+  "mode": "server",
+  "entry": "/",
+  "app": {
+    "mode": "server",
+    "entry": "/",
+    "login": {
+      "username": "dana",
+      "email": "",
+      "password": "skyline-2019"
+    },
+    "stubs": [
+      {
+        "service": "adsbdb (api.adsbdb.com) callsign -> route lookup, used by the browser on the New Flight page ('fetch' by flight number) and by the server's 'Fetch airlines from callsigns' job in Settings",
+        "how": ".ui-capture/adsbdb_stub.py, a stdlib HTTP server on localhost:4457 that start.sh launches. It returns adsbdb-shaped JSON for every callsign in routes.json (airport/airline details come from data/airports.db and data/airlines.db) and adsbdb's 404 {\"response\":\"unknown callsign\"} for anything else. IATA-style input like UA1520 also works. The base URL was made configurable with minimal edits: env ADSBDB_URL in server/routers/flights.py and build-time VITE_ADSBDB_URL in client/pages/New.tsx. Both default to the real URL."
+      },
+      {
+        "service": "Forward-auth reverse proxy (jetlog's AUTH_HEADER feature, normally Authelia/Authentik in front of jetlog)",
+        "how": ".ui-capture/local_auth_proxy.py is an ASGI wrapper around server.main:app that start.sh runs under uvicorn with AUTH_HEADER=Remote-User. Requests with no Authorization header get 'Remote-User: dana', so a fresh browser opening / goes straight into dana's signed-in UI and doesn't bounce to /login. Requests with a Bearer token from the normal /login form are untouched, so signing in as marco/marco-flies or priya/priya-ux-42 still works. Invalid tokens still get a 401."
+      },
+      {
+        "service": "SECRET_KEY / env config",
+        "how": "start.sh sets a placeholder SECRET_KEY, DATA_PATH=.ui-capture/data, TOKEN_DURATION=30 and ENABLE_EXTERNAL_APIS=true (pointed at the stub)"
+      }
+    ],
+    "notes": "Jetlog = FastAPI + SQLite back end serving a Vite/React build from ./dist. Tools are pinned in mise.toml (node 22.23.5, python 3.11.18). Python deps are pinned from Pipfile.lock into .ui-capture/requirements.txt and installed in .ui-capture/venv. The front end was built with `VITE_ADSBDB_URL=http://localhost:4457 npm run build`. start.sh starts the adsbdb stub on 4457 (or reuses one already listening there), then uvicorn on $PORT running local_auth_proxy:app, which wraps the unmodified jetlog app and uses its header auth to sign token-less requests in as dana. The login page and normal token login still work. Data: .ui-capture/seed.sh regenerates everything. gen_data.py deterministically writes flights.json and routes.json, then seed.py boots the app on a temp port and loads it through the app's own API: it renames the default admin to 'dana' (admin), creates users 'marco' (partner) and 'priya' (colleague), posts flights via /api/flights and /api/flights/many (shared trips), and runs the app's 'compute connections' job. Dana is a San Diego UX consultant with 223 flights from Jan 2019 to Nov 2026: frequent West Coast and client-office work trips (SFO, SEA, DEN, ORD, NYC, AUS...), a 2020 pandemic gap, Thanksgiving in Boston each year, Christmas in Austin, and trips abroad (Japan 2019, Portugal/Spain 2022, UK/Amsterdam 2023, Iceland/Copenhagen 2024, Oaxaca 2025, Seoul/Taipei 2025, Honolulu 2026). There's also a private Cessna hop to Catalina and an upcoming Dec 2026 Austin trip. The data is deliberately mixed: economy/economy+/first/business/private classes, seats and sides, tail numbers on some flights, short and long notes, some flights without times or airline. 40 airports, 11 countries. 301 flights in total across the 3 users. Main areas: Home (world map of routes plus summary stats), Flights (sortable table with flight detail/edit; /flights?id=N), Statistics (charts), New flight (manual entry plus fetch by flight number, served by the stub, e.g. ASA509, UAL1520, BAW272), Settings (import/export CSV/iCal, users, maintenance jobs)."
+  },
+  "tools": {
+    "node": "22.23.5",
+    "python": "3.11.18"
+  },
+  "prompt": "This is a checkout of pbogre/jetlog (https://github.com/pbogre/jetlog) at commit 4306c3e458c3. Personal flight tracker and viewer\n\nI want to see its user interface in a desktop browser, in the state a real, established user would see it. Please get the app running locally with its main interface working and realistic data in it.\n\n# Running it\n- Follow the repo's own setup docs and tooling. Take the simplest route that shows the real app: a static production build if the front end works without a backend, otherwise the app's own server (production or dev mode).\n- If it needs a database or other services, run them locally with an embedded or file-based option (SQLite, in-memory, JSON files, an embedded Postgres such as PGlite) or the app's demo/mock mode.\n- Don't redesign or restyle anything. Change only what's needed to build and run it.\n\n# Tools: use mise\nInstall every runtime and tool you need (node, the package manager, python, bun, ...) with mise, pinned to exact versions in a mise.toml at the repo root, so the setup can be reproduced. Match what the repo asks for (engines, .nvmrc, .tool-versions, packageManager). mise is already configured for this directory: `mise install` installs into ./.ui-capture/mise, and its shims come first on PATH, so `node`, `pnpm` and the rest resolve to the pinned versions. Don't use other copies of these tools or download runtimes by hand.\n\n# Secrets, API keys and external services: fake them\nThe app must not depend on anything outside this machine, and when it runs it has no network except localhost. Wherever it expects secrets, environment variables, API keys or third-party services (hosted auth or OAuth, payment providers, email, LLM or other AI APIs, maps, storage buckets, analytics, hosted databases):\n- Give the required variables placeholder values so the app starts.\n- Where it actually calls the service, make the call succeed locally with realistic responses: use the app's own mock, test or offline mode if it has one; otherwise point the client at a small local stub server that start.sh also starts, or swap in a stub at the integration boundary (the API client or service module). Keep stubs out of UI code. Responses should look like what the real service returns for a real user, e.g. an AI reply that actually answers, a payment history with real-looking amounts.\n- Calls the browser makes directly to outside services count too; point them at the local stub.\n- For sign-in through an outside provider, create a local account or use the app's dev sign-in so you can get past it.\nList every stub in app.json.\n\n# Data: like real use\nSeed it the way an established user's data would look after months of actual use: specific, plausible names and content for this kind of app; dates spread over time; a realistic mix of states (done, in progress, overdue, archived, ...); realistic volume (dozens to hundreds of records where the app revolves around records); short and long text; some messiness real data has. Start from the app's own demo or seed data if it has realistic data, and extend it if it's thin. Load data through the app's own paths (its API, import, seed scripts, or its database schema), never by hardcoding it into UI code. If the app needs an account, create one and attach the data to it. No lorem ipsum or \"Test 1\".\n\n# Environment\nThis shell is sandboxed: you can write only inside this directory (package-manager caches already point into ./.ui-capture/cache), and the network reaches only package registries, mise's download sources and GitHub (registry.npmjs.org, registry.yarnpkg.com, repo.yarnpkg.com, github.com, codeload.github.com, objects.githubusercontent.com, raw.githubusercontent.com, nodejs.org, mise.jdx.dev, mise-versions.jdx.dev, release-assets.githubusercontent.com, pypi.org, files.pythonhosted.org, binaries.prisma.sh, cdn.jsdelivr.net, unpkg.com). Docker isn't available. A process you start in the background can't be seen or stopped from a later command, so test servers on another port than 4456 (e.g. 5456) or in the foreground under `timeout`; anything still listening on 4456 is stopped before I check.\n\n# When you're done, leave this in ./.ui-capture/\n- app.json: {\"mode\": \"static\" or \"server\", \"entry\": \"/path where the main UI opens\", \"login\": null or {\"username\": \"...\", \"email\": \"...\", \"password\": \"...\"}, \"stubs\": [{\"service\": \"what was faked\", \"how\": \"how\"}], \"notes\": \"how you set it up, what data is loaded, and the main areas of the app\"}\n- static mode: the production build in ./.ui-capture/out, with index.html as its entry. It will be served from the root of a plain static file server; unknown paths fall back to index.html.\n- server mode: ./.ui-capture/start.sh, which starts everything the app needs (stubs included) in the foreground and serves the UI at http://localhost:4456/ (it gets PORT=4456). It runs with the same PATH and restrictions as your shell, plus no network at all except localhost, so everything must already be installed, built and seeded (or seeded by start.sh itself).\n- Put any scripts you write for seeding or stubbing in ./.ui-capture/ too; they're kept with the setup record.\n\n# Order of work\nYou have 90 minutes in total, and anything unfinished when time runs out is lost. So work in this order:\n1. Get the app building and running with its stubs, and write the contract above (app.json plus out/ or start.sh), even if it has only a little data so far.\n2. Then build out the data, re-running your seed and checking the app still loads after each substantial step, so that a working state with the data loaded so far is always in place.\nWrite large data sets with a short generator script rather than as one long literal file.\n\nI'll open it at 1440×900.",
+  "model": {
+    "model": "claude-opus-5-5",
+    "effort": "high"
+  },
+  "sandbox": true,
+  "startedAt": "2026-11-17T07:25:46.899Z",
+  "finishedAt": "2026-11-17T07:34:25.101Z",
+  "verification": {
+    "ok": true,
+    "problems": [],
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedRequests": [],
+    "textChars": 313,
+    "visibleElements": 405,
+    "title": "Jetlog"
+  },
+  "repairs": 1,
+  "session": {
+    "rounds": 2,
+    "numTurns": 59,
+    "costUsd": 3.8156266000000008,
+    "durationMs": 513438,
+    "models": [
+      "claude-opus-5-5"
+    ],
+    "usage": {
+      "input_tokens": 114,
+      "cache_creation_input_tokens": 84285,
+      "cache_read_input_tokens": 3150377,
+      "output_tokens": 41237
+    },
+    "timedOut": false
+  },
+  "changes": {
+    "files": 3,
+    "insertions": 6,
+    "deletions": 2,
+    "patchBytes": 1481,
+    "patch": "setup.patch"
+  }
+}

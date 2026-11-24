@@ -1,0 +1,428 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "leon--search-sessions",
+    "url": "http://localhost:4412/web-app/",
+    "finalUrl": "http://localhost:4412/web-app/",
+    "status": 200,
+    "title": "Leon",
+    "capturedAt": "2026-11-18T03:25:48.718Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 2420
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "ai-tools",
+    "domainNote": "Leon — open-source personal AI assistant web app (chat sessions)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/leon/explore.json",
+      "repo": {
+        "name": "leon-ai/leon",
+        "url": "https://github.com/leon-ai/leon",
+        "commit": "677a516850a7c077fb0611900e0efc76d505fad9",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "search-sessions",
+        "name": "Search sessions dialog",
+        "description": "Modal command-palette style dialog with a search field and a list of sessions with relative dates, over the dimmed new-session page."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Left sidebar: Leon logo, update 'New' button, sidebar toggle, New session / Search sessions / Inbox, Recents list with pinned project folders and dated sessions, Discord link, settings and version footer",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 265,
+        "height": 2420
+      },
+      "patterns": [
+        "app-shell",
+        "tree-view"
+      ]
+    },
+    {
+      "id": "main-composer",
+      "role": "main",
+      "label": "Empty new-session stage: faint brain logo, 'Attach workspace', centred composer with add files, model chooser, reasoning level and send; illustrated desk-at-night background",
+      "bbox": {
+        "x": 264,
+        "y": 0,
+        "width": 1176,
+        "height": 2420
+      },
+      "patterns": [
+        "prompt-input",
+        "ai-chat"
+      ]
+    },
+    {
+      "id": "search-dialog",
+      "role": "modal",
+      "label": "Search sessions modal: outlined search combobox, list of matching sessions with relative dates, Close footer",
+      "bbox": {
+        "x": 359,
+        "y": 112,
+        "width": 722,
+        "height": 493
+      },
+      "patterns": [
+        "modal-dialog",
+        "command-palette",
+        "autocomplete",
+        "text-field"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "modal-dialog",
+      "status": "present",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 359,
+            "y": 112,
+            "width": 722,
+            "height": 493
+          },
+          "quote": "Search sessions",
+          "note": "Centered dialog over dimmed/blurred page with Close button footer; Escape dismissed it live",
+          "region": "search-dialog"
+        }
+      ],
+      "dims": {
+        "form": "centered-large",
+        "openBy": [
+          "user-action",
+          "keyboard-shortcut"
+        ],
+        "dismissBy": [
+          "close-button",
+          "escape"
+        ],
+        "modality": "blocking",
+        "purpose": "selection-list"
+      }
+    },
+    {
+      "id": "command-palette",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 359,
+            "y": 112,
+            "width": 722,
+            "height": 493
+          },
+          "quote": "Search sessions...",
+          "note": "Ctrl K-summoned (hint shown on sidebar button) centered search overlay that jumps to sessions; filters fuzzily as you type",
+          "region": "search-dialog"
+        },
+        {
+          "bbox": {
+            "x": 8,
+            "y": 113,
+            "width": 248,
+            "height": 40
+          },
+          "quote": "Search sessions",
+          "note": "Visible trigger button showing Ctrl K shortcut on hover/focus",
+          "region": "sidebar"
+        }
+      ],
+      "dims": {
+        "types": [
+          "objects-and-files"
+        ],
+        "summon": [
+          "in-app-shortcut",
+          "visible-search-button"
+        ],
+        "arguments": "runs-immediately",
+        "ranking": "fuzzy-match",
+        "scope": "current-app",
+        "placement": "centered-overlay"
+      }
+    },
+    {
+      "id": "autocomplete",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 384,
+            "y": 129,
+            "width": 672,
+            "height": 400
+          },
+          "quote": "Cabinet layout for the kitchen",
+          "note": "role=combobox with listbox 'Matching sessions'; typing 'p' live filtered list and highlighted matched letters in blue",
+          "region": "search-dialog"
+        }
+      ],
+      "dims": {
+        "types": [
+          "records-or-entities"
+        ],
+        "presentation": "dropdown-list",
+        "accept": [
+          "click"
+        ],
+        "freedom": "must-choose"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 384,
+            "y": 129,
+            "width": 672,
+            "height": 56
+          },
+          "quote": "Search sessions...",
+          "note": "Outlined search input with blue focus border, search icon prefix and placeholder",
+          "region": "search-dialog"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "placeholder",
+          "prefix-or-suffix"
+        ],
+        "style": "outlined",
+        "assistance": [
+          "suggestions"
+        ],
+        "inputType": "plain"
+      }
+    },
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 265,
+            "height": 900
+          },
+          "quote": "New session",
+          "note": "Persistent left sidebar with fixed destinations, pinned folders and recents; 'Close sidebar' toggle",
+          "region": "sidebar"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations",
+          "user-pinned-items",
+          "recents"
+        ],
+        "visibility": "toggle-button",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "tree-view",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 243,
+            "width": 248,
+            "height": 120
+          },
+          "quote": "Kitchen renovation",
+          "note": "Project folders in Recents are 'Expand …' buttons; live click revealed nested sessions with pin/new/more hover actions",
+          "region": "sidebar"
+        }
+      ],
+      "dims": {
+        "content": [
+          "label",
+          "type-icon",
+          "hover-actions"
+        ],
+        "selection": "single-node",
+        "source": "containment",
+        "density": "comfortable"
+      }
+    },
+    {
+      "id": "prompt-input",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 466,
+            "y": 964,
+            "width": 772,
+            "height": 98
+          },
+          "quote": "Don’t be shy",
+          "note": "Centred composer with Add files, model chooser 'anthropic/claude-sonnet-5.5', reasoning 'High', send button; 'Attach workspace' above",
+          "region": "main-composer"
+        }
+      ],
+      "dims": {
+        "content": [
+          "plain-prompt",
+          "attached-images-or-docs"
+        ],
+        "layout": "centred-hero-box",
+        "submitBy": [
+          "click-send"
+        ]
+      }
+    },
+    {
+      "id": "ai-chat",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Product is a chat assistant with sessions and composer, but no thread/turns are visible in the capture (new empty session).",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 466,
+            "y": 1002,
+            "width": 772,
+            "height": 60
+          },
+          "quote": "Send a message to Leon",
+          "region": "main-composer"
+        }
+      ],
+      "dims": {
+        "invokeBy": [
+          "text-field-submit",
+          "attach-file-or-image"
+        ]
+      }
+    },
+    {
+      "id": "search-results",
+      "status": "absent",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 384,
+            "y": 201,
+            "width": 672,
+            "height": 330
+          },
+          "note": "Session list inside palette better coded as command-palette/autocomplete"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "badge",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 155,
+            "y": 24,
+            "width": 55,
+            "height": 24
+          },
+          "quote": "New",
+          "note": "'New update available!' is a standalone text button, not a badge on a host"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "app layout: fixed left sidebar navigation + main stage with centred AI composer; search-sessions modal open over blurred backdrop",
+    "regions": [
+      "sidebar",
+      "main-composer",
+      "search-dialog"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#000000",
+      "#1e1e1e",
+      "#f5f5f7",
+      "#888888",
+      "#1c75db"
+    ],
+    "colorRoles": {
+      "background": "#000000",
+      "surface": "#1e1e1e",
+      "text": "#f5f5f7",
+      "muted": "#888888",
+      "primary": "#1c75db",
+      "accent": "#1c75db"
+    },
+    "typography": "Source Sans Pro throughout — nav, list rows, inputs, buttons",
+    "typeScale": "Flat scale: 16px regular for most text, 14px/12px for timestamps and meta, 18px composer textarea; headings like 'Recents' only semibold 16px",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "illustration",
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "image",
+    "mood": [
+      "dark",
+      "calm",
+      "cozy",
+      "minimal",
+      "technical"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T03:27:30.349Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 10,
+    "usage": {
+      "input_tokens": 20,
+      "cache_creation_input_tokens": 36742,
+      "cache_read_input_tokens": 371742,
+      "output_tokens": 5125
+    }
+  },
+  "notes": "Pure-black dark UI. Modal backdrop blurs and dims the whole app. Main stage has a moody illustrated background of a desk at night (lamp, potted plant, keyboard, coffee mug, window onto a city) plus a faint large brain-logo outline and a soft red/blue glow behind the composer. Sidebar Recents mixes colour-coded project folders (orange, green, blue, teal, purple outline icons) with pinned markers and plain sessions carrying compact relative times (9h, 2d, 1w, 1mo). Search modal shows sessions with right-aligned relative/absolute dates and highlights matched characters in blue as you type. Version string '2.0.0-alpha.1+dev' and mood avatar in sidebar footer."
+}

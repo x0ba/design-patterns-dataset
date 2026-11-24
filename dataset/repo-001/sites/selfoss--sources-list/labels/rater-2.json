@@ -1,0 +1,334 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "selfoss--sources-list",
+    "url": "http://localhost:4433/manage/sources",
+    "finalUrl": "http://localhost:4433/manage/sources",
+    "status": 200,
+    "title": "selfoss",
+    "capturedAt": "2026-11-18T20:20:48.705Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1016
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "news-publishing",
+    "domainNote": "self-hosted RSS/feed reader (selfoss) — manage sources/subscriptions admin page",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/selfoss/explore.json",
+      "repo": {
+        "name": "fossar/selfoss",
+        "url": "https://github.com/fossar/selfoss",
+        "commit": "4f97e67e1dcab2c2e7d63a5bd12ab6fbaca6a21d",
+        "license": "GPL-3.0"
+      },
+      "view": {
+        "slug": "sources-list",
+        "name": "Manage sources",
+        "description": "Source settings list with Add source / OPML import links, export link, and each subscribed feed with Edit, More actions and last-post info; a failing feed is outlined in red."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Dark left nav: logo, Mark as read button, collapsible FILTER (Newest/Unread/Starred), TAGS, SOURCES sections, refresh and settings icon buttons at bottom",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 180,
+        "height": 900
+      },
+      "patterns": [
+        "app-shell",
+        "accordion"
+      ]
+    },
+    {
+      "id": "toolbar",
+      "role": "toolbar",
+      "label": "Search toggle button, Add source button, import OPML link, Export sources link",
+      "bbox": {
+        "x": 180,
+        "y": 18,
+        "width": 1210,
+        "height": 32
+      },
+      "patterns": []
+    },
+    {
+      "id": "source-list",
+      "role": "list",
+      "label": "Alphabetical list of 22 feed sources, each row with favicon, title, Edit • More actions • Last post seen",
+      "bbox": {
+        "x": 225,
+        "y": 50,
+        "width": 1165,
+        "height": 945
+      },
+      "patterns": [
+        "inline-edit",
+        "menu",
+        "settings"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 180,
+            "height": 900
+          },
+          "region": "sidebar",
+          "quote": "Mark as read FILTER Newest Unread Starred TAGS All tags SOURCES",
+          "note": "persistent dark sidebar navigation framing the main content"
+        }
+      ]
+    },
+    {
+      "id": "accordion",
+      "status": "present",
+      "confidence": 0.75,
+      "dims": {
+        "policy": "many-at-a-time",
+        "header": [
+          "title-only"
+        ],
+        "toggle": [
+          "header-click"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 110,
+            "width": 175,
+            "height": 275
+          },
+          "region": "sidebar",
+          "quote": "FILTER",
+          "note": "FILTER/TAGS/SOURCES headings are aria-expanded buttons with triangle indicators; live click collapsed TAGS independently; SOURCES collapsed in capture"
+        }
+      ]
+    },
+    {
+      "id": "tree-view",
+      "status": "absent",
+      "confidence": 0.7,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 293,
+            "width": 175,
+            "height": 90
+          },
+          "region": "sidebar",
+          "note": "collapsible sidebar sections are single-level disclosure groups, not a hierarchical tree"
+        }
+      ]
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "openBy": "button-click",
+        "structure": "flat",
+        "item": [
+          "label"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 391,
+            "y": 105,
+            "width": 78,
+            "height": 16
+          },
+          "region": "source-list",
+          "quote": "More actions",
+          "note": "live: clicking opens small dropdown with Browse / Delete"
+        }
+      ]
+    },
+    {
+      "id": "inline-edit",
+      "status": "present",
+      "confidence": 0.75,
+      "dims": {
+        "enter": "click",
+        "commit": "save-and-cancel-buttons",
+        "unit": "whole-row"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 356,
+            "y": 105,
+            "width": 26,
+            "height": 16
+          },
+          "region": "source-list",
+          "quote": "Edit",
+          "note": "live: Edit expands the row in place into Title/Tags/Filter/Type/URL fields with Save • Cancel"
+        }
+      ]
+    },
+    {
+      "id": "form",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Edit form (text fields, Type select) only appears after clicking Edit; not visible in capture",
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 225,
+            "y": 93,
+            "width": 1165,
+            "height": 40
+          },
+          "region": "source-list",
+          "note": "row expands into labelled form on Edit (live only)"
+        }
+      ]
+    },
+    {
+      "id": "settings",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Page is the app's 'Settings' destination (/manage/sources) but is a managed list of subscriptions rather than a catalog of app options",
+      "dims": {
+        "ia": "single-long-page",
+        "timing": "save-button"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 225,
+            "y": 18,
+            "width": 1165,
+            "height": 977
+          },
+          "region": "source-list",
+          "quote": "Add source",
+          "note": "source management reached via sidebar Settings link"
+        }
+      ]
+    },
+    {
+      "id": "data-table",
+      "status": "absent",
+      "confidence": 0.7,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 225,
+            "y": 93,
+            "width": 1165,
+            "height": 40
+          },
+          "region": "source-list",
+          "note": "rows are a plain list with inline meta text, no columns or sort"
+        }
+      ]
+    }
+  ],
+  "structure": {
+    "layout": "two-column app layout: fixed dark left sidebar, wide main list of feed sources on a lightly striped background",
+    "regions": [
+      "sidebar",
+      "toolbar",
+      "source-list"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#191718",
+      "#272325",
+      "#525858",
+      "#ffffff",
+      "#333333",
+      "#aaaaaa",
+      "#777777",
+      "#e05050"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "text": "#333333",
+      "muted": "#aaaaaa",
+      "surface": "#191718",
+      "primary": "#525858",
+      "secondary": "#777777",
+      "accent": "#e05050"
+    },
+    "typography": "Open Sans throughout (sidebar nav, source titles, meta links); Arial in search input",
+    "typeScale": "flat scale: 16px regular source titles, 13px light-grey meta/action links, 11px Export/import links, 13px uppercase small-caps-like sidebar section headings; little weight contrast",
+    "shape": "mixed",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "filled",
+    "whitespace": "moderate",
+    "backgroundTreatment": "texture",
+    "mood": [
+      "utilitarian",
+      "minimal",
+      "technical",
+      "calm"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T20:22:02.919Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 10,
+    "usage": {
+      "input_tokens": 20,
+      "cache_creation_input_tokens": 28440,
+      "cache_read_input_tokens": 310039,
+      "output_tokens": 4176
+    }
+  },
+  "notes": "selfoss manage-sources page. Main area has subtle diagonal pinstripe texture; each source row is a faint white band ~40px tall with colored 2-letter favicon squares. Actions are inline text links separated by bullets (Edit • More actions • Last post seen X). First row (Tin Can Podcast, no favicon/last-seen) has a red 1px outline — likely an error/never-fetched state. Sidebar has a teal-grey vertical rule on its right edge; bottom has two square dark icon buttons (refresh, cloud/settings). Search is a toggle icon that expands a search box over the sidebar edge."
+}

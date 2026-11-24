@@ -1,0 +1,88 @@
+# Codebook proposal (new-entry) — review with: node scripts/proposals.ts show gen-002 floor-plan-locator
+id: floor-plan-locator
+kind: new-entry
+status: open
+batch: gen-002
+codebookVersion: 1.0.0
+name: Floor plan locator
+level: pattern
+parent: explore-space
+definition: A schematic, non-geographic building floor plan whose rooms and pins can be clicked,
+  used to say where you are ("you are here") and find where an object or task is in a building. It
+  is not pannable or zoomable, and it is not about booking seats.
+relations:
+  neighbors:
+    - map-explorer
+    - seat-map
+    - zoomable-canvas
+dimensions:
+  - name: Interactions
+    family: invocation
+    question: What can a person do on the plan?
+    subdimensions:
+      - id: planActions
+        name: Plan actions
+        select: many
+        values:
+          - id: set-own-location
+            name: Set own location
+            description: Click a room to declare where you are
+          - id: open-pin
+            name: Open pin
+            description: Click an object pin to open its detail
+          - id: highlight-target
+            name: Highlight target
+            description: The target room or object is emphasized
+  - name: Interaction
+    family: invocation
+    question: What can the person do on the plan?
+    subdimensions:
+      - id: planInteraction
+        name: Plan interaction
+        select: many
+        values:
+          - id: view-only
+            name: View only
+          - id: set-own-location
+            name: Set own location by clicking a room
+          - id: open-pin-detail
+            name: Open pin detail
+          - id: switch-floors
+            name: Switch floors
+rationale:
+  - rater: rater-3
+    site: shared-cabin-house-guide
+    text: map-explorer requires a pannable geographic map, seat-map is for booking availability, and
+      zoomable-canvas is a free 2D plane. A static indoor floor plan with room hit-targets, a 'YOU'
+      marker and object pins does not fit any of these.
+  - rater: rater-1
+    site: shared-cabin-house-guide
+    text: map-explorer requires a geographic pannable/zoomable basemap; seat-map is about venue seat
+      availability and booking. Indoor floor plans with room hit-areas, object pins and a
+      self-location marker are common in facility, home-guide and wayfinding apps and have no entry.
+sources:
+  - batch: gen-002
+    site: shared-cabin-house-guide
+    url: http://shared-cabin-house-guide.localhost:4318/
+    note: proposed by rater-3, rater-1
+evidence:
+  - site: shared-cabin-house-guide
+    rater: rater-3
+    bbox:
+      x: 997
+      y: 409
+      width: 400
+      height: 284
+    quote: Click a room to say where you are. Click a pin to open its plan.
+    note: SVG ground-floor plan with clickable rooms, a YOU marker and pin G1
+  - site: shared-cabin-house-guide
+    rater: rater-1
+    bbox:
+      x: 1018
+      y: 440
+      width: 358
+      height: 231
+    note: Ground floor plan SVG with room buttons 'set as your location', a G1 pin and a YOU marker
+    quote: Click a room to say where you are. Click a pin to open its plan.
+createdAt: 2026-11-18T02:45:55.855Z
+updatedAt: 2026-11-18T02:46:00.173Z

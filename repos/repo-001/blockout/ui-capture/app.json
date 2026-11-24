@@ -1,0 +1,28 @@
+{
+  "mode": "server",
+  "entry": "/",
+  "login": null,
+  "stubs": [
+    {
+      "service": "Electron main process / preload IPC (window.blockout: project folders, file dialogs, presets, file reads)",
+      "how": ".ui-capture/bridge/bridge.js re-implements the preload's window.blockout API in the browser and forwards each call over HTTP to .ui-capture/server.mjs, which ports the src/main IPC handlers (project:save/load/saveBackup, import*, file:readAbsolute, presets:*) onto plain folders under .ui-capture/data. The server injects the bridge as a classic <script> ahead of the unmodified production bundle. Native Open/New dialogs: Open returns the most recent project, New creates 'Untitled N.blockout'; pickFile uses a browser file input and uploads the file to .ui-capture/data/uploads."
+    },
+    {
+      "service": "ffmpeg video encoding (export:begin/frame/end, export:concat)",
+      "how": "No ffmpeg on the machine. The bridge counts rendered frames in-page and the server writes '<name>.mp4.encode.log' (with the ffmpeg command line and frame count) where the MP4 would go, then reports exit code 0. The real stills, metadata.json, prompt and ComfyUI files are still written to the package folder through export:writeFile."
+    },
+    {
+      "service": "Anthropic Claude vision call (ai:analyzeReference, 'Populate from reference')",
+      "how": ".ui-capture/stubs/analyze-stub.mjs returns a layout in the same {ok, layout:{entities, lighting, camera, notes}} shape as src/main/analyze.ts. It picks a diner, alley-chase or living-room staging from keywords in the file name, after a 2.5 s delay. No API key is needed."
+    },
+    {
+      "service": "MCP agent control server (src/main/control.ts)",
+      "how": "Not started in browser mode; onControlInvoke/controlResult are no-ops."
+    },
+    {
+      "service": "shell:openExternal / shell:showFolder",
+      "how": "Server returns the allowlist result for openExternal without opening anything; showFolder is a no-op."
+    }
+  ],
+  "notes": "Electron + React + three.js previs app (Blockout v5.1.1) run as a browser app. Setup: mise.toml pins node 22.20.0 (npm 10.9.3); `ELECTRON_SKIP_BINARY_DOWNLOAD=1 npm ci --ignore-scripts`; `npm run build` (electron-vite) produces out/renderer, which is served as is. start.sh re-runs the seed generator (.ui-capture/seed/dist/seed.mjs, bundled from seed/seed.ts by seed/build.sh with the repo's esbuild), then runs server.mjs on $PORT. Seed data is built with the app's own engine (schema factories, choreography engine, motion presets, camera-move presets, serializer) and validated with parseProject plus ShotEvaluator. On load the bridge reopens the most recent project ('Low Tide') through the app's own loadProject + store.loadFromJson path, so the app opens straight into the editor instead of the Welcome screen. Data: 5 project folders under .ui-capture/data/projects. 'Low Tide' (open by default) is a short film with 7 scenes (harbor lot night, diner dawn, alley foot chase, warehouse brawl, hospital rooftop blue hour, nightclub dance number, beach golden hour). It has about 100 entities with labelled characters (MAYA, DEX, ELI, KOVAC, ROSA...), married props, hand-blocked marks, choreographed chase/fight/dance routines and motion-preset performances; 26 shots plus 3 drafts with camera-move presets (crane, steadicam follow, orbits, drone), rigs, a Cam B bank, an alternate blocking take, mixed aspects (2.39:1 and one 9:16) and director's shot notes; and earlier export packages in exports/. The other projects are an insurance commercial, a music video with a 12-dancer routine, a generator bake-off test and a near-empty 'Untitled 3'. There are also 7 global stage presets, shown in the Library. Main areas: titlebar mode switch STAGE / SHOOT / DELIVER; left Project rail (scenes, shots, drafts) plus Library (assets, camera moves, motions, Choreographer, presets); centre three.js viewport (Shoot adds the timeline with marks); right Inspector (entity/shot/camera/scene); Deliver shows the generator profile, passes and export. The viewport needs WebGL. I could not screenshot it: headless Chrome cannot launch inside this sandbox. I verified the server endpoints, the bridge injection and the full project load/parse path. Verification: verify/panels-check.sh server-renders every panel for every scene/shot/mode/entity selection (all pass); shot.mjs is a Playwright screenshot helper that works outside the sandbox."
+}

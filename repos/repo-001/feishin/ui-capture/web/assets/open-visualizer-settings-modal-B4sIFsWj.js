@@ -1,0 +1,2 @@
+import{fL as n,ax as e,ay as s}from"./index-YG3uxby7.js";function a(t,i){return t?i===n.LOCAL?t.visualizerInputs??[]:t.gains:[]}const r=()=>{e({innerProps:{},modal:"visualizerSettings",overlayProps:{blur:0,opacity:0},size:"xl",styles:{content:{height:"90%",maxWidth:"1400px",minHeight:"600px",width:"100%"}},title:s.t("common.setting",{count:2}),transitionProps:{transition:"pop"}})};export{a as g,r as o};
+//# sourceMappingURL=open-visualizer-settings-modal-B4sIFsWj.js.map

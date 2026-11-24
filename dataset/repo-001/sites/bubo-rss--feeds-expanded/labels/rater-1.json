@@ -1,0 +1,300 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "bubo-rss--feeds-expanded",
+    "url": "http://bubo-rss.localhost:4319/",
+    "finalUrl": "http://bubo-rss.localhost:4319/",
+    "status": 200,
+    "title": "🦉 Bubo Reader",
+    "capturedAt": "2026-11-18T02:08:50.130Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 2082
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "news-publishing",
+    "domainNote": "self-hosted static RSS/Atom feed aggregator (Bubo Reader) grouping followed feeds by category",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/bubo-rss/explore.json",
+      "repo": {
+        "name": "georgemandis/bubo-rss",
+        "url": "https://github.com/georgemandis/bubo-rss",
+        "commit": "d9857c501e58092f3f208463ece64984588c273c",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "feeds-expanded",
+        "name": "Feeds expanded",
+        "description": "The feed page with two feed disclosures opened, showing dated lists of linked article titles under each feed."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Page title '🦉 Bubo Reader' as plain h1, no navigation",
+      "bbox": {
+        "x": 8,
+        "y": 24,
+        "width": 1424,
+        "height": 42
+      },
+      "patterns": []
+    },
+    {
+      "id": "feed-categories",
+      "role": "content-list",
+      "label": "Category h2 sections (Developer News, Blogs, Design, Reading & Misc, My GitHub Projects) each holding collapsible <details> per feed source with dated article link lists",
+      "bbox": {
+        "x": 8,
+        "y": 90,
+        "width": 1424,
+        "height": 1668
+      },
+      "patterns": [
+        "accordion",
+        "feed"
+      ]
+    },
+    {
+      "id": "errors",
+      "role": "error-summary",
+      "label": "'Errors' section listing feeds that failed to fetch/parse",
+      "bbox": {
+        "x": 8,
+        "y": 1780,
+        "width": 1424,
+        "height": 190
+      },
+      "patterns": [
+        "banner"
+      ]
+    },
+    {
+      "id": "footer",
+      "role": "footer",
+      "label": "Horizontal rule, last-updated timestamp and 'Powered by Bubo Reader' credits with sponsor link",
+      "bbox": {
+        "x": 8,
+        "y": 1980,
+        "width": 1424,
+        "height": 95
+      },
+      "patterns": []
+    }
+  ],
+  "patterns": [
+    {
+      "id": "accordion",
+      "status": "present",
+      "confidence": 0.92,
+      "dims": {
+        "policy": "many-at-a-time",
+        "header": [
+          "title-only"
+        ],
+        "toggle": [
+          "header-click",
+          "keyboard"
+        ],
+        "memory": "resets"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 144,
+            "width": 1424,
+            "height": 291
+          },
+          "quote": "Changelog Master Feed (https://changelog.com/feed)",
+          "region": "feed-categories",
+          "note": "Native <details> open by default showing article list; triangle indicator"
+        },
+        {
+          "bbox": {
+            "x": 8,
+            "y": 453,
+            "width": 1424,
+            "height": 147
+          },
+          "quote": "WebKit (https://webkit.org/feed/)",
+          "region": "feed-categories",
+          "note": "Collapsed sibling feeds; clicking WebKit on live page expanded it while Changelog stayed open (many at a time)"
+        },
+        {
+          "bbox": {
+            "x": 8,
+            "y": 717,
+            "width": 1424,
+            "height": 354
+          },
+          "quote": "Simon Willison's Weblog",
+          "region": "feed-categories",
+          "note": "Second open section in a different category"
+        }
+      ]
+    },
+    {
+      "id": "feed",
+      "status": "present",
+      "confidence": 0.65,
+      "dims": {
+        "density": "headline",
+        "heterogeneity": [
+          "uniform-posts"
+        ],
+        "ordering": "chronological",
+        "sources": [
+          "followed-accounts"
+        ],
+        "arrangement": "single-column",
+        "nesting": [
+          "flat"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 183,
+            "width": 760,
+            "height": 252
+          },
+          "quote": "11/15/2026 - Changelog & Friends 118: Kaizen! The one with the new CDN",
+          "region": "feed-categories",
+          "note": "Date + headline link items, newest first, from subscribed RSS feeds; grouped per source rather than merged into one stream"
+        }
+      ],
+      "rationale": "It is an RSS reader showing chronological headline items from followed sources, but items are split per-source inside collapsible groups rather than one merged stream, and the page is a static build with no loading behaviour."
+    },
+    {
+      "id": "banner",
+      "status": "uncertain",
+      "confidence": 0.45,
+      "dims": {
+        "scope": "section",
+        "severity": "critical",
+        "action": "none",
+        "placement": "beside-the-problem"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 1780,
+            "width": 1424,
+            "height": 190
+          },
+          "quote": "There were errors trying to parse these feeds:",
+          "region": "errors",
+          "note": "Persistent error summary listing failed feeds; unstyled, sits as a normal section at the bottom"
+        }
+      ],
+      "rationale": "Functions as a persistent error notice about failed feeds, but has no banner styling (no color, container or icon) and reads as an ordinary content section."
+    },
+    {
+      "id": "tree-view",
+      "status": "absent",
+      "confidence": 0.7,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 90,
+            "width": 1424,
+            "height": 510
+          },
+          "note": "Categories are static h2 headings; only one level of disclosure (feed -> articles), better coded as accordion"
+        }
+      ]
+    },
+    {
+      "id": "overview-detail",
+      "status": "absent",
+      "confidence": 0.6,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 158,
+            "y": 183,
+            "width": 600,
+            "height": 21
+          },
+          "note": "Article links go to external sites; no in-app detail view"
+        }
+      ]
+    }
+  ],
+  "structure": {
+    "layout": "single-column unstyled HTML document: h1 title, category h2 sections of native <details> feed groups with bulleted dated link lists, error list, hr and footer",
+    "regions": [
+      "header",
+      "feed-categories",
+      "errors",
+      "footer"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#000000",
+      "#0000ee",
+      "#aaaaaa"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "text": "#000000",
+      "primary": "#0000ee",
+      "muted": "#aaaaaa"
+    },
+    "typography": "system-ui throughout at browser defaults: bold headings, regular body, default underlined blue links; feed URLs in gray",
+    "typeScale": "h1 36px bold, h2 27px bold, everything else 18px regular; hierarchy from size/weight only",
+    "shape": "sharp",
+    "elevation": "flat",
+    "borders": "none",
+    "imagery": [
+      "none"
+    ],
+    "iconStyle": "none",
+    "whitespace": "tight",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "minimal",
+      "brutalist",
+      "utilitarian",
+      "technical",
+      "unstyled"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T02:09:49.137Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 6,
+    "usage": {
+      "input_tokens": 12,
+      "cache_creation_input_tokens": 28740,
+      "cache_read_input_tokens": 176858,
+      "output_tokens": 3408
+    }
+  },
+  "notes": "Essentially browser-default HTML (no custom CSS beyond gray #aaaaaa feed URLs and 18px system-ui): default 8px body margin, default blue #0000ee underlined links, native disclosure triangles for <details>. Each list item is 'M/D/YYYY - <linked title>'. Only emoji (🦉 in title, ❤️ in footer) provide any visual flourish. Error section shows raw parser/fetch error strings. Footer has <hr>, 'Last updated' timestamp from static build and powered-by credits."
+}

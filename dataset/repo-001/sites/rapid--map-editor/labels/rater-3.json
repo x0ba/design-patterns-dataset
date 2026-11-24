@@ -1,0 +1,392 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "rapid--map-editor",
+    "url": "http://localhost:4487/#map=17.00/41.94320/-85.63180&background=custom&overlays=&datasets=8c3f1d29a6b54e0f9e2c7a51d4b0e6f2,2b7e94c0f13d4a5c8d6e0a9b3c1f7e48",
+    "finalUrl": "http://localhost:4487/#map=17.00/41.94320/-85.63180&background=custom:http://localhost:4487/tiles/{zoom}/{x}/{y}.png&datasets=8c3f1d29a6b54e0f9e2c7a51d4b0e6f2,2b7e94c0f13d4a5c8d6e0a9b3c1f7e48",
+    "status": 200,
+    "title": "Rapid Dev",
+    "capturedAt": "2026-11-18T20:42:11.321Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 900
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "utilities",
+    "domainNote": "OpenStreetMap map data editor (Rapid, AI-assisted mapping)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/rapid/explore.json",
+      "repo": {
+        "name": "meta/Rapid",
+        "url": "https://github.com/meta/Rapid",
+        "commit": "249abff91e6982c6cc99c3e8bae4718a02913fa3",
+        "license": "ISC"
+      },
+      "view": {
+        "slug": "map-editor",
+        "name": "Map editor workspace",
+        "description": "Main Rapid editing workspace: OSM data over imagery of Three Rivers, MI, with feature search sidebar, add-feature toolbar, Rapid AI toggle, undo/save, and map controls."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Left 'Search features' panel with search field, otherwise empty",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 400,
+        "height": 900
+      },
+      "patterns": [
+        "text-field",
+        "app-shell"
+      ]
+    },
+    {
+      "id": "top-toolbar",
+      "role": "toolbar",
+      "label": "Translucent black bar with Point/Line/Area add-feature tools, Rapid Assist button, Undo/Redo and Save with edit count",
+      "bbox": {
+        "x": 415,
+        "y": 0,
+        "width": 1025,
+        "height": 71
+      },
+      "patterns": [
+        "undo",
+        "badge",
+        "canvas-editor",
+        "app-shell"
+      ]
+    },
+    {
+      "id": "map",
+      "role": "map-canvas",
+      "label": "Full-bleed aerial basemap with OSM data drawn on top: roads, rivers, buildings, POI pins, address dots",
+      "bbox": {
+        "x": 415,
+        "y": 71,
+        "width": 1025,
+        "height": 800
+      },
+      "patterns": [
+        "map-explorer",
+        "canvas-editor"
+      ]
+    },
+    {
+      "id": "map-controls",
+      "role": "control-rail",
+      "label": "Right-edge vertical button rail: north/compass, zoom in/out, zoom to selection, geolocate, layers, map data, issues, preferences, help",
+      "bbox": {
+        "x": 1400,
+        "y": 141,
+        "width": 40,
+        "height": 410
+      },
+      "patterns": [
+        "map-explorer"
+      ]
+    },
+    {
+      "id": "footer-bar",
+      "role": "status-bar",
+      "label": "Bottom bar with scale bar, 'Edits by' contributor attribution, version and user account / log out",
+      "bbox": {
+        "x": 415,
+        "y": 870,
+        "width": 1025,
+        "height": 30
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "map-explorer",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 415,
+            "y": 71,
+            "width": 1025,
+            "height": 800
+          },
+          "region": "map",
+          "note": "Aerial-imagery basemap with editable OSM overlays: road polylines, river areas, building polygons, white POI pins and yellow address dots with house-number labels",
+          "quote": "Portage River"
+        },
+        {
+          "bbox": {
+            "x": 1400,
+            "y": 141,
+            "width": 40,
+            "height": 200
+          },
+          "region": "map-controls",
+          "note": "Compass, zoom +/-, zoom to selection, geolocate buttons"
+        }
+      ],
+      "dims": {
+        "basemap": "satellite-aerial",
+        "overlays": [
+          "poi-pins",
+          "routes-and-polylines",
+          "user-generated-marks"
+        ],
+        "mapNav": [
+          "drag-pan",
+          "pinch-scroll-zoom",
+          "recenter-on-me",
+          "rotate-and-tilt"
+        ],
+        "coupling": "map-only",
+        "markDesign": [
+          "price-or-value-label"
+        ],
+        "mapAdapt": [
+          "desktop-side-panel"
+        ]
+      }
+    },
+    {
+      "id": "canvas-editor",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Rapid is a direct-manipulation editor of geometric map features with a persistent creation toolbar (Point/Line/Area) and selectable vertices, but the canvas is a geographic map, so map-explorer may be the better sole fit; editing behavior could not be verified live.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 684,
+            "y": 10,
+            "width": 234,
+            "height": 40
+          },
+          "region": "top-toolbar",
+          "quote": "Point Line Area",
+          "note": "Persistent creation tools labelled 'Add Feature'"
+        }
+      ],
+      "dims": {
+        "tools": [
+          "persistent-toolbar"
+        ],
+        "hierarchy": "flat-objects"
+      }
+    },
+    {
+      "id": "undo",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1283,
+            "y": 10,
+            "width": 82,
+            "height": 55
+          },
+          "region": "top-toolbar",
+          "quote": "Undo / Redo",
+          "note": "Undo and redo toolbar buttons (disabled, no edits yet)"
+        }
+      ],
+      "dims": {
+        "access": [
+          "toolbar-button"
+        ]
+      }
+    },
+    {
+      "id": "badge",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "rationale": "Save button carries an edit count '0' rendered faintly; in the capture it is barely visible so its badge treatment is unclear.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1375,
+            "y": 10,
+            "width": 60,
+            "height": 40
+          },
+          "region": "top-toolbar",
+          "quote": "0",
+          "note": "Pending-edits count on Save button"
+        }
+      ],
+      "dims": {
+        "meaning": "count",
+        "rule": "pending-actions",
+        "overflow": "exact-count"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 61,
+            "width": 400,
+            "height": 54
+          },
+          "region": "sidebar",
+          "quote": "Search",
+          "note": "Full-width search input with magnifier icon and placeholder"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "placeholder"
+        ],
+        "style": "borderless-inline"
+      }
+    },
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 900
+          },
+          "note": "Persistent editor frame: left sidebar, top tool bar, right map-control rail, bottom status/attribution bar around the map content"
+        }
+      ],
+      "dims": {
+        "visibility": "always-visible",
+        "structure": "single-app",
+        "secondary": "none"
+      }
+    },
+    {
+      "id": "ai-provenance",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 928,
+            "y": 10,
+            "width": 81,
+            "height": 40
+          },
+          "region": "top-toolbar",
+          "quote": "Assist",
+          "note": "Rapid Assist button exists but no AI-suggested features or provenance markers visibly distinguished in the capture"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "search-results",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 115,
+            "width": 400,
+            "height": 200
+          },
+          "region": "sidebar",
+          "note": "Search panel shows no results list (no query)"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "full-viewport map editor: fixed 400px left sidebar, map canvas filling the rest with overlaid translucent top toolbar, right icon rail and bottom status bar",
+    "regions": [
+      "sidebar",
+      "top-toolbar",
+      "map",
+      "map-controls",
+      "footer-bar"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#333333",
+      "#000000",
+      "#f6f6f6",
+      "#ffffff",
+      "#7092ff",
+      "#ccccff",
+      "#da26d3",
+      "#ffff00"
+    ],
+    "colorRoles": {
+      "background": "#333333",
+      "text": "#333333",
+      "surface": "#f6f6f6",
+      "primary": "#7092ff",
+      "accent": "#da26d3",
+      "muted": "#ccccff",
+      "toolbar": "#000000",
+      "button": "#ffffff"
+    },
+    "typography": "ui-sans-serif system stack throughout: bold 16px panel heading, bold 12px toolbar buttons, 18px bold search input, 10–12px footer links and captions",
+    "typeScale": "Compact utilitarian scale: 18px search, 16px/700 heading, 12px/700 buttons, 11–12px labels, 10px attribution; little size contrast",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "none",
+    "imagery": [
+      "photography",
+      "data-visualization",
+      "iconography"
+    ],
+    "iconStyle": "filled",
+    "whitespace": "tight",
+    "backgroundTreatment": "image",
+    "mood": [
+      "technical",
+      "utilitarian",
+      "busy",
+      "tool-like"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T20:51:01.199Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 8,
+    "usage": {
+      "input_tokens": 16,
+      "cache_creation_input_tokens": 23025,
+      "cache_read_input_tokens": 211274,
+      "output_tokens": 4424
+    }
+  },
+  "notes": "Rapid (Facebook/Meta's fork of iD) OSM editor. Map content dominates: aerial imagery tinted beneath vivid OSM styling (yellow primary road, orange secondary, cyan waterways with direction arrows, red-outlined buildings, green sidewalk outlines, grey vertex circles). Chrome is minimal: semi-transparent black toolbar with white 4px-rounded button group and a magenta 'Rapid' wordmark button for AI Assist; right icon rail of black 40px square buttons; captions under button groups ('Add Feature', 'Assist', 'Undo / Redo', 'Save'). Footer shows scale bar and 'Edits by' contributor links in periwinkle #7092ff. Live page could not be loaded to verify interactions."
+}

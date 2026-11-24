@@ -1,0 +1,541 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "nutritrace--foods-catalog",
+    "url": "http://localhost:4449/",
+    "finalUrl": "http://localhost:4449/#/foods",
+    "status": 200,
+    "title": "NutriTrace",
+    "capturedAt": "2026-11-18T19:48:35.975Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 3700
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "health",
+    "domainNote": "personal nutrition tracker / food database (NutriTrace)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/nutritrace/explore.json",
+      "repo": {
+        "name": "TraceApps/nutritrace",
+        "url": "https://github.com/TraceApps/nutritrace",
+        "commit": "888c9664cd3a0222a9449cff506264097a2ae9b2",
+        "license": "AGPL-3.0"
+      },
+      "view": {
+        "slug": "foods-catalog",
+        "name": "Foods catalog with preview",
+        "description": "Food catalog with source/category filters, food card grid, and a preview pane showing the selected food's Nutrition Facts label."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Gradient top bar with hamburger (opens nav drawer), 'Foods' title and add button",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 61
+      },
+      "patterns": [
+        "app-shell",
+        "drawer"
+      ]
+    },
+    {
+      "id": "toolbar",
+      "role": "toolbar",
+      "label": "Foods/Meals/Recipes segmented tabs and pill search field with barcode scan button",
+      "bbox": {
+        "x": 0,
+        "y": 61,
+        "width": 1440,
+        "height": 104
+      },
+      "patterns": [
+        "tabs",
+        "text-field"
+      ]
+    },
+    {
+      "id": "filter-sidebar",
+      "role": "sidebar",
+      "label": "Sources (All/Local/OFF) and Categories single-select filter buttons",
+      "bbox": {
+        "x": 16,
+        "y": 177,
+        "width": 240,
+        "height": 1109
+      },
+      "patterns": [
+        "filter-controls",
+        "choice-control"
+      ]
+    },
+    {
+      "id": "food-grid",
+      "role": "collection",
+      "label": "Two-column grid of horizontal food cards (icon tile, name, brand, serving)",
+      "bbox": {
+        "x": 292,
+        "y": 177,
+        "width": 676,
+        "height": 3459
+      },
+      "patterns": [
+        "overview-detail",
+        "card"
+      ]
+    },
+    {
+      "id": "detail-panel",
+      "role": "detail",
+      "label": "Docked preview of selected food: title, brand, kcal pill, FDA-style Nutrition Facts table, Add to Diary/Delete/Edit",
+      "bbox": {
+        "x": 1004,
+        "y": 177,
+        "width": 420,
+        "height": 725
+      },
+      "patterns": [
+        "overview-detail",
+        "badge"
+      ]
+    },
+    {
+      "id": "ai-fab",
+      "role": "floating-action",
+      "label": "Floating circular AI coach button",
+      "bbox": {
+        "x": 1360,
+        "y": 3556,
+        "width": 60,
+        "height": 60
+      },
+      "patterns": [
+        "ai-chat"
+      ]
+    },
+    {
+      "id": "bottom-nav",
+      "role": "navigation",
+      "label": "Bottom tab bar: Diary, Foods, Wellness, Statistics, Goals, Settings",
+      "bbox": {
+        "x": 0,
+        "y": 3636,
+        "width": 1440,
+        "height": 64
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "dims": {
+        "primary": "bottom-tab-bar",
+        "secondary": "sub-tabs-under-the-header",
+        "items": [
+          "fixed-destinations"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 3636,
+            "width": 1440,
+            "height": 64
+          },
+          "quote": "DIARY FOODS WELLNESS STATISTICS GOALS SETTINGS",
+          "region": "bottom-nav",
+          "note": "fixed bottom tab bar, Foods active with mint pill"
+        },
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 61
+          },
+          "quote": "Foods",
+          "region": "header",
+          "note": "top bar with title, hamburger and add"
+        }
+      ]
+    },
+    {
+      "id": "drawer",
+      "status": "present",
+      "confidence": 0.75,
+      "dims": {
+        "edge": "left",
+        "relationship": "overlay-with-scrim",
+        "holds": "navigation",
+        "openBy": [
+          "menu-button"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 12,
+            "y": 10,
+            "width": 40,
+            "height": 40
+          },
+          "region": "header",
+          "note": "'Open menu' hamburger; live: opens left navigation drawer with logo, destinations and user account over a blurred scrim"
+        }
+      ]
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "placement": "segmented-control",
+        "label": [
+          "text"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 16,
+            "y": 73,
+            "width": 1408,
+            "height": 38
+          },
+          "quote": "Foods Meals Recipes",
+          "region": "toolbar",
+          "note": "role=tablist, white raised thumb on grey track"
+        }
+      ]
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "supporting": [
+          "placeholder",
+          "prefix-or-suffix"
+        ],
+        "style": "filled",
+        "validation": "none"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 44,
+            "y": 123,
+            "width": 1380,
+            "height": 35
+          },
+          "quote": "Search foods or scan barcode...",
+          "region": "toolbar",
+          "note": "pill search with barcode-scanner suffix button"
+        }
+      ]
+    },
+    {
+      "id": "filter-controls",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "placement": "sidebar-facets",
+        "types": [
+          "toggle-chips"
+        ],
+        "preview": "live-results",
+        "origin": "developer-defined",
+        "logic": "and-across-or-within"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 16,
+            "y": 177,
+            "width": 240,
+            "height": 640
+          },
+          "quote": "SOURCES All Local OFF CATEGORIES All Alcohol Bakery",
+          "region": "filter-sidebar",
+          "note": "live: clicking Alcohol instantly narrows grid to 2 items"
+        }
+      ]
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.7,
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "chips",
+        "option": [
+          "label-only"
+        ],
+        "timing": "immediately",
+        "largeSets": "scrolling-list"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 27,
+            "y": 365,
+            "width": 218,
+            "height": 440
+          },
+          "quote": "All",
+          "region": "filter-sidebar",
+          "note": "stacked full-width pill buttons, selected one mint-filled; OFF has a split dropdown for quality tier"
+        }
+      ]
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.9,
+      "dims": {
+        "attributePlacement": [
+          "in-both-views",
+          "in-detail-view-only"
+        ],
+        "truncation": "ellipsis",
+        "relationship": "one-to-one",
+        "recursion": [
+          "none"
+        ],
+        "openIn": "side-by-side",
+        "overviewType": [
+          "grid"
+        ],
+        "detailMultiplicity": "one-at-a-time",
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "whole-item",
+        "attributeScope": [
+          "per-item"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 636,
+            "y": 176,
+            "width": 331,
+            "height": 77
+          },
+          "quote": "Atlantic Salmon Fillet",
+          "region": "food-grid",
+          "note": "selected card outlined in green"
+        },
+        {
+          "bbox": {
+            "x": 1004,
+            "y": 177,
+            "width": 420,
+            "height": 725
+          },
+          "quote": "Nutrition Facts",
+          "region": "detail-panel",
+          "note": "docked preview with nutrition facts and actions, closable"
+        },
+        {
+          "bbox": {
+            "x": 293,
+            "y": 710,
+            "width": 331,
+            "height": 77
+          },
+          "quote": "Chicken Breast, boneless ski...",
+          "region": "food-grid",
+          "note": "ellipsis truncation"
+        }
+      ]
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "media": "side-thumbnail",
+        "actions": "none",
+        "shape": "horizontal",
+        "style": "outlined",
+        "target": "whole-card"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 293,
+            "y": 178,
+            "width": 331,
+            "height": 77
+          },
+          "quote": "Air-Popped Popcorn SkinnyPop 28g",
+          "region": "food-grid",
+          "note": "mint icon tile, name/brand/serving, chevron"
+        }
+      ]
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.6,
+      "dims": {
+        "meaning": "label",
+        "aggregation": "per-item"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1038,
+            "y": 336,
+            "width": 66,
+            "height": 22
+          },
+          "quote": "230 kcal",
+          "region": "detail-panel",
+          "note": "mint outlined pill"
+        }
+      ]
+    },
+    {
+      "id": "ai-chat",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Only the floating launcher is in the capture; the chat panel (Trace AI coach with message thread and composer) appears only after clicking it live.",
+      "dims": {
+        "composition": "linear-thread",
+        "invokeBy": [
+          "text-field-submit",
+          "voice-input",
+          "attach-file-or-image"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1360,
+            "y": 3556,
+            "width": 60,
+            "height": 60
+          },
+          "region": "ai-fab",
+          "note": "'Open AI coach (hold to dictate food)' button"
+        }
+      ]
+    },
+    {
+      "id": "search-results",
+      "status": "absent",
+      "confidence": 0.75,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 292,
+            "y": 177,
+            "width": 676,
+            "height": 400
+          },
+          "note": "browse list without a query; not a results page"
+        }
+      ]
+    }
+  ],
+  "structure": {
+    "layout": "tablet-style app shell: gradient top bar with hamburger + title + add button, segmented tabs and full-width search below, three-column body (filter sidebar | 2-column food card grid | docked detail preview with nutrition-facts label), fixed bottom tab bar and floating AI-coach button",
+    "regions": [
+      "header",
+      "toolbar",
+      "filter-sidebar",
+      "food-grid",
+      "detail-panel",
+      "ai-fab",
+      "bottom-nav"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#f5f7fa",
+      "#ffffff",
+      "#eef1f7",
+      "#0d0f14",
+      "#00c47a",
+      "#000000",
+      "#d93025"
+    ],
+    "colorRoles": {
+      "background": "#f5f7fa",
+      "surface": "#ffffff",
+      "text": "#0d0f14",
+      "primary": "#00c47a",
+      "muted": "#eef1f7",
+      "danger": "#d93025",
+      "nutrition-label": "#000000"
+    },
+    "typography": "Inter for all UI text; Helvetica Neue in the FDA-style Nutrition Facts label; Material Symbols Rounded for icons",
+    "typeScale": "Title 22px bold in header; card titles 15px/500 with 13px grey brand and serving; tab labels 13px/600; section labels 11px uppercase tracked; nutrition label 32px 'Nutrition Facts' and 64px calorie figure for strong contrast",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "filled",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "clean",
+      "fresh",
+      "friendly",
+      "health",
+      "calm"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T19:50:21.401Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 11,
+    "usage": {
+      "input_tokens": 22,
+      "cache_creation_input_tokens": 42063,
+      "cache_read_input_tokens": 396901,
+      "output_tokens": 6716
+    }
+  },
+  "notes": "Mint-to-sky-blue gradient top bar; mint green (#00c47a) accent used for selected states (mint-tinted fill + green outline). Every food card uses the same generic fork-and-knife icon on a pale mint tile rather than photos. Detail panel embeds a faithful black-and-white FDA Nutrition Facts label with heavy rules, a deliberate stylistic contrast to the soft UI. Gradient 'Add to Diary' primary button, outlined red Delete and grey Edit. Teal circular AI-coach FAB opens a chat popup (Trace) on the live page; selecting a category with no detail selection shows an empty state 'Pick a food from the list to preview.'"
+}

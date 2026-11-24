@@ -1,0 +1,36 @@
+{
+  "mode": "static",
+  "entry": "/",
+  "login": null,
+  "stubs": [
+    {
+      "service": "Google Maps JavaScript API (maps, geometry, markers, polylines, info windows, traffic layer)",
+      "how": "Build-time Vite alias swaps @googlemaps/js-api-loader for .ui-capture/stubs/google-maps-loader.js, which installs an offline window.google.maps implementation (stubs/google-maps-stub.js) that renders a dark canvas basemap of CA/NV (coast, lakes, parks, highways, towns from stubs/basemap.js) with pan/zoom and the app's markers, routes and info windows."
+    },
+    {
+      "service": "Google Directions API (DirectionsService)",
+      "how": "Same stub: routes are computed locally by shortest path over the bundled highway graph, returning overview_path, distance and duration in the Directions response shape."
+    },
+    {
+      "service": "Google Places API (findPlaceFromQuery / getDetails)",
+      "how": "Same stub: answers from a local gazetteer (stubs/places-data.js) with place_id, address, phone, website, rating, review count and opening hours for the trip's venues."
+    },
+    {
+      "service": "NOAA api.weather.gov (points, forecast, hourly forecast, stations, latest observation)",
+      "how": "weather.js API root is rewritten at build time to /__stub/weather.gov; stubs/weather-gov.js emits NWS-shaped JSON files into out/__stub/weather.gov for Groveland and Yosemite, dated from build time."
+    },
+    {
+      "service": "Google Fonts (Inter)",
+      "how": "The fonts.googleapis.com <link> is removed at build time; Inter 400-700 is bundled from @fontsource/inter (.ui-capture/vendor) via seed/fonts.css."
+    },
+    {
+      "service": "images.unsplash.com reference photos",
+      "how": "Unsplash URLs in src are rewritten at build time to /__stub/photos/*.svg, locally generated illustrated scenes (stubs/photos.js)."
+    },
+    {
+      "service": "Env vars",
+      "how": ".ui-capture/.env sets VITE_GOOGLE_MAPS_API_KEY=offline-stub-key (placeholder; never sent anywhere)."
+    }
+  ],
+  "notes": "Static Vite build of the repo (React 19 + Vite 8, Node 22.23.5 pinned in mise.toml). Rebuild with `npm ci && npx vite build --config .ui-capture/vite.capture.config.js` from the repo root; that config extends the repo's vite.config.js and only swaps integrations for stubs (no repo source files changed). Output is .ui-capture/out (index.html entry, SPA fallback ok). DATA: the app stores everything in browser localStorage. The capture build boots via .ui-capture/seed/boot.js, which on first load writes a seeded trip document (generator: .ui-capture/seed/seedData.js) into the app's own key 'trip-command-center/v4-public' before React mounts, and sets the viewer profile to the Jiangs (marker key 'ui-capture/seed-version'; clear localStorage to reseed). Seed = the app's built-in Pine Mountain Lake / Yosemite weekend (Apr 9-12, 3 families: Parkers LA, Jiangs SF, Riveras Reno) extended to look like ~3 months of group planning: ~65 checklist tasks across families/days (mostly done, some open, short and long notes, created/edited stamps Jan-Apr 2026), 15 meals incl. road stops and pending treats, 10 activities (Go/Watch/Pending, incl. parked ideas), edited expense ledger (real-looking amounts, manual split, settled/open), family responsibilities, stay notes, and page notes with edit attribution. The app re-derives families/locations/itinerary/stay/expenses from its built-in seed on every load (refreshSeededDoc), so those collections can't grow beyond the built-in records; only their edited fields persist. On load the app snaps the timeline cursor to the real clock relative to April 9-12 of the current year, so in November the cursor sits at trip end ('No live items in this window'); scrub the bottom timeline to see live state. MAIN AREAS: top command bar with 'Working as' family switcher; left rail (current situation, daily briefing, travel units); center live map (offline stub basemap with family routes, vehicles, facilities, layer/family/day focus, NOAA weather intel); bottom mission timeline with playback; right inspector rail (briefing, checklist, notes). Icon nav on the far left: Itinerary, Stay, Meals, Activities, Expenses, Families. Verified with a jsdom smoke test (.ui-capture/smoke.mjs). Headless Chromium couldn't launch inside the build sandbox, so I never inspected it visually."
+}

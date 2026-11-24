@@ -1,0 +1,350 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "mirotalk--polls-panel",
+    "url": "http://localhost:4438/join?room=northwind-product-weekly&name=Dana%20Okafor&audio=0&video=0&notify=0",
+    "finalUrl": "http://localhost:4438/join?room=northwind-product-weekly&name=Dana%20Okafor&audio=0&video=0&notify=0",
+    "status": 200,
+    "title": "MiroTalk WebRTC Video call, Chat Room & Screen Sharing.",
+    "capturedAt": "2026-11-18T20:24:24.416Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 900
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "productivity",
+    "domainNote": "WebRTC video conferencing room (MiroTalk P2P)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/mirotalk/explore.json",
+      "repo": {
+        "name": "miroslavpejic85/mirotalk",
+        "url": "https://github.com/miroslavpejic85/mirotalk",
+        "commit": "91dac4da68d66c8ebccabb524b904cdd8c42283e",
+        "license": "AGPL-3.0"
+      },
+      "view": {
+        "slug": "polls-panel",
+        "name": "Polls panel with live results",
+        "description": "Floating Polls window over the meeting grid listing two polls with options, percentage bars, vote counts, voter names and an anonymous flag."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "participant-grid",
+      "role": "video-stage",
+      "label": "4x2 gallery grid of 8 participant tiles with avatars, names and per-tile pin/video/audio/hand/more controls",
+      "bbox": {
+        "x": 21,
+        "y": 57,
+        "width": 1398,
+        "height": 694
+      },
+      "patterns": [
+        "video-call",
+        "menu"
+      ]
+    },
+    {
+      "id": "toast",
+      "role": "notification",
+      "label": "Top-centre toast 'Priya Raman started a poll' with info icon and close button",
+      "bbox": {
+        "x": 550,
+        "y": 10,
+        "width": 340,
+        "height": 81
+      },
+      "patterns": [
+        "toast"
+      ]
+    },
+    {
+      "id": "call-toolbar",
+      "role": "toolbar",
+      "label": "Bottom floating control bar: mic, camera, screen share, raise hand, chat, participants (badge 8), layout, settings, leave",
+      "bbox": {
+        "x": 411,
+        "y": 814,
+        "width": 618,
+        "height": 70
+      },
+      "patterns": [
+        "video-call",
+        "badge",
+        "menu"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "video-call",
+      "status": "present",
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 21,
+            "y": 57,
+            "width": 1398,
+            "height": 694
+          },
+          "region": "participant-grid",
+          "note": "Gallery grid of 8 tiles, avatars since video is off, name pills, mute/hand-raise icons and pin buttons",
+          "quote": "Dana O. (me)"
+        },
+        {
+          "bbox": {
+            "x": 411,
+            "y": 814,
+            "width": 618,
+            "height": 70
+          },
+          "region": "call-toolbar",
+          "note": "Mute, camera, share screen, raise hand, chat, participants, layout, settings, red leave button"
+        },
+        {
+          "bbox": {
+            "x": 179,
+            "y": 420,
+            "width": 170,
+            "height": 24
+          },
+          "region": "participant-grid",
+          "note": "Raised hand indicator on Tomás's tile",
+          "quote": "Participant hand is raised"
+        }
+      ],
+      "dims": {
+        "people": "gallery-grid",
+        "subspaces": "one-room",
+        "tile": [
+          "name",
+          "mute-and-hand-raised"
+        ],
+        "attention": [
+          "pin-a-participant"
+        ]
+      }
+    },
+    {
+      "id": "toast",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 550,
+            "y": 10,
+            "width": 340,
+            "height": 81
+          },
+          "region": "toast",
+          "quote": "Priya Raman started a poll",
+          "note": "role=alert toast with info icon and × close"
+        }
+      ],
+      "dims": {
+        "content": [
+          "message-only",
+          "status-icon"
+        ],
+        "severity": "neutral"
+      },
+      "novel": [
+        {
+          "subdimension": "position",
+          "proposedValueId": "top-centre",
+          "description": "Toast anchored to the top edge, horizontally centred"
+        }
+      ]
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 740,
+            "y": 825,
+            "width": 20,
+            "height": 18
+          },
+          "region": "call-toolbar",
+          "quote": "8",
+          "note": "Red count badge on participants button"
+        },
+        {
+          "bbox": {
+            "x": 458,
+            "y": 818,
+            "width": 76,
+            "height": 18
+          },
+          "region": "call-toolbar",
+          "note": "Yellow '!' status badges on disabled mic and camera buttons (exception: status meaning)"
+        }
+      ],
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "rationale": "Kebab 'More options' on tiles and chevron 'Settings menu'/'Participant actions' buttons imply dropdown menus, but none are open in the capture and live page could not reach the room state.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 322,
+            "y": 68,
+            "width": 26,
+            "height": 24
+          },
+          "region": "participant-grid",
+          "note": "Kebab 'More options' on tile"
+        },
+        {
+          "bbox": {
+            "x": 913,
+            "y": 824,
+            "width": 34,
+            "height": 50
+          },
+          "region": "call-toolbar",
+          "note": "Chevron 'Settings menu' split button"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "tooltip",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 411,
+            "y": 814,
+            "width": 618,
+            "height": 70
+          },
+          "note": "Icon-only buttons likely have hover tooltips but none visible and not verifiable"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "card",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 21,
+            "y": 57,
+            "width": 342,
+            "height": 342
+          },
+          "note": "Tiles are video-call participant tiles, coded under video-call rather than as collection cards"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "banner",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 550,
+            "y": 10,
+            "width": 340,
+            "height": 81
+          },
+          "note": "Only a hidden 'Connection lost' status exists in the a11y tree; not visible in capture"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "full-viewport video call app: uniform 4x2 participant tile grid filling the screen, floating centered control bar at bottom, toast at top centre",
+    "regions": [
+      "participant-grid",
+      "toast",
+      "call-toolbar"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#121214",
+      "#1c1c20",
+      "#ffffff",
+      "#dcdce6",
+      "#e74c3c",
+      "#ff6b6b",
+      "#b8860b",
+      "#2e6f95"
+    ],
+    "colorRoles": {
+      "background": "#121214",
+      "surface": "#1c1c20",
+      "text": "#ffffff",
+      "muted": "#dcdce6",
+      "primary": "#e74c3c",
+      "accent": "#ff6b6b",
+      "warning": "#b8860b"
+    },
+    "typography": "Montserrat throughout: tile name labels, toast heading, badge counts",
+    "typeScale": "Small, flat scale: 12px name pills, 13px, 16px semibold toast heading; avatar initials large (~40px) as the only display-size text",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "illustration",
+      "iconography"
+    ],
+    "iconStyle": "filled",
+    "whitespace": "moderate",
+    "backgroundTreatment": "gradient",
+    "mood": [
+      "dark",
+      "technical",
+      "focused",
+      "utilitarian"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T20:25:41.675Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 8,
+    "usage": {
+      "input_tokens": 16,
+      "cache_creation_input_tokens": 16939,
+      "cache_read_input_tokens": 198371,
+      "output_tokens": 3718
+    }
+  },
+  "notes": "MiroTalk P2P room with all cameras off: tiles show colored initial circles or cartoon avatars. Each tile has a dark top strip with small round icon buttons (pin, red crossed camera, red crossed mic, yellow hand, kebab) and a bottom-right dark name pill. Tiles use subtle radial gradients on near-black (#121214). Bottom toolbar is a floating rounded dark pill of square 50px icon buttons; disabled mic/camera tinted maroon with yellow '!' badges; leave button solid red #e74c3c. Participants and settings have split chevron buttons. Hidden a11y statuses: 'Connection lost Reconnecting…' and 'Polls closed'. Live page differed (username-in-use modal) so behaviour could not be verified."
+}

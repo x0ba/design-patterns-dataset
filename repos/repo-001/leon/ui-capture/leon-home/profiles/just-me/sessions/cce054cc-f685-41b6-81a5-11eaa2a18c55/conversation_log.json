@@ -1,0 +1,66 @@
+[
+  {
+    "who": "owner",
+    "message": "Users report ~18%/hour battery drain while tracking. What are the usual suspects with expo-location?",
+    "messageId": "4ca35910-4e63-4e0c-9193-51b4e819f387",
+    "isAddedToHistory": true,
+    "sentAt": 1793170440000
+  },
+  {
+    "who": "leon",
+    "message": "In order of impact:\n\n1. **`Accuracy.BestForNavigation`** keeps GPS fully on. For hiking, `Accuracy.High` with `distanceInterval: 10` is plenty.\n2. **`timeInterval` too short** — 1 s updates are overkill; 5 s is a good balance.\n3. **Re-rendering the map on every update.** Batch points and update the polyline at most every 5 s, and pause rendering when the screen is off.\n4. **Elevation lookups per point** — compute the profile once at the end instead.\n\nWith the first three changes, similar apps get down to roughly 6–8 %/hour. I would measure with a 30‑minute walk before/after on the same phone.",
+    "messageId": "4ca35910-4e63-4e0c-9193-51b4e819f387:leon",
+    "isAddedToHistory": true,
+    "sentAt": 1793170442894,
+    "inference": {
+      "provider": "openrouter",
+      "model": "anthropic/claude-sonnet-5.5",
+      "authMode": "api_key",
+      "credentialSource": "profile_api_key",
+      "endpoint": "https://openrouter.ai/api/v1/chat/completions"
+    },
+    "agentResponseTrace": {
+      "id": "4ca35910-4e63-4e0c-9193-51b4e819f387",
+      "answerStartedAt": 1793170441898,
+      "planSteps": [],
+      "toolCalls": [],
+      "reasoning": [
+        {
+          "id": "4ca35910-4e63-4e0c-9193-51b4e819f387:reasoning",
+          "text": "Typical causes: highest accuracy setting, very short distance interval, foreground service waking the CPU, map re-rendering every location update. I should list them in order of impact and suggest measurements.",
+          "phase": "agent",
+          "startedAt": 1793170440200
+        }
+      ],
+      "reasoningSummary": "Typical causes: highest accuracy setting, very short distance interval, foreground service waking the CPU, map re-rendering every location update",
+      "metrics": {
+        "completionCount": 1,
+        "contextUsedTokens": 6654,
+        "contextUsageEstimated": false,
+        "contextWindowTokens": 1000000,
+        "contextUsagePercent": 0.67,
+        "usageAccounting": {
+          "cachedInputTokens": 3992,
+          "cacheReadCompletionCount": 0,
+          "cacheWriteInputTokens": 0,
+          "costUSD": 0.0225,
+          "costCompletionCount": 1,
+          "estimatedCostCompletionCount": 0,
+          "costSources": [
+            "provider-reported"
+          ]
+        },
+        "inputTokens": 6654,
+        "outputTokens": 166,
+        "totalTokens": 6820,
+        "durationMs": 2894,
+        "turnInputTokens": 6654,
+        "turnOutputTokens": 166,
+        "turnTotalTokens": 6820,
+        "ttftMs": 1411,
+        "tokensPerSecond": 113,
+        "total_duration_ms": 2894
+      }
+    }
+  }
+]

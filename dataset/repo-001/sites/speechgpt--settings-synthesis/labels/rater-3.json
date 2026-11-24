@@ -1,0 +1,585 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "speechgpt--settings-synthesis",
+    "url": "http://localhost:4443/",
+    "finalUrl": "http://localhost:4443/",
+    "status": 200,
+    "title": "SpeechGPT",
+    "capturedAt": "2026-11-18T20:25:48.292Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 2289
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "ai-tools",
+    "domainNote": "Voice-enabled ChatGPT client (SpeechGPT) for spoken conversation / language practice, with TTS and speech recognition settings",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/speechgpt/explore.json",
+      "repo": {
+        "name": "hahahumble/speechgpt",
+        "url": "https://github.com/hahahumble/speechgpt",
+        "commit": "daa4d49203c5c59ff23bd682d6f474789137e002",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "settings-synthesis",
+        "name": "Settings – Synthesis",
+        "description": "Speech synthesis settings: service selector, language, speech rate and pitch sliders, and voice selection."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Conversation list with search, starred items pinned on top, per-conversation message counts, New Conversation + delete",
+      "bbox": {
+        "x": 12,
+        "y": 12,
+        "width": 320,
+        "height": 2265
+      },
+      "patterns": [
+        "app-shell",
+        "text-field",
+        "badge"
+      ]
+    },
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Waveform logo, gradient SpeechGPT wordmark, UI language select, kebab menu trigger at top right",
+      "bbox": {
+        "x": 526,
+        "y": 70,
+        "width": 720,
+        "height": 145
+      },
+      "patterns": [
+        "choice-control",
+        "menu"
+      ]
+    },
+    {
+      "id": "chat-thread",
+      "role": "main-content",
+      "label": "Bordered panel holding the linear user/assistant message thread with gradient avatars",
+      "bbox": {
+        "x": 526,
+        "y": 218,
+        "width": 720,
+        "height": 586
+      },
+      "patterns": [
+        "ai-chat"
+      ]
+    },
+    {
+      "id": "composer",
+      "role": "composer",
+      "label": "Mic/speaker toggles, clear/reset icons, message textarea, Record and Send buttons",
+      "bbox": {
+        "x": 526,
+        "y": 2145,
+        "width": 720,
+        "height": 132
+      },
+      "patterns": [
+        "prompt-input",
+        "ai-chat"
+      ]
+    },
+    {
+      "id": "settings-dialog",
+      "role": "modal",
+      "label": "Settings modal over dimmed page: vertical tabs Chat/Synthesis/Recognition; Synthesis pane with service select, language select, rate/pitch number+slider, voice ID",
+      "bbox": {
+        "x": 360,
+        "y": 946,
+        "width": 720,
+        "height": 382
+      },
+      "patterns": [
+        "modal-dialog",
+        "settings",
+        "tabs",
+        "slider",
+        "choice-control",
+        "text-field",
+        "tooltip"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "ai-chat",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 526,
+            "y": 218,
+            "width": 720,
+            "height": 586
+          },
+          "quote": "Ideas you haven't covered:",
+          "region": "chat-thread",
+          "note": "Linear thread of user prompts and model replies with bold/bulleted markdown"
+        },
+        {
+          "bbox": {
+            "x": 1022,
+            "y": 2237,
+            "width": 224,
+            "height": 40
+          },
+          "quote": "Record",
+          "region": "composer",
+          "note": "Voice recording and Send both start the next turn"
+        }
+      ],
+      "dims": {
+        "turnContent": [
+          "markdown-with-code"
+        ],
+        "composition": "linear-thread",
+        "invokeBy": [
+          "text-field-submit",
+          "voice-input"
+        ],
+        "flow": "strict-turn-taking",
+        "scope": "this-thread-only"
+      }
+    },
+    {
+      "id": "prompt-input",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 526,
+            "y": 2189,
+            "width": 720,
+            "height": 40
+          },
+          "quote": "Type your message...",
+          "region": "composer"
+        }
+      ],
+      "dims": {
+        "content": [
+          "plain-prompt"
+        ],
+        "layout": "bottom-sticky-composer",
+        "submitBy": [
+          "click-send",
+          "push-to-talk"
+        ],
+        "assistance": [
+          "none"
+        ]
+      }
+    },
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 12,
+            "y": 12,
+            "width": 320,
+            "height": 2265
+          },
+          "quote": "New Conversation",
+          "region": "sidebar",
+          "note": "Persistent conversation sidebar with starred (pinned) items above recents"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "user-pinned-items",
+          "recents"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "modal-dialog",
+      "status": "present",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 360,
+            "y": 946,
+            "width": 720,
+            "height": 382
+          },
+          "quote": "Speech Synthesis Service",
+          "region": "settings-dialog",
+          "note": "Centered dialog over grey backdrop with close X; Escape closes it (verified live)"
+        }
+      ],
+      "dims": {
+        "form": "centered-large",
+        "openBy": [
+          "user-action"
+        ],
+        "dismissBy": [
+          "close-button",
+          "escape"
+        ],
+        "modality": "blocking",
+        "purpose": "form",
+        "onDismiss": "already-saved"
+      }
+    },
+    {
+      "id": "settings",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 538,
+            "y": 946,
+            "width": 542,
+            "height": 382
+          },
+          "quote": "Properties",
+          "region": "settings-dialog",
+          "note": "Sectioned settings: Service, Properties, Voice; no save button"
+        }
+      ],
+      "dims": {
+        "ia": "tabbed-categories",
+        "controls": [
+          "single-and-multi-select",
+          "numeric-and-ranges",
+          "text-and-credentials"
+        ],
+        "discovery": [
+          "browse-hierarchy"
+        ],
+        "timing": "instant",
+        "safety": [
+          "no-confirm"
+        ]
+      }
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 368,
+            "y": 970,
+            "width": 162,
+            "height": 96
+          },
+          "quote": "Synthesis",
+          "region": "settings-dialog",
+          "note": "Vertical tab list with icon+label; clicking Chat switched the pane (verified live)"
+        }
+      ],
+      "dims": {
+        "placement": "vertical",
+        "label": [
+          "text",
+          "icon"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      }
+    },
+    {
+      "id": "slider",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 812,
+            "y": 1158,
+            "width": 240,
+            "height": 80
+          },
+          "quote": "Speech Rate",
+          "region": "settings-dialog",
+          "note": "Speech Rate and Pitch sliders each paired with a number field"
+        }
+      ],
+      "dims": {
+        "values": "single-value",
+        "labels": [
+          "none"
+        ],
+        "scale": "linear",
+        "precision": [
+          "paired-number-field"
+        ]
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 890,
+            "y": 1013,
+            "width": 160,
+            "height": 36
+          },
+          "quote": "System",
+          "region": "settings-dialog",
+          "note": "Native select: System / Azure TTS / Amazon Polly"
+        },
+        {
+          "bbox": {
+            "x": 1137,
+            "y": 168,
+            "width": 107,
+            "height": 42
+          },
+          "quote": "English",
+          "region": "header",
+          "note": "UI language select"
+        }
+      ],
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "dropdown-select",
+        "option": [
+          "label-only"
+        ],
+        "largeSets": "show-all"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 59,
+            "y": 46,
+            "width": 244,
+            "height": 36
+          },
+          "quote": "Search...",
+          "region": "sidebar",
+          "note": "Search field with icon and placeholder"
+        },
+        {
+          "bbox": {
+            "x": 812,
+            "y": 1158,
+            "width": 80,
+            "height": 36
+          },
+          "region": "settings-dialog",
+          "note": "Number input paired with slider"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "label",
+          "placeholder"
+        ],
+        "validation": "none",
+        "style": "outlined",
+        "assistance": [
+          "none"
+        ]
+      }
+    },
+    {
+      "id": "tooltip",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 772,
+            "y": 1018,
+            "width": 18,
+            "height": 18
+          },
+          "region": "settings-dialog",
+          "note": "? help icon; hover shows 'The service used to synthesize speech' below (verified live)"
+        }
+      ],
+      "dims": {
+        "trigger": [
+          "hover"
+        ],
+        "content": "label",
+        "placement": "below",
+        "timing": "until-the-pointer-leaves"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 252,
+            "y": 100,
+            "width": 28,
+            "height": 24
+          },
+          "quote": "8",
+          "region": "sidebar",
+          "note": "Per-conversation message count pill"
+        }
+      ],
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1388,
+            "y": 16,
+            "width": 36,
+            "height": 36
+          },
+          "region": "header",
+          "note": "Kebab trigger; live it opens Setting/Feedback/About with icons (not open in capture)"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click",
+        "structure": "flat",
+        "item": [
+          "label",
+          "icon"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    },
+    {
+      "id": "chat-thread",
+      "status": "absent",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 526,
+            "y": 218,
+            "width": 720,
+            "height": 586
+          },
+          "note": "Conversation is with a model, coded as ai-chat"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "Two-column app: fixed left conversation sidebar, centered narrow chat column with logo header, thread panel and bottom composer; settings modal open over a grey scrim",
+    "regions": [
+      "sidebar",
+      "header",
+      "chat-thread",
+      "composer",
+      "settings-dialog"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#f1f5f9",
+      "#ffffff",
+      "#6b7280",
+      "#374151",
+      "#1f2937",
+      "#6366f1",
+      "#8b5cf6",
+      "#ec4899",
+      "#dc2626",
+      "#e2e8f0",
+      "#cbd5e1"
+    ],
+    "colorRoles": {
+      "background": "#f1f5f9",
+      "surface": "#ffffff",
+      "text": "#374151",
+      "muted": "#6b7280",
+      "primary": "#8b5cf6",
+      "accent": "#ec4899",
+      "border": "#cbd5e1",
+      "danger": "#dc2626",
+      "scrim": "#6b7280"
+    },
+    "typography": "ui-sans-serif system stack throughout (renders as DejaVu Sans): body, list items, settings labels; bold gradient wordmark",
+    "typeScale": "Flat scale: 16px body/labels dominate, 18px settings section headings, 24px bold gradient brand title, 14px counts/badges; weight contrast mostly 400 vs 700 in markdown",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "clean",
+      "utilitarian",
+      "friendly",
+      "calm"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T20:27:29.098Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 12,
+    "usage": {
+      "input_tokens": 24,
+      "cache_creation_input_tokens": 43900,
+      "cache_read_input_tokens": 443584,
+      "output_tokens": 5838
+    }
+  },
+  "notes": "Tailwind slate palette with an indigo→purple→pink gradient used for the waveform logo, SpeechGPT wordmark, user avatars and the Send button; assistant avatars are yellow→green gradient circles. Record button is a red→orange gradient. Sidebar items have colored dot markers (or yellow stars for favorites) and grey pill message counts. Messages reveal hover actions (speak, delete, copy). Composer has mic/speaker auto-toggle icons and reset/clear icons above the textarea. Settings modal is a two-pane layout: grey left tab rail, white right scrolling pane with hairline-separated sections and native selects."
+}

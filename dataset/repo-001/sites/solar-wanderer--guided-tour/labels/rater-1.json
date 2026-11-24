@@ -1,0 +1,473 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "solar-wanderer--guided-tour",
+    "url": "http://solar-wanderer.localhost:4319/en/",
+    "finalUrl": "http://solar-wanderer.localhost:4319/en/",
+    "status": 200,
+    "title": "Solar Wanderer · 遨游太阳系 — A 1:1 Real-Time Solar System Explorer in Your Browser",
+    "capturedAt": "2026-11-18T03:40:23.313Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 900
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "science-research",
+    "domainNote": "real-time 1:1 3D solar system explorer / planetarium in the browser (education-leaning)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/solar-wanderer/explore.json",
+      "repo": {
+        "name": "hyqzz/Solar-Wanderer",
+        "url": "https://github.com/hyqzz/Solar-Wanderer",
+        "commit": "96a1bf2b89891d8db227bca3c14f4db2f4fb1b78",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "guided-tour",
+        "name": "Guided tour in progress",
+        "description": "The 'Journey of the Giants' guided tour at Jupiter, with the tour list open in the directory, the tour control bar (step 1/5, prev/next/sound/close) and Jupiter's info card."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "stage",
+      "role": "canvas",
+      "label": "Full-bleed 3D solar system render with Europa in focus, in-scene label, star names, orbit lines",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 900
+      },
+      "patterns": [
+        "map-explorer",
+        "object-viewer-3d"
+      ]
+    },
+    {
+      "id": "time-panel",
+      "role": "hud",
+      "label": "Simulation clock with time-warp and keyboard shortcut chips",
+      "bbox": {
+        "x": 14,
+        "y": 14,
+        "width": 260,
+        "height": 93
+      },
+      "patterns": [
+        "contextual-help"
+      ]
+    },
+    {
+      "id": "directory",
+      "role": "sidebar",
+      "label": "Directory: search field and collapsible category tree of bodies and tours",
+      "bbox": {
+        "x": 14,
+        "y": 110,
+        "width": 260,
+        "height": 717
+      },
+      "patterns": [
+        "tree-view",
+        "text-field"
+      ]
+    },
+    {
+      "id": "flight-hud",
+      "role": "hud",
+      "label": "Flight status, nearest body/altitude, F/T shortcut hints, texture loading percent",
+      "bbox": {
+        "x": 14,
+        "y": 752,
+        "width": 430,
+        "height": 136
+      },
+      "patterns": [
+        "progress-indicator",
+        "contextual-help"
+      ]
+    },
+    {
+      "id": "tour-bar",
+      "role": "transport",
+      "label": "Active tour bar: Journey of the Giants 2/5 with prev/next/TTS/exit",
+      "bbox": {
+        "x": 546,
+        "y": 841,
+        "width": 347,
+        "height": 40
+      },
+      "patterns": [
+        "stepper"
+      ]
+    },
+    {
+      "id": "info-panel",
+      "role": "detail-panel",
+      "label": "Selected body facts, description, Did-you-know callout, Fly there",
+      "bbox": {
+        "x": 1126,
+        "y": 14,
+        "width": 300,
+        "height": 392
+      },
+      "patterns": [
+        "map-explorer"
+      ]
+    },
+    {
+      "id": "compass",
+      "role": "widget",
+      "label": "Circular compass N/S/E/W with sun/selected body",
+      "bbox": {
+        "x": 1306,
+        "y": 762,
+        "width": 120,
+        "height": 120
+      },
+      "patterns": []
+    }
+  ],
+  "patterns": [
+    {
+      "id": "map-explorer",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "rationale": "Spatial world explorer with search/fly-to, body labels and a detail side card, but the world is a 3D solar system rather than a geographic map; proposed space-simulator entry.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 900
+          },
+          "region": "stage",
+          "note": "Navigable 3D world, in-scene body label with distance",
+          "quote": "Europa 5,463 km"
+        },
+        {
+          "bbox": {
+            "x": 1126,
+            "y": 14,
+            "width": 300,
+            "height": 392
+          },
+          "region": "info-panel",
+          "note": "Place-detail panel for selected body with Fly there",
+          "quote": "Fly there"
+        }
+      ],
+      "dims": {
+        "mapNav": [
+          "drag-pan",
+          "search-and-fly-to"
+        ],
+        "coupling": "detail-card-over-map",
+        "overlays": [
+          "poi-pins",
+          "routes-and-polylines"
+        ],
+        "mapAdapt": [
+          "desktop-side-panel",
+          "dark-night-style"
+        ]
+      },
+      "novel": [
+        {
+          "subdimension": "basemap",
+          "description": "Base is a rendered 3D starfield/solar system, not a terrestrial basemap",
+          "proposedValueId": "astronomical-3d-scene"
+        }
+      ]
+    },
+    {
+      "id": "object-viewer-3d",
+      "status": "uncertain",
+      "confidence": 0.4,
+      "rationale": "Planets are 3D textured bodies viewed in a full-bleed viewport with floating tools and progressive HD textures, but the purpose is navigating a world, not inspecting one model.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 478,
+            "y": 210,
+            "width": 485,
+            "height": 482
+          },
+          "region": "stage",
+          "note": "Textured 3D Europa sphere; HD textures loading progressively"
+        }
+      ],
+      "dims": {
+        "viewerChrome": "full-bleed-with-floating-tools",
+        "appearanceModes": [
+          "realistic-materials"
+        ],
+        "modelLoading": "progressive-lod",
+        "sceneGuidance": "guided-tour-of-hotspots"
+      }
+    },
+    {
+      "id": "tree-view",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 23,
+            "y": 197,
+            "width": 242,
+            "height": 620
+          },
+          "region": "directory",
+          "note": "details/summary groups with disclosure triangles, emoji type icons, counts; Planets and Tours expanded",
+          "quote": "🌙 Moons (53)"
+        }
+      ],
+      "dims": {
+        "content": [
+          "label",
+          "type-icon",
+          "count-badge"
+        ],
+        "expandBy": [
+          "disclosure-triangle"
+        ],
+        "selection": "single-node",
+        "source": "grouped-by-attribute",
+        "density": "compact"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 23,
+            "y": 154,
+            "width": 242,
+            "height": 31
+          },
+          "region": "directory",
+          "note": "Search input with icon placeholder",
+          "quote": "🔍 Search bodies…"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "placeholder"
+        ],
+        "style": "filled"
+      }
+    },
+    {
+      "id": "progress-indicator",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 14,
+            "y": 873,
+            "width": 160,
+            "height": 15
+          },
+          "region": "flight-hud",
+          "note": "Text percentage for HD texture loading",
+          "quote": "Loading HD textures 17%"
+        }
+      ],
+      "dims": {
+        "determinacy": "percentage",
+        "form": "text-status",
+        "coverage": "background-task-tray",
+        "control": "no-control"
+      }
+    },
+    {
+      "id": "stepper",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 546,
+            "y": 841,
+            "width": 347,
+            "height": 40
+          },
+          "region": "tour-bar",
+          "note": "Tour position count with previous/next buttons and exit",
+          "quote": "Journey of the Giants · 2/5"
+        }
+      ],
+      "dims": {
+        "rule": "linear-with-back",
+        "form": "compact-count",
+        "states": [
+          "current"
+        ],
+        "labels": "numbers-only"
+      }
+    },
+    {
+      "id": "contextual-help",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 14,
+            "y": 14,
+            "width": 260,
+            "height": 93
+          },
+          "region": "time-panel",
+          "note": "Keycap chips beside each action",
+          "quote": "[ slower ] faster P pause N now"
+        },
+        {
+          "bbox": {
+            "x": 28,
+            "y": 852,
+            "width": 215,
+            "height": 22
+          },
+          "region": "flight-hud",
+          "quote": "F Free flight T Go to selected"
+        }
+      ],
+      "dims": {
+        "access": [
+          "the-control-itself"
+        ],
+        "content": [
+          "shortcut-reference"
+        ],
+        "placement": "inline-static-text",
+        "proactivity": "always-visible-hints",
+        "relevance": "the-person-s-current-state"
+      }
+    },
+    {
+      "id": "media-player",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 546,
+            "y": 841,
+            "width": 347,
+            "height": 40
+          },
+          "note": "Tour bar has prev/next/TTS but it steps a camera tour, not media playback"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "onboarding-tour",
+      "status": "absent",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 23,
+            "y": 684,
+            "width": 242,
+            "height": 132
+          },
+          "note": "Tours are content journeys through the solar system, not product feature introductions"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "full-bleed WebGL canvas with floating HUD panels: time panel + collapsible directory tree top-left, selected-body info panel top-right, flight HUD bottom-left, tour transport bar bottom-centre, compass bottom-right",
+    "regions": [
+      "stage",
+      "time-panel",
+      "directory",
+      "flight-hud",
+      "tour-bar",
+      "info-panel",
+      "compass"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#000000",
+      "#08101c",
+      "#142034",
+      "#cfe3f5",
+      "#9fc6ea",
+      "#e8f4ff",
+      "#d4ecd4",
+      "#141e0a",
+      "#96a5c3",
+      "#6fb0e8"
+    ],
+    "colorRoles": {
+      "background": "#000000",
+      "surface": "#08101c",
+      "text": "#cfe3f5",
+      "muted": "#96a5c3",
+      "primary": "#9fc6ea",
+      "accent": "#d4ecd4",
+      "border": "#142034",
+      "heading": "#e8f4ff"
+    },
+    "typography": "Microsoft YaHei (falls back to system sans/DejaVu) for all HUD text, bilingual English + Chinese body names; Arial in search input and tour buttons",
+    "typeScale": "Small, compact HUD scale: 17px bold panel titles/clock, 16px, 13px body and list items, 11-12px secondary/Chinese names and stop counts, 10px keycaps; weight contrast mainly bold titles vs regular",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "3d-renders",
+      "iconography"
+    ],
+    "iconStyle": "filled",
+    "whitespace": "tight",
+    "backgroundTreatment": "image",
+    "mood": [
+      "immersive",
+      "technical",
+      "nocturnal",
+      "educational",
+      "calm"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T05:32:56.880Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 9,
+    "usage": {
+      "input_tokens": 18,
+      "cache_creation_input_tokens": 35185,
+      "cache_read_input_tokens": 314977,
+      "output_tokens": 7759
+    }
+  },
+  "notes": "Space-simulator UI: semi-transparent navy (#08101c) rounded panels float over a black starfield WebGL canvas. Keycap-style chips teach shortcuts inline ([ ] P N F T M C H). Bilingual (English + Chinese) body names throughout. Green-tinted 'Did you know' callout with 'Another ↻' cycling facts. Tours auto-play with TTS toggle. Compass widget bottom-right. Toast 'Flying to Io… (drag to cancel)' exists in DOM as role=status but not visible in the capture. Proposed new codebook entry space-simulator since map-explorer/object-viewer-3d fit imperfectly."
+}

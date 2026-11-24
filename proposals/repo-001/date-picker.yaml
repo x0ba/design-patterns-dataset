@@ -1,0 +1,159 @@
+# Codebook proposal (new-values) — review with: node scripts/proposals.ts show repo-001 date-picker
+id: date-picker
+kind: new-values
+status: open
+batch: repo-001
+codebookVersion: 1.0.0
+dimensions:
+  - subdimensions:
+      - id: selection
+        values:
+          - id: month-or-period
+            name: Month or period
+            description: The unit chosen is a whole month (or quarter/year) from a grid of months, used to scope
+              reports or budgets.
+            example: MyFin Budget dashboard month picker; MUI DatePicker views=['month','year']
+          - id: month
+            name: Month
+            description: Chooses a month and year rather than a specific day, typically from a 3x4 month grid
+            example: MyFin Budget dashboard month filter
+  - subdimensions:
+      - id: annotations
+        values:
+          - id: per-day-metric-or-progress
+            name: Per-day metric or progress
+            description: Each day shows a logged value or goal progress (calories, steps, completion bar)
+              summarising that day's data
+            example: MyFitnessPal / NutriTrace week strip with daily kcal and progress bars
+          - id: per-day-metric-value
+            name: Per-day metric value
+            description: Each day shows a logged quantity (e.g. kcal total) and/or a mini progress bar toward a
+              daily goal
+            example: NutriTrace / MyFitnessPal week strip
+          - id: metric-per-day
+            name: Metric per day
+            description: Each day shows a logged value or goal progress (kcal total, steps, mini progress bar)
+            example: NutriTrace / MyFitnessPal diary week strip
+          - id: per-day-metric
+            name: Per-day metric
+            description: Each day shows a logged value or goal progress for that day (e.g. kcal total with a
+              mini bar)
+            example: NutriTrace diary week strip
+          - id: per-day-totals
+            name: Per-day totals or progress
+            description: Each day shows a logged metric total and/or goal progress bar
+            example: MyFitnessPal-style diary week strip
+          - id: per-day-metric-summary
+            name: Per-day metric summary
+            description: Each day carries a summary of the person's own logged data for it — a total and/or a
+              mini progress bar toward a daily goal.
+            example: Nutrition diary week strip showing kcal and goal bar under each day
+rationale:
+  - rater: rater-1
+    site: myfin--dashboard
+    text: The picker chooses a whole month (month grid Jan–Dec with year dropdown), not a single day,
+      range or date-time. None of the selection values describes month/period granularity.
+  - rater: rater-3
+    site: myfin--dashboard
+    text: Month-granularity pickers (pick a month+year from a month grid) are common in
+      finance/reporting dashboards; single-date/range don't capture coarser granularity.
+  - rater: rater-2
+    site: nutritrace--diary
+    text: Week-strip day picker shows each day's logged total (kcal) and a mini goal-progress bar under
+      the date. That's a per-day summary metric, not busy, price, holiday or unavailability.
+  - rater: rater-1
+    site: nutritrace--diary
+    text: Tracker apps annotate each day in a week strip with that day's logged metric and progress
+      toward a goal; none of none/unavailable/price/busy/holidays fit.
+  - rater: rater-3
+    site: nutritrace--diary
+    text: Week strips in tracking apps annotate each day with a logged metric (calorie total) and a
+      goal-progress bar. This is not price, busy, holiday or unavailable.
+  - rater: rater-2
+    site: nutritrace--statistics
+    text: Tracker apps show the day's logged metric (kcal, steps) and a goal-progress bar on each day in
+      a week strip; none of the existing annotation values (price, busy, holidays, unavailable)
+      describe that.
+  - rater: rater-1
+    site: nutritrace--statistics
+    text: Week strip days in tracking apps carry a per-day logged total and goal progress bar; none of
+      the existing annotation values (busy, price, holidays, unavailable) cover it.
+  - rater: rater-3
+    site: nutritrace--statistics
+    text: Each day in the week strip shows the user's own logged total for that day (kcal number plus a
+      goal-progress bar coloured by status). None of the listed annotations (price, busy, holidays,
+      unavailable) describes per-day personal metric summaries.
+sources:
+  - batch: repo-001
+    site: myfin--dashboard
+    url: http://localhost:4419/
+    note: proposed by rater-1, rater-3
+  - batch: repo-001
+    site: nutritrace--diary
+    url: http://localhost:4449/
+    note: proposed by rater-2, rater-1, rater-3
+  - batch: repo-001
+    site: nutritrace--statistics
+    url: http://localhost:4449/
+    note: proposed by rater-2, rater-1, rater-3
+evidence:
+  - site: myfin--dashboard
+    rater: rater-1
+    bbox:
+      x: 266
+      y: 96
+      width: 246
+      height: 56
+    quote: November 2026
+    note: Month field opens a Jan–Dec month grid popover
+  - site: myfin--dashboard
+    rater: rater-3
+    bbox:
+      x: 266
+      y: 96
+      width: 246
+      height: 56
+    quote: November 2026
+  - site: nutritrace--diary
+    rater: rater-2
+    bbox:
+      x: 16
+      y: 126
+      width: 1408
+      height: 65
+    quote: SUNDAY 15 1,540
+  - site: nutritrace--diary
+    rater: rater-1
+    bbox:
+      x: 0
+      y: 118
+      width: 1440
+      height: 82
+    quote: TUESDAY 17 1,313
+  - site: nutritrace--diary
+    rater: rater-3
+    bbox:
+      x: 0
+      y: 118
+      width: 1440
+      height: 82
+    quote: TUESDAY 17 1,313
+  - site: nutritrace--statistics
+    rater: rater-2
+    bbox:
+      x: 0
+      y: 118
+      width: 1440
+      height: 82
+    quote: SUNDAY 15 1,921
+  - site: nutritrace--statistics
+    rater: rater-3
+    bbox:
+      x: 0
+      y: 118
+      width: 1440
+      height: 82
+    quote: SUNDAY 15 1,921
+    note: week strip days annotated with daily kcal and progress bars
+createdAt: 2026-11-18T03:35:51.001Z
+updatedAt: 2026-11-18T21:29:57.402Z

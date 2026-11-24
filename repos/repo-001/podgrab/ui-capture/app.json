@@ -1,0 +1,24 @@
+{
+  "mode": "server",
+  "entry": "/",
+  "login": null,
+  "stubs": [
+    {
+      "service": "Podcast publishers' RSS feeds (25 fictional shows, 20 subscribed + 6 discoverable via search)",
+      "how": "Local Go stub (.ui-capture/stub, binary .ui-capture/bin/stub) on localhost:4430 serves /feed/<slug>.xml with itunes: tags, enclosures, durations and episode artwork; start.sh starts it. The app fetches and refreshes feeds from it exactly as it would from a real host."
+    },
+    {
+      "service": "Podcast cover art / episode artwork CDNs",
+      "how": "Same stub serves generated SVG cover art at /art/<slug>.svg and per-episode art at /art/<slug>/ep<N>.svg. The app downloads covers into DATA like real ones; the podcast page and player also load them directly from the stub."
+    },
+    {
+      "service": "Episode audio file hosts",
+      "how": "Stub /audio/... returns a few seconds of valid silent MP3 (HEAD reports the realistic enclosure size). Downloaded files on disk are these short MP3s; DB file sizes are set from the feed enclosure lengths."
+    },
+    {
+      "service": "iTunes Search API, PodcastIndex API, gpodder.net search (Add Podcast page)",
+      "how": "Stub endpoints /itunes/search, /podcastindex/search/byterm and /gpodder/search.json return realistic JSON from the stub's show catalog. Wired in via new env overrides ITUNES_BASE_URL, PODCASTINDEX_BASE_URL and GPODDER_BASE_URL in service/itunesService.go and service/gpodderService.go (defaults unchanged)."
+    }
+  ],
+  "notes": "Podgrab is a Go (gin) server rendering Go templates with Vue on the client; SQLite (gorm) in .ui-capture/data/config/podgrab.db, downloaded files in .ui-capture/data/assets. Build: Go 1.25.14 via mise (http backend pointing at the official GitHub-hosted actions/go-versions tarball, since dl.google.com is blocked); Go modules from vanity hosts are served from a file:// GOPROXY in .ui-capture/goproxy built by .ui-capture/tools/mkproxy from GitHub mirrors (hashes verified against go.sum). .ui-capture/build.sh rebuilds the app, stub and seeder binaries into .ui-capture/bin. start.sh runs the stub on :4430 and the app on $PORT (CHECK_FREQUENCY=240 so the background refresh/download jobs don't change state during a capture). Data: .ui-capture/seed.sh starts the stub + app on side ports and runs .ui-capture/bin/seed (source in .ui-capture/seed), which uses the app's own HTTP API to set settings, create 17 tags, subscribe to 20 shows (app fetches feeds and auto-downloads), replay ~14 months of listening (downloads, played/unplayed, bookmarks, deleting played episodes, 2 paused shows, 2 episodes left queued), then back-dates created/download/bookmark timestamps in SQLite and writes 5 rolling DB backups. ~1,000 episodes total, mix of Downloaded / Not downloaded / Queued, played and bookmarked. No password is set, so there is no login. Main areas: Podcasts home (/ — grid/list of subscriptions with counts, tags filter, sort), podcast detail (/podcasts/<id>/view), All Episodes (/episodes with filters: played, downloaded, bookmarked, tags, sort, paging), Tags (/allTags), Add Podcast (/add — URL, OPML import, search via stubbed iTunes/PodcastIndex), Player (/player), Settings (/settings), Backups (/backups), RSS (/rss)."
+}

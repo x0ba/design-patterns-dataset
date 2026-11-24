@@ -1,0 +1,112 @@
+[
+  {
+    "who": "owner",
+    "message": "How do I embed the Shopify Buy Button in an Astro component without it breaking on page transitions?",
+    "messageId": "4f2347f3-d253-45b4-8f29-56ae75269f78",
+    "isAddedToHistory": true,
+    "sentAt": 1793919600000
+  },
+  {
+    "who": "leon",
+    "message": "The Buy Button script mounts once and does not know about Astro’s view transitions, so re‑initialise it on `astro:page-load`:\n\n```astro\n---\nconst { productId } = Astro.props\n---\n<div class=\"buy-button\" data-product-id={productId}></div>\n\n<script>\n  import { mountBuyButtons } from '../lib/shopify'\n  document.addEventListener('astro:page-load', () => mountBuyButtons())\n</script>\n```\n\nIn `mountBuyButtons()`, create the client once (module scope) and only call `ui.createComponent('product', …)` for nodes that do not have a `data-mounted` attribute yet. That avoids duplicate buttons when you navigate back.",
+    "messageId": "4f2347f3-d253-45b4-8f29-56ae75269f78:leon",
+    "isAddedToHistory": true,
+    "sentAt": 1793919602921,
+    "inference": {
+      "provider": "openrouter",
+      "model": "anthropic/claude-sonnet-5.5",
+      "authMode": "api_key",
+      "credentialSource": "profile_api_key",
+      "endpoint": "https://openrouter.ai/api/v1/chat/completions"
+    },
+    "agentResponseTrace": {
+      "id": "4f2347f3-d253-45b4-8f29-56ae75269f78",
+      "answerStartedAt": 1793919601907,
+      "planSteps": [],
+      "toolCalls": [],
+      "metrics": {
+        "completionCount": 1,
+        "contextUsedTokens": 6843,
+        "contextUsageEstimated": false,
+        "contextWindowTokens": 1000000,
+        "contextUsagePercent": 0.68,
+        "usageAccounting": {
+          "cachedInputTokens": 4106,
+          "cacheReadCompletionCount": 0,
+          "cacheWriteInputTokens": 0,
+          "costUSD": 0.0231,
+          "costCompletionCount": 1,
+          "estimatedCostCompletionCount": 0,
+          "costSources": [
+            "provider-reported"
+          ]
+        },
+        "inputTokens": 6843,
+        "outputTokens": 169,
+        "totalTokens": 7012,
+        "durationMs": 2921,
+        "turnInputTokens": 6843,
+        "turnOutputTokens": 169,
+        "turnTotalTokens": 7012,
+        "ttftMs": 1034,
+        "tokensPerSecond": 81,
+        "total_duration_ms": 2921
+      }
+    }
+  },
+  {
+    "who": "owner",
+    "message": "the cart drawer opens twice now",
+    "messageId": "b55ee342-4f12-4953-a5d9-f4531a45e499",
+    "isAddedToHistory": true,
+    "sentAt": 1793919962921
+  },
+  {
+    "who": "leon",
+    "message": "That is the same issue one level up: the cart toggle component is created on every page load. Create it only once — guard with a module‑level flag:\n\n```ts\nlet cartReady = false\nexport function mountBuyButtons() {\n  if (!cartReady) {\n    ui.createComponent('cart', { moneyFormat: '{{amount_with_comma_separator}} €' })\n    cartReady = true\n  }\n  // …product buttons as before\n}\n```",
+    "messageId": "b55ee342-4f12-4953-a5d9-f4531a45e499:leon",
+    "isAddedToHistory": true,
+    "sentAt": 1793919965275,
+    "inference": {
+      "provider": "openrouter",
+      "model": "anthropic/claude-sonnet-5.5",
+      "authMode": "api_key",
+      "credentialSource": "profile_api_key",
+      "endpoint": "https://openrouter.ai/api/v1/chat/completions"
+    },
+    "agentResponseTrace": {
+      "id": "b55ee342-4f12-4953-a5d9-f4531a45e499",
+      "answerStartedAt": 1793919964639,
+      "planSteps": [],
+      "toolCalls": [],
+      "metrics": {
+        "completionCount": 1,
+        "contextUsedTokens": 8477,
+        "contextUsageEstimated": false,
+        "contextWindowTokens": 1000000,
+        "contextUsagePercent": 0.85,
+        "usageAccounting": {
+          "cachedInputTokens": 5086,
+          "cacheReadCompletionCount": 0,
+          "cacheWriteInputTokens": 0,
+          "costUSD": 0.027,
+          "costCompletionCount": 1,
+          "estimatedCostCompletionCount": 0,
+          "costSources": [
+            "provider-reported"
+          ]
+        },
+        "inputTokens": 8477,
+        "outputTokens": 106,
+        "totalTokens": 8583,
+        "durationMs": 2354,
+        "turnInputTokens": 8477,
+        "turnOutputTokens": 106,
+        "turnTotalTokens": 8583,
+        "ttftMs": 1043,
+        "tokensPerSecond": 98,
+        "total_duration_ms": 2354
+      }
+    }
+  }
+]

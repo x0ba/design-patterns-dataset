@@ -1,0 +1,98 @@
+{
+  "batch": "repo-001",
+  "slug": "trek",
+  "ok": true,
+  "repo": {
+    "name": "liketrek/TREK",
+    "url": "https://github.com/liketrek/TREK",
+    "commit": "2bcfc1bfcbbff0affd097c0f789c835396389572",
+    "branch": "main",
+    "license": "AGPL-3.0"
+  },
+  "domain": "travel-hospitality",
+  "port": 4453,
+  "checkoutRoot": "~/.cache/design-patterns-dataset/repos",
+  "mode": "server",
+  "entry": "/dashboard",
+  "app": {
+    "mode": "server",
+    "entry": "/dashboard",
+    "login": {
+      "username": "maya.lindqvist",
+      "email": "maya@trek.local",
+      "password": "Wanderlust2026!"
+    },
+    "stubs": [
+      {
+        "service": "Remembered sign-in for the seeded user (a fresh browser has no session, so TREK would bounce /dashboard to /login and cancel its boot requests)",
+        "how": "start.sh puts session-proxy.mjs on $PORT and runs TREK on 127.0.0.1 (HOST) at a free port picked at startup. At startup the proxy signs maya@trek.local in through TREK's own /api/auth/login (remember_me) and attaches that trek_session cookie to any request that arrives without one (also setting it in the browser); WebSocket upgrades (/ws) are piped through, and requests that arrive while TREK is still booting are held until it answers instead of failing. Requests that already carry a session pass untouched. Signing out works, but the next request is signed in again."
+      },
+      {
+        "service": "Open-Meteo weather & wind API (forecast + archive), used by the day plan, journal and wind widgets",
+        "how": "start.sh runs stub-server.mjs on a free loopback port picked at startup, which returns deterministic, plausible daily/hourly/current weather for any lat/lng/date (temperatures follow latitude and season). The server is started with --require fetch-redirect.cjs, which sends its fetch() calls for api.open-meteo.com / archive-api.open-meteo.com to that stub; no app source is changed."
+      },
+      {
+        "service": "TREK hosted services (place search, routing, Photon/Valhalla relays, place photos)",
+        "how": "Turned off with TREK_SERVICES=off and TREK_PLACES_ENABLED=false (the app's own self-hosted/offline switches); places carry their own coordinates from the seed."
+      },
+      {
+        "service": "Plugins registry",
+        "how": "TREK_PLUGINS_ENABLED=false."
+      },
+      {
+        "service": "OIDC / SSO, SMTP mail, Web Push, LLM assistant, Immich/Synology/Dawarich/AirTrail integrations",
+        "how": "Left unconfigured (no env vars), which TREK treats as 'feature off'; local password login is used. VAPID keys are generated locally on first run."
+      },
+      {
+        "service": "Secrets",
+        "how": "ENCRYPTION_KEY is a fixed placeholder in .ui-capture/env.sh; the JWT secret is generated into server/data on first start."
+      }
+    ],
+    "notes": "TREK 5.1.4 (NestJS + SQLite server, React/Vite client). Built with `npm ci && npm run build` (Node 24.22.3 via mise; better-sqlite3 uses its bundled prebuild), client/dist copied to server/public as the Dockerfile does. start.sh sources .ui-capture/env.sh, runs `node dist/index.js` from server/ bound to 127.0.0.1 on a free internal port and serves it on $PORT through session-proxy.mjs (opens already signed in as Maya) in production mode with COOKIE_SECURE=false; the SQLite DB is .ui-capture/data/travel.db (TREK_DB_FILE). Data was loaded through the REST API by .ui-capture/seed/seed.mjs (content in seed/data.mjs): main admin account Maya Lindqvist (maya@trek.local) plus 5 friends (jonas.weber, priya.r, tomas_herrera, lena.f, samwhit) who share trips. 10 trips: Copenhagen long weekend (ongoing, 14–18 Nov 2026), Mexico City & Oaxaca New Year (upcoming, heavily planned: 27 places, flights/hotels/restaurant bookings, polls, chat, notes, budget split 4 ways, todos incl. overdue), Kyoto & Tokyo (Oct 2026, done), Lisbon & Porto (Apr 2026), Amalfi & Rome (May 2027, partly planned), Patagonia W Trek (Feb 2027, early), Iceland Ring Road and Scottish Highlands (archived), Berlin TechConf 2025, Dolomites ski week (no dates yet). Each has places with real coordinates, day plans with times, reservations, accommodations, costs with payers/FX, packing lists with bags, to-dos, collab notes/polls/links/messages. Also: Atlas with 26 visited countries + bucket list, 3 Collections of saved places, 2 Journeys (journal) with entries, Vacay days for 2026. Main areas: Dashboard (/dashboard) with trip cards, trip planner (/trips/:id) with map + day plan + bookings/lists/costs/files/collab tabs, Atlas, Vacay, Collections, Journey, Settings and Admin. Map tiles are loaded by the browser from public tile servers and are not stubbed, so the map background stays blank offline (markers, routes and the rest of the UI work). Also seeded: 9 PDF booking documents in trip Files (seed/files.mjs, stored in server/uploads), and creation timestamps spread over the past months (seed/backdate.mjs). To rebuild the data from scratch: delete .ui-capture/data/travel.db*, start the server, then run node seed/seed.mjs, node seed/files.mjs and node seed/notices.mjs (base URL as argument; notices.mjs dismisses the release-notes modal like a long-time user) and, from server/, node ../.ui-capture/seed/backdate.mjs ../.ui-capture/data/travel.db."
+  },
+  "tools": {
+    "node": "24.22.3"
+  },
+  "prompt": "This is a checkout of liketrek/TREK (https://github.com/liketrek/TREK) at commit 2bcfc1bfcbbf. The most complete open-source travel planner: real-time collaboration, bookings, budgets, packing lists, journals, offline PWA, SSO and an AI-ready MCP server, with planet-wide place search and routing built in.\n\nI want to see its user interface in a desktop browser, in the state a real, established user would see it. Please get the app running locally with its main interface working and realistic data in it.\n\n# Running it\n- Follow the repo's own setup docs and tooling. Take the simplest route that shows the real app: a static production build if the front end works without a backend, otherwise the app's own server (production or dev mode).\n- If it needs a database or other services, run them locally with an embedded or file-based option (SQLite, in-memory, JSON files, an embedded Postgres such as PGlite) or the app's demo/mock mode.\n- Don't redesign or restyle anything. Change only what's needed to build and run it.\n\n# Tools: use mise\nInstall every runtime and tool you need (node, the package manager, python, bun, ...) with mise, pinned to exact versions in a mise.toml at the repo root, so the setup can be reproduced. Match what the repo asks for (engines, .nvmrc, .tool-versions, packageManager). mise is already configured for this directory: `mise install` installs into ./.ui-capture/mise, and its shims come first on PATH, so `node`, `pnpm` and the rest resolve to the pinned versions. Don't use other copies of these tools or download runtimes by hand.\n\n# Secrets, API keys and external services: fake them\nThe app must not depend on anything outside this machine, and when it runs it has no network except localhost. Wherever it expects secrets, environment variables, API keys or third-party services (hosted auth or OAuth, payment providers, email, LLM or other AI APIs, maps, storage buckets, analytics, hosted databases):\n- Give the required variables placeholder values so the app starts.\n- Where it actually calls the service, make the call succeed locally with realistic responses: use the app's own mock, test or offline mode if it has one; otherwise point the client at a small local stub server that start.sh also starts, or swap in a stub at the integration boundary (the API client or service module). Keep stubs out of UI code. Responses should look like what the real service returns for a real user, e.g. an AI reply that actually answers, a payment history with real-looking amounts.\n- Calls the browser makes directly to outside services count too; point them at the local stub.\n- For sign-in through an outside provider, create a local account or use the app's dev sign-in so you can get past it.\nList every stub in app.json.\n\n# Data: like real use\nSeed it the way an established user's data would look after months of actual use: specific, plausible names and content for this kind of app; dates spread over time; a realistic mix of states (done, in progress, overdue, archived, ...); realistic volume (dozens to hundreds of records where the app revolves around records); short and long text; some messiness real data has. Start from the app's own demo or seed data if it has realistic data, and extend it if it's thin. Load data through the app's own paths (its API, import, seed scripts, or its database schema), never by hardcoding it into UI code. If the app needs an account, create one and attach the data to it. No lorem ipsum or \"Test 1\".\n\n# Environment\nThis shell is sandboxed: you can write only inside this directory (package-manager caches already point into ./.ui-capture/cache), and the network reaches only package registries, mise's download sources and GitHub (registry.npmjs.org, registry.yarnpkg.com, repo.yarnpkg.com, github.com, codeload.github.com, objects.githubusercontent.com, raw.githubusercontent.com, nodejs.org, mise.jdx.dev, mise-versions.jdx.dev, release-assets.githubusercontent.com, pypi.org, files.pythonhosted.org, binaries.prisma.sh, cdn.jsdelivr.net, unpkg.com). Docker isn't available. A process you start in the background can't be seen or stopped from a later command, so test servers on another port than 4453 (e.g. 5453) or in the foreground under `timeout`; anything still listening on 4453 is stopped before I check.\n\n# When you're done, leave this in ./.ui-capture/\n- app.json: {\"mode\": \"static\" or \"server\", \"entry\": \"/path where the main UI opens\", \"login\": null or {\"username\": \"...\", \"email\": \"...\", \"password\": \"...\"}, \"stubs\": [{\"service\": \"what was faked\", \"how\": \"how\"}], \"notes\": \"how you set it up, what data is loaded, and the main areas of the app\"}\n- static mode: the production build in ./.ui-capture/out, with index.html as its entry. It will be served from the root of a plain static file server; unknown paths fall back to index.html.\n- server mode: ./.ui-capture/start.sh, which starts everything the app needs (stubs included) in the foreground and serves the UI at http://localhost:4453/ (it gets PORT=4453). It runs with the same PATH and restrictions as your shell, plus no network at all except localhost, so everything must already be installed, built and seeded (or seeded by start.sh itself).\n- Put any scripts you write for seeding or stubbing in ./.ui-capture/ too; they're kept with the setup record.\n\n# Order of work\nYou have 90 minutes in total, and anything unfinished when time runs out is lost. So work in this order:\n1. Get the app building and running with its stubs, and write the contract above (app.json plus out/ or start.sh), even if it has only a little data so far.\n2. Then build out the data, re-running your seed and checking the app still loads after each substantial step, so that a working state with the data loaded so far is always in place.\nWrite large data sets with a short generator script rather than as one long literal file.\n\nI'll open it at 1440×900.",
+  "model": {
+    "model": "claude-opus-5-5",
+    "effort": "high"
+  },
+  "sandbox": true,
+  "startedAt": "2026-11-17T07:00:51.840Z",
+  "finishedAt": "2026-11-17T07:23:17.402Z",
+  "verification": {
+    "ok": true,
+    "problems": [],
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedRequests": [],
+    "textChars": 1309,
+    "visibleElements": 539,
+    "title": "TREK"
+  },
+  "repairs": 2,
+  "session": {
+    "rounds": 3,
+    "numTurns": 109,
+    "costUsd": 14.987933199999997,
+    "durationMs": 1327389,
+    "models": [
+      "claude-opus-5-5"
+    ],
+    "usage": {
+      "input_tokens": 202,
+      "cache_creation_input_tokens": 208418,
+      "cache_read_input_tokens": 11493092,
+      "output_tokens": 95680
+    },
+    "timedOut": false
+  },
+  "changes": {
+    "files": 1,
+    "insertions": 2,
+    "deletions": 0,
+    "patchBytes": 156,
+    "patch": "setup.patch"
+  }
+}

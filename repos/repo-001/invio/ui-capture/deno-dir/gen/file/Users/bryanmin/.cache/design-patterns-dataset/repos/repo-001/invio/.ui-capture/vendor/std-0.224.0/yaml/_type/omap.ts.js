@@ -1,0 +1,36 @@
+// Ported from js-yaml v3.13.1:
+// https://github.com/nodeca/js-yaml/commit/665aadda42349dcae869f12040d9b10ef18d12da
+// Copyright 2011-2015 by Vitaly Puzrin. All rights reserved. MIT license.
+// Copyright 2018-2024 the Deno authors. All rights reserved. MIT license.
+import { Type } from "../type.ts";
+const { hasOwn } = Object;
+const _toString = Object.prototype.toString;
+function resolveYamlOmap(data) {
+  const objectKeys = [];
+  let pairKey = "";
+  let pairHasKey = false;
+  for (const pair of data){
+    pairHasKey = false;
+    if (_toString.call(pair) !== "[object Object]") return false;
+    for(pairKey in pair){
+      if (hasOwn(pair, pairKey)) {
+        if (!pairHasKey) pairHasKey = true;
+        else return false;
+      }
+    }
+    if (!pairHasKey) return false;
+    if (objectKeys.indexOf(pairKey) === -1) objectKeys.push(pairKey);
+    else return false;
+  }
+  return true;
+}
+function constructYamlOmap(data) {
+  return data !== null ? data : [];
+}
+export const omap = new Type("tag:yaml.org,2002:omap", {
+  construct: constructYamlOmap,
+  kind: "sequence",
+  resolve: resolveYamlOmap
+});
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImZpbGU6Ly8vVXNlcnMvYnJ5YW5taW4vLmNhY2hlL2Rlc2lnbi1wYXR0ZXJucy1kYXRhc2V0L3JlcG9zL3JlcG8tMDAxL2ludmlvLy51aS1jYXB0dXJlL3ZlbmRvci9zdGQtMC4yMjQuMC95YW1sL190eXBlL29tYXAudHMiXSwic291cmNlc0NvbnRlbnQiOlsiLy8gUG9ydGVkIGZyb20ganMteWFtbCB2My4xMy4xOlxuLy8gaHR0cHM6Ly9naXRodWIuY29tL25vZGVjYS9qcy15YW1sL2NvbW1pdC82NjVhYWRkYTQyMzQ5ZGNhZTg2OWYxMjA0MGQ5YjEwZWYxOGQxMmRhXG4vLyBDb3B5cmlnaHQgMjAxMS0yMDE1IGJ5IFZpdGFseSBQdXpyaW4uIEFsbCByaWdodHMgcmVzZXJ2ZWQuIE1JVCBsaWNlbnNlLlxuLy8gQ29weXJpZ2h0IDIwMTgtMjAyNCB0aGUgRGVubyBhdXRob3JzLiBBbGwgcmlnaHRzIHJlc2VydmVkLiBNSVQgbGljZW5zZS5cblxuaW1wb3J0IHsgVHlwZSB9IGZyb20gXCIuLi90eXBlLnRzXCI7XG5pbXBvcnQgdHlwZSB7IEFueSB9IGZyb20gXCIuLi9fdXRpbHMudHNcIjtcblxuY29uc3QgeyBoYXNPd24gfSA9IE9iamVjdDtcbmNvbnN0IF90b1N0cmluZyA9IE9iamVjdC5wcm90b3R5cGUudG9TdHJpbmc7XG5cbmZ1bmN0aW9uIHJlc29sdmVZYW1sT21hcChkYXRhOiBBbnkpOiBib29sZWFuIHtcbiAgY29uc3Qgb2JqZWN0S2V5czogc3RyaW5nW10gPSBbXTtcbiAgbGV0IHBhaXJLZXkgPSBcIlwiO1xuICBsZXQgcGFpckhhc0tleSA9IGZhbHNlO1xuXG4gIGZvciAoY29uc3QgcGFpciBvZiBkYXRhKSB7XG4gICAgcGFpckhhc0tleSA9IGZhbHNlO1xuXG4gICAgaWYgKF90b1N0cmluZy5jYWxsKHBhaXIpICE9PSBcIltvYmplY3QgT2JqZWN0XVwiKSByZXR1cm4gZmFsc2U7XG5cbiAgICBmb3IgKHBhaXJLZXkgaW4gcGFpcikge1xuICAgICAgaWYgKGhhc093bihwYWlyLCBwYWlyS2V5KSkge1xuICAgICAgICBpZiAoIXBhaXJIYXNLZXkpIHBhaXJIYXNLZXkgPSB0cnVlO1xuICAgICAgICBlbHNlIHJldHVybiBmYWxzZTtcbiAgICAgIH1cbiAgICB9XG5cbiAgICBpZiAoIXBhaXJIYXNLZXkpIHJldHVybiBmYWxzZTtcblxuICAgIGlmIChvYmplY3RLZXlzLmluZGV4T2YocGFpcktleSkgPT09IC0xKSBvYmplY3RLZXlzLnB1c2gocGFpcktleSk7XG4gICAgZWxzZSByZXR1cm4gZmFsc2U7XG4gIH1cblxuICByZXR1cm4gdHJ1ZTtcbn1cblxuZnVuY3Rpb24gY29uc3RydWN0WWFtbE9tYXAoZGF0YTogQW55KTogQW55IHtcbiAgcmV0dXJuIGRhdGEgIT09IG51bGwgPyBkYXRhIDogW107XG59XG5cbmV4cG9ydCBjb25zdCBvbWFwID0gbmV3IFR5cGUoXCJ0YWc6eWFtbC5vcmcsMjAwMjpvbWFwXCIsIHtcbiAgY29uc3RydWN0OiBjb25zdHJ1Y3RZYW1sT21hcCxcbiAga2luZDogXCJzZXF1ZW5jZVwiLFxuICByZXNvbHZlOiByZXNvbHZlWWFtbE9tYXAsXG59KTtcbiJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSwrQkFBK0I7QUFDL0Isb0ZBQW9GO0FBQ3BGLDBFQUEwRTtBQUMxRSwwRUFBMEU7QUFFMUUsU0FBUyxJQUFJLFFBQVEsYUFBYTtBQUdsQyxNQUFNLEVBQUUsTUFBTSxFQUFFLEdBQUc7QUFDbkIsTUFBTSxZQUFZLE9BQU8sU0FBUyxDQUFDLFFBQVE7QUFFM0MsU0FBUyxnQkFBZ0IsSUFBUztFQUNoQyxNQUFNLGFBQXVCLEVBQUU7RUFDL0IsSUFBSSxVQUFVO0VBQ2QsSUFBSSxhQUFhO0VBRWpCLEtBQUssTUFBTSxRQUFRLEtBQU07SUFDdkIsYUFBYTtJQUViLElBQUksVUFBVSxJQUFJLENBQUMsVUFBVSxtQkFBbUIsT0FBTztJQUV2RCxJQUFLLFdBQVcsS0FBTTtNQUNwQixJQUFJLE9BQU8sTUFBTSxVQUFVO1FBQ3pCLElBQUksQ0FBQyxZQUFZLGFBQWE7YUFDekIsT0FBTztNQUNkO0lBQ0Y7SUFFQSxJQUFJLENBQUMsWUFBWSxPQUFPO0lBRXhCLElBQUksV0FBVyxPQUFPLENBQUMsYUFBYSxDQUFDLEdBQUcsV0FBVyxJQUFJLENBQUM7U0FDbkQsT0FBTztFQUNkO0VBRUEsT0FBTztBQUNUO0FBRUEsU0FBUyxrQkFBa0IsSUFBUztFQUNsQyxPQUFPLFNBQVMsT0FBTyxPQUFPLEVBQUU7QUFDbEM7QUFFQSxPQUFPLE1BQU0sT0FBTyxJQUFJLEtBQUssMEJBQTBCO0VBQ3JELFdBQVc7RUFDWCxNQUFNO0VBQ04sU0FBUztBQUNYLEdBQUcifQ==
+// denoCacheMetadata=3792533546953768489,9218622677866306676

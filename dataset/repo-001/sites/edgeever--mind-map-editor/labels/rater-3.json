@@ -1,0 +1,646 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "edgeever--mind-map-editor",
+    "url": "http://localhost:4501/",
+    "finalUrl": "http://localhost:4501/",
+    "status": 200,
+    "title": "EdgeEver",
+    "capturedAt": "2026-11-18T02:38:18.064Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1203
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "productivity",
+    "domainNote": "open-source note-taking / personal knowledge base with diagram (mind map) notes",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/edgeever/explore.json",
+      "repo": {
+        "name": "tianma-if/edgeever",
+        "url": "https://github.com/tianma-if/edgeever",
+        "commit": "e1be9c897278c061ccc40c5a5c2c4049c471e7fa",
+        "license": "AGPL-3.0"
+      },
+      "view": {
+        "slug": "mind-map-editor",
+        "name": "Mind map note editor",
+        "description": "Canvas-style mind map editor for a note, with outline view, shape library, auto layout, zoom and export toolbar beside the notebook sidebar and note list."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Icon row (tags, attachments, templates, plugins, trash), New note split button, notebook tree with counts, footer with clients & profile",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 240,
+        "height": 1203
+      },
+      "patterns": [
+        "app-shell",
+        "tree-view",
+        "menu",
+        "badge",
+        "split-pane"
+      ]
+    },
+    {
+      "id": "note-list",
+      "role": "list-pane",
+      "label": "Notebook header, search field, list of 7 note cards with tags and dates",
+      "bbox": {
+        "x": 240,
+        "y": 0,
+        "width": 360,
+        "height": 1203
+      },
+      "patterns": [
+        "overview-detail",
+        "card",
+        "text-field"
+      ]
+    },
+    {
+      "id": "editor-header",
+      "role": "toolbar",
+      "label": "Note title, notebook/tags controls, Synced status, focus mode, diagram toolbar (outline view, shape library, undo/redo, auto layout, zoom, shape, color scheme, export)",
+      "bbox": {
+        "x": 600,
+        "y": 0,
+        "width": 840,
+        "height": 110
+      },
+      "patterns": [
+        "canvas-editor",
+        "undo",
+        "menu",
+        "badge"
+      ]
+    },
+    {
+      "id": "diagram-canvas",
+      "role": "canvas",
+      "label": "Mind map 'My Second Brain' with branches, keyboard hint strip and floating AI assistant button",
+      "bbox": {
+        "x": 600,
+        "y": 110,
+        "width": 840,
+        "height": 1093
+      },
+      "patterns": [
+        "canvas-editor",
+        "contextual-help",
+        "ai-chat",
+        "prompt-input",
+        "zoomable-canvas"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 240,
+            "height": 1203
+          },
+          "region": "sidebar",
+          "note": "Persistent left sidebar with global entries, notebook navigation, profile and collapse button",
+          "quote": "Clients & Browser Extensions"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "second-sidebar-column",
+        "items": [
+          "fixed-destinations",
+          "live-counts"
+        ],
+        "visibility": "toggle-button",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "tree-view",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 12,
+            "y": 238,
+            "width": 215,
+            "height": 712
+          },
+          "region": "sidebar",
+          "note": "Notebooks nested with disclosure chevrons, type icons and note counts",
+          "quote": "Creative Ideas 15"
+        }
+      ],
+      "dims": {
+        "content": [
+          "label",
+          "type-icon",
+          "count-badge"
+        ],
+        "expandBy": [
+          "disclosure-triangle"
+        ],
+        "selection": "single-node",
+        "source": "containment",
+        "density": "comfortable"
+      }
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 258,
+            "y": 121,
+            "width": 323,
+            "height": 1068
+          },
+          "region": "note-list",
+          "note": "Note list overview; selected note (filled) opens in editor pane to the right"
+        },
+        {
+          "bbox": {
+            "x": 600,
+            "y": 0,
+            "width": 840,
+            "height": 1203
+          },
+          "region": "diagram-canvas",
+          "note": "Detail view of selected note"
+        }
+      ],
+      "dims": {
+        "attributePlacement": [
+          "in-both-views",
+          "in-overview-only"
+        ],
+        "abstraction": [
+          "summary",
+          "category",
+          "sum-or-average"
+        ],
+        "truncation": "ellipsis",
+        "relationship": "one-to-one",
+        "recursion": [
+          "none"
+        ],
+        "openIn": "side-by-side",
+        "overviewType": [
+          "list"
+        ],
+        "detailMultiplicity": "one-at-a-time",
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "whole-item",
+        "attributeScope": [
+          "per-item"
+        ]
+      }
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 258,
+            "y": 745,
+            "width": 323,
+            "height": 151
+          },
+          "region": "note-list",
+          "note": "Selected note card with filled background, title, node/link count, snippet, date, tags, overflow and delete actions",
+          "quote": "Second Brain: A Personal Kno..."
+        },
+        {
+          "bbox": {
+            "x": 258,
+            "y": 259,
+            "width": 323,
+            "height": 170
+          },
+          "region": "note-list",
+          "note": "Unselected card: no fill, thin divider only",
+          "quote": "System Architecture: EdgeEve..."
+        }
+      ],
+      "dims": {
+        "media": "none",
+        "actions": "overflow-menu",
+        "shape": "horizontal",
+        "style": "borderless",
+        "target": "whole-card"
+      }
+    },
+    {
+      "id": "split-pane",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 236,
+            "y": 0,
+            "width": 8,
+            "height": 1203
+          },
+          "region": "sidebar",
+          "note": "'Resize notebook pane' separator; collapse button «"
+        },
+        {
+          "bbox": {
+            "x": 596,
+            "y": 0,
+            "width": 8,
+            "height": 1203
+          },
+          "region": "note-list",
+          "note": "'Resize note list' separator"
+        }
+      ],
+      "dims": {
+        "orientation": "side-by-side",
+        "sizing": "draggable-divider",
+        "relationship": "linked-selection"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 256,
+            "y": 62,
+            "width": 287,
+            "height": 36
+          },
+          "region": "note-list",
+          "note": "Filled search field with icon and placeholder",
+          "quote": "Search notes"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "placeholder"
+        ],
+        "style": "filled"
+      }
+    },
+    {
+      "id": "canvas-editor",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 720,
+            "y": 260,
+            "width": 590,
+            "height": 495
+          },
+          "region": "diagram-canvas",
+          "note": "Mind map with central node and branches, editable on canvas"
+        },
+        {
+          "bbox": {
+            "x": 600,
+            "y": 37,
+            "width": 840,
+            "height": 73
+          },
+          "region": "editor-header",
+          "note": "Diagram toolbar: shape library, undo/redo, auto layout, zoom, shape, color scheme, export",
+          "quote": "Auto layout"
+        },
+        {
+          "bbox": {
+            "x": 612,
+            "y": 1165,
+            "width": 420,
+            "height": 27
+          },
+          "region": "diagram-canvas",
+          "quote": "Drag to pan · Shift Box select · Tab Child node"
+        }
+      ],
+      "dims": {
+        "selection": [
+          "click",
+          "marquee"
+        ],
+        "tools": [
+          "persistent-toolbar"
+        ],
+        "multiplayer": [
+          "solo"
+        ]
+      }
+    },
+    {
+      "id": "zoomable-canvas",
+      "status": "uncertain",
+      "confidence": 0.45,
+      "rationale": "Diagram supports drag-to-pan and zoom controls, but it is primarily an editor for one structured mind map rather than an unbounded spatial board; overlaps canvas-editor.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 600,
+            "y": 110,
+            "width": 840,
+            "height": 1093
+          },
+          "region": "diagram-canvas",
+          "note": "Pannable/zoomable mind map with 100% zoom control",
+          "quote": "Drag to pan"
+        }
+      ],
+      "dims": {
+        "canvasStructure": "graph-with-edges",
+        "canvasMode": "authoring"
+      }
+    },
+    {
+      "id": "node-editor",
+      "status": "absent",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 720,
+            "y": 260,
+            "width": 590,
+            "height": 495
+          },
+          "note": "Mind map nodes have no typed ports; not visual programming"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "undo",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 893,
+            "y": 40,
+            "width": 62,
+            "height": 30
+          },
+          "region": "editor-header",
+          "note": "Undo / Redo toolbar buttons (disabled)"
+        }
+      ],
+      "dims": {
+        "access": [
+          "toolbar-button"
+        ]
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 153,
+            "y": 66,
+            "width": 66,
+            "height": 32
+          },
+          "region": "sidebar",
+          "note": "'More' trigger opens note-type menu (Regular note, Mind map, Flowchart, ...) verified live",
+          "quote": "More"
+        },
+        {
+          "bbox": {
+            "x": 737,
+            "y": 39,
+            "width": 144,
+            "height": 32
+          },
+          "region": "editor-header",
+          "note": "Shape library dropdown trigger",
+          "quote": "Shape library"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click",
+        "structure": "flat",
+        "item": [
+          "label",
+          "icon"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 160,
+            "y": 242,
+            "width": 30,
+            "height": 20
+          },
+          "region": "sidebar",
+          "note": "Per-notebook note counts",
+          "quote": "15"
+        },
+        {
+          "bbox": {
+            "x": 1247,
+            "y": 8,
+            "width": 72,
+            "height": 20
+          },
+          "region": "editor-header",
+          "note": "Synced status pill",
+          "quote": "Synced"
+        }
+      ],
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "contextual-help",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 612,
+            "y": 1165,
+            "width": 420,
+            "height": 27
+          },
+          "region": "diagram-canvas",
+          "note": "Always-visible keyboard hint strip at bottom of canvas",
+          "quote": "Drag to pan · Shift Box select · Tab Child node · Enter Child node"
+        }
+      ],
+      "dims": {
+        "content": [
+          "shortcut-reference"
+        ],
+        "placement": "inline-static-text",
+        "proactivity": "always-visible-hints",
+        "relevance": "page"
+      }
+    },
+    {
+      "id": "ai-chat",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Only the floating 'Open AI writing assistant' button is visible in the capture; live, it opens a right-side AI chat panel with suggestion chips and composer, but the panel is not shown in the captured state.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1364,
+            "y": 1127,
+            "width": 44,
+            "height": 44
+          },
+          "region": "diagram-canvas",
+          "note": "Floating AI assistant button"
+        }
+      ],
+      "dims": {
+        "scope": "live-page-or-selection"
+      }
+    },
+    {
+      "id": "prompt-input",
+      "status": "uncertain",
+      "confidence": 0.45,
+      "rationale": "Composer group ('Include current note', gpt-4.1-mini) exists in DOM but is hidden in the captured state; seen only after opening the assistant live.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1364,
+            "y": 1127,
+            "width": 44,
+            "height": 44
+          },
+          "region": "diagram-canvas",
+          "note": "Entry point to hidden AI composer"
+        }
+      ],
+      "dims": {
+        "layout": "sidebar-composer"
+      }
+    }
+  ],
+  "structure": {
+    "layout": "three-pane desktop app: notebook tree sidebar, note list column, and editor pane (here a mind-map diagram editor with toolbar and pannable canvas)",
+    "regions": [
+      "sidebar",
+      "note-list",
+      "editor-header",
+      "diagram-canvas"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#eef1f4",
+      "#e7ebef",
+      "#f8fafb",
+      "#ffffff",
+      "#dde3e9",
+      "#0a0a0a",
+      "#525252",
+      "#737373",
+      "#a6a6a6",
+      "#16a34a",
+      "#6b6b6b"
+    ],
+    "colorRoles": {
+      "background": "#eef1f4",
+      "surface": "#ffffff",
+      "text": "#0a0a0a",
+      "muted": "#737373",
+      "subtle": "#a6a6a6",
+      "selected": "#dde3e9",
+      "sidebar": "#e7ebef",
+      "list": "#f8fafb",
+      "primary": "#16a34a",
+      "node": "#6b6b6b"
+    },
+    "typography": "System UI stack (-apple-system / DejaVu-like fallback) for nearly everything; Inter in a few controls; JetBrains Mono for keyboard key hints (Shift, Tab, Enter).",
+    "typeScale": "Compact app scale: 12px dominant for list meta, tags and sidebar; 13-14px for controls and note titles (bold ~15px); editor title ~17px bold; mind map root node bold white on gray ~15px. Contrast via weight rather than size.",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "iconography",
+      "data-visualization"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "clean",
+      "calm",
+      "technical",
+      "neutral",
+      "utilitarian"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T02:40:33.634Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 12,
+    "usage": {
+      "input_tokens": 24,
+      "cache_creation_input_tokens": 47072,
+      "cache_read_input_tokens": 514412,
+      "output_tokens": 7632
+    }
+  },
+  "notes": "Three grayscale panes of stepped grays (sidebar #e7ebef, list #f8fafb, editor white); only color accents are the green circular + in the New note button and small colored notebook icons (yellow bulb, purple cap, green house, blue briefcase, red plane). Note cards show diagram metadata ('14 nodes · 13 links') and hashtag tags in muted gray. Mind map is monochrome: dark gray pill root, outlined rounded branch nodes, underline leaves with curved gray connectors; text wraps awkwardly ('My Second Brai n'). Bottom hint strip uses kbd-style keycaps. A floating round AI sparkle button bottom-right opens a right-docked AI chat panel (not open in capture)."
+}

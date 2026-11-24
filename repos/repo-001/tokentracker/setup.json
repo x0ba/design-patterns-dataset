@@ -1,0 +1,94 @@
+{
+  "batch": "repo-001",
+  "slug": "tokentracker",
+  "ok": true,
+  "repo": {
+    "name": "xiufengsun/TokenTracker",
+    "url": "https://github.com/xiufengsun/TokenTracker",
+    "commit": "e2ff7493c600ec78ba1551490a053e5eedc4ae7a",
+    "branch": "main",
+    "license": "MIT"
+  },
+  "domain": "developer-tools",
+  "port": 4407,
+  "checkoutRoot": "~/.cache/design-patterns-dataset/repos",
+  "mode": "server",
+  "entry": "/",
+  "app": {
+    "mode": "server",
+    "entry": "/",
+    "login": null,
+    "stubs": [
+      {
+        "service": "macOS Keychain (Claude Code OAuth credentials)",
+        "how": ".ui-capture/stubs/provider-stub.cjs is preloaded via NODE_OPTIONS=--require and patches child_process.spawnSync for /usr/bin/security: 'Claude Code-credentials' returns a placeholder OAuth payload (subscriptionType=max, rateLimitTier=default_claude_max_20x); every other Keychain lookup returns 'not found'. The real Keychain is never touched."
+      },
+      {
+        "service": "Anthropic usage API (https://api.anthropic.com/api/oauth/usage) for the Limits panel",
+        "how": "Same preload wraps globalThis.fetch and answers locally with a realistic body: 5-hour and 7-day utilization that advance through each window, a Sonnet weekly-scoped bar, and extra usage turned off."
+      },
+      {
+        "service": "ChatGPT/Codex usage API (https://chatgpt.com/backend-api/wham/usage, /rate-limit-reset-credits)",
+        "how": "Same fetch wrapper returns a Pro plan with 5h/weekly rate-limit windows; reset-credits returns 404 as for accounts without credits. Placeholder ~/.codex/auth.json (unsigned JWTs, plan=pro) is written by seed/gen-provider-config.cjs."
+      },
+      {
+        "service": "All other outbound HTTP from the CLI server (LiteLLM pricing refresh, provider status pages, telemetry)",
+        "how": "The fetch wrapper fails them fast as an offline ENOTFOUND, so the app uses its bundled pricing snapshot and stays in its normal signed-out local mode. Telemetry and dashboard PostHog are disabled with TOKENTRACKER_NO_TELEMETRY=1 / DO_NOT_TRACK=1. Proxy env vars are unset so the CLI does not relaunch itself."
+      },
+      {
+        "service": "InsForge cloud auth (optional cloud account), reached through the local server's /api/auth/* proxy",
+        "how": "The fetch wrapper in stubs/provider-stub.cjs answers https://srctyff5.us-east.insforge.app/api/auth/refresh (the SDK's session restore on every page load) with 200 {accessToken:null,user:null,csrfToken:null}, i.e. no session. The dashboard then stays in normal signed-out local mode (no 502). Other /api/auth/* paths get InsForge's 401 'No active session' JSON. The user has never signed in to the optional cloud, so cloud-only pages (Leaderboard, Cloud) show their signed-out or offline states."
+      },
+      {
+        "service": "Vercel Web Analytics / Speed Insights (/_vercel/insights/script.js, /_vercel/speed-insights/script.js), which exist only on Vercel hosting",
+        "how": "provider-stub.cjs wraps http.createServer in the tracker process. Those two script paths are served as small local stand-ins that drain the va/si queues and send nothing, and /_vercel/* beacon POSTs return 204."
+      }
+    ],
+    "notes": "Server mode: start.sh runs the CLI's own `node bin/tracker.js serve --no-sync --no-open --port $PORT`, which serves the production dashboard build (dashboard/dist, built with `npm --prefix dashboard run build`) and the local API (/functions/tokentracker-*). HOME is set to .ui-capture/home, and start.sh reseeds it on every start with seed/seed-all.cjs. The seed runs every seed/gen-*.cjs and shifts the timeline by whole days so the data always ends 'today'. Data: one developer (Pacific time, small fintech studio 'harborline-labs' plus side projects, a thesis and a CSE291 course repo) across about six months, May 11 to today. queue.jsonl has about 4,000 half-hour buckets (about 4.4B tokens, about $740 in the last 30 days) for Claude Code (Opus 4.6 to 4.8, 5, 5.5, then Fable 5.2, plus Sonnet and Haiku), Codex (gpt-5.4 to 5.5 to 5.6-terra, codex-spark), Cursor (composer-2/2.5, grok), Gemini CLI (3.5-flash, 4-carbon) and OpenCode (kimi, glm, deepseek). There are weekends, vacation gaps, late nights and a few re-written buckets. project.queue.jsonl attributes usage to 8 repos. About 570 real-format Claude Code transcripts in ~/.claude/projects (metadata plus ai-title titles) feed the Sessions page, session insights and the context category breakdown. Main areas: Dashboard (/), Sessions (/sessions), Limits (/limits), Achievements (/achievements), Skills (/skills), Widgets (/widgets), Settings (/settings), Leaderboard (/leaderboard, cloud), Wrapped (/wrapped)."
+  },
+  "tools": {
+    "node": "24.22.3"
+  },
+  "prompt": "This is a checkout of xiufengsun/TokenTracker (https://github.com/xiufengsun/TokenTracker) at commit e2ff7493c600. Local-first AI token usage & cost tracker for 31 coding tools incl. Claude Code, Codex, Cursor, Gemini & DeepSeek Harness—with native apps. Never reads prompts.\n\nI want to see its user interface in a desktop browser, in the state a real, established user would see it. Please get the app running locally with its main interface working and realistic data in it.\n\n# Running it\n- Follow the repo's own setup docs and tooling. Take the simplest route that shows the real app: a static production build if the front end works without a backend, otherwise the app's own server (production or dev mode).\n- If it needs a database or other services, run them locally with an embedded or file-based option (SQLite, in-memory, JSON files, an embedded Postgres such as PGlite) or the app's demo/mock mode.\n- Don't redesign or restyle anything. Change only what's needed to build and run it.\n\n# Tools: use mise\nInstall every runtime and tool you need (node, the package manager, python, bun, ...) with mise, pinned to exact versions in a mise.toml at the repo root, so the setup can be reproduced. Match what the repo asks for (engines, .nvmrc, .tool-versions, packageManager). mise is already configured for this directory: `mise install` installs into ./.ui-capture/mise, and its shims come first on PATH, so `node`, `pnpm` and the rest resolve to the pinned versions. Don't use other copies of these tools or download runtimes by hand.\n\n# Secrets, API keys and external services: fake them\nThe app must not depend on anything outside this machine, and when it runs it has no network except localhost. Wherever it expects secrets, environment variables, API keys or third-party services (hosted auth or OAuth, payment providers, email, LLM or other AI APIs, maps, storage buckets, analytics, hosted databases):\n- Give the required variables placeholder values so the app starts.\n- Where it actually calls the service, make the call succeed locally with realistic responses: use the app's own mock, test or offline mode if it has one; otherwise point the client at a small local stub server that start.sh also starts, or swap in a stub at the integration boundary (the API client or service module). Keep stubs out of UI code. Responses should look like what the real service returns for a real user, e.g. an AI reply that actually answers, a payment history with real-looking amounts.\n- Calls the browser makes directly to outside services count too; point them at the local stub.\n- For sign-in through an outside provider, create a local account or use the app's dev sign-in so you can get past it.\nList every stub in app.json.\n\n# Data: like real use\nSeed it the way an established user's data would look after months of actual use: specific, plausible names and content for this kind of app; dates spread over time; a realistic mix of states (done, in progress, overdue, archived, ...); realistic volume (dozens to hundreds of records where the app revolves around records); short and long text; some messiness real data has. Start from the app's own demo or seed data if it has realistic data, and extend it if it's thin. Load data through the app's own paths (its API, import, seed scripts, or its database schema), never by hardcoding it into UI code. If the app needs an account, create one and attach the data to it. No lorem ipsum or \"Test 1\".\n\n# Environment\nThis shell is sandboxed: you can write only inside this directory (package-manager caches already point into ./.ui-capture/cache), and the network reaches only package registries, mise's download sources and GitHub (registry.npmjs.org, registry.yarnpkg.com, repo.yarnpkg.com, github.com, codeload.github.com, objects.githubusercontent.com, raw.githubusercontent.com, nodejs.org, mise.jdx.dev, mise-versions.jdx.dev, release-assets.githubusercontent.com, pypi.org, files.pythonhosted.org, binaries.prisma.sh, cdn.jsdelivr.net, unpkg.com). Docker isn't available. A process you start in the background can't be seen or stopped from a later command, so test servers on another port than 4407 (e.g. 5407) or in the foreground under `timeout`; anything still listening on 4407 is stopped before I check.\n\n# When you're done, leave this in ./.ui-capture/\n- app.json: {\"mode\": \"static\" or \"server\", \"entry\": \"/path where the main UI opens\", \"login\": null or {\"username\": \"...\", \"email\": \"...\", \"password\": \"...\"}, \"stubs\": [{\"service\": \"what was faked\", \"how\": \"how\"}], \"notes\": \"how you set it up, what data is loaded, and the main areas of the app\"}\n- static mode: the production build in ./.ui-capture/out, with index.html as its entry. It will be served from the root of a plain static file server; unknown paths fall back to index.html.\n- server mode: ./.ui-capture/start.sh, which starts everything the app needs (stubs included) in the foreground and serves the UI at http://localhost:4407/ (it gets PORT=4407). It runs with the same PATH and restrictions as your shell, plus no network at all except localhost, so everything must already be installed, built and seeded (or seeded by start.sh itself).\n- Put any scripts you write for seeding or stubbing in ./.ui-capture/ too; they're kept with the setup record.\n\n# Order of work\nYou have 90 minutes in total, and anything unfinished when time runs out is lost. So work in this order:\n1. Get the app building and running with its stubs, and write the contract above (app.json plus out/ or start.sh), even if it has only a little data so far.\n2. Then build out the data, re-running your seed and checking the app still loads after each substantial step, so that a working state with the data loaded so far is always in place.\nWrite large data sets with a short generator script rather than as one long literal file.\n\nI'll open it at 1440×900.",
+  "model": {
+    "model": "claude-opus-5-5",
+    "effort": "high"
+  },
+  "sandbox": true,
+  "startedAt": "2026-11-17T02:48:44.074Z",
+  "finishedAt": "2026-11-17T03:05:20.086Z",
+  "verification": {
+    "ok": true,
+    "problems": [],
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedRequests": [],
+    "textChars": 1998,
+    "visibleElements": 1259,
+    "title": "Token Tracker — AI Token Usage & Cost Tracker for Coding CLIs"
+  },
+  "repairs": 1,
+  "session": {
+    "rounds": 2,
+    "numTurns": 118,
+    "costUsd": 9.731674399999998,
+    "durationMs": 989629,
+    "models": [
+      "claude-opus-5-5"
+    ],
+    "usage": {
+      "input_tokens": 226,
+      "cache_creation_input_tokens": 202832,
+      "cache_read_input_tokens": 12881516,
+      "output_tokens": 67912
+    },
+    "timedOut": false
+  },
+  "changes": {
+    "files": 1,
+    "insertions": 2,
+    "deletions": 0,
+    "patchBytes": 154,
+    "patch": "setup.patch"
+  }
+}

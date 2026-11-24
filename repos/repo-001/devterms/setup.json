@@ -1,0 +1,104 @@
+{
+  "batch": "repo-001",
+  "slug": "devterms",
+  "ok": true,
+  "repo": {
+    "name": "aelew/devterms",
+    "url": "https://github.com/aelew/devterms",
+    "commit": "60a285a308a36baba4b77b582898ca7226ba633a",
+    "branch": "main",
+    "license": "MIT"
+  },
+  "domain": "reference-docs",
+  "port": 4475,
+  "checkoutRoot": "~/.cache/design-patterns-dataset/repos",
+  "mode": "server",
+  "entry": "/",
+  "app": {
+    "mode": "server",
+    "entry": "/",
+    "login": {
+      "username": "kenjimatsuda",
+      "email": "kenji.matsuda@fastmail.com",
+      "password": "",
+      "how": "No password exists: DevTerms only supports 'Sign in with GitHub'. Go to /login and click 'Sign in with GitHub'; the local GitHub OAuth stub approves instantly and redirects back signed in as kenjimatsuda (a moderator, so the mod-only Pending/Reported dashboards are visible)."
+    },
+    "stubs": [
+      {
+        "service": "Turso (hosted libSQL database)",
+        "how": "Node stub (.ui-capture/stubs/server.mjs, port 4488) speaking the libSQL Hrana-over-HTTP v2 JSON pipeline protocol, backed by a SQLite file (.ui-capture/data/devterms.db) via node:sqlite. The app's unmodified @libsql/client/web connects to it through TURSO_DATABASE_URL. (The real sqld binary was tried but panics inside the sandbox.)"
+      },
+      {
+        "service": "Meilisearch (search bar, /api/v1/search, random definition / I'm feeling lucky)",
+        "how": "Node stub on port 4487 implementing the Meilisearch REST subset the app uses (/multi-search, /indexes/:uid/search, stats, documents, settings, tasks) with typo-tolerant prefix ranking and CORS. Documents are pushed by the app's own /api/cron/meilisearch endpoint, which start.sh calls once the app is up; persisted to .ui-capture/data/search-index.json."
+      },
+      {
+        "service": "Upstash Redis REST (vote rate limiting via @upstash/ratelimit)",
+        "how": "Same misc stub on port 4486 at /upstash: answers EVAL/EVALSHA with a per-key sliding-window counter so votes succeed (and the 10-per-10s limit still applies)."
+      },
+      {
+        "service": "GitHub OAuth + GitHub REST API (sign in)",
+        "how": "Browser-facing authorize URL is overridden via GITHUB_OAUTH_AUTHORIZE_URL (small env-gated change in src/app/login/_actions.ts) to the stub at :4486/github/login/oauth/authorize, which redirects straight back to /api/callback/github. Server-side calls to github.com/login/oauth/access_token and api.github.com/user(/emails) are redirected to the stub by a Node preload (.ui-capture/stubs/fetch-redirect.cjs, NODE_OPTIONS=--require) and return a token and the kenjimatsuda profile."
+      },
+      {
+        "service": "GitHub avatars (avatars.githubusercontent.com)",
+        "how": "User avatar URLs in the seed point at :4486/avatars/u/<githubId>?v=4, which serves deterministic GitHub-style identicon SVGs."
+      },
+      {
+        "service": "Plausible Analytics script (browser)",
+        "how": "PlausibleProvider src made overridable with NEXT_PUBLIC_PLAUSIBLE_SRC (falls back to the original URL); set to :4486/plausible/js/script.js which serves a no-op plausible() queue; /api/event accepted with 202."
+      },
+      {
+        "service": "Twitter/X and Bluesky posting, cron secrets, OG HMAC secret",
+        "how": "Optional Twitter/Bluesky credentials are left unset so the word-of-the-day cron skips posting; CRON_SECRET, OG_HMAC_SECRET, GitHub client id/secret, Upstash token and Meilisearch keys are placeholder values in .ui-capture/env.sh."
+      }
+    ],
+    "notes": "DevTerms (Next.js 15 App Router + Hono API + Drizzle ORM). Tools pinned in mise.toml (node 22.21.1, pnpm 10.25.0 from packageManager). Setup: .ui-capture/build.sh = mise install, pnpm install, start stubs, drizzle-kit migrate (the repo's migrations), run .ui-capture/seed/seed.ts (inserts through the app's Drizzle schema), next build. One build-only workaround: the sandbox forbids writing files named .gitmodules, which the hogan.js tarball contains, so pnpm-workspace.yaml overrides hogan.js with a vendored copy minus that file (.ui-capture/vendor/hogan.js). start.sh starts the stubs, clears Next's data cache, runs `next start` on $PORT (4475) with the GitHub fetch-redirect preload, then rebuilds the search index via the app's cron endpoint. Data (dated as of 2026-11-17): 171 GitHub-style users (1 bot 'devterms' that seeded the original batch in Aug 2024, 2 moderators incl. the login user, 40 active contributors, ~128 sign-in-only users); 179 definitions: 136 distinct terms with 158 approved definitions (serious ones plus 22 alternate/jokey takes on popular terms like Kubernetes, Docker, DNS, YAML), 14 pending in the mod queue, 7 rejected (spam, low effort); vote counts scale with age, with some controversial ones; 627 days of word-of-the-day history since 2025-03-01 (today's: 'Yak shaving' by kenjimatsuda); 18 reports (6 unread in the mod reports view). kenjimatsuda's dashboard has 11 approved, 3 pending and 1 rejected definition. Main areas: Home feed (word of the day + history, paginated, stats sidebar, I'm feeling lucky, browse A–Z), search bar autocomplete (top of every page), /define/<term> (all definitions for a term, voting, share, report), /browse and /browse/<letter|new>, /submit (definition form), /u/<name> profiles, dashboard /definitions/me, mod-only /definitions/queue and /definitions/reports, /about, /api/docs (Scalar API reference; it loads its UI script from cdn.jsdelivr.net, so it will be blank offline). Stub ports 4486-4488 must be free."
+  },
+  "tools": {
+    "node": "22.21.1",
+    "pnpm": "10.25.0"
+  },
+  "prompt": "This is a checkout of aelew/devterms (https://github.com/aelew/devterms) at commit 60a285a308a3. 📚 The crowdsourced dictionary for developers. Find definitions for technical terms, programming jargon, and more!\n\nI want to see its user interface in a desktop browser, in the state a real, established user would see it. Please get the app running locally with its main interface working and realistic data in it.\n\n# Running it\n- Follow the repo's own setup docs and tooling. Take the simplest route that shows the real app: a static production build if the front end works without a backend, otherwise the app's own server (production or dev mode).\n- If it needs a database or other services, run them locally with an embedded or file-based option (SQLite, in-memory, JSON files, an embedded Postgres such as PGlite) or the app's demo/mock mode.\n- Don't redesign or restyle anything. Change only what's needed to build and run it.\n\n# Tools: use mise\nInstall every runtime and tool you need (node, the package manager, python, bun, ...) with mise, pinned to exact versions in a mise.toml at the repo root, so the setup can be reproduced. Match what the repo asks for (engines, .nvmrc, .tool-versions, packageManager). mise is already configured for this directory: `mise install` installs into ./.ui-capture/mise, and its shims come first on PATH, so `node`, `pnpm` and the rest resolve to the pinned versions. Don't use other copies of these tools or download runtimes by hand.\n\n# Secrets, API keys and external services: fake them\nThe app must not depend on anything outside this machine, and when it runs it has no network except localhost. Wherever it expects secrets, environment variables, API keys or third-party services (hosted auth or OAuth, payment providers, email, LLM or other AI APIs, maps, storage buckets, analytics, hosted databases):\n- Give the required variables placeholder values so the app starts.\n- Where it actually calls the service, make the call succeed locally with realistic responses: use the app's own mock, test or offline mode if it has one; otherwise point the client at a small local stub server that start.sh also starts, or swap in a stub at the integration boundary (the API client or service module). Keep stubs out of UI code. Responses should look like what the real service returns for a real user, e.g. an AI reply that actually answers, a payment history with real-looking amounts.\n- Calls the browser makes directly to outside services count too; point them at the local stub.\n- For sign-in through an outside provider, create a local account or use the app's dev sign-in so you can get past it.\nList every stub in app.json.\n\n# Data: like real use\nSeed it the way an established user's data would look after months of actual use: specific, plausible names and content for this kind of app; dates spread over time; a realistic mix of states (done, in progress, overdue, archived, ...); realistic volume (dozens to hundreds of records where the app revolves around records); short and long text; some messiness real data has. Start from the app's own demo or seed data if it has realistic data, and extend it if it's thin. Load data through the app's own paths (its API, import, seed scripts, or its database schema), never by hardcoding it into UI code. If the app needs an account, create one and attach the data to it. No lorem ipsum or \"Test 1\".\n\n# Environment\nThis shell is sandboxed: you can write only inside this directory (package-manager caches already point into ./.ui-capture/cache), and the network reaches only package registries, mise's download sources and GitHub (registry.npmjs.org, registry.yarnpkg.com, repo.yarnpkg.com, github.com, codeload.github.com, objects.githubusercontent.com, raw.githubusercontent.com, nodejs.org, mise.jdx.dev, mise-versions.jdx.dev, release-assets.githubusercontent.com, pypi.org, files.pythonhosted.org, binaries.prisma.sh, cdn.jsdelivr.net, unpkg.com). Docker isn't available. A process you start in the background can't be seen or stopped from a later command, so test servers on another port than 4475 (e.g. 5475) or in the foreground under `timeout`; anything still listening on 4475 is stopped before I check.\n\n# When you're done, leave this in ./.ui-capture/\n- app.json: {\"mode\": \"static\" or \"server\", \"entry\": \"/path where the main UI opens\", \"login\": null or {\"username\": \"...\", \"email\": \"...\", \"password\": \"...\"}, \"stubs\": [{\"service\": \"what was faked\", \"how\": \"how\"}], \"notes\": \"how you set it up, what data is loaded, and the main areas of the app\"}\n- static mode: the production build in ./.ui-capture/out, with index.html as its entry. It will be served from the root of a plain static file server; unknown paths fall back to index.html.\n- server mode: ./.ui-capture/start.sh, which starts everything the app needs (stubs included) in the foreground and serves the UI at http://localhost:4475/ (it gets PORT=4475). It runs with the same PATH and restrictions as your shell, plus no network at all except localhost, so everything must already be installed, built and seeded (or seeded by start.sh itself).\n- Put any scripts you write for seeding or stubbing in ./.ui-capture/ too; they're kept with the setup record.\n\n# Order of work\nYou have 90 minutes in total, and anything unfinished when time runs out is lost. So work in this order:\n1. Get the app building and running with its stubs, and write the contract above (app.json plus out/ or start.sh), even if it has only a little data so far.\n2. Then build out the data, re-running your seed and checking the app still loads after each substantial step, so that a working state with the data loaded so far is always in place.\nWrite large data sets with a short generator script rather than as one long literal file.\n\nI'll open it at 1440×900.",
+  "model": {
+    "model": "claude-opus-5-5",
+    "effort": "high"
+  },
+  "sandbox": true,
+  "startedAt": "2026-11-17T12:37:43.160Z",
+  "finishedAt": "2026-11-17T12:55:24.713Z",
+  "verification": {
+    "ok": true,
+    "problems": [],
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedRequests": [],
+    "textChars": 1647,
+    "visibleElements": 276,
+    "title": "The Developer Dictionary | DevTerms"
+  },
+  "repairs": 1,
+  "session": {
+    "rounds": 2,
+    "numTurns": 58,
+    "costUsd": 7.190908199999999,
+    "durationMs": 1059753,
+    "models": [
+      "claude-opus-5-5"
+    ],
+    "usage": {
+      "input_tokens": 106,
+      "cache_creation_input_tokens": 152718,
+      "cache_read_input_tokens": 4803364,
+      "output_tokens": 75862
+    },
+    "timedOut": false
+  },
+  "changes": {
+    "files": 5,
+    "insertions": 25,
+    "deletions": 5,
+    "patchBytes": 3090,
+    "patch": "setup.patch"
+  }
+}

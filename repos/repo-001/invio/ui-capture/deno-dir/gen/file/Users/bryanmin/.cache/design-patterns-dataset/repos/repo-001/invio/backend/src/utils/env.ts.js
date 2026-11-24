@@ -1,0 +1,72 @@
+import { load } from "dotenv";
+let envLoaded = false;
+async function loadEnvOnce() {
+  if (envLoaded) return;
+  try {
+    const parsed = await load();
+    for (const [key, value] of Object.entries(parsed)){
+      if (Deno.env.get(key) === undefined && value !== undefined) {
+        Deno.env.set(key, value);
+      }
+    }
+  } catch (error) {
+    // Ignore missing .env files, surface other errors for visibility
+    if (!(error instanceof Deno.errors.NotFound)) {
+      console.warn("Failed to load .env file:", error);
+    }
+  }
+  envLoaded = true;
+}
+await loadEnvOnce();
+export function getEnv(key, fallback) {
+  const value = Deno.env.get(key);
+  if (value === undefined || value === "") {
+    return fallback;
+  }
+  return value;
+}
+export function requireEnv(key) {
+  const value = getEnv(key);
+  if (value === undefined) {
+    throw new Error(`Missing required environment variable: ${key}`);
+  }
+  return value;
+}
+export function ensureEnv(keys) {
+  const missing = keys.filter((key)=>getEnv(key) === undefined);
+  if (missing.length > 0) {
+    throw new Error(`Missing required environment variables: ${missing.join(", ")}`);
+  }
+}
+export function getAdminCredentials() {
+  const username = requireEnv("ADMIN_USER").trim();
+  const password = requireEnv("ADMIN_PASS").trim();
+  if (username.length === 0) {
+    throw new Error("ADMIN_USER must not be empty");
+  }
+  if (password.length === 0) {
+    throw new Error("ADMIN_PASS must not be empty");
+  }
+  return {
+    username,
+    password
+  };
+}
+export function getJwtSecret() {
+  const secret = requireEnv("JWT_SECRET").trim();
+  if (secret.length === 0) {
+    throw new Error("JWT_SECRET must not be empty");
+  }
+  return secret;
+}
+export function isDemoMode() {
+  return (getEnv("DEMO_MODE", "false") || "false").toLowerCase() === "true";
+}
+export function getNumberEnv(key, fallback) {
+  const raw = getEnv(key);
+  if (!raw) return fallback;
+  const parsed = Number(raw);
+  return Number.isFinite(parsed) ? parsed : fallback;
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImZpbGU6Ly8vVXNlcnMvYnJ5YW5taW4vLmNhY2hlL2Rlc2lnbi1wYXR0ZXJucy1kYXRhc2V0L3JlcG9zL3JlcG8tMDAxL2ludmlvL2JhY2tlbmQvc3JjL3V0aWxzL2Vudi50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBsb2FkIH0gZnJvbSBcImRvdGVudlwiO1xuXG5sZXQgZW52TG9hZGVkID0gZmFsc2U7XG5cbmFzeW5jIGZ1bmN0aW9uIGxvYWRFbnZPbmNlKCkge1xuICBpZiAoZW52TG9hZGVkKSByZXR1cm47XG4gIHRyeSB7XG4gICAgY29uc3QgcGFyc2VkID0gYXdhaXQgbG9hZCgpO1xuICAgIGZvciAoY29uc3QgW2tleSwgdmFsdWVdIG9mIE9iamVjdC5lbnRyaWVzKHBhcnNlZCkpIHtcbiAgICAgIGlmIChEZW5vLmVudi5nZXQoa2V5KSA9PT0gdW5kZWZpbmVkICYmIHZhbHVlICE9PSB1bmRlZmluZWQpIHtcbiAgICAgICAgRGVuby5lbnYuc2V0KGtleSwgdmFsdWUpO1xuICAgICAgfVxuICAgIH1cbiAgfSBjYXRjaCAoZXJyb3IpIHtcbiAgICAvLyBJZ25vcmUgbWlzc2luZyAuZW52IGZpbGVzLCBzdXJmYWNlIG90aGVyIGVycm9ycyBmb3IgdmlzaWJpbGl0eVxuICAgIGlmICghKGVycm9yIGluc3RhbmNlb2YgRGVuby5lcnJvcnMuTm90Rm91bmQpKSB7XG4gICAgICBjb25zb2xlLndhcm4oXCJGYWlsZWQgdG8gbG9hZCAuZW52IGZpbGU6XCIsIGVycm9yKTtcbiAgICB9XG4gIH1cbiAgZW52TG9hZGVkID0gdHJ1ZTtcbn1cblxuYXdhaXQgbG9hZEVudk9uY2UoKTtcblxuZXhwb3J0IGZ1bmN0aW9uIGdldEVudihrZXk6IHN0cmluZywgZmFsbGJhY2s/OiBzdHJpbmcpOiBzdHJpbmcgfCB1bmRlZmluZWQge1xuICBjb25zdCB2YWx1ZSA9IERlbm8uZW52LmdldChrZXkpO1xuICBpZiAodmFsdWUgPT09IHVuZGVmaW5lZCB8fCB2YWx1ZSA9PT0gXCJcIikge1xuICAgIHJldHVybiBmYWxsYmFjaztcbiAgfVxuICByZXR1cm4gdmFsdWU7XG59XG5cbmV4cG9ydCBmdW5jdGlvbiByZXF1aXJlRW52KGtleTogc3RyaW5nKTogc3RyaW5nIHtcbiAgY29uc3QgdmFsdWUgPSBnZXRFbnYoa2V5KTtcbiAgaWYgKHZhbHVlID09PSB1bmRlZmluZWQpIHtcbiAgICB0aHJvdyBuZXcgRXJyb3IoYE1pc3NpbmcgcmVxdWlyZWQgZW52aXJvbm1lbnQgdmFyaWFibGU6ICR7a2V5fWApO1xuICB9XG4gIHJldHVybiB2YWx1ZTtcbn1cblxuZXhwb3J0IGZ1bmN0aW9uIGVuc3VyZUVudihrZXlzOiBzdHJpbmdbXSk6IHZvaWQge1xuICBjb25zdCBtaXNzaW5nID0ga2V5cy5maWx0ZXIoKGtleSkgPT4gZ2V0RW52KGtleSkgPT09IHVuZGVmaW5lZCk7XG4gIGlmIChtaXNzaW5nLmxlbmd0aCA+IDApIHtcbiAgICB0aHJvdyBuZXcgRXJyb3IoXG4gICAgICBgTWlzc2luZyByZXF1aXJlZCBlbnZpcm9ubWVudCB2YXJpYWJsZXM6ICR7bWlzc2luZy5qb2luKFwiLCBcIil9YCxcbiAgICApO1xuICB9XG59XG5cbmV4cG9ydCBmdW5jdGlvbiBnZXRBZG1pbkNyZWRlbnRpYWxzKCkge1xuICBjb25zdCB1c2VybmFtZSA9IHJlcXVpcmVFbnYoXCJBRE1JTl9VU0VSXCIpLnRyaW0oKTtcbiAgY29uc3QgcGFzc3dvcmQgPSByZXF1aXJlRW52KFwiQURNSU5fUEFTU1wiKS50cmltKCk7XG4gIGlmICh1c2VybmFtZS5sZW5ndGggPT09IDApIHtcbiAgICB0aHJvdyBuZXcgRXJyb3IoXCJBRE1JTl9VU0VSIG11c3Qgbm90IGJlIGVtcHR5XCIpO1xuICB9XG4gIGlmIChwYXNzd29yZC5sZW5ndGggPT09IDApIHtcbiAgICB0aHJvdyBuZXcgRXJyb3IoXCJBRE1JTl9QQVNTIG11c3Qgbm90IGJlIGVtcHR5XCIpO1xuICB9XG4gIHJldHVybiB7IHVzZXJuYW1lLCBwYXNzd29yZCB9O1xufVxuXG5leHBvcnQgZnVuY3Rpb24gZ2V0Snd0U2VjcmV0KCk6IHN0cmluZyB7XG4gIGNvbnN0IHNlY3JldCA9IHJlcXVpcmVFbnYoXCJKV1RfU0VDUkVUXCIpLnRyaW0oKTtcbiAgaWYgKHNlY3JldC5sZW5ndGggPT09IDApIHtcbiAgICB0aHJvdyBuZXcgRXJyb3IoXCJKV1RfU0VDUkVUIG11c3Qgbm90IGJlIGVtcHR5XCIpO1xuICB9XG4gIHJldHVybiBzZWNyZXQ7XG59XG5cbmV4cG9ydCBmdW5jdGlvbiBpc0RlbW9Nb2RlKCk6IGJvb2xlYW4ge1xuICByZXR1cm4gKGdldEVudihcIkRFTU9fTU9ERVwiLCBcImZhbHNlXCIpIHx8IFwiZmFsc2VcIikudG9Mb3dlckNhc2UoKSA9PT0gXCJ0cnVlXCI7XG59XG5cbmV4cG9ydCBmdW5jdGlvbiBnZXROdW1iZXJFbnYoa2V5OiBzdHJpbmcsIGZhbGxiYWNrOiBudW1iZXIpOiBudW1iZXIge1xuICBjb25zdCByYXcgPSBnZXRFbnYoa2V5KTtcbiAgaWYgKCFyYXcpIHJldHVybiBmYWxsYmFjaztcbiAgY29uc3QgcGFyc2VkID0gTnVtYmVyKHJhdyk7XG4gIHJldHVybiBOdW1iZXIuaXNGaW5pdGUocGFyc2VkKSA/IHBhcnNlZCA6IGZhbGxiYWNrO1xufVxuIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLFNBQVMsSUFBSSxRQUFRLFNBQVM7QUFFOUIsSUFBSSxZQUFZO0FBRWhCLGVBQWU7RUFDYixJQUFJLFdBQVc7RUFDZixJQUFJO0lBQ0YsTUFBTSxTQUFTLE1BQU07SUFDckIsS0FBSyxNQUFNLENBQUMsS0FBSyxNQUFNLElBQUksT0FBTyxPQUFPLENBQUMsUUFBUztNQUNqRCxJQUFJLEtBQUssR0FBRyxDQUFDLEdBQUcsQ0FBQyxTQUFTLGFBQWEsVUFBVSxXQUFXO1FBQzFELEtBQUssR0FBRyxDQUFDLEdBQUcsQ0FBQyxLQUFLO01BQ3BCO0lBQ0Y7RUFDRixFQUFFLE9BQU8sT0FBTztJQUNkLGlFQUFpRTtJQUNqRSxJQUFJLENBQUMsQ0FBQyxpQkFBaUIsS0FBSyxNQUFNLENBQUMsUUFBUSxHQUFHO01BQzVDLFFBQVEsSUFBSSxDQUFDLDZCQUE2QjtJQUM1QztFQUNGO0VBQ0EsWUFBWTtBQUNkO0FBRUEsTUFBTTtBQUVOLE9BQU8sU0FBUyxPQUFPLEdBQVcsRUFBRSxRQUFpQjtFQUNuRCxNQUFNLFFBQVEsS0FBSyxHQUFHLENBQUMsR0FBRyxDQUFDO0VBQzNCLElBQUksVUFBVSxhQUFhLFVBQVUsSUFBSTtJQUN2QyxPQUFPO0VBQ1Q7RUFDQSxPQUFPO0FBQ1Q7QUFFQSxPQUFPLFNBQVMsV0FBVyxHQUFXO0VBQ3BDLE1BQU0sUUFBUSxPQUFPO0VBQ3JCLElBQUksVUFBVSxXQUFXO0lBQ3ZCLE1BQU0sSUFBSSxNQUFNLENBQUMsdUNBQXVDLEVBQUUsS0FBSztFQUNqRTtFQUNBLE9BQU87QUFDVDtBQUVBLE9BQU8sU0FBUyxVQUFVLElBQWM7RUFDdEMsTUFBTSxVQUFVLEtBQUssTUFBTSxDQUFDLENBQUMsTUFBUSxPQUFPLFNBQVM7RUFDckQsSUFBSSxRQUFRLE1BQU0sR0FBRyxHQUFHO0lBQ3RCLE1BQU0sSUFBSSxNQUNSLENBQUMsd0NBQXdDLEVBQUUsUUFBUSxJQUFJLENBQUMsT0FBTztFQUVuRTtBQUNGO0FBRUEsT0FBTyxTQUFTO0VBQ2QsTUFBTSxXQUFXLFdBQVcsY0FBYyxJQUFJO0VBQzlDLE1BQU0sV0FBVyxXQUFXLGNBQWMsSUFBSTtFQUM5QyxJQUFJLFNBQVMsTUFBTSxLQUFLLEdBQUc7SUFDekIsTUFBTSxJQUFJLE1BQU07RUFDbEI7RUFDQSxJQUFJLFNBQVMsTUFBTSxLQUFLLEdBQUc7SUFDekIsTUFBTSxJQUFJLE1BQU07RUFDbEI7RUFDQSxPQUFPO0lBQUU7SUFBVTtFQUFTO0FBQzlCO0FBRUEsT0FBTyxTQUFTO0VBQ2QsTUFBTSxTQUFTLFdBQVcsY0FBYyxJQUFJO0VBQzVDLElBQUksT0FBTyxNQUFNLEtBQUssR0FBRztJQUN2QixNQUFNLElBQUksTUFBTTtFQUNsQjtFQUNBLE9BQU87QUFDVDtBQUVBLE9BQU8sU0FBUztFQUNkLE9BQU8sQ0FBQyxPQUFPLGFBQWEsWUFBWSxPQUFPLEVBQUUsV0FBVyxPQUFPO0FBQ3JFO0FBRUEsT0FBTyxTQUFTLGFBQWEsR0FBVyxFQUFFLFFBQWdCO0VBQ3hELE1BQU0sTUFBTSxPQUFPO0VBQ25CLElBQUksQ0FBQyxLQUFLLE9BQU87RUFDakIsTUFBTSxTQUFTLE9BQU87RUFDdEIsT0FBTyxPQUFPLFFBQVEsQ0FBQyxVQUFVLFNBQVM7QUFDNUMifQ==
+// denoCacheMetadata=2786084630794443124,13637487941601753045

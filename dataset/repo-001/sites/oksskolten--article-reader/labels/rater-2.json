@@ -1,0 +1,313 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "oksskolten--article-reader",
+    "url": "http://localhost:4435/go.dev/blog/flight-recorder",
+    "finalUrl": "http://localhost:4435/go.dev/blog/flight-recorder",
+    "status": 200,
+    "title": "Oksskolten",
+    "capturedAt": "2026-11-18T06:52:49.531Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 10789
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "news-publishing",
+    "domainNote": "self-hosted RSS/feed reader (Oksskolten) showing a full-text article view of a Go Blog post, with a summary box and chat launcher",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/oksskolten/explore.json",
+      "repo": {
+        "name": "babarot/oksskolten",
+        "url": "https://github.com/babarot/oksskolten",
+        "commit": "737526230a9c5907f1a253dd82d93c828526790b",
+        "license": "AGPL-3.0"
+      },
+      "view": {
+        "slug": "article-reader",
+        "name": "Article reader",
+        "description": "Full-text article reader with title, date, feed/source/bookmark/like/markdown action chips, an AI summary callout and the article body, plus a floating chat button."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "top-bar",
+      "role": "header",
+      "label": "Minimal header with only a back chevron button",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 48
+      },
+      "patterns": []
+    },
+    {
+      "id": "article-header",
+      "role": "article-meta",
+      "label": "H1 title, date, and a row of outlined chip buttons: feed name 'Go Blog', 'Source Article' external link, bookmark, like (pressed), Markdown export",
+      "bbox": {
+        "x": 424,
+        "y": 80,
+        "width": 592,
+        "height": 100
+      },
+      "patterns": [
+        "reader",
+        "reactions"
+      ]
+    },
+    {
+      "id": "summary-box",
+      "role": "summary",
+      "label": "Grey callout with blue left rule: one-sentence summary plus bullet points, truncated with 'Read more'/'Show less' toggle",
+      "bbox": {
+        "x": 424,
+        "y": 204,
+        "width": 592,
+        "height": 202
+      },
+      "patterns": [
+        "reader"
+      ]
+    },
+    {
+      "id": "article-body",
+      "role": "content",
+      "label": "Long-form article: blue H2 section headings, paragraphs, inline code, syntax-highlighted Go code blocks, embedded trace-viewer screenshots",
+      "bbox": {
+        "x": 424,
+        "y": 430,
+        "width": 592,
+        "height": 10340
+      },
+      "patterns": [
+        "reader"
+      ]
+    },
+    {
+      "id": "chat-fab",
+      "role": "floating-action",
+      "label": "Fixed circular blue chat button in bottom-right corner",
+      "bbox": {
+        "x": 1368,
+        "y": 828,
+        "width": 48,
+        "height": 48
+      },
+      "patterns": [
+        "ai-chat"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "reader",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "pagination": "continuous-scroll",
+        "annotations": [
+          "bookmarks",
+          "export-to-notes-app"
+        ],
+        "assistance": [
+          "summarize-chapter"
+        ],
+        "typography": [
+          "column-width"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 424,
+            "y": 80,
+            "width": 592,
+            "height": 100
+          },
+          "quote": "Flight Recorder for Go Programs",
+          "note": "Reader view of a feed item, with bookmark and Markdown export buttons",
+          "region": "article-header"
+        },
+        {
+          "bbox": {
+            "x": 424,
+            "y": 204,
+            "width": 592,
+            "height": 202
+          },
+          "quote": "Flight recorder provides always-on execution tracing with minimal overhead for production debugging.",
+          "note": "Summary callout at the top of the article; expands in place with Read more / Show less",
+          "region": "summary-box"
+        },
+        {
+          "bbox": {
+            "x": 424,
+            "y": 430,
+            "width": 592,
+            "height": 2000
+          },
+          "note": "Continuous-scroll long-form text in a narrow ~592px column",
+          "region": "article-body"
+        }
+      ]
+    },
+    {
+      "id": "reactions",
+      "status": "present",
+      "confidence": 0.65,
+      "dims": {
+        "vocabulary": "single-like",
+        "add": [
+          "tap-a-dedicated-button"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 659,
+            "y": 154,
+            "width": 32,
+            "height": 26
+          },
+          "note": "Thumbs-up toggle button, aria-pressed, filled blue when active; no count shown",
+          "region": "article-header"
+        }
+      ]
+    },
+    {
+      "id": "ai-chat",
+      "status": "uncertain",
+      "confidence": 0.4,
+      "rationale": "Only the floating 'Chat' launcher button is visible in the capture; clicking it on the live copy did not show a chat panel, so I couldn't confirm it is an AI conversation about the article.",
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1368,
+            "y": 828,
+            "width": 48,
+            "height": 48
+          },
+          "quote": "Chat",
+          "note": "Fixed circular chat launcher button",
+          "region": "chat-fab"
+        }
+      ]
+    },
+    {
+      "id": "ai-provenance",
+      "status": "absent",
+      "confidence": 0.6,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 424,
+            "y": 204,
+            "width": 592,
+            "height": 202
+          },
+          "note": "Summary box is probably machine-generated but has no AI label or badge"
+        }
+      ]
+    },
+    {
+      "id": "accordion",
+      "status": "absent",
+      "confidence": 0.7,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 444,
+            "y": 371,
+            "width": 59,
+            "height": 16
+          },
+          "quote": "Read more",
+          "note": "A single truncation toggle, not stacked expandable sections"
+        }
+      ]
+    }
+  ],
+  "structure": {
+    "layout": "single centered reading column (~592px) under a minimal back-button header, with a fixed floating chat button; there is no sidebar or navigation",
+    "regions": [
+      "top-bar",
+      "article-header",
+      "summary-box",
+      "article-body",
+      "chat-fab"
+    ],
+    "density": "sparse"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#111111",
+      "#2563eb",
+      "#f7f7f7",
+      "#6b7280",
+      "#e5e7eb",
+      "#d73a49",
+      "#032f62",
+      "#6a737d"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "text": "#111111",
+      "primary": "#2563eb",
+      "surface": "#f7f7f7",
+      "muted": "#6b7280",
+      "border": "#e5e7eb",
+      "accent": "#d73a49"
+    },
+    "typography": "ui-sans-serif system stack (renders as Liberation Sans/Arial-like) for the title, headings and body; Noto Sans for the app chrome (back and chat buttons); ui-monospace for inline code and code blocks, which use GitHub-light syntax colors",
+    "typeScale": "28px/700 H1, 22px/700 blue H2s, 16px body with a generous ~1.8 line-height, 14px monospace code, 13px meta chips, 12px Read more link",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "product-screenshots",
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "generous",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "clean",
+      "calm",
+      "minimal",
+      "technical",
+      "bookish"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T19:47:11.456Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 10,
+    "usage": {
+      "input_tokens": 20,
+      "cache_creation_input_tokens": 47135,
+      "cache_read_input_tokens": 301034,
+      "output_tokens": 6542
+    }
+  },
+  "notes": "Reader view of an article in the Oksskolten RSS reader. The look is very plain: white page, one 592px column, near-black text, and blue (#2563eb) used for the H2 section headings, links, the active like button, the summary's left rule and the round chat FAB. The summary callout (#f7f7f7 fill, 4px blue left border) is cut off after two bullets and expands in place. The metadata action row uses small outlined chips (1px #e5e7eb border, 4px radius, 13px grey text); the bookmark, like and Markdown-export chips are icon-only, with an 'M↓' glyph for export. Code blocks are light grey with GitHub-style syntax colors and scroll horizontally. An empty Sonner toaster region ('Notifications alt+T') is in the DOM."
+}

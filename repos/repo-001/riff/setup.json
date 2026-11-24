@@ -1,0 +1,135 @@
+{
+  "batch": "repo-001",
+  "slug": "riff",
+  "ok": true,
+  "repo": {
+    "name": "rootscripts/riff",
+    "url": "https://github.com/rootscripts/riff",
+    "commit": "ea3a1a2be443a5f11630c99527d23c65eb20ba73",
+    "branch": "main",
+    "license": "MIT"
+  },
+  "domain": "media-entertainment",
+  "port": 4431,
+  "checkoutRoot": "~/.cache/design-patterns-dataset/repos",
+  "mode": "server",
+  "entry": "/",
+  "app": {
+    "mode": "server",
+    "entry": "/",
+    "login": null,
+    "stubs": [
+      {
+        "service": "Electron preload bridge (window.electronAPI: IPC to main process, native dialogs, window controls, Discord RPC, updater, Google/YouTube login)",
+        "how": ".ui-capture/shim.js is injected into index.html by the front server; storage IPC is backed by .ui-capture/runtime/storage.json via /__riff/storage (same storage.json model as src/main/main.js); native-only calls resolve with harmless defaults (not logged in, no updates, no plugins/themes)"
+      },
+      {
+        "service": "YouTube Music / YouTube / SoundCloud search, My Wave recommendations (/api/vibe), hot picks, trending, country top charts",
+        "how": ".ui-capture/stubs.js answers these /api routes from a local catalog (.ui-capture/catalog.js: 252 real-world tracks, 43 albums, 50 artists) in the same JSON shape as src/server/server.js"
+      },
+      {
+        "service": "Artist pages and album pages (YouTube Music browse)",
+        "how": "stubs.js /api/artist, /api/album, /api/album-tracks, /api/albums/search built from the catalog"
+      },
+      {
+        "service": "Media stream resolution (yt-dlp / YouTube / SoundCloud streams)",
+        "how": "/api/stream-info returns /__audio/<id>.wav, a generated soft chord-pad WAV of the track's length (.ui-capture/audio.js, supports Range)"
+      },
+      {
+        "service": "Cover art and artist photos (i.ytimg.com, sndcdn.com)",
+        "how": "catalog thumbnails point to /__art/... — deterministic generated SVG artwork (.ui-capture/art.js); /api/image-proxy redirects there"
+      },
+      {
+        "service": "Lyrics providers (lrclib, Musixmatch, Genius, NetEase)",
+        "how": "stubs.js /api/lyrics: instrumental artists report instrumental, others report 'not found' like a provider miss"
+      },
+      {
+        "service": "yt-dlp/ffmpeg tool status and install, network check, Spotify/YouTube account status, Last.fm, translation",
+        "how": "stubs.js returns tools installed, online, not connected/logged in"
+      },
+      {
+        "service": "Google Fonts (Google Sans, Inter, Material Symbols)",
+        "how": "fonts.googleapis.com/css2 URLs in served HTML/JS/CSS are rewritten to /__fonts/css2, served from npm packages @fontsource/google-sans, @fontsource/inter and material-symbols in .ui-capture/tools"
+      },
+      {
+        "service": "lottie-web CDN (cdnjs/jsdelivr)",
+        "how": "/assets/lottie.min.js is served from the lottie-web@5.12.2 npm package (repo doesn't ship the file)"
+      },
+      {
+        "service": "Riff's own local API server (src/server/server.js)",
+        "how": "not stubbed: runs in-process under plain Node with RIFF_DATA_DIR=.ui-capture/runtime/data; all /api routes not listed above are proxied to it with its auth token"
+      }
+    ],
+    "notes": "Riff is an Electron app (vanilla JS renderer + local Node API server). For the browser, .ui-capture/server.js (started by start.sh on $PORT) serves src/renderer as the site root (/assets from repo assets), injects a preload stand-in, persists localStorage through storage.json, proxies /api to the real server and stubs external services. Tools pinned in mise.toml (node 24.11.1); deps via `ELECTRON_SKIP_BINARY_DOWNLOAD=1 npm ci`; helper packages in .ui-capture/tools. Data: .ui-capture/seed.js generates seed/storage.json (the app's own localStorage keys) and start.sh regenerates it and copies it to runtime/storage.json on every start: 138 liked songs added over ~10 months, 100-play history (latest session tonight), 14 playlists (late night drive, deep focus, lofi / study, sad girl autumn, GYM, Ukrainian and Russian post-punk lists, a wedding first-dance shortlist, a Spotify-imported Discover Weekly, a YT Music import, an empty 'new playlist'), 17 saved albums, 20 followed artists, search history, 2 custom audio presets, and a paused 'now playing' (Fred again.. – adore u at 1:14 with an 8-track queue). Main areas: Home (For you / My Wave, liked songs, favorite artists, trending, top chart), sidebar library (playlists/albums/queue), Liked songs, History, Albums, artist and album pages, search, player bar with lyrics/visualizer/audio editor, Settings modal."
+  },
+  "tools": {
+    "node": "24.11.1"
+  },
+  "prompt": "This is a checkout of rootscripts/riff (https://github.com/rootscripts/riff) at commit ea3a1a2be443. Riff is the best, free music player with YouTube Music & SoundCloud library and WebGL shader visuals. No backend or telemetry. No paid tiers.\n\nI want to see its user interface in a desktop browser, in the state a real, established user would see it. Please get the app running locally with its main interface working and realistic data in it.\n\n# Running it\n- Follow the repo's own setup docs and tooling. Take the simplest route that shows the real app: a static production build if the front end works without a backend, otherwise the app's own server (production or dev mode).\n- If it needs a database or other services, run them locally with an embedded or file-based option (SQLite, in-memory, JSON files, an embedded Postgres such as PGlite) or the app's demo/mock mode.\n- Don't redesign or restyle anything. Change only what's needed to build and run it.\n\n# Tools: use mise\nInstall every runtime and tool you need (node, the package manager, python, bun, ...) with mise, pinned to exact versions in a mise.toml at the repo root, so the setup can be reproduced. Match what the repo asks for (engines, .nvmrc, .tool-versions, packageManager). mise is already configured for this directory: `mise install` installs into ./.ui-capture/mise, and its shims come first on PATH, so `node`, `pnpm` and the rest resolve to the pinned versions. Don't use other copies of these tools or download runtimes by hand.\n\n# Secrets, API keys and external services: fake them\nThe app must not depend on anything outside this machine, and when it runs it has no network except localhost. Wherever it expects secrets, environment variables, API keys or third-party services (hosted auth or OAuth, payment providers, email, LLM or other AI APIs, maps, storage buckets, analytics, hosted databases):\n- Give the required variables placeholder values so the app starts.\n- Where it actually calls the service, make the call succeed locally with realistic responses: use the app's own mock, test or offline mode if it has one; otherwise point the client at a small local stub server that start.sh also starts, or swap in a stub at the integration boundary (the API client or service module). Keep stubs out of UI code. Responses should look like what the real service returns for a real user, e.g. an AI reply that actually answers, a payment history with real-looking amounts.\n- Calls the browser makes directly to outside services count too; point them at the local stub.\n- For sign-in through an outside provider, create a local account or use the app's dev sign-in so you can get past it.\nList every stub in app.json.\n\n# Data: like real use\nSeed it the way an established user's data would look after months of actual use: specific, plausible names and content for this kind of app; dates spread over time; a realistic mix of states (done, in progress, overdue, archived, ...); realistic volume (dozens to hundreds of records where the app revolves around records); short and long text; some messiness real data has. Start from the app's own demo or seed data if it has realistic data, and extend it if it's thin. Load data through the app's own paths (its API, import, seed scripts, or its database schema), never by hardcoding it into UI code. If the app needs an account, create one and attach the data to it. No lorem ipsum or \"Test 1\".\n\n# Environment\nThis shell is sandboxed: you can write only inside this directory (package-manager caches already point into ./.ui-capture/cache), and the network reaches only package registries, mise's download sources and GitHub (registry.npmjs.org, registry.yarnpkg.com, repo.yarnpkg.com, github.com, codeload.github.com, objects.githubusercontent.com, raw.githubusercontent.com, nodejs.org, mise.jdx.dev, mise-versions.jdx.dev, release-assets.githubusercontent.com, pypi.org, files.pythonhosted.org, binaries.prisma.sh, cdn.jsdelivr.net, unpkg.com). Docker isn't available. A process you start in the background can't be seen or stopped from a later command, so test servers on another port than 4431 (e.g. 5431) or in the foreground under `timeout`; anything still listening on 4431 is stopped before I check.\n\n# When you're done, leave this in ./.ui-capture/\n- app.json: {\"mode\": \"static\" or \"server\", \"entry\": \"/path where the main UI opens\", \"login\": null or {\"username\": \"...\", \"email\": \"...\", \"password\": \"...\"}, \"stubs\": [{\"service\": \"what was faked\", \"how\": \"how\"}], \"notes\": \"how you set it up, what data is loaded, and the main areas of the app\"}\n- static mode: the production build in ./.ui-capture/out, with index.html as its entry. It will be served from the root of a plain static file server; unknown paths fall back to index.html.\n- server mode: ./.ui-capture/start.sh, which starts everything the app needs (stubs included) in the foreground and serves the UI at http://localhost:4431/ (it gets PORT=4431). It runs with the same PATH and restrictions as your shell, plus no network at all except localhost, so everything must already be installed, built and seeded (or seeded by start.sh itself).\n- Put any scripts you write for seeding or stubbing in ./.ui-capture/ too; they're kept with the setup record.\n\n# Order of work\nYou have 90 minutes in total, and anything unfinished when time runs out is lost. So work in this order:\n1. Get the app building and running with its stubs, and write the contract above (app.json plus out/ or start.sh), even if it has only a little data so far.\n2. Then build out the data, re-running your seed and checking the app still loads after each substantial step, so that a working state with the data loaded so far is always in place.\nWrite large data sets with a short generator script rather than as one long literal file.\n\nI'll open it at 1440×900.",
+  "model": {
+    "model": "claude-opus-5-5",
+    "effort": "high"
+  },
+  "sandbox": true,
+  "startedAt": "2026-11-17T17:49:36.238Z",
+  "finishedAt": "2026-11-17T18:02:53.155Z",
+  "verification": {
+    "ok": true,
+    "problems": [],
+    "pageErrors": [],
+    "consoleErrors": [
+      "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "Access to fetch at 'http://127.0.0.1:4431/api/offline-library' from origin 'http://localhost:4431' has been blocked by CORS policy: The 'Access-Control-Allow-Origin' header contains multiple values '*, *', but only one is allowed. Have the server send the header with a valid value.",
+      "Failed to load resource: net::ERR_FAILED",
+      "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "Failed to sync proxy config to server TypeError: Failed to fetch\n    at window.fetch (http://localhost:4431/modules/utils.js:67:18)\n    at syncActiveProxyToBackend (http://localhost:4431/modules/utils.js:1147:7)\n    at initProxyManager (http://localhost:4431/modules/utils.js:1337:5)\n    at http://lo",
+      "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "Access to fetch at 'https://lrclib.net/api/get?track_name=adore%20u&artist_name=Fred%20again..' from origin 'http://localhost:4431' has been blocked by CORS policy: Request header field x-riff-token is not allowed by Access-Control-Allow-Headers in preflight response.",
+      "Failed to load resource: net::ERR_FAILED",
+      "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "Access to fetch at 'https://lrclib.net/api/search?q=Fred%20again..%20adore%20u' from origin 'http://localhost:4431' has been blocked by CORS policy: Request header field x-riff-token is not allowed by Access-Control-Allow-Headers in preflight response.",
+      "Failed to load resource: net::ERR_FAILED",
+      "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "Failed to load resource: net::ERR_CONNECTION_REFUSED"
+    ],
+    "failedRequests": [],
+    "textChars": 1157,
+    "visibleElements": 1122,
+    "title": "Riff"
+  },
+  "repairs": 0,
+  "session": {
+    "rounds": 1,
+    "numTurns": 87,
+    "costUsd": 4.009024199999998,
+    "durationMs": 792665,
+    "models": [
+      "claude-opus-5-5"
+    ],
+    "usage": {
+      "input_tokens": 164,
+      "cache_creation_input_tokens": 150897,
+      "cache_read_input_tokens": 7491161,
+      "output_tokens": 65148
+    },
+    "timedOut": false
+  },
+  "changes": {
+    "files": 1,
+    "insertions": 2,
+    "deletions": 0,
+    "patchBytes": 152,
+    "patch": "setup.patch"
+  }
+}

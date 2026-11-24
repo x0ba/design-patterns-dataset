@@ -1,0 +1,84 @@
+# Codebook proposal (new-entry) — review with: node scripts/proposals.ts show repo-001 map-editor
+id: map-editor
+kind: new-entry
+status: open
+batch: repo-001
+codebookVersion: 1.0.0
+name: Map editor
+level: pattern
+parent: create
+definition: Creating and changing geographic features (points, lines, areas) and their tags directly
+  on a pannable, zoomable map, with a feature inspector, validation and changeset upload.
+relations:
+  neighbors:
+    - map-explorer
+    - canvas-editor
+  uses:
+    - property-inspector
+    - undo
+    - contextual-help
+dimensions:
+  - name: Geometry tools
+    family: invocation
+    question: How are features created?
+    subdimensions:
+      - id: geometryTools
+        name: Geometry tools
+        select: many
+        values:
+          - id: point-line-area-toolbar
+            name: Point / line / area toolbar
+            example: iD, Rapid
+          - id: trace-from-imagery
+            name: Trace from imagery
+            example: JOSM
+          - id: accept-ai-suggestions
+            name: Accept AI-detected features
+            example: Rapid
+  - name: Commit
+    family: lifecycle
+    question: How do edits reach the shared map?
+    subdimensions:
+      - id: commit
+        name: Commit
+        select: one
+        values:
+          - id: changeset-upload
+            name: Batched changeset upload
+            example: iD Save
+          - id: live-sync
+            name: Live sync
+            example: Collaborative GIS
+rationale:
+  - rater: rater-3
+    site: rapid--feature-inspector
+    text: "map-explorer covers browsing a map to find places; canvas-editor covers free 2D design
+      canvases. A GIS/OSM editor (iD, Rapid, JOSM) mixes both: geometry tools (Point/Line/Area),
+      vertex snapping, a tag inspector, an issues panel and a batch Save of a changeset. Neither
+      entry describes this."
+sources:
+  - batch: repo-001
+    site: rapid--feature-inspector
+    url: http://localhost:4487/#map=19.00/41.94332/-85.63375&background=custom&overlays=&datasets=8c3f1d29a6b54e0f9e2c7a51d4b0e6f2,2b7e94c0f13d4a5c8d6e0a9b3c1f7e48&id=n4212799302
+    note: proposed by rater-3
+evidence:
+  - site: rapid--feature-inspector
+    rater: rater-3
+    bbox:
+      x: 684
+      y: 10
+      width: 234
+      height: 40
+    quote: Point Line Area
+    note: geometry creation tools over the map
+  - site: rapid--feature-inspector
+    rater: rater-3
+    bbox:
+      x: 0
+      y: 0
+      width: 400
+      height: 1366
+    quote: OpenStreetMap Feature
+    note: tag/field inspector for the selected node
+createdAt: 2026-11-18T20:52:23.961Z
+updatedAt: 2026-11-18T20:52:23.961Z

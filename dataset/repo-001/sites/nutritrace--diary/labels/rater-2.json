@@ -1,0 +1,608 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "nutritrace--diary",
+    "url": "http://localhost:4449/",
+    "finalUrl": "http://localhost:4449/#/",
+    "status": 200,
+    "title": "NutriTrace",
+    "capturedAt": "2026-11-18T06:43:18.997Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1479
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "health",
+    "domainNote": "personal nutrition / food diary and fasting tracker (NutriTrace)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/nutritrace/explore.json",
+      "repo": {
+        "name": "TraceApps/nutritrace",
+        "url": "https://github.com/TraceApps/nutritrace",
+        "commit": "888c9664cd3a0222a9449cff506264097a2ae9b2",
+        "license": "AGPL-3.0"
+      },
+      "view": {
+        "slug": "diary",
+        "name": "Diary day view",
+        "description": "Today's food diary with week strip, fasting tracker, meal cards with logged foods, and an overview rail with macro ring and water."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Gradient app bar with hamburger (opens nav drawer) and 'Diary' title",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 61
+      },
+      "patterns": [
+        "app-shell",
+        "drawer"
+      ]
+    },
+    {
+      "id": "date-nav",
+      "role": "date-navigation",
+      "label": "Today 11/17/2026 with prev/next day arrows and week strip of days with kcal totals and progress bars",
+      "bbox": {
+        "x": 0,
+        "y": 61,
+        "width": 1440,
+        "height": 139
+      },
+      "patterns": [
+        "date-picker"
+      ]
+    },
+    {
+      "id": "fasting-card",
+      "role": "control-card",
+      "label": "Start Fasting card with protocol chips (14:10, 16:8 …) and Start button",
+      "bbox": {
+        "x": 32,
+        "y": 212,
+        "width": 996,
+        "height": 101
+      },
+      "patterns": [
+        "choice-control",
+        "card"
+      ]
+    },
+    {
+      "id": "meal-log",
+      "role": "content-grid",
+      "label": "Breakfast/Lunch/Snacks/Dinner meal cards listing food entries with action buttons and macro stacked bars; Activity card below",
+      "bbox": {
+        "x": 16,
+        "y": 336,
+        "width": 1028,
+        "height": 1056
+      },
+      "patterns": [
+        "card",
+        "chart",
+        "bottom-sheet"
+      ]
+    },
+    {
+      "id": "overview-panel",
+      "role": "sidebar",
+      "label": "Overview widget panel: calorie/macro ring with %/g toggle and macro stat tiles, water log, body stats, day notes",
+      "bbox": {
+        "x": 1064,
+        "y": 212,
+        "width": 356,
+        "height": 1144
+      },
+      "patterns": [
+        "dashboard",
+        "chart",
+        "stat-tile",
+        "choice-control",
+        "text-field",
+        "card"
+      ]
+    },
+    {
+      "id": "bottom-nav",
+      "role": "bottom-tab-bar",
+      "label": "Bottom tab bar: Diary, Foods, Wellness, Statistics, Goals, Settings",
+      "bbox": {
+        "x": 0,
+        "y": 1415,
+        "width": 1440,
+        "height": 64
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "dims": {
+        "primary": "bottom-tab-bar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 1415,
+            "width": 1440,
+            "height": 64
+          },
+          "quote": "DIARY FOODS WELLNESS STATISTICS GOALS SETTINGS",
+          "region": "bottom-nav",
+          "note": "bottom tab bar with active Diary tab"
+        },
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 61
+          },
+          "quote": "Diary",
+          "region": "header"
+        }
+      ]
+    },
+    {
+      "id": "drawer",
+      "status": "present",
+      "confidence": 0.7,
+      "dims": {
+        "edge": "left",
+        "relationship": "overlay-with-scrim",
+        "holds": "navigation",
+        "openBy": [
+          "menu-button"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 12,
+            "y": 10,
+            "width": 40,
+            "height": 40
+          },
+          "region": "header",
+          "note": "'Open menu' hamburger; live page opens a left navigation drawer (NutriTrace brand, same destinations, user profile) over a blurred scrim — not visible in capture"
+        }
+      ]
+    },
+    {
+      "id": "date-picker",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "presentation": "week-strip-with-paging",
+        "selection": "single-date",
+        "openBy": "always-visible"
+      },
+      "novel": [
+        {
+          "subdimension": "annotations",
+          "description": "Each day shows its logged kcal total and a mini goal-progress bar",
+          "proposedValueId": "per-day-metric-or-progress"
+        }
+      ],
+      "evidence": [
+        {
+          "bbox": {
+            "x": 16,
+            "y": 126,
+            "width": 1408,
+            "height": 65
+          },
+          "quote": "TUESDAY 17 1,313",
+          "region": "date-nav",
+          "note": "7-day strip, selected day outlined in green; buttons 'Switch diary to 2026-11-15'"
+        },
+        {
+          "bbox": {
+            "x": 16,
+            "y": 69,
+            "width": 1408,
+            "height": 40
+          },
+          "quote": "Today 11/17/2026",
+          "region": "date-nav",
+          "note": "prev/next day arrows and Jump to Date button"
+        }
+      ]
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "media": "none",
+        "actions": "action-row",
+        "shape": "vertical",
+        "style": "outlined"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 16,
+            "y": 337,
+            "width": 508,
+            "height": 520
+          },
+          "quote": "Breakfast",
+          "region": "meal-log",
+          "note": "meal card: header with icon+title, three icon buttons (more, quick calories, add), list of food rows, Add Food row, macro bar footer; white, 1px border, 16px radius, colored left accent"
+        },
+        {
+          "bbox": {
+            "x": 536,
+            "y": 336,
+            "width": 508,
+            "height": 301
+          },
+          "quote": "Lunch",
+          "region": "meal-log"
+        },
+        {
+          "bbox": {
+            "x": 1064,
+            "y": 682,
+            "width": 356,
+            "height": 261
+          },
+          "quote": "Water",
+          "region": "overview-panel",
+          "note": "widget cards in sidebar use same container"
+        }
+      ]
+    },
+    {
+      "id": "chart",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "markType": "arcs",
+        "channels": [
+          "length",
+          "colour-hue-or-value"
+        ],
+        "scale": "radial",
+        "faceting": "layered-series",
+        "authorship": "author-specified",
+        "annotation": [
+          "callout-labels"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1140,
+            "y": 303,
+            "width": 204,
+            "height": 204
+          },
+          "quote": "1,313 kcal of 1,900",
+          "region": "overview-panel",
+          "note": "concentric ring: outer calorie progress ring, inner arcs for protein/carbs/fat"
+        },
+        {
+          "bbox": {
+            "x": 35,
+            "y": 812,
+            "width": 472,
+            "height": 32
+          },
+          "quote": "29% P · 47% C · 28% F · 347 kcal",
+          "region": "meal-log",
+          "note": "stacked horizontal macro bar per meal"
+        }
+      ]
+    },
+    {
+      "id": "stat-tile",
+      "status": "present",
+      "confidence": 0.75,
+      "dims": {
+        "context": [
+          "label"
+        ],
+        "encoding": "number-only",
+        "drill": "open-a-detail-chart"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1081,
+            "y": 592,
+            "width": 322,
+            "height": 61
+          },
+          "quote": "90g PROTEIN 151g CARBS 41g FAT",
+          "region": "overview-panel",
+          "note": "three tinted macro tiles"
+        },
+        {
+          "bbox": {
+            "x": 1083,
+            "y": 1005,
+            "width": 318,
+            "height": 36
+          },
+          "quote": "162.8 lb",
+          "region": "overview-panel"
+        }
+      ]
+    },
+    {
+      "id": "dashboard",
+      "status": "present",
+      "confidence": 0.6,
+      "dims": {
+        "widgets": [
+          "kpi-tiles",
+          "categorical-charts",
+          "control-widgets"
+        ],
+        "purpose": "motivation-and-learning",
+        "arrangement": "single-scrolling-column",
+        "density": "a-few-glanceable-tiles",
+        "linking": "global-filters",
+        "ownership": "personal"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1064,
+            "y": 212,
+            "width": 356,
+            "height": 1144
+          },
+          "quote": "OVERVIEW",
+          "region": "overview-panel",
+          "note": "collapsible widget panel of glanceable daily metrics (macro ring, water, body stats, notes) driven by the selected day; widgets expand via open_in_full"
+        }
+      ]
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "chips",
+        "option": [
+          "label-only"
+        ],
+        "largeSets": "show-all"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 89,
+            "y": 275,
+            "width": 341,
+            "height": 25
+          },
+          "quote": "14:10 16:8 18:6 20:4 OMAD Custom",
+          "region": "fasting-card",
+          "note": "fasting protocol pill chips, 16:8 selected in purple"
+        },
+        {
+          "bbox": {
+            "x": 1081,
+            "y": 266,
+            "width": 74,
+            "height": 26
+          },
+          "quote": "% g",
+          "region": "overview-panel",
+          "note": "segmented %/g toggle"
+        }
+      ]
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "supporting": [
+          "label",
+          "placeholder",
+          "character-counter"
+        ],
+        "style": "filled",
+        "validation": "none",
+        "inputType": "plain"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1083,
+            "y": 1189,
+            "width": 318,
+            "height": 155
+          },
+          "quote": "Tempo run this morning, 5 mi. Chili for dinner tonight.",
+          "region": "overview-panel",
+          "note": "Day Notes textarea with '55 characters' counter"
+        }
+      ]
+    },
+    {
+      "id": "bottom-sheet",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Not visible in capture; on the live page the meal 'more' button opens a bottom action sheet with grabber (Move Items to…, Copy, Save as Meal…, Clear All Items, Cancel).",
+      "dims": {
+        "detents": "single-height",
+        "modality": "modal-with-scrim",
+        "holds": "actions"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 371,
+            "y": 352,
+            "width": 40,
+            "height": 40
+          },
+          "region": "meal-log",
+          "note": "'Meal actions for Breakfast' trigger"
+        }
+      ]
+    },
+    {
+      "id": "progress-indicator",
+      "status": "absent",
+      "confidence": 0.6,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1083,
+            "y": 733,
+            "width": 318,
+            "height": 8
+          },
+          "note": "water bar and week-strip bars are goal-progress meters, not work-in-progress indicators"
+        }
+      ]
+    },
+    {
+      "id": "activity-log",
+      "status": "absent",
+      "confidence": 0.6,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 35,
+            "y": 413,
+            "width": 472,
+            "height": 52
+          },
+          "note": "timestamped food rows are diary entries grouped by meal, not an audit/history log"
+        }
+      ]
+    },
+    {
+      "id": "calendar",
+      "status": "absent",
+      "confidence": 0.75,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 16,
+            "y": 126,
+            "width": 1408,
+            "height": 65
+          },
+          "note": "week strip only selects a day; no event grid"
+        }
+      ]
+    }
+  ],
+  "structure": {
+    "layout": "Tablet-style app: gradient top bar with hamburger and title, date header with prev/next and a 7-day week strip, a two-column masonry of meal cards (plus fasting card and activity card) on the left, a docked right 'Overview' widget panel (macro ring, water, body stats, notes), bottom tab bar, and a floating AI-coach button",
+    "regions": [
+      "header",
+      "date-nav",
+      "fasting-card",
+      "meal-log",
+      "overview-panel",
+      "bottom-nav"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#f5f7fa",
+      "#ffffff",
+      "#0d0f14",
+      "#00c47a",
+      "#00a865",
+      "#8e24aa",
+      "#f9a825",
+      "#2196f3",
+      "#8b5cf6",
+      "#eef1f7",
+      "#e5e8f0"
+    ],
+    "colorRoles": {
+      "background": "#f5f7fa",
+      "surface": "#ffffff",
+      "text": "#0d0f14",
+      "primary": "#00c47a",
+      "accent": "#8e24aa",
+      "muted": "#eef1f7",
+      "border": "#e5e8f0",
+      "carbs": "#00a865",
+      "fat": "#f9a825",
+      "water": "#2196f3",
+      "fasting": "#8b5cf6"
+    },
+    "typography": "Inter throughout (UI, headings, numbers); Material Symbols Rounded for icons",
+    "typeScale": "Restrained 10–15px body/meta (13px rows, 11px uppercase letter-spaced labels like SUNDAY, PROTEIN, OVERVIEW); emphasis via color and weight: 22–24px bold app title, ~36px bold orange '1,313' in the ring, 17–18px bold macro tile values",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "iconography",
+      "data-visualization"
+    ],
+    "iconStyle": "mixed",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "clean",
+      "friendly",
+      "fresh",
+      "health-focused",
+      "app-like"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T06:45:09.207Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 13,
+    "usage": {
+      "input_tokens": 26,
+      "cache_creation_input_tokens": 46640,
+      "cache_read_input_tokens": 529125,
+      "output_tokens": 7753
+    }
+  },
+  "notes": "Mobile/tablet-first PWA layout rendered at desktop width: bottom tab bar persists even at 1440px. Top bar is a green→teal→sky gradient. Macros are color-coded consistently (protein purple, carbs green, fat orange) across ring arcs, stacked meal bars, percentage text and pastel tiles. Meal cards have a colored left border accent and three square 40px icon buttons (more/bolt/add). Week strip shows daily kcal and thin progress bars; future days greyed. Floating circular teal AI coach FAB (robot icon, 'hold to dictate food') bottom-right. Overview panel is collapsible (right_panel_close). Meal 'more' opens a bottom action sheet; hamburger opens a left nav drawer with scrim (verified live)."
+}

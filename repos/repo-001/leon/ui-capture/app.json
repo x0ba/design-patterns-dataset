@@ -1,0 +1,20 @@
+{
+  "mode": "server",
+  "entry": "/web-app/",
+  "login": null,
+  "stubs": [
+    {
+      "service": "LLM provider (OpenRouter chat completions API, model anthropic/claude-sonnet-5.5)",
+      "how": ".ui-capture/llm-stub.mjs is an OpenAI/OpenRouter-compatible HTTP server loaded into the Leon server process via `node --import` (listens on 127.0.0.1:$LLM_STUB_PORT, default 4471). The profile config sets llm.providers.openrouter.base_url to it and .env has a placeholder LEON_OPENROUTER_API_KEY. It streams SSE chat-completion chunks with topic-aware answers (weather, reminders, recipes, code, summaries, translations, otherwise a contextual generic reply), fills JSON-schema structured outputs, and reports usage/cost."
+    },
+    {
+      "service": "Process listing (/bin/ps, used for stale-process cleanup)",
+      "how": ".ui-capture/bin/ps prints an empty process table; the sandbox forbids executing the setuid system ps. Put first on PATH by start.sh."
+    },
+    {
+      "service": "Online update check, telemetry, pulse, context-file refresh workers",
+      "how": "Not stubbed but disabled through Leon's own settings: LEON_NODE_ENV=development (skips the updater), telemetry_enabled: false, runtime.pulse_enabled: false, context.disabled_files: ['*'] (those workers need tsx IPC unix sockets, which the sandbox blocks)."
+    }
+  ],
+  "notes": "Leon's real Fastify server (server/src/index.ts run with `node --import tsx`, as `pnpm dev:server` does) serves the production build of the 2.0 web app (apps/web/dist, built with `pnpm run build:web-app`) at /web-app/ (root / is the legacy app). Toolchain via mise.toml: node 26.13.1 (.nvmrc) and pnpm 11.28.12 (the repo's devEngines asks for pnpm 12.18.0, whose Rust store lock can't be opened in the sandbox; onFail is 'ignore'). Deps installed with `pnpm install --ignore-scripts --pnpmfile .ui-capture/pnpmfile.cjs` (skips the dev-only `json` CLI package that ships a .gitmodules file the sandbox can't write; the full Python/llama.cpp setup is not needed for the UI). No auth: local profile auth is disabled by default, so the web app opens straight in as profile 'just-me'. Data: isolated LEON_HOME at .ui-capture/leon-home. On every start, .ui-capture/seed.mjs (content in seed-data.mjs) rewrites the profile's sessions in Leon's legacy archive format (sessions/index.json + <id>/conversation_log.json), which Leon's own initializeConversationArchive imports into conversations.sqlite, and adds workspaces through Leon's own workspace schema. The owner is a Lyon-based product designer and developer: 59 sessions (128 messages) spread over about 7 months, 3 pinned. 5 workspaces (Kitchen renovation (pinned), Trailhead hiking app, Lisbon March trip, Atelier Brun website freelance, Half marathon training) with briefs, folder and link resources. Rich agent turns include plans, reasoning, tool calls (weather, web search, file read/patch, ripgrep, workspace search, shell with command output, one timed-out tool error), tables, code blocks and FR/EN text. Dates are anchored to the current day at start. Main areas: sidebar with workspaces, pinned and recent sessions plus search; session feed with expandable 'worked for'/tool-call disclosures and tool detail dialogs; the composer, whose model selector shows OpenRouter / Claude Sonnet 5.5 (sending a message runs the real agent loop against the stub); the new-session page; settings (/web-app/settings) with tool/skill catalogs and connections."
+}

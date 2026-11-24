@@ -1,0 +1,429 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "catai--chat-conversation",
+    "url": "http://localhost:4414/seed.html",
+    "finalUrl": "http://localhost:4414/",
+    "status": 200,
+    "title": "Catai - Chat with AI",
+    "capturedAt": "2026-11-18T02:58:35.674Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1439
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "ai-tools",
+    "domainNote": "AI chat assistant web client (Catai)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/catai/explore.json",
+      "repo": {
+        "name": "withcatai/catai",
+        "url": "https://github.com/withcatai/catai",
+        "commit": "003f29ecf55fda01f4278581ab4c3ec676f9c76c",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "chat-conversation",
+        "name": "Chat conversation",
+        "description": "Main chat workspace with sidebar of recent chats and an open conversation showing the user prompt, the expanded model thinking, a markdown reply with a highlighted code block, and the message composer."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Top bar with cat logo, 'Catai / Chat with AI' title and a theme toggle",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 65
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Connection status, New Chat / Settings buttons, chat search field, recent chats list with timestamps, Load more, 'Powered by Catai' footer",
+      "bbox": {
+        "x": 0,
+        "y": 65,
+        "width": 256,
+        "height": 1374
+      },
+      "patterns": [
+        "app-shell",
+        "text-field",
+        "badge"
+      ]
+    },
+    {
+      "id": "thread",
+      "role": "conversation",
+      "label": "AI chat thread: user bubbles on the right, assistant replies in cards with thinking toggles, markdown and syntax-highlighted code blocks with Copy buttons",
+      "bbox": {
+        "x": 256,
+        "y": 65,
+        "width": 1184,
+        "height": 1214
+      },
+      "patterns": [
+        "ai-chat",
+        "accordion"
+      ]
+    },
+    {
+      "id": "composer",
+      "role": "composer",
+      "label": "Bottom composer with placeholder 'Type your message here...' and keyboard shortcut hints",
+      "bbox": {
+        "x": 256,
+        "y": 1279,
+        "width": 1184,
+        "height": 160
+      },
+      "patterns": [
+        "prompt-input",
+        "ai-chat"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "ai-chat",
+      "status": "present",
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 929,
+            "y": 89,
+            "width": 299,
+            "height": 47
+          },
+          "quote": "why does my useEffect run twice in dev?",
+          "region": "thread",
+          "note": "User prompt bubble"
+        },
+        {
+          "bbox": {
+            "x": 468,
+            "y": 152,
+            "width": 576,
+            "height": 634
+          },
+          "quote": "That's React 18 StrictMode.",
+          "region": "thread",
+          "note": "Assistant reply with markdown, bold text and a syntax-highlighted TSX code block with Copy"
+        },
+        {
+          "bbox": {
+            "x": 468,
+            "y": 865,
+            "width": 576,
+            "height": 389
+          },
+          "quote": "Show thinking",
+          "region": "thread",
+          "note": "Second assistant turn with its thinking collapsed"
+        }
+      ],
+      "dims": {
+        "turnContent": [
+          "markdown-with-code"
+        ],
+        "composition": "linear-thread",
+        "invokeBy": [
+          "text-field-submit"
+        ],
+        "scope": "this-thread-only"
+      },
+      "novel": [
+        {
+          "subdimension": "turnContent",
+          "description": "Collapsible model reasoning/thinking block shown at the top of each reply",
+          "proposedValueId": "reasoning-trace"
+        }
+      ]
+    },
+    {
+      "id": "prompt-input",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 400,
+            "y": 1307,
+            "width": 896,
+            "height": 58
+          },
+          "quote": "Type your message here...",
+          "region": "composer"
+        },
+        {
+          "bbox": {
+            "x": 400,
+            "y": 1386,
+            "width": 420,
+            "height": 26
+          },
+          "quote": "send Shift new line Tab complete history",
+          "region": "composer",
+          "note": "Keyboard hints: Enter sends, Shift+Enter adds a new line, Tab completes, arrow keys recall history"
+        }
+      ],
+      "dims": {
+        "content": [
+          "plain-prompt"
+        ],
+        "layout": "bottom-sticky-composer",
+        "submitBy": [
+          "enter-key",
+          "click-send"
+        ],
+        "assistance": [
+          "placeholder-examples"
+        ]
+      }
+    },
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 65
+          },
+          "quote": "Catai",
+          "region": "header"
+        },
+        {
+          "bbox": {
+            "x": 0,
+            "y": 65,
+            "width": 256,
+            "height": 1374
+          },
+          "quote": "RECENT CHATS",
+          "region": "sidebar",
+          "note": "Sidebar with New Chat, Settings and the recent conversations"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations",
+          "recents"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 12,
+            "y": 251,
+            "width": 231,
+            "height": 38
+          },
+          "quote": "Search chats...",
+          "region": "sidebar"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "placeholder"
+        ],
+        "style": "outlined"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "The green dot next to 'Connected' is a status indicator, but it stands alone in the sidebar instead of being attached to a host element",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 12,
+            "y": 76,
+            "width": 95,
+            "height": 22
+          },
+          "quote": "Connected",
+          "region": "sidebar"
+        }
+      ],
+      "dims": {
+        "meaning": "status"
+      }
+    },
+    {
+      "id": "accordion",
+      "status": "uncertain",
+      "confidence": 0.45,
+      "rationale": "Each assistant turn has one Show/Hide thinking disclosure that expands in place. These are single disclosures, not stacked accordion sections, so the fit is weak",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 484,
+            "y": 160,
+            "width": 544,
+            "height": 80
+          },
+          "quote": "Hide thinking",
+          "region": "thread"
+        },
+        {
+          "bbox": {
+            "x": 484,
+            "y": 875,
+            "width": 110,
+            "height": 20
+          },
+          "quote": "Show thinking",
+          "region": "thread"
+        }
+      ],
+      "dims": {
+        "policy": "many-at-a-time",
+        "header": [
+          "title-only"
+        ],
+        "toggle": [
+          "header-click"
+        ]
+      }
+    },
+    {
+      "id": "ai-provenance",
+      "status": "absent",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 424,
+            "y": 152,
+            "width": 40,
+            "height": 32
+          },
+          "note": "Only a mascot avatar marks assistant turns; there are no citations, model name or AI-generated labels"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "suggestion-chips",
+      "status": "absent",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 400,
+            "y": 1307,
+            "width": 896,
+            "height": 110
+          },
+          "note": "No suggested prompts near the composer"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "Full-height app shell: top header bar, fixed left sidebar (status, nav buttons, chat search, recent chats list), and a main conversation pane whose message thread scrolls by itself, with a composer fixed at the bottom",
+    "regions": [
+      "header",
+      "sidebar",
+      "thread",
+      "composer"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#020617",
+      "#0f172a",
+      "#1e293b",
+      "#334155",
+      "#282c34",
+      "#3b82f6",
+      "#cbd5e1",
+      "#ffffff",
+      "#94a3b8",
+      "#22c55e",
+      "#38bdf8"
+    ],
+    "colorRoles": {
+      "background": "#020617",
+      "surface": "#1e293b",
+      "text": "#cbd5e1",
+      "muted": "#94a3b8",
+      "primary": "#3b82f6",
+      "accent": "#38bdf8",
+      "border": "#334155",
+      "sidebar": "#0f172a",
+      "code-background": "#282c34",
+      "success": "#22c55e"
+    },
+    "typography": "Inter for all UI and body text; ui-monospace for code blocks, the thinking trace and the kbd shortcut chips; code uses the One Dark syntax palette (#abb2bf, #61aeee, #98c379, #d19a66)",
+    "typeScale": "Flat scale: 18px semibold brand title, 14px body/messages/list items, 12px timestamps, section labels, buttons and hints; hierarchy comes from weight and color more than size",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "illustration",
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "dark",
+      "technical",
+      "calm",
+      "developer-focused",
+      "playful-mascot"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T02:59:52.435Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 9,
+    "usage": {
+      "input_tokens": 18,
+      "cache_creation_input_tokens": 29072,
+      "cache_read_input_tokens": 273961,
+      "output_tokens": 4799
+    }
+  },
+  "notes": "Slate/Tailwind dark theme (slate-950 page, slate-900 sidebar, slate-800 assistant cards) with blue-500 user bubbles. Cat-mascot avatars (orange cat for the assistant, gray cat for the user) give the site its character. Assistant replies sit in rounded cards topped by an eye-icon 'Hide/Show thinking' toggle that reveals a monospace reasoning summary, then a divider rule. Code blocks have a 'TSX' language header and a Copy button, with One Dark highlighting. The composer is a wide pill-like rounded box (16px radius) with kbd-style hints below (↵ send, Shift ↵ new line, Tab complete, ↑ ↓ history). The send button is hidden/disabled while the box is empty. The sidebar's recent chats are truncated titles with timestamps, plus a 'Load more chats' link."
+}

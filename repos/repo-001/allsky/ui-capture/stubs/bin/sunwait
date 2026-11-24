@@ -1,0 +1,41 @@
+#!/usr/bin/env php
+<?php
+// Stub for sunwait (https://github.com/risacher/sunwait), computed with PHP's sun functions.
+// Supports: "poll exit set angle A LAT LON", "list [rise|set] angle A LAT LON",
+//           "list rise|set civil|daylight|nautical|astronomical LAT LON".
+date_default_timezone_set(getenv("ALLSKY_TZ") ?: "America/Denver");
+$a = array_slice($argv, 1);
+$cmd = array_shift($a);
+$angle = -6.0; $event = null; $twilight = null; $coords = [];
+for ($i = 0; $i < count($a); $i++) {
+	$t = $a[$i];
+	if ($t === 'angle') { $angle = (float)$a[++$i]; $twilight = 'angle'; continue; }
+	if (in_array($t, ['rise','set'])) { $event = $t; continue; }
+	if (in_array($t, ['civil','daylight','nautical','astronomical'])) { $twilight = $t; continue; }
+	if (preg_match('/^(-?[\d.]+)([NSEW])?$/i', $t, $m)) {
+		$v = (float)$m[1];
+		if (isset($m[2]) && in_array(strtoupper($m[2]), ['S','W'])) $v = -$v;
+		$coords[] = $v; continue;
+	}
+}
+$lat = $coords[0] ?? 0.0; $lon = $coords[1] ?? 0.0;
+$zen = ['daylight' => 90.833, 'civil' => 96, 'nautical' => 102, 'astronomical' => 108][$twilight ?? ''] ?? (90 - $angle);
+$now = time();
+$day = strtotime('today 12:00');
+function times($ts, $lat, $lon, $zen) {
+	$r = date_sunrise($ts, SUNFUNCS_RET_TIMESTAMP, $lat, $lon, $zen);
+	$s = date_sunset($ts, SUNFUNCS_RET_TIMESTAMP, $lat, $lon, $zen);
+	return [$r, $s];
+}
+[$rise, $set] = @times($day, $lat, $lon, $zen);
+if ($cmd === 'poll') {
+	$isDay = ($now >= $rise && $now < $set);
+	echo $isDay ? "DAY\n" : "NIGHT\n";
+	exit($isDay ? 2 : 3);
+}
+if ($cmd === 'list') {
+	if ($event === 'rise') { echo date('H:i', $rise), "\n"; exit(0); }
+	if ($event === 'set') { echo date('H:i', $set), "\n"; exit(0); }
+	echo date('H:i', $rise), ", ", date('H:i', $set), "\n"; exit(0);
+}
+exit(0);

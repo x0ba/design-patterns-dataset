@@ -1,0 +1,24 @@
+{
+  "mode": "static",
+  "entry": "/",
+  "login": null,
+  "stubs": [
+    {
+      "service": "LRCGET Rust/Tauri backend (SQLite library DB, file scanner, config, export writers)",
+      "how": "out/tauri-backend-stub.js installs window.__TAURI_INTERNALS__ (the IPC boundary @tauri-apps/api calls into) before the app bundle loads and answers every invoke() command (get_init, get_track_ids, get_track, get_album*, get_artist*, get_config/set_config, scan_library, save_lyrics, export_track_lyrics, ...) from an in-memory copy of the seeded library in out/seed-data.js. Tauri events (scan-progress, scan-complete, reload-track-id, player-state, publish/flag progress) are emitted through the same callback mechanism. State changes last until page reload."
+    },
+    {
+      "service": "Kira audio player (Rust)",
+      "how": "play/pause/resume/seek/stop/volume/speed commands drive a simulated clock in the stub that emits 'player-state' events every 100 ms, so the Now Playing bar, progress and synced-lyrics highlighting advance without audio."
+    },
+    {
+      "service": "LRCLIB API (lrclib.net: /api/get, /api/v2/search, /api/get/{id}, /api/publish, /api/flag)",
+      "how": "Served by the stub from a seeded LRCLIB catalogue (~620 entries: the library songs plus single/live/radio-edit/plain variant submissions). download_lyrics matches by title+artist+duration (some tracks deliberately return 'This track does not exist in LRCLIB database'); search_lyrics, retrieve_lyrics_by_id, apply_lyrics, prepare/refresh_lrclib_lyricsfile, publish_lyrics and flag_lyrics (with progress events) all resolve locally."
+    },
+    {
+      "service": "Tauri plugins (app version, window theme, os, dialog, clipboard, global-shortcut)",
+      "how": "plugin:app|version returns 2.2.2 (Cargo.toml version); plugin:window|theme follows prefers-color-scheme (config theme_mode is 'auto'); window controls and other plugin calls are no-ops."
+    }
+  ],
+  "notes": "Tauri v2 desktop app (Vue 3 + Vite front end, Rust backend). Built per repo tooling: node 22.21.1 via mise, `npm install` (lockfile was out of sync so `npm ci` failed), `vite build`. .ui-capture/build.sh builds into .ui-capture/out, generates out/seed-data.js with gen-seed.mjs and injects <script> tags for seed-data.js + tauri-backend-stub.js into out/index.html ahead of the module bundle; no app source was changed. Data: an established library already scanned from two folders (/home/linh/Music and /mnt/nas/music/flac): 29 albums, 30 artists, 263 tracks across indie rock, folk, synthpop, Spanish, Japanese and Vietnamese pop, hip hop, metal, jazz trio, Chopin nocturnes, ambient field recordings, a Various Artists compilation, a lo-fi bedroom-pop album with lowercase titles, a remastered album, a live album and a messy 'Unknown Artist / Unknown Album' import (Track 01, AUD-20190612-WA0003). Lyrics status across the 263 tracks: 124 synced, 27 word-synced, 25 plain only, 23 instrumental, 64 still missing (most downloadable via 'Download all lyrics' from the stubbed LRCLIB, the rest return 'not found'). Settings reflect a configured user (skip tracks with synced lyrics on, volume 72%, LRC export). All lyrics are original text written for the seed, stored as LRCGET lyricsfile YAML. Main areas: Tracks tab (virtualized list with Synced/Word Synced/Plain/Instrumental badges, search and filters, Download all lyrics, Export), Albums and Artists tabs (with detail track lists), LRCLIB tab (search LRCLIB, preview, edit, flag), the bottom Now Playing bar with live lyrics, the lyrics editor (Edit Lyrics v2 with sync/word-timing lanes, publish), Search Lyrics modal, Download viewer, Settings and About modals. Rebuild with .ui-capture/build.sh (re-runs the seed generator). tools/ holds verification helpers only (jsdom DOM check, seed validator); headless Chromium could not start in this sandbox, so the UI was verified via jsdom against an IIFE build of the same source."
+}

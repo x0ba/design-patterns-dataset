@@ -1,0 +1,529 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "shopnex--home-dashboard",
+    "url": "http://localhost:4422/admin",
+    "finalUrl": "http://localhost:4422/admin",
+    "status": 200,
+    "title": "ShopNex Admin",
+    "capturedAt": "2026-11-18T05:54:24.887Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1107
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "commerce",
+    "domainNote": "e-commerce store admin (merchant back-office) home dashboard",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/shopnex/explore.json",
+      "repo": {
+        "name": "shopnex-ai/shopnex",
+        "url": "https://github.com/shopnex-ai/shopnex",
+        "commit": "f323cab65174b7ff4b5b8a05b1bd7724c913421a",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "home-dashboard",
+        "name": "Home dashboard",
+        "description": "Store analytics dashboard with KPI cards, sales-over-time line chart and top products list, beside the admin sidebar."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Store identity, search/command trigger (⌘K), grouped nav (Store, Platform), Settings and user account menu trigger",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 256,
+        "height": 900
+      },
+      "patterns": [
+        "app-shell",
+        "command-palette",
+        "menu"
+      ]
+    },
+    {
+      "id": "topbar",
+      "role": "header",
+      "label": "Toggle Sidebar icon button and 'View store' external link",
+      "bbox": {
+        "x": 256,
+        "y": 0,
+        "width": 1184,
+        "height": 48
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "page-header",
+      "role": "page-header",
+      "label": "'Home' title, comparison subtitle, 7/30/90 days segmented control, '36 orders to fulfill' and '3 orders awaiting payment' pills",
+      "bbox": {
+        "x": 336,
+        "y": 72,
+        "width": 1024,
+        "height": 112
+      },
+      "patterns": [
+        "choice-control",
+        "dashboard"
+      ]
+    },
+    {
+      "id": "kpi-row",
+      "role": "stats-strip",
+      "label": "Four KPI tiles (Total sales, Orders, AOV, Returning customers) with % change; first three select the chart metric",
+      "bbox": {
+        "x": 336,
+        "y": 208,
+        "width": 1024,
+        "height": 88
+      },
+      "patterns": [
+        "stat-tile",
+        "dashboard"
+      ]
+    },
+    {
+      "id": "chart-panel",
+      "role": "chart",
+      "label": "'Total sales over time' area/line chart, this period vs dashed previous period, hover datatip",
+      "bbox": {
+        "x": 336,
+        "y": 320,
+        "width": 1024,
+        "height": 366
+      },
+      "patterns": [
+        "chart",
+        "tooltip",
+        "dashboard"
+      ]
+    },
+    {
+      "id": "top-products",
+      "role": "ranked-list",
+      "label": "Top products list: thumbnail, name, revenue, units, horizontal green bar proportional to revenue",
+      "bbox": {
+        "x": 336,
+        "y": 710,
+        "width": 1024,
+        "height": 374
+      },
+      "patterns": [
+        "chart",
+        "dashboard"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "dashboard",
+      "status": "present",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 336,
+            "y": 72,
+            "width": 1024,
+            "height": 1012
+          },
+          "quote": "Last 30 days compared with the 30 days before",
+          "region": "kpi-row",
+          "note": "KPI tiles, time-series chart and top-products bar list on one view with a global date-range control"
+        }
+      ],
+      "dims": {
+        "widgets": [
+          "kpi-tiles",
+          "time-series-charts",
+          "categorical-charts"
+        ],
+        "purpose": "operational-decisions",
+        "arrangement": "single-scrolling-column",
+        "density": "a-few-glanceable-tiles",
+        "linking": "global-filters",
+        "alerting": "none"
+      }
+    },
+    {
+      "id": "stat-tile",
+      "status": "present",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 336,
+            "y": 208,
+            "width": 247,
+            "height": 88
+          },
+          "quote": "Total sales $30,177.50 88%",
+          "region": "kpi-row",
+          "note": "selected tile (green outline) drives chart"
+        },
+        {
+          "bbox": {
+            "x": 595,
+            "y": 208,
+            "width": 247,
+            "height": 88
+          },
+          "quote": "Orders 155 37.2%",
+          "region": "kpi-row",
+          "note": "clicking switches chart to 'Orders over time' (verified live)"
+        },
+        {
+          "bbox": {
+            "x": 1113,
+            "y": 208,
+            "width": 247,
+            "height": 88
+          },
+          "quote": "Returning customers 32.2% 1.3%",
+          "region": "kpi-row",
+          "note": "exception: not a button, static tile"
+        }
+      ],
+      "dims": {
+        "context": [
+          "label",
+          "change-vs-previous-period"
+        ],
+        "encoding": "signed-change-with-arrow",
+        "window": "follows-the-dashboard-filter",
+        "drill": "open-a-detail-chart"
+      }
+    },
+    {
+      "id": "chart",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 336,
+            "y": 320,
+            "width": 1024,
+            "height": 366
+          },
+          "quote": "Total sales over time",
+          "region": "chart-panel",
+          "note": "green line with light area fill for this period, dashed grey line for previous period, legend, linear $ y-axis, date x-axis; hover shows crosshair datatip"
+        },
+        {
+          "bbox": {
+            "x": 336,
+            "y": 710,
+            "width": 1024,
+            "height": 374
+          },
+          "quote": "Top products",
+          "region": "top-products",
+          "note": "secondary instance: per-product horizontal bars proportional to revenue"
+        }
+      ],
+      "dims": {
+        "markType": "areas",
+        "channels": [
+          "position"
+        ],
+        "scale": "time",
+        "faceting": "layered-series",
+        "inspectBy": [
+          "hover-tooltip"
+        ],
+        "authorship": "author-specified",
+        "annotation": [
+          "none"
+        ],
+        "adaptation": "fixed-desktop-chart"
+      }
+    },
+    {
+      "id": "tooltip",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 432,
+            "y": 422,
+            "width": 908,
+            "height": 220
+          },
+          "region": "chart-panel",
+          "note": "Live hover shows datatip with this-period and previous-period dates/values ('Nov 9 8 / Oct 10 8') beside a vertical crosshair; not in static capture"
+        }
+      ],
+      "dims": {
+        "trigger": [
+          "hover"
+        ],
+        "timing": "until-the-pointer-leaves",
+        "content": "rich-content",
+        "placement": "following-the-pointer"
+      }
+    },
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.93,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 256,
+            "height": 900
+          },
+          "quote": "Store Home Orders Products Collections Customers Discounts Online store Pages Navigation Apps",
+          "region": "sidebar",
+          "note": "persistent left sidebar with grouped destinations, identity, account"
+        },
+        {
+          "bbox": {
+            "x": 268,
+            "y": 10,
+            "width": 28,
+            "height": 28
+          },
+          "quote": "Toggle Sidebar",
+          "region": "topbar"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations"
+        ],
+        "visibility": "toggle-button",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "command-palette",
+      "status": "present",
+      "confidence": 0.82,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 72,
+            "width": 239,
+            "height": 32
+          },
+          "quote": "Search ⌘K",
+          "region": "sidebar",
+          "note": "trigger button with shortcut hint; live click opens centered overlay 'Search products, orders, customers…' with blurred backdrop"
+        }
+      ],
+      "dims": {
+        "types": [
+          "objects-and-files",
+          "places"
+        ],
+        "summon": [
+          "visible-search-button",
+          "in-app-shortcut"
+        ],
+        "scope": "current-app",
+        "placement": "centered-overlay"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 844,
+            "width": 239,
+            "height": 48
+          },
+          "quote": "Jordan Reyes jordan@northfieldsupply.co",
+          "region": "sidebar",
+          "note": "account button opens menu (verified live) with Theme section Light/Dark/System (checkmark) and Sign out"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click",
+        "structure": "sections",
+        "item": [
+          "label",
+          "icon",
+          "checkmark-state"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1145,
+            "y": 86,
+            "width": 215,
+            "height": 28
+          },
+          "quote": "7 days 30 days 90 days",
+          "region": "page-header",
+          "note": "group 'Date range' of toggle buttons, 30 days pressed with grey fill"
+        }
+      ],
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "segmented-control",
+        "option": [
+          "label-only"
+        ],
+        "timing": "immediately",
+        "largeSets": "show-all"
+      }
+    },
+    {
+      "id": "coordinated-views",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 336,
+            "y": 208,
+            "width": 1024,
+            "height": 478
+          },
+          "note": "tiles switch chart metric but this is metric selection, not linked synchronized views; captured as dashboard linking / stat-tile drill"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "card",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 336,
+            "y": 710,
+            "width": 1024,
+            "height": 374
+          },
+          "note": "rounded white panels are widget containers, not item-summarizing cards"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "tabs",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 336,
+            "y": 208,
+            "width": 766,
+            "height": 88
+          },
+          "note": "stat tiles act tab-like (aria-pressed) but are coded as stat-tile drill"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "admin app shell with fixed left sidebar navigation and a thin top bar; main column holds page title with date-range segmented control, quick-action count pills, a row of 4 KPI tiles, a full-width time-series chart panel and a top-products ranked list panel",
+    "regions": [
+      "sidebar",
+      "topbar",
+      "page-header",
+      "kpi-row",
+      "chart-panel",
+      "top-products"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#f8f8f7",
+      "#ffffff",
+      "#171717",
+      "#6b6b6b",
+      "#12915a",
+      "#e2f1e9",
+      "#e7e5e4",
+      "#9a9a9a"
+    ],
+    "colorRoles": {
+      "background": "#f8f8f7",
+      "surface": "#ffffff",
+      "text": "#171717",
+      "muted": "#6b6b6b",
+      "primary": "#12915a",
+      "accent": "#e2f1e9",
+      "border": "#e7e5e4",
+      "secondary-series": "#9a9a9a"
+    },
+    "typography": "Geist throughout (nav, headings, numbers, labels); ui-monospace only for the ⌘K keycap hint",
+    "typeScale": "Restrained: h1 'Home' 24px/600; KPI values 24px semibold; panel titles 15px/600; body/nav 14px/400-500; chips/controls 13px/500; axis labels, deltas and meta 12px. Hierarchy from weight and the large KPI numbers rather than big display type.",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "data-visualization",
+      "photography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "clean",
+      "calm",
+      "professional",
+      "technical",
+      "minimal"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T05:56:04.350Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 12,
+    "usage": {
+      "input_tokens": 24,
+      "cache_creation_input_tokens": 43300,
+      "cache_read_input_tokens": 400153,
+      "output_tokens": 6479
+    }
+  },
+  "notes": "shadcn/ui-style admin (sidebar + inset main) in warm off-white with a single emerald green accent used for the selected KPI tile outline, positive deltas (↗ arrow + %), chart line/area fill and top-product revenue bars. KPI tiles are 14px-radius white boxes with hairline shadow; the selected tile gets a 2px green border and swaps the chart metric (Total sales -> 'Orders over time'). Pill-shaped 'count + label + chevron' links ('36 orders to fulfill', '3 orders awaiting payment') act as to-do shortcuts into filtered order views — no codebook entry fits exactly. Chart compares current period (solid green with pale fill) vs previous period (dashed grey). Top products rows: 36px product photo thumbnail, name, right-aligned revenue and units, full-width progress-like bar. Sidebar is sticky; user menu includes theme switcher (Light/Dark/System). Toasts region 'Notifications alt+T' exists but empty."
+}

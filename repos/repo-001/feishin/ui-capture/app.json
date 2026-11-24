@@ -1,0 +1,36 @@
+{
+  "mode": "server",
+  "entry": "/",
+  "login": {
+    "username": "maya",
+    "email": "maya.okafor@fastmail.com",
+    "password": "listen2music"
+  },
+  "stubs": [
+    {
+      "service": "Music server (Navidrome/OpenSubsonic backend Feishin connects to)",
+      "how": "server.mjs implements the OpenSubsonic REST API (/rest/*.view: ping, getUser, getArtists/getArtist/getArtistInfo2, getAlbum/getAlbumList2/getAlbumInfo2, getSong, search3, getStarred(2), star/unstar/setRating/scrobble, getGenres, getSongsByGenre, getRandomSongs, getTopSongs, getSimilarSongs(2), playlists CRUD, play queue, internet radio, scan status, lyrics) on the same origin, backed by data/library.json from seed.mjs. Mutations persist in memory for the session. Auth uses the real Subsonic token scheme (md5(password+salt))."
+    },
+    {
+      "service": "Album / artist / playlist artwork (getCoverArt)",
+      "how": "Deterministic generated SVG artwork per album/artist/playlist served by server.mjs (no image files or network)."
+    },
+    {
+      "service": "Audio streaming (stream/download)",
+      "how": "server.mjs returns a silent 8 kHz WAV with the track's real duration so the player can play/seek offline."
+    },
+    {
+      "service": "Feishin web deploy config (settings.js, normally templated by the Docker/nginx image)",
+      "how": "server.mjs serves settings.js with SERVER_URL=current origin, SERVER_TYPE=subsonic, ANALYTICS_DISABLED=true, and on first load seeds localStorage with the saved server session for user maya (as a returning user would have) and the dismissed release-notes version."
+    },
+    {
+      "service": "GitHub API (update check, release notes, markdown render) called directly from the browser",
+      "how": "settings.js rewrites XHRs to https://api.github.com/* onto /_stub/github/* on the local server, which returns release metadata with the current version (v1.17.0) as latest, so no update banner and no outbound request."
+    },
+    {
+      "service": "Umami analytics",
+      "how": "Disabled via ANALYTICS_DISABLED=true in settings.js and localStorage umami.disabled=1; the script is never loaded."
+    }
+  ],
+  "notes": "Feishin is a client for self-hosted music servers. Built with the repo's own `pnpm run build:web` (via .ui-capture/build.sh, which builds in a $TMPDIR copy because the sandbox forbids creating `.idea` dirs that iconv-lite ships) into .ui-capture/web. start.sh runs server.mjs (Node only, no deps) which serves the web build plus a local OpenSubsonic-compatible server on PORT. The user opens / and is already signed in as 'maya' to 'Home Server' (credentials in login, in case the session is cleared - the login form then pre-fills the server URL). Data (seed.mjs + catalog.mjs): 48 albums / ~530 tracks / 54 artists from a realistic personal library (Radiohead, Boards of Canada, Miles Davis, Kendrick Lamar, Phoebe Bridgers, Bach/Gould, etc. with real tracklists, mixed FLAC/MP3/M4A), added over 2023-2026, play counts and last-played dates, ~100 favourited tracks, starred albums & artists, ratings, 17 playlists with comments, 7 internet radio stations, a saved play queue, plus a messy '[Unknown Album]' of untagged files. Main areas: Home (recently played / most played / recently added / random), Albums, Artists, Tracks, Genres, Playlists, Favorites, Folders, Radio, Search, Now Playing/queue, Settings. The server also holds a saved play queue (Teen Dream + Jubilee) that can be loaded via the queue panel menu \"Restore queue from server\" (indexBasedQueue extension); the local player bar starts empty. Tooling: .ui-capture/build.sh rebuilds web/, seed.mjs regenerates data/library.json, tools/validate.sh checks stub responses against the app's own zod schemas/normalizers, tools/boot.mjs boots the bundle in jsdom (a real browser cannot run inside this sandbox)."
+}

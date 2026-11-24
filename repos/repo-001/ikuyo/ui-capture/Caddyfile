@@ -1,0 +1,44 @@
+{
+	frankenphp {
+		php_ini opcache.lockfile_path {$IKUYO_ROOT}/.ui-capture/cache/tmp
+		php_ini sys_temp_dir {$IKUYO_ROOT}/.ui-capture/cache/tmp
+		php_ini upload_tmp_dir {$IKUYO_ROOT}/.ui-capture/cache/tmp
+	}
+	auto_https off
+	admin off
+	storage file_system {$IKUYO_ROOT}/.ui-capture/cache/caddy
+	log {
+		level WARN
+	}
+}
+
+http://:{$PORT} {
+	# Laravel JSON API (+ health check)
+	@api path /api/* /up
+	handle @api {
+		root * {$IKUYO_ROOT}/backend/public
+		php_server
+	}
+
+	# Local stand-in for api.maptiler.com (styles, tiles, geocoding)
+	handle_path /maptiler-stub/* {
+		@glyphs path /fonts/*
+		rewrite @glyphs /fonts/empty.pbf
+		@mtapi path /api/*
+		handle @mtapi {
+			root * {$IKUYO_ROOT}/.ui-capture/maptiler-stub
+			rewrite * /api.php
+			php
+		}
+		root * {$IKUYO_ROOT}/.ui-capture/maptiler-stub
+		header Access-Control-Allow-Origin *
+		file_server
+	}
+
+	# Production SPA build, unknown paths fall back to index.html
+	handle {
+		root * {$IKUYO_ROOT}/.ui-capture/web
+		try_files {path} /index.html
+		file_server
+	}
+}

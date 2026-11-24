@@ -1,0 +1,16 @@
+{
+  "mode": "server",
+  "entry": "/",
+  "login": null,
+  "stubs": [
+    {
+      "service": "Remote RSS/Atom feeds, site homepages, favicons and article images (the internet selfoss normally polls)",
+      "how": "Seed-time only: .ui-capture/seed/stub-web.mjs is a local HTTP forward proxy on 127.0.0.1:8901 serving 22 fictional-but-realistic feeds (generated from seed/sources.mjs) plus gd-drawn favicons/thumbnails (seed/gen-images.php). selfoss's own updater (cliupdate.php) fetched them with HTTP_PROXY pointed at the stub. Favicons/thumbnails are stored locally by selfoss, so nothing external is needed at runtime and start.sh does not start the stub."
+    },
+    {
+      "service": "Authentication",
+      "how": "config.ini sets username 'jordan' with a bcrypt password, but selfoss itself trusts requests from 127.0.0.1/::1, so the UI opens without a login screen on localhost (password, if ever needed from another host: riverbend-maple-42)."
+    }
+  ],
+  "notes": "selfoss 2.20-SNAPSHOT (PHP RSS reader, React client built with Parcel into public/). Served by FrankenPHP (static PHP 8.5 build pinned in mise.toml) using .ui-capture/Caddyfile, which mirrors the repo's .nginx.conf/.htaccess rewrite rules; SQLite DB at data/sqlite/selfoss.db. start.sh restores the seeded snapshot (.ui-capture/seed/selfoss.db + favicons + thumbnails) on every start, writes PHP temp/opcache/session dirs inside .ui-capture/cache, and runs in the foreground on $PORT (4433). Install/build steps are in .ui-capture/setup.sh; reseed with .ui-capture/seed/seed.sh. Data: 22 subscribed sources with tags (Tech, Linux, Dev, Blogs, Science, Space, News, Climate, Cooking, Design, Comics, Releases, Local, Podcasts; custom tag colors) and 296 articles dated from early July 2026 to the seed day, with authors, long and short bodies, thumbnails on the space and cooking feeds; 233 read, 63 unread (news/aggregator backlog), 17 starred; one dead podcast feed showing a 404 fetch error in the sources settings. Main areas: Newest/Unread/Starred streams (top filter), sidebar with tags and sources with unread counts, article expansion with share buttons, search, Settings > sources (/manage/sources) for adding/editing feeds, and OPML import (/opml)."
+}

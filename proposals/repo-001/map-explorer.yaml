@@ -1,0 +1,149 @@
+# Codebook proposal (new-values) — review with: node scripts/proposals.ts show repo-001 map-explorer
+id: map-explorer
+kind: new-values
+status: open
+batch: repo-001
+codebookVersion: 1.0.0
+dimensions:
+  - subdimensions:
+      - id: mapNarrowing
+        values:
+          - id: layer-toggle-panel
+            name: Layer toggle panel
+            description: Grouped per-layer on/off toggles with show-all/hide-all and visible/total counts decide
+              which overlays are drawn
+            example: Mini Map Macau layer panel (LRT lines, bus groups 0/32, air/sea)
+          - id: layer-toggle-list
+            name: Layer toggle list
+            description: Thematic overlay layers switched on/off individually from a panel, often with counts
+              and solo/show-only actions
+            example: Mini Map Macau layers panel; Google Earth layers
+  - subdimensions:
+      - id: basemap
+        values:
+          - id: sky-survey-imagery
+            name: Sky survey imagery
+            description: Astronomical all-sky image survey (HiPS) projected on a celestial sphere, switchable
+              between surveys/wavelengths
+            example: Aladin Lite, WorldWide Telescope
+  - subdimensions:
+      - id: overlays
+        values:
+          - id: footprint-polygons
+            name: Footprint / coverage polygons
+            description: Outlined or shaded areas showing instrument fields of view or survey coverage
+            example: Aladin Lite JWST footprints, MOC coverage
+rationale:
+  - rater: rater-1
+    site: mini-macau--transit-map
+    text: "Map explorers often narrow the visible world with a layer panel: grouped per-layer ON/OFF
+      toggles (one per transit line or category) with show-all and hide-all controls and
+      visible/total counts. Category chips and faceted filters describe filtering a result set, not
+      switching map layers on and off."
+  - rater: rater-2
+    site: mini-macau--city-layers
+    text: This page decides what appears on the map with a side panel of data-layer cards. Each card has
+      an on/off switch, an item count and a solo ("show only this") button. Category chips and
+      faceted filters don't describe toggling whole thematic layers like this.
+  - rater: rater-1
+    site: mini-macau--city-layers
+    text: The map's set of visible places is narrowed by a side panel of per-layer cards. Each card has
+      an on/off switch, an item count and a 'solo' action. These are layer toggles, not category
+      chips, faceted filters or a drawn search area.
+  - rater: rater-3
+    site: aladin-lite--sky-view
+    text: Sky atlases (Aladin Lite, WorldWide Telescope) use the same pan/zoom/layer pattern over a
+      celestial sphere; the basemap is a HiPS survey image of the sky, which none of the terrestrial
+      basemap values describe. Overlays include instrument footprint polygons and coverage maps
+      (MOC).
+  - rater: rater-2
+    site: aladin-lite--sky-view
+    text: Sky atlases (Aladin, WorldWide Telescope) use astronomical survey imagery (HiPS) as the base
+      layer in celestial coordinates; none of the basemap values fit.
+  - rater: rater-3
+    site: aladin-lite--layer-stack
+    text: Sky atlases (Aladin Lite, WorldWide Telescope) are map explorers over celestial coordinates;
+      the basemap is a selectable stack of survey imagery (HiPS) in different wavelengths, not
+      streets/satellite/terrain, and overlays are source catalogues, instrument footprints and
+      coverage (MOC) areas.
+  - rater: rater-1
+    site: aladin-lite--layer-stack
+    text: Sky atlases use celestial survey imagery (HiPS) in a celestial coordinate frame instead of
+      Earth basemaps; none of the basemap values describe that.
+sources:
+  - batch: repo-001
+    site: mini-macau--transit-map
+    url: http://localhost:4461/
+    note: proposed by rater-1
+  - batch: repo-001
+    site: mini-macau--city-layers
+    url: http://localhost:4461/
+    note: proposed by rater-2, rater-1
+  - batch: repo-001
+    site: aladin-lite--sky-view
+    url: http://localhost:4483/
+    note: proposed by rater-3, rater-2
+  - batch: repo-001
+    site: aladin-lite--layer-stack
+    url: http://localhost:4483/
+    note: proposed by rater-3, rater-1
+evidence:
+  - site: mini-macau--transit-map
+    rater: rater-1
+    bbox:
+      x: 1081
+      y: 198
+      width: 342
+      height: 642
+    quote: BUS · 巴士 8/91
+    note: layer toggle panel
+  - site: mini-macau--city-layers
+    rater: rater-2
+    bbox:
+      x: 1093
+      y: 244
+      width: 318
+      height: 121
+    quote: PARISHES 堂區 8 … 單獨顯示
+  - site: mini-macau--city-layers
+    rater: rater-1
+    bbox:
+      x: 1093
+      y: 244
+      width: 318
+      height: 1029
+    quote: PARISHES 堂區 8 ... 單獨顯示
+  - site: aladin-lite--sky-view
+    rater: rater-3
+    bbox:
+      x: 0
+      y: 0
+      width: 1440
+      height: 900
+    note: Full-bleed sky survey image with catalog markers and telescope footprints
+  - site: aladin-lite--sky-view
+    rater: rater-2
+    bbox:
+      x: 0
+      y: 0
+      width: 1440
+      height: 900
+    note: Orion B HiPS sky image with catalog overlays
+  - site: aladin-lite--layer-stack
+    rater: rater-3
+    bbox:
+      x: 0
+      y: 0
+      width: 1440
+      height: 900
+    note: Orion B sky view with SIMBAD/Gaia catalogues and JWST/VLT footprints
+  - site: aladin-lite--layer-stack
+    rater: rater-1
+    bbox:
+      x: 0
+      y: 0
+      width: 1440
+      height: 900
+    note: Orion B sky imagery with catalog markers and JWST/VLT footprint polygons
+createdAt: 2026-11-18T19:56:54.051Z
+updatedAt: 2026-11-18T20:39:35.970Z

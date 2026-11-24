@@ -1,0 +1,90 @@
+{
+  "batch": "repo-001",
+  "slug": "blockout",
+  "ok": true,
+  "repo": {
+    "name": "wassermanproductions/blockout",
+    "url": "https://github.com/wassermanproductions/blockout",
+    "commit": "3f2d0564fd575f70fc28e9bfaa7e94b05e3955d9",
+    "branch": "main",
+    "license": "Apache-2.0"
+  },
+  "domain": "design-creative",
+  "port": 4474,
+  "checkoutRoot": "~/.cache/design-patterns-dataset/repos",
+  "mode": "server",
+  "entry": "/",
+  "app": {
+    "mode": "server",
+    "entry": "/",
+    "login": null,
+    "stubs": [
+      {
+        "service": "Electron main process / preload IPC (window.blockout: project folders, file dialogs, presets, file reads)",
+        "how": ".ui-capture/bridge/bridge.js re-implements the preload's window.blockout API in the browser and forwards each call over HTTP to .ui-capture/server.mjs, which ports the src/main IPC handlers (project:save/load/saveBackup, import*, file:readAbsolute, presets:*) onto plain folders under .ui-capture/data. The server injects the bridge as a classic <script> ahead of the unmodified production bundle. Native Open/New dialogs: Open returns the most recent project, New creates 'Untitled N.blockout'; pickFile uses a browser file input and uploads the file to .ui-capture/data/uploads."
+      },
+      {
+        "service": "ffmpeg video encoding (export:begin/frame/end, export:concat)",
+        "how": "No ffmpeg on the machine. The bridge counts rendered frames in-page and the server writes '<name>.mp4.encode.log' (with the ffmpeg command line and frame count) where the MP4 would go, then reports exit code 0. The real stills, metadata.json, prompt and ComfyUI files are still written to the package folder through export:writeFile."
+      },
+      {
+        "service": "Anthropic Claude vision call (ai:analyzeReference, 'Populate from reference')",
+        "how": ".ui-capture/stubs/analyze-stub.mjs returns a layout in the same {ok, layout:{entities, lighting, camera, notes}} shape as src/main/analyze.ts. It picks a diner, alley-chase or living-room staging from keywords in the file name, after a 2.5 s delay. No API key is needed."
+      },
+      {
+        "service": "MCP agent control server (src/main/control.ts)",
+        "how": "Not started in browser mode; onControlInvoke/controlResult are no-ops."
+      },
+      {
+        "service": "shell:openExternal / shell:showFolder",
+        "how": "Server returns the allowlist result for openExternal without opening anything; showFolder is a no-op."
+      }
+    ],
+    "notes": "Electron + React + three.js previs app (Blockout v5.1.1) run as a browser app. Setup: mise.toml pins node 22.20.0 (npm 10.9.3); `ELECTRON_SKIP_BINARY_DOWNLOAD=1 npm ci --ignore-scripts`; `npm run build` (electron-vite) produces out/renderer, which is served as is. start.sh re-runs the seed generator (.ui-capture/seed/dist/seed.mjs, bundled from seed/seed.ts by seed/build.sh with the repo's esbuild), then runs server.mjs on $PORT. Seed data is built with the app's own engine (schema factories, choreography engine, motion presets, camera-move presets, serializer) and validated with parseProject plus ShotEvaluator. On load the bridge reopens the most recent project ('Low Tide') through the app's own loadProject + store.loadFromJson path, so the app opens straight into the editor instead of the Welcome screen. Data: 5 project folders under .ui-capture/data/projects. 'Low Tide' (open by default) is a short film with 7 scenes (harbor lot night, diner dawn, alley foot chase, warehouse brawl, hospital rooftop blue hour, nightclub dance number, beach golden hour). It has about 100 entities with labelled characters (MAYA, DEX, ELI, KOVAC, ROSA...), married props, hand-blocked marks, choreographed chase/fight/dance routines and motion-preset performances; 26 shots plus 3 drafts with camera-move presets (crane, steadicam follow, orbits, drone), rigs, a Cam B bank, an alternate blocking take, mixed aspects (2.39:1 and one 9:16) and director's shot notes; and earlier export packages in exports/. The other projects are an insurance commercial, a music video with a 12-dancer routine, a generator bake-off test and a near-empty 'Untitled 3'. There are also 7 global stage presets, shown in the Library. Main areas: titlebar mode switch STAGE / SHOOT / DELIVER; left Project rail (scenes, shots, drafts) plus Library (assets, camera moves, motions, Choreographer, presets); centre three.js viewport (Shoot adds the timeline with marks); right Inspector (entity/shot/camera/scene); Deliver shows the generator profile, passes and export. The viewport needs WebGL. I could not screenshot it: headless Chrome cannot launch inside this sandbox. I verified the server endpoints, the bridge injection and the full project load/parse path. Verification: verify/panels-check.sh server-renders every panel for every scene/shot/mode/entity selection (all pass); shot.mjs is a Playwright screenshot helper that works outside the sandbox."
+  },
+  "tools": {
+    "node": "22.20.0"
+  },
+  "prompt": "This is a checkout of wassermanproductions/blockout (https://github.com/wassermanproductions/blockout) at commit 3f2d0564fd57. Open Source Desktop App to help with Previs for AI-native filmmaking — stage grey-box scenes, choreograph camera & cast with marks, export motion-reference packages for Seedance/Veo/Kling/LTX/Wan. Apache-2.0.uggested Donation of $30 if you you can to help me keep making these tools.https://ko-fi.com/samwasserman\n\nI want to see its user interface in a desktop browser, in the state a real, established user would see it. Please get the app running locally with its main interface working and realistic data in it.\n\n# Running it\n- Follow the repo's own setup docs and tooling. Take the simplest route that shows the real app: a static production build if the front end works without a backend, otherwise the app's own server (production or dev mode).\n- If it needs a database or other services, run them locally with an embedded or file-based option (SQLite, in-memory, JSON files, an embedded Postgres such as PGlite) or the app's demo/mock mode.\n- Don't redesign or restyle anything. Change only what's needed to build and run it.\n\n# Tools: use mise\nInstall every runtime and tool you need (node, the package manager, python, bun, ...) with mise, pinned to exact versions in a mise.toml at the repo root, so the setup can be reproduced. Match what the repo asks for (engines, .nvmrc, .tool-versions, packageManager). mise is already configured for this directory: `mise install` installs into ./.ui-capture/mise, and its shims come first on PATH, so `node`, `pnpm` and the rest resolve to the pinned versions. Don't use other copies of these tools or download runtimes by hand.\n\n# Secrets, API keys and external services: fake them\nThe app must not depend on anything outside this machine, and when it runs it has no network except localhost. Wherever it expects secrets, environment variables, API keys or third-party services (hosted auth or OAuth, payment providers, email, LLM or other AI APIs, maps, storage buckets, analytics, hosted databases):\n- Give the required variables placeholder values so the app starts.\n- Where it actually calls the service, make the call succeed locally with realistic responses: use the app's own mock, test or offline mode if it has one; otherwise point the client at a small local stub server that start.sh also starts, or swap in a stub at the integration boundary (the API client or service module). Keep stubs out of UI code. Responses should look like what the real service returns for a real user, e.g. an AI reply that actually answers, a payment history with real-looking amounts.\n- Calls the browser makes directly to outside services count too; point them at the local stub.\n- For sign-in through an outside provider, create a local account or use the app's dev sign-in so you can get past it.\nList every stub in app.json.\n\n# Data: like real use\nSeed it the way an established user's data would look after months of actual use: specific, plausible names and content for this kind of app; dates spread over time; a realistic mix of states (done, in progress, overdue, archived, ...); realistic volume (dozens to hundreds of records where the app revolves around records); short and long text; some messiness real data has. Start from the app's own demo or seed data if it has realistic data, and extend it if it's thin. Load data through the app's own paths (its API, import, seed scripts, or its database schema), never by hardcoding it into UI code. If the app needs an account, create one and attach the data to it. No lorem ipsum or \"Test 1\".\n\n# Environment\nThis shell is sandboxed: you can write only inside this directory (package-manager caches already point into ./.ui-capture/cache), and the network reaches only package registries, mise's download sources and GitHub (registry.npmjs.org, registry.yarnpkg.com, repo.yarnpkg.com, github.com, codeload.github.com, objects.githubusercontent.com, raw.githubusercontent.com, nodejs.org, mise.jdx.dev, mise-versions.jdx.dev, release-assets.githubusercontent.com, pypi.org, files.pythonhosted.org, binaries.prisma.sh, cdn.jsdelivr.net, unpkg.com). Docker isn't available. A process you start in the background can't be seen or stopped from a later command, so test servers on another port than 4474 (e.g. 5474) or in the foreground under `timeout`; anything still listening on 4474 is stopped before I check.\n\n# When you're done, leave this in ./.ui-capture/\n- app.json: {\"mode\": \"static\" or \"server\", \"entry\": \"/path where the main UI opens\", \"login\": null or {\"username\": \"...\", \"email\": \"...\", \"password\": \"...\"}, \"stubs\": [{\"service\": \"what was faked\", \"how\": \"how\"}], \"notes\": \"how you set it up, what data is loaded, and the main areas of the app\"}\n- static mode: the production build in ./.ui-capture/out, with index.html as its entry. It will be served from the root of a plain static file server; unknown paths fall back to index.html.\n- server mode: ./.ui-capture/start.sh, which starts everything the app needs (stubs included) in the foreground and serves the UI at http://localhost:4474/ (it gets PORT=4474). It runs with the same PATH and restrictions as your shell, plus no network at all except localhost, so everything must already be installed, built and seeded (or seeded by start.sh itself).\n- Put any scripts you write for seeding or stubbing in ./.ui-capture/ too; they're kept with the setup record.\n\n# Order of work\nYou have 90 minutes in total, and anything unfinished when time runs out is lost. So work in this order:\n1. Get the app building and running with its stubs, and write the contract above (app.json plus out/ or start.sh), even if it has only a little data so far.\n2. Then build out the data, re-running your seed and checking the app still loads after each substantial step, so that a working state with the data loaded so far is always in place.\nWrite large data sets with a short generator script rather than as one long literal file.\n\nI'll open it at 1440×900.",
+  "model": {
+    "model": "claude-opus-5-5",
+    "effort": "high"
+  },
+  "sandbox": true,
+  "startedAt": "2026-11-17T12:28:35.033Z",
+  "finishedAt": "2026-11-17T12:37:53.817Z",
+  "verification": {
+    "ok": true,
+    "problems": [],
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedRequests": [],
+    "textChars": 7477,
+    "visibleElements": 322,
+    "title": "Blockout"
+  },
+  "repairs": 0,
+  "session": {
+    "rounds": 1,
+    "numTurns": 43,
+    "costUsd": 2.6959785999999992,
+    "durationMs": 557048,
+    "models": [
+      "claude-opus-5-5"
+    ],
+    "usage": {
+      "input_tokens": 86,
+      "cache_creation_input_tokens": 124821,
+      "cache_read_input_tokens": 3408033,
+      "output_tokens": 50773
+    },
+    "timedOut": false
+  },
+  "changes": {
+    "files": 1,
+    "insertions": 2,
+    "deletions": 0,
+    "patchBytes": 152,
+    "patch": "setup.patch"
+  }
+}

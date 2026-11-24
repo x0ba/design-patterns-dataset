@@ -1,0 +1,70 @@
+{
+  "batch": "repo-001",
+  "slug": "type-pal",
+  "ok": true,
+  "repo": {
+    "name": "IllegalCreed/type-pal",
+    "url": "https://github.com/IllegalCreed/type-pal",
+    "commit": "8fce7b6a485904d2b7e2adb076989fcb94ccb027",
+    "branch": "main",
+    "license": "GPL-3.0"
+  },
+  "domain": "games",
+  "port": 4467,
+  "checkoutRoot": "~/.cache/design-patterns-dataset/repos",
+  "mode": "server",
+  "entry": "/",
+  "app": {
+    "mode": "server",
+    "entry": "/",
+    "login": null,
+    "stubs": [],
+    "notes": "Type PAL visual editor (@type-pal/editor, React), the repo's main phase-2 product surface. Tooling is pinned in mise.toml at the repo root: node 22.23.2 and pnpm 10.29.2, matching CI. Install ran as `pnpm install --frozen-lockfile --ignore-scripts`, then esbuild's install.js was run by hand. The optional `canvas` devDependency (only used by phase-1 game tests) needs node-gyp, so it is skipped. Build: `VITE_PROJECT_ID=pal vite build` in packages/editor (output in packages/editor/dist). With VITE_PROJECT_ID baked in, the editor skips the project picker and auto-loads the repo's PAL author project, as the repo's own `pnpm --filter @type-pal/editor dev` does. start.sh first runs .ui-capture/seed-save-state.mjs (idempotent). It writes projects/pal/.type-pal/save-state.json, a gitignored per-workspace file, holding the 'committed' author-save record the editor's own save journal leaves after a completed save (format from packages/reforge/src/project-save-state.ts). An established workspace has this file, and without it the editor's startup probe shows up as a 404. start.sh then runs `vite preview` on $PORT. The editor's vite config adds middleware so preview also serves /projects/* from <repo>/projects (project JSON, maps, RLE assets, editor libraries) and /soundfont.sf3 for music preview. No backend, accounts or external services: everything is local files, so no stubs. Data is the repo's committed, fully migrated PAL content project (projects/pal, about 144 MB): 294 scenes, 223 maps, 1934 catalog assets, plus actors, items, skills, enemies, enemy teams, battle fields, shops, shared scripts, world variables, locale strings, stamps, a saved battle-simulator library and a script-preview library. This is the state of a long-running authoring project. `check-project` passes on it, and the editor's real HTTP boot path (dev workspace proof, project load, all scenes) was verified against the preview server. Headless Chromium could not run in the sandbox, so no screenshot was taken. Main areas: workspace tabs for scenes/maps (tile brush and layer editing on canvas), entities and NPC scripts, the script editor, characters/actors, items and shops, enemies and battle data with the battle simulator, assets, project settings, reference diagnostics, undo/redo and in-editor play preview (/play.html). /design-lab.html is the design-system lab. Saving to disk needs File System Access authorization and is not required for viewing."
+  },
+  "tools": {
+    "node": "22.23.2",
+    "pnpm": "10.29.2"
+  },
+  "prompt": "This is a checkout of IllegalCreed/type-pal (https://github.com/IllegalCreed/type-pal) at commit 8fce7b6a4859. 用 TypeScript 从零重写《仙剑奇侠传》（1995），浏览器里能通关，附可视化编辑器 · A from-scratch TypeScript remake of PAL (1995) with a visual editor. Unofficial fan project.\n\nI want to see its user interface in a desktop browser, in the state a real, established user would see it. Please get the app running locally with its main interface working and realistic data in it.\n\n# Running it\n- Follow the repo's own setup docs and tooling. Take the simplest route that shows the real app: a static production build if the front end works without a backend, otherwise the app's own server (production or dev mode).\n- If it needs a database or other services, run them locally with an embedded or file-based option (SQLite, in-memory, JSON files, an embedded Postgres such as PGlite) or the app's demo/mock mode.\n- Don't redesign or restyle anything. Change only what's needed to build and run it.\n\n# Tools: use mise\nInstall every runtime and tool you need (node, the package manager, python, bun, ...) with mise, pinned to exact versions in a mise.toml at the repo root, so the setup can be reproduced. Match what the repo asks for (engines, .nvmrc, .tool-versions, packageManager). mise is already configured for this directory: `mise install` installs into ./.ui-capture/mise, and its shims come first on PATH, so `node`, `pnpm` and the rest resolve to the pinned versions. Don't use other copies of these tools or download runtimes by hand.\n\n# Secrets, API keys and external services: fake them\nThe app must not depend on anything outside this machine, and when it runs it has no network except localhost. Wherever it expects secrets, environment variables, API keys or third-party services (hosted auth or OAuth, payment providers, email, LLM or other AI APIs, maps, storage buckets, analytics, hosted databases):\n- Give the required variables placeholder values so the app starts.\n- Where it actually calls the service, make the call succeed locally with realistic responses: use the app's own mock, test or offline mode if it has one; otherwise point the client at a small local stub server that start.sh also starts, or swap in a stub at the integration boundary (the API client or service module). Keep stubs out of UI code. Responses should look like what the real service returns for a real user, e.g. an AI reply that actually answers, a payment history with real-looking amounts.\n- Calls the browser makes directly to outside services count too; point them at the local stub.\n- For sign-in through an outside provider, create a local account or use the app's dev sign-in so you can get past it.\nList every stub in app.json.\n\n# Data: like real use\nSeed it the way an established user's data would look after months of actual use: specific, plausible names and content for this kind of app; dates spread over time; a realistic mix of states (done, in progress, overdue, archived, ...); realistic volume (dozens to hundreds of records where the app revolves around records); short and long text; some messiness real data has. Start from the app's own demo or seed data if it has realistic data, and extend it if it's thin. Load data through the app's own paths (its API, import, seed scripts, or its database schema), never by hardcoding it into UI code. If the app needs an account, create one and attach the data to it. No lorem ipsum or \"Test 1\".\n\n# Environment\nThis shell is sandboxed: you can write only inside this directory (package-manager caches already point into ./.ui-capture/cache), and the network reaches only package registries, mise's download sources and GitHub (registry.npmjs.org, registry.yarnpkg.com, repo.yarnpkg.com, github.com, codeload.github.com, objects.githubusercontent.com, raw.githubusercontent.com, nodejs.org, mise.jdx.dev, mise-versions.jdx.dev, release-assets.githubusercontent.com, pypi.org, files.pythonhosted.org, binaries.prisma.sh, cdn.jsdelivr.net, unpkg.com). Docker isn't available. A process you start in the background can't be seen or stopped from a later command, so test servers on another port than 4467 (e.g. 5467) or in the foreground under `timeout`; anything still listening on 4467 is stopped before I check.\n\n# When you're done, leave this in ./.ui-capture/\n- app.json: {\"mode\": \"static\" or \"server\", \"entry\": \"/path where the main UI opens\", \"login\": null or {\"username\": \"...\", \"email\": \"...\", \"password\": \"...\"}, \"stubs\": [{\"service\": \"what was faked\", \"how\": \"how\"}], \"notes\": \"how you set it up, what data is loaded, and the main areas of the app\"}\n- static mode: the production build in ./.ui-capture/out, with index.html as its entry. It will be served from the root of a plain static file server; unknown paths fall back to index.html.\n- server mode: ./.ui-capture/start.sh, which starts everything the app needs (stubs included) in the foreground and serves the UI at http://localhost:4467/ (it gets PORT=4467). It runs with the same PATH and restrictions as your shell, plus no network at all except localhost, so everything must already be installed, built and seeded (or seeded by start.sh itself).\n- Put any scripts you write for seeding or stubbing in ./.ui-capture/ too; they're kept with the setup record.\n\n# Order of work\nYou have 90 minutes in total, and anything unfinished when time runs out is lost. So work in this order:\n1. Get the app building and running with its stubs, and write the contract above (app.json plus out/ or start.sh), even if it has only a little data so far.\n2. Then build out the data, re-running your seed and checking the app still loads after each substantial step, so that a working state with the data loaded so far is always in place.\nWrite large data sets with a short generator script rather than as one long literal file.\n\nI'll open it at 1440×900.",
+  "model": {
+    "model": "claude-opus-5-5",
+    "effort": "high"
+  },
+  "sandbox": true,
+  "startedAt": "2026-11-17T10:57:48.434Z",
+  "finishedAt": "2026-11-17T11:02:27.886Z",
+  "verification": {
+    "ok": true,
+    "problems": [],
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedRequests": [],
+    "textChars": 613,
+    "visibleElements": 239,
+    "title": "仙剑奇侠传·复刻 · type-pal 编辑器"
+  },
+  "repairs": 1,
+  "session": {
+    "rounds": 2,
+    "numTurns": 40,
+    "costUsd": 1.7647125999999997,
+    "durationMs": 231261,
+    "models": [
+      "claude-opus-5-5"
+    ],
+    "usage": {
+      "input_tokens": 78,
+      "cache_creation_input_tokens": 55105,
+      "cache_read_input_tokens": 1523797,
+      "output_tokens": 15769
+    },
+    "timedOut": false
+  },
+  "changes": {
+    "files": 1,
+    "insertions": 3,
+    "deletions": 0,
+    "patchBytes": 174,
+    "patch": "setup.patch"
+  }
+}

@@ -1,0 +1,429 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "mere-medical--timeline",
+    "url": "http://mere-medical.localhost:4319/timeline",
+    "finalUrl": "http://mere-medical.localhost:4319/timeline",
+    "status": 200,
+    "title": "Mere",
+    "capturedAt": "2026-11-18T01:35:44.138Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1702
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "health",
+    "domainNote": "personal health record aggregator (Mere Medical) — patient medical timeline, demo mode",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/mere-medical/explore.json",
+      "repo": {
+        "name": "cfu288/mere-medical",
+        "url": "https://github.com/cfu288/mere-medical",
+        "commit": "e14c49318421c2182cf3cda8165d71458f7a2fcb",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "timeline",
+        "name": "Timeline",
+        "description": "Main record feed with search, a jump-to date rail, and date-grouped cards listing encounters, procedures, lab panels, labs and immunizations."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Dark teal global nav sidebar: logo, Timeline/Summary/Connections/Settings, user profile at bottom",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 256,
+        "height": 1702
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Teal page header band 'Welcome back John! Your recent medical updates'",
+      "bbox": {
+        "x": 256,
+        "y": 0,
+        "width": 1184,
+        "height": 88
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "toast",
+      "role": "toast",
+      "label": "Demo-mode success toast top right with close button",
+      "bbox": {
+        "x": 1032,
+        "y": 24,
+        "width": 384,
+        "height": 94
+      },
+      "patterns": [
+        "toast"
+      ]
+    },
+    {
+      "id": "jump-to",
+      "role": "secondary-nav",
+      "label": "'Jump To' column of year and date anchor links with Load More",
+      "bbox": {
+        "x": 256,
+        "y": 88,
+        "width": 80,
+        "height": 1614
+      },
+      "patterns": [
+        "app-shell",
+        "pagination"
+      ]
+    },
+    {
+      "id": "timeline",
+      "role": "main-content",
+      "label": "Search field above a vertical timeline of dated record cards grouped by year",
+      "bbox": {
+        "x": 336,
+        "y": 88,
+        "width": 1104,
+        "height": 1614
+      },
+      "patterns": [
+        "activity-log",
+        "feed",
+        "card",
+        "text-field",
+        "accordion"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "second-sidebar-column",
+        "items": [
+          "fixed-destinations"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 256,
+            "height": 1702
+          },
+          "region": "sidebar",
+          "quote": "Timeline",
+          "note": "Persistent left nav with 4 fixed destinations and user identity at bottom"
+        },
+        {
+          "bbox": {
+            "x": 256,
+            "y": 88,
+            "width": 80,
+            "height": 250
+          },
+          "region": "jump-to",
+          "quote": "Jump To",
+          "note": "Narrow secondary column of in-page date anchors"
+        }
+      ]
+    },
+    {
+      "id": "activity-log",
+      "status": "present",
+      "confidence": 0.65,
+      "dims": {
+        "detail": "expandable-groups",
+        "subject": "the-person-s-own",
+        "aggregation": "daily-digests",
+        "presentation": "vertical-timeline",
+        "actions": "read-only"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 472,
+            "y": 170,
+            "width": 824,
+            "height": 566
+          },
+          "region": "timeline",
+          "quote": "Your Procedures, Labs, Lab Panels, and Encounters",
+          "note": "Date bubble (Nov 09) on vertical rail with a card grouping that day's medical events; View More expands detail records"
+        },
+        {
+          "bbox": {
+            "x": 476,
+            "y": 752,
+            "width": 820,
+            "height": 210
+          },
+          "region": "timeline",
+          "quote": "Your Immunizations"
+        }
+      ]
+    },
+    {
+      "id": "feed",
+      "status": "uncertain",
+      "confidence": 0.4,
+      "rationale": "Chronological stream of the user's records with load-more could be read as a feed, but it is a personal record history rather than an arriving stream of posts; coded primarily as activity-log.",
+      "dims": {
+        "density": "card-preview",
+        "ordering": "chronological",
+        "arrangement": "single-column",
+        "loading": [
+          "paged"
+        ],
+        "nesting": [
+          "flat"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 633,
+            "y": 206,
+            "width": 663,
+            "height": 1496
+          },
+          "region": "timeline",
+          "note": "Newest-first single column of record cards"
+        }
+      ]
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "media": "none",
+        "actions": "one-primary-action",
+        "shape": "vertical",
+        "style": "outlined"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 633,
+            "y": 206,
+            "width": 663,
+            "height": 530
+          },
+          "region": "timeline",
+          "quote": "Your Procedures, Labs, Lab Panels, and Encounters",
+          "note": "Outlined white card, title, location/provider meta, color-coded category lists, 'View More' pill"
+        },
+        {
+          "bbox": {
+            "x": 633,
+            "y": 978,
+            "width": 663,
+            "height": 634
+          },
+          "region": "timeline",
+          "quote": "Your Procedures, Labs, Lab Panels, and Encounters"
+        }
+      ]
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "supporting": [
+          "placeholder"
+        ],
+        "style": "outlined",
+        "inputType": "plain"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 472,
+            "y": 112,
+            "width": 832,
+            "height": 38
+          },
+          "region": "timeline",
+          "quote": "Search your medical records",
+          "note": "Outlined search input with magnifier icon and placeholder"
+        }
+      ]
+    },
+    {
+      "id": "toast",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "content": [
+          "message-only",
+          "status-icon"
+        ],
+        "position": "top-right-stack",
+        "severity": "success",
+        "duration": "auto-dismiss"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1032,
+            "y": 24,
+            "width": 384,
+            "height": 94
+          },
+          "region": "toast",
+          "quote": "Welcome to the Mere Medical demo! We have added some test data for you. Some features are disabled while in demo mode.",
+          "note": "Green check icon, close X; disappeared on its own in live check"
+        }
+      ]
+    },
+    {
+      "id": "pagination",
+      "status": "present",
+      "confidence": 0.7,
+      "dims": {
+        "mechanism": "load-more",
+        "position": "scroll-position-only"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 264,
+            "y": 314,
+            "width": 50,
+            "height": 16
+          },
+          "region": "jump-to",
+          "quote": "Load More",
+          "note": "Load More in jump list; a 'Load more records' button also exists at end of timeline (a11y tree)"
+        }
+      ]
+    },
+    {
+      "id": "accordion",
+      "status": "uncertain",
+      "confidence": 0.45,
+      "rationale": "'View More'/'View Less' pill on each card expands detailed record sub-cards in place — a disclosure rather than a classic stacked-header accordion.",
+      "dims": {
+        "policy": "many-at-a-time",
+        "toggle": [
+          "indicator-only"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 911,
+            "y": 683,
+            "width": 106,
+            "height": 32
+          },
+          "region": "timeline",
+          "quote": "View More"
+        }
+      ]
+    }
+  ],
+  "structure": {
+    "layout": "app layout: fixed dark left sidebar nav, teal header band, narrow 'Jump To' date-index column, centered main column with search and vertical timeline of record cards",
+    "regions": [
+      "sidebar",
+      "header",
+      "toast",
+      "jump-to",
+      "timeline"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#09384e",
+      "#006183",
+      "#07455f",
+      "#055270",
+      "#111827",
+      "#f9fafb",
+      "#e5e7eb",
+      "#374151",
+      "#ef4444",
+      "#2563eb",
+      "#9333ea"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "text": "#111827",
+      "primary": "#006183",
+      "sidebar": "#09384e",
+      "nav-active": "#07455f",
+      "heading": "#055270",
+      "surface": "#f9fafb",
+      "border": "#e5e7eb",
+      "year-badge": "#374151",
+      "accent-encounters": "#ef4444",
+      "accent-procedures": "#2563eb",
+      "accent-immunizations": "#9333ea"
+    },
+    "typography": "Source Sans throughout: bold 24px teal card titles and header greeting, 16px nav/meta, 14px bold colored category labels and uppercase list items, 12px light jump-to links",
+    "typeScale": "Moderate: 24px bold titles, 20px, 16px body/meta, 14px lists and buttons, 12px index links; weights 100-700",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "clinical",
+      "calm",
+      "trustworthy",
+      "utilitarian"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T01:37:00.464Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 10,
+    "usage": {
+      "input_tokens": 20,
+      "cache_creation_input_tokens": 30499,
+      "cache_read_input_tokens": 300107,
+      "output_tokens": 4925
+    }
+  },
+  "notes": "Medical timeline: gray vertical rail with circular date bubbles (month/day) and a dark '2026' year pill; each card groups a day's encounters/procedures/labs with color-coded category headings (red Encounters, blue Procedures/Lab Panels, cyan Labs, purple Immunizations) and truncation '... and 12 more', ending in a centered pill 'View More' button set on a horizontal rule. Jump To column is a date index for anchor scrolling. Demo-mode toast top right."
+}

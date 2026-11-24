@@ -1,0 +1,68 @@
+{
+  "mode": "server",
+  "entry": "/",
+  "login": null,
+  "stubs": [
+    {
+      "service": "ASP.NET host + CORS proxy (Program.cs, Middleware/CorsMiddleware.cs)",
+      "how": "Replaced by .ui-capture/stub/server.js (Node, no deps): serves the repo root statically (index.html default, case-insensitive paths like the IIS host) and implements the same GET /cors/?u=<url> endpoint, but answers from local generators instead of fetching the internet."
+    },
+    {
+      "service": "NWS point forecast page + DWML XML (forecast.weather.gov/MapClick.php)",
+      "how": "Generated per lat/lon from a synthetic weather model (stub/model.js): HTML with zone/station/radar/timezone markers the app scrapes, and DWML with 12-hour periods, highs/lows, PoP, icons, worded forecasts and current observations."
+    },
+    {
+      "service": "METAR observations (aviationweather.gov/api/data/metar)",
+      "how": "XML in the real ADDS format for ids= or bbox= queries; stations come from the app's own Scripts/stations.js, values (temp, dewpoint, wind/gusts, sky layers, wx, altimeter, raw_text) from the weather model."
+    },
+    {
+      "service": "NWS active alerts (api.weather.gov/alerts/active?zone=)",
+      "how": "GeoJSON FeatureCollection: Wind Advisory, Flood Watch and High Surf Advisory for CAZ043 timed relative to today; other zones return no alerts."
+    },
+    {
+      "service": "NWS zone forecast text (tgftp.nws.noaa.gov/data/forecasts/zone/...)",
+      "how": "ZFP product text in NWS layout (.TODAY... periods, headline banners) generated from the same model."
+    },
+    {
+      "service": "NWS climate report CLI (forecast.weather.gov/product.php?product=CLI)",
+      "how": "Static-format CLISAN report with month-to-date precipitation for the Almanac screen."
+    },
+    {
+      "service": "Weather Company API (api.weather.com v3/location/near, v2/astro)",
+      "how": "Nearby-airport list for San Diego; sunrise/sunset computed with the NOAA solar algorithm and moon phases from the synodic month. Placeholder apiKey from the source is ignored."
+    },
+    {
+      "service": "NOAA Tides & Currents (tidepredstations.json, api/datagetter)",
+      "how": "San Diego Bay / La Jolla stations; hi/lo predictions from a harmonic (M2,S2,K1,O1) tide curve."
+    },
+    {
+      "service": "AirNow (airnowgovapi.com) and Open-Meteo air quality",
+      "how": "Reporting-area forecast JSON for 'San Diego County Region' (AQI 21-58 across days); Open-Meteo hourly us_aqi fallback."
+    },
+    {
+      "service": "Marine forecast (l-36.com zone lookup, forecast.weather.gov/shmrn.php)",
+      "how": "Zone PZZ750 select page and coastal-waters forecast HTML with a Small Craft Advisory banner."
+    },
+    {
+      "service": "IEM NEXRAD composite (mesonet.agron.iastate.edu .../GIS/uscomp/)",
+      "how": "Apache-style directory listings of 5-minute n0r frames and generated palette PNGs (real IEM geometry) rendering the storm's echoes at each frame time."
+    },
+    {
+      "service": "CPC 30-day outlook maps (www.cpc.ncep.noaa.gov off14_temp/prcp.gif)",
+      "how": "Generated 719x707 category maps the app samples for the Outlook screen."
+    },
+    {
+      "service": "ArcGIS geocoder (geocode.arcgis.com suggest/find/reverseGeocode, called directly by the browser via JSONP)",
+      "how": "A tiny shim (stub/shim.js) injected into the HTML after jQuery adds a $.ajaxPrefilter that rewrites those URLs to /stub/geocode.arcgis.com/...; the server answers with suggestions built from stations.js and a ZIP lookup for known cities."
+    },
+    {
+      "service": "GitHub buttons script (buttons.github.io/buttons.js)",
+      "how": "Script src rewritten to /stub/buttons.github.io/buttons.js, which renders the GitHub/Star/Fork/Issue/Follow links as styled buttons with static counts."
+    },
+    {
+      "service": "Custom RSS scroll feed (any URL + ?rss=1 through /cors/)",
+      "how": "Returns a small NWS San Diego news RSS document (stub/feed.xml)."
+    }
+  ],
+  "notes": "WeatherStar 4000+ is a static jQuery/canvas front end (index.html hosting twc3.html in an iframe) whose only backend is an ASP.NET CORS proxy to NWS/NOAA and other weather services. start.sh runs .ui-capture/stub/server.js (node pinned in mise.toml) on $PORT, serving the repo as-is and stubbing every upstream through the app's own /cors/?u= endpoint. One app source change: Scripts/twc3.js guards the play and music timers (NavigatePlayToggle, AudioPlayToggle) against _WeatherParameters still being null. index.js starts those timers when the iframe loads, before twc3.js finishes its 250ms setTimeout init, which threw \"Cannot read properties of null (reading Progress)\" on the first ticks. Otherwise the server only injects one <script> (stub/shim.js) after jQuery. Data: all services render one consistent synthetic weather world generated from the current date: a late-season Pacific storm comes ashore over Southern California tonight (showers likely today, heavy rain tonight, clearing Thursday), then tracks over the Four Corners, Plains, Midwest and Great Lakes during the week, with lake-effect showers in upstate NY, Florida showers and PNW showers later. Established-user state: on first visit the shim seeds localStorage the way index.js does after a user picks a location: saved query 'San Diego, California, USA' with its coordinates, English units, Classic theme, auto-refresh on, auto-play on, music muted, narration off, hazard scroll on, plus a saved custom scroll text and RSS URL (not selected). The app opens straight into San Diego (station KSAN, zone CAZ043, radar NKX, ZIP 92101) and cycles through Current Conditions, Latest Observations, Travel Forecast, Regional Forecast/Observations, Local Forecast, Extended Forecast, Almanac/Tides/Outlook, Air Quality, Marine Forecast, Local Radar and Hazardous Weather (3 active alerts). The menu button opens the segment menu; the controls below the TV set location, units, themes, scroll text and auto refresh. Searching another city works through the stubbed geocoder (weather is generated for any lat/lon). Verification: twc3.html run under jsdom with faked canvas (all 12 Progress segments reach Loaded, no uncaught errors including when play/music are toggled before init); a real Chromium could not run inside this sandbox."
+}

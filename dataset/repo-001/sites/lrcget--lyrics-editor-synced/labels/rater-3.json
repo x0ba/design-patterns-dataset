@@ -1,0 +1,571 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "lrcget--lyrics-editor-synced",
+    "url": "http://lrcget.localhost:4319/",
+    "finalUrl": "http://lrcget.localhost:4319/",
+    "status": 200,
+    "title": "LRCGET",
+    "capturedAt": "2026-11-18T02:06:46.947Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 5400
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "utilities",
+    "domainNote": "desktop lyrics manager (LRCGET) — downloading, editing and syncing LRC lyrics for a local music library",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/lrcget/explore.json",
+      "repo": {
+        "name": "tranxuanthang/lrcget",
+        "url": "https://github.com/tranxuanthang/lrcget",
+        "commit": "6e79ef68ec0a524d71e8330e9f37daa86baa6524",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "lyrics-editor-synced",
+        "name": "Lyrics editor (synced)",
+        "description": "Lyrics editor modal in Synced mode with an audio scrubber, word-timing lane for the selected line and a list of timestamped lyric lines with start/end times."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "top-bar",
+      "role": "header",
+      "label": "Search with filter icon, Tracks/Albums/Artists/LRCLIB nav tabs, Download all lyrics, Export, overflow menu",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 48
+      },
+      "patterns": [
+        "app-shell",
+        "tabs",
+        "text-field",
+        "filter-controls"
+      ]
+    },
+    {
+      "id": "track-table",
+      "role": "data-table",
+      "label": "Dimmed track list: title/album·artist, duration, lyrics status badge, play/search/edit row actions",
+      "bbox": {
+        "x": 0,
+        "y": 60,
+        "width": 1440,
+        "height": 5246
+      },
+      "patterns": [
+        "data-table",
+        "badge"
+      ]
+    },
+    {
+      "id": "lyrics-editor-modal",
+      "role": "modal",
+      "label": "Lyrics editor dialog: save split button, Plain/Synced toggle, audio transport, word-sync strip, timed lyric line list",
+      "bbox": {
+        "x": 208,
+        "y": 135,
+        "width": 1024,
+        "height": 5130
+      },
+      "patterns": [
+        "modal-dialog",
+        "media-player",
+        "choice-control",
+        "slider",
+        "timeline-editor"
+      ]
+    },
+    {
+      "id": "bottom-player",
+      "role": "player-bar",
+      "label": "Persistent now-playing bar with scrubber, ±10s skip, play, speed and volume",
+      "bbox": {
+        "x": 0,
+        "y": 5306,
+        "width": 1440,
+        "height": 94
+      },
+      "patterns": [
+        "media-player",
+        "slider",
+        "app-shell"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 48
+          },
+          "region": "top-bar",
+          "note": "Persistent top bar with search, top-level destinations and global actions",
+          "quote": "Tracks"
+        },
+        {
+          "bbox": {
+            "x": 0,
+            "y": 5306,
+            "width": 1440,
+            "height": 94
+          },
+          "region": "bottom-player",
+          "note": "Persistent player bar at bottom of frame"
+        }
+      ],
+      "dims": {
+        "primary": "top-navigation-bar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 583,
+            "y": 9,
+            "width": 282,
+            "height": 30
+          },
+          "region": "top-bar",
+          "note": "Text tabs with underline indicator on the current one",
+          "quote": "Tracks Albums Artists LRCLIB"
+        }
+      ],
+      "dims": {
+        "placement": "top",
+        "label": [
+          "text"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 24,
+            "y": 8,
+            "width": 256,
+            "height": 32
+          },
+          "region": "top-bar",
+          "note": "Pill search input with leading search icon and trailing filter button",
+          "quote": "Search for tracks..."
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "placeholder",
+          "prefix-or-suffix"
+        ],
+        "style": "outlined",
+        "inputType": "plain"
+      }
+    },
+    {
+      "id": "filter-controls",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Funnel icon button inside the search field suggests filters, but the modal blocked opening it to see what it offers.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 252,
+            "y": 12,
+            "width": 24,
+            "height": 24
+          },
+          "region": "top-bar",
+          "note": "Filter funnel icon button"
+        }
+      ],
+      "dims": {
+        "placement": "toolbar-popover"
+      }
+    },
+    {
+      "id": "data-table",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 60,
+            "width": 1440,
+            "height": 500
+          },
+          "region": "track-table",
+          "note": "Columns Track / Duration / Lyrics, rows with two-line title and album·artist, per-row play/search/edit icon buttons",
+          "quote": "Track Duration Lyrics"
+        },
+        {
+          "bbox": {
+            "x": 1095,
+            "y": 8,
+            "width": 293,
+            "height": 32
+          },
+          "region": "top-bar",
+          "note": "Whole-table actions",
+          "quote": "DOWNLOAD ALL LYRICS"
+        }
+      ],
+      "dims": {
+        "columnSet": "fixed",
+        "cellRendering": [
+          "plain-text",
+          "chips-and-avatars"
+        ],
+        "density": "standard",
+        "rowExpansion": "none",
+        "selection": "none",
+        "opScope": [
+          "row",
+          "whole-table"
+        ],
+        "aggregation": [
+          "flat"
+        ],
+        "openIn": "modal"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1114,
+            "y": 5262,
+            "width": 56,
+            "height": 18
+          },
+          "region": "track-table",
+          "note": "Green status pill for lyrics state per track (Synced, Word Synced, Instrumental per a11y tree)",
+          "quote": "Synced"
+        }
+      ],
+      "dims": {
+        "meaning": "status",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "modal-dialog",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 208,
+            "y": 135,
+            "width": 1024,
+            "height": 5130
+          },
+          "region": "lyrics-editor-modal",
+          "note": "Large centered dialog over dimmed backdrop, close X top right",
+          "quote": "Afterglow District - Kestrel Park"
+        }
+      ],
+      "dims": {
+        "form": "centered-large",
+        "openBy": [
+          "user-action"
+        ],
+        "dismissBy": [
+          "close-button"
+        ],
+        "modality": "blocking",
+        "purpose": "form"
+      }
+    },
+    {
+      "id": "media-player",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 232,
+            "y": 215,
+            "width": 976,
+            "height": 57
+          },
+          "region": "lyrics-editor-modal",
+          "note": "In-editor audio transport: play, scrubber with elapsed/total, speed select",
+          "quote": "00:04:27"
+        },
+        {
+          "bbox": {
+            "x": 0,
+            "y": 5306,
+            "width": 1440,
+            "height": 94
+          },
+          "region": "bottom-player",
+          "note": "Persistent now-playing bar: rewind/forward 10s, play, scrubber, speed, volume",
+          "quote": "Afterglow District"
+        }
+      ],
+      "dims": {
+        "controls": [
+          "play-pause",
+          "scrubber",
+          "skip-forward-back",
+          "playback-speed",
+          "volume-and-mute"
+        ],
+        "position": [
+          "time-scrubber",
+          "lyrics-synced-to-time"
+        ],
+        "mode": "mini-or-pip"
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 910,
+            "y": 159,
+            "width": 194,
+            "height": 32
+          },
+          "region": "lyrics-editor-modal",
+          "note": "Two-segment pill toggle between plain and synced lyrics modes",
+          "quote": "PLAIN SYNCED"
+        }
+      ],
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "segmented-control",
+        "option": [
+          "label-only"
+        ],
+        "timing": "immediately",
+        "largeSets": "show-all"
+      }
+    },
+    {
+      "id": "slider",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 362,
+            "y": 230,
+            "width": 678,
+            "height": 24
+          },
+          "region": "lyrics-editor-modal",
+          "note": "Pink seek slider with elapsed and total time labels",
+          "quote": "00:00:00"
+        },
+        {
+          "bbox": {
+            "x": 1300,
+            "y": 5355,
+            "width": 124,
+            "height": 25
+          },
+          "region": "bottom-player",
+          "note": "Volume slider"
+        }
+      ],
+      "dims": {
+        "values": "single-value",
+        "labels": [
+          "current-value",
+          "minimum-and-maximum"
+        ],
+        "scale": "linear"
+      }
+    },
+    {
+      "id": "timeline-editor",
+      "status": "uncertain",
+      "confidence": 0.45,
+      "rationale": "The lyrics sync editor times text lines and words against audio (start/end timestamp pills, sync-to-playback, ±100ms nudges, word sync strip) but there are no tracks or clips on a time axis; closest existing entry. Filed new-entry proposal timed-text-sync-editor.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 232,
+            "y": 385,
+            "width": 976,
+            "height": 610
+          },
+          "region": "lyrics-editor-modal",
+          "note": "Lyric rows with start/end timestamps and sync/nudge/delete controls",
+          "quote": "We built a castle out of cardboard boxes"
+        },
+        {
+          "bbox": {
+            "x": 232,
+            "y": 289,
+            "width": 976,
+            "height": 80
+          },
+          "region": "lyrics-editor-modal",
+          "note": "Word-level sync strip for the active line",
+          "quote": "SYNC WORD"
+        }
+      ],
+      "dims": {
+        "tracks": "one-main-track",
+        "representation": [
+          "transcript-text"
+        ],
+        "navigation": [
+          "scrub-the-playhead"
+        ],
+        "automation": "manual"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1392,
+            "y": 8,
+            "width": 32,
+            "height": 32
+          },
+          "note": "Overflow kebab trigger present but no menu open in capture"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "popover",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 328,
+            "y": 159,
+            "width": 35,
+            "height": 32
+          },
+          "note": "Save split-button chevron opens a publish/export popover on the live page, but it is closed in the capture"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "desktop app: top bar with search and nav tabs, full-width track table, persistent bottom player bar; a large centered modal lyrics editor is open over a dimmed backdrop",
+    "regions": [
+      "top-bar",
+      "track-table",
+      "lyrics-editor-modal",
+      "bottom-player"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#171717",
+      "#737373",
+      "#f35697",
+      "#ffd9e2",
+      "#fef3c7",
+      "#b45309",
+      "#f5f5f5",
+      "#e5e5e5",
+      "#166534",
+      "#10b981"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "text": "#171717",
+      "muted": "#737373",
+      "primary": "#f35697",
+      "surface": "#f5f5f5",
+      "accent": "#fef3c7",
+      "border": "#e5e5e5",
+      "success": "#166534"
+    },
+    "typography": "System UI sans (ui-sans-serif) for all UI text, bold uppercase for buttons and tabs; ui-monospace for timestamps (start/end pills, range readout)",
+    "typeScale": "Compact: 18px dialog title, 16px lyric lines and track titles (bold for titles), 14px secondary text and buttons (700 uppercase), 11-12px monospace timestamps and badges",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "filled",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "utilitarian",
+      "clean",
+      "technical",
+      "playful-accent"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T02:08:43.651Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 14,
+    "usage": {
+      "input_tokens": 28,
+      "cache_creation_input_tokens": 43862,
+      "cache_read_input_tokens": 533810,
+      "output_tokens": 9308
+    }
+  },
+  "notes": "LRCGET lyrics manager. Hot pink (#f35697) is the single brand accent: primary buttons (Download all lyrics, Synced, Sync word), scrubber thumb/track, play button. Timestamps are monospace pills colored by role — pink-tinted start times, amber-tinted end times — and green dots mark synced lines. Active line row is gray with sync/nudge (◂◂ ▸▸) controls; a pink 'built' marker label sits under the word strip to show the current word being synced. Save is a split button (disabled until edits) whose chevron opens a popover with 'Save and publish' to LRCLIB and export-to-directory checkboxes (verified live, closed in capture). Proposed new codebook entry timed-text-sync-editor for this lyrics timing editor. Rows in the background table carry status pills: Synced, Word Synced, Instrumental."
+}

@@ -1,0 +1,98 @@
+{
+  "batch": "repo-001",
+  "slug": "huey",
+  "ok": true,
+  "repo": {
+    "name": "rpbouman/huey",
+    "url": "https://github.com/rpbouman/huey",
+    "commit": "0401e03389f3aeba3adca43d069595cedde2d251",
+    "branch": "dev",
+    "license": "MIT"
+  },
+  "domain": "data-visualization",
+  "port": 4462,
+  "checkoutRoot": "~/.cache/design-patterns-dataset/repos",
+  "mode": "static",
+  "entry": "/",
+  "app": {
+    "mode": "static",
+    "entry": "/",
+    "login": null,
+    "stubs": [
+      {
+        "service": "jsdelivr CDN: DuckDB-WASM library, worker and .wasm (@duckdb/duckdb-wasm@1.33.1-dev114.0, the version index.html pins)",
+        "how": "Installed the same npm version into .ui-capture/vendor, bundled duckdb-browser.mjs (+apache-arrow) with esbuild into out/vendor/duckdb/, copied duckdb-base.wasm and duckdb-browser-base.worker.js. patch-index.mjs changes the import URL and replaces getJsDelivrBundles() with local bundle URLs, in out/index.html only."
+      },
+      {
+        "service": "jsdelivr CDN: Tabler Icons webfont (@tabler/icons-webfont@3.49.0)",
+        "how": "Copied tabler-icons.woff2 from the npm package to out/vendor/tabler/ and pointed tablerIconsFontUrl at it."
+      },
+      {
+        "service": "User picking local data files (Huey keeps datasources in memory only; there is no backend)",
+        "how": "out/seed/huey-seed.js (added with one <script> tag) fetches the files listed in out/seed/data/manifest.json and registers them through Huey's own uploadUi.uploadFiles(), the code behind the Upload button. If the URL has no report route, it then opens the user's usual report through pageStateManager.setPageState(), using a normal Huey #route built from out/seed/reports.json."
+      },
+      {
+        "service": "Saved Remote Catalogs and Secrets (Huey's IndexedDB document store)",
+        "how": "huey-seed.js stores the entries in out/seed/documents.json through AppDocumentStore (the app's own store API). The secrets store is initialised with password Trailhead#2025-nw, which the Secrets Manager asks for when you open a secret. Every entry has autoload=false, so nothing contacts the (fictional) remote endpoints."
+      },
+      {
+        "service": "duckdb.org release icons (About dialog avatar)",
+        "how": "The 1.3.0 and 2.0.0 SVGs from github.com/duckdb/duckdb-web are vendored in vendor/duckdb-release-icons and copied to out/vendor/duckdb/release-icons/. patch-index.mjs points the <img> in index.html and the URL built in out/App/App.js at them."
+      },
+      {
+        "service": "English UI label file for navigator.languages[0] (en-US / en-GB)",
+        "how": "Huey requests Internationalization/i18n/<browser language>.js, but the repo has no en-US or en-GB file. A 404 there stops language initialisation, because Huey only listens for the script load event. build.sh copies the repo's English-to-English label template (Internationalization/huey.i18n.labels.template.js) to i18n/en-US.js and i18n/en-GB.js."
+      },
+      {
+        "service": "DuckDB extension repository (extensions.duckdb.org)",
+        "how": "Not stubbed; it is unreachable offline. The data uses only CSV and a .duckdb file, which this DuckDB-WASM build reads without extensions. Parquet, JSON, Excel and ICU time-zone functions would need downloaded extensions."
+      }
+    ],
+    "notes": "Huey is a static browser app with no build step (src/ is the app). .ui-capture/build.sh copies src/ to .ui-capture/out, vendors the CDN dependencies, generates the seed data (seed/generate-data.mjs writes the CSVs; seed/generate-duckdb.mjs builds northwind_dw.duckdb with @duckdb/node-api 2.0.0, the same DuckDB version as the WASM build) and patches out/index.html (patch-index.mjs). Tools are pinned in mise.toml (node 22.12.0); npm versions are pinned in vendor/package.json. The persona is an analyst at 'Northwind Outdoor Co.', an outdoor gear retailer. Datasources tab: the DuckDB database northwind_dw, with schemas sales (order_lines, dim_customer [640], dim_product [50], product_reviews [420, short and long text, mixed moderation status], views v_monthly_revenue and v_returns), ops (support_tickets, inventory_snapshot, dim_store, store_daily_traffic [~3.9k days]) and marketing (campaign_spend, view v_roas). Files: northwind_order_lines_2023-2025.csv (~12k order lines from Jan 2023 to 14 Nov 2025; statuses Delivered/Shipped/Processing/Cancelled/Returned/Refunded/Lost in Transit; channels, regions, countries, cities including some missing or upper-cased ones; promo codes), support_tickets_2024-2025.csv (~4.1k tickets with open, in-progress, escalated and closed statuses, agents and CSAT), marketing_spend_by_campaign.csv (~2.4k rows) and inventory_snapshot_2025-11-14.csv (200 rows). Catalogs Manager: 4 saved catalogs (duckdb, ducklake, iceberg, sqlite). Secrets Manager: 3 secrets (s3, iceberg, huggingface). On load the app opens the default report: net revenue (sum of net_amount) by category/subcategory against year/quarter of order_timestamp, filtered on status, with the Attributes sidebar pinned. Main areas: the top toolbar (upload, load from URL, attach remote catalog, clone session, autorun, Quick Query, current datasource, download, secrets, settings, about), the sidebar with Datasources and Attributes tabs (derived date fields, statistics), the query editor (Filters/Columns/Rows/Cells axes) and the pivot table. DuckDB-WASM boots in a web worker, so the seeded report appears a few seconds after page load; html[data-huey-seeded=true] marks completion. Deep links (#<base64 route>) also work and are applied after the files load. The PWA service worker in out/ is patched to precache its app shell relative to its own location, because out/ is the web root rather than the repo root; all 113 entries exist, so precaching makes no 404s. To test locally: PORT=5463 node .ui-capture/serve.mjs .ui-capture/out (a strict server: missing files with an extension return 404)."
+  },
+  "tools": {
+    "node": "22.12.0"
+  },
+  "prompt": "This is a checkout of rpbouman/huey (https://github.com/rpbouman/huey) at commit 0401e03389f3. Browser-based data analytics & BI with DuckDB-WASM. Privacy-first: your data stays local; no server required.\n\nI want to see its user interface in a desktop browser, in the state a real, established user would see it. Please get the app running locally with its main interface working and realistic data in it.\n\n# Running it\n- Follow the repo's own setup docs and tooling. Take the simplest route that shows the real app: a static production build if the front end works without a backend, otherwise the app's own server (production or dev mode).\n- If it needs a database or other services, run them locally with an embedded or file-based option (SQLite, in-memory, JSON files, an embedded Postgres such as PGlite) or the app's demo/mock mode.\n- Don't redesign or restyle anything. Change only what's needed to build and run it.\n\n# Tools: use mise\nInstall every runtime and tool you need (node, the package manager, python, bun, ...) with mise, pinned to exact versions in a mise.toml at the repo root, so the setup can be reproduced. Match what the repo asks for (engines, .nvmrc, .tool-versions, packageManager). mise is already configured for this directory: `mise install` installs into ./.ui-capture/mise, and its shims come first on PATH, so `node`, `pnpm` and the rest resolve to the pinned versions. Don't use other copies of these tools or download runtimes by hand.\n\n# Secrets, API keys and external services: fake them\nThe app must not depend on anything outside this machine, and when it runs it has no network except localhost. Wherever it expects secrets, environment variables, API keys or third-party services (hosted auth or OAuth, payment providers, email, LLM or other AI APIs, maps, storage buckets, analytics, hosted databases):\n- Give the required variables placeholder values so the app starts.\n- Where it actually calls the service, make the call succeed locally with realistic responses: use the app's own mock, test or offline mode if it has one; otherwise point the client at a small local stub server that start.sh also starts, or swap in a stub at the integration boundary (the API client or service module). Keep stubs out of UI code. Responses should look like what the real service returns for a real user, e.g. an AI reply that actually answers, a payment history with real-looking amounts.\n- Calls the browser makes directly to outside services count too; point them at the local stub.\n- For sign-in through an outside provider, create a local account or use the app's dev sign-in so you can get past it.\nList every stub in app.json.\n\n# Data: like real use\nSeed it the way an established user's data would look after months of actual use: specific, plausible names and content for this kind of app; dates spread over time; a realistic mix of states (done, in progress, overdue, archived, ...); realistic volume (dozens to hundreds of records where the app revolves around records); short and long text; some messiness real data has. Start from the app's own demo or seed data if it has realistic data, and extend it if it's thin. Load data through the app's own paths (its API, import, seed scripts, or its database schema), never by hardcoding it into UI code. If the app needs an account, create one and attach the data to it. No lorem ipsum or \"Test 1\".\n\n# Environment\nThis shell is sandboxed: you can write only inside this directory (package-manager caches already point into ./.ui-capture/cache), and the network reaches only package registries, mise's download sources and GitHub (registry.npmjs.org, registry.yarnpkg.com, repo.yarnpkg.com, github.com, codeload.github.com, objects.githubusercontent.com, raw.githubusercontent.com, nodejs.org, mise.jdx.dev, mise-versions.jdx.dev, release-assets.githubusercontent.com, pypi.org, files.pythonhosted.org, binaries.prisma.sh, cdn.jsdelivr.net, unpkg.com). Docker isn't available. A process you start in the background can't be seen or stopped from a later command, so test servers on another port than 4462 (e.g. 5462) or in the foreground under `timeout`; anything still listening on 4462 is stopped before I check.\n\n# When you're done, leave this in ./.ui-capture/\n- app.json: {\"mode\": \"static\" or \"server\", \"entry\": \"/path where the main UI opens\", \"login\": null or {\"username\": \"...\", \"email\": \"...\", \"password\": \"...\"}, \"stubs\": [{\"service\": \"what was faked\", \"how\": \"how\"}], \"notes\": \"how you set it up, what data is loaded, and the main areas of the app\"}\n- static mode: the production build in ./.ui-capture/out, with index.html as its entry. It will be served from the root of a plain static file server; unknown paths fall back to index.html.\n- server mode: ./.ui-capture/start.sh, which starts everything the app needs (stubs included) in the foreground and serves the UI at http://localhost:4462/ (it gets PORT=4462). It runs with the same PATH and restrictions as your shell, plus no network at all except localhost, so everything must already be installed, built and seeded (or seeded by start.sh itself).\n- Put any scripts you write for seeding or stubbing in ./.ui-capture/ too; they're kept with the setup record.\n\n# Order of work\nYou have 90 minutes in total, and anything unfinished when time runs out is lost. So work in this order:\n1. Get the app building and running with its stubs, and write the contract above (app.json plus out/ or start.sh), even if it has only a little data so far.\n2. Then build out the data, re-running your seed and checking the app still loads after each substantial step, so that a working state with the data loaded so far is always in place.\nWrite large data sets with a short generator script rather than as one long literal file.\n\nI'll open it at 1440×900.",
+  "model": {
+    "model": "claude-opus-5-5",
+    "effort": "high"
+  },
+  "sandbox": true,
+  "startedAt": "2026-11-17T10:05:44.447Z",
+  "finishedAt": "2026-11-17T10:20:16.257Z",
+  "verification": {
+    "ok": true,
+    "problems": [],
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedRequests": [],
+    "textChars": 2096,
+    "visibleElements": 1016,
+    "title": "Huey - \"sum of net_amount\" from northwind_order_lines_2023-2025 with \"category\", \"subcategory\" on rows and \"year of order_timestamp\", \"quarter of order_timestamp\" on columns"
+  },
+  "repairs": 1,
+  "session": {
+    "rounds": 2,
+    "numTurns": 132,
+    "costUsd": 10.008570599999999,
+    "durationMs": 867883,
+    "models": [
+      "claude-opus-5-5"
+    ],
+    "usage": {
+      "input_tokens": 240,
+      "cache_creation_input_tokens": 183889,
+      "cache_read_input_tokens": 12634634,
+      "output_tokens": 74959
+    },
+    "timedOut": false
+  },
+  "changes": {
+    "files": 1,
+    "insertions": 2,
+    "deletions": 0,
+    "patchBytes": 152,
+    "patch": "setup.patch"
+  }
+}

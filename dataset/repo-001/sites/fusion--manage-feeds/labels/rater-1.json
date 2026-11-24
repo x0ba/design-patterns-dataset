@@ -1,0 +1,475 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "fusion--manage-feeds",
+    "url": "http://localhost:4434/feeds",
+    "finalUrl": "http://localhost:4434/feeds",
+    "status": 200,
+    "title": "Fusion",
+    "capturedAt": "2026-11-18T20:22:08.899Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 2604
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "news-publishing",
+    "domainNote": "self-hosted RSS feed reader (Fusion) — feed management screen",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/fusion/explore.json",
+      "repo": {
+        "name": "0x2E/fusion",
+        "url": "https://github.com/0x2E/fusion",
+        "commit": "c31ade09b481fa877633899e8cf5d4c86a72c4f9",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "manage-feeds",
+        "name": "Manage feeds",
+        "description": "Feed management page listing feeds grouped by folder with article counts, last refresh, error/suspended status, edit buttons, search, status filter and add/refresh/import/export actions."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "App sidebar: logo, Cmd+K search trigger, Unread/Starred/All with counts, collapsible feed-group tree with per-feed unread counts, Manage Feeds/Settings/Sign out",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 300,
+        "height": 2604
+      },
+      "patterns": [
+        "app-shell",
+        "tree-view",
+        "badge",
+        "command-palette"
+      ]
+    },
+    {
+      "id": "page-header",
+      "role": "header",
+      "label": "Page title 'Manage Feeds' with 'Feeds: 34' total",
+      "bbox": {
+        "x": 300,
+        "y": 0,
+        "width": 1140,
+        "height": 56
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "toolbar",
+      "role": "toolbar",
+      "label": "Search feeds field, All Status filter dropdown, Add split menu, Refresh All, Import, Export",
+      "bbox": {
+        "x": 324,
+        "y": 64,
+        "width": 1092,
+        "height": 44
+      },
+      "patterns": [
+        "text-field",
+        "filter-controls",
+        "menu",
+        "choice-control"
+      ]
+    },
+    {
+      "id": "feed-groups",
+      "role": "list",
+      "label": "Stacked collapsible outlined group panels (Default, Tech News, ...) each listing feeds with favicon letter, title, domain, article count, last fetched, status, edit pencil",
+      "bbox": {
+        "x": 324,
+        "y": 140,
+        "width": 1092,
+        "height": 2440
+      },
+      "patterns": [
+        "accordion",
+        "badge"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 300,
+            "height": 2604
+          },
+          "region": "sidebar",
+          "note": "persistent left sidebar with fixed destinations, live unread counts, feed tree",
+          "quote": "Unread 131"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations",
+          "live-counts",
+          "user-pinned-items"
+        ],
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "tree-view",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 236,
+            "width": 283,
+            "height": 550
+          },
+          "region": "sidebar",
+          "note": "feed groups with chevrons expand to feeds, favicon icons and unread counts",
+          "quote": "Tech News 33"
+        }
+      ],
+      "dims": {
+        "content": [
+          "label",
+          "type-icon",
+          "count-badge"
+        ],
+        "expandBy": [
+          "disclosure-triangle"
+        ],
+        "selection": "single-node",
+        "source": "containment",
+        "density": "compact"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 260,
+            "y": 118,
+            "width": 30,
+            "height": 16
+          },
+          "region": "sidebar",
+          "note": "unread count right-aligned in nav",
+          "quote": "131"
+        },
+        {
+          "bbox": {
+            "x": 444,
+            "y": 152,
+            "width": 24,
+            "height": 20
+          },
+          "region": "feed-groups",
+          "note": "pill count of feeds in group header",
+          "quote": "2"
+        }
+      ],
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "rule": "everything-unread",
+        "aggregation": "rolled-up-to-parent"
+      }
+    },
+    {
+      "id": "command-palette",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 68,
+            "width": 283,
+            "height": 36
+          },
+          "region": "sidebar",
+          "note": "Search button with Cmd+K hint opens centered overlay palette (verified live) with Quick Actions and Keyboard Shortcuts",
+          "quote": "Search Cmd+K / ?"
+        }
+      ],
+      "dims": {
+        "types": [
+          "commands",
+          "objects-and-files"
+        ],
+        "summon": [
+          "in-app-shortcut",
+          "visible-search-button"
+        ],
+        "scope": "current-app",
+        "placement": "centered-overlay",
+        "detail": "name-and-shortcut"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 324,
+            "y": 68,
+            "width": 280,
+            "height": 36
+          },
+          "region": "toolbar",
+          "note": "outlined search input with leading icon and placeholder",
+          "quote": "Search feeds..."
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "placeholder"
+        ],
+        "style": "outlined",
+        "validation": "none",
+        "inputType": "plain"
+      }
+    },
+    {
+      "id": "filter-controls",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 612,
+            "y": 70,
+            "width": 131,
+            "height": 32
+          },
+          "region": "toolbar",
+          "note": "status filter dropdown (All Status / Error / Paused, verified live) next to text search",
+          "quote": "All Status"
+        }
+      ],
+      "dims": {
+        "placement": "toolbar-popover",
+        "types": [
+          "text-match"
+        ],
+        "origin": "developer-defined"
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 612,
+            "y": 70,
+            "width": 131,
+            "height": 32
+          },
+          "region": "toolbar",
+          "note": "single-choice dropdown select for status",
+          "quote": "All Status"
+        }
+      ],
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "dropdown-select",
+        "option": [
+          "label-only"
+        ],
+        "timing": "immediately",
+        "largeSets": "show-all"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 989,
+            "y": 70,
+            "width": 100,
+            "height": 32
+          },
+          "region": "toolbar",
+          "note": "Add button with chevron opens dropdown: Add Feed, Add Group with icons (verified live)",
+          "quote": "Add"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click",
+        "structure": "flat",
+        "item": [
+          "label",
+          "icon"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    },
+    {
+      "id": "accordion",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 324,
+            "y": 305,
+            "width": 1092,
+            "height": 271
+          },
+          "region": "feed-groups",
+          "note": "group header with chevron, folder icon, count; clicking header collapses group independently (verified live); hover reveals add/rename/delete actions",
+          "quote": "Tech News 4"
+        },
+        {
+          "bbox": {
+            "x": 324,
+            "y": 140,
+            "width": 1092,
+            "height": 157
+          },
+          "region": "feed-groups",
+          "quote": "Default 2"
+        }
+      ],
+      "dims": {
+        "policy": "many-at-a-time",
+        "header": [
+          "title-plus-summary-value"
+        ],
+        "toggle": [
+          "header-click"
+        ]
+      }
+    },
+    {
+      "id": "card",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 324,
+            "y": 140,
+            "width": 1092,
+            "height": 157
+          }
+        }
+      ],
+      "dims": {},
+      "rationale": "Group containers are outlined panels of list rows, not item-summarizing cards; coded as accordion."
+    },
+    {
+      "id": "data-table",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 324,
+            "y": 183,
+            "width": 1092,
+            "height": 114
+          }
+        }
+      ],
+      "dims": {},
+      "rationale": "Feed rows are list items without columns/headers."
+    }
+  ],
+  "structure": {
+    "layout": "two-column app layout: fixed left sidebar navigation tree and a main panel with title bar, toolbar, and stacked collapsible group lists",
+    "regions": [
+      "sidebar",
+      "page-header",
+      "toolbar",
+      "feed-groups"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#f9f9f8",
+      "#f7f7f5",
+      "#37352f",
+      "#5f5e5b",
+      "#e9e9e7",
+      "#0b6bcb",
+      "#e03e3e"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "surface": "#f9f9f8",
+      "text": "#37352f",
+      "muted": "#5f5e5b",
+      "border": "#e9e9e7",
+      "primary": "#0b6bcb",
+      "danger": "#e03e3e"
+    },
+    "typography": "Inter Variable for all UI text (titles, nav, rows); ui-monospace for the Cmd+K shortcut hint",
+    "typeScale": "Restrained: 18px semibold page title, 14px medium for group headers/buttons/feed titles, 13–14px nav, 11–12px muted domain/metadata and counts",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "clean",
+      "utilitarian",
+      "calm",
+      "notion-like"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T20:23:36.503Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 13,
+    "usage": {
+      "input_tokens": 26,
+      "cache_creation_input_tokens": 46032,
+      "cache_read_input_tokens": 495753,
+      "output_tokens": 5208
+    }
+  },
+  "notes": "Notion-esque warm grey palette with a single blue primary (Add). Each feed has a colored rounded-square letter favicon. Feed rows show right-aligned muted metadata '5 articles · 9 minutes ago' plus a pencil edit icon; paused feeds show a pause glyph; failing feeds show inline red error text with alert icon, truncated with ellipsis. Group header hover reveals +/rename/delete icon actions. Sidebar footer pins Manage Feeds (active, grey fill), Settings, Sign out."
+}

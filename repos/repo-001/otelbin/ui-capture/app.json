@@ -1,0 +1,32 @@
+{
+  "mode": "server",
+  "entry": "/s/6befbdd713299ed89cc7c89c0012020a0b9efb9c",
+  "login": null,
+  "stubs": [
+    {
+      "service": "Clerk authentication (@clerk/nextjs client + @clerk/nextjs/server middleware)",
+      "how": "Webpack alias in packages/otelbin/next.config.mjs, active only when OTELBIN_STUB_CLERK=1 (set in .ui-capture/env.sh), swaps the SDK module for .ui-capture/stubs/clerk-nextjs.js and clerk-nextjs-server.js. These report a loaded Clerk with a signed-in GitHub user, Priya Raman (praman-sre, priya.raman@northwind-freight.io). The header shows her avatar UserButton with a small account menu, and the Share popover goes straight to short-URL creation. No password is needed: every visitor is that user."
+    },
+    {
+      "service": "Upstash Redis REST API (short links + @upstash/ratelimit)",
+      "how": ".ui-capture/stubs/stub-server.js serves the Upstash REST protocol (single commands, /pipeline, base64 response encoding) at http://localhost:4411/redis. Storage is a JSON file (.ui-capture/data/redis.json) that start.sh copies from seed/redis.seed.json on each start. Rate-limit EVAL calls always allow the request."
+    },
+    {
+      "service": "OTelBin collector validation API (AWS API Gateway + Lambda running real collector binaries)",
+      "how": "The same stub server at http://localhost:4411/validation. GET /validation/supported-distributions returns the repo's own packages/otelbin-validation/src/assets/supported-distributions.json (otelcol core/contrib, ADOT, Splunk with real release lists). POST /validation/{distro}/{version} applies env-var substitution and rule-based checks that mimic `otelcol validate`: unknown component types per distro, pipelines referencing unconfigured components, a missing otlp endpoint, prometheus without scrape_configs, and memory_limiter limits. It returns the Lambda's {message, error, path} payload after about 0.7s of latency."
+    },
+    {
+      "service": "Google Fonts (next/font/google Inter + Fira Code, fetched at build time)",
+      "how": "Uses Next's own NEXT_FONT_GOOGLE_MOCKED_RESPONSES hook, pointing at .ui-capture/fonts/google-fonts-mock.js. That file serves the same fonts from the @fontsource-variable npm packages, so no app code changed."
+    },
+    {
+      "service": "Vercel Web Analytics (/_vercel/insights/script.js + /view, /event beacons, normally served by Vercel edge)",
+      "how": "Env-gated rewrite in packages/otelbin/next.config.mjs (OTELBIN_STUB_VERCEL_INSIGHTS_URL, set in env.sh, baked in at build time) proxies /_vercel/insights/* to the stub server on :4411, which serves .ui-capture/stubs/vercel-insights-script.js (drains the window.vaq queue, posts pageview/event beacons like the real script) and answers the beacons with 200 OK."
+    },
+    {
+      "service": "Dash0 web SDK (self-monitoring)",
+      "how": "Not configured: NEXT_PUBLIC_DASH0_* env vars are unset, so the SDK is not initialised and makes no requests."
+    }
+  ],
+  "notes": "OTelBin is a Next.js 16 app in packages/otelbin. Node 22.23.5 is pinned in the repo-root mise.toml, and dependencies are installed with `npm ci` as CONTRIBUTING.md says. Build: .ui-capture/build.sh (npm run build with env.sh). Run: .ui-capture/start.sh starts the stub server on :4411, then `next start` on $PORT (4409). All secrets in env.sh are placeholders.\n\nData: OTelBin has no database. A user's configs live in the URL hash (#config=...&distro=...&distroVersion=...&env=...), and signed-in users share them as short links stored in Redis. .ui-capture/seed/run-seed.sh starts the app on :5409 and creates 33 short links through the app's own POST /s/new endpoint, using the app's jsurl2 serializer. The links are the configs a platform/SRE team at a logistics company (Northwind Freight) would have shared over months: prod and staging Kubernetes gateways with tail sampling, spanmetrics/servicegraph connectors and Dash0/Mimir/S3 exporters; DaemonSet node agents; ADOT ECS sidecars; Splunk warehouse edge collectors; a Kafka buffer; tenant routing; a legacy Jaeger/Zipkin bridge; GitHub CI receivers; a minimal debug config; plus a WIP logs draft with a real error and a core-distro config that uses a contrib-only receiver. The short-link-to-config map is in .ui-capture/seed/links.json, and the configs are in seed/configs.js.\n\nThe entry /s/6bef… is the 'prod-gateway-eu' short link. It redirects to http://localhost:4409/?#config=… with the full production gateway config, otelcol-contrib v0.160.0 selected for server-side validation (result: valid), and DASH0_AUTH_TOKEN bound in the env-var panel.\n\nMain areas: header with OTelBin logo, distribution/version validation picker, Share popover (short URL, badge, image, YAML/PNG download) and the user avatar; left Monaco YAML editor with JSON-schema validation and an error console; env-var panel when the config uses ${env:...}; right ReactFlow pipeline visualization (traces/metrics/logs swimlanes, connectors, view-mode toggles); footer. Other routes: /s/{id}/img (rendered PNG of the pipeline), /badges/collector-config.\n\nCaveat: in a fresh browser profile the app shows its 4-step Welcome modal once, as it does for any first visit. Dismissing it (Skip, Esc or Next through it) stores localStorage welcomeModal=0, and it doesn't appear again. Headless Chromium couldn't launch inside the build sandbox, so the UI was checked over HTTP (pages, assets, short-link redirects, validation, and the server-rendered /s/{id}/img pipeline image), not in a real browser."
+}

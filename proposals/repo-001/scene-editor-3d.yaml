@@ -1,0 +1,247 @@
+# Codebook proposal (new-entry) — review with: node scripts/proposals.ts show repo-001 scene-editor-3d
+id: scene-editor-3d
+kind: new-entry
+status: open
+batch: repo-001
+codebookVersion: 1.0.0
+name: 3D scene / model editor
+level: pattern
+parent: create
+definition: Authoring a 3D model or scene by directly manipulating objects in a perspective viewport
+  with transform gizmos, alongside an outliner hierarchy, a numeric transform inspector and mode
+  switches (edit / paint / animate).
+aliases:
+  - 3D modeler
+  - Blender-style editor
+  - model editor
+relations:
+  neighbors:
+    - canvas-editor
+    - object-viewer-3d
+  uses:
+    - tree-view
+    - property-inspector
+    - menu
+    - tabs
+dimensions:
+  - name: Workspace modes
+    family: layout
+    question: How does the editor switch between kinds of work?
+    subdimensions:
+      - id: modes
+        name: Modes
+        select: one
+        values:
+          - id: single-mode
+            name: Single mode
+          - id: mode-tabs
+            name: Mode tabs
+            description: Edit / Paint / Animate style workspace switch
+            example: Blockbench, Blender workspaces
+  - name: Manipulation
+    family: invocation
+    question: How are objects transformed?
+    subdimensions:
+      - id: manipulation
+        name: Manipulation
+        select: many
+        values:
+          - id: viewport-gizmo
+            name: Viewport gizmo
+          - id: numeric-fields
+            name: Numeric fields
+          - id: keyboard-modal
+            name: Keyboard modal (G/R/S)
+          - id: transform-gizmo
+            name: Transform gizmo
+          - id: record-performance
+            name: Record a live performance or flight
+          - id: snap-to-ground
+            name: Snap to ground
+  - name: Placement method
+    family: invocation
+    question: How are objects added to the scene?
+    subdimensions:
+      - id: placement
+        name: Placement
+        select: many
+        values:
+          - id: pick-then-click-floor
+            name: Pick from library then click floor
+            example: Blockout previs
+          - id: drag-from-library
+            name: Drag from library
+            example: Unity
+          - id: procedural-spawn
+            name: Procedural spawn
+            example: Blockout choreographer 'Spawn routine'
+          - id: library-click-then-floor
+            name: Pick from library then click floor
+            example: Blockout
+          - id: import-model-or-scan
+            name: Import model or scan
+            example: Blockout Import 3D Scan
+  - name: Transform tools
+    family: layout
+    question: How are objects manipulated?
+    subdimensions:
+      - id: transform
+        name: Transform
+        select: many
+        values:
+          - id: gizmo-modes
+            name: Move/rotate/scale gizmo modes
+            example: Blender, Unity
+          - id: numeric-inspector
+            name: Numeric inspector fields
+            example: Unity inspector
+          - id: snap-to-ground
+            name: Snap to ground
+            example: Blockout Ground
+          - id: gizmo-move-rotate-scale
+            name: Gizmo move/rotate/scale
+            example: Blender
+          - id: numeric-fields
+            name: Numeric fields in inspector
+            example: Unity transform
+          - id: move-rotate-scale-modes
+            name: Move / rotate / scale modes
+      - id: transformTools
+        name: Transform tools
+        select: many
+        values:
+          - id: gizmo-modes
+            name: Move/rotate/scale tool modes
+          - id: snap-to-ground
+            name: Snap to ground/surface
+          - id: numeric-fields
+            name: Numeric transform fields in inspector
+  - name: Viewpoint
+    family: layout
+    question: How is the scene viewed?
+    subdimensions:
+      - id: viewpoint
+        name: Viewpoint
+        select: many
+        values:
+          - id: free-orbit
+            name: Free orbit
+          - id: look-through-camera
+            name: Look through scene camera
+          - id: inset-camera-preview
+            name: Inset camera preview
+  - name: Camera authoring
+    family: content
+    question: How are viewpoints authored?
+    subdimensions:
+      - id: cameraAuthoring
+        name: Camera authoring
+        select: many
+        values:
+          - id: keyframed-marks
+            name: Keyframed camera marks along a path
+          - id: framing-presets
+            name: Shot framing presets (WS/MS/CU)
+          - id: look-through
+            name: Look through camera / preview inset
+rationale:
+  - rater: rater-1
+    site: blockbench--edit-mode
+    text: canvas-editor is defined as 2D; object-viewer-3d is inspection-only.
+      Blockbench/Blender/Unity-style editors (gizmos, outliner, transform panel, workspace modes)
+      have no fitting entry.
+  - rater: rater-3
+    site: blockout--stage
+    text: canvas-editor is explicitly 2D; object-viewer-3d is for inspecting a model, not authoring a
+      scene. Previs/blocking tools like this one (asset library → click floor to place,
+      Move/Rotate/Ground gizmos, lighting presets, camera marks and paths) have no fitting entry.
+  - rater: rater-2
+    site: blockout--stage
+    text: canvas-editor is defined for 2D canvases/artboards; object-viewer-3d is for inspecting a
+      single model, not authoring a scene. Tools like Unity, Blender layout, and this previs app
+      (Blockout) arrange many objects in 3D with Move/Rotate/Ground gizmo tools and a library
+      palette.
+  - rater: rater-1
+    site: blockout--shoot-camera
+    text: object-viewer-3d covers inspecting one model; canvas-editor covers 2D arrangement. Nothing
+      covers authoring a 3D scene (Blender/Unity/Unreal viewports, previs tools) with transform
+      gizmos (Move/Rotate/Ground), camera placement, look-through-camera and shot-framing presets.
+  - rater: rater-2
+    site: blockout--shoot-camera
+    text: object-viewer-3d covers inspecting a model; canvas-editor is 2D. A 3D viewport where the
+      person authors the scene (Move/Rotate/Ground tools, dropping camera marks, blocking characters
+      along paths) has no fitting entry.
+  - rater: rater-3
+    site: blockout--shoot-camera
+    text: canvas-editor is 2D; object-viewer-3d is for inspecting a model, not authoring a scene.
+      Previs, game-engine and 3D DCC editors have no fitting entry.
+sources:
+  - batch: repo-001
+    site: blockbench--edit-mode
+    url: http://blockbench.localhost:4319/
+    note: proposed by rater-1
+  - batch: repo-001
+    site: blockout--stage
+    url: http://localhost:4474/
+    note: proposed by rater-3, rater-2
+  - batch: repo-001
+    site: blockout--shoot-camera
+    url: http://localhost:4474/
+    note: proposed by rater-1, rater-2, rater-3
+evidence:
+  - site: blockbench--edit-mode
+    rater: rater-1
+    bbox:
+      x: 368
+      y: 104
+      width: 756
+      height: 1025
+    note: 3D viewport with move gizmo on selected cube, grid floor, axis widget
+  - site: blockout--stage
+    rater: rater-3
+    bbox:
+      x: 200
+      y: 44
+      width: 976
+      height: 856
+    note: 3D viewport with placed characters, marks, paths and Move/Rotate/Ground tools
+    quote: Click a library item, then click the floor to place it.
+  - site: blockout--stage
+    rater: rater-2
+    bbox:
+      x: 200
+      y: 44
+      width: 976
+      height: 856
+    note: 3D viewport with floor marks, camera paths and Move/Rotate/Ground transform tools
+    quote: ⇄ Move
+  - site: blockout--shoot-camera
+    rater: rater-1
+    bbox:
+      x: 200
+      y: 44
+      width: 976
+      height: 1189
+    note: 3D viewport with Move/Rotate/Ground transform tools, camera marks, shot preset buttons,
+      look-through camera
+    quote: ⇄ Move
+  - site: blockout--shoot-camera
+    rater: rater-2
+    bbox:
+      x: 200
+      y: 44
+      width: 976
+      height: 1189
+    note: 3D previs viewport with camera marks 1-7, character paths, Move/Rotate/Ground tools, shot
+      preview PiP
+    quote: ⇄ Move
+  - site: blockout--shoot-camera
+    rater: rater-3
+    bbox:
+      x: 200
+      y: 44
+      width: 976
+      height: 1189
+    note: Blockout viewport with Move/Rotate/Ground tools, camera marks, record camera
+createdAt: 2026-11-18T01:45:41.197Z
+updatedAt: 2026-11-18T20:34:21.554Z

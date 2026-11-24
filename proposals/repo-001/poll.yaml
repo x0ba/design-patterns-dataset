@@ -1,0 +1,89 @@
+# Codebook proposal (new-entry) — review with: node scripts/proposals.ts show repo-001 poll
+id: poll
+kind: new-entry
+status: open
+batch: repo-001
+codebookVersion: 1.0.0
+name: Poll
+level: component
+parent: communicate
+definition: A question posed to a group with a fixed set of options, where participants vote and
+  live tallies (percent, counts, voter names) are shown inline per option, often inside a chat, call
+  or post.
+aliases:
+  - survey question
+  - quick poll
+  - vote
+relations:
+  uses:
+    - choice-control
+    - chart
+    - card
+  neighbors:
+    - reactions
+    - availability-picker
+dimensions:
+  - name: Results visibility
+    family: feedback
+    question: When and how are tallies shown?
+    subdimensions:
+      - id: results
+        name: Results
+        select: one
+        values:
+          - id: inline-bars-always
+            name: Inline bars always
+            description: Fill bars and percentages shown on each option before and after voting
+            example: MiroTalk polls
+          - id: after-voting
+            name: After voting
+            example: Twitter/X polls
+          - id: after-close
+            name: After poll closes
+  - name: Voter identity
+    family: scope
+    question: Are voters visible?
+    subdimensions:
+      - id: identity
+        name: Identity
+        select: one
+        values:
+          - id: anonymous
+            name: Anonymous
+          - id: named-voters
+            name: Named voters
+            description: Names listed under each option
+            example: Slack Polly, MiroTalk
+rationale:
+  - rater: rater-2
+    site: mirotalk--meeting-grid
+    text: Choice-control covers picking an option but not the social tally layer (aggregate result bars,
+      vote counts, anonymous vs named voters, author, poll creation). availability-picker mentions
+      polling only for time slots. Polls are a common side channel in video calls, chats and social
+      posts.
+sources:
+  - batch: repo-001
+    site: mirotalk--meeting-grid
+    url: http://localhost:4438/join?room=northwind-product-weekly&name=Dana%20Okafor&audio=0&video=0&notify=0
+    note: proposed by rater-2
+evidence:
+  - site: mirotalk--meeting-grid
+    rater: rater-2
+    bbox:
+      x: 512
+      y: 224
+      width: 416
+      height: 217
+    quote: Ship onboarding checklist v2 behind a flag on Nov 24?
+    note: Poll with radio options, fill bars, '60% (3)', 'Anonymous'
+  - site: mirotalk--meeting-grid
+    rater: rater-2
+    bbox:
+      x: 512
+      y: 451
+      width: 416
+      height: 300
+    quote: Which date works for the Q1 roadmap offsite?
+    note: Voter names under each option
+createdAt: 2026-11-18T06:55:09.742Z
+updatedAt: 2026-11-18T06:55:09.742Z

@@ -1,0 +1,580 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "gen-002",
+  "site": {
+    "slug": "photo-studio-bay-scheduling",
+    "url": "http://photo-studio-bay-scheduling.localhost:4318/",
+    "finalUrl": "http://photo-studio-bay-scheduling.localhost:4318/",
+    "status": 200,
+    "title": "Baylight · Northlight Studios",
+    "capturedAt": "2026-11-17T22:19:17.956Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1381
+    },
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "productivity",
+    "domainNote": "photo-studio front-desk bay & kit scheduling / resource booking operations",
+    "provenance": {
+      "source": "generated",
+      "generation": "generated/gen-002/photo-studio-bay-scheduling/generation.json",
+      "generator": {
+        "id": "haiku",
+        "model": "claude-haiku-5-5",
+        "effort": "high"
+      },
+      "brief": {
+        "domain": "design-creative",
+        "archetype": "schedule",
+        "context": "shared-screen",
+        "product": "Baylight"
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Dark top bar: Baylight logo/studio name, centered date + live clock, staff on desk status",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 64
+      },
+      "patterns": []
+    },
+    {
+      "id": "timeline",
+      "role": "resource-timeline",
+      "label": "Today's bays (Bay 1-3) day timeline 8 AM-10 PM with booking blocks, clean-down hatching, now line, ghosted preview moves, plus kit reservation and backdrop paper swimlanes",
+      "bbox": {
+        "x": 20,
+        "y": 76,
+        "width": 1034,
+        "height": 1130
+      },
+      "patterns": [
+        "calendar",
+        "gantt-timeline",
+        "badge",
+        "coordinated-views",
+        "overview-detail"
+      ]
+    },
+    {
+      "id": "up-next",
+      "role": "card-strip",
+      "label": "Up next · what to tell arrivals: four arrival cards with time, bay badge, client and readiness note; preview badge for selected option",
+      "bbox": {
+        "x": 20,
+        "y": 1216,
+        "width": 1034,
+        "height": 153
+      },
+      "patterns": [
+        "card",
+        "badge"
+      ]
+    },
+    {
+      "id": "extension-request",
+      "role": "request-summary",
+      "label": "Extension request for Lena Strauss with three value tiles (ends now, asked for, charge) and yellow constraint callout",
+      "bbox": {
+        "x": 1083,
+        "y": 78,
+        "width": 343,
+        "height": 244
+      },
+      "patterns": [
+        "stat-tile",
+        "banner"
+      ]
+    },
+    {
+      "id": "options",
+      "role": "decision-options",
+      "label": "Three ways to answer: A/B/C option cards as accordion with status pills, checklist of checks and Apply button",
+      "bbox": {
+        "x": 1083,
+        "y": 334,
+        "width": 343,
+        "height": 777
+      },
+      "patterns": [
+        "accordion",
+        "card",
+        "badge"
+      ]
+    },
+    {
+      "id": "selected-booking",
+      "role": "detail-panel",
+      "label": "Selected booking detail: name, time, bay, crew, deposit, charge, add-ons, kit reserved",
+      "bbox": {
+        "x": 1083,
+        "y": 1124,
+        "width": 343,
+        "height": 243
+      },
+      "patterns": [
+        "overview-detail"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "calendar",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 20,
+            "y": 76,
+            "width": 1034,
+            "height": 290
+          },
+          "region": "timeline",
+          "quote": "TODAY 8 AM 9 AM 10 AM",
+          "note": "Single-day time grid with bays as resource rows; event blocks show client, time, crew/deposit status; red now line"
+        },
+        {
+          "bbox": {
+            "x": 306,
+            "y": 208,
+            "width": 245,
+            "height": 67
+          },
+          "region": "timeline",
+          "quote": "Lena Strauss 10 AM–2 PM 5 crew · deposit paid",
+          "note": "Event block with title, time and status"
+        }
+      ],
+      "dims": {
+        "gridFields": [
+          "title-and-time",
+          "status-marks"
+        ],
+        "detailDepth": "side-panel",
+        "primaryView": "day",
+        "moveResize": [
+          "propose-new-time"
+        ]
+      }
+    },
+    {
+      "id": "gantt-timeline",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Horizontal bars on an hour axis with swimlanes and a now line read as a Gantt-style resource timeline, but items are bookings not tasks; calendar is the primary code.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 20,
+            "y": 380,
+            "width": 1034,
+            "height": 310
+          },
+          "region": "timeline",
+          "quote": "KIT RESERVATIONS · 9 TODAY",
+          "note": "Kit swimlanes grouped by kit type with bars per reservation and a red today/now line"
+        }
+      ],
+      "dims": {
+        "barAttrs": [
+          "title-on-bar",
+          "health-or-status-colour"
+        ],
+        "rowHierarchy": "grouped-by-project",
+        "linking": [
+          "no-links"
+        ],
+        "chrome": "list-plus-timeline",
+        "ganttScale": "day",
+        "statusFeedback": [
+          "today-line"
+        ]
+      }
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 459,
+            "y": 128,
+            "width": 214,
+            "height": 67
+          },
+          "region": "timeline",
+          "quote": "Priya Raman 12:30–4 PM",
+          "note": "Clicking a booking block selects it (outline) and the Selected booking panel switches to it (verified live)"
+        },
+        {
+          "bbox": {
+            "x": 1083,
+            "y": 1124,
+            "width": 343,
+            "height": 243
+          },
+          "region": "selected-booking",
+          "quote": "SELECTED BOOKING · IN SESSION",
+          "note": "Detail view with all attributes: bay, crew, deposit, charge, add-ons, kit reserved"
+        }
+      ],
+      "dims": {
+        "attributePlacement": [
+          "in-both-views",
+          "in-detail-view-only"
+        ],
+        "abstraction": [
+          "style",
+          "graphic"
+        ],
+        "truncation": "ellipsis",
+        "openIn": "side-by-side",
+        "overviewType": [
+          "timeline"
+        ],
+        "detailMultiplicity": "one-at-a-time",
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "whole-item",
+        "relationship": "many-overviews-to-one-detail-view"
+      }
+    },
+    {
+      "id": "coordinated-views",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 306,
+            "y": 536,
+            "width": 245,
+            "height": 122
+          },
+          "region": "timeline",
+          "quote": "Lena Strauss",
+          "note": "Selecting a booking highlights its linked kit/backdrop reservation bars with an outline"
+        },
+        {
+          "bbox": {
+            "x": 613,
+            "y": 284,
+            "width": 184,
+            "height": 75
+          },
+          "region": "timeline",
+          "quote": "Arlo Goods (moved)",
+          "note": "Selecting an option card previews its moves on the timeline (dashed ghost blocks) and in the Up next strip ('Preview · Option B')"
+        }
+      ],
+      "dims": {
+        "linkChannel": [
+          "selection-highlight",
+          "parameters"
+        ],
+        "arrangement": "overview-detail-split",
+        "trigger": [
+          "click-a-mark",
+          "change-a-control"
+        ],
+        "feedback": [
+          "highlight-in-place"
+        ],
+        "authorship": "fixed-published-dashboard"
+      }
+    },
+    {
+      "id": "accordion",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1083,
+            "y": 357,
+            "width": 343,
+            "height": 755
+          },
+          "region": "options",
+          "quote": "THREE WAYS TO ANSWER",
+          "note": "Option A/B/C cards; B expanded (aria-expanded); clicking A expanded A and collapsed B (verified live)"
+        }
+      ],
+      "dims": {
+        "policy": "one-at-a-time",
+        "header": [
+          "title-plus-summary-value",
+          "status-indicator"
+        ],
+        "toggle": [
+          "header-click"
+        ]
+      }
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 35,
+            "y": 1254,
+            "width": 245,
+            "height": 102
+          },
+          "region": "up-next",
+          "quote": "3:00 PM Bay 3 Arlo Goods",
+          "note": "Arrival cards: outlined, light filled, no media; first highlighted in amber as changed"
+        },
+        {
+          "bbox": {
+            "x": 1083,
+            "y": 415,
+            "width": 343,
+            "height": 631
+          },
+          "region": "options",
+          "quote": "Move Arlo to Bay 3, extend Lena",
+          "note": "Option card with primary action 'Apply Option B'"
+        }
+      ],
+      "dims": {
+        "media": "none",
+        "actions": "none",
+        "shape": "compact-tile",
+        "style": "outlined"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1353,
+            "y": 373,
+            "width": 60,
+            "height": 18
+          },
+          "region": "options",
+          "quote": "Blocked",
+          "note": "Red status pill on option A"
+        },
+        {
+          "bbox": {
+            "x": 1308,
+            "y": 444,
+            "width": 104,
+            "height": 18
+          },
+          "region": "options",
+          "quote": "Works · 2 moves",
+          "note": "Amber status pill"
+        },
+        {
+          "bbox": {
+            "x": 116,
+            "y": 1263,
+            "width": 43,
+            "height": 16
+          },
+          "region": "up-next",
+          "quote": "Bay 3",
+          "note": "Navy bay label badges on arrival cards"
+        },
+        {
+          "bbox": {
+            "x": 919,
+            "y": 1227,
+            "width": 120,
+            "height": 20
+          },
+          "region": "up-next",
+          "quote": "Preview · Option B"
+        }
+      ],
+      "dims": {
+        "meaning": "status",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "stat-tile",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1100,
+            "y": 183,
+            "width": 310,
+            "height": 44
+          },
+          "region": "extension-request",
+          "quote": "ENDS NOW 2:00 PM ASKED FOR 3:30 PM CHARGE $127.50",
+          "note": "Three small grey tiles, uppercase label over a large bold value"
+        }
+      ],
+      "dims": {
+        "context": [
+          "label"
+        ],
+        "encoding": "number-only",
+        "window": "fixed",
+        "drill": "none"
+      }
+    },
+    {
+      "id": "banner",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1100,
+            "y": 238,
+            "width": 309,
+            "height": 68
+          },
+          "region": "extension-request",
+          "quote": "Arlo Goods holds Bay 2 from 3:00 PM. Only Bays 2 and 3 have a white cyc.",
+          "note": "Amber inline callout stating the constraint behind the request"
+        }
+      ],
+      "dims": {
+        "scope": "section",
+        "severity": "warning",
+        "dismissal": "clears-with-the-condition",
+        "action": "none",
+        "placement": "beside-the-problem"
+      }
+    },
+    {
+      "id": "app-shell",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 64
+          },
+          "note": "Top bar carries identity, clock and staff status but no navigation destinations"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "approval-flow",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1083,
+            "y": 78,
+            "width": 343,
+            "height": 244
+          },
+          "note": "Request is answered by choosing a resolution option, not routed to reviewers with approve/reject"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "Desktop operations console: dark top status bar; left wide card holding a day resource-timeline (bays as rows, hours as columns) with kit/backdrop reservation swimlanes below and an 'Up next' arrivals card strip; right fixed internally-scrolling decision column with request summary, three option accordion cards, and selected-booking detail.",
+    "regions": [
+      "header",
+      "timeline",
+      "up-next",
+      "extension-request",
+      "options",
+      "selected-booking"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#e4e7ec",
+      "#ffffff",
+      "#15181e",
+      "#1f3a5f",
+      "#e9f0fa",
+      "#f1f3f6",
+      "#6b7280",
+      "#e1e5eb",
+      "#fffbf0",
+      "#e8c46b",
+      "#145437",
+      "#c0262d"
+    ],
+    "colorRoles": {
+      "background": "#e4e7ec",
+      "surface": "#ffffff",
+      "text": "#15181e",
+      "muted": "#6b7280",
+      "primary": "#1f3a5f",
+      "accent": "#e8c46b",
+      "border": "#e1e5eb",
+      "header": "#15181e",
+      "success": "#145437",
+      "danger": "#c0262d"
+    },
+    "typography": "System UI stack (-apple-system / SF) throughout; bold for client names and headings, small uppercase letter-spaced labels for section eyebrows, tabular large clock in header.",
+    "typeScale": "Compact: 26px bold clock, 17px bold headings, 13-16px body/bold titles, 11-12px secondary meta, 9-10px uppercase tracking eyebrows and CLEAN labels; hierarchy carried mainly by weight and colour.",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "data-visualization"
+    ],
+    "iconStyle": "none",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "operational",
+      "calm",
+      "technical",
+      "precise",
+      "utilitarian"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-17T22:20:54.327Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 11,
+    "usage": {
+      "input_tokens": 22,
+      "cache_creation_input_tokens": 49943,
+      "cache_read_input_tokens": 451733,
+      "output_tokens": 6903
+    }
+  },
+  "notes": "Front-desk operations tool resolving one live extension conflict. Timeline encodes state by fill: grey = past, navy = in session, light blue = upcoming; diagonal grey hatching marks 30-min clean-down gaps; red vertical now line with red 'Now 1:10 PM' pill; dashed green ghost blocks preview where bookings would move under the selected option, red dashed hatch shows a blocked extension. Choosing option A/B/C live-updates the timeline ghosts and the 'Up next' arrivals strip (labelled 'Preview · Option X'). Options use lettered square badges (A red, B green, C navy) and a ✓/✗ check list explaining feasibility. The right column scrolls internally."
+}

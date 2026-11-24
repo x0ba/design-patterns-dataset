@@ -1,0 +1,57 @@
+[
+  {
+    "who": "owner",
+    "message": "GPS elevation is super noisy, total ascent shows 2,100 m for a hike that is really ~1,300 m. How do I smooth it?",
+    "messageId": "3d6ca57f-d9f0-43f9-9291-a6a0665d5935",
+    "isAddedToHistory": true,
+    "sentAt": 1790913600000
+  },
+  {
+    "who": "leon",
+    "message": "Two things together work well:\n\n1. **Smooth** with a moving median (window ~7 points) before anything else — it kills spikes without flattening real climbs.\n2. **Hysteresis** when summing ascent: only count a climb once it exceeds a threshold (≈ 3–5 m) since the last local minimum.\n\n```ts\nfunction totalAscent(elevations: number[], threshold = 4) {\n  let ascent = 0\n  let base = elevations[0]\n  for (const e of elevations) {\n    if (e - base >= threshold) { ascent += e - base; base = e }\n    else if (e < base) base = e\n  }\n  return ascent\n}\n```\n\nOn your sample track that gives about **1,340 m**.",
+    "messageId": "3d6ca57f-d9f0-43f9-9291-a6a0665d5935:leon",
+    "isAddedToHistory": true,
+    "sentAt": 1790913602894,
+    "inference": {
+      "provider": "openrouter",
+      "model": "anthropic/claude-sonnet-5.5",
+      "authMode": "api_key",
+      "credentialSource": "profile_api_key",
+      "endpoint": "https://openrouter.ai/api/v1/chat/completions"
+    },
+    "agentResponseTrace": {
+      "id": "3d6ca57f-d9f0-43f9-9291-a6a0665d5935",
+      "answerStartedAt": 1790913601898,
+      "planSteps": [],
+      "toolCalls": [],
+      "metrics": {
+        "completionCount": 1,
+        "contextUsedTokens": 8878,
+        "contextUsageEstimated": false,
+        "contextWindowTokens": 1000000,
+        "contextUsagePercent": 0.89,
+        "usageAccounting": {
+          "cachedInputTokens": 5327,
+          "cacheReadCompletionCount": 0,
+          "cacheWriteInputTokens": 0,
+          "costUSD": 0.0291,
+          "costCompletionCount": 1,
+          "estimatedCostCompletionCount": 0,
+          "costSources": [
+            "provider-reported"
+          ]
+        },
+        "inputTokens": 8878,
+        "outputTokens": 166,
+        "totalTokens": 9044,
+        "durationMs": 2894,
+        "turnInputTokens": 8878,
+        "turnOutputTokens": 166,
+        "turnTotalTokens": 9044,
+        "ttftMs": 634,
+        "tokensPerSecond": 103,
+        "total_duration_ms": 2894
+      }
+    }
+  }
+]

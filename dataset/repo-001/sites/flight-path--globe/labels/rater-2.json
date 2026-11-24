@@ -1,0 +1,390 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "flight-path--globe",
+    "url": "http://flight-path.localhost:4319/",
+    "finalUrl": "http://flight-path.localhost:4319/",
+    "status": 200,
+    "title": "Flight Path - GPU Instanced Rendering",
+    "capturedAt": "2026-11-18T01:41:27.113Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 900
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "data-visualization",
+    "domainNote": "WebGL/Three.js demo: 3D globe with thousands of GPU-instanced animated flight paths",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/flight-path/explore.json",
+      "repo": {
+        "name": "jeantimex/flight-path",
+        "url": "https://github.com/jeantimex/flight-path",
+        "commit": "3e48cf54741f73861032cb9f73329a0928ef595b",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "globe",
+        "name": "Flight globe",
+        "description": "Full-screen 3D Earth globe with thousands of animated, region-colored planes on dashed great-circle flight arcs, a starfield background, author credit and lat/lng readout."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "scene",
+      "role": "canvas",
+      "label": "Full-viewport 3D Earth globe with dashed colored flight arcs and plane markers over a nebula starfield",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 900
+      },
+      "patterns": [
+        "map-explorer",
+        "object-viewer-3d"
+      ]
+    },
+    {
+      "id": "controls-panel",
+      "role": "control-panel",
+      "label": "dat.GUI 'Open Controls' bar; expands into folders (Flight, Flight Path, Plane, Space, Performance, Earth, Brightness Controls) with sliders, checkboxes, color, select",
+      "bbox": {
+        "x": 1180,
+        "y": 0,
+        "width": 245,
+        "height": 20
+      },
+      "patterns": [
+        "settings",
+        "accordion",
+        "slider",
+        "choice-control",
+        "color-picker"
+      ]
+    },
+    {
+      "id": "footer-overlay",
+      "role": "footer",
+      "label": "GitHub 'Made by jeantimex' credit bottom-left and monospace lat/lng readout bottom-right",
+      "bbox": {
+        "x": 18,
+        "y": 866,
+        "width": 1406,
+        "height": 28
+      },
+      "patterns": []
+    }
+  ],
+  "patterns": [
+    {
+      "id": "map-explorer",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 400,
+            "y": 108,
+            "width": 660,
+            "height": 662
+          },
+          "note": "Satellite-textured 3D globe with flight route polylines and plane markers; day/night shading",
+          "region": "scene"
+        },
+        {
+          "bbox": {
+            "x": 1236,
+            "y": 870,
+            "width": 188,
+            "height": 20
+          },
+          "quote": "Lat: 19.79°, Lng: 135.22°",
+          "note": "Geographic coordinate readout",
+          "region": "footer-overlay"
+        }
+      ],
+      "dims": {
+        "basemap": "satellite-aerial",
+        "overlays": [
+          "routes-and-polylines",
+          "live-traffic-or-vehicles"
+        ],
+        "coupling": "map-only",
+        "mapAdapt": [
+          "dark-night-style"
+        ]
+      }
+    },
+    {
+      "id": "object-viewer-3d",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "The globe is a rendered 3D model presented full-bleed with floating tools, but its purpose is geographic route visualization rather than object inspection; camera controls could not be verified by drag in the capture.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 400,
+            "y": 108,
+            "width": 660,
+            "height": 662
+          },
+          "note": "Rendered 3D Earth model with atmosphere glow, auto-rotating",
+          "region": "scene"
+        }
+      ],
+      "dims": {
+        "appearanceModes": [
+          "realistic-materials"
+        ],
+        "viewerChrome": "full-bleed-with-floating-tools",
+        "sceneGuidance": "free-explore"
+      }
+    },
+    {
+      "id": "settings",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1180,
+            "y": 0,
+            "width": 245,
+            "height": 20
+          },
+          "quote": "Open Controls",
+          "note": "Collapsed dat.GUI panel; DOM holds grouped folders of scene options (Flight Count, Dash Length, Plane Color, Star Cloud, Day/Night Effect, Brightness...)",
+          "region": "controls-panel"
+        }
+      ],
+      "dims": {
+        "ia": "sectioned-page",
+        "controls": [
+          "boolean-toggles",
+          "single-and-multi-select",
+          "numeric-and-ranges"
+        ],
+        "discovery": [
+          "browse-hierarchy"
+        ],
+        "timing": "instant",
+        "safety": [
+          "no-confirm"
+        ]
+      }
+    },
+    {
+      "id": "accordion",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1180,
+            "y": 0,
+            "width": 245,
+            "height": 20
+          },
+          "quote": "Open Controls",
+          "note": "Panel collapses/expands; inside, folders like 'Flight Controls', 'Plane Controls' expand in place with a triangle indicator (verified live)",
+          "region": "controls-panel"
+        }
+      ],
+      "dims": {
+        "policy": "many-at-a-time",
+        "header": [
+          "title-only"
+        ],
+        "toggle": [
+          "header-click"
+        ]
+      }
+    },
+    {
+      "id": "slider",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1180,
+            "y": 0,
+            "width": 245,
+            "height": 20
+          },
+          "note": "Hidden in collapsed panel: Plane Size, Fly Speed, Plane Elevation, Dash Length etc. are dat.GUI slider bars paired with number fields (verified live)",
+          "region": "controls-panel"
+        }
+      ],
+      "dims": {
+        "values": "single-value",
+        "labels": [
+          "current-value"
+        ],
+        "scale": "linear",
+        "precision": [
+          "paired-number-field"
+        ]
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1180,
+            "y": 0,
+            "width": 245,
+            "height": 20
+          },
+          "note": "Hidden in collapsed panel: checkboxes (Return Flight, Hide Path, Star Cloud, Day/Night Effect) and a 'Plane Style' select (Pane/SVG)",
+          "region": "controls-panel"
+        }
+      ],
+      "dims": {
+        "cardinality": "on-or-off",
+        "form": "checkbox-list",
+        "option": [
+          "label-only"
+        ],
+        "timing": "immediately",
+        "largeSets": "show-all"
+      }
+    },
+    {
+      "id": "color-picker",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1180,
+            "y": 0,
+            "width": 245,
+            "height": 20
+          },
+          "quote": "#ff0000",
+          "note": "Plane Color field in collapsed panel; hover opens saturation area + hue strip (verified live)",
+          "region": "controls-panel"
+        }
+      ],
+      "dims": {
+        "form": "area-and-hue-strip",
+        "model": "rgb-or-hex",
+        "target": "a-token-used-everywhere"
+      }
+    },
+    {
+      "id": "chart",
+      "status": "absent",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 400,
+            "y": 108,
+            "width": 660,
+            "height": 662
+          },
+          "note": "Flight arcs are geographic overlays, not a chart with axes/encodings"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "property-inspector",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1180,
+            "y": 0,
+            "width": 245,
+            "height": 20
+          },
+          "note": "Panel holds global scene options, not properties of a selected object"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "single full-bleed WebGL canvas (globe in starfield) with a collapsed dat.GUI control panel pinned top-right, credit link bottom-left and lat/lng readout bottom-right",
+    "regions": [
+      "scene",
+      "controls-panel",
+      "footer-overlay"
+    ],
+    "density": "sparse"
+  },
+  "aesthetics": {
+    "palette": [
+      "#000000",
+      "#303030",
+      "#2a2a2a",
+      "#2fa1d6",
+      "#eeeeee",
+      "#ffffff",
+      "#58a6ff",
+      "#ff0000",
+      "#1e6f8a"
+    ],
+    "colorRoles": {
+      "background": "#000000",
+      "text": "#eeeeee",
+      "surface": "#303030",
+      "primary": "#2fa1d6",
+      "accent": "#ff0000",
+      "link": "#58a6ff",
+      "muted": "#2a2a2a"
+    },
+    "typography": "Lucida Grande 11px for dat.GUI panel labels; Arial 13px inputs and 14px footer credit/link; monospace 12px for lat/lng readout",
+    "typeScale": "Flat, tiny scale: 11-14px only, no headings; weights 400-500 (700 on color hex field)",
+    "shape": "sharp",
+    "elevation": "flat",
+    "borders": "none",
+    "imagery": [
+      "3d-renders",
+      "data-visualization"
+    ],
+    "iconStyle": "filled",
+    "whitespace": "generous",
+    "backgroundTreatment": "image",
+    "mood": [
+      "technical",
+      "cosmic",
+      "immersive",
+      "dark"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T02:19:48.078Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 11,
+    "usage": {
+      "input_tokens": 22,
+      "cache_creation_input_tokens": 26360,
+      "cache_read_input_tokens": 298879,
+      "output_tokens": 7439
+    }
+  },
+  "notes": "Pure WebGL demo: everything is one canvas — a photoreal blue Earth with atmosphere glow, day/night terminator and clouds, set in a starfield with purple/orange nebula, auto-rotating. Thousands of dashed neon flight arcs (yellow-green, magenta, cyan) with instanced plane sprites. Only DOM UI is the stock dark dat.GUI panel (collapsed to 'Open Controls' at capture), a GitHub-icon credit bottom-left, and a monospace lat/lng readout bottom-right. No headings, landmarks, or marketing copy."
+}

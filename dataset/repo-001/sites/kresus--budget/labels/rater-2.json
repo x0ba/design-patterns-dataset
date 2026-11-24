@@ -1,0 +1,478 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "kresus--budget",
+    "url": "http://localhost:4417/#/view/account/1/budget",
+    "finalUrl": "http://localhost:4417/#/view/account/1/budget",
+    "status": 200,
+    "title": "Kresus",
+    "capturedAt": "2026-11-18T05:48:24.678Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1501
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "finance",
+    "domainNote": "self-hosted personal finance manager (Kresus) — monthly budget per category",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/kresus/explore.json",
+      "repo": {
+        "name": "kresusapp/kresus",
+        "url": "https://github.com/kresusapp/kresus",
+        "commit": "574d4de662aeed180abc56a6eee03c36721192d0",
+        "license": "AGPL-3.0"
+      },
+      "view": {
+        "slug": "budget",
+        "name": "Budget",
+        "description": "Monthly budget table per category with real-amount progress bars, editable planned budgets and differences."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Dark top bar with hamburger toggle, KRESUS / Budget title and gear settings menu",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 40
+      },
+      "patterns": [
+        "app-shell",
+        "menu"
+      ]
+    },
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Account navigation: currency global view, banks with collapsible account lists and totals, custom views, section links (Reports, Budget, Charts, Duplicates), version footer",
+      "bbox": {
+        "x": 0,
+        "y": 40,
+        "width": 320,
+        "height": 1461
+      },
+      "patterns": [
+        "app-shell",
+        "tree-view"
+      ]
+    },
+    {
+      "id": "budget-toolbar",
+      "role": "toolbar",
+      "label": "Period dropdown select and Default parameters button",
+      "bbox": {
+        "x": 334,
+        "y": 54,
+        "width": 772,
+        "height": 34
+      },
+      "patterns": [
+        "choice-control"
+      ]
+    },
+    {
+      "id": "budget-table",
+      "role": "data-table",
+      "label": "Budget table: category with colour swatch, real amount progress bar, editable planned budget with sign toggle, difference, link to reports; Uncategorized and Total footer rows",
+      "bbox": {
+        "x": 334,
+        "y": 102,
+        "width": 772,
+        "height": 1364
+      },
+      "patterns": [
+        "data-table",
+        "inline-edit",
+        "text-field",
+        "progress-indicator",
+        "tooltip"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 40
+          },
+          "region": "header",
+          "quote": "KRESUS / Budget",
+          "note": "top bar with hamburger toggle and gear menu"
+        },
+        {
+          "bbox": {
+            "x": 0,
+            "y": 40,
+            "width": 320,
+            "height": 860
+          },
+          "region": "sidebar",
+          "quote": "Budget",
+          "note": "left sidebar with account selection and section destinations"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations",
+          "workspace-switcher"
+        ],
+        "visibility": "toggle-button",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1398,
+            "y": 10,
+            "width": 21,
+            "height": 20
+          },
+          "region": "header",
+          "note": "gear button opens dropdown menu (Dashboard, Categories, Bank accesses, ..., About) — verified live"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "tree-view",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "rationale": "Bank > accounts hierarchy with +/- expand buttons; could also be read as accordion",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 20,
+            "y": 128,
+            "width": 300,
+            "height": 395
+          },
+          "region": "sidebar",
+          "quote": "Crédit Mutuel",
+          "note": "bank nodes with logo, total and +/- disclosure; Crédit Mutuel expanded showing 4 accounts"
+        }
+      ],
+      "dims": {
+        "content": [
+          "label",
+          "type-icon",
+          "status-decoration"
+        ],
+        "selection": "single-node",
+        "source": "containment"
+      }
+    },
+    {
+      "id": "accordion",
+      "status": "absent",
+      "confidence": 0.5,
+      "rationale": "Collapsible bank groups could be an accordion, but they are coded as tree-view (hierarchical nodes with selectable children)",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 20,
+            "y": 128,
+            "width": 300,
+            "height": 395
+          },
+          "note": "collapsible bank groups coded as tree-view instead"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 394,
+            "y": 54,
+            "width": 153,
+            "height": 34
+          },
+          "region": "budget-toolbar",
+          "quote": "This month",
+          "note": "Period native select with months"
+        }
+      ],
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "dropdown-select",
+        "option": [
+          "label-only"
+        ],
+        "timing": "immediately",
+        "largeSets": "scrolling-list"
+      }
+    },
+    {
+      "id": "data-table",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 334,
+            "y": 102,
+            "width": 772,
+            "height": 1364
+          },
+          "region": "budget-table",
+          "quote": "Category Real amount Planned budget Difference",
+          "note": "one row per category, in-cell bars and editable budget inputs, Total footer row"
+        }
+      ],
+      "dims": {
+        "columnSet": "fixed",
+        "cellRendering": [
+          "plain-text",
+          "in-cell-charts",
+          "editable-input"
+        ],
+        "density": "comfortable",
+        "rowExpansion": "none",
+        "selection": "none",
+        "opScope": [
+          "row"
+        ],
+        "aggregation": [
+          "flat",
+          "footer-aggregates"
+        ],
+        "openIn": "new-page"
+      }
+    },
+    {
+      "id": "inline-edit",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 833,
+            "y": 175,
+            "width": 106,
+            "height": 34
+          },
+          "region": "budget-table",
+          "quote": "20",
+          "note": "planned budget always-editable input with sign-toggle button"
+        }
+      ],
+      "dims": {
+        "enter": "always-editable",
+        "unit": "one-field"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 869,
+            "y": 175,
+            "width": 70,
+            "height": 34
+          },
+          "region": "budget-table",
+          "quote": "20",
+          "note": "numeric input with +/- prefix button"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "prefix-or-suffix"
+        ],
+        "style": "outlined"
+      }
+    },
+    {
+      "id": "progress-indicator",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "role=progressbar bars show budget consumption per category, not work in progress",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 538,
+            "y": 182,
+            "width": 274,
+            "height": 20
+          },
+          "region": "budget-table",
+          "quote": "-157.5%",
+          "note": "red bar with percentage of budget; grey bar with raw amount when no budget"
+        }
+      ],
+      "dims": {
+        "determinacy": "percentage",
+        "form": "linear-bar",
+        "coverage": "one-control",
+        "control": "no-control"
+      }
+    },
+    {
+      "id": "chart",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 538,
+            "y": 182,
+            "width": 274,
+            "height": 20
+          },
+          "note": "bars are in-cell progress bars, not a chart"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "tooltip",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 893,
+            "y": 136,
+            "width": 14,
+            "height": 14
+          },
+          "region": "budget-table",
+          "quote": "A negative budget value means a source of expenses, while a positive budget value means a source of income.",
+          "note": "help icon tooltip appears below on hover (verified live)"
+        }
+      ],
+      "dims": {
+        "trigger": [
+          "hover"
+        ],
+        "timing": "until-the-pointer-leaves",
+        "placement": "below"
+      }
+    },
+    {
+      "id": "filter-controls",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 394,
+            "y": 54,
+            "width": 153,
+            "height": 34
+          },
+          "note": "period select changes time window rather than filtering items"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "application view: dark top bar, fixed left account sidebar (320px), content area with toolbar and a single wide budget table (772px), right side empty",
+    "regions": [
+      "header",
+      "sidebar",
+      "budget-toolbar",
+      "budget-table"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#f8f9fa",
+      "#ffffff",
+      "#f5f6f7",
+      "#303641",
+      "#444444",
+      "#717171",
+      "#0d59d2",
+      "#6792d8",
+      "#d9534f",
+      "#757272",
+      "#5bc0de",
+      "#dddddd"
+    ],
+    "colorRoles": {
+      "background": "#f8f9fa",
+      "surface": "#ffffff",
+      "text": "#717171",
+      "heading": "#444444",
+      "primary": "#6792d8",
+      "link": "#0d59d2",
+      "header": "#303641",
+      "danger": "#d9534f",
+      "muted": "#757272",
+      "accent": "#5bc0de",
+      "border": "#dddddd",
+      "sidebar": "#f5f6f7"
+    },
+    "typography": "Open Sans throughout (bold 20px brand, 16px semibold section headings, 14px body and table); FontAwesome icons",
+    "typeScale": "Low contrast: 20px/700 brand title, 16px headings and bank names, 14px everything else; weights 400/600/700",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "filled",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "utilitarian",
+      "bootstrap",
+      "plain",
+      "functional"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T05:49:31.294Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 8,
+    "usage": {
+      "input_tokens": 16,
+      "cache_creation_input_tokens": 30253,
+      "cache_read_input_tokens": 260804,
+      "output_tokens": 4424
+    }
+  },
+  "notes": "Bootstrap 3-era styling (4px radii, info-blue search buttons, danger red bars). Each category has a small colour swatch. Real amount bars are red when over budget showing percent, grey with raw amount when no budget set. Sign-toggle '+' button prefix on budget input. Selected account highlighted with solid blue (#6792d8) bar in sidebar; bank logos as thumbnails; warning icon on Fortuneo. Negative balances in orange-red (#f26c4f), positive amounts in link blue."
+}

@@ -1,0 +1,311 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "bubo-rss--feeds-expanded",
+    "url": "http://bubo-rss.localhost:4319/",
+    "finalUrl": "http://bubo-rss.localhost:4319/",
+    "status": 200,
+    "title": "🦉 Bubo Reader",
+    "capturedAt": "2026-11-18T02:08:50.130Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 2082
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "news-publishing",
+    "domainNote": "self-hosted static RSS/Atom feed reader (Bubo Reader) aggregating developer blogs and news",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/bubo-rss/explore.json",
+      "repo": {
+        "name": "georgemandis/bubo-rss",
+        "url": "https://github.com/georgemandis/bubo-rss",
+        "commit": "d9857c501e58092f3f208463ece64984588c273c",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "feeds-expanded",
+        "name": "Feeds expanded",
+        "description": "The feed page with two feed disclosures opened, showing dated lists of linked article titles under each feed."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "H1 title '🦉 Bubo Reader'",
+      "bbox": {
+        "x": 8,
+        "y": 24,
+        "width": 1424,
+        "height": 42
+      },
+      "patterns": []
+    },
+    {
+      "id": "feed-sections",
+      "role": "content",
+      "label": "Category sections (Developer News, Blogs, Design, Reading & Misc, My GitHub Projects), each a stack of collapsible feeds listing dated headline links",
+      "bbox": {
+        "x": 8,
+        "y": 90,
+        "width": 1424,
+        "height": 1670
+      },
+      "patterns": [
+        "accordion",
+        "feed"
+      ]
+    },
+    {
+      "id": "errors",
+      "role": "status-section",
+      "label": "'Errors' section listing feeds that failed to fetch/parse",
+      "bbox": {
+        "x": 8,
+        "y": 1780,
+        "width": 1424,
+        "height": 160
+      },
+      "patterns": [
+        "banner"
+      ]
+    },
+    {
+      "id": "footer",
+      "role": "footer",
+      "label": "hr, last-updated timestamp, 'Powered by Bubo Reader' credits and sponsor link",
+      "bbox": {
+        "x": 8,
+        "y": 1980,
+        "width": 1424,
+        "height": 95
+      },
+      "patterns": []
+    }
+  ],
+  "patterns": [
+    {
+      "id": "accordion",
+      "status": "present",
+      "confidence": 0.9,
+      "dims": {
+        "policy": "many-at-a-time",
+        "header": [
+          "title-plus-summary-value"
+        ],
+        "toggle": [
+          "header-click",
+          "keyboard"
+        ],
+        "memory": "resets"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 144,
+            "width": 1424,
+            "height": 291
+          },
+          "quote": "Changelog Master Feed (https://changelog.com/feed)",
+          "note": "native <details> open by default, revealing dated post list",
+          "region": "feed-sections"
+        },
+        {
+          "bbox": {
+            "x": 8,
+            "y": 453,
+            "width": 1424,
+            "height": 147
+          },
+          "quote": "WebKit (https://webkit.org/feed/)",
+          "note": "closed details with ▶ triangle; header shows feed title plus grey feed URL",
+          "region": "feed-sections"
+        },
+        {
+          "bbox": {
+            "x": 8,
+            "y": 717,
+            "width": 1424,
+            "height": 354
+          },
+          "quote": "Simon Willison's Weblog",
+          "note": "second open section alongside the first — sections open independently",
+          "region": "feed-sections"
+        }
+      ]
+    },
+    {
+      "id": "feed",
+      "status": "present",
+      "confidence": 0.6,
+      "dims": {
+        "density": "headline",
+        "heterogeneity": [
+          "uniform-posts"
+        ],
+        "ordering": "chronological",
+        "sources": [
+          "followed-accounts"
+        ],
+        "arrangement": "single-column",
+        "nesting": [
+          "flat"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 183,
+            "width": 800,
+            "height": 252
+          },
+          "quote": "11/15/2026 - Changelog & Friends 118: Kaizen! The one with the new CDN",
+          "note": "date + headline link per item, newest first, from subscribed RSS sources",
+          "region": "feed-sections"
+        },
+        {
+          "bbox": {
+            "x": 8,
+            "y": 756,
+            "width": 820,
+            "height": 315
+          },
+          "quote": "11/16/2026 - Quoting a maintainer on why they turned off AI-generated pull requests",
+          "region": "feed-sections"
+        }
+      ],
+      "rationale": "Content is subscribed RSS headlines in date order, but grouped per source inside disclosures rather than one merged scrolling stream; no loading behaviour."
+    },
+    {
+      "id": "banner",
+      "status": "uncertain",
+      "confidence": 0.45,
+      "dims": {
+        "scope": "page",
+        "severity": "warning",
+        "action": "none",
+        "placement": "bottom-bar"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 1780,
+            "width": 1424,
+            "height": 160
+          },
+          "quote": "There were errors trying to parse these feeds:",
+          "note": "unstyled error summary section at end of content",
+          "region": "errors"
+        }
+      ],
+      "rationale": "Conveys a failure condition but is an unstyled ordinary section at the end of the page, not a visually distinct alert surface."
+    },
+    {
+      "id": "tree-view",
+      "status": "absent",
+      "confidence": 0.7,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 90,
+            "width": 1424,
+            "height": 530
+          },
+          "note": "only one level of disclosure; category headings are not collapsible nodes"
+        }
+      ]
+    },
+    {
+      "id": "overview-detail",
+      "status": "absent",
+      "confidence": 0.7,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 183,
+            "width": 800,
+            "height": 252
+          },
+          "note": "headline links go to external sites; no in-app detail view"
+        }
+      ]
+    }
+  ],
+  "structure": {
+    "layout": "single-column unstyled HTML document: h1 title, h2 category sections each containing a stack of <details> feed disclosures with dated headline lists, an errors section, hr and footer",
+    "regions": [
+      "header",
+      "feed-sections",
+      "errors",
+      "footer"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#000000",
+      "#0000ee",
+      "#aaaaaa"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "text": "#000000",
+      "primary": "#0000ee",
+      "muted": "#aaaaaa",
+      "border": "#aaaaaa"
+    },
+    "typography": "system-ui throughout (browser-default sans) for headings, summaries, dates and links",
+    "typeScale": "browser defaults: h1 36px bold, h2 27px bold, everything else 18px regular; hierarchy only from heading weight/size and grey URL text",
+    "shape": "sharp",
+    "elevation": "flat",
+    "borders": "none",
+    "imagery": [
+      "none"
+    ],
+    "iconStyle": "none",
+    "whitespace": "tight",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "brutalist",
+      "minimal",
+      "utilitarian",
+      "technical",
+      "raw"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T02:09:45.150Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 7,
+    "usage": {
+      "input_tokens": 14,
+      "cache_creation_input_tokens": 15548,
+      "cache_read_input_tokens": 162977,
+      "output_tokens": 5505
+    }
+  },
+  "notes": "Essentially unstyled HTML: default blue (#0000ee) underlined links, default disclosure triangles of <details>/<summary>, bullet lists of 'M/D/YYYY - Title' items, grey (#aaaaaa) feed URLs in parentheses next to each feed name. Only emoji owl in title and ❤️ in footer add visual flavour. Two feeds open by default (Changelog, Simon Willison). Footer shows 'Last updated' build timestamp — a statically generated page. Errors section exposes raw fetch/parse error messages."
+}

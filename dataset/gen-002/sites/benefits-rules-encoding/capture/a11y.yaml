@@ -1,0 +1,165 @@
+- banner:
+  - text: Statute Loom SNAP eligibility / State rule model /
+  - strong: Working draft
+  - text: Draft on r27 · no changes Results current
+  - button "Run all tests"
+  - button "Save revision…"
+  - text: KA Kwame Asante
+- status:
+  - strong: 3 of 12 test households fail on the last run
+  - text: ": T-04, T-07, T-11. All of them include an elderly or disabled member. The legal advisor expects each to be eligible."
+  - button "Open failing cases"
+- complementary:
+  - text: 63 Steps 81 Connections 27 Revisions 2 Open notes Parameters effective 2026-10-01 Sections
+  - list:
+    - listitem:
+      - button "All steps 63"
+    - listitem:
+      - button "Non-financial criteria 7"
+    - listitem:
+      - button "Resources 4"
+    - listitem:
+      - button "Gross and net income tests 7"
+    - listitem:
+      - button "Deductions and shelter 17"
+    - listitem:
+      - button "Eligibility and benefit amount 8"
+    - listitem:
+      - button "Verification and certification 5"
+    - listitem:
+      - button "Study flags 3"
+    - listitem:
+      - button "Outcomes 12"
+  - text: 2025 amendment 461-160-0015 (amended 2025) Gross income test for households with an elderly or disabled member
+  - list:
+    - listitem:
+      - code: gross_test
+      - text: not cited
+    - listitem:
+      - code: net_test
+      - text: not cited
+    - listitem:
+      - code: income_test
+      - text: not cited
+  - text: 0 of 3 affected steps cite the amendment.
+  - button "Attach to 3 unattached steps"
+  - text: Demo paraphrase in the registry. Check wording against the official text. Open notes
+  - list:
+    - listitem:
+      - button "medical_ded medical_excess takes the $35 threshold off the household total. Should the threshold… Hye-jin · 2026-11-12 10:14":
+        - code: medical_ded
+        - text: medical_excess takes the $35 threshold off the household total. Should the threshold… Hye-jin · 2026-11-12 10:14
+    - listitem:
+      - button "shelter_ded shelter_ded drops the cap whenever eld_dis_members > 0. Should that read \"any\" elder… Hye-jin · 2026-11-15 16:02":
+        - code: shelter_ded
+        - text: shelter_ded drops the cap whenever eld_dis_members > 0. Should that read "any" elder… Hye-jin · 2026-11-15 16:02
+- tablist:
+  - tab "Rule steps" [selected]
+  - tab "Graph"
+  - tab "Test households 3"
+  - tab "Parameters"
+  - tab "Sources and amendment"
+  - tab "Revisions"
+- text: Gross and net income tests Gross and net standards. The 2025 amendment changes how the gross test applies to elderly or disabled households.
+- textbox "Filter steps":
+  - /placeholder: Filter by id, label or expression
+- button "+ Add condition"
+- text: 7 steps · Values for
+- strong: T-04
+- text: (failing)
+- button "Show all sections"
+- article:
+  - code: gross_income
+  - text: Calculation 2,350 Gross monthly income earned + unearned 7 CFR 273.9(a) ← 0 steps → 3 · reads 2 inputs · Gross and net income tests
+- article:
+  - code: gross_limit_row
+  - text: Calculation 2,292 Gross limit for household size gross_limit 7 CFR 273.9(a) ← 0 steps → 2 · reads 1 input · Gross and net income tests
+- article:
+  - code: net_limit_row
+  - text: Calculation 1,763 Net limit for household size net_limit 7 CFR 273.9(a) ← 0 steps → 2 · reads 1 input · Gross and net income tests
+- article:
+  - code: gross_test
+  - text: Condition Amendment reaches this step false Gross income test gross_income <= gross_limit_row 7 CFR 273.9(a) ← 2 steps → 5 · Gross and net income tests
+- article:
+  - code: net_income
+  - text: Calculation 1,696 Net monthly income max(0, pre_shelter - shelter_ded) 7 CFR 273.9(a) ← 2 steps → 3 · Gross and net income tests
+- article:
+  - code: net_test
+  - text: Condition Amendment reaches this step false Net income test gross_test && net_income <= net_limit_row 7 CFR 273.9(a) ← 3 steps → 4 · Gross and net income tests
+- article:
+  - code: income_test
+  - text: Condition Amendment reaches this step false Income tests passed gross_test && net_test 7 CFR 273.9(a) ← 2 steps → 1 · Gross and net income tests
+- complementary:
+  - code: gross_test
+  - text: Condition Amendment reaches this step Gross income test Gross and net income tests Rule Label
+  - textbox "Label": Gross income test
+  - text: Expression
+  - textbox "Expression": gross_income <= gross_limit_row
+  - text: Must read true or false. Names that match a step create a connection. Other names read a household input or parameter.
+  - button "Apply change" [disabled]
+  - button "Revert" [disabled]
+  - text: Connections Reads 2 steps
+  - list:
+    - listitem:
+      - button "gross_income"
+      - text: Gross monthly income 2,350
+    - listitem:
+      - button "gross_limit_row"
+      - text: Gross limit for household size 2,292
+  - text: Read by 5 steps
+  - list:
+    - listitem:
+      - button "net_test"
+      - text: Net income test
+    - listitem:
+      - button "income_test"
+      - text: Income tests passed
+    - listitem:
+      - button "reason_code"
+      - text: Reason code
+    - listitem:
+      - button "outcome_gross_pass"
+      - text: Gross test result
+    - listitem:
+      - button "outcome_path"
+      - text: Test path taken
+  - text: Value for test case
+  - combobox "Test case":
+    - option "T-01 · Single adult, wages"
+    - option "T-02 · Family of three, wages, care needed for work"
+    - option "T-03 · Family of four, unearned income over gross limit"
+    - option "T-04 · Elderly couple, Social Security, high medical costs" [selected]
+    - option "T-05 · Single adult, wages, heating billed separately"
+    - option "T-06 · Two adults, SSN not provided for one member"
+    - option "T-07 · Single adult with disability, SSDI"
+    - option "T-08 · Three adults, pension over net limit"
+    - option "T-09 · Two adults, earned income over gross limit"
+    - option "T-10 · Two adults, cash over resource limit"
+    - option "T-11 · Single adult aged 61 with disability, wages over gross limit"
+    - option "T-12 · Two adults, heating billed, vehicle under exclusion"
+  - text: gross_test = false Citations 7 CFR 273.9(a)
+  - combobox "Citation to attach":
+    - option "Attach a citation…" [selected]
+    - option "7 CFR 273.1 · Household concept"
+    - option "7 CFR 273.2(f) · Verification"
+    - option "7 CFR 273.3 · Residency"
+    - option "7 CFR 273.4 · Citizenship and alien status"
+    - option "7 CFR 273.5 · Students"
+    - option "7 CFR 273.6 · Social security numbers"
+    - option "7 CFR 273.7 · Work requirements"
+    - option "7 CFR 273.8 · Resource eligibility standards"
+    - option "7 CFR 273.9(d) · Deductions from income"
+    - option "7 CFR 273.10 · Determining eligibility and benefit levels"
+    - option "7 CFR 273.10(e) · Computing the benefit"
+    - option "7 CFR 273.10(f) · Certification periods"
+    - option "7 CFR 273.13 · Notice of adverse action"
+    - 'option "7 CFR 271.2 · Definitions: elderly or disabled member"'
+    - option "461-160-0015 (amended 2025) · Gross income test for households with an elderly or disabled member"
+    - option "Lab protocol §2.3 · Borderline-case flag"
+  - button "Attach" [disabled]
+  - text: This step is reached by the 2025 amendment and does not cite it yet.
+  - button "Attach 461-160-0015 (amended 2025)"
+  - text: Tags
+  - 'checkbox "Income standard: the 2025 amendment reaches this step" [checked]'
+  - strong: Income standard
+  - text: ": the 2025 amendment reaches this step Notes (0 open) No notes on this step. Remove step Other steps read this one (net_test, income_test, reason_code, outcome_gross_pass, outcome_path). Rewire them first."

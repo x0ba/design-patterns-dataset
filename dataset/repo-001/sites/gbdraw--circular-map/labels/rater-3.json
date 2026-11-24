@@ -1,0 +1,707 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "gbdraw--circular-map",
+    "url": "http://gbdraw.localhost:4319/",
+    "finalUrl": "http://gbdraw.localhost:4319/",
+    "status": 200,
+    "title": "gbdraw Web App",
+    "capturedAt": "2026-11-18T03:01:30.919Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1471
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "science-research",
+    "domainNote": "bioinformatics: web app for drawing circular/linear genome maps from GenBank/GFF3 files (gbdraw)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/gbdraw/explore.json",
+      "repo": {
+        "name": "satoshikawato/gbdraw",
+        "url": "https://github.com/satoshikawato/gbdraw",
+        "commit": "033a3aa899a6966925df6f413bd29e4a2d342777",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "circular-map",
+        "name": "Circular genome map",
+        "description": "Circular mode: settings pane for a single GenBank record and the preview canvas showing the MjeNMV circular genome map with labeled features, GC content/skew tracks and legend."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Logo, undo/redo/history, Reset/Save/Load Session, Load example, Gallery link, session name, Circular/Linear segmented toggle, language select",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 56
+      },
+      "patterns": [
+        "app-shell",
+        "undo",
+        "choice-control"
+      ]
+    },
+    {
+      "id": "settings-sidebar",
+      "role": "sidebar",
+      "label": "Settings panel: icon section-jump nav, Input Genomes card (format radios, file chooser, record select), Basic fields, collapsible sections (Region Annotations, Pairwise Comparisons, Layout, Font...), Generate Diagram button",
+      "bbox": {
+        "x": 16,
+        "y": 68,
+        "width": 320,
+        "height": 1360
+      },
+      "patterns": [
+        "form",
+        "settings",
+        "accordion",
+        "file-upload",
+        "choice-control",
+        "text-field",
+        "contextual-help",
+        "tooltip"
+      ]
+    },
+    {
+      "id": "preview-panel",
+      "role": "main-content",
+      "label": "Result Preview: Preview/Run info tabs, DPI select and SVG/Interactive SVG/PNG/PDF export buttons, feature search bar, circular genome map with legend, Editor drawer tab, bottom Reset Layout/Layout edit/Canvas padding/Search + zoom controls",
+      "bbox": {
+        "x": 356,
+        "y": 68,
+        "width": 1068,
+        "height": 1351
+      },
+      "patterns": [
+        "tabs",
+        "chart",
+        "drawer",
+        "choice-control",
+        "text-field"
+      ]
+    },
+    {
+      "id": "footer",
+      "role": "footer",
+      "label": "Disclaimer, license, gallery, GitHub and author links",
+      "bbox": {
+        "x": 0,
+        "y": 1439,
+        "width": 1440,
+        "height": 32
+      },
+      "patterns": []
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 56
+          },
+          "region": "header",
+          "note": "Persistent top toolbar with identity, session actions and mode toggle",
+          "quote": "gbdraw"
+        },
+        {
+          "bbox": {
+            "x": 16,
+            "y": 68,
+            "width": 312,
+            "height": 36
+          },
+          "region": "settings-sidebar",
+          "note": "Icon jump-nav to settings sections plus collapse-to-icons button",
+          "quote": "Settings sections"
+        }
+      ],
+      "dims": {
+        "primary": "top-navigation-bar",
+        "secondary": "contextual-panel",
+        "items": [
+          "fixed-destinations"
+        ],
+        "visibility": "toggle-button",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "form",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 16,
+            "y": 112,
+            "width": 312,
+            "height": 348
+          },
+          "region": "settings-sidebar",
+          "note": "Input Genomes section: format radios, file chooser, record select",
+          "quote": "Input Genomes"
+        },
+        {
+          "bbox": {
+            "x": 16,
+            "y": 468,
+            "width": 312,
+            "height": 191
+          },
+          "region": "settings-sidebar",
+          "note": "Basic section with top-aligned labels, placeholder examples, help icons",
+          "quote": "Output Prefix"
+        },
+        {
+          "bbox": {
+            "x": 20,
+            "y": 1354,
+            "width": 312,
+            "height": 68
+          },
+          "region": "settings-sidebar",
+          "note": "Primary submit; fields marked 'Applies on Generate'",
+          "quote": "Generate Diagram"
+        }
+      ],
+      "dims": {
+        "labels": "top-aligned",
+        "columns": "single-column",
+        "grouping": "collapsible-optional-sections",
+        "prefill": "smart-defaults",
+        "help": [
+          "tooltip-help",
+          "format-examples"
+        ],
+        "commit": "submit-button"
+      }
+    },
+    {
+      "id": "settings",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "The sidebar is a large catalog of rendering options with section jump-nav and Reset Settings, but options are per-diagram generation parameters committed with Generate, so it may be better read only as a form.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 22,
+            "y": 73,
+            "width": 265,
+            "height": 26
+          },
+          "region": "settings-sidebar",
+          "note": "Section jump nav labelled 'Settings sections'",
+          "quote": "Settings sections"
+        },
+        {
+          "bbox": {
+            "x": 282,
+            "y": 13,
+            "width": 102,
+            "height": 30
+          },
+          "region": "header",
+          "quote": "Reset Settings"
+        }
+      ],
+      "dims": {
+        "ia": "sectioned-page",
+        "controls": [
+          "boolean-toggles",
+          "single-and-multi-select",
+          "numeric-and-ranges",
+          "text-and-credentials"
+        ],
+        "discovery": [
+          "browse-hierarchy"
+        ],
+        "timing": "save-button",
+        "safety": [
+          "reset-to-default"
+        ]
+      }
+    },
+    {
+      "id": "accordion",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 29,
+            "y": 345,
+            "width": 286,
+            "height": 48
+          },
+          "region": "settings-sidebar",
+          "note": "details/summary disclosure with chevron",
+          "quote": "Single-record crop, orientation and titles"
+        },
+        {
+          "bbox": {
+            "x": 16,
+            "y": 668,
+            "width": 312,
+            "height": 45
+          },
+          "region": "settings-sidebar",
+          "note": "Collapsed section header with Applies-on-Generate and help icons",
+          "quote": "Region Annotations"
+        },
+        {
+          "bbox": {
+            "x": 16,
+            "y": 722,
+            "width": 312,
+            "height": 45
+          },
+          "region": "settings-sidebar",
+          "quote": "Pairwise Comparisons"
+        }
+      ],
+      "dims": {
+        "policy": "many-at-a-time",
+        "header": [
+          "title-only",
+          "status-indicator"
+        ],
+        "toggle": [
+          "header-click"
+        ]
+      }
+    },
+    {
+      "id": "file-upload",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 29,
+            "y": 206,
+            "width": 286,
+            "height": 32
+          },
+          "region": "settings-sidebar",
+          "note": "Dashed-border chooser button",
+          "quote": "Choose GenBank/DDBJ File"
+        }
+      ],
+      "dims": {
+        "entry": [
+          "browse-button"
+        ],
+        "multiplicity": "single-file"
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 29,
+            "y": 155,
+            "width": 232,
+            "height": 34
+          },
+          "region": "settings-sidebar",
+          "note": "Radio pair for input format",
+          "quote": "GenBank"
+        },
+        {
+          "bbox": {
+            "x": 1049,
+            "y": 12,
+            "width": 190,
+            "height": 32
+          },
+          "region": "header",
+          "note": "Circular / Linear segmented toggle",
+          "quote": "Circular"
+        },
+        {
+          "bbox": {
+            "x": 29,
+            "y": 280,
+            "width": 286,
+            "height": 25
+          },
+          "region": "settings-sidebar",
+          "note": "Record dropdown select",
+          "quote": "Automatic (single record)"
+        },
+        {
+          "bbox": {
+            "x": 29,
+            "y": 616,
+            "width": 286,
+            "height": 30
+          },
+          "region": "settings-sidebar",
+          "note": "Checkbox",
+          "quote": "Rich Feature Popup"
+        }
+      ],
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "radio-list",
+        "option": [
+          "label-only"
+        ],
+        "timing": "on-submit",
+        "largeSets": "show-all"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 29,
+            "y": 513,
+            "width": 286,
+            "height": 42
+          },
+          "region": "settings-sidebar",
+          "note": "Labelled input with placeholder",
+          "quote": "Output Prefix"
+        },
+        {
+          "bbox": {
+            "x": 29,
+            "y": 563,
+            "width": 286,
+            "height": 45
+          },
+          "region": "settings-sidebar",
+          "quote": "e.g., Escherichia coli"
+        },
+        {
+          "bbox": {
+            "x": 791,
+            "y": 171,
+            "width": 120,
+            "height": 26
+          },
+          "region": "preview-panel",
+          "note": "Feature search input",
+          "quote": "Search features"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "label",
+          "placeholder",
+          "format-examples"
+        ],
+        "style": "outlined",
+        "inputType": "plain"
+      }
+    },
+    {
+      "id": "contextual-help",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 72,
+            "y": 261,
+            "width": 15,
+            "height": 15
+          },
+          "region": "settings-sidebar",
+          "note": "Help icon next to Record; click opens dark explanation bubble (verified live)"
+        },
+        {
+          "bbox": {
+            "x": 140,
+            "y": 512,
+            "width": 16,
+            "height": 16
+          },
+          "region": "settings-sidebar",
+          "note": "Help: Output Prefix icon"
+        }
+      ],
+      "dims": {
+        "access": [
+          "info-icon"
+        ],
+        "content": [
+          "definitions",
+          "step-instructions"
+        ],
+        "placement": "popover-at-the-field",
+        "proactivity": "on-request",
+        "relevance": "field"
+      }
+    },
+    {
+      "id": "tooltip",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 72,
+            "y": 261,
+            "width": 15,
+            "height": 15
+          },
+          "region": "settings-sidebar",
+          "note": "Clicking the help icon shows a dark multi-line tooltip bubble above the field: 'Select the record to draw as one Circular diagram...'"
+        }
+      ],
+      "dims": {
+        "trigger": [
+          "info-icon-click"
+        ],
+        "content": "rich-content",
+        "placement": "above"
+      }
+    },
+    {
+      "id": "undo",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 178,
+            "y": 19,
+            "width": 79,
+            "height": 17
+          },
+          "region": "header",
+          "note": "Undo, Redo, History icon buttons (disabled in capture)"
+        }
+      ],
+      "dims": {
+        "unit": "many-levels",
+        "access": [
+          "toolbar-button",
+          "history-panel"
+        ],
+        "window": "session",
+        "multiUser": "single-user-stack"
+      }
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 527,
+            "y": 78,
+            "width": 182,
+            "height": 32
+          },
+          "region": "preview-panel",
+          "note": "Preview (pressed) / Run info (disabled) toggle switching panel content",
+          "quote": "Preview"
+        }
+      ],
+      "dims": {
+        "placement": "segmented-control",
+        "label": [
+          "text",
+          "icon"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      }
+    },
+    {
+      "id": "chart",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 476,
+            "y": 292,
+            "width": 828,
+            "height": 541
+          },
+          "region": "preview-panel",
+          "note": "Circular genome map: feature blocks on rings, GC content and GC skew tracks, kbp ticks, callout labels and color legend",
+          "quote": "306,008 bp"
+        }
+      ],
+      "dims": {
+        "markType": "arcs",
+        "channels": [
+          "position",
+          "length",
+          "colour-hue-or-value"
+        ],
+        "scale": "radial",
+        "faceting": "layered-series",
+        "authorship": "builder-ui",
+        "annotation": [
+          "callout-labels"
+        ],
+        "adaptation": "fixed-desktop-chart"
+      }
+    },
+    {
+      "id": "drawer",
+      "status": "present",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1388,
+            "y": 470,
+            "width": 36,
+            "height": 60
+          },
+          "region": "preview-panel",
+          "note": "Edge tab 'Editor'; live click slides in a right Editor panel (Legend / Features / Similarity groups list) that narrows the preview",
+          "quote": "Editor"
+        }
+      ],
+      "dims": {
+        "edge": "right",
+        "relationship": "push-content",
+        "holds": "settings",
+        "responsive": "always-docked"
+      }
+    },
+    {
+      "id": "view-switcher",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1049,
+            "y": 12,
+            "width": 190,
+            "height": 32
+          },
+          "note": "Circular/Linear switches diagram mode (regenerates), not a collection view"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "product-configurator",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 16,
+            "y": 112,
+            "width": 312,
+            "height": 348
+          },
+          "note": "Parameter panel builds a diagram, not a purchasable product"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "Desktop tool app shell: top toolbar header, scrolling left settings sidebar (accordion sections + sticky Generate button), large right result preview panel with an export toolbar, a floating feature-search bar, a circular genome diagram, and a bottom zoom/layout toolbar; slim footer",
+    "regions": [
+      "header",
+      "settings-sidebar",
+      "preview-panel",
+      "footer"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#eef2f6",
+      "#ffffff",
+      "#f8fafc",
+      "#334155",
+      "#1e293b",
+      "#64748b",
+      "#2563eb",
+      "#eff6ff",
+      "#e2e8f0",
+      "#cbd5e1"
+    ],
+    "colorRoles": {
+      "background": "#eef2f6",
+      "surface": "#ffffff",
+      "text": "#334155",
+      "heading": "#1e293b",
+      "muted": "#64748b",
+      "primary": "#2563eb",
+      "accent": "#eff6ff",
+      "border": "#e2e8f0",
+      "subtle-surface": "#f8fafc"
+    },
+    "typography": "Inter for all UI (labels, buttons, headings); ui-monospace for the DPI value; Liberation Sans/Arial inside the SVG diagram labels and the feature search bar",
+    "typeScale": "Compact tool scale: 18px/700 Generate button and section titles, 16-14px/600-700 section headers and buttons, 12px labels, 11px toolbar buttons, 10px input text, 8px diagram labels; weight carries hierarchy more than size",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "data-visualization",
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "technical",
+      "clean",
+      "utilitarian",
+      "scientific"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T03:04:06.583Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 14,
+    "usage": {
+      "input_tokens": 28,
+      "cache_creation_input_tokens": 54462,
+      "cache_read_input_tokens": 576241,
+      "output_tokens": 8045
+    }
+  },
+  "notes": "Slate/blue Tailwind-like palette on a cool grey #eef2f6 canvas with white rounded (12px) cards. Many fields carry a small circular 'Applies on Generate' marker plus a '?' help icon, signalling deferred application. Left sidebar has a row of tiny line icons as a section jump-nav with a collapse-to-icons chevron, and a big full-width blue Generate Diagram button pinned at the bottom. The preview shows a white 'paper' with a dense circular genome map (grey CDS blocks, teal/purple GC skew, legend). A floating feature search bar (field select, regex checkbox, prev/next/open/clear) overlays the preview; bottom centered toolbar holds layout edit and zoom (55%, Fit). A collapsed 'Editor' drawer tab sits at the right edge. Header also includes a 17-language selector and session save/load. In-diagram feature search has no exact codebook entry (find-in-artifact)."
+}

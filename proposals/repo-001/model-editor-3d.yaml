@@ -1,0 +1,208 @@
+# Codebook proposal (new-entry) — review with: node scripts/proposals.ts show repo-001 model-editor-3d
+id: model-editor-3d
+kind: new-entry
+status: open
+batch: repo-001
+codebookVersion: 1.0.0
+name: 3D model editor
+level: pattern
+parent: create
+definition: Authoring a three-dimensional model or scene by directly manipulating elements in a
+  perspective viewport with transform gizmos, alongside a scene-hierarchy outliner, a numeric
+  transform inspector, and texture/UV or material panels; often with workspace modes
+  (Edit/Paint/Animate).
+aliases:
+  - 3D modeling tool
+  - DCC tool
+  - scene editor
+  - voxel/box modeler
+relations:
+  neighbors:
+    - canvas-editor
+    - object-viewer-3d
+    - timeline-editor
+  uses:
+    - tree-view
+    - property-inspector
+    - tabs
+    - menu
+    - tooltip
+dimensions:
+  - name: Workspace modes
+    family: composition
+    question: Which authoring modes does the editor offer?
+    subdimensions:
+      - id: modes
+        name: Modes
+        select: many
+        values:
+          - id: modeling
+            name: Modeling/edit
+          - id: texture-paint
+            name: Texture paint
+          - id: animate
+            name: Animate
+          - id: uv-edit
+            name: UV editing
+          - id: single-mode
+            name: Single mode
+          - id: mode-tabs
+            name: Mode tabs
+            example: Blockbench Edit/Paint/Animate
+          - id: workspace-presets
+            name: Workspace presets
+            example: Blender workspaces
+          - id: single-workspace
+            name: Single workspace
+  - name: Manipulation
+    family: invocation
+    question: How are parts transformed?
+    subdimensions:
+      - id: manipulation
+        name: Manipulation
+        select: many
+        values:
+          - id: viewport-gizmo
+            name: Viewport gizmo
+            example: Blockbench move arrows
+          - id: numeric-fields
+            name: Numeric fields
+            example: Blockbench Transform panel
+          - id: keyboard-modal
+            name: Keyboard modal transforms
+            example: Blender G/R/S
+          - id: gizmo
+            name: Viewport gizmo
+          - id: snapping-grid
+            name: Grid snapping
+  - name: Geometry primitive
+    family: composition
+    question: What is the model built from?
+    subdimensions:
+      - id: primitive
+        name: Primitive
+        select: one
+        values:
+          - id: cubes-boxes
+            name: Cubes / boxes
+            example: Blockbench
+          - id: polygon-mesh
+            name: Polygon mesh
+            example: Blender
+          - id: parametric-solids
+            name: Parametric solids
+            example: Onshape
+          - id: voxels
+            name: Voxels
+            example: MagicaVoxel
+rationale:
+  - rater: rater-2
+    site: blockbench--edit-mode
+    text: "canvas-editor is defined as a 2D canvas (frames, artboards, slides) and object-viewer-3d
+      covers inspection only (orbit, explode), not authoring. Blockbench, Blender, Unity scene view,
+      Spline share a distinct anatomy: 3D viewport with move/rotate/scale gizmos and axis indicator,
+      outliner of grouped meshes/bones, XYZ transform fields, UV/texture editor, and mode switcher.
+      No existing entry captures creation in 3D space."
+  - rater: rater-1
+    site: blockbench--animate-mode
+    text: canvas-editor is explicitly 2D (canvas, frames, artboards) and object-viewer-3d covers
+      inspection only, not authoring. Blockbench, Blender, Spline, Tinkercad etc. are creation tools
+      in 3D space with move/rotate/scale gizmos, pivot points, mode switching (Edit/Paint/Animate)
+      and texture UV mapping.
+  - rater: rater-2
+    site: blockbench--animate-mode
+    text: canvas-editor is explicitly 2D (canvas, frames, artboards) and object-viewer-3d is
+      inspection-only; neither covers authoring in 3D with gizmos, outliner and mode tabs
+      (Blockbench, Blender, Spline).
+  - rater: rater-3
+    site: blockbench--animate-mode
+    text: canvas-editor is defined as 2D canvas/artboards and object-viewer-3d is for inspection only;
+      neither covers authoring 3D geometry with gizmos, pivot points, UV maps and Edit/Paint/Animate
+      workspace modes.
+sources:
+  - batch: repo-001
+    site: blockbench--edit-mode
+    url: http://blockbench.localhost:4319/
+    note: proposed by rater-2
+  - batch: repo-001
+    site: blockbench--animate-mode
+    url: http://blockbench.localhost:4319/
+    note: proposed by rater-1, rater-2, rater-3
+evidence:
+  - site: blockbench--edit-mode
+    rater: rater-2
+    bbox:
+      x: 368
+      y: 104
+      width: 756
+      height: 1025
+    note: 3D viewport with transform gizmo, ground grid and XYZ axis widget
+  - site: blockbench--edit-mode
+    rater: rater-2
+    bbox:
+      x: 1124
+      y: 104
+      width: 316
+      height: 870
+    note: Transform inspector (Position/Size/Pivot/Rotation XYZ) and Outliner hierarchy
+  - site: blockbench--edit-mode
+    rater: rater-2
+    bbox:
+      x: 1184
+      y: 68
+      width: 250
+      height: 32
+    quote: Edit Paint Animate
+    note: workspace modes
+  - site: blockbench--animate-mode
+    rater: rater-1
+    bbox:
+      x: 368
+      y: 104
+      width: 756
+      height: 1025
+    note: 3D viewport with transform gizmo on selected cube group, grid floor and axis widget
+  - site: blockbench--animate-mode
+    rater: rater-1
+    bbox:
+      x: 1184
+      y: 68
+      width: 250
+      height: 32
+    note: Mode switcher
+    quote: Edit
+  - site: blockbench--animate-mode
+    rater: rater-2
+    bbox:
+      x: 368
+      y: 104
+      width: 756
+      height: 1025
+    note: 3D viewport with move gizmo, grid floor and axis widget
+  - site: blockbench--animate-mode
+    rater: rater-2
+    bbox:
+      x: 1124
+      y: 104
+      width: 316
+      height: 1053
+    note: Transform inspector + Outliner hierarchy
+  - site: blockbench--animate-mode
+    rater: rater-3
+    bbox:
+      x: 368
+      y: 104
+      width: 756
+      height: 1025
+    note: 3D viewport with move gizmo, grid floor and axis widget
+  - site: blockbench--animate-mode
+    rater: rater-3
+    bbox:
+      x: 1124
+      y: 104
+      width: 314
+      height: 250
+    quote: Pivot Point
+    note: Transform inspector with Position/Size/Pivot/Rotation
+createdAt: 2026-11-18T01:46:02.616Z
+updatedAt: 2026-11-18T02:24:13.519Z

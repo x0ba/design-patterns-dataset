@@ -1,0 +1,583 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "gen-002",
+  "site": {
+    "slug": "photo-studio-bay-scheduling",
+    "url": "http://photo-studio-bay-scheduling.localhost:4318/",
+    "finalUrl": "http://photo-studio-bay-scheduling.localhost:4318/",
+    "status": 200,
+    "title": "Baylight · Northlight Studios",
+    "capturedAt": "2026-11-17T22:19:17.956Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1381
+    },
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "travel-hospitality",
+    "domainNote": "Front-desk app for a photo studio that rents out bays: a resource-timeline schedule of bays and kit, plus a panel for deciding a booking-extension request",
+    "provenance": {
+      "source": "generated",
+      "generation": "generated/gen-002/photo-studio-bay-scheduling/generation.json",
+      "generator": {
+        "id": "haiku",
+        "model": "claude-haiku-5-5",
+        "effort": "high"
+      },
+      "brief": {
+        "domain": "design-creative",
+        "archetype": "schedule",
+        "context": "shared-screen",
+        "product": "Baylight"
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Dark top bar with Baylight logo/studio name, centered date and large current time, and the staff on desk shown on the right with a presence dot",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 64
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "schedule",
+      "role": "resource-timeline",
+      "label": "Today's bays and kit reservations: horizontal 8 AM–10 PM time axis with a red now-line, bay rows with booking blocks and hatched clean-down gaps, and kit/backdrop reservation rows with thin bars",
+      "bbox": {
+        "x": 20,
+        "y": 76,
+        "width": 1034,
+        "height": 1130
+      },
+      "patterns": [
+        "calendar",
+        "gantt-timeline",
+        "coordinated-views",
+        "overview-detail"
+      ]
+    },
+    {
+      "id": "up-next",
+      "role": "card-strip",
+      "label": "Up next · what to tell arrivals: four arrival cards with time, bay badge, client and readiness note, previewing the selected option",
+      "bbox": {
+        "x": 20,
+        "y": 1216,
+        "width": 1034,
+        "height": 153
+      },
+      "patterns": [
+        "card",
+        "badge",
+        "coordinated-views"
+      ]
+    },
+    {
+      "id": "decision-panel",
+      "role": "sidebar",
+      "label": "Extension decision side panel: request summary with three value tiles and a constraint callout, an accordion of options A/B/C with status pills, checks and an Apply button, and the selected-booking detail",
+      "bbox": {
+        "x": 1068,
+        "y": 64,
+        "width": 372,
+        "height": 1317
+      },
+      "patterns": [
+        "accordion",
+        "badge",
+        "stat-tile",
+        "banner",
+        "overview-detail"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "calendar",
+      "status": "present",
+      "confidence": 0.75,
+      "dims": {
+        "gridFields": [
+          "title-and-time",
+          "status-marks"
+        ],
+        "detailDepth": "side-panel",
+        "primaryView": "day",
+        "multiLayout": "side-by-side-columns"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 20,
+            "y": 76,
+            "width": 1034,
+            "height": 290
+          },
+          "region": "schedule",
+          "note": "Single-day resource schedule: one row per bay, booking blocks showing client, time, crew and deposit status, and a now-line",
+          "quote": "Lena Strauss 10 AM–2 PM 5 crew · deposit paid"
+        },
+        {
+          "bbox": {
+            "x": 1083,
+            "y": 1124,
+            "width": 343,
+            "height": 243
+          },
+          "region": "decision-panel",
+          "note": "Clicking a booking block updates the Selected booking detail in the side panel",
+          "quote": "SELECTED BOOKING · IN SESSION"
+        }
+      ]
+    },
+    {
+      "id": "gantt-timeline",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "These are horizontal bars on a time axis with a today/now line and swimlanes per resource, which reads like a Gantt chart. But the bars are bookings, not project tasks, so a resource calendar is the better fit.",
+      "dims": {
+        "barAttrs": [
+          "title-on-bar",
+          "health-or-status-colour"
+        ],
+        "rowHierarchy": "swimlanes-by-person-or-team",
+        "linking": [
+          "no-links"
+        ],
+        "chrome": "list-plus-timeline",
+        "ganttScale": "day",
+        "statusFeedback": [
+          "today-line"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 20,
+            "y": 360,
+            "width": 1034,
+            "height": 330
+          },
+          "region": "schedule",
+          "note": "Kit reservation rows (softbox, strobe, backdrop paper) with thin labelled bars along the time axis",
+          "quote": "KIT RESERVATIONS · 9 TODAY"
+        }
+      ]
+    },
+    {
+      "id": "accordion",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "policy": "one-at-a-time",
+        "header": [
+          "title-only",
+          "status-indicator"
+        ],
+        "toggle": [
+          "header-click"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1083,
+            "y": 357,
+            "width": 343,
+            "height": 50
+          },
+          "region": "decision-panel",
+          "note": "Collapsed option A header with a status pill; clicking it expanded A and collapsed B (checked on the live page)",
+          "quote": "Extend Lena in Bay 2 Blocked"
+        },
+        {
+          "bbox": {
+            "x": 1083,
+            "y": 415,
+            "width": 343,
+            "height": 631
+          },
+          "region": "decision-panel",
+          "note": "Expanded option B panel with checks and an Apply button",
+          "quote": "Move Arlo to Bay 3, extend Lena"
+        },
+        {
+          "bbox": {
+            "x": 1083,
+            "y": 1054,
+            "width": 343,
+            "height": 58
+          },
+          "region": "decision-panel",
+          "quote": "Offer Lena Bay 3, 2:30–4 PM"
+        }
+      ]
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "meaning": "status",
+        "aggregation": "per-item"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1352,
+            "y": 373,
+            "width": 62,
+            "height": 18
+          },
+          "region": "decision-panel",
+          "quote": "Blocked"
+        },
+        {
+          "bbox": {
+            "x": 1308,
+            "y": 444,
+            "width": 104,
+            "height": 18
+          },
+          "region": "decision-panel",
+          "quote": "Works · 2 moves"
+        },
+        {
+          "bbox": {
+            "x": 116,
+            "y": 1263,
+            "width": 42,
+            "height": 16
+          },
+          "region": "up-next",
+          "note": "Bay label pill on an arrival card",
+          "quote": "Bay 3"
+        }
+      ]
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "media": "none",
+        "actions": "none",
+        "shape": "vertical",
+        "style": "outlined"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 35,
+            "y": 1254,
+            "width": 245,
+            "height": 102
+          },
+          "region": "up-next",
+          "note": "Arrival card, highlighted in amber because it previews the move",
+          "quote": "3:00 PM Bay 3 Arlo Goods"
+        },
+        {
+          "bbox": {
+            "x": 288,
+            "y": 1254,
+            "width": 245,
+            "height": 102
+          },
+          "region": "up-next",
+          "quote": "4:30 PM Bay 1 Tomasz Kowalczyk"
+        }
+      ]
+    },
+    {
+      "id": "stat-tile",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "rationale": "These are compact label-plus-value tiles inside the request card. They give key numbers but no trend or change, so they could simply be a key-value summary.",
+      "dims": {
+        "context": [
+          "label"
+        ],
+        "encoding": "number-only",
+        "drill": "none"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1100,
+            "y": 183,
+            "width": 309,
+            "height": 44
+          },
+          "region": "decision-panel",
+          "quote": "ENDS NOW 2:00 PM ASKED FOR 3:30 PM CHARGE $127.50"
+        }
+      ]
+    },
+    {
+      "id": "banner",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "This is an amber inline callout stating the scheduling constraints. It is closer to a static note than to an attention banner about a changing condition.",
+      "dims": {
+        "scope": "section",
+        "severity": "warning",
+        "action": "none",
+        "placement": "beside-the-problem"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1100,
+            "y": 237,
+            "width": 309,
+            "height": 70
+          },
+          "region": "decision-panel",
+          "quote": "Arlo Goods holds Bay 2 from 3:00 PM. Only Bays 2 and 3 have a white cyc."
+        }
+      ]
+    },
+    {
+      "id": "coordinated-views",
+      "status": "present",
+      "confidence": 0.65,
+      "dims": {
+        "linkChannel": [
+          "selection-highlight",
+          "parameters"
+        ],
+        "arrangement": "overview-detail-split",
+        "trigger": [
+          "click-a-mark",
+          "change-a-control"
+        ],
+        "feedback": [
+          "highlight-in-place"
+        ],
+        "authorship": "fixed-published-dashboard"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 550,
+            "y": 205,
+            "width": 250,
+            "height": 155
+          },
+          "region": "schedule",
+          "note": "Dashed ghost blocks preview the selected option on the timeline; choosing option A switched them to a red conflict overlay",
+          "quote": "Arlo Goods (moved)"
+        },
+        {
+          "bbox": {
+            "x": 918,
+            "y": 1227,
+            "width": 122,
+            "height": 20
+          },
+          "region": "up-next",
+          "note": "The arrival cards re-render for the selected option",
+          "quote": "Preview · Option B"
+        }
+      ]
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.7,
+      "dims": {
+        "attributePlacement": [
+          "in-both-views",
+          "in-detail-view-only"
+        ],
+        "abstraction": [
+          "graphic",
+          "style"
+        ],
+        "truncation": "ellipsis",
+        "relationship": "one-to-one",
+        "openIn": "side-by-side",
+        "overviewType": [
+          "timeline"
+        ],
+        "detailMultiplicity": "one-at-a-time",
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "whole-item",
+        "attributeScope": [
+          "per-item"
+        ]
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 855,
+            "y": 205,
+            "width": 158,
+            "height": 72
+          },
+          "region": "schedule",
+          "note": "Clicking a booking block selects it (outlined) and fills the Selected booking panel",
+          "quote": "Nadia Brooks 7–9:30 PM"
+        },
+        {
+          "bbox": {
+            "x": 1083,
+            "y": 1124,
+            "width": 343,
+            "height": 243
+          },
+          "region": "decision-panel",
+          "quote": "Lena Strauss"
+        }
+      ]
+    },
+    {
+      "id": "app-shell",
+      "status": "uncertain",
+      "confidence": 0.4,
+      "rationale": "The persistent dark top bar shows identity and staff status but has no navigation destinations. It is a frame, not a navigation shell.",
+      "dims": {
+        "primary": "top-navigation-bar",
+        "secondary": "none",
+        "structure": "single-app"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 64
+          },
+          "region": "header",
+          "quote": "Baylight Northlight Studios · Front desk"
+        }
+      ]
+    },
+    {
+      "id": "property-inspector",
+      "status": "absent",
+      "confidence": 0.7,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1083,
+            "y": 1124,
+            "width": 343,
+            "height": 243
+          },
+          "note": "Selected booking details are read-only key-value pairs, not editable"
+        }
+      ]
+    },
+    {
+      "id": "availability-picker",
+      "status": "absent",
+      "confidence": 0.7,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 20,
+            "y": 76,
+            "width": 1034,
+            "height": 290
+          },
+          "note": "Staff-facing schedule for resolving a conflict, not slot picking by a booker"
+        }
+      ]
+    }
+  ],
+  "structure": {
+    "layout": "Desktop operations app: dark top bar; a left main column with a wide resource timeline (bays and kit) and an 'up next' card strip underneath; and a right sidebar that scrolls on its own, holding the decision panel",
+    "regions": [
+      "header",
+      "schedule",
+      "up-next",
+      "decision-panel"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#e4e7ec",
+      "#ffffff",
+      "#15181e",
+      "#1f3a5f",
+      "#e9f0fa",
+      "#6b7280",
+      "#374151",
+      "#fffbf0",
+      "#8a5a00",
+      "#c0392b",
+      "#2e7d4f",
+      "#f5b82e"
+    ],
+    "colorRoles": {
+      "background": "#e4e7ec",
+      "surface": "#ffffff",
+      "text": "#15181e",
+      "muted": "#6b7280",
+      "primary": "#1f3a5f",
+      "accent": "#f5b82e",
+      "warning-surface": "#fffbf0",
+      "warning-text": "#8a5a00",
+      "danger": "#c0392b",
+      "success": "#2e7d4f",
+      "header": "#15181e"
+    },
+    "typography": "System UI stack (-apple-system / SF Pro) everywhere. Small letter-spaced uppercase labels for section headers; semibold names on blocks.",
+    "typeScale": "The 26px bold clock in the header is the one large element. Headings are 15–17px semibold; most content is small at 11–13px, and labels and bar text go down to 9–10px uppercase. Hierarchy comes mostly from weight and color, not size.",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "data-visualization"
+    ],
+    "iconStyle": "none",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "operational",
+      "technical",
+      "calm",
+      "precise",
+      "utilitarian"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-17T22:20:50.277Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 8,
+    "usage": {
+      "input_tokens": 16,
+      "cache_creation_input_tokens": 38441,
+      "cache_read_input_tokens": 263017,
+      "output_tokens": 6394
+    }
+  },
+  "notes": "A distinctive decision-support layout. The main schedule is a single-day resource timeline: confirmed bookings are navy blocks, past ones are faded, clean-down gaps are diagonal hatching labelled 'CLEAN', and a red 'Now 1:10 PM' line runs through every row. Proposed changes from the selected option appear as dashed green ghost blocks ('Arlo Goods (moved)', 'Lena +90 min'), or as a red hatched conflict when you pick blocked option A. The right panel lists 'Three ways to answer' as one-open-at-a-time accordion options with lettered colored squares (A red, B green, C navy). Each carries an outcome pill (Blocked / Works · 2 moves / Works · Lena to confirm) and expands into a checklist of constraint checks with ✓ and ✗ marks plus an Apply button. The 'Up next' arrival cards re-render to preview the chosen option, with an amber or red highlight on the affected card."
+}

@@ -1,0 +1,24 @@
+{
+  "mode": "server",
+  "entry": "/app/",
+  "login": {
+    "username": "hlindqvist",
+    "email": "hannah.lindqvist@uni-kiel.example",
+    "password": "Lindqvist-Coast-2026"
+  },
+  "stubs": [
+    {
+      "service": "Outgoing email (SMTP relay for confirmations, invitations, digests)",
+      "how": "SMTP_URL left empty in .ui-capture/config.py; this is altero's built-in no-relay mode, which writes messages to the server log instead of sending them"
+    },
+    {
+      "service": "zotero.org import, OIDC/SAML single sign-on",
+      "how": "Not configured (optional features); nothing in the UI calls them unless an admin sets them up, and all sign-in is via local password accounts"
+    },
+    {
+      "service": "Browser sign-in (so the entry opens as the established user, not the sign-in form)",
+      "how": ".ui-capture/autologin_proxy.py listens on PORT and forwards to altero on PORT+10000. When a browser request to /app/ or /web/ has no altero_session cookie, it signs in through altero's own POST /web/auth/login as hlindqvist and hands the browser the session and CSRF cookies altero issued. Other traffic (Zotero Web API, files) passes through untouched. No app code changed."
+    }
+  ],
+  "notes": "altero 1.0.0-rc1 (self-hosted Zotero sync server) run from source. Tools pinned in mise.toml (python 3.14.10, uv 0.13.8, node 24.22.3); Python deps via `uv sync --locked --no-dev` (PyICU built against Homebrew icu4c 77), web UI built with `npm --prefix web ci && npm --prefix web run build` into src/altero/web/static. start.sh runs `altero serve` (FastAPI/uvicorn) on PORT+10000 behind autologin_proxy.py on PORT, so a fresh browser opening /app/ lands signed in on /app/library (without it, altero answers the 401 'nobody signed in' probe on /web/auth/session and shows the sign-in form). Signing out ends the session, but the next request signs the browser back in with SQLite at .ui-capture/data/altero.sqlite and attachment files in .ui-capture/data/storage; UI at /app/ (sign in, then lands on /app/library). Data is rebuilt by .ui-capture/rebuild_data.sh: alembic migrate -> bootstrap.py (6 accounts with passwords/emails, API keys, 3 group libraries with roles, via altero's service layer) -> seed.py (everything through the Zotero Web API v3 the desktop client uses: hierarchical collections, ~180 references in Hannah Lindqvist's personal library \u2014 journal articles, books, chapters, reports, theses, datasets, software, webpages, preprints \u2014 with dates added spread over ~3.5 years, child notes, standalone notes, ~70 uploaded PDFs (realistic sizes, deduplicated across libraries), PDF annotations, linked URLs, items in trash, duplicate items, related items, saved searches, colored tags; group libraries 'Coastal Ecology Lab' (~57 items, SOPs, monitoring reports, student theses, items added by different members), 'Seagrass Restoration Consortium' (public), 'STS Reading Group'; smaller personal libraries for colleagues) -> extras.py (pending group invitation, group-activity notifications with read/unread, collection share links, notification preferences). Main areas: Library (collection tree, item list, item pane with editable fields/creators/notes/attachments/tags, Recently Read, My Publications, Duplicate Items, Unfiled, Trash, tag selector), Groups, Notifications, Settings (profile, sign-in & security, language/time zone, API keys, connected apps, import/export, move from zotero.org), Administration (overview, storage, accounts, sign-in providers, retention \u2014 the login is the instance administrator)."
+}

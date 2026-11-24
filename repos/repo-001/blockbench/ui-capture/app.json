@@ -1,0 +1,32 @@
+{
+  "mode": "static",
+  "entry": "/",
+  "login": null,
+  "stubs": [
+    {
+      "service": "Blockbench news feed (web.blockbench.net/content/news.json, start screen)",
+      "how": "Network shim in out/seed/seed_loader.js rewrites the request to the repo's own bundled content/news.json"
+    },
+    {
+      "service": "Plugin store catalog (cdn.jsdelivr.net/gh/JannisX11/blockbench-plugins plugins.json, updates.json, per-plugin icons/about/changelog)",
+      "how": "Real catalog + icons snapshotted once into out/stub/plugins/; the shim rewrites XHR/fetch and <img src> URLs to those files"
+    },
+    {
+      "service": "Plugin download statistics (blckbn.ch/api/stats/plugins)",
+      "how": "Generated per-plugin download counts in out/stub/blckbn/plugin_stats.json"
+    },
+    {
+      "service": "Telemetry events (blckbn.ch/api/event/new_installation, recurring_user, install_plugin, successful_update)",
+      "how": "Rewritten to GET out/stub/blckbn/ok.json ({\"success\":true})"
+    },
+    {
+      "service": "Shared model links (blckbn.ch/api/models/<code>)",
+      "how": "Rewritten to out/stub/blckbn/models/<code>.json (none present -> app shows its normal 'invalid link' message)"
+    },
+    {
+      "service": "GitHub releases API (About dialog latest version) and plugin commit history",
+      "how": "out/stub/github/release_latest.json (v5.2.2) and an empty commits list"
+    }
+  ],
+  "notes": "Blockbench 5.2.2 web app (the same build as web.blockbench.net) built with `npm run build-web` (esbuild) and assembled into .ui-capture/out by .ui-capture/build_out.sh (index.html, dist/bundle.js, css, assets, font, lib, content). The front end needs no backend. Tooling: node 24.22.3 via mise.toml (matches CI). Data: Blockbench web keeps its user state in the browser, so .ui-capture/seed/seed_loader.js (a separate classic script injected before the bundle in out/index.html) seeds it on first load from out/seed/*.json, which .ui-capture/seed/generate.mjs produces: (1) localStorage settings of a long-time user (username 'mossbyte', ~148 launches, custom palette and color history, recently used actions); (2) the IndexedDB 'auto_backups' store that Blockbench uses for project recovery, holding 6 projects in the native .bbmodel 5.0 format (146 cubes, 14 animations total, each with editor_state: camera, selected element, saved flag) with generated pixel-art textures: red_panda (Bedrock entity, 15 cubes, 5 animations incl. a WIP climb), goblin_merchant (Bedrock entity with backpack/lantern/wares, 5 animations), sky_skiff_mk2 (Generic model airship, 76 cubes, 3 animations), copper_lantern_post (Java block, 4 textures, display transforms), mossy_mushroom_stool (Java block), ember_wisp (small Bedrock entity). After the app boots, the loader opens them with Blockbench's own AutoBackup.recoverAllBackups() (the 'Recover' action on the start screen) and focuses red_panda, so the editor opens with six project tabs. Open /?start to land on the start screen instead (it shows the 'Recover backup' banner plus model format list). Main areas: menu bar, project tabs, Edit/Paint/Animate modes (toolbar top right), 3D viewport, UV editor + Textures panel (left), Transform/Element and Outliner panels (right), Animate mode timeline/animations list, Display mode (Java block models), File > Plugins (store backed by the stub catalog), Settings, Keybindings. The browser needs WebGL. Rebuild everything with .ui-capture/build_out.sh; .ui-capture/tools/check.mjs is the headless screenshot check used during setup (serves out/ on :5471). The only console error is the app trying to register ./service_worker.js, which the web build does not produce without `npm run pwa`; it is harmless."
+}

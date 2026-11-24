@@ -1,0 +1,101 @@
+# Codebook proposal (new-entry) — review with: node scripts/proposals.ts show repo-001 quantity-stepper
+id: quantity-stepper
+kind: new-entry
+status: open
+batch: repo-001
+codebookVersion: 1.0.0
+name: Quantity stepper
+level: component
+parent: enter-data
+definition: A compact numeric control with − and + buttons around a current value, used to adjust a
+  small integer such as item quantity in a cart.
+aliases:
+  - number stepper
+  - spin button
+  - increment/decrement control
+relations:
+  neighbors:
+    - slider
+    - choice-control
+    - text-field
+dimensions:
+  - name: Value entry
+    family: invocation
+    question: How is the value changed?
+    subdimensions:
+      - id: entry
+        name: Entry
+        select: one
+        values:
+          - id: buttons-only
+            name: Buttons only
+            example: Shop.co cart quantity
+          - id: buttons-and-typing
+            name: Buttons and typing
+            example: HTML number input
+  - name: Zero behavior
+    family: lifecycle
+    question: What happens at the minimum?
+    subdimensions:
+      - id: minimum
+        name: Minimum
+        select: one
+        values:
+          - id: disabled-at-min
+            name: Disabled at minimum
+          - id: removes-item
+            name: Removes item at zero
+          - id: becomes-remove
+            name: Minus becomes remove/trash
+          - id: disabled-decrement
+            name: Decrement disabled
+          - id: no-limit-feedback
+            name: No feedback
+rationale:
+  - rater: rater-2
+    site: next-ecommerce-shopco--cart
+    text: Cart line items use a pill-shaped "− 2 +" control. slider, choice-control and text-field don't
+      describe a discrete increment/decrement control, and stepper is a navigation trail.
+  - rater: rater-1
+    site: next-ecommerce-shopco--cart
+    text: Choice-control, slider and text-field don't describe a −/value/+ increment control. In this
+      cart, each line item uses one to edit its quantity in place.
+  - rater: rater-3
+    site: next-ecommerce-shopco--cart
+    text: Cart line items use a pill with − value + buttons. Slider (drag along a track), choice-control
+      (pick from a set of options), text-field and inline-edit (click to edit a displayed value) all
+      fail to describe a discrete increment/decrement spinner, and this control is very common in
+      commerce and booking UIs.
+sources:
+  - batch: repo-001
+    site: next-ecommerce-shopco--cart
+    url: http://localhost:4423/cart
+    note: proposed by rater-2, rater-1, rater-3
+evidence:
+  - site: next-ecommerce-shopco--cart
+    rater: rater-2
+    bbox:
+      x: 662
+      y: 359
+      width: 128
+      height: 40
+    note: Pill-shaped minus / count / plus control on each cart line item
+  - site: next-ecommerce-shopco--cart
+    rater: rater-1
+    bbox:
+      x: 662
+      y: 359
+      width: 128
+      height: 40
+    note: Pill-shaped −/2/+ quantity control on a cart line item
+  - site: next-ecommerce-shopco--cart
+    rater: rater-3
+    bbox:
+      x: 662
+      y: 359
+      width: 128
+      height: 40
+    note: − 2 + quantity pill on cart line item
+    quote: "2"
+createdAt: 2026-11-18T05:59:48.700Z
+updatedAt: 2026-11-18T05:59:59.191Z

@@ -1,0 +1,99 @@
+{
+  "batch": "repo-001",
+  "slug": "feishin",
+  "ok": true,
+  "repo": {
+    "name": "jeffvli/feishin",
+    "url": "https://github.com/jeffvli/feishin",
+    "commit": "e36c5a9589162b9f9f2eb277cff97882e448540d",
+    "branch": "development",
+    "license": "GPL-3.0"
+  },
+  "domain": "media-entertainment",
+  "port": 4427,
+  "checkoutRoot": "~/.cache/design-patterns-dataset/repos",
+  "mode": "server",
+  "entry": "/",
+  "app": {
+    "mode": "server",
+    "entry": "/",
+    "login": {
+      "username": "maya",
+      "email": "maya.okafor@fastmail.com",
+      "password": "listen2music"
+    },
+    "stubs": [
+      {
+        "service": "Music server (Navidrome/OpenSubsonic backend Feishin connects to)",
+        "how": "server.mjs implements the OpenSubsonic REST API (/rest/*.view: ping, getUser, getArtists/getArtist/getArtistInfo2, getAlbum/getAlbumList2/getAlbumInfo2, getSong, search3, getStarred(2), star/unstar/setRating/scrobble, getGenres, getSongsByGenre, getRandomSongs, getTopSongs, getSimilarSongs(2), playlists CRUD, play queue, internet radio, scan status, lyrics) on the same origin, backed by data/library.json from seed.mjs. Mutations persist in memory for the session. Auth uses the real Subsonic token scheme (md5(password+salt))."
+      },
+      {
+        "service": "Album / artist / playlist artwork (getCoverArt)",
+        "how": "Deterministic generated SVG artwork per album/artist/playlist served by server.mjs (no image files or network)."
+      },
+      {
+        "service": "Audio streaming (stream/download)",
+        "how": "server.mjs returns a silent 8 kHz WAV with the track's real duration so the player can play/seek offline."
+      },
+      {
+        "service": "Feishin web deploy config (settings.js, normally templated by the Docker/nginx image)",
+        "how": "server.mjs serves settings.js with SERVER_URL=current origin, SERVER_TYPE=subsonic, ANALYTICS_DISABLED=true, and on first load seeds localStorage with the saved server session for user maya (as a returning user would have) and the dismissed release-notes version."
+      },
+      {
+        "service": "GitHub API (update check, release notes, markdown render) called directly from the browser",
+        "how": "settings.js rewrites XHRs to https://api.github.com/* onto /_stub/github/* on the local server, which returns release metadata with the current version (v1.17.0) as latest, so no update banner and no outbound request."
+      },
+      {
+        "service": "Umami analytics",
+        "how": "Disabled via ANALYTICS_DISABLED=true in settings.js and localStorage umami.disabled=1; the script is never loaded."
+      }
+    ],
+    "notes": "Feishin is a client for self-hosted music servers. Built with the repo's own `pnpm run build:web` (via .ui-capture/build.sh, which builds in a $TMPDIR copy because the sandbox forbids creating `.idea` dirs that iconv-lite ships) into .ui-capture/web. start.sh runs server.mjs (Node only, no deps) which serves the web build plus a local OpenSubsonic-compatible server on PORT. The user opens / and is already signed in as 'maya' to 'Home Server' (credentials in login, in case the session is cleared - the login form then pre-fills the server URL). Data (seed.mjs + catalog.mjs): 48 albums / ~530 tracks / 54 artists from a realistic personal library (Radiohead, Boards of Canada, Miles Davis, Kendrick Lamar, Phoebe Bridgers, Bach/Gould, etc. with real tracklists, mixed FLAC/MP3/M4A), added over 2023-2026, play counts and last-played dates, ~100 favourited tracks, starred albums & artists, ratings, 17 playlists with comments, 7 internet radio stations, a saved play queue, plus a messy '[Unknown Album]' of untagged files. Main areas: Home (recently played / most played / recently added / random), Albums, Artists, Tracks, Genres, Playlists, Favorites, Folders, Radio, Search, Now Playing/queue, Settings. The server also holds a saved play queue (Teen Dream + Jubilee) that can be loaded via the queue panel menu \"Restore queue from server\" (indexBasedQueue extension); the local player bar starts empty. Tooling: .ui-capture/build.sh rebuilds web/, seed.mjs regenerates data/library.json, tools/validate.sh checks stub responses against the app's own zod schemas/normalizers, tools/boot.mjs boots the bundle in jsdom (a real browser cannot run inside this sandbox)."
+  },
+  "tools": {
+    "node": "23.11.1",
+    "pnpm": "11.5.2"
+  },
+  "prompt": "This is a checkout of jeffvli/feishin (https://github.com/jeffvli/feishin) at commit e36c5a958916. A modern self-hosted music player.\n\nI want to see its user interface in a desktop browser, in the state a real, established user would see it. Please get the app running locally with its main interface working and realistic data in it.\n\n# Running it\n- Follow the repo's own setup docs and tooling. Take the simplest route that shows the real app: a static production build if the front end works without a backend, otherwise the app's own server (production or dev mode).\n- If it needs a database or other services, run them locally with an embedded or file-based option (SQLite, in-memory, JSON files, an embedded Postgres such as PGlite) or the app's demo/mock mode.\n- Don't redesign or restyle anything. Change only what's needed to build and run it.\n\n# Tools: use mise\nInstall every runtime and tool you need (node, the package manager, python, bun, ...) with mise, pinned to exact versions in a mise.toml at the repo root, so the setup can be reproduced. Match what the repo asks for (engines, .nvmrc, .tool-versions, packageManager). mise is already configured for this directory: `mise install` installs into ./.ui-capture/mise, and its shims come first on PATH, so `node`, `pnpm` and the rest resolve to the pinned versions. Don't use other copies of these tools or download runtimes by hand.\n\n# Secrets, API keys and external services: fake them\nThe app must not depend on anything outside this machine, and when it runs it has no network except localhost. Wherever it expects secrets, environment variables, API keys or third-party services (hosted auth or OAuth, payment providers, email, LLM or other AI APIs, maps, storage buckets, analytics, hosted databases):\n- Give the required variables placeholder values so the app starts.\n- Where it actually calls the service, make the call succeed locally with realistic responses: use the app's own mock, test or offline mode if it has one; otherwise point the client at a small local stub server that start.sh also starts, or swap in a stub at the integration boundary (the API client or service module). Keep stubs out of UI code. Responses should look like what the real service returns for a real user, e.g. an AI reply that actually answers, a payment history with real-looking amounts.\n- Calls the browser makes directly to outside services count too; point them at the local stub.\n- For sign-in through an outside provider, create a local account or use the app's dev sign-in so you can get past it.\nList every stub in app.json.\n\n# Data: like real use\nSeed it the way an established user's data would look after months of actual use: specific, plausible names and content for this kind of app; dates spread over time; a realistic mix of states (done, in progress, overdue, archived, ...); realistic volume (dozens to hundreds of records where the app revolves around records); short and long text; some messiness real data has. Start from the app's own demo or seed data if it has realistic data, and extend it if it's thin. Load data through the app's own paths (its API, import, seed scripts, or its database schema), never by hardcoding it into UI code. If the app needs an account, create one and attach the data to it. No lorem ipsum or \"Test 1\".\n\n# Environment\nThis shell is sandboxed: you can write only inside this directory (package-manager caches already point into ./.ui-capture/cache), and the network reaches only package registries, mise's download sources and GitHub (registry.npmjs.org, registry.yarnpkg.com, repo.yarnpkg.com, github.com, codeload.github.com, objects.githubusercontent.com, raw.githubusercontent.com, nodejs.org, mise.jdx.dev, mise-versions.jdx.dev, release-assets.githubusercontent.com, pypi.org, files.pythonhosted.org, binaries.prisma.sh, cdn.jsdelivr.net, unpkg.com). Docker isn't available. A process you start in the background can't be seen or stopped from a later command, so test servers on another port than 4427 (e.g. 5427) or in the foreground under `timeout`; anything still listening on 4427 is stopped before I check.\n\n# When you're done, leave this in ./.ui-capture/\n- app.json: {\"mode\": \"static\" or \"server\", \"entry\": \"/path where the main UI opens\", \"login\": null or {\"username\": \"...\", \"email\": \"...\", \"password\": \"...\"}, \"stubs\": [{\"service\": \"what was faked\", \"how\": \"how\"}], \"notes\": \"how you set it up, what data is loaded, and the main areas of the app\"}\n- static mode: the production build in ./.ui-capture/out, with index.html as its entry. It will be served from the root of a plain static file server; unknown paths fall back to index.html.\n- server mode: ./.ui-capture/start.sh, which starts everything the app needs (stubs included) in the foreground and serves the UI at http://localhost:4427/ (it gets PORT=4427). It runs with the same PATH and restrictions as your shell, plus no network at all except localhost, so everything must already be installed, built and seeded (or seeded by start.sh itself).\n- Put any scripts you write for seeding or stubbing in ./.ui-capture/ too; they're kept with the setup record.\n\n# Order of work\nYou have 90 minutes in total, and anything unfinished when time runs out is lost. So work in this order:\n1. Get the app building and running with its stubs, and write the contract above (app.json plus out/ or start.sh), even if it has only a little data so far.\n2. Then build out the data, re-running your seed and checking the app still loads after each substantial step, so that a working state with the data loaded so far is always in place.\nWrite large data sets with a short generator script rather than as one long literal file.\n\nI'll open it at 1440×900.",
+  "model": {
+    "model": "claude-opus-5-5",
+    "effort": "high"
+  },
+  "sandbox": true,
+  "startedAt": "2026-11-17T17:09:59.398Z",
+  "finishedAt": "2026-11-17T17:36:37.779Z",
+  "verification": {
+    "ok": true,
+    "problems": [],
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedRequests": [],
+    "textChars": 2044,
+    "visibleElements": 1230,
+    "title": "Feishin"
+  },
+  "repairs": 0,
+  "session": {
+    "rounds": 1,
+    "numTurns": 79,
+    "costUsd": 4.3742682,
+    "durationMs": 1594259,
+    "models": [
+      "claude-opus-5-5"
+    ],
+    "usage": {
+      "input_tokens": 146,
+      "cache_creation_input_tokens": 165387,
+      "cache_read_input_tokens": 7415241,
+      "output_tokens": 78377
+    },
+    "timedOut": false
+  },
+  "changes": {
+    "files": 1,
+    "insertions": 7,
+    "deletions": 0,
+    "patchBytes": 228,
+    "patch": "setup.patch"
+  }
+}

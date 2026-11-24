@@ -1,0 +1,19 @@
+#!/bin/bash
+# Stub: no privilege escalation on this machine; drop sudo options and run the command as-is.
+while [[ $# -gt 0 ]]; do
+	case "$1" in
+		-u|--user|-g|--group) shift 2 ;;
+		--user=*|--group=*) shift ;;
+		-n|-E|-H|-S|--non-interactive|--preserve-env|--preserve-env=*) shift ;;
+		--) shift; break ;;
+		*) break ;;
+	esac
+done
+[[ $# -eq 0 ]] && exit 0
+case "$1" in
+	/sbin/reboot|/sbin/shutdown|reboot|shutdown) echo "(stub) $*"; exit 0 ;;
+	/bin/systemctl|systemctl) shift; exec "$(dirname "$0")/systemctl" "$@" ;;
+	/usr/bin/vcgencmd|vcgencmd) shift; exec "$(dirname "$0")/vcgencmd" "$@" ;;
+	ifconfig|/sbin/ifconfig) echo "(stub) $*"; exit 0 ;;
+esac
+exec "$@"

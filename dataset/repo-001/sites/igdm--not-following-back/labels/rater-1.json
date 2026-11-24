@@ -1,0 +1,246 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "igdm--not-following-back",
+    "url": "http://localhost:4439/browser/index.html",
+    "finalUrl": "http://localhost:4439/browser/index.html",
+    "status": 200,
+    "title": "IGdm - Instagram Desktop Messenger",
+    "capturedAt": "2026-11-18T20:59:58.522Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1701
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "social-community",
+    "domainNote": "IGdm — Instagram desktop messenger; full-screen 'following' list overlay with unfollow actions",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/igdm/explore.json",
+      "repo": {
+        "name": "igdmapps/igdm",
+        "url": "https://github.com/igdmapps/igdm",
+        "commit": "644fd213e2d7a9eaf6660729217021c2ba30fef4",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "not-following-back",
+        "name": "Users not following back",
+        "description": "Full-screen overlay listing accounts that don't follow the user back as a grid of avatars with usernames and Unfollow buttons, with a close icon."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "following-overlay",
+      "role": "modal-overlay",
+      "label": "Full-screen white overlay with close X at top right and a 4-column grid of followed accounts (avatar, username, blue Unfollow button)",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 1701
+      },
+      "patterns": [
+        "modal-dialog",
+        "card"
+      ]
+    },
+    {
+      "id": "hidden-messenger",
+      "role": "app-behind-overlay",
+      "label": "Messenger app (conversation list, search, composer) that sits in the DOM behind the overlay; not visible in the capture",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 1701
+      },
+      "patterns": [
+        "inbox"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "modal-dialog",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "form": "full-screen",
+        "openBy": [
+          "user-action"
+        ],
+        "dismissBy": [
+          "close-button",
+          "escape"
+        ],
+        "modality": "blocking",
+        "purpose": "selection-list"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1405,
+            "y": 5,
+            "width": 25,
+            "height": 26
+          },
+          "note": "Close icon button ('close icon'); on the live page, Escape also closes the overlay and shows the messenger underneath",
+          "region": "following-overlay"
+        },
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 1701
+          },
+          "note": "Opaque white full-screen surface that covers the whole app",
+          "region": "following-overlay"
+        }
+      ]
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.6,
+      "dims": {
+        "media": "top-image",
+        "actions": "one-primary-action",
+        "shape": "vertical",
+        "style": "borderless"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 110,
+            "y": 46,
+            "width": 140,
+            "height": 108
+          },
+          "quote": "hazel.sato Unfollow",
+          "note": "User tile: round 48px avatar, username, and a single blue Unfollow button. No container. 26 tiles in a 4-column grid",
+          "region": "following-overlay"
+        }
+      ],
+      "rationale": "The user tiles are borderless list items with no container, so calling them cards is a judgment call"
+    },
+    {
+      "id": "inbox",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "dims": {
+        "grouping": "conversation-threads",
+        "openIn": "side-by-side",
+        "rowAttributes": [
+          "sender",
+          "snippet"
+        ],
+        "priority": "chronological"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 16,
+            "y": 97,
+            "width": 48,
+            "height": 48
+          },
+          "note": "The accessibility tree holds a conversation list (jess.tran 6m, Saturday Market Crew 43m, ...), but it is fully hidden behind the overlay in the capture",
+          "region": "hidden-messenger"
+        }
+      ],
+      "rationale": "The message list is in the DOM but covered by the opaque overlay; it is visible only after the dialog is dismissed on the live page"
+    },
+    {
+      "id": "chat-thread",
+      "status": "absent",
+      "confidence": 0.75,
+      "dims": {},
+      "evidence": [
+        {
+          "quote": "Search and select a chat to start."
+        }
+      ]
+    },
+    {
+      "id": "app-shell",
+      "status": "absent",
+      "confidence": 0.6,
+      "dims": {},
+      "evidence": [
+        {
+          "note": "Hidden behind the overlay, there is only a top search bar. There are no global navigation destinations."
+        }
+      ]
+    }
+  ],
+  "structure": {
+    "layout": "Full-screen overlay: 4-column centered grid of user tiles (avatar, name, button) with a close X at top right, covering a two-pane messenger",
+    "regions": [
+      "following-overlay",
+      "hidden-messenger"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#212529",
+      "#168bf9",
+      "#efefef",
+      "#fcfcfc",
+      "#dadada"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "text": "#212529",
+      "primary": "#168bf9",
+      "surface": "#fcfcfc",
+      "muted": "#efefef",
+      "border": "#dadada"
+    },
+    "typography": "-apple-system / system sans stack (Helvetica/Arial fallback) for everything: usernames and buttons",
+    "typeScale": "Flat: 16px regular usernames and 16px button labels. No headings, and very little hierarchy.",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "none",
+    "imagery": [
+      "illustration"
+    ],
+    "iconStyle": "line",
+    "whitespace": "generous",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "plain",
+      "utilitarian",
+      "bootstrap-default"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T21:00:54.931Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 7,
+    "usage": {
+      "input_tokens": 14,
+      "cache_creation_input_tokens": 21252,
+      "cache_read_input_tokens": 177221,
+      "output_tokens": 2994
+    }
+  },
+  "notes": "Electron-style IGdm clone. The capture shows a 'following' overlay with no title: 26 accounts in a 4-column grid, each column 360px wide. Each tile is a 48px circular avatar (cartoon illustration, or a two-letter monogram in serif caps on a colored disc), a centered username, and a Bootstrap-like solid blue (#168bf9) 'Unfollow' button with 4px radius. The only other chrome is a thin gray X at top right. Behind it sits the messenger: a search bar, a conversation list with unread blue dots, an empty state with an Instagram logo, and the text 'Start a message'."
+}

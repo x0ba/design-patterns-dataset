@@ -1,0 +1,397 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "devterms--my-definitions",
+    "url": "http://localhost:4475/login",
+    "finalUrl": "http://localhost:4475/definitions/me",
+    "status": 200,
+    "title": "My definitions | DevTerms",
+    "capturedAt": "2026-11-18T20:34:13.918Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 900
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "developer-tools",
+    "domainNote": "community dictionary of developer jargon (DevTerms); logged-in 'My definitions' management page",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/devterms/explore.json",
+      "repo": {
+        "name": "aelew/devterms",
+        "url": "https://github.com/aelew/devterms",
+        "commit": "60a285a308a36baba4b77b582898ca7226ba633a",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "my-definitions",
+        "name": "My definitions dashboard",
+        "description": "User dashboard table of own submitted definitions with status badges, vote counts and created dates, with tabs for pending and reported mod views."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Logo, text nav (Home/Browse/Submit/API), GitHub + theme toggle icon buttons, avatar user menu, full-width search combobox",
+      "bbox": {
+        "x": 220,
+        "y": 0,
+        "width": 1000,
+        "height": 102
+      },
+      "patterns": [
+        "app-shell",
+        "menu",
+        "autocomplete"
+      ]
+    },
+    {
+      "id": "section-tabs",
+      "role": "secondary-nav",
+      "label": "Three outlined link-tabs with colored icons: My definitions (active), Pending definitions, Reported definitions",
+      "bbox": {
+        "x": 236,
+        "y": 118,
+        "width": 563,
+        "height": 36
+      },
+      "patterns": [
+        "tabs"
+      ]
+    },
+    {
+      "id": "definitions-table",
+      "role": "data-table",
+      "label": "Table of the user's definitions: Term, Status badge, Upvotes, Downvotes, sortable Created",
+      "bbox": {
+        "x": 237,
+        "y": 163,
+        "width": 966,
+        "height": 625
+      },
+      "patterns": [
+        "data-table",
+        "sort-control",
+        "badge"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "data-table",
+      "status": "present",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 237,
+            "y": 163,
+            "width": 966,
+            "height": 625
+          },
+          "quote": "Term Status Upvotes Downvotes Created",
+          "region": "definitions-table",
+          "note": "15 rows, term links to definition page, status pills, numeric vote columns, date column"
+        }
+      ],
+      "dims": {
+        "columnSet": "fixed",
+        "cellRendering": [
+          "plain-text",
+          "chips-and-avatars"
+        ],
+        "density": "standard",
+        "rowExpansion": "none",
+        "selection": "none",
+        "opScope": [
+          "column"
+        ],
+        "aggregation": [
+          "flat"
+        ],
+        "openIn": "new-page"
+      }
+    },
+    {
+      "id": "sort-control",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 947,
+            "y": 165,
+            "width": 112,
+            "height": 36
+          },
+          "quote": "Created",
+          "region": "definitions-table",
+          "note": "Header button with up/down arrows icon; clicking on live page re-sorted rows by date descending"
+        }
+      ],
+      "dims": {
+        "form": "column-header-click",
+        "indicator": "header-arrow"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 546,
+            "y": 213,
+            "width": 74,
+            "height": 20
+          },
+          "quote": "approved",
+          "region": "definitions-table",
+          "note": "Green filled pill"
+        },
+        {
+          "bbox": {
+            "x": 546,
+            "y": 642,
+            "width": 63,
+            "height": 20
+          },
+          "quote": "pending",
+          "region": "definitions-table",
+          "note": "Light gray outlined pill"
+        },
+        {
+          "bbox": {
+            "x": 546,
+            "y": 759,
+            "width": 68,
+            "height": 20
+          },
+          "quote": "rejected",
+          "region": "definitions-table",
+          "note": "Red filled pill"
+        }
+      ],
+      "dims": {
+        "meaning": "status",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 236,
+            "y": 118,
+            "width": 563,
+            "height": 36
+          },
+          "quote": "My definitions Pending definitions Reported definitions",
+          "region": "section-tabs",
+          "note": "Link buttons to /definitions/me, /queue, /reports; current one has gray fill. Implemented as separate routes, functioning as peer tab views"
+        }
+      ],
+      "dims": {
+        "placement": "top",
+        "label": [
+          "text",
+          "icon"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      }
+    },
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 220,
+            "y": 0,
+            "width": 1000,
+            "height": 102
+          },
+          "quote": "DevTerms Home Browse Submit API",
+          "region": "header",
+          "note": "Persistent top bar with logo, nav links, search, account"
+        }
+      ],
+      "dims": {
+        "primary": "top-navigation-bar",
+        "secondary": "sub-tabs-under-the-header",
+        "items": [
+          "fixed-destinations"
+        ],
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1168,
+            "y": 10,
+            "width": 36,
+            "height": 36
+          },
+          "region": "header",
+          "note": "Avatar 'User menu' button; live click opens dropdown with username/email header and View profile, Dashboard, Sign out items with icons"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click",
+        "structure": "sections",
+        "item": [
+          "label",
+          "icon"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    },
+    {
+      "id": "autocomplete",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "ARIA tree shows the search input as a combobox with a 'Suggestions' listbox, but no suggestions are visible and typing could not be tested live.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 236,
+            "y": 56,
+            "width": 968,
+            "height": 46
+          },
+          "quote": "Search...",
+          "region": "header",
+          "note": "Full-width search combobox with listbox 'Suggestions'"
+        }
+      ],
+      "dims": {
+        "presentation": "dropdown-list",
+        "freedom": "free-text-allowed"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 236,
+            "y": 56,
+            "width": 968,
+            "height": 46
+          },
+          "note": "Only input is the search combobox, coded as autocomplete"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "pagination",
+      "status": "absent",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 237,
+            "y": 763,
+            "width": 966,
+            "height": 100
+          },
+          "note": "No pagination below table"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "centered 1000px single-column app page: top nav bar with full-width search, row of three link-tabs, then a bordered data table of the user's submitted definitions",
+    "regions": [
+      "header",
+      "section-tabs",
+      "definitions-table"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#09090b",
+      "#71717a",
+      "#f4f4f5",
+      "#e4e4e7",
+      "#16a34a",
+      "#ef4444",
+      "#18181b"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "text": "#09090b",
+      "muted": "#71717a",
+      "surface": "#f4f4f5",
+      "border": "#e4e4e7",
+      "primary": "#18181b",
+      "success": "#16a34a",
+      "danger": "#ef4444"
+    },
+    "typography": "GeistSans throughout: 20px semibold wordmark, 14px nav/table/button text (500 weight for term links, tab buttons, headers), 12px semibold status badges",
+    "typeScale": "Very flat: 20px logo, 14px nearly everything, 12px badges; hierarchy via weight (400/500/600) and gray vs near-black color",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "texture",
+    "mood": [
+      "clean",
+      "minimal",
+      "technical",
+      "neutral"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T20:35:16.136Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 7,
+    "usage": {
+      "input_tokens": 14,
+      "cache_creation_input_tokens": 24621,
+      "cache_read_input_tokens": 188375,
+      "output_tokens": 3553
+    }
+  },
+  "notes": "shadcn/ui-style zinc design (Geist font, #e4e4e7 borders, 6px radii, shadow-sm on buttons/inputs). Page background has a very faint gray grid pattern plus a soft blue radial glow at top-left and center (SVG). Tab buttons are outlined with small colored line icons (green bookmark, amber clock, red flag) — the only color in the chrome besides status pills. Status pills: solid green 'approved', outlined gray 'pending', solid red 'rejected'. Table rows ~39px with thin dividers, inside a rounded bordered container. No page heading; the active tab serves as title."
+}

@@ -1,0 +1,342 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "ancientbeast--battlefield",
+    "url": "http://ancientbeast.localhost:4319/",
+    "finalUrl": "http://ancientbeast.localhost:4319/",
+    "status": 200,
+    "title": "Ancient Beast v0.6-α",
+    "capturedAt": "2026-11-18T01:41:55.656Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 900
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "games",
+    "domainNote": "browser turn-based hex tactics game (Ancient Beast) mid-match in replay/auto-play",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/ancientbeast/explore.json",
+      "repo": {
+        "name": "FreezingMoon/AncientBeast",
+        "url": "https://github.com/FreezingMoon/AncientBeast",
+        "commit": "2dad015855a07e3d3f75bc15ba892846059c7853",
+        "license": "AGPL-3.0"
+      },
+      "view": {
+        "slug": "battlefield",
+        "name": "Battlefield – player's turn",
+        "description": "Hex battlefield in round 8 with summoned creatures, the turn queue along the bottom, the active Swampler's ability buttons on the left, game controls on the right and the combat log."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "top-frame",
+      "role": "frame",
+      "label": "Dark textured decorative bar across the top",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 45
+      },
+      "patterns": []
+    },
+    {
+      "id": "battlefield",
+      "role": "game-board",
+      "label": "Painted desert battlefield with units on hex tiles, HP number pills and floating combat text",
+      "bbox": {
+        "x": 0,
+        "y": 45,
+        "width": 1440,
+        "height": 755
+      },
+      "patterns": [
+        "badge"
+      ]
+    },
+    {
+      "id": "active-unit",
+      "role": "hud",
+      "label": "Active creature ability icon with vertical health/energy meters",
+      "bbox": {
+        "x": 0,
+        "y": 720,
+        "width": 100,
+        "height": 80
+      },
+      "patterns": []
+    },
+    {
+      "id": "combat-log",
+      "role": "log",
+      "label": "Single-line timestamped combat log that expands on hover into scrollable history",
+      "bbox": {
+        "x": 490,
+        "y": 757,
+        "width": 460,
+        "height": 40
+      },
+      "patterns": [
+        "activity-log"
+      ]
+    },
+    {
+      "id": "right-toolbar",
+      "role": "toolbar",
+      "label": "Vertical icon buttons: music, fast forward, skip turn (stopwatch), fullscreen, with violet meter bar",
+      "bbox": {
+        "x": 1340,
+        "y": 480,
+        "width": 100,
+        "height": 320
+      },
+      "patterns": [
+        "tooltip"
+      ]
+    },
+    {
+      "id": "turn-queue",
+      "role": "hud",
+      "label": "Turn-order queue of creature portraits with status labels (Queued, Sickened, Protected, HP) and Round divider",
+      "bbox": {
+        "x": 0,
+        "y": 800,
+        "width": 820,
+        "height": 100
+      },
+      "patterns": [
+        "badge"
+      ]
+    },
+    {
+      "id": "player-panel",
+      "role": "hud",
+      "label": "Player1 stats panel: points, plasma, units",
+      "bbox": {
+        "x": 1340,
+        "y": 800,
+        "width": 100,
+        "height": 100
+      },
+      "patterns": [
+        "stat-tile"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "activity-log",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "detail": "one-line-summary",
+        "subject": "the-whole-system",
+        "aggregation": "every-event",
+        "presentation": "vertical-timeline",
+        "actions": "read-only"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 490,
+            "y": 757,
+            "width": 460,
+            "height": 40
+          },
+          "quote": "00:00:19 Active Creature: Uncle Fungus",
+          "region": "combat-log",
+          "note": "Collapsed log shows latest event; hover expands into a timestamped list of all match events (verified live; full list in a11y tree)"
+        }
+      ]
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.75,
+      "dims": {
+        "meaning": "status",
+        "aggregation": "per-item"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 420,
+            "y": 880,
+            "width": 80,
+            "height": 20
+          },
+          "quote": "Protected",
+          "region": "turn-queue",
+          "note": "Status label under queue portrait; others: Sickened, Queued, 43/70"
+        },
+        {
+          "bbox": {
+            "x": 423,
+            "y": 564,
+            "width": 40,
+            "height": 17
+          },
+          "quote": "42",
+          "region": "battlefield",
+          "note": "HP pill under each unit, team-colored outline"
+        }
+      ]
+    },
+    {
+      "id": "tooltip",
+      "status": "present",
+      "confidence": 0.7,
+      "dims": {
+        "trigger": [
+          "hover"
+        ],
+        "timing": "until-the-pointer-leaves",
+        "content": "label-and-shortcut",
+        "placement": "beside"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1340,
+            "y": 560,
+            "width": 80,
+            "height": 80
+          },
+          "region": "right-toolbar",
+          "note": "Hover on toolbar button shows tooltip to its left: 'hotkey F / Fast Forward / Click to return to normal replay speed.' (live only, not in capture)"
+        }
+      ]
+    },
+    {
+      "id": "stat-tile",
+      "status": "uncertain",
+      "confidence": 0.4,
+      "rationale": "Player panel lists several numbers (points, plasma, units) in one box rather than one key metric; could be read as a stat panel rather than a stat tile.",
+      "dims": {
+        "context": [
+          "label"
+        ],
+        "encoding": "number-only"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1340,
+            "y": 800,
+            "width": 100,
+            "height": 100
+          },
+          "quote": "42 Plasma",
+          "region": "player-panel"
+        }
+      ]
+    },
+    {
+      "id": "progress-indicator",
+      "status": "absent",
+      "confidence": 0.6,
+      "dims": {},
+      "evidence": []
+    },
+    {
+      "id": "contextual-help",
+      "status": "absent",
+      "confidence": 0.55,
+      "rationale": "Tutorial hints appear as entries in the combat log (a11y tree) but not as help anchored to UI in the capture.",
+      "dims": {},
+      "evidence": []
+    },
+    {
+      "id": "seat-map",
+      "status": "absent",
+      "confidence": 0.85,
+      "dims": {},
+      "evidence": []
+    }
+  ],
+  "structure": {
+    "layout": "full-viewport game canvas: painted desert battlefield with hex-grid units, framed by dark textured top/bottom bars; bottom-left HUD with active unit portrait + turn-order queue strip; centered collapsible combat log; right-edge vertical icon toolbar and player info panel",
+    "regions": [
+      "top-frame",
+      "battlefield",
+      "active-unit",
+      "combat-log",
+      "right-toolbar",
+      "turn-queue",
+      "player-panel"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#000000",
+      "#d9a35f",
+      "#ffffff",
+      "#dddddd",
+      "#8888ff",
+      "#ff5555",
+      "#ffff00",
+      "#b8860b",
+      "#6b8e23",
+      "#4a4a6a",
+      "#cc55ff"
+    ],
+    "colorRoles": {
+      "background": "#000000",
+      "surface": "#4a4a6a",
+      "text": "#ffffff",
+      "primary": "#8888ff",
+      "accent": "#ffff00",
+      "danger": "#ff5555",
+      "muted": "#dddddd",
+      "positive": "#6b8e23",
+      "warning": "#b8860b"
+    },
+    "typography": "Play (sans, slightly squared techno face) for all HUD text: log, labels, player panel; floating combat text in yellow outlined Play",
+    "typeScale": "Small HUD scale: 18px log/combat text, 14px queue labels and panel stats, 12px HP pills; little hierarchy beyond color",
+    "shape": "mixed",
+    "elevation": "flat",
+    "borders": "heavy",
+    "imagery": [
+      "illustration",
+      "iconography"
+    ],
+    "iconStyle": "filled",
+    "whitespace": "tight",
+    "backgroundTreatment": "image",
+    "mood": [
+      "fantasy",
+      "gritty",
+      "game-like",
+      "painterly"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T01:44:02.171Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 10,
+    "usage": {
+      "input_tokens": 20,
+      "cache_creation_input_tokens": 24523,
+      "cache_read_input_tokens": 280223,
+      "output_tokens": 6200
+    }
+  },
+  "notes": "Turn-based hex tactics game. Painted full-bleed desert backdrop; units are illustrated sprites with team-colored (red vs blue) HP pills and hex highlights. Bottom queue: square portraits with thick red/blue team borders and small colored status strips beneath (yellow Protected, olive Sickened, slate Queued). Floating yellow combat text with dark outline. Right toolbar uses brown leather-like square tiles with white glyphs. Log is a translucent rounded pill (20px radius) that expands on hover. Proposed new entry game-board-hud for the battlefield + initiative queue, which the codebook cannot express."
+}

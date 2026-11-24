@@ -1,0 +1,36 @@
+{
+  "mode": "static",
+  "entry": "/",
+  "login": null,
+  "stubs": [
+    {
+      "service": "jsdelivr CDN: DuckDB-WASM library, worker and .wasm (@duckdb/duckdb-wasm@1.33.1-dev114.0, the version index.html pins)",
+      "how": "Installed the same npm version into .ui-capture/vendor, bundled duckdb-browser.mjs (+apache-arrow) with esbuild into out/vendor/duckdb/, copied duckdb-base.wasm and duckdb-browser-base.worker.js. patch-index.mjs changes the import URL and replaces getJsDelivrBundles() with local bundle URLs, in out/index.html only."
+    },
+    {
+      "service": "jsdelivr CDN: Tabler Icons webfont (@tabler/icons-webfont@3.49.0)",
+      "how": "Copied tabler-icons.woff2 from the npm package to out/vendor/tabler/ and pointed tablerIconsFontUrl at it."
+    },
+    {
+      "service": "User picking local data files (Huey keeps datasources in memory only; there is no backend)",
+      "how": "out/seed/huey-seed.js (added with one <script> tag) fetches the files listed in out/seed/data/manifest.json and registers them through Huey's own uploadUi.uploadFiles(), the code behind the Upload button. If the URL has no report route, it then opens the user's usual report through pageStateManager.setPageState(), using a normal Huey #route built from out/seed/reports.json."
+    },
+    {
+      "service": "Saved Remote Catalogs and Secrets (Huey's IndexedDB document store)",
+      "how": "huey-seed.js stores the entries in out/seed/documents.json through AppDocumentStore (the app's own store API). The secrets store is initialised with password Trailhead#2025-nw, which the Secrets Manager asks for when you open a secret. Every entry has autoload=false, so nothing contacts the (fictional) remote endpoints."
+    },
+    {
+      "service": "duckdb.org release icons (About dialog avatar)",
+      "how": "The 1.3.0 and 2.0.0 SVGs from github.com/duckdb/duckdb-web are vendored in vendor/duckdb-release-icons and copied to out/vendor/duckdb/release-icons/. patch-index.mjs points the <img> in index.html and the URL built in out/App/App.js at them."
+    },
+    {
+      "service": "English UI label file for navigator.languages[0] (en-US / en-GB)",
+      "how": "Huey requests Internationalization/i18n/<browser language>.js, but the repo has no en-US or en-GB file. A 404 there stops language initialisation, because Huey only listens for the script load event. build.sh copies the repo's English-to-English label template (Internationalization/huey.i18n.labels.template.js) to i18n/en-US.js and i18n/en-GB.js."
+    },
+    {
+      "service": "DuckDB extension repository (extensions.duckdb.org)",
+      "how": "Not stubbed; it is unreachable offline. The data uses only CSV and a .duckdb file, which this DuckDB-WASM build reads without extensions. Parquet, JSON, Excel and ICU time-zone functions would need downloaded extensions."
+    }
+  ],
+  "notes": "Huey is a static browser app with no build step (src/ is the app). .ui-capture/build.sh copies src/ to .ui-capture/out, vendors the CDN dependencies, generates the seed data (seed/generate-data.mjs writes the CSVs; seed/generate-duckdb.mjs builds northwind_dw.duckdb with @duckdb/node-api 2.0.0, the same DuckDB version as the WASM build) and patches out/index.html (patch-index.mjs). Tools are pinned in mise.toml (node 22.12.0); npm versions are pinned in vendor/package.json. The persona is an analyst at 'Northwind Outdoor Co.', an outdoor gear retailer. Datasources tab: the DuckDB database northwind_dw, with schemas sales (order_lines, dim_customer [640], dim_product [50], product_reviews [420, short and long text, mixed moderation status], views v_monthly_revenue and v_returns), ops (support_tickets, inventory_snapshot, dim_store, store_daily_traffic [~3.9k days]) and marketing (campaign_spend, view v_roas). Files: northwind_order_lines_2023-2025.csv (~12k order lines from Jan 2023 to 14 Nov 2025; statuses Delivered/Shipped/Processing/Cancelled/Returned/Refunded/Lost in Transit; channels, regions, countries, cities including some missing or upper-cased ones; promo codes), support_tickets_2024-2025.csv (~4.1k tickets with open, in-progress, escalated and closed statuses, agents and CSAT), marketing_spend_by_campaign.csv (~2.4k rows) and inventory_snapshot_2025-11-14.csv (200 rows). Catalogs Manager: 4 saved catalogs (duckdb, ducklake, iceberg, sqlite). Secrets Manager: 3 secrets (s3, iceberg, huggingface). On load the app opens the default report: net revenue (sum of net_amount) by category/subcategory against year/quarter of order_timestamp, filtered on status, with the Attributes sidebar pinned. Main areas: the top toolbar (upload, load from URL, attach remote catalog, clone session, autorun, Quick Query, current datasource, download, secrets, settings, about), the sidebar with Datasources and Attributes tabs (derived date fields, statistics), the query editor (Filters/Columns/Rows/Cells axes) and the pivot table. DuckDB-WASM boots in a web worker, so the seeded report appears a few seconds after page load; html[data-huey-seeded=true] marks completion. Deep links (#<base64 route>) also work and are applied after the files load. The PWA service worker in out/ is patched to precache its app shell relative to its own location, because out/ is the web root rather than the repo root; all 113 entries exist, so precaching makes no 404s. To test locally: PORT=5463 node .ui-capture/serve.mjs .ui-capture/out (a strict server: missing files with an extension return 404)."
+}

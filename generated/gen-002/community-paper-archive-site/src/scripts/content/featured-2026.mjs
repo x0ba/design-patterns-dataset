@@ -1,0 +1,285 @@
+// Hand-written stories for the November 2026 issue (the current issue).
+// 22 articles across the regular sections, plus the Holiday Events roundup.
+// Fields: section, page, title, deck, by, streets, hoods, body (paragraphs),
+// photos ({scene, caption, credit}), events (roundup only).
+
+export const issue = { id: '2026-11', date: '2026-11-12' };
+
+export const articles = [
+  {
+    section: 'Front Page', page: 1,
+    title: 'Council Approves $1.2 Million to Repair Millrace Levee',
+    deck: 'Crews will rebuild the earthen levee behind Tannery Street and start on the Mill Road footbridge in March, the first major repair since the 1994 flood.',
+    by: ['Helen Rusakova'],
+    streets: ['Tannery Street', 'Mill Road'],
+    hoods: ['Lower Millrace', 'Tannery Flats'],
+    body: [
+      'The Millrace Town Council voted 5–2 on Tuesday night to spend $1.2 million on repairs to the levee that runs behind Tannery Street and the Mill Road footbridge. Work is scheduled to start in March and should take about five months, weather permitting.',
+      'County engineers surveyed the levee in September and found settling along a 900-foot stretch where the bank meets the millrace. Councilmember Anita Brandt, who represents Tannery Flats, said residents have asked for repairs since the spring of 2019, when heavy rain left the water within two feet of the top of the bank.',
+      'The money comes from a state infrastructure grant and about $300,000 in local reserves. Two members voted against the plan, saying the council should first hold a public meeting on the footbridge’s long-term upkeep. Public comment on the work plan will be taken at the December 9 council session.',
+    ],
+    photos: [{ scene: 'levee-2026', caption: 'Survey stakes mark the section of levee behind Tannery Street where settling was found in September.', credit: 'Photo by Gil Amador' }],
+  },
+  {
+    section: 'Front Page', page: 1,
+    title: 'New Gazette Website Opens With 38 Years of Back Issues',
+    deck: 'Every issue from March 1988 forward is now online, and the search tool can find names, streets and phrases in the scanned text.',
+    by: ['Thomas Quill'],
+    streets: [], hoods: [],
+    body: [
+      'Last month the volunteers who put this paper together launched the Millrace Gazette Online, a website that holds every issue published since March 1988. That is 452 issues, about 14,000 articles, and roughly 9,800 stories from the early years that were scanned from print and read by computer.',
+      'Because those early stories were scanned from paper, the text sometimes has mistakes. “Tannery” can come out as “Tannerv,” for example, and a dot can turn into a comma. The search tool allows for small misspellings like these. Stories written on computers after 2010 come through clean.',
+      'The site has no server behind it. Every page is a file, which means it loads quickly and can be copied to a new host if we ever need to move it. Volunteers will be at the Millrace Library on Saturday mornings through December to help readers search the archive and print old stories.',
+    ],
+  },
+  {
+    section: 'Neighborhood News', page: 2,
+    title: 'Holiday Lights Go Up on Kettle Hill',
+    deck: 'Forty-two households on Orchard Lane and Kettle Hill Road have signed up for the lighting tour, which runs December 6 through January 1.',
+    by: ['Thomas Quill'],
+    streets: ['Orchard Lane', 'Kettle Hill Road'], hoods: ['Kettle Hill'],
+    body: [
+      'Walk or drive the loop from Kettle Hill Park to the top of Orchard Lane and you will see every kind of holiday display, from a single string of white bulbs on a porch rail to a sleigh and eight reindeer on a front lawn that has been wired up since 2011.',
+      'Organizers ask visitors to park along the south side of Kettle Hill Road and to keep moving so the cars behind them can get through. A donation box at the park gate collects money for the Canal Park Food Pantry. Last year it took in $1,140.',
+    ],
+    photos: [{ scene: 'lights-kettle', caption: 'The Varga house on Orchard Lane, one of 42 displays on this year’s tour.', credit: 'Photo by Gil Amador' }],
+  },
+  {
+    section: 'Neighborhood News', page: 4,
+    title: 'Canal Park Food Pantry Moves to Larger Hall',
+    deck: 'The pantry will serve Tuesday and Thursday shoppers from the St. Brendan’s Parish hall starting December 1.',
+    by: ['Sana Whitcomb'],
+    streets: ['Canal Street'], hoods: ['Canal Park'],
+    body: [
+      'The Canal Park Food Pantry is leaving its cramped room behind the laundromat for the parish hall on Canal Street, which has three times the floor space and a loading door that opens straight onto the lot.',
+      'Shoppers will be able to pick out their own food instead of waiting in line for pre-packed bags. Volunteer coordinator Jerome Adeyemi said the new setup should cut waiting time from about 40 minutes to under 15. The pantry is still looking for two drivers for Thursday pickups.',
+    ],
+  },
+  {
+    section: 'Neighborhood News', page: 6,
+    title: 'Foxglove Heights Block Party Plans Set for Spring',
+    deck: 'Residents will vote in January on a new date and a shared-cost budget for the June street fair.',
+    by: ['Thomas Quill'],
+    streets: ['Foxglove Court'], hoods: ['Foxglove Heights'],
+    body: [
+      'The Foxglove Heights block party has been held on the second Saturday in June for 21 years, but the weather last spring pushed it into a rainout in two of those years. The steering group has proposed moving the party to the third Saturday of June.',
+      'Each household would pay a $15 share toward tables, a bounce house and the sound system. Residents who cannot pay will not be asked to. The vote will be held at the community room on January 14.',
+    ],
+  },
+  {
+    section: 'Neighborhood News', page: 7,
+    title: 'Scout Troop 14 Repaints Millrace Green Benches',
+    deck: 'Eleven benches around the green were sanded and repainted over two Saturdays, using paint donated by the hardware store on Mill Road.',
+    by: ['Dale Pruitt'],
+    streets: ['Mill Road'], hoods: ['Lower Millrace'],
+    body: [
+      'Troop 14 spent the first two Saturdays of October scraping, sanding and painting the benches on Millrace Green. The boys said the hardest part was the bench nearest the bandstand, which had at least six layers of paint on it.',
+      'Scoutmaster Ed Pruitt said the troop will do the same for the benches at Stonebridge Park in the spring. Anyone who wants to sponsor a bench plaque can contact the Lower Millrace Improvement Group.',
+    ],
+  },
+  {
+    section: 'Neighborhood News', page: 9,
+    title: 'Bellwood Chapel Seeks Drivers for Winter Meal Route',
+    deck: 'Volunteers deliver 60 hot meals each weekday to homebound residents. The route needs four more drivers by January.',
+    by: ['Carmen Lopes'],
+    streets: ['Chapel Lane'], hoods: ['Bellwood'],
+    body: [
+      'The Bellwood Chapel meal route has run every weekday since 1996. Drivers pick up insulated boxes at 11 a.m. and finish the route around 1 p.m. Most drivers take the same six or seven stops each week, and many have been doing it for years.',
+      'Anyone with a valid license and a few hours a week can volunteer. Training takes about 40 minutes. Call the chapel office or stop by on a weekday morning.',
+    ],
+  },
+  {
+    section: 'Neighborhood News', page: 10,
+    title: 'Stonebridge Trail Closed for Culvert Work Through December',
+    deck: 'The city will replace a stone culvert under the trail near Hickory Ridge Road. Use the Eastgate detour until the work is done.',
+    by: ['Oren Bell'],
+    streets: ['Hickory Ridge Road'], hoods: ['Stonebridge', 'Hickory Ridge'],
+    body: [
+      'The trail between Stonebridge Park and the Hickory Ridge footbridge will be closed to walkers and bikes until about December 19. The stone culvert that carries the trail over a feeder creek has cracked along its east wall, and crews need to rebuild it before the spring thaw.',
+      'The detour follows Eastgate Avenue to the rail underpass and returns on the south bank. It adds about a mile. Signs are posted at both ends of the closed section.',
+    ],
+  },
+  {
+    section: 'Council Watch', page: 3,
+    title: 'Parking Permit Rules Revised for Foundry Row',
+    deck: 'Residents who park on the street overnight will need a sticker starting in February, and guest passes will be capped at 30 a year.',
+    by: ['Helen Rusakova'],
+    streets: ['Foundry Street'], hoods: ['Foundry Row'],
+    body: [
+      'The council approved a revised overnight parking ordinance for the Foundry Row blocks on a 6–1 vote. Stickers will cost $10 a year for the first car and $25 for a second. The city expects the new rules to start in February, after a 60-day notice period.',
+      'The guest pass limit was the most debated change. Several residents said 30 passes a year is too few for households that host holiday visitors. The council agreed to revisit the cap in June.',
+    ],
+  },
+  {
+    section: 'Council Watch', page: 5,
+    title: 'Budget Hearing Draws Record Crowd of 212',
+    deck: 'Most speakers asked the council to keep the library open on Sundays and to avoid cutting the bus shelter program.',
+    by: ['Helen Rusakova'],
+    streets: [], hoods: ['Mill Hill'],
+    body: [
+      'The council’s budget hearing ran four hours, the longest in recent memory. Two hundred and twelve people signed up to speak, and the chair limited each speaker to two minutes. Many used their time to ask for the Sunday library hours to be restored.',
+      'The proposed budget keeps the library at its current schedule but does not restore Sunday service. The council is expected to vote on the budget at its December 2 meeting.',
+    ],
+  },
+  {
+    section: 'Council Watch', page: 12,
+    title: 'Council Okays Speed Bumps on Hickory Ridge Road',
+    deck: 'Two raised crosswalks will go in near the elementary school after a summer of complaints from parents.',
+    by: ['Jonah Peltier'],
+    streets: ['Hickory Ridge Road'], hoods: ['Hickory Ridge'],
+    body: [
+      'Two raised crosswalks will be installed on Hickory Ridge Road in front of the elementary school. The council approved $48,000 for the work on a 5–3 vote. The city will also add a painted pedestrian zone at the Orchard Lane corner.',
+      'Parents said drivers routinely pass school buses on the hill. Public works says the new crosswalks should slow traffic to about 20 miles an hour in school zones.',
+    ],
+  },
+  {
+    section: 'Schools', page: 8,
+    title: 'Eastgate Elementary Wins State Reading Grant',
+    deck: 'The $25,000 grant will pay for a part-time library aide and new books for grades K through 2.',
+    by: ['Priya Raman'],
+    streets: [], hoods: ['Eastgate'],
+    body: [
+      'Eastgate Elementary has been awarded a $25,000 early literacy grant from the state. Principal Denise Holloway said the money will pay for a library aide three days a week and about 800 new picture books for the primary grades.',
+      'The school will hold a family reading night on January 22. Parents of kindergarten and first-grade students will receive sign-up forms in their backpacks this week.',
+    ],
+  },
+  {
+    section: 'Schools', page: 13,
+    title: 'Winter Concert Schedule Announced for Middle and High School',
+    deck: 'Concerts run from December 10 to December 18 in the Millrace Middle School gym. Tickets are free at the door.',
+    by: ['Priya Raman'],
+    streets: [], hoods: ['Mill Hill'],
+    body: [
+      'The Millrace Middle School band, chorus and string ensemble will perform on December 10, 11 and 12. The high school jazz band and show choir take the stage on December 17 and 18. All shows begin at 7 p.m. and last about 90 minutes.',
+      'Doors open 30 minutes early. Seating is first come, first served, and the gym holds about 400 people.',
+    ],
+  },
+  {
+    section: 'Schools', page: 14,
+    title: 'Millrace Middle School Robotics Team Heads to State Finals',
+    deck: 'Six students built a robot that sorts recycling. The team will compete at the state finals in February.',
+    by: ['Tobias Greer'],
+    streets: [], hoods: ['Mill Hill'],
+    body: [
+      'The Millrace Middle School robotics team qualified for the state finals after a second-place finish at the regional meet in October. Their robot uses a color sensor and a rotating arm to sort plastic, glass and paper from a conveyor belt.',
+      'Coach Lena Park said the team meets Tuesdays and Thursdays after school. The club is always looking for mentors who can help with wiring and programming. The team is raising money through a bake sale on December 5.',
+    ],
+  },
+  {
+    section: 'Letters', page: 15,
+    title: 'Letter: The Levee Coverage Was Long Overdue',
+    deck: '',
+    by: ['Bernard Kowal'],
+    streets: ['Tannery Street'], hoods: ['Tannery Flats'],
+    body: [
+      'To the editor: Thank you for the front-page story on the levee. I have lived on Tannery Street since 1986 and have watched that bank slump a little more every spring. I am glad someone with a county engineering report finally put the numbers in print.',
+      'I hope the council will keep the public meeting on the footbridge. Many of us who walk across it every day would like a say in what the repairs look like.',
+    ],
+  },
+  {
+    section: 'Letters', page: 15,
+    title: 'Letter: The Lantern Walk Brought Us Back Together',
+    deck: '',
+    by: ['Maureen Doyle'],
+    streets: ['Tannery Street'], hoods: ['Tannery Flats'],
+    body: [
+      'To the editor: Last year’s Lantern Walk was the first time in a long time that I saw my neighbors from the south end of the street at the same place at the same time. I hope this year brings even more of us out.',
+      'The walk leaves Tannery Street Park at 6 p.m. on November 29 and ends at the old mill steps. Bring a flashlight if you have one. The Scouts will have lanterns for the children.',
+    ],
+  },
+  {
+    section: 'Obituaries', page: 16,
+    title: 'Ellen M. Sadowski, 84, Longtime Canal Park Librarian',
+    deck: 'She ran the Canal Park branch reading room for 31 years and started the first summer story hour in the neighborhood.',
+    by: ['Marguerite Shaw'],
+    streets: [], hoods: ['Canal Park'],
+    body: [
+      'Ellen Marie Sadowski died November 3 at Eastgate Care Center. She was 84. Born in Millrace in 1942, she joined the Canal Park branch as a part-time clerk in 1966 and became head librarian in 1979, a post she held until her retirement in 2010.',
+      'She is survived by two sons, five grandchildren and a long list of former students and patrons who remember her summer story hours in the reading room. Services were held at St. Brendan’s on November 8. Donations may be made to the library’s children’s fund.',
+    ],
+  },
+  {
+    section: 'Obituaries', page: 17,
+    title: 'Frank Dwyer, 91, Eastgate Volunteer Firefighter',
+    deck: 'He answered alarms for the Eastgate company for 47 years and rarely missed a Thursday drill.',
+    by: ['Marguerite Shaw'],
+    streets: [], hoods: ['Eastgate'],
+    body: [
+      'Francis X. Dwyer, known to everyone as Frank, died October 29 at home on Eastgate Avenue. He was 91. He joined the Eastgate Volunteer Fire Co. in 1958 and served as assistant chief from 1974 to 1989.',
+      'Friends remember him as the man who kept the hose house swept and the coffee on. A memorial breakfast will be held at the fire hall on December 6.',
+    ],
+  },
+  {
+    section: 'Events', page: 18,
+    title: 'Holiday Events Roundup: 17 Things to Do Between Thanksgiving and New Year’s',
+    deck: 'Tree lightings, lantern walks, a teen dance, skating on Marsh Landing Pond and a New Year’s countdown on Millrace Green.',
+    by: ['Ines Ferreira'],
+    streets: ['Tannery Street', 'Canal Street'], hoods: ['Lower Millrace', 'Tannery Flats', 'Canal Park', 'Eastgate', 'Mill Hill', 'Cedar Hollow', 'Kettle Hill', 'Foundry Row', 'Hickory Ridge', 'Bellwood', 'Foxglove Heights', 'Stonebridge', 'Marsh Landing'],
+    body: [
+      'Here is everything happening in the neighborhoods from the Saturday after Thanksgiving through the last night of the year. Times and prices come from the organizers. If the weather changes plans, check the host’s posting before you go.',
+      'Events are listed in date order. Most are free. Where there is a charge, it is listed with the event.',
+    ],
+    events: [
+      { date: '2026-11-28', time: '5:00 p.m.', title: 'Tree Lighting on Millrace Green', place: 'Millrace Green', hood: 'Lower Millrace', cost: 'Free', note: 'Cocoa and cider from Scout Troop 14. The tree lights come on at 5:30.' },
+      { date: '2026-11-28', time: '2:00–4:00 p.m.', title: 'Cocoa and Carols', place: 'St. Brendan’s Parish Hall, Canal Street', hood: 'Canal Park', cost: 'Free (donations to the food pantry)', note: 'Parish choir and a sing-along of carols from the old hymnal.' },
+      { date: '2026-11-29', time: '6:00 p.m.', title: 'Lantern Walk on Tannery Street', place: 'Tannery Street Park, to the old mill steps', hood: 'Tannery Flats', cost: 'Free', note: 'Bring a flashlight. Lanterns for children are provided by the Scouts.' },
+      { date: '2026-12-01', time: '10:00 a.m.–1:00 p.m.', title: 'Canal Park Food Pantry Opens in New Hall', place: 'St. Brendan’s Parish Hall, Canal Street', hood: 'Canal Park', cost: 'Free', note: 'Open Tuesdays and Thursdays. Bring a bag if you have one.' },
+      { date: '2026-12-03', time: 'Noon', title: 'Seniors’ Holiday Lunch', place: 'Eastgate Community Hall', hood: 'Eastgate', cost: 'Free for residents 65 and older', note: 'Reservations by November 30 at the community hall desk.' },
+      { date: '2026-12-05', time: '10:00 a.m.–12:00 p.m.', title: 'Gingerbread Build', place: 'Millrace Library, Mill Hill branch', hood: 'Mill Hill', cost: 'Free, ages 6 to 12', note: 'Sign up at the children’s desk. Materials are supplied.' },
+      { date: '2026-12-05', time: '9:00 a.m.–12:00 p.m.', title: 'Winter Market Opening Day', place: 'Cedar Hollow Pavilion', hood: 'Cedar Hollow', cost: 'Free to browse', note: 'Vendors return every Saturday through December 19.' },
+      { date: '2026-12-06', time: '5:30–8:00 p.m.', title: 'Kettle Hill Lights Tour Begins', place: 'Kettle Hill Park gate', hood: 'Kettle Hill', cost: 'Free; donations welcome', note: 'Tour runs through January 1. Park on the south side of Kettle Hill Road.' },
+      { date: '2026-12-07', time: '2:00–7:00 p.m.', title: 'Community Blood Drive', place: 'Foundry Row Fire House', hood: 'Foundry Row', cost: 'Free', note: 'Walk-ins welcome; appointments recommended.' },
+      { date: '2026-12-09', time: '7:00 p.m.', title: 'Council Session: Public Comment on Levee Work Plan', place: 'Town Hall Council Chambers, Mill Hill', hood: 'Mill Hill', cost: 'Free', note: 'Speakers sign in at 6:30 p.m.' },
+      { date: '2026-12-12', time: '7:00–9:00 p.m.', title: 'Teen Winter Dance', place: 'Hickory Ridge Recreation Center', hood: 'Hickory Ridge', cost: '$5 at the door, ages 13 to 17', note: 'Chaperoned. Snacks and a DJ from the youth center.' },
+      { date: '2026-12-13', time: '8:00–11:00 a.m.', title: 'Pancake Breakfast', place: 'Foxglove Heights Fire Station', hood: 'Foxglove Heights', cost: '$6 adults, $3 children', note: 'All-you-can-eat pancakes, sausage and coffee. Proceeds to the fire auxiliary.' },
+      { date: '2026-12-14', time: '7:00 p.m.', title: 'Carol Sing', place: 'Bellwood Chapel', hood: 'Bellwood', cost: 'Free', note: 'Song sheets provided. Bring a friend who doesn’t know the words.' },
+      { date: '2026-12-18', time: '6:00–8:00 p.m.', title: 'Stonebridge Sled Hill Open Night', place: 'Stonebridge Park hill', hood: 'Stonebridge', cost: 'Free', note: 'Weather permitting. Bring your own sled; the park has a warming tent.' },
+      { date: '2026-12-19', time: '9:00 a.m.–12:00 p.m.', title: 'Winter Market, Final Saturday', place: 'Cedar Hollow Pavilion', hood: 'Cedar Hollow', cost: 'Free to browse', note: 'Last market of the season. Holiday gift baskets are sold out by 11 a.m. most years.' },
+      { date: '2026-12-20', time: '2:00–4:00 p.m.', title: 'Open Skate on Marsh Landing Pond', place: 'Marsh Landing Pond', hood: 'Marsh Landing', cost: 'Free; skate rental $2', note: 'Ice conditions are posted on the pond gate. Helmets recommended for children.' },
+      { date: '2026-12-31', time: '9:00 p.m.–12:30 a.m.', title: 'New Year’s Eve Countdown on Millrace Green', place: 'Millrace Green', hood: 'Lower Millrace', cost: 'Free', note: 'Live music until the countdown. Fireworks over the river at midnight.' },
+    ],
+  },
+  {
+    section: 'Events', page: 19,
+    title: 'Winter Market Returns to Cedar Hollow Pavilion',
+    deck: 'Vendors will sell from 9 a.m. to noon on Saturdays, December 5, 12 and 19, under the pavilion roof.',
+    by: ['Ines Ferreira'],
+    streets: [], hoods: ['Cedar Hollow'],
+    body: [
+      'The Cedar Hollow Winter Market returns for its third season with 14 vendors selling baked goods, wool scarves, honey, candles and holiday wreaths. Most vendors are from within 20 miles of Millrace.',
+      'The market accepts cash and cards. A small table near the entrance sells the market’s wooden tokens for children to trade for a free cider.',
+    ],
+  },
+  {
+    section: 'Then & Now', page: 20,
+    title: 'Then & Now: Tannery Street’s Flood Garage, 1994 and 2026',
+    deck: 'Thirty-two years after the spring flood, the garage at 318 Tannery Street has a new roof and no visible water line. Here is the spot.',
+    by: ['Dorothy Kessler'],
+    streets: ['Tannery Street'], hoods: ['Tannery Flats'],
+    body: [
+      'In June 1994 the Gazette ran a series of photographs of the south end of Tannery Street after the river went over its banks. The most striking was the detached garage at 318 Tannery Street, where the water had reached the rafters of the door.',
+      'The garage is still standing. Its owner, Ed Ostrowski’s grandson Nate, rebuilt the roof and the door in 2008 and added a second bay for a workbench. The water line on the back wall has been painted over, but it is still visible from the alley if you know where to look.',
+    ],
+    photos: [
+      { scene: 'flood-garage', caption: 'The Ostrowski garage at 318 Tannery Street the day after the water went down, May 1994.', credit: 'Photo by Gene Auerbach, 1994' },
+      { scene: 'garage-now', caption: 'The same garage from the same angle, November 2026.', credit: 'Photo by Dorothy Kessler' },
+    ],
+  },
+  {
+    section: 'Then & Now', page: 11,
+    title: 'Then & Now: The Mill Road Footbridge, 1971 and 2026',
+    deck: 'The footbridge that will get new piers in March has carried foot traffic across the millrace for more than 50 years.',
+    by: ['Dorothy Kessler'],
+    streets: ['Mill Road'], hoods: ['Lower Millrace'],
+    body: [
+      'The steel footbridge was built in 1971 to replace a wooden span that had washed out twice in the 1960s. A county photo from that year shows the first crossing, with men in suits and children in winter coats on the new deck.',
+      'Fifty-five years later the bridge is still in use, though its piers have settled and the railings have been repainted at least a dozen times. The levee work scheduled for March will rebuild the south pier and the approach ramp.',
+    ],
+    photos: [
+      { scene: 'bridge-1971', caption: 'The new Mill Road footbridge on its opening day, October 1971.', credit: 'Millrace County Historical Society' },
+      { scene: 'bridge-2026', caption: 'The footbridge today, looking toward Lower Millrace.', credit: 'Photo by Dorothy Kessler' },
+    ],
+  },
+];
+
+// Holiday roundup events are attached to the roundup article above.

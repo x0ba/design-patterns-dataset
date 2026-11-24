@@ -1,0 +1,517 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "flocafe--pos-register",
+    "url": "http://localhost:4425/",
+    "finalUrl": "http://localhost:4425/pos/",
+    "status": 200,
+    "title": "Flo",
+    "capturedAt": "2026-11-18T06:02:31.746Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 3586
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "commerce",
+    "domainNote": "restaurant/café point-of-sale (POS) terminal for order entry",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/flocafe/explore.json",
+      "repo": {
+        "name": "FreeOpenSourcePOS/FloCafe",
+        "url": "https://github.com/FreeOpenSourcePOS/FloCafe",
+        "commit": "2bac03d52f470ab2897ebe0750167c48e4691ce3",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "pos-register",
+        "name": "POS register",
+        "description": "Point-of-sale screen with product grid, category filters, and the order cart panel holding an Americano."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Store identity, primary nav (POS, Dashboard, Orders, Products, Inventory…), theme and user buttons",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 200,
+        "height": 3586
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "top-toolbar",
+      "role": "toolbar",
+      "label": "Customer search by phone/name, printer status dropdown, more-actions menu, lock and full-screen buttons",
+      "bbox": {
+        "x": 200,
+        "y": 0,
+        "width": 1240,
+        "height": 80
+      },
+      "patterns": [
+        "text-field",
+        "menu"
+      ]
+    },
+    {
+      "id": "product-catalog",
+      "role": "product-grid",
+      "label": "Product search, category filter chips with View more, 4-column grid of product cards with image or initials tile, name, price, customisable icon",
+      "bbox": {
+        "x": 232,
+        "y": 91,
+        "width": 840,
+        "height": 3437
+      },
+      "patterns": [
+        "filter-controls",
+        "choice-control",
+        "card",
+        "badge",
+        "text-field",
+        "modal-dialog"
+      ]
+    },
+    {
+      "id": "order-panel",
+      "role": "cart-sidebar",
+      "label": "Current order: Dine in/Takeaway/Delivery/Online segmented control, pax stepper, line items with qty steppers, subtotal and Place Order",
+      "bbox": {
+        "x": 1088,
+        "y": 91,
+        "width": 320,
+        "height": 3437
+      },
+      "patterns": [
+        "checkout",
+        "choice-control"
+      ]
+    },
+    {
+      "id": "status-bar",
+      "role": "footer",
+      "label": "Status bar: signed-in user and role, receipt printer, Shift opened pill, Diagnostics & Logs",
+      "bbox": {
+        "x": 200,
+        "y": 3554,
+        "width": 1240,
+        "height": 32
+      },
+      "patterns": [
+        "badge"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations"
+        ],
+        "visibility": "toggle-button",
+        "structure": "single-app"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 72,
+            "width": 183,
+            "height": 356
+          },
+          "quote": "POS Dashboard Orders Products Inventory",
+          "region": "sidebar",
+          "note": "Fixed sidebar destinations; 'Toggle or resize sidebar' button present"
+        }
+      ]
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.9,
+      "dims": {
+        "media": "top-image",
+        "actions": "none",
+        "shape": "vertical",
+        "style": "outlined",
+        "target": "whole-card"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 232,
+            "y": 191,
+            "width": 201,
+            "height": 264
+          },
+          "quote": "Latte $5.25",
+          "region": "product-catalog",
+          "note": "Whole card is a button; outlined 1px border, 14px radius; photo or colored initials square on top"
+        },
+        {
+          "bbox": {
+            "x": 658,
+            "y": 191,
+            "width": 201,
+            "height": 264
+          },
+          "quote": "Cappuccino",
+          "region": "product-catalog",
+          "note": "Initials placeholder tile instead of photo"
+        }
+      ]
+    },
+    {
+      "id": "filter-controls",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "placement": "filter-bar-with-chips",
+        "types": [
+          "toggle-chips",
+          "text-match"
+        ],
+        "preview": "live-results",
+        "origin": "developer-defined"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 232,
+            "y": 137,
+            "width": 840,
+            "height": 38
+          },
+          "quote": "All Espresso Bar Brew Bar & Tea Cold Drinks Pastries & Bakes Breakfast View more",
+          "region": "product-catalog",
+          "note": "Category chips filter the grid instantly (verified live); View more reveals more categories"
+        },
+        {
+          "bbox": {
+            "x": 232,
+            "y": 91,
+            "width": 840,
+            "height": 38
+          },
+          "quote": "Search products... [/]",
+          "region": "product-catalog"
+        }
+      ]
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "segmented-control",
+        "option": [
+          "label-only",
+          "icon-or-image"
+        ],
+        "timing": "immediately",
+        "largeSets": "show-all"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1099,
+            "y": 96,
+            "width": 299,
+            "height": 28
+          },
+          "quote": "Dine in Takeaway Delivery Online",
+          "region": "order-panel",
+          "note": "Order type segmented group, Dine in pressed"
+        },
+        {
+          "bbox": {
+            "x": 232,
+            "y": 137,
+            "width": 840,
+            "height": 38
+          },
+          "quote": "All",
+          "region": "product-catalog",
+          "note": "Category chips are single-select with show-more ('View more')"
+        }
+      ]
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.85,
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "aggregation": "per-item"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 408,
+            "y": 468,
+            "width": 24,
+            "height": 22
+          },
+          "quote": "1",
+          "region": "product-catalog",
+          "note": "Count of this item in current order on Americano card"
+        },
+        {
+          "bbox": {
+            "x": 666,
+            "y": 1853,
+            "width": 82,
+            "height": 20
+          },
+          "quote": "Running Low",
+          "region": "product-catalog",
+          "note": "Status label badges on cards (also 'Out of Stock')"
+        },
+        {
+          "bbox": {
+            "x": 240,
+            "y": 3277,
+            "width": 80,
+            "height": 20
+          },
+          "quote": "Out of Stock",
+          "region": "product-catalog"
+        },
+        {
+          "bbox": {
+            "x": 1172,
+            "y": 3561,
+            "width": 92,
+            "height": 18
+          },
+          "quote": "Shift opened",
+          "region": "status-bar",
+          "note": "Status pill"
+        }
+      ]
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "openBy": "button-click",
+        "structure": "flat",
+        "item": [
+          "label",
+          "icon"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1260,
+            "y": 26,
+            "width": 44,
+            "height": 44
+          },
+          "region": "top-toolbar",
+          "note": "'More actions' ⋮ button opens Cash movement / Close shift / Print Menu (verified live)"
+        }
+      ]
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "supporting": [
+          "placeholder"
+        ],
+        "style": "outlined",
+        "inputType": "plain"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 232,
+            "y": 28,
+            "width": 320,
+            "height": 40
+          },
+          "quote": "Search by phone or name…",
+          "region": "top-toolbar"
+        },
+        {
+          "bbox": {
+            "x": 232,
+            "y": 91,
+            "width": 840,
+            "height": 38
+          },
+          "quote": "Search products... [/]",
+          "region": "product-catalog",
+          "note": "Shortcut hint '/' kbd suffix"
+        }
+      ]
+    },
+    {
+      "id": "checkout",
+      "status": "present",
+      "confidence": 0.6,
+      "dims": {
+        "structure": "one-page",
+        "summary": "persistent-side-summary",
+        "disclosure": "running-total-with-estimates"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1088,
+            "y": 91,
+            "width": 320,
+            "height": 3437
+          },
+          "quote": "Americano $3.75",
+          "region": "order-panel",
+          "note": "POS order ticket with editable line items, qty steppers, price override"
+        },
+        {
+          "bbox": {
+            "x": 1089,
+            "y": 3458,
+            "width": 318,
+            "height": 69
+          },
+          "quote": "Subtotal $3.75 Place Order",
+          "region": "order-panel"
+        }
+      ]
+    },
+    {
+      "id": "modal-dialog",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "dims": {},
+      "rationale": "Not visible in capture; verified live that the customise icon on a card opens a modal with modifier options (milk, extra shots) and Add to Cart.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 398,
+            "y": 420,
+            "width": 20,
+            "height": 20
+          },
+          "region": "product-catalog",
+          "note": "Customise (sliders) icon that opens the modifier modal"
+        }
+      ]
+    },
+    {
+      "id": "product-configurator",
+      "status": "absent",
+      "confidence": 0.6,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 398,
+            "y": 420,
+            "width": 20,
+            "height": 20
+          },
+          "note": "Modifier selection only exists inside a modal not shown in capture"
+        }
+      ]
+    }
+  ],
+  "structure": {
+    "layout": "web app shell: left sidebar nav, top toolbar, center product grid with search and category chips, right persistent order/cart panel, bottom status bar",
+    "regions": [
+      "sidebar",
+      "top-toolbar",
+      "product-catalog",
+      "order-panel",
+      "status-bar"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#f8f8f9",
+      "#111111",
+      "#3248ff",
+      "#e8ebff",
+      "#e5e7eb",
+      "#6b7280",
+      "#7eceb6",
+      "#b07ece",
+      "#16a34a",
+      "#ef4444"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "surface": "#f8f8f9",
+      "text": "#111111",
+      "primary": "#3248ff",
+      "accent": "#e8ebff",
+      "border": "#e5e7eb",
+      "muted": "#6b7280"
+    },
+    "typography": "Geist throughout (nav, headings, prices, buttons); Geist Mono for the keyboard hint.",
+    "typeScale": "Compact UI scale: 24px bold initials on placeholders, 16px bold blue prices, 14px/500 product names and nav, 12px secondary controls, 10–11px status bar and badges; contrast mostly through weight and the blue price color.",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "photography",
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "clean",
+      "utilitarian",
+      "friendly",
+      "functional"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T06:04:05.029Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 11,
+    "usage": {
+      "input_tokens": 22,
+      "cache_creation_input_tokens": 43323,
+      "cache_read_input_tokens": 386795,
+      "output_tokens": 5637
+    }
+  },
+  "notes": "Café POS. Products without photos get pastel tiles with two-letter initials in white. Prices are set in the bright blue primary (#3248ff), which also marks the active category chip and the active nav item (light blue fill). The Place Order button is black with a 'Space' keyboard hint. The status bar at the bottom shows the printer, shift state and diagnostics. The Pax stepper and the qty steppers are numeric steppers, which the codebook has no entry for."
+}

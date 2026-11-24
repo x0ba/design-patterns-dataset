@@ -1,0 +1,230 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "igdm--not-following-back",
+    "url": "http://localhost:4439/browser/index.html",
+    "finalUrl": "http://localhost:4439/browser/index.html",
+    "status": 200,
+    "title": "IGdm - Instagram Desktop Messenger",
+    "capturedAt": "2026-11-18T20:59:58.522Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1701
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "social-community",
+    "domainNote": "IGdm — unofficial Instagram desktop DM client; capture shows a full-screen 'following' overlay with Unfollow actions",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/igdm/explore.json",
+      "repo": {
+        "name": "igdmapps/igdm",
+        "url": "https://github.com/igdmapps/igdm",
+        "commit": "644fd213e2d7a9eaf6660729217021c2ba30fef4",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "not-following-back",
+        "name": "Users not following back",
+        "description": "Full-screen overlay listing accounts that don't follow the user back as a grid of avatars with usernames and Unfollow buttons, with a close icon."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "following-overlay",
+      "role": "modal-overlay",
+      "label": "Full-screen white overlay with close X top-right, listing 26 followed accounts in a 4-column grid, each with avatar, username and blue Unfollow button",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 1701
+      },
+      "patterns": [
+        "modal-dialog",
+        "card"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "modal-dialog",
+      "status": "present",
+      "confidence": 0.8,
+      "dims": {
+        "form": "full-screen",
+        "dismissBy": [
+          "close-button",
+          "escape"
+        ],
+        "modality": "blocking"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 1701
+          },
+          "note": "Opaque white full-screen layer covering the chat app (search, conversation list, composer present in ARIA but hidden); Escape on live page closes it to reveal the inbox",
+          "region": "following-overlay"
+        },
+        {
+          "bbox": {
+            "x": 1405,
+            "y": 5,
+            "width": 25,
+            "height": 26
+          },
+          "quote": "close icon",
+          "note": "Close X button",
+          "region": "following-overlay"
+        }
+      ],
+      "novel": [
+        {
+          "subdimension": "purpose",
+          "description": "Manage-list dialog: a roster of followed accounts with a per-item destructive action (Unfollow), not a single selection or form"
+        }
+      ]
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.65,
+      "dims": {
+        "media": "top-image",
+        "actions": "one-primary-action",
+        "shape": "vertical",
+        "style": "borderless"
+      },
+      "evidence": [
+        {
+          "bbox": {
+            "x": 100,
+            "y": 46,
+            "width": 160,
+            "height": 108
+          },
+          "quote": "hazel.sato Unfollow",
+          "note": "Borderless user tile: circular avatar, username, single Unfollow button; repeated 26 times in a 4-column grid",
+          "region": "following-overlay"
+        },
+        {
+          "bbox": {
+            "x": 460,
+            "y": 198,
+            "width": 160,
+            "height": 108
+          },
+          "quote": "makingthingspod Unfollow",
+          "note": "Initials-monogram avatar variant",
+          "region": "following-overlay"
+        }
+      ]
+    },
+    {
+      "id": "inbox",
+      "status": "absent",
+      "confidence": 0.6,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 1701
+          },
+          "note": "Conversation list with timestamps/snippets exists in DOM/ARIA but is fully covered by the overlay in the capture"
+        }
+      ],
+      "rationale": "The inbox list exists underneath but is not visible in the capture; coded absent because the label describes the visible capture."
+    },
+    {
+      "id": "chat-thread",
+      "status": "absent",
+      "confidence": 0.7,
+      "dims": {},
+      "evidence": [
+        {
+          "bbox": {
+            "x": 480,
+            "y": 1619,
+            "width": 960,
+            "height": 82
+          },
+          "note": "Message composer exists in DOM but hidden behind overlay; no thread open"
+        }
+      ]
+    }
+  ],
+  "structure": {
+    "layout": "full-screen overlay with a centered 4-column grid of user tiles (avatar, username, Unfollow button) and a close X top-right; the chat app beneath is fully hidden",
+    "regions": [
+      "following-overlay"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#212529",
+      "#168bf9",
+      "#000000",
+      "#efefef",
+      "#495057"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "text": "#212529",
+      "primary": "#168bf9",
+      "surface": "#efefef",
+      "muted": "#495057"
+    },
+    "typography": "System UI stack (-apple-system / Helvetica-like) throughout: usernames 16px regular dark, button labels 16px white",
+    "typeScale": "Flat: almost everything 16px/400; 14px in hidden chat list; no headings on the overlay",
+    "shape": "mixed",
+    "elevation": "flat",
+    "borders": "none",
+    "imagery": [
+      "illustration",
+      "user-generated"
+    ],
+    "iconStyle": "line",
+    "whitespace": "generous",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "plain",
+      "utilitarian",
+      "bootstrap-default"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T21:00:53.780Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 7,
+    "usage": {
+      "input_tokens": 14,
+      "cache_creation_input_tokens": 22215,
+      "cache_read_input_tokens": 183108,
+      "output_tokens": 2973
+    }
+  },
+  "notes": "Bootstrap-flavored (text #212529, 4px-radius primary buttons in Instagram-ish blue #168bf9). Avatars are 48px circles: either flat illustrated people or colored monogram discs with serif initials and an inner ring. Tiles sit on pure white with no containers, ~150px vertical pitch, each column 360px wide. No title on the overlay; only a thin grey X close at top right. Last row (2 items) is centered."
+}

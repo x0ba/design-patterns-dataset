@@ -1,0 +1,377 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "podgrab--podcasts-home",
+    "url": "http://localhost:4429/",
+    "finalUrl": "http://localhost:4429/",
+    "status": 200,
+    "title": "PodGrab",
+    "capturedAt": "2026-11-18T06:04:41.451Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 3476
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "media-entertainment",
+    "domainNote": "self-hosted podcast downloader/manager (Podgrab), subscribed podcasts library page",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/podgrab/explore.json",
+      "repo": {
+        "name": "akhilrex/podgrab",
+        "url": "https://github.com/akhilrex/podgrab",
+        "commit": "032248091294dbf5b6a439a5afd93788a7cc647f",
+        "license": "GPL-3.0"
+      },
+      "view": {
+        "slug": "podcasts-home",
+        "name": "Podcasts home",
+        "description": "List of subscribed podcasts with cover art, descriptions, episode counts, tags, action buttons, and sort/filter/layout controls."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Centered 'Podgrab' H1 title and uppercase letter-spaced top nav (Home, Episodes, Add Podcast, Player, Tags, Settings) between thin rules",
+      "bbox": {
+        "x": 150,
+        "y": 80,
+        "width": 1140,
+        "height": 147
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "toolbar",
+      "role": "toolbar",
+      "label": "Right-aligned native selects: sort (Date Added Old First), tag filter (All, with counts), view (List/Grid)",
+      "bbox": {
+        "x": 868,
+        "y": 251,
+        "width": 422,
+        "height": 38
+      },
+      "patterns": [
+        "sort-control",
+        "filter-controls",
+        "view-switcher"
+      ]
+    },
+    {
+      "id": "podcast-list",
+      "role": "collection-list",
+      "label": "20 podcast rows: square cover art, large title link, description, last-episode date, downloaded/total episode count, tag list, and a row of 5 icon buttons (delete, download all, play all, pause auto-download, info); paused podcasts are dimmed",
+      "bbox": {
+        "x": 150,
+        "y": 304,
+        "width": 1140,
+        "height": 3125
+      },
+      "patterns": [
+        "overview-detail",
+        "card",
+        "tooltip"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 150,
+            "y": 160,
+            "width": 1140,
+            "height": 67
+          },
+          "quote": "HOME EPISODES ADD PODCAST PLAYER TAGS SETTINGS",
+          "region": "header",
+          "note": "global text navigation of a self-hosted web app"
+        }
+      ],
+      "dims": {
+        "primary": "top-navigation-bar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations"
+        ],
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "sort-control",
+      "status": "present",
+      "confidence": 0.92,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 868,
+            "y": 251,
+            "width": 200,
+            "height": 38
+          },
+          "quote": "Date Added (Old First)",
+          "region": "toolbar",
+          "note": "native select with Name, Latest Episode, Date Added, Episodes Count asc/desc"
+        }
+      ],
+      "dims": {
+        "keys": "fixed-list",
+        "form": "dropdown",
+        "indicator": "label"
+      }
+    },
+    {
+      "id": "filter-controls",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1072,
+            "y": 251,
+            "width": 145,
+            "height": 38
+          },
+          "quote": "All",
+          "region": "toolbar",
+          "note": "native select filtering by tag; options carry counts e.g. 'Tech (4)', 'Science (3)'"
+        }
+      ],
+      "dims": {
+        "types": [
+          "checkbox-values"
+        ],
+        "preview": "counts-per-value",
+        "origin": "developer-defined"
+      },
+      "novel": [
+        {
+          "subdimension": "placement",
+          "description": "Single-select native dropdown in a toolbar row above the list (no chips/sidebar/popover)",
+          "proposedValueId": "toolbar-dropdown"
+        }
+      ]
+    },
+    {
+      "id": "view-switcher",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1222,
+            "y": 251,
+            "width": 68,
+            "height": 38
+          },
+          "quote": "List",
+          "region": "toolbar",
+          "note": "select with List / Grid options"
+        }
+      ],
+      "dims": {
+        "views": [
+          "list",
+          "grid"
+        ],
+        "form": "dropdown"
+      }
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 150,
+            "y": 304,
+            "width": 1140,
+            "height": 158
+          },
+          "quote": "Self-Hosted Weekly",
+          "region": "podcast-list",
+          "note": "item view with cover, title, description, date, episode count, tags; cover and title link to /podcasts/{id}/view"
+        },
+        {
+          "bbox": {
+            "x": 150,
+            "y": 912,
+            "width": 1140,
+            "height": 148
+          },
+          "quote": "The Pragmatic Investor",
+          "region": "podcast-list",
+          "note": "paused podcast rendered dimmed/greyed (style abstraction)"
+        }
+      ],
+      "dims": {
+        "attributePlacement": [
+          "in-both-views"
+        ],
+        "abstraction": [
+          "style",
+          "sum-or-average",
+          "category"
+        ],
+        "truncation": "full-text",
+        "relationship": "one-to-one",
+        "openIn": "new-page",
+        "overviewType": [
+          "list"
+        ],
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "specific-attribute",
+        "attributeScope": [
+          "per-item"
+        ]
+      }
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 150,
+            "y": 304,
+            "width": 1140,
+            "height": 158
+          },
+          "quote": "Self-Hosted Weekly",
+          "region": "podcast-list",
+          "note": "borderless horizontal item with side cover thumbnail and action row of 5 icon buttons; rows separated by hr only"
+        }
+      ],
+      "dims": {
+        "media": "side-thumbnail",
+        "actions": "action-row",
+        "shape": "horizontal",
+        "style": "borderless"
+      }
+    },
+    {
+      "id": "tooltip",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Icon-only buttons carry title attributes (e.g. 'Click to pause automatic downloading for this podcast.'), which give native browser tooltips; no custom tooltip appeared in live hover screenshot.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1001,
+            "y": 409,
+            "width": 227,
+            "height": 38
+          },
+          "region": "podcast-list",
+          "note": "icon buttons with accessible names like 'Delete Podcast and episode files', 'Play all episodes'"
+        }
+      ],
+      "dims": {
+        "trigger": [
+          "hover"
+        ],
+        "content": "label"
+      }
+    },
+    {
+      "id": "data-table",
+      "status": "absent",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 150,
+            "y": 304,
+            "width": 1140,
+            "height": 158
+          },
+          "note": "rows are free-form list items, not a column grid"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "single centered column (~1140px) with large centered title, uppercase text nav between hairlines, right-aligned toolbar of three native selects, then a long stacked list of podcast rows separated by horizontal rules",
+    "regions": [
+      "header",
+      "toolbar",
+      "podcast-list"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#222222",
+      "#e1e1e1",
+      "#bbbbbb",
+      "#d1d1d1",
+      "#ff0000",
+      "#d11a2a"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "text": "#222222",
+      "border": "#bbbbbb",
+      "muted": "#e1e1e1",
+      "accent": "#ff0000",
+      "danger": "#d11a2a"
+    },
+    "typography": "Raleway for everything textual (title, nav, headings, body); native selects and icon buttons use Arial 13/11px",
+    "typeScale": "Skeleton-CSS style: 50px light H1 site title, 36px light podcast titles, 15px body/meta, 11px semibold uppercase letter-spaced nav; strong size contrast but mostly light/regular weights",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "illustration",
+      "iconography"
+    ],
+    "iconStyle": "filled",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "plain",
+      "utilitarian",
+      "minimal",
+      "self-hosted"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T06:06:05.975Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 11,
+    "usage": {
+      "input_tokens": 22,
+      "cache_creation_input_tokens": 28665,
+      "cache_read_input_tokens": 332088,
+      "output_tokens": 7151
+    }
+  },
+  "notes": "Classic Skeleton CSS look: white page, #222 Raleway text, 4px rounded thin-bordered controls, hairline hr separators between rows. Colour comes only from the generated podcast cover art (gradients, starfields, waveforms) and a red record-dot pause-download icon; paused podcasts are rendered at reduced opacity with a green dot. Icon buttons are small Font Awesome glyphs in outlined square buttons, right-aligned in each row. Episode counts like '(1)/7/120 episodes' encode downloading/downloaded/total."
+}

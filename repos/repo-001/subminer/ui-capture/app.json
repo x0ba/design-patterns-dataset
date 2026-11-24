@@ -1,0 +1,20 @@
+{
+  "mode": "server",
+  "entry": "/",
+  "login": null,
+  "stubs": [
+    {
+      "service": "AnkiConnect (Anki desktop add-on API used for note previews / 'open in Anki')",
+      "how": ".ui-capture/anki-stub.ts — local JSON-RPC server on 127.0.0.1:18765 started by start.sh; answers notesInfo/guiBrowse/deckNames/modelNames/findNotes from the Lapis-style notes the seed mined (.ui-capture/data/anki-notes.json). The stats server's getAnkiConnectConfig points at it."
+    },
+    {
+      "service": "AniList GraphQL metadata + AniList CDN cover images",
+      "how": "Applied at seed time only: seed.ts calls the tracker's own reassignAnimeAnilist() ('Change AniList Entry' path) with AniList-shaped titles/ids/episode counts/synopses, and a fetch shim answers the s4.anilist.co cover URLs with locally generated abstract PNG posters (seed/poster.ts). Covers are stored in SQLite, so nothing is fetched at runtime. Live AniList/TMDB search in the 'Change entry' dialogs is unreachable offline and returns empty results (app's own error handling)."
+    },
+    {
+      "service": "TMDB, Yomitan word helper, mpv socket, media generation (ffmpeg) for 'mine card'",
+      "how": "Not configured in the standalone runner (.ui-capture/server.ts), same as the app when those integrations are absent; the dashboard's read-only views don't need them."
+    }
+  ],
+  "notes": "SubMiner is an Electron mpv overlay; its browser UI is the stats dashboard (stats/, Vite+React) served by the app's own Hono stats server (src/core/services/stats-server.ts) over the immersion-tracker SQLite DB. .ui-capture/server.ts mirrors src/stats-daemon-runner.ts under bun (createStatsApp + ImmersionTrackerService, retention disabled) and serves stats/dist on PORT (4447). Tools pinned in mise.toml (bun 1.3.5 per packageManager, node 22). Root deps installed with `bun install --production` (electron-builder's tarballs contain 0666 files the sandbox refuses), stats/ deps with `bun install`, UI built with `bun run build` in stats/. Data: .ui-capture/seed/seed.ts replays ~9 months (Feb–Nov 2026) of simulated mpv playback through the tracker's own recording API (handleMediaChange, recordSubtitleLine with tokenized Japanese lines, lookups, Yomitan lookups, cards mined with Anki note ids, pauses, rewinds) using the tracker's test clock hook, then runs its rollup maintenance. ~13 series (Yuru Camp, Non Non Biyori, Kaguya-sama, Hyouka (stalled), Mushishi (dropped), Bocchi the Rock!, SPY x FAMILY (dropped at ep 7), Frieren, Apothecary Diaries, Hibike! Euphonium, Dungeon Meshi (airing, in progress), Dandadan (airing, in progress), plus Terrace House with no poster/metadata). ~170 sessions, ~6k subtitle lines, ~380 vocabulary words, kanji, ~140 mined cards, known-word cache (data/known-words-cache.json). start.sh copies data/immersion.seed.sqlite to data/immersion.sqlite on each start. Main areas: Overview (KPIs, streak calendar, recent sessions), Library (series grid with covers -> series/episode detail), Trends (charts), Vocabulary (words/kanji, known-word coverage, word detail), Sessions (timeline, session detail with mined cards), sentence search. Re-seed: `bun .ui-capture/seed/seed.ts`."
+}

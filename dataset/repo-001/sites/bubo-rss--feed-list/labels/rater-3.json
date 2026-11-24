@@ -1,0 +1,263 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "bubo-rss--feed-list",
+    "url": "http://bubo-rss.localhost:4319/",
+    "finalUrl": "http://bubo-rss.localhost:4319/",
+    "status": 200,
+    "title": "🦉 Bubo Reader",
+    "capturedAt": "2026-11-18T01:34:42.236Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1443
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "news-publishing",
+    "domainNote": "self-hosted static RSS/Atom feed aggregator (Bubo Reader)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/bubo-rss/explore.json",
+      "repo": {
+        "name": "georgemandis/bubo-rss",
+        "url": "https://github.com/georgemandis/bubo-rss",
+        "commit": "d9857c501e58092f3f208463ece64984588c273c",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "feed-list",
+        "name": "Feed list (collapsed)",
+        "description": "The reader's single page: feeds grouped under headings, each a collapsed disclosure showing feed title and URL, with errors and footer at the bottom."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "H1 title with owl emoji '🦉 Bubo Reader'",
+      "bbox": {
+        "x": 8,
+        "y": 24,
+        "width": 1424,
+        "height": 42
+      },
+      "patterns": []
+    },
+    {
+      "id": "feed-groups",
+      "role": "content-list",
+      "label": "Category headings (Developer News, Blogs, Design, Reading & Misc, My GitHub Projects) each with collapsible <details> per feed source showing name + grey feed URL; expanding reveals dated article link list",
+      "bbox": {
+        "x": 8,
+        "y": 90,
+        "width": 1424,
+        "height": 1040
+      },
+      "patterns": [
+        "accordion",
+        "feed"
+      ]
+    },
+    {
+      "id": "errors",
+      "role": "error-list",
+      "label": "'Errors' heading with paragraph and bullet list of feeds that failed to parse/fetch",
+      "bbox": {
+        "x": 8,
+        "y": 1141,
+        "width": 1424,
+        "height": 160
+      },
+      "patterns": []
+    },
+    {
+      "id": "footer",
+      "role": "footer",
+      "label": "hr, last-updated timestamp, powered-by credit with links and sponsor link",
+      "bbox": {
+        "x": 8,
+        "y": 1340,
+        "width": 1424,
+        "height": 90
+      },
+      "patterns": []
+    }
+  ],
+  "patterns": [
+    {
+      "id": "accordion",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 144,
+            "width": 1424,
+            "height": 21
+          },
+          "quote": "Changelog Master Feed (https://changelog.com/feed)",
+          "note": "native <details>/<summary> with triangle marker; clicking on live page expanded a list of 12 dated article links in place while other items stayed closed",
+          "region": "feed-groups"
+        },
+        {
+          "bbox": {
+            "x": 8,
+            "y": 387,
+            "width": 1424,
+            "height": 189
+          },
+          "quote": "Marisol Ortega — notes",
+          "note": "stack of collapsed disclosure rows under Blogs",
+          "region": "feed-groups"
+        }
+      ],
+      "dims": {
+        "policy": "many-at-a-time",
+        "header": [
+          "title-plus-summary-value"
+        ],
+        "toggle": [
+          "header-click",
+          "keyboard"
+        ],
+        "memory": "resets"
+      }
+    },
+    {
+      "id": "feed",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "rationale": "Content is per-source lists of dated headline links hidden inside disclosures, grouped by category rather than one merged stream; it's an RSS reader's feed listing but not a classic unbounded stream.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 144,
+            "width": 1424,
+            "height": 21
+          },
+          "quote": "Changelog Master Feed",
+          "note": "expanded live shows '11/15/2026 - Changelog & Friends 118...' date + headline links, newest first",
+          "region": "feed-groups"
+        }
+      ],
+      "dims": {
+        "density": "headline",
+        "heterogeneity": [
+          "uniform-posts"
+        ],
+        "ordering": "chronological",
+        "sources": [
+          "followed-accounts"
+        ],
+        "arrangement": "single-column",
+        "nesting": [
+          "flat"
+        ]
+      }
+    },
+    {
+      "id": "banner",
+      "status": "absent",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 1141,
+            "width": 1424,
+            "height": 160
+          },
+          "quote": "There were errors trying to parse these feeds:",
+          "note": "errors are a plain unstyled section at page bottom, not a banner"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "reader",
+      "status": "absent",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 8,
+            "y": 24,
+            "width": 400,
+            "height": 42
+          },
+          "quote": "Bubo Reader",
+          "note": "links out to articles; no in-app long-form reading surface"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "single-column unstyled HTML document: h1, category h2 sections with native details/summary disclosure rows, error list, hr footer",
+    "regions": [
+      "header",
+      "feed-groups",
+      "errors",
+      "footer"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#000000",
+      "#aaaaaa",
+      "#0000ee"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "text": "#000000",
+      "muted": "#aaaaaa",
+      "primary": "#0000ee"
+    },
+    "typography": "system-ui throughout (browser default sans), headings bold",
+    "typeScale": "h1 36px bold, h2 27px bold, everything else 18px regular; minimal hierarchy",
+    "shape": "sharp",
+    "elevation": "flat",
+    "borders": "none",
+    "imagery": [
+      "none"
+    ],
+    "iconStyle": "none",
+    "whitespace": "tight",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "minimal",
+      "brutalist",
+      "utilitarian",
+      "technical"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T01:35:25.073Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 6,
+    "usage": {
+      "input_tokens": 12,
+      "cache_creation_input_tokens": 15713,
+      "cache_read_input_tokens": 135427,
+      "output_tokens": 2529
+    }
+  },
+  "notes": "Essentially browser-default HTML with a tiny stylesheet: only customisation is system-ui 18px font and grey (#aaa) feed URLs after each source name. Native <details> triangles act as disclosure; expanded content is a bulleted list of 'M/D/YYYY - <default blue underlined link>'. Owl emoji as logo. Footer separated by default <hr>, shows build timestamp (static site generator). No nav, no search, no interactivity beyond disclosures."
+}

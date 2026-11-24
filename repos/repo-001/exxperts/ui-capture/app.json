@@ -1,0 +1,24 @@
+{
+  "mode": "server",
+  "entry": "/auth/session?token=uicapture-local-token",
+  "login": null,
+  "stubs": [
+    {
+      "service": "LLM provider (company LiteLLM / OpenAI-compatible gateway)",
+      "how": ".ui-capture/llm-stub.mjs, a local OpenAI-compatible server on 127.0.0.1:4416 started by start.sh (GET /v1/models, GET /v1/model/info with LiteLLM capability/cost fields, POST /v1/chat/completions streaming and non-streaming, canned on-topic replies). It was connected through the app's own Settings > AI setup 'Add gateway' API as 'EXXETA AI Gateway' with a placeholder key; Default models are Claude Sonnet 5.5 (conversation) and Claude Haiku 5.5 (memory)."
+    },
+    {
+      "service": "App sign-in (local auth token)",
+      "how": "EXXPERTS_AUTH_TOKEN is pinned to 'uicapture-local-token'; the entry URL /auth/session?token=... is the app's own browser handoff, which sets the session cookie and redirects to /."
+    },
+    {
+      "service": "xlsx package from cdn.sheetjs.com (unreachable)",
+      "how": "package.json / lockfile point xlsx at the npm registry's 0.18.5 (same API) instead of the 0.20.3 CDN tarball; only spreadsheet previews use it."
+    },
+    {
+      "service": "Headless Chromium download, web search (SearXNG), MCP connectors",
+      "how": "Not installed or configured; the app treats them as optional and works without them."
+    }
+  ],
+  "notes": "Node 24.22.3 via mise (mise.toml). Built with `npm install` + `npm run build` (web UI in apps/web-ui/dist) + `node scripts/bundle-server.mjs` (bundled production server apps/web-server/dist/server.mjs, needed because tsx's CLI opens an IPC pipe that the sandbox forbids). start.sh runs the app's own launcher `node bin/exxperts-web.cjs --no-open --port $PORT` with EXXPERTS_SERVER_BUNDLE=1, HOME=.ui-capture/home (all app state lives in .ui-capture/home/.exxperts) and starts the LLM stub. Data: rebuild with .ui-capture/seed.sh, which (1) adds the gateway and default models through the API (setup-gateway.mjs), (2) creates rooms through the app's own scaffold and thread-store code (seed-rooms.ts + seed-data.ts): rooms for consultant Jonas Keller (Helvetia CRM Migration, Proposal Writing, Weekly Planning, Hiring \u2013 Senior Data Engineer, Workshop Design, Personal Admin, Reading & Research, and Data Platform Practice, whose ~85 memory notes come from the repo's frozen synthetic-room corpus), each with dated memory notes across topics (Jun\u2013Nov 2026), open items, an open conversation, and for some rooms remembered conversations waiting to be memorized, (3) writes ~1,170 usage rows over Jun\u2013Nov 2026 with the app's appendUsage (seed-extra.ts, feeds the Wallet), (4) archives 'Q2 Offsite Planning' and dismisses What's new through the API (seed-finish.mjs). Main areas: Rooms launcher (/), a room's chat (click Resume), Memory (notes per room, history, search, Ask your rooms), Wallet (usage), Settings (AI setup with the gateway, Appearance, etc.)."
+}

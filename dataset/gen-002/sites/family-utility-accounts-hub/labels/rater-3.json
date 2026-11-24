@@ -1,0 +1,564 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "gen-002",
+  "site": {
+    "slug": "family-utility-accounts-hub",
+    "url": "http://family-utility-accounts-hub.localhost:4318/",
+    "finalUrl": "http://family-utility-accounts-hub.localhost:4318/",
+    "status": 200,
+    "title": "Pilotlight — Household utilities",
+    "capturedAt": "2026-11-18T02:16:10.652Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1409
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "utilities",
+    "domainNote": "household utility accounts manager across multiple properties (bills, autopay, open provider items, notes)",
+    "provenance": {
+      "source": "generated",
+      "generation": "generated/gen-002/family-utility-accounts-hub/generation.json",
+      "generator": {
+        "id": "opus",
+        "model": "claude-opus-5-5",
+        "effort": "high"
+      },
+      "brief": {
+        "domain": "utilities",
+        "archetype": "navigate",
+        "context": "household",
+        "product": "Pilotlight"
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Dark nav: Pilotlight logo, Properties list with selected property expanded into its 5 accounts, count badges, Open items list with status pills, user footer",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 280,
+        "height": 1409
+      },
+      "patterns": [
+        "app-shell",
+        "tree-view",
+        "badge",
+        "task-list"
+      ]
+    },
+    {
+      "id": "top-bar",
+      "role": "header",
+      "label": "\"You're in\" context chip, address, search field with / shortcut hint, date-time",
+      "bbox": {
+        "x": 280,
+        "y": 0,
+        "width": 1160,
+        "height": 62
+      },
+      "patterns": [
+        "app-shell",
+        "text-field"
+      ]
+    },
+    {
+      "id": "property-header",
+      "role": "page-header",
+      "label": "Property icon, eyebrow, H1 'My house', address, 'Where I live' tag, three stat tiles",
+      "bbox": {
+        "x": 312,
+        "y": 92,
+        "width": 1096,
+        "height": 122
+      },
+      "patterns": [
+        "stat-tile"
+      ]
+    },
+    {
+      "id": "accounts",
+      "role": "card-grid",
+      "label": "Accounts at My house: 2-column grid of outlined account cards with key-value attributes and Open account link",
+      "bbox": {
+        "x": 312,
+        "y": 235,
+        "width": 726,
+        "height": 736
+      },
+      "patterns": [
+        "card",
+        "overview-detail",
+        "badge"
+      ]
+    },
+    {
+      "id": "open-items",
+      "role": "task-section",
+      "label": "Open items at My house: an item card with status pill, age, title, provider status, last update and Log update / Read email / Mark done actions",
+      "bbox": {
+        "x": 312,
+        "y": 991,
+        "width": 726,
+        "height": 358
+      },
+      "patterns": [
+        "task-list",
+        "badge",
+        "status-tracker"
+      ]
+    },
+    {
+      "id": "aside",
+      "role": "aside",
+      "label": "About this property definition list and Notes list (yellow sticky-style notes, hover Edit/Delete, add-note button)",
+      "bbox": {
+        "x": 1058,
+        "y": 235,
+        "width": 350,
+        "height": 588
+      },
+      "patterns": []
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 280,
+            "height": 1409
+          },
+          "region": "sidebar",
+          "note": "persistent dark sidebar with properties, accounts and open items; stays when opening account detail",
+          "quote": "PROPERTIES"
+        },
+        {
+          "bbox": {
+            "x": 280,
+            "y": 0,
+            "width": 1160,
+            "height": 62
+          },
+          "region": "top-bar",
+          "quote": "YOU’RE IN My house"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "secondary": "none",
+        "items": [
+          "live-counts",
+          "workspace-switcher"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "tree-view",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "rationale": "Selected property shows its accounts nested and indented beneath it, but there is no disclosure control; children appear when a property is selected, so it is a nested nav list rather than a true expandable tree.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 12,
+            "y": 101,
+            "width": 256,
+            "height": 227
+          },
+          "region": "sidebar",
+          "quote": "My house 4418 Whitlow Ave, Col…",
+          "note": "property node with nested account children (icon, name, type, status dot)"
+        }
+      ],
+      "dims": {
+        "content": [
+          "label",
+          "type-icon",
+          "count-badge",
+          "status-decoration"
+        ],
+        "source": "containment",
+        "selection": "single-node",
+        "density": "comfortable"
+      }
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 333,
+            "y": 291,
+            "width": 336,
+            "height": 240
+          },
+          "region": "accounts",
+          "quote": "AEP Ohio",
+          "note": "whole card is a link; icon tile, title, type, masked account number chip, 2x2 key-value grid, Open account link"
+        },
+        {
+          "bbox": {
+            "x": 681,
+            "y": 543,
+            "width": 336,
+            "height": 207
+          },
+          "region": "accounts",
+          "quote": "Rumpke Waste & R..."
+        }
+      ],
+      "dims": {
+        "media": "none",
+        "actions": "none",
+        "shape": "vertical",
+        "style": "outlined",
+        "target": "whole-card"
+      }
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 312,
+            "y": 235,
+            "width": 726,
+            "height": 736
+          },
+          "region": "accounts",
+          "note": "account card grid; clicking opens account detail page (#/p/home/a/home-electric) with phone numbers, meter readings, notices"
+        },
+        {
+          "bbox": {
+            "x": 34,
+            "y": 160,
+            "width": 226,
+            "height": 160
+          },
+          "region": "sidebar",
+          "note": "sidebar account list opens same detail view"
+        }
+      ],
+      "dims": {
+        "attributePlacement": [
+          "in-both-views",
+          "in-detail-view-only"
+        ],
+        "abstraction": [
+          "style",
+          "summary"
+        ],
+        "truncation": "ellipsis",
+        "relationship": "many-overviews-to-one-detail-view",
+        "openIn": "new-page",
+        "overviewType": [
+          "grid",
+          "list"
+        ],
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "whole-item",
+        "attributeScope": [
+          "per-item",
+          "per-collection"
+        ]
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 234,
+            "y": 348,
+            "width": 26,
+            "height": 22
+          },
+          "region": "sidebar",
+          "quote": "2",
+          "note": "red pending count per property; also 1,1 and 4 on Open items"
+        },
+        {
+          "bbox": {
+            "x": 198,
+            "y": 525,
+            "width": 60,
+            "height": 22
+          },
+          "region": "sidebar",
+          "quote": "Nov 21",
+          "note": "status/date pills: Nov 21, Waiting"
+        },
+        {
+          "bbox": {
+            "x": 354,
+            "y": 262,
+            "width": 152,
+            "height": 22
+          },
+          "region": "open-items",
+          "quote": "Waiting on provider"
+        }
+      ],
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "rule": "pending-actions",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "stat-tile",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1050,
+            "y": 98,
+            "width": 358,
+            "height": 66
+          },
+          "region": "property-header",
+          "quote": "$4,996.00 billed, last 12 mo"
+        }
+      ],
+      "dims": {
+        "context": [
+          "label"
+        ],
+        "encoding": "number-only",
+        "window": "fixed",
+        "drill": "none"
+      }
+    },
+    {
+      "id": "task-list",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 12,
+            "y": 475,
+            "width": 256,
+            "height": 240
+          },
+          "region": "sidebar",
+          "quote": "Open items",
+          "note": "list of open items across properties with property·provider tags and due/status pills, colored left bars"
+        },
+        {
+          "bbox": {
+            "x": 333,
+            "y": 1047,
+            "width": 684,
+            "height": 281
+          },
+          "region": "open-items",
+          "quote": "Mark done",
+          "note": "issue-like open item with status, age, provider status, last update, Log an update / Mark done"
+        }
+      ],
+      "dims": {
+        "rowFields": [
+          "due-date",
+          "project-or-tags",
+          "priority-or-score"
+        ],
+        "itemRichness": "issue-like-task",
+        "taskStructure": "grouped-by-project-or-list",
+        "timeBinding": "due-date-only",
+        "completionPath": [
+          "check-off",
+          "status-workflow"
+        ],
+        "sharingModel": "private-list"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 842,
+            "y": 12,
+            "width": 340,
+            "height": 38
+          },
+          "region": "top-bar",
+          "quote": "Search accounts, account numbers, notices, phone numbers…",
+          "note": "outlined search input with icon and '/' shortcut hint"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "placeholder",
+          "prefix-or-suffix"
+        ],
+        "style": "outlined"
+      }
+    },
+    {
+      "id": "status-tracker",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Open item shows current state as text ('Waiting on provider', 'Provider status: Pending', 'Open 18 days · no completion date') with no drawn stages; could be read simply as task status.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 354,
+            "y": 262,
+            "width": 650,
+            "height": 170
+          },
+          "region": "open-items",
+          "quote": "Provider status: Pending"
+        }
+      ],
+      "dims": {
+        "presentation": "status-statement",
+        "updates": "on-visit"
+      }
+    },
+    {
+      "id": "banner",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 348,
+            "y": 445,
+            "width": 306,
+            "height": 42
+          },
+          "note": "amber inline callout on AEP card is a tag linking to open item, not a condition banner"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "command-palette",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 842,
+            "y": 12,
+            "width": 340,
+            "height": 38
+          },
+          "note": "'/' hint focuses an inline search field, not a command palette"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "app layout: dark left sidebar (properties tree with nested accounts, open-items list, user footer), thin top bar with context chip + search + date, main content with property header + stat tiles, a two-column body: account card grid and open-items section on the left, About/Notes aside on the right",
+    "regions": [
+      "sidebar",
+      "top-bar",
+      "property-header",
+      "accounts",
+      "open-items",
+      "aside"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#f5f3ee",
+      "#ffffff",
+      "#1f2a37",
+      "#2a3645",
+      "#1d2430",
+      "#4a5260",
+      "#7a7468",
+      "#2f5f9e",
+      "#e9f0fa",
+      "#fffbea",
+      "#e6e1d7",
+      "#f0a133",
+      "#d9432f"
+    ],
+    "colorRoles": {
+      "background": "#f5f3ee",
+      "surface": "#ffffff",
+      "text": "#1d2430",
+      "muted": "#7a7468",
+      "secondaryText": "#4a5260",
+      "primary": "#2f5f9e",
+      "sidebar": "#1f2a37",
+      "sidebarActive": "#2a3645",
+      "accent": "#f0a133",
+      "danger": "#d9432f",
+      "border": "#e6e1d7",
+      "note": "#fffbea",
+      "tint": "#e9f0fa"
+    },
+    "typography": "System UI sans (ui-sans-serif) for everything; ui-monospace for masked account numbers (••3704). Bold labels, small uppercase letter-spaced eyebrows (PROPERTY, YOU'RE IN, PROPERTIES).",
+    "typeScale": "H1 28px/700; section H2 17–18px/700; card titles 16–17px/700; body 14–15px; key-value labels and meta 12–13px muted gray with values 13–14px bold; strong weight contrast, mostly small sizes",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "practical",
+      "calm",
+      "organized",
+      "warm",
+      "utilitarian"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T02:17:37.862Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 8,
+    "usage": {
+      "input_tokens": 16,
+      "cache_creation_input_tokens": 32794,
+      "cache_read_input_tokens": 246960,
+      "output_tokens": 10125
+    }
+  },
+  "notes": "Warm off-white page (#f5f3ee) against a slate-navy sidebar; brand flame logo on orange square. Main area has a 4px blue top rule under the top bar. Account cards use a light-blue icon tile, mono masked account chip, 2x2 Holder/Last bill/Status/Autopay grid with semantic colored status text (green Autopaid, red 'Due Nov 27 · not paid yet'). Open items use colored left accent bars (orange/green/blue) and status pills. Notes in aside are pale yellow sticky-note cards linked to accounts with hover-revealed Edit/Delete. Detail pages for accounts open inside the same shell (breadcrumb-like 'You're in My house › AEP Ohio' chip in top bar)."
+}

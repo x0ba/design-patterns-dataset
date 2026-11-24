@@ -1,0 +1,417 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "jetlog--flights-list",
+    "url": "http://localhost:4456/flights",
+    "finalUrl": "http://localhost:4456/flights",
+    "status": 200,
+    "title": "Jetlog",
+    "capturedAt": "2026-11-18T19:54:57.224Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1096
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "travel-hospitality",
+    "domainNote": "personal flight logbook / tracker (self-hosted Jetlog)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/jetlog/explore.json",
+      "repo": {
+        "name": "pbogre/jetlog",
+        "url": "https://github.com/pbogre/jetlog",
+        "commit": "4306c3e458c326a1407c496d666f3ded3da37fb5",
+        "license": "GPL-2.0"
+      },
+      "view": {
+        "slug": "flights-list",
+        "name": "All flights",
+        "description": "Sortable table of all logged flights with date, route, times, duration, distance, seat, class and airline."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Top bar: JETLOG wordmark / FLIGHTS breadcrumb, live UTC clock, hamburger that opens right navigation drawer",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 57
+      },
+      "patterns": [
+        "app-shell",
+        "drawer"
+      ]
+    },
+    {
+      "id": "page-toolbar",
+      "role": "toolbar",
+      "label": "ALL FLIGHTS h1, yellow NEW FLIGHT button, ALL FLIGHTS caption and FILTERS button (opens filter drawer)",
+      "bbox": {
+        "x": 104,
+        "y": 80,
+        "width": 1232,
+        "height": 76
+      },
+      "patterns": [
+        "filter-controls",
+        "drawer"
+      ]
+    },
+    {
+      "id": "flights-table",
+      "role": "data-table",
+      "label": "Flights table, 10 columns (date, origin, destination, departure, arrival, duration, distance, seat, class, airline), zebra rows, sortable headers",
+      "bbox": {
+        "x": 104,
+        "y": 166,
+        "width": 1232,
+        "height": 862
+      },
+      "patterns": [
+        "data-table",
+        "sort-control"
+      ]
+    },
+    {
+      "id": "pagination-footer",
+      "role": "pagination",
+      "label": "Per-page select (10/20/50), 'Showing 1–20', Prev / Page 1 / Next",
+      "bbox": {
+        "x": 104,
+        "y": 1038,
+        "width": 1232,
+        "height": 36
+      },
+      "patterns": [
+        "pagination",
+        "choice-control"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "data-table",
+      "status": "present",
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 105,
+            "y": 166,
+            "width": 1230,
+            "height": 861
+          },
+          "quote": "DATE ORIGIN DESTINATION DEPARTURE ARRIVAL DURATION DISTANCE SEAT CLASS AIRLINE",
+          "region": "flights-table",
+          "note": "Semantic table with plain monospace cells, alternating row fills; clicking a row navigates to /flights?id=… detail page (verified live)"
+        }
+      ],
+      "dims": {
+        "columnSet": "fixed",
+        "cellRendering": [
+          "plain-text"
+        ],
+        "density": "standard",
+        "rowExpansion": "none",
+        "selection": "none",
+        "opScope": [
+          "column",
+          "whole-table"
+        ],
+        "aggregation": [
+          "flat"
+        ],
+        "openIn": "new-page"
+      }
+    },
+    {
+      "id": "sort-control",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 117,
+            "y": 178,
+            "width": 50,
+            "height": 16
+          },
+          "quote": "DATE",
+          "region": "flights-table",
+          "note": "Active sort with down arrow"
+        },
+        {
+          "bbox": {
+            "x": 780,
+            "y": 178,
+            "width": 294,
+            "height": 16
+          },
+          "quote": "DURATION DISTANCE SEAT",
+          "region": "flights-table",
+          "note": "Inactive sortable headers with ⇅ icon; clicking Duration re-sorted descending live"
+        }
+      ],
+      "dims": {
+        "keys": "any-column",
+        "form": "column-header-click",
+        "default": "recency",
+        "indicator": "header-arrow"
+      }
+    },
+    {
+      "id": "filter-controls",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1234,
+            "y": 125,
+            "width": 102,
+            "height": 28
+          },
+          "quote": "FILTERS",
+          "region": "page-toolbar",
+          "note": "Opens right-side drawer with Start date, End date, User select, Clear all / Apply (verified live)"
+        }
+      ],
+      "dims": {
+        "placement": "modal-or-sheet",
+        "types": [
+          "date-range"
+        ],
+        "preview": "none",
+        "origin": "developer-defined"
+      }
+    },
+    {
+      "id": "drawer",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1388,
+            "y": 11,
+            "width": 34,
+            "height": 34
+          },
+          "region": "header",
+          "note": "Hamburger opens right overlay drawer with scrim: Home, Flights (active), New flight, Statistics, Settings, signed-in user, Logout"
+        },
+        {
+          "bbox": {
+            "x": 1234,
+            "y": 125,
+            "width": 102,
+            "height": 28
+          },
+          "quote": "FILTERS",
+          "region": "page-toolbar",
+          "note": "Second right drawer with scrim holding filters"
+        }
+      ],
+      "dims": {
+        "edge": "right",
+        "relationship": "overlay-with-scrim",
+        "holds": "navigation",
+        "openBy": [
+          "menu-button"
+        ]
+      }
+    },
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 57
+          },
+          "quote": "JETLOG / FLIGHTS",
+          "region": "header",
+          "note": "Persistent top bar; global navigation lives in hamburger drawer"
+        }
+      ],
+      "dims": {
+        "primary": "drawer",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations"
+        ],
+        "visibility": "toggle-button",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "pagination",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 104,
+            "y": 1038,
+            "width": 1232,
+            "height": 36
+          },
+          "quote": "Showing 1–20",
+          "region": "pagination-footer",
+          "note": "Prev (disabled) / Page 1 / Next, per page select"
+        }
+      ],
+      "dims": {
+        "mechanism": "next-and-previous",
+        "position": "item-range",
+        "pageSize": "chosen-by-the-person"
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 179,
+            "y": 1040,
+            "width": 68,
+            "height": 32
+          },
+          "quote": "20",
+          "region": "pagination-footer",
+          "note": "Native select for rows per page (10/20/50)"
+        }
+      ],
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "dropdown-select",
+        "option": [
+          "label-only"
+        ],
+        "largeSets": "show-all"
+      }
+    },
+    {
+      "id": "breadcrumbs",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "'JETLOG / FLIGHTS' reads like a two-step trail but FLIGHTS is plain text and it may just be a section label next to the logo.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 24,
+            "y": 16,
+            "width": 160,
+            "height": 24
+          },
+          "quote": "JETLOG / FLIGHTS",
+          "region": "header"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "bulk-actions",
+      "status": "absent",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 105,
+            "y": 166,
+            "width": 1230,
+            "height": 861
+          },
+          "note": "No checkbox column or selection"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "app page: thin top bar (logo + breadcrumb, UTC clock, hamburger) over a centered, max-width content column holding a page title, toolbar and full-width data table with pagination footer",
+    "regions": [
+      "header",
+      "page-toolbar",
+      "flights-table",
+      "pagination-footer"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#faf7f0",
+      "#f0ebdc",
+      "#f3efe3",
+      "#14130f",
+      "#76725f",
+      "#a8a48f",
+      "#f5c518",
+      "#c99a00",
+      "#d9d2bc"
+    ],
+    "colorRoles": {
+      "background": "#faf7f0",
+      "surface": "#f0ebdc",
+      "text": "#14130f",
+      "muted": "#76725f",
+      "primary": "#f5c518",
+      "accent": "#c99a00",
+      "border": "#d9d2bc"
+    },
+    "typography": "JetBrains Mono everywhere: wordmark, uppercase letter-spaced headings, table header labels, cells and buttons (menu button computed Space Grotesk but shows only an icon)",
+    "typeScale": "Flat scale: 16px bold wordmark and h1 (wide-tracked caps), 14px body/table cells, 12px uppercase tracked buttons, 11px uppercase tracked column headers and captions; hierarchy comes from tracking, caps and muted color more than size",
+    "shape": "sharp",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "texture",
+    "mood": [
+      "technical",
+      "utilitarian",
+      "retro",
+      "aviation-logbook",
+      "warm",
+      "monospace"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T19:56:12.884Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 10,
+    "usage": {
+      "input_tokens": 20,
+      "cache_creation_input_tokens": 33430,
+      "cache_read_input_tokens": 310787,
+      "output_tokens": 4705
+    }
+  },
+  "notes": "Departure-board/logbook aesthetic: warm cream paper (#faf7f0) with faint horizontal scanline texture, zebra rows in beige #f0ebdc, zero corner radius, no shadows, 1px khaki borders. All-monospace JetBrains Mono with wide letter-spacing in uppercase labels. Single strong accent of signal yellow #f5c518 (New Flight button, 'LOG' in wordmark in #c99a00, active nav item). Live ticking UTC clock in the header with dimmed seconds. Numeric columns (duration, distance) right-aligned. Primary nav and filters both hide in right-side overlay drawers rather than visible navigation. Row click opens a full flight detail page with airport cards and a route map."
+}

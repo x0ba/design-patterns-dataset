@@ -1,0 +1,32 @@
+{
+  "mode": "server",
+  "entry": "/",
+  "login": null,
+  "stubs": [
+    {
+      "service": "macOS Keychain (Claude Code OAuth credentials)",
+      "how": ".ui-capture/stubs/provider-stub.cjs is preloaded via NODE_OPTIONS=--require and patches child_process.spawnSync for /usr/bin/security: 'Claude Code-credentials' returns a placeholder OAuth payload (subscriptionType=max, rateLimitTier=default_claude_max_20x); every other Keychain lookup returns 'not found'. The real Keychain is never touched."
+    },
+    {
+      "service": "Anthropic usage API (https://api.anthropic.com/api/oauth/usage) for the Limits panel",
+      "how": "Same preload wraps globalThis.fetch and answers locally with a realistic body: 5-hour and 7-day utilization that advance through each window, a Sonnet weekly-scoped bar, and extra usage turned off."
+    },
+    {
+      "service": "ChatGPT/Codex usage API (https://chatgpt.com/backend-api/wham/usage, /rate-limit-reset-credits)",
+      "how": "Same fetch wrapper returns a Pro plan with 5h/weekly rate-limit windows; reset-credits returns 404 as for accounts without credits. Placeholder ~/.codex/auth.json (unsigned JWTs, plan=pro) is written by seed/gen-provider-config.cjs."
+    },
+    {
+      "service": "All other outbound HTTP from the CLI server (LiteLLM pricing refresh, provider status pages, telemetry)",
+      "how": "The fetch wrapper fails them fast as an offline ENOTFOUND, so the app uses its bundled pricing snapshot and stays in its normal signed-out local mode. Telemetry and dashboard PostHog are disabled with TOKENTRACKER_NO_TELEMETRY=1 / DO_NOT_TRACK=1. Proxy env vars are unset so the CLI does not relaunch itself."
+    },
+    {
+      "service": "InsForge cloud auth (optional cloud account), reached through the local server's /api/auth/* proxy",
+      "how": "The fetch wrapper in stubs/provider-stub.cjs answers https://srctyff5.us-east.insforge.app/api/auth/refresh (the SDK's session restore on every page load) with 200 {accessToken:null,user:null,csrfToken:null}, i.e. no session. The dashboard then stays in normal signed-out local mode (no 502). Other /api/auth/* paths get InsForge's 401 'No active session' JSON. The user has never signed in to the optional cloud, so cloud-only pages (Leaderboard, Cloud) show their signed-out or offline states."
+    },
+    {
+      "service": "Vercel Web Analytics / Speed Insights (/_vercel/insights/script.js, /_vercel/speed-insights/script.js), which exist only on Vercel hosting",
+      "how": "provider-stub.cjs wraps http.createServer in the tracker process. Those two script paths are served as small local stand-ins that drain the va/si queues and send nothing, and /_vercel/* beacon POSTs return 204."
+    }
+  ],
+  "notes": "Server mode: start.sh runs the CLI's own `node bin/tracker.js serve --no-sync --no-open --port $PORT`, which serves the production dashboard build (dashboard/dist, built with `npm --prefix dashboard run build`) and the local API (/functions/tokentracker-*). HOME is set to .ui-capture/home, and start.sh reseeds it on every start with seed/seed-all.cjs. The seed runs every seed/gen-*.cjs and shifts the timeline by whole days so the data always ends 'today'. Data: one developer (Pacific time, small fintech studio 'harborline-labs' plus side projects, a thesis and a CSE291 course repo) across about six months, May 11 to today. queue.jsonl has about 4,000 half-hour buckets (about 4.4B tokens, about $740 in the last 30 days) for Claude Code (Opus 4.6 to 4.8, 5, 5.5, then Fable 5.2, plus Sonnet and Haiku), Codex (gpt-5.4 to 5.5 to 5.6-terra, codex-spark), Cursor (composer-2/2.5, grok), Gemini CLI (3.5-flash, 4-carbon) and OpenCode (kimi, glm, deepseek). There are weekends, vacation gaps, late nights and a few re-written buckets. project.queue.jsonl attributes usage to 8 repos. About 570 real-format Claude Code transcripts in ~/.claude/projects (metadata plus ai-title titles) feed the Sessions page, session insights and the context category breakdown. Main areas: Dashboard (/), Sessions (/sessions), Limits (/limits), Achievements (/achievements), Skills (/skills), Widgets (/widgets), Settings (/settings), Leaderboard (/leaderboard, cloud), Wrapped (/wrapped)."
+}

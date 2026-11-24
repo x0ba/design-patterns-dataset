@@ -1,0 +1,114 @@
+# Codebook proposal (new-entry) — review with: node scripts/proposals.ts show gen-002 section-index
+id: section-index
+kind: new-entry
+status: open
+batch: gen-002
+codebookVersion: 1.0.0
+name: Section index (in-page jump nav)
+level: component
+parent: navigate
+definition: A sticky list of the sections of one long page that jumps to each section and highlights
+  the one currently in view (scroll-spy), often carrying a per-section status.
+aliases:
+  - table of contents
+  - scroll-spy nav
+  - jump links
+  - on this page
+relations:
+  neighbors:
+    - tabs
+    - stepper
+    - breadcrumbs
+    - tree-view
+dimensions:
+  - name: Item content
+    family: content
+    question: What does each entry show?
+    subdimensions:
+      - id: entryContent
+        name: Entry content
+        select: many
+        values:
+          - id: title-only
+            name: Title only
+          - id: per-section-status
+            name: Per-section status
+            description: Completion or error count per section
+            example: Hearthchart form section nav
+      - id: itemContent
+        name: Item content
+        select: many
+        values:
+          - id: titles-only
+            name: Titles only
+          - id: per-section-status
+            name: Per-section status
+            description: Completion or issue count per section
+            example: Hearthchart form sections
+          - id: scrollspy-highlight
+            name: Scrollspy highlight
+            description: Current section highlighted while scrolling
+  - name: Tracking
+    family: feedback
+    question: Does it follow scroll position?
+    subdimensions:
+      - id: tracking
+        name: Tracking
+        select: one
+        values:
+          - id: static
+            name: Static
+          - id: scroll-spy
+            name: Scroll-spy highlight
+  - name: Position
+    family: layout
+    question: Where does the index sit?
+    subdimensions:
+      - id: position
+        name: Position
+        select: one
+        values:
+          - id: sticky-left-rail
+            name: Sticky left rail
+          - id: sticky-right-rail
+            name: Sticky right rail
+          - id: top-of-content
+            name: Top of content
+rationale:
+  - rater: rater-1
+    site: family-health-records-forms
+    text: This sticky left nav lists form sections A–F with a status for each ("1 to fix of 2").
+      Clicking one scrolls to that section, and the section in view is highlighted. That isn't tabs
+      (every section stays visible), breadcrumbs, a stepper or a tree-view. The codebook has no
+      entry for in-page section navigation.
+  - rater: rater-3
+    site: family-health-records-forms
+    text: No entry covers in-page section navigation. app-shell secondary navigation is about
+      destinations, breadcrumbs are hierarchy, and stepper implies an ordered flow. This page has a
+      sticky 'Form sections' nav with per-section status ('1 to fix of 2', 'All 7 filled').
+sources:
+  - batch: gen-002
+    site: family-health-records-forms
+    url: http://family-health-records-forms.localhost:4318/
+    note: proposed by rater-1, rater-3
+evidence:
+  - site: family-health-records-forms
+    rater: rater-1
+    bbox:
+      x: 88
+      y: 279
+      width: 210
+      height: 424
+    quote: C Emergency contacts and hospital 1 to fix of 2
+    note: Sticky section nav that highlights the section in view
+  - site: family-health-records-forms
+    rater: rater-3
+    bbox:
+      x: 88
+      y: 279
+      width: 210
+      height: 424
+    quote: C Emergency contacts and hospital 1 to fix of 2
+    note: sticky in-page section nav with status per section
+createdAt: 2026-11-17T22:25:29.726Z
+updatedAt: 2026-11-17T22:25:33.003Z

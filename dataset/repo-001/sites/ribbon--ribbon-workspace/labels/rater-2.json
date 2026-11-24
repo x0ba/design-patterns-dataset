@@ -1,0 +1,455 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "ribbon--ribbon-workspace",
+    "url": "http://localhost:4482/?perma=ribbon/4e1f6c7e-3bfd-41ec-a078-7af5ba86f4c6#ribbon",
+    "finalUrl": "http://localhost:4482/?perma=ribbon/4e1f6c7e-3bfd-41ec-a078-7af5ba86f4c6#ribbon",
+    "status": 200,
+    "title": "Ribbon",
+    "capturedAt": "2026-11-18T20:06:48.185Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 959
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "science-research",
+    "domainNote": "genomics: structural-variant / long-read alignment visualizer (Ribbon 2.0)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/ribbon/explore.json",
+      "repo": {
+        "name": "MariaNattestad/Ribbon",
+        "url": "https://github.com/MariaNattestad/Ribbon",
+        "commit": "8ebc77ec3d6f803fe0203cddcdc92446c892c06d",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "ribbon-workspace",
+        "name": "Ribbon multi-read workspace",
+        "description": "Ribbon tab showing a gene fusion: multi-read alignment view across chromosomes, single-read ribbon below, and the Ribbon Settings panel with input alignment tabs."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Dark Bootstrap navbar with 'Ribbon' wordmark and version note linking to release notes / v1",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 55
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "app-tabs",
+      "role": "navigation",
+      "label": "Top-level tabs: Examples / Ribbon (active) / SplitThreader / About",
+      "bbox": {
+        "x": 10,
+        "y": 70,
+        "width": 1420,
+        "height": 36
+      },
+      "patterns": [
+        "tabs",
+        "app-shell"
+      ]
+    },
+    {
+      "id": "multi-read-view",
+      "role": "visualization",
+      "label": "Multi-read view: chromosome ideogram with zoom wedges to reference regions, stacked read alignments, variant arcs and gene tracks",
+      "bbox": {
+        "x": 27,
+        "y": 143,
+        "width": 883,
+        "height": 465
+      },
+      "patterns": [
+        "chart",
+        "coordinated-views",
+        "focus-context"
+      ]
+    },
+    {
+      "id": "single-read-view",
+      "role": "visualization",
+      "label": "Single-read view: ideogram, reference regions with genes, ribbons connecting reference to the selected read/query axis",
+      "bbox": {
+        "x": 27,
+        "y": 626,
+        "width": 883,
+        "height": 304
+      },
+      "patterns": [
+        "chart",
+        "coordinated-views"
+      ]
+    },
+    {
+      "id": "control-sidebar",
+      "role": "sidebar",
+      "label": "Right panel: navigate-to-position field, info alert, Ribbon Settings panel with nested tabs and BAM URL loader plus sample BAM list",
+      "bbox": {
+        "x": 926,
+        "y": 125,
+        "width": 494,
+        "height": 590
+      },
+      "patterns": [
+        "text-field",
+        "banner",
+        "tabs"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "chart",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 27,
+            "y": 143,
+            "width": 883,
+            "height": 465
+          },
+          "note": "Read alignments drawn as horizontal segments positioned on genomic coordinates, coloured by strand/type, with gene annotation track and arcs",
+          "quote": "Reference",
+          "region": "multi-read-view"
+        },
+        {
+          "bbox": {
+            "x": 27,
+            "y": 626,
+            "width": 883,
+            "height": 304
+          },
+          "note": "Single-read ribbon plot with Read / Query linear axis",
+          "quote": "Read / Query",
+          "region": "single-read-view"
+        }
+      ],
+      "dims": {
+        "markType": "bars",
+        "channels": [
+          "position",
+          "length",
+          "colour-hue-or-value"
+        ],
+        "scale": "linear",
+        "inspectBy": [
+          "click-to-select",
+          "hover-tooltip"
+        ],
+        "authorship": "author-specified",
+        "annotation": [
+          "callout-labels"
+        ]
+      }
+    },
+    {
+      "id": "coordinated-views",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 27,
+            "y": 143,
+            "width": 883,
+            "height": 787
+          },
+          "note": "Live check: clicking a read in the multi-read view highlights it and redraws the single-read view below with that read",
+          "region": "multi-read-view"
+        }
+      ],
+      "dims": {
+        "linkChannel": [
+          "selection-highlight"
+        ],
+        "arrangement": "overview-detail-split",
+        "trigger": [
+          "click-a-mark"
+        ],
+        "scope": "one-mark",
+        "feedback": [
+          "highlight-in-place"
+        ],
+        "authorship": "fixed-published-dashboard"
+      }
+    },
+    {
+      "id": "focus-context",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "The whole-genome ideogram stays visible with wedges magnifying selected regions beneath it, which reads as detail-in-context, but it may be better described as a linked overview strip; focus movement not verified.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 70,
+            "y": 195,
+            "width": 796,
+            "height": 325
+          },
+          "note": "Chromosome ideogram (context) with coloured wedges expanding chr8 and chr17 segments into large focus panels",
+          "quote": "Reference",
+          "region": "multi-read-view"
+        }
+      ],
+      "dims": {
+        "relation": "embedded-magnification",
+        "arrangement": "edge-aware-focus-panel",
+        "orientation": [
+          "visible-surrounding-context"
+        ]
+      }
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 10,
+            "y": 70,
+            "width": 290,
+            "height": 36
+          },
+          "note": "Top-level app tabs",
+          "quote": "Examples Ribbon SplitThreader About",
+          "region": "app-tabs"
+        },
+        {
+          "bbox": {
+            "x": 936,
+            "y": 304,
+            "width": 411,
+            "height": 109
+          },
+          "note": "Settings tabs wrapping onto three rows",
+          "quote": "Input alignments",
+          "region": "control-sidebar"
+        },
+        {
+          "bbox": {
+            "x": 945,
+            "y": 422,
+            "width": 444,
+            "height": 37
+          },
+          "note": "Nested tabs inside Input alignments panel",
+          "quote": "BAM from URL (recommended)",
+          "region": "control-sidebar"
+        }
+      ],
+      "dims": {
+        "placement": "top",
+        "overflow": "wrap",
+        "label": [
+          "text"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "nested-tabs",
+        "switchBy": [
+          "click"
+        ]
+      }
+    },
+    {
+      "id": "banner",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 926,
+            "y": 183,
+            "width": 494,
+            "height": 53
+          },
+          "note": "Bootstrap info alert with close ×",
+          "quote": "Info: Loading data from permalink",
+          "region": "control-sidebar"
+        }
+      ],
+      "dims": {
+        "scope": "section",
+        "severity": "information",
+        "dismissal": "dismissible",
+        "action": "none",
+        "placement": "top-of-content"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 926,
+            "y": 156,
+            "width": 202,
+            "height": 27
+          },
+          "note": "Position input with placeholder and Go button",
+          "quote": "Navigate to a position:",
+          "region": "control-sidebar"
+        },
+        {
+          "bbox": {
+            "x": 954,
+            "y": 468,
+            "width": 438,
+            "height": 53
+          },
+          "note": "BAM URL input with placeholder and load button, hint text below",
+          "quote": "Load bam file from a URL",
+          "region": "control-sidebar"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "label",
+          "placeholder",
+          "hint-text"
+        ],
+        "style": "outlined",
+        "inputType": "plain"
+      }
+    },
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 106
+          },
+          "note": "Dark top bar with app name plus top-level tab strip switching app panels",
+          "quote": "Ribbon",
+          "region": "header"
+        }
+      ],
+      "dims": {
+        "primary": "top-navigation-bar",
+        "secondary": "sub-tabs-under-the-header",
+        "items": [
+          "fixed-destinations"
+        ],
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "form",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 954,
+            "y": 468,
+            "width": 438,
+            "height": 53
+          },
+          "note": "Only single-field loaders, not a multi-field form"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "two-column web app: wide left canvas with two stacked SVG genome visualizations, right control sidebar with tabbed settings panel, under a dark navbar and tab strip",
+    "regions": [
+      "header",
+      "app-tabs",
+      "multi-read-view",
+      "single-read-view",
+      "control-sidebar"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#222222",
+      "#333333",
+      "#337ab7",
+      "#d9edf7",
+      "#f5f5f5",
+      "#dddddd",
+      "#9d9d9d",
+      "#e8908e",
+      "#d62728",
+      "#2ca02c",
+      "#98d095",
+      "#0000ff"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "text": "#333333",
+      "primary": "#337ab7",
+      "surface": "#f5f5f5",
+      "header": "#222222",
+      "info": "#d9edf7",
+      "border": "#dddddd",
+      "accent": "#d62728",
+      "muted": "#9d9d9d"
+    },
+    "typography": "Lato throughout (Bootstrap 3 theme): navbar wordmark 20px, panel heading 16px/500, UI text and tabs 14px, chart labels 11-12px",
+    "typeScale": "Low contrast: 20px wordmark, 16px panel title, 14px body/tabs, 11px axis labels; almost all weight 400 with bold gene labels in SVG",
+    "shape": "soft",
+    "elevation": "subtle-shadows",
+    "borders": "thin",
+    "imagery": [
+      "data-visualization"
+    ],
+    "iconStyle": "none",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "technical",
+      "utilitarian",
+      "scientific",
+      "bootstrap-default"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T20:08:00.341Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 7,
+    "usage": {
+      "input_tokens": 14,
+      "cache_creation_input_tokens": 27009,
+      "cache_read_input_tokens": 191894,
+      "output_tokens": 4408
+    }
+  },
+  "notes": "Stock Bootstrap 3 look (dark navbar, bordered tabs, info alert, panel) wrapped around D3 SVG genome graphics. Visual character comes from the visualization: a whole-genome ideogram in categorical chromosome colours, translucent wedges fanning out to light-red/light-green region panels, blue/red read segments, black/grey split-read arcs, and bold blue gene arrows. The bottom view adds trapezoid ribbons linking reference to a black query axis. Settings tabs wrap onto 3 rows and have a second nested tab level."
+}

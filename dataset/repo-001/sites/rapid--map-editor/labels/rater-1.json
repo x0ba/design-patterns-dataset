@@ -1,0 +1,439 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "rapid--map-editor",
+    "url": "http://localhost:4487/#map=17.00/41.94320/-85.63180&background=custom&overlays=&datasets=8c3f1d29a6b54e0f9e2c7a51d4b0e6f2,2b7e94c0f13d4a5c8d6e0a9b3c1f7e48",
+    "finalUrl": "http://localhost:4487/#map=17.00/41.94320/-85.63180&background=custom:http://localhost:4487/tiles/{zoom}/{x}/{y}.png&datasets=8c3f1d29a6b54e0f9e2c7a51d4b0e6f2,2b7e94c0f13d4a5c8d6e0a9b3c1f7e48",
+    "status": 200,
+    "title": "Rapid Dev",
+    "capturedAt": "2026-11-18T20:42:11.321Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 900
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "utilities",
+    "domainNote": "OpenStreetMap editor (Rapid, AI-assisted OSM map editor)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/rapid/explore.json",
+      "repo": {
+        "name": "meta/Rapid",
+        "url": "https://github.com/meta/Rapid",
+        "commit": "249abff91e6982c6cc99c3e8bae4718a02913fa3",
+        "license": "ISC"
+      },
+      "view": {
+        "slug": "map-editor",
+        "name": "Map editor workspace",
+        "description": "Main Rapid editing workspace: OSM data over imagery of Three Rivers, MI, with feature search sidebar, add-feature toolbar, Rapid AI toggle, undo/save, and map controls."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Left sidebar: 'Search features' heading and search input, resize handle on right edge",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 400,
+        "height": 900
+      },
+      "patterns": [
+        "text-field",
+        "split-pane"
+      ]
+    },
+    {
+      "id": "top-toolbar",
+      "role": "toolbar",
+      "label": "Black bar: Point/Line/Area add-feature tools, Rapid Assist, Undo/Redo, Save",
+      "bbox": {
+        "x": 415,
+        "y": 0,
+        "width": 1025,
+        "height": 71
+      },
+      "patterns": [
+        "canvas-editor",
+        "undo",
+        "tooltip"
+      ]
+    },
+    {
+      "id": "map",
+      "role": "map-canvas",
+      "label": "Aerial-style basemap with OSM vector data: roads, rivers, buildings, POI pins, numbered address markers",
+      "bbox": {
+        "x": 415,
+        "y": 71,
+        "width": 1025,
+        "height": 799
+      },
+      "patterns": [
+        "map-explorer",
+        "canvas-editor"
+      ]
+    },
+    {
+      "id": "map-controls",
+      "role": "control-rail",
+      "label": "Right icon rail: compass, zoom, fit, geolocate, Background/Map Data/Issues/Preferences/Help pane toggles",
+      "bbox": {
+        "x": 1400,
+        "y": 141,
+        "width": 40,
+        "height": 410
+      },
+      "patterns": [
+        "map-explorer",
+        "drawer"
+      ]
+    },
+    {
+      "id": "info-bar",
+      "role": "status-bar",
+      "label": "Scale bar, 'Edits by' contributors, version, user, Log Out",
+      "bbox": {
+        "x": 415,
+        "y": 870,
+        "width": 1025,
+        "height": 30
+      },
+      "patterns": []
+    }
+  ],
+  "patterns": [
+    {
+      "id": "map-explorer",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 415,
+            "y": 71,
+            "width": 1025,
+            "height": 799
+          },
+          "note": "Pannable zoomable map with aerial basemap and OSM overlays",
+          "region": "map"
+        },
+        {
+          "bbox": {
+            "x": 1400,
+            "y": 141,
+            "width": 40,
+            "height": 200
+          },
+          "note": "Compass, zoom +/-, zoom to selection, geolocate",
+          "region": "map-controls"
+        }
+      ],
+      "dims": {
+        "basemap": "satellite-aerial",
+        "overlays": [
+          "poi-pins",
+          "routes-and-polylines",
+          "user-generated-marks"
+        ],
+        "mapNav": [
+          "drag-pan",
+          "pinch-scroll-zoom",
+          "rotate-and-tilt",
+          "recenter-on-me",
+          "search-and-fly-to"
+        ],
+        "coupling": "map-only",
+        "markDesign": [
+          "category-icon",
+          "price-or-value-label"
+        ],
+        "mapAdapt": [
+          "desktop-side-panel"
+        ]
+      }
+    },
+    {
+      "id": "canvas-editor",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 684,
+            "y": 10,
+            "width": 234,
+            "height": 40
+          },
+          "quote": "Point Line Area",
+          "note": "Persistent creation toolbar for drawing geometry on the map",
+          "region": "top-toolbar"
+        },
+        {
+          "bbox": {
+            "x": 415,
+            "y": 71,
+            "width": 985,
+            "height": 799
+          },
+          "note": "Editable vertices and ways drawn over the map",
+          "region": "map"
+        }
+      ],
+      "dims": {
+        "canvas": "infinite-canvas",
+        "hierarchy": "flat-objects",
+        "selection": [
+          "click"
+        ],
+        "tools": [
+          "persistent-toolbar"
+        ],
+        "multiplayer": [
+          "solo"
+        ],
+        "responsiveness": "absolute-positions"
+      }
+    },
+    {
+      "id": "undo",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1283,
+            "y": 10,
+            "width": 82,
+            "height": 55
+          },
+          "quote": "Undo / Redo",
+          "note": "Undo and redo toolbar buttons (disabled, no edits yet)",
+          "region": "top-toolbar"
+        }
+      ],
+      "dims": {
+        "unit": "many-levels",
+        "access": [
+          "toolbar-button",
+          "keyboard-shortcut"
+        ],
+        "window": "session",
+        "multiUser": "single-user-stack"
+      }
+    },
+    {
+      "id": "tooltip",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 684,
+            "y": 10,
+            "width": 81,
+            "height": 40
+          },
+          "quote": "Point",
+          "note": "Live hover shows tooltip below: 'Add businesses, waste baskets, post boxes, or other points to the map. Key: 1'",
+          "region": "top-toolbar"
+        }
+      ],
+      "dims": {
+        "trigger": [
+          "hover"
+        ],
+        "timing": "until-the-pointer-leaves",
+        "content": "label-and-shortcut",
+        "placement": "below"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 61,
+            "width": 400,
+            "height": 54
+          },
+          "quote": "Search",
+          "note": "Full-width search input with magnifier icon and placeholder",
+          "region": "sidebar"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "placeholder"
+        ],
+        "style": "filled",
+        "inputType": "plain"
+      }
+    },
+    {
+      "id": "split-pane",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "rationale": "A grab handle appears on the sidebar edge suggesting a resizable divider; dragging was not tested.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 400,
+            "y": 400,
+            "width": 15,
+            "height": 100
+          },
+          "note": "Vertical resize handle between sidebar and map",
+          "region": "sidebar"
+        }
+      ],
+      "dims": {
+        "orientation": "side-by-side",
+        "sizing": "draggable-divider",
+        "relationship": "linked-selection"
+      }
+    },
+    {
+      "id": "drawer",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "rationale": "Pane triggers are in the capture but no pane is open; live click on Background opened a right-side pane over the map.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1400,
+            "y": 351,
+            "width": 40,
+            "height": 200
+          },
+          "note": "Background, Map Data, Issues, Preferences, Help pane toggle buttons",
+          "region": "map-controls"
+        }
+      ],
+      "dims": {
+        "edge": "right",
+        "relationship": "overlay-no-scrim",
+        "holds": "settings",
+        "openBy": [
+          "menu-button",
+          "keyboard-shortcut"
+        ]
+      }
+    },
+    {
+      "id": "search-results",
+      "status": "absent",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 115,
+            "width": 400,
+            "height": 785
+          },
+          "note": "Sidebar below search is empty; no results shown"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "badge",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1375,
+            "y": 10,
+            "width": 60,
+            "height": 40
+          },
+          "note": "Save button edit count is 0 and not visibly displayed"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "full-viewport map editor: 400px left sidebar with feature search beside a full-bleed map canvas; black top toolbar overlay, right-edge control rail, bottom info bar",
+    "regions": [
+      "sidebar",
+      "top-toolbar",
+      "map",
+      "map-controls",
+      "info-bar"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#f6f6f6",
+      "#ffffff",
+      "#333333",
+      "#000000",
+      "#7092ff",
+      "#ccccff",
+      "#da26d3",
+      "#ffe600"
+    ],
+    "colorRoles": {
+      "background": "#f6f6f6",
+      "surface": "#ffffff",
+      "text": "#333333",
+      "primary": "#7092ff",
+      "accent": "#da26d3",
+      "muted": "#ccccff",
+      "chrome": "#000000"
+    },
+    "typography": "ui-sans-serif (system sans) throughout: bold 16px sidebar heading, 18px bold search input, 12px bold toolbar buttons, 12px links, 10px attribution",
+    "typeScale": "Compact utility scale, 10-18px, weight contrast (700 for headings/buttons vs 400 for links)",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "none",
+    "imagery": [
+      "photography",
+      "iconography"
+    ],
+    "iconStyle": "filled",
+    "whitespace": "tight",
+    "backgroundTreatment": "image",
+    "mood": [
+      "technical",
+      "utilitarian",
+      "dense",
+      "tool-like"
+    ]
+  },
+  "model": {
+    "rater": "rater-1",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T20:51:24.672Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 9,
+    "usage": {
+      "input_tokens": 18,
+      "cache_creation_input_tokens": 26906,
+      "cache_read_input_tokens": 261751,
+      "output_tokens": 7241
+    }
+  },
+  "notes": "Rapid (Meta's fork of iD) OpenStreetMap editor. The map is the whole UI; chrome is semi-transparent black bars and an icon rail floating over it. Aerial basemap imagery coded as photography. OSM data uses iD's road color coding (orange/yellow/white casings, green outlines for paths, cyan waterways, pink building fills) with white teardrop POI pins and yellow circles labelled with house numbers. Rapid button uses a magenta logo. Tooltips are rich with keyboard shortcut chips."
+}

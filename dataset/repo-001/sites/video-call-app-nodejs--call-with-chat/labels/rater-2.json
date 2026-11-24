@@ -1,0 +1,270 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "video-call-app-nodejs--call-with-chat",
+    "url": "http://localhost:4441/join",
+    "finalUrl": "http://localhost:4441/?room=Tidewater_Weekly%20Sync_2813309571",
+    "status": 200,
+    "title": "Multi-User Video Call",
+    "capturedAt": "2026-11-18T06:34:19.830Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 5400
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "productivity",
+    "domainNote": "multi-user WebRTC video call room with side chat (demo/self-hosted)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/video-call-app-nodejs/explore.json",
+      "repo": {
+        "name": "amirsanni/Video-Call-App-NodeJS",
+        "url": "https://github.com/amirsanni/Video-Call-App-NodeJS",
+        "commit": "152e649ef76b04bc6b15ff5390a5cddd1dd21bf0",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "call-with-chat",
+        "name": "Call room with chat pane",
+        "description": "Video call room with the navbar controls and the open chat pane showing the team's sync messages and a message composer."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "top-bar",
+      "role": "header",
+      "label": "Teal nav bar: 'Video Call' title, unique identifier, icon buttons (camera, mute, share screen, record, chat toggle, leave)",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 47
+      },
+      "patterns": [
+        "video-call"
+      ]
+    },
+    {
+      "id": "video-stage",
+      "role": "main-stage",
+      "label": "Empty white video stage; small self-view video element (216x150) with no camera feed",
+      "bbox": {
+        "x": 0,
+        "y": 47,
+        "width": 1080,
+        "height": 5353
+      },
+      "patterns": [
+        "video-call"
+      ]
+    },
+    {
+      "id": "chat-panel",
+      "role": "sidebar",
+      "label": "CHAT side panel: stacked wheat-colored message boxes with text, links, sender name+ID and timestamp; textarea + Send composer",
+      "bbox": {
+        "x": 1080,
+        "y": 41,
+        "width": 360,
+        "height": 5359
+      },
+      "patterns": [
+        "chat-thread",
+        "text-field",
+        "video-call"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "video-call",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1210,
+            "y": 8,
+            "width": 215,
+            "height": 31
+          },
+          "note": "Call controls: Hide Video, Mute, Share screen, Record, chat toggle, leave",
+          "region": "top-bar"
+        },
+        {
+          "bbox": {
+            "x": 0,
+            "y": 5250,
+            "width": 216,
+            "height": 150
+          },
+          "note": "Self-view video element, empty in capture (no camera)",
+          "region": "video-stage"
+        },
+        {
+          "bbox": {
+            "x": 1080,
+            "y": 41,
+            "width": 360,
+            "height": 900
+          },
+          "note": "Chat side channel; chat icon toggles this panel off (verified live)",
+          "region": "chat-panel",
+          "quote": "CHAT"
+        }
+      ],
+      "dims": {
+        "subspaces": "one-room"
+      }
+    },
+    {
+      "id": "chat-thread",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1084,
+            "y": 110,
+            "width": 303,
+            "height": 622
+          },
+          "note": "Chronological messages, each a rounded wheat box with text then 'Name (__id__) - date time'",
+          "region": "chat-panel",
+          "quote": "noted. will not touch the batch 🙏"
+        },
+        {
+          "bbox": {
+            "x": 1085,
+            "y": 4396,
+            "width": 350,
+            "height": 72
+          },
+          "note": "Composer: textarea + Send button",
+          "region": "chat-panel",
+          "quote": "Send"
+        }
+      ],
+      "dims": {
+        "layout": "bubbles-by-sender",
+        "replies": "flat",
+        "content": [
+          "text"
+        ],
+        "metadata": [
+          "timestamp"
+        ]
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1085,
+            "y": 4396,
+            "width": 288,
+            "height": 72
+          },
+          "note": "Multi-line textarea with italic placeholder, no label",
+          "region": "chat-panel",
+          "quote": "Type here..."
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "placeholder"
+        ],
+        "style": "outlined",
+        "inputType": "plain"
+      }
+    },
+    {
+      "id": "tooltip",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [],
+      "dims": {}
+    },
+    {
+      "id": "drawer",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "full-viewport app: fixed teal top bar with title, room identifier and icon call controls; large white video stage on left (~1080px); fixed-width 360px teal chat side panel on right with scrolling message list and composer pinned at bottom",
+    "regions": [
+      "top-bar",
+      "video-stage",
+      "chat-panel"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#17a2b8",
+      "#ffffff",
+      "#f5deb3",
+      "#000000",
+      "#007bff",
+      "#343a40"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "text": "#000000",
+      "primary": "#17a2b8",
+      "surface": "#f5deb3",
+      "accent": "#007bff",
+      "button": "#343a40",
+      "onPrimary": "#ffffff"
+    },
+    "typography": "System stack (-apple-system / Helvetica-like) throughout: 16px nav title and identifier, 32px 'CHAT' heading, 12px message text, 10px sender/timestamp meta, 13px italic placeholder",
+    "typeScale": "Flat hierarchy: one 32px panel heading, 16px bar text, 12px body, 10px meta; all regular weight",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "filled",
+    "whitespace": "tight",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "utilitarian",
+      "bootstrap-default",
+      "plain",
+      "functional"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T06:35:12.678Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 7,
+    "usage": {
+      "input_tokens": 14,
+      "cache_creation_input_tokens": 22584,
+      "cache_read_input_tokens": 194233,
+      "output_tokens": 3210
+    }
+  },
+  "notes": "Bootstrap-flavoured demo app (bg-info #17a2b8, btn-dark #343a40). Messages are uniform left-aligned wheat (#f5deb3) boxes with 6px radius regardless of sender—no own/other alignment, no avatars; meta line shows 'Name (__numeric id__) - 17th November, 2026 10:34 pm'. URLs in messages are plain blue links with no previews. Stage is empty white (no participant tiles rendered); a tiny self-view <video> exists bottom-left. Top-bar icon buttons are white Font Awesome glyphs without visible labels; chat icon toggles the side panel. Includes a Record control."
+}

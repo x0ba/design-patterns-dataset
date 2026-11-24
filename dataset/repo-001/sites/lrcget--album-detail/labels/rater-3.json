@@ -1,0 +1,501 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "lrcget--album-detail",
+    "url": "http://lrcget.localhost:4319/",
+    "finalUrl": "http://lrcget.localhost:4319/",
+    "status": 200,
+    "title": "LRCGET",
+    "capturedAt": "2026-11-18T03:37:48.807Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1715
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "utilities",
+    "domainNote": "Desktop (Tauri) app for downloading synced/plain lyrics files for a local music library from LRCLIB (LRCGET)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/lrcget/explore.json",
+      "repo": {
+        "name": "tranxuanthang/lrcget",
+        "url": "https://github.com/tranxuanthang/lrcget",
+        "commit": "6e79ef68ec0a524d71e8330e9f37daa86baa6524",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "album-detail",
+        "name": "Album detail",
+        "description": "Album page for \"Casa de Sal\" with back button, album header, Download album lyrics action and numbered track list with lyrics badges."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Top bar: logo mark, pill search field, Tracks/Albums/Artists/LRCLIB nav, Download all lyrics (pink primary), Export, and an overflow ⋮ menu",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 48
+      },
+      "patterns": [
+        "app-shell",
+        "text-field",
+        "menu"
+      ]
+    },
+    {
+      "id": "album-header",
+      "role": "detail-header",
+      "label": "Album detail header: round back button, album title 'Casa de Sal', track count | artist, Download album lyrics button",
+      "bbox": {
+        "x": 0,
+        "y": 56,
+        "width": 1440,
+        "height": 134
+      },
+      "patterns": [
+        "overview-detail"
+      ]
+    },
+    {
+      "id": "track-table",
+      "role": "data-table",
+      "label": "Track list table: #, Track (title + album·artist), Duration, Lyrics status badge, and per-row play/search-lyrics/edit-lyrics icon buttons",
+      "bbox": {
+        "x": 16,
+        "y": 208,
+        "width": 1408,
+        "height": 604
+      },
+      "patterns": [
+        "data-table",
+        "badge",
+        "overview-detail"
+      ]
+    },
+    {
+      "id": "player-bar",
+      "role": "player",
+      "label": "Docked bottom audio player: elapsed/total time, pink seek slider, ±10s skip, big pink play button, 1x speed pill, volume slider",
+      "bbox": {
+        "x": 0,
+        "y": 1621,
+        "width": 1440,
+        "height": 94
+      },
+      "patterns": [
+        "media-player",
+        "slider",
+        "app-shell"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 48
+          },
+          "note": "Persistent top bar with search, primary destinations and global actions",
+          "quote": "Tracks Albums Artists LRCLIB",
+          "region": "header"
+        },
+        {
+          "bbox": {
+            "x": 0,
+            "y": 1621,
+            "width": 1440,
+            "height": 94
+          },
+          "note": "Persistent docked player frame at the bottom",
+          "region": "player-bar"
+        }
+      ],
+      "dims": {
+        "primary": "top-navigation-bar",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 16,
+            "y": 64,
+            "width": 51,
+            "height": 51
+          },
+          "note": "Back button returns to the album list (in the DOM but hidden; checked live). The album detail replaces the list.",
+          "region": "album-header"
+        },
+        {
+          "bbox": {
+            "x": 16,
+            "y": 131,
+            "width": 200,
+            "height": 50
+          },
+          "note": "Detail shows album title, track count and artist (the same attributes as the list item) plus the full track table",
+          "quote": "Casa de Sal",
+          "region": "album-header"
+        }
+      ],
+      "dims": {
+        "openIn": "replace",
+        "overviewType": [
+          "list"
+        ],
+        "openBy": [
+          "click",
+          "back-button"
+        ],
+        "openFrom": "whole-item",
+        "attributePlacement": [
+          "in-both-views",
+          "in-detail-view-only"
+        ],
+        "relationship": "one-to-one",
+        "recursion": [
+          "overview-inside-detail-view"
+        ],
+        "detailMultiplicity": "one-at-a-time"
+      }
+    },
+    {
+      "id": "data-table",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 16,
+            "y": 208,
+            "width": 1408,
+            "height": 604
+          },
+          "note": "Header row with # / Track / Duration / Lyrics columns and 11 track rows, each with row action icons",
+          "quote": "# Track Duration Lyrics",
+          "region": "track-table"
+        }
+      ],
+      "dims": {
+        "columnSet": "fixed",
+        "cellRendering": [
+          "plain-text",
+          "chips-and-avatars"
+        ],
+        "density": "standard",
+        "rowExpansion": "none",
+        "selection": "none",
+        "opScope": [
+          "row",
+          "whole-table"
+        ],
+        "aggregation": [
+          "flat"
+        ]
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1114,
+            "y": 258,
+            "width": 56,
+            "height": 18
+          },
+          "note": "Green 'Synced' lyrics status pill",
+          "quote": "Synced",
+          "region": "track-table"
+        },
+        {
+          "bbox": {
+            "x": 1121,
+            "y": 310,
+            "width": 42,
+            "height": 18
+          },
+          "note": "Dark 'Plain' status pill",
+          "quote": "Plain",
+          "region": "track-table"
+        },
+        {
+          "bbox": {
+            "x": 1097,
+            "y": 362,
+            "width": 90,
+            "height": 18
+          },
+          "note": "Gradient orange→pink→purple 'Word Synced' pill",
+          "quote": "Word Synced",
+          "region": "track-table"
+        }
+      ],
+      "dims": {
+        "meaning": "status",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "media-player",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 1621,
+            "width": 1440,
+            "height": 94
+          },
+          "note": "Audio transport: 00:00 scrubber, rewind 10, play, forward 10, 1x speed, volume",
+          "quote": "Playback speed: 1x",
+          "region": "player-bar"
+        }
+      ],
+      "dims": {
+        "controls": [
+          "play-pause",
+          "scrubber",
+          "skip-forward-back",
+          "playback-speed",
+          "volume-and-mute"
+        ],
+        "position": [
+          "time-scrubber"
+        ]
+      },
+      "novel": [
+        {
+          "subdimension": "mode",
+          "description": "Full-width transport bar docked to the bottom of the app shell, staying in place while you browse",
+          "proposedValueId": "docked-bar"
+        }
+      ]
+    },
+    {
+      "id": "slider",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 61,
+            "y": 1628,
+            "width": 1312,
+            "height": 28
+          },
+          "note": "Seek slider with elapsed and total time labels",
+          "quote": "00:00",
+          "region": "player-bar"
+        },
+        {
+          "bbox": {
+            "x": 1300,
+            "y": 1670,
+            "width": 124,
+            "height": 24
+          },
+          "note": "Volume slider with no labels",
+          "region": "player-bar"
+        }
+      ],
+      "dims": {
+        "values": "single-value",
+        "labels": [
+          "current-value"
+        ],
+        "scale": "linear"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1392,
+            "y": 8,
+            "width": 32,
+            "height": 32
+          },
+          "note": "⋮ trigger. Checked live: it opens a vertical list with Refresh library, Manage directories, Settings and About, each with an icon (closed in the capture).",
+          "region": "header"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click",
+        "structure": "flat",
+        "item": [
+          "label",
+          "icon"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 24,
+            "y": 8,
+            "width": 256,
+            "height": 32
+          },
+          "note": "Pill-shaped outlined search input with a search icon prefix and a placeholder",
+          "quote": "Search for albums...",
+          "region": "header"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "placeholder",
+          "prefix-or-suffix"
+        ],
+        "style": "outlined",
+        "inputType": "plain"
+      }
+    },
+    {
+      "id": "tabs",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 583,
+            "y": 9,
+            "width": 282,
+            "height": 30
+          },
+          "note": "Tracks/Albums/Artists has an underline indicator, but it works as the app's primary top navigation (coded as app-shell), not as a tab set inside a panel",
+          "quote": "Tracks Albums Artists"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "tooltip",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1345,
+            "y": 248,
+            "width": 35,
+            "height": 35
+          },
+          "note": "Checked live: hovering an unlabeled row icon only highlights it in pink; no tooltip appears"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "Desktop-app single-column layout: thin top bar (search, centered primary nav, actions), a full-width content area showing an album detail that replaced the album list, and a persistent bottom audio player",
+    "regions": [
+      "header",
+      "album-header",
+      "track-table",
+      "player-bar"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#ffffff",
+      "#fafafa",
+      "#f5f5f5",
+      "#f35697",
+      "#ffd9e2",
+      "#166534",
+      "#1f2937",
+      "#171717",
+      "#262626",
+      "#737373",
+      "#d4d4d4"
+    ],
+    "colorRoles": {
+      "background": "#ffffff",
+      "surface": "#f5f5f5",
+      "text": "#262626",
+      "muted": "#737373",
+      "primary": "#f35697",
+      "accent": "#ffd9e2",
+      "border": "#d4d4d4",
+      "success": "#166534",
+      "player-surface": "#fafafa"
+    },
+    "typography": "ui-sans-serif system stack throughout (renders as DejaVu Sans-like). Bold/extra-bold (800) for nav and track titles, uppercase bold 12px for pill buttons, regular for metadata",
+    "typeScale": "Flat scale: 20px album title (regular), 14px track titles (bold) and metadata (regular, grey), 12px uppercase bold buttons and column headers, 11px badges. Hierarchy comes from weight and grey tone more than from size.",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "none",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "filled",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "utilitarian",
+      "clean",
+      "minimal",
+      "playful-accent"
+    ]
+  },
+  "model": {
+    "rater": "rater-3",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T03:39:33.715Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 11,
+    "usage": {
+      "input_tokens": 22,
+      "cache_creation_input_tokens": 41436,
+      "cache_read_input_tokens": 395726,
+      "output_tokens": 6336
+    }
+  },
+  "notes": "LRCGET desktop app (likely Tauri) running in a browser. Mostly monochrome white UI with one hot-pink accent (#f35697) used for the primary 'Download all lyrics' pill, the big round play button, the slider thumbs/tracks and row-icon hover fills. All buttons are pills (radius 9999px); the round back button is grey. Lyrics status is shown as tiny pills: green 'Synced', near-black 'Plain', and a multicolor gradient 'Word Synced' (one of the page's 4 gradients). Rows have no dividers and get a light grey hover. The album list stays in the DOM, hidden behind the album detail view. Beyond the 11 rows, the extra height in the full capture is empty because the panel was stretched for the tall screenshot. Player bar #fafafa with a faint pink seek track (#ffd9e2)."
+}

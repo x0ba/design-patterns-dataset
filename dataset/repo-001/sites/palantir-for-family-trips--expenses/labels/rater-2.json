@@ -1,0 +1,631 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "palantir-for-family-trips--expenses",
+    "url": "http://palantir-for-family-trips.localhost:4319/",
+    "finalUrl": "http://palantir-for-family-trips.localhost:4319/",
+    "status": 200,
+    "title": "Pine Mountain Lake Command Center",
+    "capturedAt": "2026-11-18T06:07:04.146Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1245
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "productivity",
+    "domainNote": "family group-trip planning command center: shared expense ledger split across families",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/palantir-for-family-trips/explore.json",
+      "repo": {
+        "name": "andrewjiang/palantir-for-family-trips",
+        "url": "https://github.com/andrewjiang/palantir-for-family-trips",
+        "commit": "0c07345ebf2c8e75d2d2e56ea5a095e5aad4504e",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "expenses",
+        "name": "Expense ledger",
+        "description": "Shared-costs ledger with totals and expense list, an editable expense form with family split allocation, and inspector with briefing, checklist and notes."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "nav-rail",
+      "role": "sidebar",
+      "label": "Icon-only navigation rail: Itinerary, Stay, Meals, Activities, Expenses (active), Families; Export, Messages, Settings at bottom",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 64,
+        "height": 1245
+      },
+      "patterns": [
+        "app-shell"
+      ]
+    },
+    {
+      "id": "top-bar",
+      "role": "header",
+      "label": "Top bar: classification tag, title, Working-as family switch, AUTOSAVE LIVE indicator, search field",
+      "bbox": {
+        "x": 64,
+        "y": 0,
+        "width": 1376,
+        "height": 48
+      },
+      "patterns": [
+        "app-shell",
+        "choice-control",
+        "text-field"
+      ]
+    },
+    {
+      "id": "expense-ledger",
+      "role": "list-pane",
+      "label": "Expense ledger: header with Add expense, Total tracked / Outstanding stat tiles, list of expense rows with status pills",
+      "bbox": {
+        "x": 64,
+        "y": 48,
+        "width": 483,
+        "height": 1197
+      },
+      "patterns": [
+        "overview-detail",
+        "stat-tile",
+        "badge"
+      ]
+    },
+    {
+      "id": "expense-detail",
+      "role": "detail-form",
+      "label": "Selected expense edit form: title, payer select, amount, settlement toggle, split-mode segmented control with per-family allocation, notes, per-family exposure",
+      "bbox": {
+        "x": 547,
+        "y": 48,
+        "width": 533,
+        "height": 1197
+      },
+      "patterns": [
+        "overview-detail",
+        "form",
+        "text-field",
+        "choice-control"
+      ]
+    },
+    {
+      "id": "inspector",
+      "role": "aside",
+      "label": "Right aside for the selection: header with checklist/day mini tiles and Mark settled, Briefing key-values, Planning tasks checklist with add row, Notes",
+      "bbox": {
+        "x": 1080,
+        "y": 48,
+        "width": 360,
+        "height": 1197
+      },
+      "patterns": [
+        "property-inspector",
+        "task-list",
+        "stat-tile",
+        "text-field"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 64,
+            "height": 1245
+          },
+          "note": "Icon navigation rail with Expenses active",
+          "region": "nav-rail"
+        },
+        {
+          "bbox": {
+            "x": 64,
+            "y": 0,
+            "width": 1376,
+            "height": 48
+          },
+          "note": "Top bar with title, identity switch, search",
+          "quote": "FAMILY TRIP COMMAND CENTER",
+          "region": "top-bar"
+        }
+      ],
+      "dims": {
+        "primary": "navigation-rail",
+        "secondary": "none",
+        "items": [
+          "fixed-destinations"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "overview-detail",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 88,
+            "y": 291,
+            "width": 434,
+            "height": 546
+          },
+          "note": "Ledger list of expenses; clicking a row (verified live) loads it into the center form and right aside",
+          "quote": "Basecamp booking",
+          "region": "expense-ledger"
+        },
+        {
+          "bbox": {
+            "x": 547,
+            "y": 48,
+            "width": 533,
+            "height": 1197
+          },
+          "note": "Detail view of the selected expense",
+          "quote": "SELECTED EXPENSE",
+          "region": "expense-detail"
+        }
+      ],
+      "dims": {
+        "attributePlacement": [
+          "in-both-views",
+          "in-detail-view-only"
+        ],
+        "abstraction": [
+          "category",
+          "style"
+        ],
+        "truncation": "full-text",
+        "relationship": "one-overview-to-many-detail-views",
+        "recursion": [
+          "none"
+        ],
+        "openIn": "side-by-side",
+        "overviewType": [
+          "list"
+        ],
+        "detailMultiplicity": "one-at-a-time",
+        "openBy": [
+          "click"
+        ],
+        "openFrom": "whole-item",
+        "attributeScope": [
+          "per-item",
+          "per-collection"
+        ]
+      }
+    },
+    {
+      "id": "form",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 571,
+            "y": 176,
+            "width": 485,
+            "height": 162
+          },
+          "note": "Two-column labelled fields: title, payer, amount, settlement",
+          "quote": "EXPENSE TITLE",
+          "region": "expense-detail"
+        },
+        {
+          "bbox": {
+            "x": 1030,
+            "y": 10,
+            "width": 120,
+            "height": 27
+          },
+          "note": "No submit button; autosave indicator",
+          "quote": "AUTOSAVE LIVE",
+          "region": "top-bar"
+        }
+      ],
+      "dims": {
+        "labels": "top-aligned",
+        "columns": "multiple-columns",
+        "grouping": "sections-with-headings",
+        "commit": "autosave-per-field",
+        "help": [
+          "hint-text"
+        ]
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 571,
+            "y": 216,
+            "width": 236,
+            "height": 56
+          },
+          "note": "Outlined text field with top label",
+          "quote": "Basecamp booking",
+          "region": "expense-detail"
+        },
+        {
+          "bbox": {
+            "x": 1160,
+            "y": 8,
+            "width": 256,
+            "height": 31
+          },
+          "note": "Search field with placeholder and icon",
+          "quote": "Search...",
+          "region": "top-bar"
+        },
+        {
+          "bbox": {
+            "x": 1118,
+            "y": 718,
+            "width": 229,
+            "height": 34
+          },
+          "note": "Add-task field with placeholder",
+          "quote": "Add a task tied to this item...",
+          "region": "inspector"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "label",
+          "placeholder"
+        ],
+        "style": "outlined",
+        "validation": "none",
+        "inputType": "plain"
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 588,
+            "y": 424,
+            "width": 389,
+            "height": 33
+          },
+          "note": "Split mode segmented control; selecting Manual allocation swaps the share rows to inputs (verified live)",
+          "quote": "EQUAL SPLIT",
+          "region": "expense-detail"
+        },
+        {
+          "bbox": {
+            "x": 799,
+            "y": 11,
+            "width": 219,
+            "height": 24
+          },
+          "note": "Working-as family segmented switch",
+          "quote": "JIANGS",
+          "region": "top-bar"
+        },
+        {
+          "bbox": {
+            "x": 819,
+            "y": 195,
+            "width": 237,
+            "height": 34
+          },
+          "note": "Payer dropdown select",
+          "quote": "Custom...",
+          "region": "expense-detail"
+        }
+      ],
+      "dims": {
+        "cardinality": "single-choice",
+        "form": "segmented-control",
+        "option": [
+          "label-only"
+        ],
+        "timing": "immediately",
+        "largeSets": "show-all"
+      }
+    },
+    {
+      "id": "stat-tile",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 88,
+            "y": 188,
+            "width": 211,
+            "height": 83
+          },
+          "quote": "TOTAL TRACKED $1,892.09",
+          "region": "expense-ledger"
+        },
+        {
+          "bbox": {
+            "x": 311,
+            "y": 188,
+            "width": 211,
+            "height": 83
+          },
+          "note": "Amber value",
+          "quote": "OUTSTANDING $1,892.09",
+          "region": "expense-ledger"
+        },
+        {
+          "bbox": {
+            "x": 1101,
+            "y": 141,
+            "width": 156,
+            "height": 53
+          },
+          "quote": "CHECKLIST 2/2",
+          "region": "inspector"
+        }
+      ],
+      "dims": {
+        "context": [
+          "label"
+        ],
+        "encoding": "number-only",
+        "drill": "none"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 461,
+            "y": 352,
+            "width": 44,
+            "height": 15
+          },
+          "note": "Amber status pill on expense row",
+          "quote": "OPEN",
+          "region": "expense-ledger"
+        },
+        {
+          "bbox": {
+            "x": 444,
+            "y": 581,
+            "width": 61,
+            "height": 15
+          },
+          "note": "Green settled pill",
+          "quote": "SETTLED",
+          "region": "expense-ledger"
+        }
+      ],
+      "dims": {
+        "meaning": "status",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "task-list",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1101,
+            "y": 498,
+            "width": 319,
+            "height": 271
+          },
+          "note": "Checklist of planning tasks tied to the selected expense, checkboxes, day tag, inline add row",
+          "quote": "PLANNING TASKS",
+          "region": "inspector"
+        }
+      ],
+      "dims": {
+        "rowFields": [
+          "title-only",
+          "due-date"
+        ],
+        "itemRichness": "checkbox-item",
+        "completionPath": [
+          "check-off"
+        ],
+        "createOpen": [
+          "inline-add-row"
+        ],
+        "sharingModel": "shared-list"
+      }
+    },
+    {
+      "id": "property-inspector",
+      "status": "uncertain",
+      "confidence": 0.5,
+      "rationale": "Right aside is a contextual panel for the current selection with key-value rows, but those rows are read-only; editing happens in the center form, so it may be better read as a detail summary than an inspector.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1101,
+            "y": 280,
+            "width": 319,
+            "height": 198
+          },
+          "note": "Key-value rows for the selected expense",
+          "quote": "WHAT MATTERS HERE",
+          "region": "inspector"
+        }
+      ],
+      "dims": {
+        "placement": "right-sidebar",
+        "multi": "single-object-only",
+        "grouping": "flat"
+      }
+    },
+    {
+      "id": "split-pane",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 547,
+            "y": 48,
+            "width": 533,
+            "height": 1197
+          },
+          "note": "Three fixed columns, no resize dividers"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "co-editing-presence",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 571,
+            "y": 125,
+            "width": 485,
+            "height": 35
+          },
+          "note": "Only created/edited-by attribution and a working-as identity switch; no live presence",
+          "quote": "Created by Parkers · Last edited by Parkers"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "tabs",
+      "status": "absent",
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 588,
+            "y": 424,
+            "width": 389,
+            "height": 33
+          },
+          "note": "Split mode buttons set a data value (shown in list and briefing), so coded as choice-control rather than tabs"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "card",
+      "status": "absent",
+      "confidence": 0.55,
+      "rationale": "Ledger items are divided rows inside one bordered list rather than separate cards.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 88,
+            "y": 291,
+            "width": 434,
+            "height": 546
+          },
+          "note": "Rows separated by dividers"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "desktop app shell: left icon navigation rail + top status bar; three columns: expense ledger list (left), selected-expense edit form (center), contextual aside with briefing, checklist and notes (right); columns scroll independently",
+    "regions": [
+      "nav-rail",
+      "top-bar",
+      "expense-ledger",
+      "expense-detail",
+      "inspector"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#0a0c10",
+      "#0d1117",
+      "#161b22",
+      "#1f2a34",
+      "#30363d",
+      "#c9d1d9",
+      "#8b949e",
+      "#58a6ff",
+      "#3fb950",
+      "#d29922"
+    ],
+    "colorRoles": {
+      "background": "#0d1117",
+      "text": "#c9d1d9",
+      "surface": "#161b22",
+      "muted": "#8b949e",
+      "primary": "#58a6ff",
+      "accent": "#d29922",
+      "success": "#3fb950",
+      "border": "#30363d",
+      "raised": "#1f2a34",
+      "page": "#0a0c10"
+    },
+    "typography": "Inter for all UI text: wide-tracked uppercase small-caps labels and headings, regular body; Geist Mono for monetary amounts in ledger rows",
+    "typeScale": "Compressed: 20px bold for money values, 16px semibold for item titles, 13-15px wide-tracked uppercase headings, many 9-11px uppercase eyebrow labels in blue; contrast mainly from weight, color and letter-spacing",
+    "shape": "sharp",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "technical",
+      "tactical",
+      "dark",
+      "utilitarian",
+      "dense"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T06:09:09.967Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 9,
+    "usage": {
+      "input_tokens": 18,
+      "cache_creation_input_tokens": 39951,
+      "cache_read_input_tokens": 317183,
+      "output_tokens": 10498
+    }
+  },
+  "notes": "Playful 'Palantir for family trips' conceit: GitHub-dark palette (#0d1117/#161b22/#58a6ff), 'UNCLASSIFIED // FAMILY OPS' green classification banner text, 'command center' framing. 2px corners, 1px #30363d borders, no shadows. Blue tracked uppercase eyebrow labels (SHARED COSTS, SELECTED EXPENSE, SPLIT MODE, BRIEFING) above white tracked uppercase section headings. Status semantics by color: amber OPEN, green SETTLED / Mark settled. Identity is chosen via a Working-as switch (Parkers/Jiangs/Riveras) and every record shows created/edited-by attribution. Manual allocation mode (live) shows per-family amount inputs, a running total and an amber 'still unassigned' warning strip."
+}

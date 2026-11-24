@@ -1,0 +1,694 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "type-pal--scene-workspace",
+    "url": "http://localhost:4467/?module=scene&page=workspace&object=s004",
+    "finalUrl": "http://localhost:4467/?module=scene&page=workspace&object=s004",
+    "status": 200,
+    "title": "仙剑奇侠传·复刻 · type-pal 编辑器",
+    "capturedAt": "2026-11-18T19:58:42.449Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 2004
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "games",
+    "domainNote": "Web-based level/scene editor for a remake of the RPG 仙剑奇侠传 (PAL): isometric map, entity placement, event-script authoring",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/type-pal/explore.json",
+      "repo": {
+        "name": "IllegalCreed/type-pal",
+        "url": "https://github.com/IllegalCreed/type-pal",
+        "commit": "8fce7b6a485904d2b7e2adb076989fcb94ccb027",
+        "license": "GPL-3.0"
+      },
+      "view": {
+        "slug": "scene-workspace",
+        "name": "Scene workspace with NPC script panel",
+        "description": "Scene editor for 盛渔村 with the object list on the left, an isometric map canvas with the selected NPC 丁香兰, the script panel (script variants and steps) below the canvas, and the entity inspector on the right."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "label": "Top bar: project title + 'PAL 开发基线' pill, menubar (文件…项目设置), panel toggles, undo/redo, save button",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 41
+      },
+      "patterns": [
+        "app-shell",
+        "menu",
+        "tooltip",
+        "undo"
+      ]
+    },
+    {
+      "id": "left-sidebar",
+      "role": "sidebar",
+      "label": "Scene outline: scene switcher, spawn points list, entity list grouped by type, layer visibility checkboxes",
+      "bbox": {
+        "x": 0,
+        "y": 41,
+        "width": 194,
+        "height": 1937
+      },
+      "patterns": [
+        "badge",
+        "choice-control",
+        "split-pane"
+      ]
+    },
+    {
+      "id": "scene-canvas",
+      "role": "canvas",
+      "label": "Preview toolbar (play/step/stop, 1× speed) above isometric pixel-art scene with selected NPC highlighted by a yellow tile grid",
+      "bbox": {
+        "x": 194,
+        "y": 41,
+        "width": 956,
+        "height": 1517
+      },
+      "patterns": [
+        "canvas-editor",
+        "choice-control"
+      ]
+    },
+    {
+      "id": "script-panel",
+      "role": "bottom-panel",
+      "label": "Script panel for selected entity: 交互脚本/自动行为 tabs, script plan cards with drag handles and move arrows, step card",
+      "bbox": {
+        "x": 194,
+        "y": 1558,
+        "width": 956,
+        "height": 420
+      },
+      "patterns": [
+        "tabs",
+        "card",
+        "drag-reorder",
+        "contextual-help",
+        "tooltip"
+      ]
+    },
+    {
+      "id": "inspector",
+      "role": "inspector",
+      "label": "Selected entity inspector with 属性/行为/引用 tabs: name field, sprite preview, sprite & facing selects, checkboxes, col/row/height coordinates",
+      "bbox": {
+        "x": 1151,
+        "y": 41,
+        "width": 289,
+        "height": 1937
+      },
+      "patterns": [
+        "property-inspector",
+        "tabs",
+        "text-field",
+        "choice-control",
+        "contextual-help"
+      ]
+    },
+    {
+      "id": "status-bar",
+      "role": "status-bar",
+      "label": "Footer status: warning count '181 项待处理', unused asset warnings, save state",
+      "bbox": {
+        "x": 0,
+        "y": 1978,
+        "width": 1440,
+        "height": 26
+      },
+      "patterns": [
+        "badge"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 41
+          },
+          "quote": "文件 编辑 视图 场景 地图 剧情 角色 物品 战斗",
+          "region": "header",
+          "note": "Persistent top bar with module menubar, panel toggles and save; status bar at bottom"
+        }
+      ],
+      "dims": {
+        "primary": "top-navigation-bar",
+        "secondary": "contextual-panel",
+        "items": [
+          "fixed-destinations",
+          "live-counts"
+        ],
+        "visibility": "always-visible",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 216,
+            "y": 0,
+            "width": 886,
+            "height": 40
+          },
+          "quote": "文件",
+          "region": "header",
+          "note": "role=menubar; clicking 文件 opens a dropdown list (新建项目, 打开项目, 保存 PAL 开发基线 ⌘S, 导出 ZIP) on live page"
+        }
+      ],
+      "dims": {
+        "openBy": "menu-bar",
+        "structure": "flat",
+        "item": [
+          "label",
+          "shortcut-hint"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    },
+    {
+      "id": "tooltip",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1214,
+            "y": 6,
+            "width": 28,
+            "height": 28
+          },
+          "quote": "撤销 · ⌘Z",
+          "region": "header",
+          "note": "Hovering undo shows a tooltip below with label and shortcut"
+        }
+      ],
+      "dims": {
+        "trigger": [
+          "hover"
+        ],
+        "content": "label-and-shortcut",
+        "placement": "below"
+      }
+    },
+    {
+      "id": "undo",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1214,
+            "y": 6,
+            "width": 60,
+            "height": 28
+          },
+          "quote": "撤销 · ⌘Z",
+          "region": "header",
+          "note": "Undo/redo toolbar buttons with ⌘Z / ⇧⌘Z shortcuts (disabled at capture)"
+        }
+      ],
+      "dims": {
+        "access": [
+          "keyboard-shortcut",
+          "toolbar-button"
+        ],
+        "unit": "many-levels",
+        "preview": "no"
+      }
+    },
+    {
+      "id": "canvas-editor",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 194,
+            "y": 121,
+            "width": 956,
+            "height": 1437
+          },
+          "region": "scene-canvas",
+          "note": "Isometric scene; selected entity shown with yellow tile grid footprint"
+        },
+        {
+          "bbox": {
+            "x": 940,
+            "y": 50,
+            "width": 200,
+            "height": 22
+          },
+          "quote": "点击选择 · 拖动移位 · Esc 取消选择",
+          "region": "scene-canvas"
+        }
+      ],
+      "dims": {
+        "canvas": "fixed-page-size",
+        "hierarchy": "layers-and-groups",
+        "selection": [
+          "click"
+        ],
+        "tools": [
+          "persistent-toolbar"
+        ],
+        "generation": "manual",
+        "multiplayer": [
+          "solo"
+        ],
+        "responsiveness": "absolute-positions"
+      }
+    },
+    {
+      "id": "property-inspector",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1151,
+            "y": 41,
+            "width": 289,
+            "height": 700
+          },
+          "quote": "选中实体 丁香兰 e83",
+          "region": "inspector",
+          "note": "Right panel of properties for selected entity, grouped into tabs and sections (外观 / 交互, 位置)"
+        }
+      ],
+      "dims": {
+        "set": "contextual-to-the-selection-type",
+        "placement": "right-sidebar",
+        "multi": "single-object-only",
+        "grouping": "tabs"
+      }
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1151,
+            "y": 120,
+            "width": 289,
+            "height": 49
+          },
+          "quote": "属性 行为 引用 6",
+          "region": "inspector",
+          "note": "tablist with count badge on 引用"
+        },
+        {
+          "bbox": {
+            "x": 248,
+            "y": 1562,
+            "width": 892,
+            "height": 48
+          },
+          "quote": "交互脚本 自动行为",
+          "region": "script-panel",
+          "note": "Script type tablist"
+        }
+      ],
+      "dims": {
+        "placement": "top",
+        "label": [
+          "text",
+          "badge-count"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      }
+    },
+    {
+      "id": "card",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 204,
+            "y": 1711,
+            "width": 220,
+            "height": 95
+          },
+          "quote": "默认触发行为 1 个步骤 方案详情",
+          "region": "script-panel",
+          "note": "Script plan card, selected (blue border); 3 siblings"
+        },
+        {
+          "bbox": {
+            "x": 208,
+            "y": 1873,
+            "width": 160,
+            "height": 114
+          },
+          "quote": "步骤 1 6 条指令 首次运行",
+          "region": "script-panel"
+        }
+      ],
+      "dims": {
+        "media": "none",
+        "actions": "action-row",
+        "shape": "horizontal",
+        "style": "outlined",
+        "target": "whole-card"
+      }
+    },
+    {
+      "id": "drag-reorder",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 212,
+            "y": 1738,
+            "width": 22,
+            "height": 22
+          },
+          "region": "script-panel",
+          "note": "Drag-handle grip dots on plan card"
+        },
+        {
+          "bbox": {
+            "x": 204,
+            "y": 1711,
+            "width": 936,
+            "height": 97
+          },
+          "quote": "上移默认触发行为",
+          "region": "script-panel",
+          "note": "‹ › move buttons per card; a11y text describes keyboard lift/move"
+        }
+      ],
+      "dims": {
+        "grab": [
+          "handle",
+          "keyboard-lift-and-move",
+          "move-up-or-down-commands"
+        ],
+        "destinations": [
+          "within-the-list"
+        ]
+      }
+    },
+    {
+      "id": "contextual-help",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 310,
+            "y": 1682,
+            "width": 20,
+            "height": 20
+          },
+          "region": "script-panel",
+          "note": "'?' icon; hover shows explanation 同一脚本入口可以有多套方案…"
+        },
+        {
+          "bbox": {
+            "x": 1235,
+            "y": 255,
+            "width": 189,
+            "height": 50
+          },
+          "quote": "只命名当前场景实例，不改ID或人物库名称。",
+          "region": "inspector",
+          "note": "Inline hint text under field"
+        }
+      ],
+      "dims": {
+        "access": [
+          "info-icon"
+        ],
+        "content": [
+          "definitions"
+        ],
+        "placement": "popover-at-the-field",
+        "proactivity": "on-request",
+        "relevance": "field"
+      }
+    },
+    {
+      "id": "choice-control",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 10,
+            "y": 1760,
+            "width": 140,
+            "height": 210
+          },
+          "quote": "地板 高物（墙、家具） 落点 实体 禁入",
+          "region": "left-sidebar",
+          "note": "Layer visibility checkbox chips"
+        },
+        {
+          "bbox": {
+            "x": 1235,
+            "y": 503,
+            "width": 189,
+            "height": 36
+          },
+          "quote": "阻挡通行",
+          "region": "inspector"
+        }
+      ],
+      "dims": {
+        "cardinality": "multiple-choice",
+        "form": "checkbox-list",
+        "option": [
+          "label-only"
+        ],
+        "timing": "immediately"
+      }
+    },
+    {
+      "id": "text-field",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1235,
+            "y": 221,
+            "width": 189,
+            "height": 30
+          },
+          "quote": "丁香兰",
+          "region": "inspector",
+          "note": "实体名称 field with hint text below; col/row/height spinbuttons"
+        }
+      ],
+      "dims": {
+        "supporting": [
+          "label",
+          "placeholder",
+          "hint-text"
+        ],
+        "style": "outlined",
+        "inputType": "plain"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 50,
+            "y": 50,
+            "width": 52,
+            "height": 22
+          },
+          "quote": "294 个",
+          "region": "left-sidebar",
+          "note": "Count pills next to section headings"
+        },
+        {
+          "bbox": {
+            "x": 1395,
+            "y": 136,
+            "width": 18,
+            "height": 16
+          },
+          "quote": "6",
+          "region": "inspector"
+        }
+      ],
+      "dims": {
+        "meaning": "count",
+        "overflow": "exact-count",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "split-pane",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 41,
+            "width": 1440,
+            "height": 1937
+          },
+          "region": "left-sidebar",
+          "note": "separators '调整左侧面板宽度' / '调整右侧面板宽度' plus header toggles for list/script/inspector panels"
+        }
+      ],
+      "dims": {
+        "orientation": "nested-splits",
+        "sizing": "draggable-divider",
+        "relationship": "linked-selection"
+      }
+    },
+    {
+      "id": "tree-view",
+      "status": "uncertain",
+      "confidence": 0.4,
+      "rationale": "Script body exposes treeitem roles but lies below the captured area; outline list in sidebar is flat grouped list without disclosure.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 204,
+            "y": 1999,
+            "width": 936,
+            "height": 5
+          },
+          "region": "script-panel",
+          "note": "Script body (treeitems) starts at bottom edge of capture"
+        }
+      ],
+      "dims": {}
+    },
+    {
+      "id": "zoomable-canvas",
+      "status": "absent",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 194,
+            "y": 121,
+            "width": 956,
+            "height": 1437
+          },
+          "note": "Bounded map, not infinite pan/zoom plane"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "Three-pane desktop editor: top menubar, left outline sidebar, center scene canvas with stacked script panel below, right property inspector, bottom status bar",
+    "regions": [
+      "header",
+      "left-sidebar",
+      "scene-canvas",
+      "script-panel",
+      "inspector",
+      "status-bar"
+    ],
+    "density": "dense"
+  },
+  "aesthetics": {
+    "palette": [
+      "#1b1d23",
+      "#232732",
+      "#2b303c",
+      "#2d3852",
+      "#5aa2ff",
+      "#edf1f7",
+      "#aeb7c7",
+      "#96a1b3",
+      "#e2b340",
+      "#3b4251"
+    ],
+    "colorRoles": {
+      "background": "#1b1d23",
+      "surface": "#232732",
+      "text": "#edf1f7",
+      "muted": "#96a1b3",
+      "primary": "#5aa2ff",
+      "accent": "#e2b340",
+      "border": "#3b4251",
+      "selected": "#2d3852"
+    },
+    "typography": "system-ui for all UI chrome and labels; ui-monospace for entity IDs, coordinates and status-bar asset IDs",
+    "typeScale": "Compact and flat: 16px bold section headings (场景, 外观 / 交互), 13–14px controls, 12px list rows, 9–11px meta on cards; hierarchy carried by weight more than size",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "illustration"
+    ],
+    "iconStyle": "mixed",
+    "whitespace": "tight",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "technical",
+      "dark",
+      "utilitarian",
+      "dense",
+      "pro-tool"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T20:00:56.160Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 11,
+    "usage": {
+      "input_tokens": 22,
+      "cache_creation_input_tokens": 46017,
+      "cache_read_input_tokens": 411037,
+      "output_tokens": 6339
+    }
+  },
+  "notes": "Dark IDE-style editor (VS Code/Unity-like) wrapped around a retro isometric pixel-art game map. Selection on the canvas is shown as a translucent yellow diamond tile grid. Emoji used as type icons in lists (📦 entity, 📍 spawn, ⬚ trigger zone, 💬 dialogue, 🧹 clear). Blue (#5aa2ff) outline marks selected tab/card/checkbox; yellow #e2b340 warning in status bar. Panels toggled from header with ⌘⌥L/B/R shortcuts. Script plans are reorderable cards with grip dots and ‹ › move buttons; script body is a keyboard-draggable tree of commands (below capture fold)."
+}

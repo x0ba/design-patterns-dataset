@@ -1,0 +1,20 @@
+{
+  "mode": "server",
+  "entry": "/?perma=ribbon/4e1f6c7e-3bfd-41ec-a078-7af5ba86f4c6#ribbon",
+  "login": null,
+  "stubs": [
+    {
+      "service": "Ribbon permalink store API (api.genomeribbon.com /v0/store, Cloudflare KV)",
+      "how": "Build sets VITE_RIBBON_API_STORE=/v0/store/ (one-line env hook added in js/index_ribbon.js; default unchanged). .ui-capture/server.mjs implements GET /v0/store/<id> and POST /v0/store/ with the same {success,message,error_code,data} envelope as api/index.js, backed by JSON files in .ui-capture/store/ (POSTed permalinks are saved there too)."
+    },
+    {
+      "service": "Google Fonts (Lato 300/900 stylesheet)",
+      "how": "build.sh rewrites the fonts.googleapis.com link in dist/index.html to /_fonts/css; server.mjs serves @font-face CSS and woff/woff2 files from the @fontsource/lato npm package installed in .ui-capture/fontstub."
+    },
+    {
+      "service": "biowasm CDN (samtools/bcftools WASM via Aioli)",
+      "how": "No stub needed: the app already loads WASM from its own /wasm path (public/wasm in the repo)."
+    }
+  ],
+  "notes": "Ribbon/SplitThreader is a client-side Vite app with no backend except the permalink store. Setup: mise.toml pins node 20.18.0; .ui-capture/build.sh runs npm ci, builds dist/ with VITE_RIBBON_API_STORE=/v0/store/, points the font link at the local stub, installs the font package and runs seed.mjs. start.sh runs server.mjs (static dist/ + stubs) on $PORT (4482). Data: seed.mjs writes the permalink store exactly as the real API stores it (base64 zlib-compressed JSON). It includes the 5 real public example snapshots shipped in permalinks/ under their production ids (_ribbon/ilmn_deletion_a549, _ribbon/grch38_vs_hg19, _ribbon/pacb_skbr3_tra, _ribbon/pacb_skbr3_gene_fusion, _ribbon/grch38_vs_gorilla) linked from the Examples tab. It also includes 20 views a researcher saved between Mar and Nov 2026 (ribbon/<uuid>), derived from those real alignments with different selected reads, MAPQ filters, sort orders, dotplot vs ribbon mode, colour palettes, chromosome subsets and names. The list with ids is in .ui-capture/store/_index.json, and any of them opens with /?perma=<id>#ribbon. Saved views have the remote bam_url removed (unreachable offline); the snapshot reads, BEDPE variants and gene features load from the permalink itself. Entry: the user's saved view of the SK-BR-3 CYTH1-EIF3H gene fusion: 628 PacBio long reads with read 106 selected, 578 Sniffles BEDPE variants and about 57k hg19 gene features, shown in the Ribbon tab (multi-read view, single-read ribbon, settings panels, variant/feature tables). SplitThreader with real data: /?session=example:skbr3#splitthreader uses the app's built-in offline example session (SKBR3 BEDPE with 540 variants, genome-wide coverage, hg19 annotation). Other areas: Examples tab (/#examples) and About tab. Remote-BAM loading (https URLs) does not work offline. Known app quirk: the 'My Ribbon data' navbar menu, which is cookie-based, is always hidden by the app itself, so no cookie is seeded. Headless Chromium could not run inside this sandbox, so the UI was checked over HTTP and by decoding every permalink with the app's own logic, not visually."
+}

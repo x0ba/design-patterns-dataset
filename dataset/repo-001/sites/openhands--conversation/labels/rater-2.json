@@ -1,0 +1,596 @@
+{
+  "schemaVersion": "1.0.0",
+  "codebookVersion": "1.0.0",
+  "batch": "repo-001",
+  "site": {
+    "slug": "openhands--conversation",
+    "url": "http://openhands.localhost:4319/conversations/c7a91e04d2f84b6b9e1f3a0c55d2e801?backend=default-local",
+    "finalUrl": "http://openhands.localhost:4319/conversations/c7a91e04d2f84b6b9e1f3a0c55d2e801?backend=default-local",
+    "status": 200,
+    "title": "✅ Fix N+1 queries on /v2/shipments list endpoint | OpenHands",
+    "capturedAt": "2026-11-18T02:05:00.798Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": {
+      "ref": "capture/screenshot.png",
+      "width": 1440,
+      "height": 1437
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+    "domain": "ai-tools",
+    "domainNote": "OpenHands — AI coding agent workspace (conversation with agent, git actions, files/terminal panel)",
+    "provenance": {
+      "source": "repo",
+      "record": "repos/repo-001/openhands/explore.json",
+      "repo": {
+        "name": "OpenHands/OpenHands",
+        "url": "https://github.com/OpenHands/OpenHands",
+        "commit": "5ed4ffa5ac2509e479acc12b83247fbb4c3612c8",
+        "license": "MIT"
+      },
+      "view": {
+        "slug": "conversation",
+        "name": "Conversation with terminal panel",
+        "description": "Agent conversation transcript with expanded tool-action group, composer with git actions, and a side panel showing terminal output."
+      }
+    }
+  },
+  "regions": [
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "label": "Logo, collapse toggle, Search commands (Ctrl+K), New Chat/Customize/Automate, Conversations list with status dots/checks, relative times and project tags, Load more, connection status + Local backend selector + settings",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 300,
+        "height": 1437
+      },
+      "patterns": [
+        "app-shell",
+        "command-palette",
+        "badge"
+      ]
+    },
+    {
+      "id": "conversation-header",
+      "role": "toolbar",
+      "label": "Conversation title with status dot, more options, Git actions dropdown, overview and hide-panel toggles",
+      "bbox": {
+        "x": 300,
+        "y": 0,
+        "width": 571,
+        "height": 40
+      },
+      "patterns": [
+        "menu",
+        "split-pane"
+      ]
+    },
+    {
+      "id": "thread",
+      "role": "chat-thread",
+      "label": "Agent conversation: user bubbles right/boxed, agent replies as plain markdown with inline code, collapsible tool-step groups",
+      "bbox": {
+        "x": 300,
+        "y": 40,
+        "width": 571,
+        "height": 1215
+      },
+      "patterns": [
+        "ai-chat",
+        "agent-run",
+        "ai-provenance",
+        "accordion"
+      ]
+    },
+    {
+      "id": "composer",
+      "role": "composer",
+      "label": "Prompt box 'What do you want to build?' with + attach, model chip sonnet-4.5, mic, send; below it repo/branch pills and Pull/Push/Pull Request buttons",
+      "bbox": {
+        "x": 300,
+        "y": 1255,
+        "width": 571,
+        "height": 182
+      },
+      "patterns": [
+        "prompt-input"
+      ]
+    },
+    {
+      "id": "workspace-panel",
+      "role": "side-panel",
+      "label": "Icon tab strip (Files active) with workspace path, file tree (empty) and file viewer empty state",
+      "bbox": {
+        "x": 871,
+        "y": 0,
+        "width": 569,
+        "height": 1437
+      },
+      "patterns": [
+        "tabs",
+        "file-manager",
+        "empty-state",
+        "split-pane"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "app-shell",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 300,
+            "height": 1437
+          },
+          "region": "sidebar",
+          "note": "Persistent left sidebar with fixed destinations and recent conversations; collapse button",
+          "quote": "Conversations"
+        }
+      ],
+      "dims": {
+        "primary": "sidebar",
+        "items": [
+          "fixed-destinations",
+          "recents"
+        ],
+        "visibility": "toggle-button",
+        "structure": "single-app"
+      }
+    },
+    {
+      "id": "ai-chat",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 332,
+            "y": 80,
+            "width": 506,
+            "height": 116
+          },
+          "region": "thread",
+          "note": "User prompt turn",
+          "quote": "Can you confirm and fix it? Keep the response schema identical."
+        },
+        {
+          "bbox": {
+            "x": 332,
+            "y": 636,
+            "width": 506,
+            "height": 393
+          },
+          "region": "thread",
+          "note": "Model reply with markdown, bold, lists and inline code",
+          "quote": "Confirmed and fixed."
+        }
+      ],
+      "dims": {
+        "turnContent": [
+          "markdown-with-code",
+          "tool-call-traces"
+        ],
+        "composition": "thread-plus-artifacts-panel",
+        "invokeBy": [
+          "text-field-submit",
+          "voice-input"
+        ],
+        "flow": "strict-turn-taking"
+      }
+    },
+    {
+      "id": "agent-run",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 332,
+            "y": 404,
+            "width": 506,
+            "height": 212
+          },
+          "region": "thread",
+          "note": "Grouped trace of agent tool steps",
+          "quote": "Read a file, made 2 edits, ran 2 commands"
+        },
+        {
+          "bbox": {
+            "x": 332,
+            "y": 1125,
+            "width": 208,
+            "height": 20
+          },
+          "region": "thread",
+          "quote": "Commit and open pull request"
+        }
+      ],
+      "dims": {
+        "brief": [
+          "natural-language-goal",
+          "repo-or-workspace-context"
+        ],
+        "structure": "linear-trace",
+        "control": [
+          "start-from-a-prompt",
+          "continue-redirect-mid-run"
+        ],
+        "lifecycle": "minutes-with-live-trace",
+        "feedback": [
+          "streaming-step-log"
+        ]
+      }
+    },
+    {
+      "id": "ai-provenance",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 332,
+            "y": 296,
+            "width": 256,
+            "height": 20
+          },
+          "region": "thread",
+          "note": "Collapsed tool-call summary that expands to the command and output",
+          "quote": "Count SQL queries for a 100-row page"
+        }
+      ],
+      "dims": {
+        "disclosure": [
+          "tool-calls-used"
+        ],
+        "openBy": [
+          "expand-tool-trace"
+        ]
+      }
+    },
+    {
+      "id": "accordion",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 332,
+            "y": 404,
+            "width": 506,
+            "height": 212
+          },
+          "region": "thread",
+          "note": "Expanded group header with nested step rows, each expandable in place to show command and output (verified live)",
+          "quote": "Re-count SQL queries"
+        }
+      ],
+      "dims": {
+        "policy": "many-at-a-time",
+        "header": [
+          "title-only"
+        ],
+        "toggle": [
+          "header-click"
+        ]
+      }
+    },
+    {
+      "id": "prompt-input",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 316,
+            "y": 1262,
+            "width": 538,
+            "height": 105
+          },
+          "region": "composer",
+          "quote": "What do you want to build?",
+          "note": "Composer with + more actions, model chip, dictation and send"
+        }
+      ],
+      "dims": {
+        "content": [
+          "plain-prompt"
+        ],
+        "layout": "bottom-sticky-composer",
+        "submitBy": [
+          "click-send"
+        ],
+        "assistance": [
+          "placeholder-examples"
+        ]
+      }
+    },
+    {
+      "id": "command-palette",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 10,
+            "y": 40,
+            "width": 279,
+            "height": 35
+          },
+          "region": "sidebar",
+          "quote": "Search commands",
+          "note": "Trigger with CTRL+K hint; opens centered overlay of navigation/settings actions with descriptions (verified live)"
+        }
+      ],
+      "dims": {
+        "types": [
+          "commands",
+          "places",
+          "settings-toggles"
+        ],
+        "detail": "name-and-description",
+        "summon": [
+          "in-app-shortcut",
+          "visible-search-button"
+        ],
+        "placement": "centered-overlay",
+        "scope": "current-app"
+      }
+    },
+    {
+      "id": "tabs",
+      "status": "present",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 875,
+            "y": 4,
+            "width": 248,
+            "height": 32
+          },
+          "region": "workspace-panel",
+          "note": "Icon tabs; selected tab shows label; switching to Terminal swaps panel (verified live)",
+          "quote": "Files"
+        }
+      ],
+      "dims": {
+        "placement": "top",
+        "label": [
+          "icon",
+          "text"
+        ],
+        "origin": "fixed-by-the-designer",
+        "grouping": "flat",
+        "switchBy": [
+          "click"
+        ]
+      }
+    },
+    {
+      "id": "menu",
+      "status": "present",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 697,
+            "y": 6,
+            "width": 101,
+            "height": 28
+          },
+          "region": "conversation-header",
+          "quote": "Git actions",
+          "note": "Opens dropdown: Commits, Pull, Push, Create PR, Create New Branch (verified live)"
+        }
+      ],
+      "dims": {
+        "openBy": "button-click",
+        "structure": "flat",
+        "item": [
+          "label",
+          "icon"
+        ],
+        "itemSet": "fixed",
+        "form": "vertical-list"
+      }
+    },
+    {
+      "id": "badge",
+      "status": "present",
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 16,
+            "y": 240,
+            "width": 270,
+            "height": 45
+          },
+          "region": "sidebar",
+          "note": "Green status dot / checkmark per conversation plus project tag chip",
+          "quote": "Project: security"
+        }
+      ],
+      "dims": {
+        "meaning": "status",
+        "aggregation": "per-item"
+      }
+    },
+    {
+      "id": "empty-state",
+      "status": "present",
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 1095,
+            "y": 740,
+            "width": 345,
+            "height": 75
+          },
+          "region": "workspace-panel",
+          "quote": "Select a file to view its contents",
+          "note": "Cursor icon illustration with explanation"
+        },
+        {
+          "bbox": {
+            "x": 871,
+            "y": 128,
+            "width": 224,
+            "height": 24
+          },
+          "region": "workspace-panel",
+          "quote": "No files in workspace"
+        }
+      ],
+      "dims": {
+        "content": [
+          "illustration",
+          "explanation"
+        ],
+        "starters": "none",
+        "recovery": "none"
+      }
+    },
+    {
+      "id": "split-pane",
+      "status": "present",
+      "confidence": 0.65,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 300,
+            "y": 0,
+            "width": 1140,
+            "height": 1437
+          },
+          "region": "workspace-panel",
+          "note": "Conversation pane beside tabbed workspace panel; Hide panel toggle collapses it; file tree/viewer split inside"
+        }
+      ],
+      "dims": {
+        "orientation": "side-by-side",
+        "sizing": "collapsible-pane",
+        "relationship": "independent"
+      }
+    },
+    {
+      "id": "file-manager",
+      "status": "uncertain",
+      "confidence": 0.55,
+      "rationale": "Files tab has workspace path, toggleable file tree and viewer, but the tree is empty so item view and metadata cannot be observed.",
+      "evidence": [
+        {
+          "bbox": {
+            "x": 871,
+            "y": 41,
+            "width": 569,
+            "height": 1396
+          },
+          "region": "workspace-panel",
+          "quote": "Workspace: /Users/jonas/src/harbor-api"
+        }
+      ],
+      "dims": {
+        "preview": "preview-pane",
+        "traversal": "tree-plus-content"
+      }
+    },
+    {
+      "id": "chat-thread",
+      "status": "absent",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "bbox": {
+            "x": 300,
+            "y": 40,
+            "width": 571,
+            "height": 1215
+          },
+          "note": "Conversation is with an AI agent, coded as ai-chat"
+        }
+      ],
+      "dims": {}
+    }
+  ],
+  "structure": {
+    "layout": "Three-column app: left sidebar (command search, primary nav, conversation history list), center conversation thread with bottom sticky composer and git action bar, right tabbed workspace panel (Files/Commits/Planner/Terminal/Browser/Usage) with file tree + viewer split",
+    "regions": [
+      "sidebar",
+      "conversation-header",
+      "thread",
+      "composer",
+      "workspace-panel"
+    ],
+    "density": "medium"
+  },
+  "aesthetics": {
+    "palette": [
+      "#181818",
+      "#202020",
+      "#313131",
+      "#282828",
+      "#404040",
+      "#ececec",
+      "#979797",
+      "#ffffff",
+      "#1fbd53"
+    ],
+    "colorRoles": {
+      "background": "#181818",
+      "surface": "#202020",
+      "text": "#ececec",
+      "muted": "#979797",
+      "border": "#404040",
+      "accent": "#1fbd53",
+      "primary": "#ffffff",
+      "selected": "#313131"
+    },
+    "typography": "System sans (-apple-system stack, renders as Ubuntu) for all UI and prose; source-code-pro / ui-monospace for inline code chips, workspace path and terminal output",
+    "typeScale": "Flat, compact: 16px title/controls, 14-15px body and list items (bold 13px conversation titles), 12-13px meta/timestamps, 10px project tags and CTRL+K kbd; hierarchy via weight and grey tone rather than size",
+    "shape": "soft",
+    "elevation": "flat",
+    "borders": "thin",
+    "imagery": [
+      "iconography"
+    ],
+    "iconStyle": "line",
+    "whitespace": "moderate",
+    "backgroundTreatment": "solid",
+    "mood": [
+      "dark",
+      "technical",
+      "minimal",
+      "calm",
+      "developer"
+    ]
+  },
+  "model": {
+    "rater": "rater-2",
+    "provider": "claude-code",
+    "name": "claude-opus-5-5",
+    "effort": "high",
+    "generatedAt": "2026-11-18T02:06:41.995Z",
+    "servedBy": [
+      "claude-opus-5-5"
+    ],
+    "turns": 11,
+    "usage": {
+      "input_tokens": 22,
+      "cache_creation_input_tokens": 46429,
+      "cache_read_input_tokens": 447410,
+      "output_tokens": 6765
+    }
+  },
+  "notes": "Near-black monochrome dark UI (#181818/#202020) with a single green accent used only for status dots/checkmarks and connection state. Agent replies are unboxed plain markdown while user turns sit in #282828 rounded bubbles; tool activity is shown as grey one-line disclosure rows ('Read a file, made 2 edits, ran 2 commands') that expand to command + output in monospace. Git workflow is foregrounded: pill-shaped repo/branch links and Pull/Push/Pull Request buttons directly under the composer, plus a Git actions dropdown in the header. Right panel uses icon-only tabs (label shown only on the active tab) with a 'Customize tabs' overflow."
+}
