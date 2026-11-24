@@ -425,7 +425,7 @@ proposals/<batch>/<id>.yaml  agent proposals, merged across raters and sites
 
 Commit a batch when its run has finished, so committed `status.json` files are
 terminal states. Labels, consensus, agreement, IRR and status JSON stay in plain
-git; screenshots, builds and transcripts go through Git LFS.
+git; screenshots, builds, generated app sources and transcripts go through Git LFS.
 
 ---
 

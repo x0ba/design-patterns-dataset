@@ -313,8 +313,9 @@ src/                   library code (codebook, pipeline, irr); scripts/ are thin
 ### Versioning data
 
 `dataset/`, `generated/` and `proposals/` are committed. Screenshots, built
-bundles (`out/`), fonts and transcripts go through Git LFS (`.gitattributes`);
-labels, consensus, agreement, IRR and status JSON stay plain git so they diff.
+bundles (`out/`), generated app sources (`src/`), fonts and transcripts go
+through Git LFS (`.gitattributes`); labels, consensus, agreement, IRR,
+generation and status JSON stay plain git so they diff.
 Run `git lfs install` once per machine (see Setup above).
 
 Every run writes only under its own batch name (`dataset/<batch>/`,
